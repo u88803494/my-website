@@ -1,0 +1,20 @@
+"use client";
+
+import AnimatedBackground from "./AnimatedBackground";
+import HeroImage from "./HeroImage";
+import HeroContent from "./HeroContent";
+
+const HeroSection = () => {
+  return (
+    <section className="hero min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 relative overflow-hidden">
+      <AnimatedBackground />
+      
+      <div className="hero-content flex-col lg:flex-row-reverse gap-8 lg:gap-16 relative z-10">
+        <HeroImage />
+        <HeroContent />
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection; 
