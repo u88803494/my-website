@@ -38,5 +38,19 @@
         "path": "./src/types"
       }
     ]
-  }
+  },
+  "rules": [
+    {
+      "name": "Component Architecture Rule",
+      "rule": "When asked to create a new React component, always follow the Component Folder Pattern. Create a dedicated folder for the component. Inside, create a main `ComponentName.tsx` file for logic and a `index.ts` barrel file for exporting. For data types, use a separate file in `src/types`."
+    },
+    {
+      "name": "Icon Usage Rule",
+      "rule": "When asked to add an icon, ALWAYS use the `lucide-react` package for general UI icons (like menus, arrows). For company or brand logos, ALWAYS use the `react-icons/si` package. Do not use any other icon sources or inline SVGs unless explicitly told to."
+    },
+    {
+      "name": "Styling Rule",
+      "rule": "All styling must use Tailwind CSS utility classes. Prioritize using daisyUI's semantic color names (like `bg-primary`, `text-base-content`) instead of hard-coded colors (like `bg-blue-500` or `text-gray-800`)."
+    }
+  ]
 }

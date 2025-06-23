@@ -8,12 +8,12 @@ const Navbar = () => {
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden btn-circle">
+          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden btn-circle btn-md">
             <Menu className="h-5 w-5" />
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow text-base md:text-lg font-medium"
+            className="menu menu-compact dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow text-base md:text-lg font-medium"
           >
             <li><Link href="/">首頁</Link></li>
             <li><Link href="/projects">專案</Link></li>
@@ -32,7 +32,7 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <button className="btn btn-primary">聯絡我</button>
+        <button className="btn btn-primary btn-md">聯絡我</button>
       </div>
     </div>
   );

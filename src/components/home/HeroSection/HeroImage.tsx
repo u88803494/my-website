@@ -12,11 +12,11 @@ const HeroImage = () => {
       transition={{ duration: 0.8, delay: 0.2 }}
     >
       <motion.div
-        className="w-48 h-48 lg:w-64 lg:h-64 rounded-full ring-4 ring-primary/20 shadow-2xl overflow-hidden"
+        className="w-48 h-48 lg:w-64 lg:h-64 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4 shadow-2xl overflow-hidden transition-transform duration-300 hover:scale-105 bg-base-100"
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 3, repeat: Infinity }}
         whileHover={{
-          scale: 1.05,
+          scale: 1.08,
           rotateY: 5,
           transition: { duration: 0.3 },
         }}

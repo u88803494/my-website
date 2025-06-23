@@ -31,7 +31,7 @@ interface ContactLinksProps {
 
 const ContactLinks = ({ variant = 'circle', className = '' }: ContactLinksProps) => {
   const baseClass = variant === 'circle' 
-    ? 'btn btn-circle btn-ghost' 
+    ? 'btn btn-ghost btn-circle' 
     : 'link link-hover';
 
   return (
@@ -40,7 +40,7 @@ const ContactLinks = ({ variant = 'circle', className = '' }: ContactLinksProps)
         <a
           key={label}
           href={href}
-          className={`${baseClass} ${className}`}
+          className={`${baseClass} ${className}`.trim()}
           target={href.startsWith('http') ? '_blank' : undefined}
           rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
           aria-label={label}

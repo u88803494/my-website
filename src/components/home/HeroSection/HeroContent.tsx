@@ -6,9 +6,9 @@ import TypewriterText from "@/components/home/HeroSection/TypewriterText";
 
 const HeroContent = () => {
   return (
-    <div className="text-center lg:text-left max-w-2xl flex flex-col gap-6">
+    <div className="text-center lg:text-left max-w-2xl flex flex-col gap-6 card-body p-0">
       <motion.h1
-        className="text-4xl lg:text-6xl font-bold mb-2"
+        className="text-4xl lg:text-6xl font-bold mb-2 card-title"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
@@ -69,21 +69,21 @@ const HeroContent = () => {
         transition={{ duration: 0.6, delay: 1.5 }}
       >
         <motion.button
-          className="btn btn-primary btn-lg relative overflow-hidden group"
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
+          className="btn btn-primary btn-lg relative overflow-hidden group shadow-md hover:shadow-xl transition-all"
+          whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
         >
           <span className="relative z-10">View My Work</span>
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-100"
+            className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-0 group-hover:opacity-20 pointer-events-none"
             initial={{ x: "-100%" }}
             whileHover={{ x: "0%" }}
             transition={{ duration: 0.3 }}
           />
         </motion.button>
         <motion.button
-          className="btn btn-outline btn-lg"
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
+          className="btn btn-outline btn-lg shadow-md hover:shadow-xl transition-all"
+          whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
         >
           Download Resume
