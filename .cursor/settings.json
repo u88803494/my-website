@@ -1,0 +1,42 @@
+{
+  "aiContext": {
+    "docs": [
+      {
+        "title": "Next.js Docs",
+        "url": "https://nextjs.org/docs"
+      },
+      {
+        "title": "React Docs",
+        "url": "https://react.dev/"
+      },
+      {
+        "title": "Tailwind CSS Docs",
+        "url": "https://tailwindcss.com/docs"
+      },
+      {
+        "title": "daisyUI Docs",
+        "url": "https://daisyui.com/"
+      },
+      {
+        "title": "Framer Motion Docs",
+        "url": "https://www.framer.com/motion/documentation/"
+      },
+      {
+        "title": "Lucide Icons",
+        "url": "https://lucide.dev/icons/"
+      },
+      {
+        "title": "React Icons",
+        "url": "https://react-icons.github.io/react-icons/"
+      },
+      {
+        "title": "My Components",
+        "path": "./src/components"
+      },
+      {
+        "title": "My Types",
+        "path": "./src/types"
+      }
+    ]
+  }
+}
