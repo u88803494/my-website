@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, corporate;
+}
 
 :root {
   --font-sans: var(--font-geist-sans);

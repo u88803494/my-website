@@ -1,16 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { Menu } from 'lucide-react';
 
-export default function Navbar() {
+const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden btn-circle">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
+            <Menu className="h-5 w-5" />
           </div>
           <ul
             tabIndex={0}
@@ -37,4 +36,6 @@ export default function Navbar() {
       </div>
     </div>
   );
-} 
+};
+
+export default Navbar; 
