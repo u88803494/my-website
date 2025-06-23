@@ -29,6 +29,7 @@ export default function RootLayout({
     <html lang="en" data-theme="corporate">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        suppressHydrationWarning={true}
       >
         <Navbar />
         <NProgressBar />
