@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import ContactLinks from "@/components/shared/ContactLinks";
-import TypewriterText from "./TypewriterText";
+import TypewriterText from "@/components/home/HeroSection/TypewriterText";
 
 const HeroContent = () => {
   return (

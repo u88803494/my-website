@@ -1,8 +1,8 @@
 "use client";
 
-import AnimatedBackground from "./AnimatedBackground";
-import HeroImage from "./HeroImage";
-import HeroContent from "./HeroContent";
+import AnimatedBackground from "@/components/home/HeroSection/AnimatedBackground";
+import HeroImage from "@/components/home/HeroSection/HeroImage";
+import HeroContent from "@/components/home/HeroSection/HeroContent";
 
 const HeroSection = () => {
   return (
