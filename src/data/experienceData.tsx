@@ -1,26 +1,7 @@
-"use client";
+import { Experience } from '@/types/experience.types';
+import React from 'react';
 
-import { ReactNode } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
-
-// 型別定義
-interface TechStackGroup {
-  label: string;
-  items: string[];
-}
-
-interface ExperienceCard {
-  role: string;
-  company: string;
-  period: string;
-  logoUrl: string;
-  achievements: { title: string; description: ReactNode }[];
-  techStackGroups: TechStackGroup[];
-}
-
-const experiences: ExperienceCard[] = [
+const experiences: Experience[] = [
   {
     role: "前端工程師",
     company: "健康益友股份有限公司",
@@ -133,75 +114,4 @@ const experiences: ExperienceCard[] = [
   }
 ];
 
-const WorkExperience = () => {
-  return (
-    <section className="py-20 bg-base-200">
-      <div className="container mx-auto px-2 md:px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-base-content mb-4">Work Experience</h2>
-          <p className="text-lg text-base-content/80">我的職涯發展歷程</p>
-        </div>
-        <div className="flex flex-col gap-12">
-          {experiences.map((exp, i) => (
-            <motion.div
-              key={exp.company + exp.period}
-              className="bg-base-100 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: i * 0.1 }}
-            >
-              <div className="flex items-center mb-4">
-                <Image
-                  src={exp.logoUrl}
-                  alt={`${exp.company} logo`}
-                  width={48}
-                  height={48}
-                  className="rounded-full object-cover mr-4 shadow"
-                />
-                <div>
-                  <h3 className="text-xl font-bold text-base-content">{exp.company}</h3>
-                  <p className="text-primary font-semibold">{exp.role}</p>
-                  <p className="text-sm text-base-content/80">{exp.period}</p>
-                </div>
-              </div>
-              <div className="mb-6">
-                <h4 className="text-lg font-semibold text-base-content mb-3">主要成就</h4>
-                <ul className="space-y-3">
-                  {exp.achievements.map((achievement, achievementIndex) => (
-                    <li key={achievementIndex} className="flex items-start gap-2 text-base-content/80 text-sm leading-relaxed">
-                      <CheckCircle2 className="w-5 h-5 mt-0.5 text-secondary shrink-0" />
-                      <p>
-                        <strong className="font-bold text-base-content">{achievement.title}：</strong>
-                        {achievement.description}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex flex-wrap gap-8">
-                {exp.techStackGroups.map((group, idx) => (
-                  <div key={group.label} className="min-w-[120px]">
-                    <h5 className="text-md font-semibold text-base-content mb-2">{group.label}</h5>
-                    <div className="flex flex-wrap gap-2">
-                      {group.items.map((tech, techIndex) => (
-                        <div
-                          key={techIndex}
-                          className="badge badge-outline badge-primary"
-                        >
-                          {tech}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default WorkExperience; 
+export { experiences }; 
