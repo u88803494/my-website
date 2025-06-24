@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="navbar shadow-lg fixed top-0 w-full z-50 backdrop-blur-sm bg-base-100/95">
       <div className="navbar-start">
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden btn-circle btn-md">
             <Menu className="h-5 w-5" />
           </div>
@@ -26,17 +26,17 @@ const Navbar = () => {
             <li><Link href="/blog">部落格</Link></li>
             <li><Link href="/about">關於我</Link></li>
           </ul>
-        </div>
-        <Link href="/" className="btn btn-ghost text-xl">我的作品集</Link>
+        </div> */}
+        <Link href="/" className="btn btn-ghost text-xl">Henry Lee</Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      {/* <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-lg">
           <li><Link href="/" className="text-xl">首頁</Link></li>
           <li><Link href="/projects" className="text-xl">專案</Link></li>
           <li><Link href="/blog" className="text-xl">部落格</Link></li>
           <li><Link href="/about" className="text-xl">關於我</Link></li>
         </ul>
-      </div>
+      </div> */}
       <div className="navbar-end">
         <button 
           onClick={scrollToContact}
