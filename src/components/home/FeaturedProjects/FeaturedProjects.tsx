@@ -11,6 +11,7 @@ const FeaturedProjects: React.FC = () => {
           <h2 className="text-4xl font-bold mb-4">
             精選專案 Featured Projects
           </h2>
+          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             探索我的技術旅程，從學習階段到專業開發的完整作品集
           </p>

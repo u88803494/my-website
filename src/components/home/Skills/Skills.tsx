@@ -19,6 +19,7 @@ const Skills: React.FC = () => {
           <h2 className="text-4xl font-bold text-base-content mb-4">
             Skills
           </h2>
+          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
           <p className="text-lg text-base-content/80">
             我在軟體開發領域的技能分佈，從核心專長到各種涉獵的技術棧
           </p>
