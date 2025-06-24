@@ -3,6 +3,7 @@
 import HeroSection from "@/components/home/HeroSection/HeroSection";
 import WorkExperience from "@/components/home/WorkExperience";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
+import Skills from "@/components/home/Skills";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <HeroSection />
       <WorkExperience />
       <FeaturedProjects />
+      <Skills />
     </div>
   );
 };
