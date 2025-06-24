@@ -4,6 +4,12 @@ import Link from 'next/link';
 import { Menu } from 'lucide-react';
 
 const Navbar = () => {
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start">
@@ -32,7 +38,12 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <button className="btn btn-primary btn-md">聯絡我</button>
+        <button 
+          onClick={scrollToContact}
+          className="btn btn-primary btn-md"
+        >
+          聯絡我
+        </button>
       </div>
     </div>
   );
