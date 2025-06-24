@@ -21,6 +21,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         scale: 1.02,
         boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
       }}
+      whileTap={{ scale: 0.98 }}
       transition={{ 
         duration: 0.3,
         ease: "easeOut"
