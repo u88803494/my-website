@@ -32,7 +32,7 @@ const experiences: Experience[] = [
     techStackGroups: [
       {
         label: "前端相關",
-        items: ["Nextjs", "TypeScript", "styled-components", "MUI", "Nxjs(mono)", "React-Query", "Line LIFF", "etc."]
+        items: ["Nextjs", "TypeScript", "styled-components", "MUI", "Nxjs(mono)", "React-Query", "Line LIFF"]
       },
       {
         label: "其他",
@@ -66,7 +66,7 @@ const experiences: Experience[] = [
     techStackGroups: [
       {
         label: "前端相關",
-        items: ["React", "React Hook", "Redux toolkit", "Redux saga", "styled-components", "Tailwind", "etc."]
+        items: ["React", "React Hook", "Redux toolkit", "Redux saga", "styled-components", "Tailwind"]
       },
       {
         label: "其他",

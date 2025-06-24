@@ -16,7 +16,7 @@ const TypewriterText = ({ text, delay = 0.8 }: { text: string; delay?: number })
     >
       {text}
       <motion.span
-        className="inline-block w-0.5 h-8 bg-primary ml-1"
+        className="inline-block w-0.5 h-7 lg:h-11 bg-primary ml-1"
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 0] }}
         transition={{ 
