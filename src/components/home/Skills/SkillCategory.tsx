@@ -4,42 +4,44 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Zap, Eye } from 'lucide-react';
 
+import { Skill } from '@/data/skillData';
+
 interface SkillCategoryProps {
   title: string;
   description: string;
-  skills: string[];
+  skills: Skill[];
   level: 'expert' | 'proficient' | 'familiar';
   index: number;
 }
 
-const SkillCategory: React.FC<SkillCategoryProps> = ({ 
-  title, 
-  description, 
-  skills, 
+const SkillCategory: React.FC<SkillCategoryProps> = ({
+  title,
+  description,
+  skills,
   level,
   index
 }) => {
   const getLevelConfig = () => {
     switch (level) {
-      case 'expert': 
+      case 'expert':
         return {
           icon: <Star className="w-5 h-5" />,
           badgeVariant: 'badge-primary',
           accentColor: 'text-primary'
         };
-      case 'proficient': 
+      case 'proficient':
         return {
           icon: <Zap className="w-5 h-5" />,
           badgeVariant: 'badge-accent',
           accentColor: 'text-accent'
         };
-      case 'familiar': 
+      case 'familiar':
         return {
           icon: <Eye className="w-5 h-5" />,
           badgeVariant: 'badge-info',
           accentColor: 'text-info'
         };
-      default: 
+      default:
         return {
           icon: <Star className="w-5 h-5" />,
           badgeVariant: 'badge-primary',
@@ -69,18 +71,19 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
             <p className={`text-sm ${config.accentColor} font-semibold`}>({description})</p>
           </div>
         </div>
-        
+
         <div className="space-y-2">
           {skills.map((skill, skillIndex) => (
             <motion.div
               key={skillIndex}
-              className={`badge ${config.badgeVariant} badge-outline w-full justify-start p-3 h-auto min-h-[2rem]`}
+              className={`badge ${config.badgeVariant} badge-outline w-full justify-start p-3 h-auto min-h-[2rem] gap-2`}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: (index * 0.1) + (skillIndex * 0.05) }}
             >
-              <span className="text-sm">{skill}</span>
+              <span className="flex-shrink-0">{skill.icon}</span>
+              <span className="text-sm">{skill.name}</span>
             </motion.div>
           ))}
         </div>

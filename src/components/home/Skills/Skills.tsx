@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { skillsData } from '@/data/skillsData';
+import { skillData } from '@/data/skillData';
 import SkillCategory from './SkillCategory';
 
 const Skills: React.FC = () => {
@@ -26,7 +26,7 @@ const Skills: React.FC = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 not-prose">
-          {skillsData.map((category, index) => (
+          {skillData.map((category, index) => (
             <SkillCategory
               key={index}
               title={category.title}
