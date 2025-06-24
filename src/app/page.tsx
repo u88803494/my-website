@@ -4,6 +4,7 @@ import HeroSection from "@/components/home/HeroSection/HeroSection";
 import WorkExperience from "@/components/home/WorkExperience";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import Skills from "@/components/home/Skills";
+import Education from "@/components/home/Education";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <WorkExperience />
       <FeaturedProjects />
       <Skills />
+      <Education />
     </div>
   );
 };
