@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
+// import { Menu } from 'lucide-react';
 
 const Navbar = () => {
   const scrollToContact = () => {
