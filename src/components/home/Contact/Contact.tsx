@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Copy, CheckCircle, Mail, Heart } from 'lucide-react';
+import { Copy, CheckCircle, Mail, Heart, Download } from 'lucide-react';
 import ContactLinks from '@/components/shared/ContactLinks';
 
 const Contact: React.FC = () => {
@@ -17,6 +17,15 @@ const Contact: React.FC = () => {
     } catch (err) {
       console.error('Failed to copy email:', err);
     }
+  };
+
+  const downloadResume = () => {
+    const link = document.createElement('a');
+    link.href = '/documents/henry-lee-resume-20250618.pdf';
+    link.download = 'Henry-Lee-Resume-2025.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (

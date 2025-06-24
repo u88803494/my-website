@@ -69,9 +69,14 @@ const HeroContent = () => {
         transition={{ duration: 0.6, delay: 1.5 }}
       >
         <motion.button
-          className="btn btn-primary btn-lg relative overflow-hidden group shadow-md hover:shadow-xl transition-all"
+          className="btn btn-primary btn-lg relative overflow-hidden group shadow-md hover:shadow-xl transition-all tooltip tooltip-custom tooltip-top"
           whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            const projectsSection = document.getElementById('featured-projects');
+            projectsSection?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          data-tip="瀏覽我的精選專案作品"
         >
           <span className="relative z-10">View My Work</span>
           <motion.div
@@ -82,9 +87,18 @@ const HeroContent = () => {
           />
         </motion.button>
         <motion.button
-          className="btn btn-outline btn-lg shadow-md hover:shadow-xl transition-all"
+          className="btn btn-outline btn-lg shadow-md hover:shadow-xl transition-all tooltip tooltip-custom tooltip-top"
           whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            const link = document.createElement('a');
+            link.href = '/documents/henry-lee-resume-20250618.pdf';
+            link.download = 'Henry-Lee-Resume-2025.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }}
+          data-tip="下載我的履歷 PDF 檔案"
         >
           Download Resume
         </motion.button>

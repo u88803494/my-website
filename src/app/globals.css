@@ -11,3 +11,12 @@
 body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Custom Tooltip Styles */
+.tooltip-custom::before {
+  @apply bg-white border border-info text-info text-sm font-normal shadow-lg;
+}
+
+.tooltip-custom::after {
+  @apply border-t-white;
+}
