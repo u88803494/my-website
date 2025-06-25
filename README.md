@@ -9,8 +9,10 @@
 
 *展示網站首頁的 Hero Section，包含個人介紹、技術背景描述、關鍵成就數據以及行動按鈕*
 
-<!-- 🖼️ 待補充：Medium 文章輪播區域截圖 -->
-*[截圖說明：請截取 Medium 文章展示區域，顯示「精選文章」(固定) + 「更多文章」(輪播) 的完整佈局效果]*
+### 📝 Medium 文章展示區域
+![Medium Articles Section](./public/images/screenshots/resume-article-section.png)
+
+*展示 Medium 文章自動化系統的完整佈局：「最新文章」固定展示最新兩篇，「更多文章」輪播展示其餘文章，包含自動播放控制、指示器和優雅的動畫效果*
 
 ## ✨ 主要功能
 

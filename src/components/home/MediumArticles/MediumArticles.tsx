@@ -44,7 +44,7 @@ const MediumArticles: React.FC = () => {
             href={SOCIAL_LINKS.MEDIUM}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline btn-lg"
+            className="btn btn-primary btn-lg shadow-lg hover:shadow-xl transition-all"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
