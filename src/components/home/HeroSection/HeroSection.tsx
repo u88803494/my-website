@@ -1,12 +1,28 @@
 "use client";
 
+import React from 'react';
+import clsx from 'clsx';
 import AnimatedBackground from "@/components/home/HeroSection/AnimatedBackground";
 import HeroImage from "@/components/home/HeroSection/HeroImage";
 import HeroContent from "@/components/home/HeroSection/HeroContent";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   return (
-    <section className="hero min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 relative overflow-hidden">
+    <section 
+      className={clsx(
+        'hero min-h-screen relative overflow-hidden',
+        backgroundClass
+      )}
+      id={sectionId}
+    >
       <AnimatedBackground />
       
       <div className="hero-content flex-col lg:flex-row-reverse gap-8 lg:gap-16 relative z-10 w-full">

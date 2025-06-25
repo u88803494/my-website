@@ -2,11 +2,20 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { Copy, CheckCircle, Mail, Heart } from 'lucide-react';
 import ContactLinks from '@/components/shared/ContactLinks';
 import { SOCIAL_LINKS } from '@/constants/socialLinks';
 
-const Contact: React.FC = () => {
+interface ContactProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const Contact: React.FC<ContactProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   const [copied, setCopied] = useState(false);
   const email = SOCIAL_LINKS.EMAIL;
 
@@ -21,7 +30,10 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5">
+    <section 
+      id={sectionId} 
+      className={clsx('py-20', backgroundClass)}
+    >
       <div className="container mx-auto px-4 max-w-4xl">
         <motion.div 
           className="text-center mb-12"
@@ -40,7 +52,6 @@ const Contact: React.FC = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Email 區塊 */}
           <motion.div
             className="bg-base-100 p-6 rounded-2xl shadow-lg border border-base-content/10"
             initial={{ opacity: 0, x: -30 }}
@@ -57,12 +68,17 @@ const Contact: React.FC = () => {
             </p>
             <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-base-content/80 text-sm md:text-base break-all">
+                <span className={clsx(
+                  'font-mono text-base-content/80 text-sm md:text-base break-all'
+                )}>
                   {email}
                 </span>
                 <button
                   onClick={copyEmail}
-                  className={`btn btn-sm ml-2 ${copied ? 'btn-success' : 'btn-primary'}`}
+                  className={clsx(
+                    'btn btn-sm ml-2',
+                    copied ? 'btn-success' : 'btn-primary'
+                  )}
                 >
                   {copied ? (
                     <>
@@ -80,7 +96,6 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* 社交連結區塊 */}
           <motion.div
             className="bg-base-100 p-6 rounded-2xl shadow-lg border border-base-content/10"
             initial={{ opacity: 0, x: 30 }}
@@ -109,7 +124,6 @@ const Contact: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* 額外資訊 */}
         <motion.div
           className="text-center mt-12"
           initial={{ opacity: 0, y: 20 }}
@@ -119,8 +133,8 @@ const Contact: React.FC = () => {
         >
           <div className="bg-base-100 p-6 rounded-xl border border-base-content/10 max-w-2xl mx-auto">
             <p className="text-base-content/70 text-sm leading-relaxed">
-              <strong>尋找職位：</strong> 前端工程師、全端工程師（遠端或現場皆可）<br/>
-              <strong>技能專長：</strong> React、Next.js、TypeScript、前端開發<br/>
+              <strong>尋找職位：</strong> 前端工程師、全端工程師（遠端或現場皆可）<br />
+              <strong>技能專長：</strong> React、Next.js、TypeScript、前端開發<br />
               <strong>回覆時間：</strong> 通常在24小時內回覆郵件
             </p>
           </div>

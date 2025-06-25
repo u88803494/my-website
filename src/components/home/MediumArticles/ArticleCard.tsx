@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { Article } from '@/types/article.types';
 import { ExternalLink, Calendar, Clock, Eye, Heart } from 'lucide-react';
 import { SiMedium } from 'react-icons/si';
@@ -19,7 +20,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <motion.div 
-      className="card bg-base-100 shadow-xl h-full w-full max-w-full border border-base-200/50 hover:border-base-200 transition-colors duration-200 group"
+      className={clsx(
+        'card bg-base-100 shadow-xl h-full w-full max-w-full',
+        'border border-base-200/50 hover:border-base-200 transition-colors duration-200 group'
+      )}
       whileHover={{ 
         y: -8,
         scale: 1.02,
@@ -39,7 +43,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         </div>
 
         {/* Title and Subtitle */}
-        <h3 className="card-title text-lg font-bold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className={clsx(
+          'card-title text-lg font-bold mb-2 line-clamp-2',
+          'group-hover:text-primary transition-colors'
+        )}>
           {article.title}
         </h3>
         <p className="text-sm text-gray-600 mb-3 italic line-clamp-1">

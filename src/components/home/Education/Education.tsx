@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { GraduationCap, Calendar } from 'lucide-react';
 
 const educationData = [
@@ -10,7 +11,7 @@ const educationData = [
     period: "Apr 2019 ~ Dec 2019",
     description: "學員",
     icon: <GraduationCap className="w-4 h-4" />,
-    highlight: true // 標記為重點
+    highlight: true
   },
   {
     title: "明新科技大學",
@@ -28,9 +29,20 @@ const educationData = [
   }
 ];
 
-const Education: React.FC = () => {
+interface EducationProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const Education: React.FC<EducationProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   return (
-    <section className="pt-10 pb-16 bg-base-200/30">
+    <section 
+      className={clsx('pt-10 pb-16', backgroundClass)}
+      id={sectionId}
+    >
       <div className="container mx-auto px-4 max-w-4xl">
         <motion.div 
           className="text-center mb-12"

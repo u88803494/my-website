@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { articleList } from '@/data/articleData';
 import { useCarousel } from './useCarousel';
 import { SOCIAL_LINKS } from '@/constants/socialLinks';
@@ -9,7 +10,17 @@ import SectionHeader from './SectionHeader';
 import FeaturedSection from './FeaturedSection';
 import CarouselSection from './CarouselSection';
 
-const MediumArticles: React.FC = () => {
+interface MediumArticlesProps {
+  /** 背景樣式，預設為 'bg-base-200' */
+  backgroundClass: string;
+  /** section id，預設為 'medium-articles' */
+  sectionId: string;
+}
+
+const MediumArticles: React.FC<MediumArticlesProps> = ({ 
+  backgroundClass,
+  sectionId
+}) => {
   // 文章分組：最新兩篇固定，其餘輪播
   const featuredArticles = articleList.slice(0, 2);
   const carouselArticles = articleList.slice(2);
@@ -21,7 +32,10 @@ const MediumArticles: React.FC = () => {
   });
 
   return (
-    <section className="py-20 bg-base-200" id="medium-articles">
+    <section 
+      className={clsx('py-20', backgroundClass)} 
+      id={sectionId}
+    >
       <div className="container mx-auto px-4">
         <SectionHeader />
         
@@ -44,7 +58,10 @@ const MediumArticles: React.FC = () => {
             href={SOCIAL_LINKS.MEDIUM}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-lg shadow-lg hover:shadow-xl transition-all"
+            className={clsx(
+              'btn btn-primary btn-lg',
+              'shadow-lg hover:shadow-xl transition-all'
+            )}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

@@ -1,11 +1,24 @@
 "use client";
 
+import React from 'react';
+import clsx from 'clsx';
 import { experiences } from '@/data/experienceData';
 import ExperienceCard from '@/components/home/WorkExperience/ExperienceCard';
 
-const WorkExperience = () => {
+interface WorkExperienceProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const WorkExperience: React.FC<WorkExperienceProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   return (
-    <section className="py-20 bg-base-200">
+    <section 
+      className={clsx('py-20', backgroundClass)}
+      id={sectionId}
+    >
       <div className="container mx-auto px-2 md:px-4 prose prose-neutral max-w-4xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-base-content mb-4">Work Experience</h2>

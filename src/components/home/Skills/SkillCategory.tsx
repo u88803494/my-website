@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { Star, Zap, Eye } from 'lucide-react';
 
 import { Skill } from '@/data/skillData';
@@ -54,7 +55,10 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
 
   return (
     <motion.div
-      className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 h-full border border-base-200/70"
+      className={clsx(
+        'card bg-base-100 shadow-xl hover:shadow-2xl h-full',
+        'border border-base-200/70 transition-shadow duration-300'
+      )}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -63,12 +67,12 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
     >
       <div className="card-body p-6">
         <div className="flex items-center mb-4">
-          <div className={`${config.accentColor} mr-3`}>
+          <div className={clsx(config.accentColor, 'mr-3')}>
             {config.icon}
           </div>
           <div>
             <h3 className="card-title text-xl font-bold text-base-content">{title}</h3>
-            <p className={`text-sm ${config.accentColor} font-semibold`}>({description})</p>
+            <p className={clsx('text-sm font-semibold', config.accentColor)}>({description})</p>
           </div>
         </div>
 
@@ -76,7 +80,11 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
           {skills.map((skill, skillIndex) => (
             <motion.div
               key={skillIndex}
-              className={`badge ${config.badgeVariant} badge-outline w-full justify-start p-3 h-auto min-h-[2rem] gap-2`}
+              className={clsx(
+                'badge badge-outline w-full justify-start p-3',
+                'h-auto min-h-[2rem] gap-2',
+                config.badgeVariant
+              )}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}

@@ -1,10 +1,22 @@
 import React from 'react';
+import clsx from 'clsx';
 import { projects } from '@/data/projectData';
 import ProjectCard from './ProjectCard';
 
-const FeaturedProjects: React.FC = () => {
+interface FeaturedProjectsProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   return (
-    <section className="py-16 bg-base-100" id="featured-projects">
+    <section 
+      className={clsx('py-16', backgroundClass)} 
+      id={sectionId}
+    >
       <div className="container mx-auto px-4">
         {/* 標題區域 */}
         <div className="text-center mb-12">

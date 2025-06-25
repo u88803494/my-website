@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import clsx from 'clsx';
 
 const HeroImage = () => {
   return (
@@ -12,7 +13,11 @@ const HeroImage = () => {
       transition={{ duration: 0.8, delay: 0.2 }}
     >
       <motion.div
-        className="w-48 h-48 lg:w-64 lg:h-64 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4 shadow-2xl overflow-hidden transition-transform duration-300 hover:scale-105 bg-base-100"
+        className={clsx(
+          'w-48 h-48 lg:w-64 lg:h-64 rounded-full overflow-hidden',
+          'ring ring-primary ring-offset-base-100 ring-offset-4',
+          'shadow-2xl bg-base-100 transition-transform duration-300 hover:scale-105'
+        )}
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 3, repeat: Infinity }}
         whileHover={{

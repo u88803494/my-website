@@ -2,12 +2,24 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import clsx from 'clsx';
 import { skillData } from '@/data/skillData';
 import SkillCategory from './SkillCategory';
 
-const Skills: React.FC = () => {
+interface SkillsProps {
+  backgroundClass: string;
+  sectionId: string;
+}
+
+const Skills: React.FC<SkillsProps> = ({
+  backgroundClass,
+  sectionId
+}) => {
   return (
-    <section className="py-20 bg-base-100">
+    <section 
+      className={clsx('py-20', backgroundClass)}
+      id={sectionId}
+    >
       <div className="container mx-auto px-2 md:px-4 prose prose-neutral max-w-6xl">
         <motion.div 
           className="text-center mb-16"
