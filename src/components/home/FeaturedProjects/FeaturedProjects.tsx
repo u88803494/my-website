@@ -4,7 +4,7 @@ import ProjectCard from './ProjectCard';
 
 const FeaturedProjects: React.FC = () => {
   return (
-    <section className="py-16" id="featured-projects">
+    <section className="py-16 bg-base-100" id="featured-projects">
       <div className="container mx-auto px-4">
         {/* 標題區域 */}
         <div className="text-center mb-12">

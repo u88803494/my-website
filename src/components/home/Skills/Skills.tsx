@@ -7,7 +7,7 @@ import SkillCategory from './SkillCategory';
 
 const Skills: React.FC = () => {
   return (
-    <section className="py-20 bg-base-200">
+    <section className="py-20 bg-base-100">
       <div className="container mx-auto px-2 md:px-4 prose prose-neutral max-w-6xl">
         <motion.div 
           className="text-center mb-16"
