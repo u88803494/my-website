@@ -1,10 +1,10 @@
 "use client";
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Article } from '@/types/article.types';
-import ArticleCard from './ArticleCard';
-import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Article } from "@/types/article.types";
+import ArticleCard from "./ArticleCard";
+import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 interface CarouselSectionProps {
   articles: Article[];
@@ -47,22 +47,22 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
           <div className="w-2 h-2 bg-secondary rounded-full"></div>
           <h3 className="text-xl font-semibold text-base-content">更多文章</h3>
         </div>
-        
+
         {/* 播放控制 */}
         {totalSlides > 1 && (
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="btn btn-circle btn-sm btn-ghost"
-              title={isPlaying ? '暫停' : '播放'}
+              title={isPlaying ? "暫停" : "播放"}
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
-            
+
             <button onClick={prevSlide} className="btn btn-circle btn-sm btn-ghost" title="上一頁">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            
+
             <button onClick={nextSlide} className="btn btn-circle btn-sm btn-ghost" title="下一頁">
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -75,13 +75,13 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            className={`grid gap-6 w-full ${itemsPerSlide === 1 ? 'grid-cols-1' : 'md:grid-cols-2'}`}
+            className={`grid gap-6 w-full ${itemsPerSlide === 1 ? "grid-cols-1" : "md:grid-cols-2"}`}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
-            transition={{ 
+            transition={{
               duration: 0.5,
-              ease: [0.23, 1, 0.320, 1]
+              ease: [0.23, 1, 0.32, 1],
             }}
           >
             {getCurrentSlideItems().map((article, idx) => (
@@ -89,9 +89,9 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 key={article.title + currentSlide + idx}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.4, 
-                  delay: idx * 0.1 
+                transition={{
+                  duration: 0.4,
+                  delay: idx * 0.1,
                 }}
               >
                 <ArticleCard article={article} />
@@ -109,9 +109,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? 'bg-primary w-8' 
-                  : 'bg-base-300 hover:bg-base-content/30'
+                index === currentSlide ? "bg-primary w-8" : "bg-base-300 hover:bg-base-content/30"
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
@@ -125,12 +123,12 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         <div className="mt-4 w-full bg-base-300 rounded-full h-1 overflow-hidden">
           <motion.div
             className="h-full bg-primary"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ 
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{
               duration: 4,
-              ease: 'linear',
-              repeat: Infinity
+              ease: "linear",
+              repeat: Infinity,
             }}
             key={currentSlide}
           />
@@ -140,4 +138,4 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
   );
 };
 
-export default CarouselSection; 
+export default CarouselSection;

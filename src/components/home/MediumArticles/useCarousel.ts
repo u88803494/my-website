@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Article } from '@/types/article.types';
+import { useState, useEffect } from "react";
+import { Article } from "@/types/article.types";
 
 interface UseCarouselProps {
   items: Article[];
@@ -18,36 +18,33 @@ interface UseCarouselReturn {
   getCurrentSlideItems: () => Article[];
 }
 
-export const useCarousel = ({ 
-  items, 
-  autoplayInterval = 4000 
-}: UseCarouselProps): UseCarouselReturn => {
+export const useCarousel = ({ items, autoplayInterval = 4000 }: UseCarouselProps): UseCarouselReturn => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [itemsPerSlide, setItemsPerSlide] = useState(2);
-  
+
   // 計算總頁數
   const totalSlides = Math.ceil(items.length / itemsPerSlide);
-  
+
   // 響應式設定
   useEffect(() => {
     const updateItemsPerSlide = () => {
       setItemsPerSlide(window.innerWidth < 768 ? 1 : 2);
     };
-    
+
     updateItemsPerSlide();
-    window.addEventListener('resize', updateItemsPerSlide);
-    return () => window.removeEventListener('resize', updateItemsPerSlide);
+    window.addEventListener("resize", updateItemsPerSlide);
+    return () => window.removeEventListener("resize", updateItemsPerSlide);
   }, []);
 
   // 自動播放
   useEffect(() => {
     if (!isPlaying || totalSlides <= 1) return;
-    
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, autoplayInterval);
-    
+
     return () => clearInterval(interval);
   }, [isPlaying, totalSlides, autoplayInterval]);
 
@@ -82,4 +79,4 @@ export const useCarousel = ({
     prevSlide,
     getCurrentSlideItems,
   };
-}; 
+};

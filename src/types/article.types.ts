@@ -9,4 +9,4 @@ export interface Article {
   claps?: number;
   description: string;
   thumbnail?: string;
-} 
+}

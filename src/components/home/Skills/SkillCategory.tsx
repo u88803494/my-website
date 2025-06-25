@@ -1,52 +1,46 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import clsx from 'clsx';
-import { Star, Zap, Eye } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import { Star, Zap, Eye } from "lucide-react";
 
-import { Skill } from '@/data/skillData';
+import { Skill } from "@/data/skillData";
 
 interface SkillCategoryProps {
   title: string;
   description: string;
   skills: Skill[];
-  level: 'expert' | 'proficient' | 'familiar';
+  level: "expert" | "proficient" | "familiar";
   index: number;
 }
 
-const SkillCategory: React.FC<SkillCategoryProps> = ({
-  title,
-  description,
-  skills,
-  level,
-  index
-}) => {
+const SkillCategory: React.FC<SkillCategoryProps> = ({ title, description, skills, level, index }) => {
   const getLevelConfig = () => {
     switch (level) {
-      case 'expert':
+      case "expert":
         return {
           icon: <Star className="w-5 h-5" />,
-          badgeVariant: 'badge-primary',
-          accentColor: 'text-primary'
+          badgeVariant: "badge-primary",
+          accentColor: "text-primary",
         };
-      case 'proficient':
+      case "proficient":
         return {
           icon: <Zap className="w-5 h-5" />,
-          badgeVariant: 'badge-accent',
-          accentColor: 'text-accent'
+          badgeVariant: "badge-accent",
+          accentColor: "text-accent",
         };
-      case 'familiar':
+      case "familiar":
         return {
           icon: <Eye className="w-5 h-5" />,
-          badgeVariant: 'badge-info',
-          accentColor: 'text-info'
+          badgeVariant: "badge-info",
+          accentColor: "text-info",
         };
       default:
         return {
           icon: <Star className="w-5 h-5" />,
-          badgeVariant: 'badge-primary',
-          accentColor: 'text-primary'
+          badgeVariant: "badge-primary",
+          accentColor: "text-primary",
         };
     }
   };
@@ -56,8 +50,8 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
   return (
     <motion.div
       className={clsx(
-        'card bg-base-100 shadow-xl hover:shadow-2xl h-full',
-        'border border-base-200/70 transition-shadow duration-300'
+        "card bg-base-100 shadow-xl hover:shadow-2xl h-full",
+        "border border-base-200/70 transition-shadow duration-300",
       )}
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -67,12 +61,10 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
     >
       <div className="card-body p-6">
         <div className="flex items-center mb-4">
-          <div className={clsx(config.accentColor, 'mr-3')}>
-            {config.icon}
-          </div>
+          <div className={clsx(config.accentColor, "mr-3")}>{config.icon}</div>
           <div>
             <h3 className="card-title text-xl font-bold text-base-content">{title}</h3>
-            <p className={clsx('text-sm font-semibold', config.accentColor)}>({description})</p>
+            <p className={clsx("text-sm font-semibold", config.accentColor)}>({description})</p>
           </div>
         </div>
 
@@ -81,14 +73,14 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
             <motion.div
               key={skillIndex}
               className={clsx(
-                'badge badge-outline w-full justify-start p-3',
-                'h-auto min-h-[2rem] gap-2',
-                config.badgeVariant
+                "badge badge-outline w-full justify-start p-3",
+                "h-auto min-h-[2rem] gap-2",
+                config.badgeVariant,
               )}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (index * 0.1) + (skillIndex * 0.05) }}
+              transition={{ duration: 0.5, delay: index * 0.1 + skillIndex * 0.05 }}
             >
               <span className="flex-shrink-0">{skill.icon}</span>
               <span className="text-sm">{skill.name}</span>
@@ -100,4 +92,4 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
   );
 };
 
-export default SkillCategory; 
+export default SkillCategory;

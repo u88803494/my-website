@@ -1,1 +1,1 @@
-export { default } from './MediumArticles'; 
+export { default } from "./MediumArticles";

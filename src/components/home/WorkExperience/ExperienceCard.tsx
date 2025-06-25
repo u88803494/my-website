@@ -1,9 +1,9 @@
 "use client";
 
-import { Experience } from '@/types/experience.types';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
+import { Experience } from "@/types/experience.types";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -37,7 +37,10 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
           <h4 className="text-lg font-semibold text-base-content mb-3">主要成就</h4>
           <ul className="space-y-3">
             {experience.achievements.map((achievement, achievementIndex) => (
-              <li key={achievementIndex} className="flex items-start gap-2 text-base-content/80 text-sm leading-relaxed">
+              <li
+                key={achievementIndex}
+                className="flex items-start gap-2 text-base-content/80 text-sm leading-relaxed"
+              >
                 <CheckCircle2 className="w-5 h-5 mt-0.5 text-secondary shrink-0" />
                 <p>
                   <strong className="font-bold text-base-content">{achievement.title}：</strong>
@@ -55,7 +58,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
                 {group.items.map((tech: string, techIndex: number) => (
                   <div
                     key={techIndex}
-                    className={`badge ${groupIdx === 0 ? 'badge-primary' : groupIdx === 1 ? 'badge-accent' : 'badge-info'} badge-outline`}
+                    className={`badge ${groupIdx === 0 ? "badge-primary" : groupIdx === 1 ? "badge-accent" : "badge-info"} badge-outline`}
                   >
                     {tech}
                   </div>
@@ -69,4 +72,4 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
   );
 };
 
-export default ExperienceCard; 
+export default ExperienceCard;

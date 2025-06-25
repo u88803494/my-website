@@ -5,4 +5,4 @@ export default function AboutPage() {
       <p className="text-lg">你好，我是一位軟體工程師，熱愛學習與分享。更多內容即將上線！</p>
     </div>
   );
-} 
+}

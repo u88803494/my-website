@@ -14,14 +14,14 @@ const AnimatedBackground = () => {
             top: `${(i * 7) % 100}%`,
           }}
           initial={{ opacity: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0, 1, 0],
-            y: [0, -100, 0]
+            y: [0, -100, 0],
           }}
           transition={{
             duration: 3 + (i % 3),
             repeat: Infinity,
-            delay: 2 + (i * 0.1), // 延遲 2 秒後開始，每個粒子間隔 0.1 秒
+            delay: 2 + i * 0.1, // 延遲 2 秒後開始，每個粒子間隔 0.1 秒
           }}
         />
       ))}
@@ -29,4 +29,4 @@ const AnimatedBackground = () => {
   );
 };
 
-export default AnimatedBackground; 
+export default AnimatedBackground;

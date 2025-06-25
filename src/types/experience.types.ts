@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 export interface Achievement {
   title: string;
@@ -17,4 +17,4 @@ export interface Experience {
   logoUrl: string;
   achievements: Achievement[];
   techStackGroups: TechStackGroup[];
-};
+}

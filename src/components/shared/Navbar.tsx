@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 // import { Menu } from 'lucide-react';
 
 const Navbar = () => {
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({
-      behavior: 'smooth'
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
     });
   };
 
@@ -27,7 +27,9 @@ const Navbar = () => {
             <li><Link href="/about">關於我</Link></li>
           </ul>
         </div> */}
-        <Link href="/" className="btn btn-ghost text-xl">Henry Lee</Link>
+        <Link href="/" className="btn btn-ghost text-xl">
+          Henry Lee
+        </Link>
       </div>
       {/* <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-lg">
@@ -38,10 +40,7 @@ const Navbar = () => {
         </ul>
       </div> */}
       <div className="navbar-end">
-        <button 
-          onClick={scrollToContact}
-          className="btn btn-primary btn-md"
-        >
+        <button onClick={scrollToContact} className="btn btn-primary btn-md">
           聯絡我
         </button>
       </div>
@@ -49,4 +48,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

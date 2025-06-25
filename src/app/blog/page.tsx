@@ -5,4 +5,4 @@ export default function BlogPage() {
       <p className="text-lg">這裡會分享我的技術文章與心得，敬請期待！</p>
     </div>
   );
-} 
+}

@@ -18,4 +18,4 @@ export default function NProgressBar() {
   }, [pathname]);
 
   return null;
-} 
+}

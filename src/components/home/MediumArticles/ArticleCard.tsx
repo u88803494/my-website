@@ -1,38 +1,38 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import clsx from 'clsx';
-import { Article } from '@/types/article.types';
-import { ExternalLink, Calendar, Clock, Eye, Heart } from 'lucide-react';
-import { SiMedium } from 'react-icons/si';
+import React from "react";
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import { Article } from "@/types/article.types";
+import { ExternalLink, Calendar, Clock, Eye, Heart } from "lucide-react";
+import { SiMedium } from "react-icons/si";
 
 interface ArticleCardProps {
   article: Article;
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
-  const formattedDate = new Date(article.publishedDate).toLocaleDateString('zh-TW', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = new Date(article.publishedDate).toLocaleDateString("zh-TW", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   return (
-    <motion.div 
+    <motion.div
       className={clsx(
-        'card bg-base-100 shadow-xl h-full w-full max-w-full',
-        'border border-base-200/50 hover:border-base-200 transition-colors duration-200 group'
+        "card bg-base-100 shadow-xl h-full w-full max-w-full",
+        "border border-base-200/50 hover:border-base-200 transition-colors duration-200 group",
       )}
-      whileHover={{ 
+      whileHover={{
         y: -8,
         scale: 1.02,
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
       }}
       whileTap={{ scale: 0.98 }}
-      transition={{ 
+      transition={{
         duration: 0.3,
-        ease: "easeOut"
+        ease: "easeOut",
       }}
     >
       <div className="card-body flex flex-col h-full">
@@ -43,35 +43,28 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         </div>
 
         {/* Title and Subtitle */}
-        <h3 className={clsx(
-          'card-title text-lg font-bold mb-2 line-clamp-2',
-          'group-hover:text-primary transition-colors'
-        )}>
+        <h3
+          className={clsx(
+            "card-title text-lg font-bold mb-2 line-clamp-2",
+            "group-hover:text-primary transition-colors",
+          )}
+        >
           {article.title}
         </h3>
-        <p className="text-sm text-gray-600 mb-3 italic line-clamp-1">
-          {article.subtitle}
-        </p>
+        <p className="text-sm text-gray-600 mb-3 italic line-clamp-1">{article.subtitle}</p>
 
         {/* Description */}
-        <p className="text-sm text-gray-700 mb-4 line-clamp-3 flex-grow">
-          {article.description}
-        </p>
+        <p className="text-sm text-gray-700 mb-4 line-clamp-3 flex-grow">{article.description}</p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
           {article.tags.slice(0, 3).map((tag, idx) => (
-            <span 
-              key={idx} 
-              className="badge badge-outline badge-sm text-xs"
-            >
+            <span key={idx} className="badge badge-outline badge-sm text-xs">
               {tag}
             </span>
           ))}
           {article.tags.length > 3 && (
-            <span className="badge badge-ghost badge-sm text-xs">
-              +{article.tags.length - 3}
-            </span>
+            <span className="badge badge-ghost badge-sm text-xs">+{article.tags.length - 3}</span>
           )}
         </div>
 
@@ -87,7 +80,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
               <span>{article.readTime}</span>
             </div>
           </div>
-          
+
           {(article.views || article.claps) && (
             <div className="flex items-center gap-3">
               {article.views && (
@@ -125,4 +118,4 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   );
 };
 
-export default ArticleCard; 
+export default ArticleCard;

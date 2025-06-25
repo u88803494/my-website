@@ -16,7 +16,7 @@ const HeroContent = () => {
         <span>{"Hi, I'm "}</span>
         <TypewriterText text="Henry Lee" delay={0.8} />
       </motion.h1>
-      
+
       <motion.h2
         className="text-xl lg:text-2xl font-semibold text-secondary mb-2"
         initial={{ opacity: 0, y: 30 }}
@@ -25,7 +25,7 @@ const HeroContent = () => {
       >
         前端工程師
       </motion.h2>
-      
+
       <div className="text-base lg:text-lg text-base-content/80 leading-relaxed space-y-4">
         <motion.p
           initial={{ opacity: 0, y: 30 }}
@@ -41,7 +41,8 @@ const HeroContent = () => {
           transition={{ duration: 0.6, delay: 0.9 }}
           whileHover={{ x: 5 }}
         >
-          擅長主導前端架構與效能優化，曾透過創新開發方式，成功將專案成本降低 <b>50%</b>，並將關鍵頁面讀取時間由 <b>5 秒以上</b> 縮短至 <b>1 秒內</b>。
+          擅長主導前端架構與效能優化，曾透過創新開發方式，成功將專案成本降低 <b>50%</b>，並將關鍵頁面讀取時間由{" "}
+          <b>5 秒以上</b> 縮短至 <b>1 秒內</b>。
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 30 }}
@@ -60,7 +61,7 @@ const HeroContent = () => {
           經歷一段個人成長與沉澱後，對職涯方向有了更清晰的規劃，已準備好重返職場，期待貢獻我的技術與經驗，為團隊創造實質價值。
         </motion.p>
       </div>
-      
+
       {/* CTA Buttons */}
       <motion.div
         className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-2"
@@ -73,8 +74,8 @@ const HeroContent = () => {
           whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            const projectsSection = document.getElementById('featured-projects');
-            projectsSection?.scrollIntoView({ behavior: 'smooth' });
+            const projectsSection = document.getElementById("featured-projects");
+            projectsSection?.scrollIntoView({ behavior: "smooth" });
           }}
           data-tip="瀏覽我的精選專案作品"
         >
@@ -91,9 +92,9 @@ const HeroContent = () => {
           whileHover={{ scale: 1.07, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)" }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            const link = document.createElement('a');
-            link.href = '/documents/henry-lee-resume-20250618.pdf';
-            link.download = 'Henry-Lee-Resume-2025.pdf';
+            const link = document.createElement("a");
+            link.href = "/documents/henry-lee-resume-20250618.pdf";
+            link.download = "Henry-Lee-Resume-2025.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -103,7 +104,7 @@ const HeroContent = () => {
           Download Resume
         </motion.button>
       </motion.div>
-      
+
       {/* Social Links */}
       <motion.div
         className="flex justify-center lg:justify-start gap-4 mt-6"
@@ -117,4 +118,4 @@ const HeroContent = () => {
   );
 };
 
-export default HeroContent; 
+export default HeroContent;

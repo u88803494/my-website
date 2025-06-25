@@ -1,5 +1,5 @@
 // import Link from 'next/link';
-import ContactLinks from '@/components/shared/ContactLinks';
+import ContactLinks from "@/components/shared/ContactLinks";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,7 +9,6 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12">
         {/* 主要內容區 */}
         <div className="flex flex-col items-center space-y-8">
-          
           {/* 個人資訊區塊 */}
           <div className="text-center">
             <h3 className="text-2xl font-bold mb-2">Henry Lee</h3>
@@ -44,4 +43,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

@@ -5,30 +5,35 @@
 ## 📸 預覽畫面
 
 ### 🏠 Hero Section
+
 ![Henry Lee Website Hero Section](./public/images/screenshots/henry-lee-hero-section.png)
 
-*展示網站首頁的 Hero Section，包含個人介紹、技術背景描述、關鍵成就數據以及行動按鈕*
+_展示網站首頁的 Hero Section，包含個人介紹、技術背景描述、關鍵成就數據以及行動按鈕_
 
 ### 📝 Medium 文章展示區域
+
 ![Medium Articles Section](./public/images/screenshots/resume-article-section.png)
 
-*展示 Medium 文章自動化系統的完整佈局：「最新文章」固定展示最新兩篇，「更多文章」輪播展示其餘文章，包含自動播放控制、指示器和優雅的動畫效果*
+_展示 Medium 文章自動化系統的完整佈局：「最新文章」固定展示最新兩篇，「更多文章」輪播展示其餘文章，包含自動播放控制、指示器和優雅的動畫效果_
 
 ## ✨ 主要功能
 
 ### 🏠 個人展示
+
 - **響應式設計** - 完美適配各種裝置
 - **現代化 UI** - 使用 Tailwind CSS 打造美觀介面
 - **動態效果** - 打字機效果、動畫背景等互動元素
 - **多頁面導航** - 關於我、專案、部落格頁面
 
 ### 📚 技術展示
+
 - **技能矩陣** - 視覺化展示技術棧和熟練度
 - **專案作品集** - 展示重要專案與技術細節
 - **工作經驗** - 時間軸式展示職涯歷程
 - **聯絡方式** - 多種聯絡管道整合
 
 ### 📝 Medium 文章自動化系統 ⭐
+
 - **自動抓取** - 一鍵獲取 Medium 文章資訊
 - **智能解析** - 自動提取標題、描述、標籤、縮圖
 - **技術標籤** - 自動分析並標記真實的 Medium 標籤
@@ -38,24 +43,28 @@
 ## 🛠️ 技術棧
 
 ### Frontend
+
 - **Next.js 14** - React 框架，支援 App Router
 - **TypeScript** - 型別安全的 JavaScript
 - **Tailwind CSS** - 原子級 CSS 框架
 - **React Components** - 模組化組件設計
 
 ### Development Tools
+
 - **ESLint** - 程式碼檢查工具
 - **PostCSS** - CSS 後處理器
 - **pnpm** - 高效能包管理器
 
 ### Automation
+
 - **Node.js Scripts** - 文章資料自動化處理
 - **Medium API Integration** - 文章內容抓取
 
 ## 📦 安裝與啟動
 
 ### 前置需求
-- Node.js 18+ 
+
+- Node.js 18+
 - pnpm (推薦) 或 npm
 
 ### 安裝步驟
@@ -79,12 +88,14 @@ pnpm dev
 ### 快速開始
 
 1. **添加文章 URL**
+
    ```bash
    # 編輯文章連結清單
    vim article-urls.json
    ```
 
 2. **執行自動化腳本**
+
    ```bash
    # 一鍵抓取並更新所有文章資料
    node scripts/batch-parse-articles.js
@@ -95,6 +106,7 @@ pnpm dev
    - 網站重新整理即可看到最新文章
 
 ### 詳細說明文檔
+
 📖 **[Medium 文章自動化完整指南](./docs/MEDIUM-ARTICLES-GUIDE.md)**
 
 ## 📁 專案結構
@@ -148,15 +160,18 @@ node scripts/batch-parse-articles.js
 ## 🌟 特色功能說明
 
 ### 🎯 響應式設計
+
 網站完全響應式，在桌面、平板、手機上都有最佳體驗。
 
 ### ⚡ 效能優化
+
 - Next.js 15 App Router 架構
 - 自動程式碼分割
 - 圖片優化
 - 字體優化
 
 ### 🎨 現代化 UI/UX
+
 - 簡潔優雅的視覺設計
 - 流暢的動畫效果
 - 直觀的使用者介面
@@ -165,12 +180,14 @@ node scripts/batch-parse-articles.js
 ## 🚀 部署
 
 ### Vercel 部署 (推薦)
+
 ```bash
 # 使用 Vercel CLI
 vercel --prod
 ```
 
 ### 其他平台
+
 專案支援任何支援 Next.js 的部署平台，如 Netlify、Railway 等。
 
 ## 🤝 貢獻

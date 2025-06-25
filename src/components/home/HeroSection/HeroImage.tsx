@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 const HeroImage = () => {
   return (
@@ -14,9 +14,9 @@ const HeroImage = () => {
     >
       <motion.div
         className={clsx(
-          'w-48 h-48 lg:w-64 lg:h-64 rounded-full overflow-hidden',
-          'ring ring-primary ring-offset-base-100 ring-offset-4',
-          'shadow-2xl bg-base-100 transition-transform duration-300 hover:scale-105'
+          "w-48 h-48 lg:w-64 lg:h-64 rounded-full overflow-hidden",
+          "ring ring-primary ring-offset-base-100 ring-offset-4",
+          "shadow-2xl bg-base-100 transition-transform duration-300 hover:scale-105",
         )}
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 3, repeat: Infinity }}
@@ -39,4 +39,4 @@ const HeroImage = () => {
   );
 };
 
-export default HeroImage; 
+export default HeroImage;

@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Project } from '@/types/project.types';
-import { SiGithub } from 'react-icons/si';
-import { ExternalLink, FileText, Calendar } from 'lucide-react';
-import TechStack from '@/components/shared/TechStack';
+import React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Project } from "@/types/project.types";
+import { SiGithub } from "react-icons/si";
+import { ExternalLink, FileText, Calendar } from "lucide-react";
+import TechStack from "@/components/shared/TechStack";
 
 interface ProjectCardProps {
   project: Project;
@@ -14,17 +14,17 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
-    <motion.div 
+    <motion.div
       className="card bg-base-100 shadow-xl h-full border border-base-200/50 hover:border-base-200 transition-colors duration-200 group"
-      whileHover={{ 
+      whileHover={{
         y: -8,
         scale: 1.02,
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
       }}
       whileTap={{ scale: 0.98 }}
-      transition={{ 
+      transition={{
         duration: 0.3,
-        ease: "easeOut"
+        ease: "easeOut",
       }}
     >
       <figure className="bg-base-100 flex items-center justify-center aspect-[4/3] overflow-hidden relative border-b border-base-200/30">
@@ -44,14 +44,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <p className="mb-3">{project.description.intro}</p>
         <ul className="list-disc list-inside mb-3 space-y-1">
           {project.description.features.map((feature, idx) => (
-            <li key={idx} className="text-sm leading-relaxed">{feature}</li>
+            <li key={idx} className="text-sm leading-relaxed">
+              {feature}
+            </li>
           ))}
         </ul>
-        <TechStack 
-          techStack={project.techStack} 
-          variant="primary" 
-          className="mb-4"
-        />
+        <TechStack techStack={project.techStack} variant="primary" className="mb-4" />
         <div className="mt-auto flex flex-wrap gap-2">
           {project.links.map((link, idx) => (
             <motion.a
@@ -63,9 +61,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {link.label === '預覽網站' && <ExternalLink className="w-4 h-4" />}
-              {link.label.includes('GitHub') && <SiGithub className="w-4 h-4" />}
-              {(link.label.includes('文章') || link.label.includes('心得')) && <FileText className="w-4 h-4" />}
+              {link.label === "預覽網站" && <ExternalLink className="w-4 h-4" />}
+              {link.label.includes("GitHub") && <SiGithub className="w-4 h-4" />}
+              {(link.label.includes("文章") || link.label.includes("心得")) && <FileText className="w-4 h-4" />}
               {link.label}
             </motion.a>
           ))}
@@ -75,4 +73,4 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   );
 };
 
-export default ProjectCard; 
+export default ProjectCard;

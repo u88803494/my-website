@@ -15,4 +15,4 @@ export interface Project {
   description: ProjectDescription;
   techStack: string[];
   links: ProjectLink[];
-} 
+}
