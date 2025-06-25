@@ -54,7 +54,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
 
   return (
     <motion.div
-      className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 h-full"
+      className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 h-full border border-base-200/70"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

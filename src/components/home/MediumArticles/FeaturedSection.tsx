@@ -25,7 +25,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
         <h3 className="text-xl font-semibold text-base-content">最新文章</h3>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 w-full">
         {articles.map((article, idx) => (
           <motion.div
             key={article.title + idx}

@@ -86,7 +86,7 @@ async function parseMediumArticle(url) {
             parentHref.includes('/tag/') &&
             !tags.includes(tagText)) {
           tags.push(tagText);
-        }
+      }
       });
       
       // 如果已經找到標籤就停止

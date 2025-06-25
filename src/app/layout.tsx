@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <Navbar />
         <NProgressBar />
-        <main className="flex-1">
+        <main className="flex-1 overflow-x-hidden">
           {children}
         </main>
         <Footer />

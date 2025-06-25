@@ -19,7 +19,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
   return (
     <motion.div 
-      className="card bg-base-100 shadow-xl h-full border border-base-200/50 hover:border-base-200 transition-colors duration-200 group"
+      className="card bg-base-100 shadow-xl h-full w-full max-w-full border border-base-200/50 hover:border-base-200 transition-colors duration-200 group"
       whileHover={{ 
         y: -8,
         scale: 1.02,

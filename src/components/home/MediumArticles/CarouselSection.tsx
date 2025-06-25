@@ -71,11 +71,11 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       </div>
 
       {/* 輪播內容 */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            className={`grid gap-6 ${itemsPerSlide === 1 ? 'grid-cols-1' : 'md:grid-cols-2'}`}
+            className={`grid gap-6 w-full ${itemsPerSlide === 1 ? 'grid-cols-1' : 'md:grid-cols-2'}`}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
