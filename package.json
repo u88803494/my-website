@@ -34,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "eslint-config-prettier": "^10.1.5",
+    "globals": "^16.2.0",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
@@ -50,7 +51,8 @@
       "prettier --write"
     ],
     "scripts/**/*.js": [
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
     ],
     "*.{ts,tsx}": [
       "bash -c 'tsc --noEmit --incremental'"

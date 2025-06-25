@@ -49,7 +49,7 @@ async function parseMediumArticle(url) {
           try {
             publishedDate = new Date(dateValue).toISOString().split("T")[0];
             break;
-          } catch (e) {
+          } catch {
             continue;
           }
         }
@@ -152,7 +152,7 @@ async function loadArticleUrls() {
     const configData = await fs.readFile(configPath, "utf8");
     const config = JSON.parse(configData);
     return config.articles || [];
-  } catch (error) {
+  } catch {
     console.warn("⚠️  無法讀取 article-urls.json，使用預設列表");
     return [
       "https://medium.com/@hugh-program-learning-diary-js/next-js-ai-%E4%B8%80%E5%A4%A9%E6%90%9E%E5%AE%9A%E5%80%8B%E4%BA%BA%E7%B6%B2%E7%AB%99-0dddd23f4db3",
