@@ -151,7 +151,7 @@ node scripts/batch-parse-articles.js
 網站完全響應式，在桌面、平板、手機上都有最佳體驗。
 
 ### ⚡ 效能優化
-- Next.js 14 App Router 架構
+- Next.js 15 App Router 架構
 - 自動程式碼分割
 - 圖片優化
 - 字體優化

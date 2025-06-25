@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Article } from '@/types/article.types';
 
 interface UseCarouselProps {
-  items: any[];
+  items: Article[];
   autoplayInterval?: number;
 }
 
@@ -14,7 +15,7 @@ interface UseCarouselReturn {
   goToSlide: (index: number) => void;
   nextSlide: () => void;
   prevSlide: () => void;
-  getCurrentSlideItems: () => any[];
+  getCurrentSlideItems: () => Article[];
 }
 
 export const useCarousel = ({ 
