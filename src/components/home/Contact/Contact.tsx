@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Copy, CheckCircle, Mail, Heart } from 'lucide-react';
 import ContactLinks from '@/components/shared/ContactLinks';
+import { SOCIAL_LINKS } from '@/constants/socialLinks';
 
 const Contact: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const email = "yhlscallop@gmail.com";
+  const email = SOCIAL_LINKS.EMAIL;
 
   const copyEmail = async () => {
     try {

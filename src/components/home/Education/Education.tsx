@@ -30,7 +30,7 @@ const educationData = [
 
 const Education: React.FC = () => {
   return (
-    <section className="pt-10 pb-16 bg-base-100">
+    <section className="pt-10 pb-16 bg-base-200/30">
       <div className="container mx-auto px-4 max-w-4xl">
         <motion.div 
           className="text-center mb-12"

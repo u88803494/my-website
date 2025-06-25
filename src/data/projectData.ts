@@ -1,4 +1,5 @@
 import { Project } from '@/types/project.types';
+import { SOCIAL_LINKS } from '@/constants/socialLinks';
 
 export const projects: Project[] = [
   {
@@ -37,7 +38,7 @@ export const projects: Project[] = [
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "AI 輔助開發"],
     links: [
         { label: "預覽網站", url: "https://buddhist-shop.vercel.app/" },
-        { label: "GitHub", url: "https://github.com/u88803494/buddhistShop" }
+        { label: "GitHub", url: `${SOCIAL_LINKS.GITHUB}/buddhistShop` }
     ]
   },
   {
@@ -57,7 +58,7 @@ export const projects: Project[] = [
     techStack: ["React", "Redux", "Firebase Auth", "Bootstrap"],
     links: [
       { label: "預覽網站", url: "https://u88803494.github.io/react_blog/#/posts" },
-      { label: "GitHub 介紹", url: "https://github.com/u88803494/react_blog?tab=readme-ov-file#react-spa-blog" }
+      { label: "GitHub 介紹", url: `${SOCIAL_LINKS.GITHUB}/react_blog?tab=readme-ov-file#react-spa-blog` }
     ]
   },
   {
