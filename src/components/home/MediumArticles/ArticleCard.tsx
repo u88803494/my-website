@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
-import clsx from "clsx";
-import { Article } from "@/types/article.types";
-import { ExternalLink, Calendar, Clock, Eye, Heart } from "lucide-react";
+import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
+import React from "react";
 import { SiMedium } from "react-icons/si";
+
+import { Article } from "@/types/article.types";
+import { cn } from "@/utils/cn";
 
 interface ArticleCardProps {
   article: Article;
@@ -13,53 +14,50 @@ interface ArticleCardProps {
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   const formattedDate = new Date(article.publishedDate).toLocaleDateString("zh-TW", {
-    year: "numeric",
-    month: "long",
     day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
     <motion.div
-      className={clsx(
-        "card bg-base-100 shadow-xl h-full w-full max-w-full",
-        "border border-base-200/50 hover:border-base-200 transition-colors duration-200 group",
+      className={cn(
+        "card bg-base-100 h-full w-full max-w-full shadow-xl",
+        "border-base-200/50 hover:border-base-200 group border transition-colors duration-200",
       )}
-      whileHover={{
-        y: -8,
-        scale: 1.02,
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-      }}
-      whileTap={{ scale: 0.98 }}
       transition={{
         duration: 0.3,
         ease: "easeOut",
       }}
+      whileHover={{
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+        scale: 1.02,
+        y: -8,
+      }}
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="card-body flex flex-col h-full">
+      <div className="card-body flex h-full flex-col">
         {/* Header with Medium icon */}
-        <div className="flex items-center gap-2 mb-3">
-          <SiMedium className="w-5 h-5 text-gray-600" />
+        <div className="mb-3 flex items-center gap-2">
+          <SiMedium className="h-5 w-5 text-gray-600" />
           <span className="text-sm text-gray-500">Medium Article</span>
         </div>
 
         {/* Title and Subtitle */}
         <h3
-          className={clsx(
-            "card-title text-lg font-bold mb-2 line-clamp-2",
-            "group-hover:text-primary transition-colors",
-          )}
+          className={cn("card-title mb-2 line-clamp-2 text-lg font-bold", "group-hover:text-primary transition-colors")}
         >
           {article.title}
         </h3>
-        <p className="text-sm text-gray-600 mb-3 italic line-clamp-1">{article.subtitle}</p>
+        <p className="mb-3 line-clamp-1 text-sm text-gray-600 italic">{article.subtitle}</p>
 
         {/* Description */}
-        <p className="text-sm text-gray-700 mb-4 line-clamp-3 flex-grow">{article.description}</p>
+        <p className="mb-4 line-clamp-3 flex-grow text-sm text-gray-700">{article.description}</p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="mb-4 flex flex-wrap gap-2">
           {article.tags.slice(0, 3).map((tag, idx) => (
-            <span key={idx} className="badge badge-outline badge-sm text-xs">
+            <span className="badge badge-outline badge-sm text-xs" key={idx}>
               {tag}
             </span>
           ))}
@@ -69,14 +67,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         </div>
 
         {/* Stats */}
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+        <div className="mb-4 flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="h-3 w-3" />
               <span>{formattedDate}</span>
             </div>
             <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="h-3 w-3" />
               <span>{article.readTime}</span>
             </div>
           </div>
@@ -85,13 +83,13 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             <div className="flex items-center gap-3">
               {article.views && (
                 <div className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
+                  <Eye className="h-3 w-3" />
                   <span>{article.views.toLocaleString()}</span>
                 </div>
               )}
               {article.claps && (
                 <div className="flex items-center gap-1">
-                  <Heart className="w-3 h-3" />
+                  <Heart className="h-3 w-3" />
                   <span>{article.claps}</span>
                 </div>
               )}
@@ -102,14 +100,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         {/* Read Button */}
         <div className="mt-auto">
           <motion.a
+            className="btn btn-outline btn-sm flex w-full items-center gap-2"
             href={article.url}
-            target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline btn-sm w-full flex items-center gap-2"
+            target="_blank"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className="h-4 w-4" />
             閱讀文章
           </motion.a>
         </div>

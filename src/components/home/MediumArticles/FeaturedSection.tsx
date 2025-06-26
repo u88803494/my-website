@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
+
 import { Article } from "@/types/article.types";
+
 import ArticleCard from "./ArticleCard";
 
 interface FeaturedSectionProps {
@@ -16,26 +17,26 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
     <motion.div
       className="mb-12"
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.6 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.2 }}
+      whileInView={{ opacity: 1, y: 0 }}
     >
-      <div className="flex items-center gap-2 mb-6">
-        <div className="w-2 h-2 bg-primary rounded-full"></div>
-        <h3 className="text-xl font-semibold text-base-content">最新文章</h3>
+      <div className="mb-6 flex items-center gap-2">
+        <div className="bg-primary h-2 w-2 rounded-full" />
+        <h3 className="text-base-content text-xl font-semibold">最新文章</h3>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 w-full">
+      <div className="grid w-full gap-6 md:grid-cols-2">
         {articles.map((article, idx) => (
           <motion.div
-            key={article.title + idx}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            key={article.title + idx}
             transition={{
-              duration: 0.5,
               delay: idx * 0.1,
+              duration: 0.5,
             }}
+            viewport={{ once: true }}
+            whileInView={{ opacity: 1, y: 0 }}
           >
             <ArticleCard article={article} />
           </motion.div>

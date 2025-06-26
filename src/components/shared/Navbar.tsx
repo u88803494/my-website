@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar shadow-lg fixed top-0 w-full z-50 backdrop-blur-sm bg-base-100/95">
+    <div className="navbar bg-base-100/95 fixed top-0 z-50 w-full shadow-lg backdrop-blur-sm">
       <div className="navbar-start">
         {/* <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden btn-circle btn-md">
@@ -27,7 +27,7 @@ const Navbar = () => {
             <li><Link href="/about">關於我</Link></li>
           </ul>
         </div> */}
-        <Link href="/" className="btn btn-ghost text-xl">
+        <Link className="btn btn-ghost text-xl" href="/">
           Henry Lee
         </Link>
       </div>
@@ -40,7 +40,7 @@ const Navbar = () => {
         </ul>
       </div> */}
       <div className="navbar-end">
-        <button onClick={scrollToContact} className="btn btn-primary btn-md">
+        <button className="btn btn-primary btn-md" onClick={scrollToContact}>
           聯絡我
         </button>
       </div>

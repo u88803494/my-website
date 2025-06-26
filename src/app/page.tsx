@@ -1,12 +1,12 @@
 "use client";
 
-import HeroSection from "@/components/home/HeroSection";
-import WorkExperience from "@/components/home/WorkExperience";
+import Contact from "@/components/home/Contact";
+import Education from "@/components/home/Education";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
+import HeroSection from "@/components/home/HeroSection";
 import MediumArticles from "@/components/home/MediumArticles";
 import Skills from "@/components/home/Skills";
-import Education from "@/components/home/Education";
-import Contact from "@/components/home/Contact";
+import WorkExperience from "@/components/home/WorkExperience";
 
 const Home = () => {
   return (

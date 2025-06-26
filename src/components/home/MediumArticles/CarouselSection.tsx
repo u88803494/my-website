@@ -1,35 +1,37 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { Article } from "@/types/article.types";
+
 import ArticleCard from "./ArticleCard";
-import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 interface CarouselSectionProps {
   articles: Article[];
   currentSlide: number;
+  getCurrentSlideItems: () => Article[];
+  goToSlide: (index: number) => void;
   isPlaying: boolean;
   itemsPerSlide: number;
-  totalSlides: number;
-  setIsPlaying: (playing: boolean) => void;
-  goToSlide: (index: number) => void;
   nextSlide: () => void;
   prevSlide: () => void;
-  getCurrentSlideItems: () => Article[];
+  setIsPlaying: (playing: boolean) => void;
+  totalSlides: number;
 }
 
 const CarouselSection: React.FC<CarouselSectionProps> = ({
   articles,
   currentSlide,
+  getCurrentSlideItems,
+  goToSlide,
   isPlaying,
   itemsPerSlide,
-  totalSlides,
-  setIsPlaying,
-  goToSlide,
   nextSlide,
   prevSlide,
-  getCurrentSlideItems,
+  setIsPlaying,
+  totalSlides,
 }) => {
   if (articles.length === 0) return null;
 
@@ -37,48 +39,48 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     <motion.div
       className="relative"
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.6 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.4 }}
+      whileInView={{ opacity: 1, y: 0 }}
     >
       {/* 標題和控制 */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-secondary rounded-full"></div>
-          <h3 className="text-xl font-semibold text-base-content">更多文章</h3>
+          <div className="bg-secondary h-2 w-2 rounded-full" />
+          <h3 className="text-base-content text-xl font-semibold">更多文章</h3>
         </div>
 
         {/* 播放控制 */}
         {totalSlides > 1 && (
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
               className="btn btn-circle btn-sm btn-ghost"
+              onClick={() => setIsPlaying(!isPlaying)}
               title={isPlaying ? "暫停" : "播放"}
             >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </button>
 
-            <button onClick={prevSlide} className="btn btn-circle btn-sm btn-ghost" title="上一頁">
-              <ChevronLeft className="w-4 h-4" />
+            <button className="btn btn-circle btn-sm btn-ghost" onClick={prevSlide} title="上一頁">
+              <ChevronLeft className="h-4 w-4" />
             </button>
 
-            <button onClick={nextSlide} className="btn btn-circle btn-sm btn-ghost" title="下一頁">
-              <ChevronRight className="w-4 h-4" />
+            <button className="btn btn-circle btn-sm btn-ghost" onClick={nextSlide} title="下一頁">
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         )}
       </div>
 
       {/* 輪播內容 */}
-      <div className="relative overflow-hidden w-full">
+      <div className="relative w-full overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentSlide}
-            className={`grid gap-6 w-full ${itemsPerSlide === 1 ? "grid-cols-1" : "md:grid-cols-2"}`}
-            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
+            className={`grid w-full gap-6 ${itemsPerSlide === 1 ? "grid-cols-1" : "md:grid-cols-2"}`}
             exit={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 50 }}
+            key={currentSlide}
             transition={{
               duration: 0.5,
               ease: [0.23, 1, 0.32, 1],
@@ -86,12 +88,12 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
           >
             {getCurrentSlideItems().map((article, idx) => (
               <motion.div
-                key={article.title + currentSlide + idx}
-                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                key={article.title + currentSlide + idx}
                 transition={{
-                  duration: 0.4,
                   delay: idx * 0.1,
+                  duration: 0.4,
                 }}
               >
                 <ArticleCard article={article} />
@@ -103,14 +105,14 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
 
       {/* 指示器 */}
       {totalSlides > 1 && (
-        <div className="flex justify-center mt-8 gap-2">
+        <div className="mt-8 flex justify-center gap-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <motion.button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`h-2 w-2 rounded-full transition-all duration-300 ${
                 index === currentSlide ? "bg-primary w-8" : "bg-base-300 hover:bg-base-content/30"
               }`}
+              key={index}
+              onClick={() => goToSlide(index)}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             />
@@ -120,17 +122,17 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
 
       {/* 進度條 */}
       {isPlaying && totalSlides > 1 && (
-        <div className="mt-4 w-full bg-base-300 rounded-full h-1 overflow-hidden">
+        <div className="bg-base-300 mt-4 h-1 w-full overflow-hidden rounded-full">
           <motion.div
-            className="h-full bg-primary"
-            initial={{ width: "0%" }}
             animate={{ width: "100%" }}
+            className="bg-primary h-full"
+            initial={{ width: "0%" }}
+            key={currentSlide}
             transition={{
               duration: 4,
               ease: "linear",
               repeat: Infinity,
             }}
-            key={currentSlide}
           />
         </div>
       )}

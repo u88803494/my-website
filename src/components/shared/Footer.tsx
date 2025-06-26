@@ -5,21 +5,21 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-gradient-to-br from-base-300/30 via-base-200 to-base-100/50 text-base-content">
+    <footer className="from-base-300/30 via-base-200 to-base-100/50 text-base-content w-full bg-gradient-to-br">
       <div className="container mx-auto px-6 py-12">
         {/* 主要內容區 */}
         <div className="flex flex-col items-center space-y-8">
           {/* 個人資訊區塊 */}
           <div className="text-center">
-            <h3 className="text-2xl font-bold mb-2">Henry Lee</h3>
+            <h3 className="mb-2 text-2xl font-bold">Henry Lee</h3>
             <p className="text-base-content/70 text-lg">前端工程師</p>
-            <p className="text-base-content/60 text-sm mt-1 max-w-md">
+            <p className="text-base-content/60 mt-1 max-w-md text-sm">
               專精於 Next.js、React、TypeScript 開發，致力於打造高效能、高可維護性的網頁應用
             </p>
           </div>
 
           {/* 分隔線 */}
-          <div className="w-24 h-1 bg-primary rounded-full"></div>
+          <div className="bg-primary h-1 w-24 rounded-full" />
 
           {/* 社交連結 */}
           <div className="flex flex-col items-center space-y-4">
@@ -30,10 +30,10 @@ const Footer = () => {
           </div>
 
           {/* 分隔線 */}
-          <div className="w-full border-t border-base-content/10"></div>
+          <div className="border-base-content/10 w-full border-t" />
 
           {/* 版權資訊 */}
-          <div className="text-center text-sm text-base-content/60">
+          <div className="text-base-content/60 text-center text-sm">
             <p>© {currentYear} Henry Lee. All rights reserved.</p>
             <p className="mt-1">Built with Next.js & TypeScript</p>
           </div>

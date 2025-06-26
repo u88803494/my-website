@@ -1,18 +1,18 @@
+export interface Project {
+  category: string;
+  description: ProjectDescription;
+  imageUrl: string;
+  links: ProjectLink[];
+  techStack: string[];
+  title: string;
+}
+
 export interface ProjectDescription {
-  intro: string;
   features: string[];
+  intro: string;
 }
 
 export interface ProjectLink {
   label: string;
   url: string;
-}
-
-export interface Project {
-  title: string;
-  category: string;
-  imageUrl: string;
-  description: ProjectDescription;
-  techStack: string[];
-  links: ProjectLink[];
 }

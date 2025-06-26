@@ -1,38 +1,39 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
-import clsx from "clsx";
+import Image from "next/image";
+
+import { cn } from "@/utils/cn";
 
 const HeroImage = () => {
   return (
     <motion.div
+      animate={{ opacity: 1, rotateY: 0, scale: 1 }}
       className="avatar"
-      initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
-      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-      transition={{ duration: 0.8, delay: 0.2 }}
+      initial={{ opacity: 0, rotateY: -90, scale: 0.8 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
     >
       <motion.div
-        className={clsx(
-          "w-48 h-48 lg:w-64 lg:h-64 rounded-full overflow-hidden",
-          "ring ring-primary ring-offset-base-100 ring-offset-4",
-          "shadow-2xl bg-base-100 transition-transform duration-300 hover:scale-105",
-        )}
         animate={{ y: [0, -10, 0] }}
+        className={cn(
+          "h-48 w-48 overflow-hidden rounded-full lg:h-64 lg:w-64",
+          "ring-primary ring-offset-base-100 ring ring-offset-4",
+          "bg-base-100 shadow-2xl transition-transform duration-300 hover:scale-105",
+        )}
         transition={{ duration: 3, repeat: Infinity }}
         whileHover={{
-          scale: 1.08,
           rotateY: 5,
+          scale: 1.08,
           transition: { duration: 0.3 },
         }}
       >
         <Image
-          src="/images/my-photo.jpeg"
           alt="Henry Lee's photo"
-          width={256}
+          className="h-full w-full object-cover object-top"
           height={256}
-          className="w-full h-full object-cover object-top"
           priority
+          src="/images/my-photo.jpeg"
+          width={256}
         />
       </motion.div>
     </motion.div>

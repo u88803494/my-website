@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
-import clsx from "clsx";
+import React from "react";
+
 import { skillData } from "@/data/skillData";
+import { cn } from "@/utils/cn";
+
 import SkillCategory from "./SkillCategory";
 
 interface SkillsProps {
@@ -13,29 +15,29 @@ interface SkillsProps {
 
 const Skills: React.FC<SkillsProps> = ({ backgroundClass, sectionId }) => {
   return (
-    <section className={clsx("py-20", backgroundClass)} id={sectionId}>
-      <div className="container mx-auto px-2 md:px-4 prose prose-neutral max-w-6xl">
+    <section className={cn("py-20", backgroundClass)} id={sectionId}>
+      <div className="prose prose-neutral container mx-auto max-w-6xl px-2 md:px-4">
         <motion.div
-          className="text-center mb-16"
+          className="mb-16 text-center"
           initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          whileInView={{ opacity: 1, y: 0 }}
         >
-          <h2 className="text-4xl font-bold text-base-content mb-4">Skills</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-lg text-base-content/80">我在軟體開發領域的技能分佈，從核心專長到各種涉獵的技術棧</p>
+          <h2 className="text-base-content mb-4 text-4xl font-bold">Skills</h2>
+          <div className="bg-primary mx-auto mb-6 h-1 w-20" />
+          <p className="text-base-content/80 text-lg">我在軟體開發領域的技能分佈，從核心專長到各種涉獵的技術棧</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 not-prose">
+        <div className="not-prose grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {skillData.map((category, index) => (
             <SkillCategory
-              key={index}
-              title={category.title}
               description={category.description}
-              skills={category.skills}
-              level={category.level}
               index={index}
+              key={index}
+              level={category.level}
+              skills={category.skills}
+              title={category.title}
             />
           ))}
         </div>

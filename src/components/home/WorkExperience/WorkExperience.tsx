@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import clsx from "clsx";
-import { experiences } from "@/data/experienceData";
+
 import ExperienceCard from "@/components/home/WorkExperience/ExperienceCard";
+import { experiences } from "@/data/experienceData";
+import { cn } from "@/utils/cn";
 
 interface WorkExperienceProps {
   backgroundClass: string;
@@ -12,16 +13,16 @@ interface WorkExperienceProps {
 
 const WorkExperience: React.FC<WorkExperienceProps> = ({ backgroundClass, sectionId }) => {
   return (
-    <section className={clsx("py-20", backgroundClass)} id={sectionId}>
-      <div className="container mx-auto px-2 md:px-4 prose prose-neutral max-w-4xl">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-base-content mb-4">Work Experience</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-lg text-base-content/80">我的職涯發展歷程</p>
+    <section className={cn("py-20", backgroundClass)} id={sectionId}>
+      <div className="prose prose-neutral container mx-auto max-w-4xl px-2 md:px-4">
+        <div className="mb-16 text-center">
+          <h2 className="text-base-content mb-4 text-4xl font-bold">Work Experience</h2>
+          <div className="bg-primary mx-auto mb-6 h-1 w-20" />
+          <p className="text-base-content/80 text-lg">我的職涯發展歷程</p>
         </div>
         <div className="flex flex-col gap-12">
           {experiences.map((exp) => (
-            <ExperienceCard key={exp.company + exp.period} experience={exp} />
+            <ExperienceCard experience={exp} key={exp.company + exp.period} />
           ))}
         </div>
       </div>

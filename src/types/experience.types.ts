@@ -1,20 +1,20 @@
 import { ReactNode } from "react";
 
 export interface Achievement {
-  title: string;
   description: ReactNode;
-}
-
-export interface TechStackGroup {
-  label: string;
-  items: string[];
+  title: string;
 }
 
 export interface Experience {
-  role: string;
-  company: string;
-  period: string;
-  logoUrl: string;
   achievements: Achievement[];
+  company: string;
+  logoUrl: string;
+  period: string;
+  role: string;
   techStackGroups: TechStackGroup[];
+}
+
+export interface TechStackGroup {
+  items: string[];
+  label: string;
 }

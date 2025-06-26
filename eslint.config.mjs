@@ -80,7 +80,15 @@ const eslintConfig = [
     },
   },
 
-  // 4. Configuration for Node.js scripts (scripts folder)
+  // 4. Configuration for auto-generated data files
+  {
+    files: ["src/data/articleData.ts"],
+    rules: {
+      "sonarjs/no-duplicate-string": "off",
+    },
+  },
+
+  // 5. Configuration for Node.js scripts (scripts folder)
   {
     files: ["scripts/**/*.js"],
     languageOptions: {

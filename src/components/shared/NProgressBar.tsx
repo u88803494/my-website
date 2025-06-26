@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import "nprogress/nprogress.css";
+
 import { usePathname } from "next/navigation";
 // @ts-expect-error: nprogress 沒有型別定義
 import NProgress from "nprogress";
-import "nprogress/nprogress.css";
+import { useEffect } from "react";
 
 // 自訂 nprogress 樣式（可根據主題調整顏色）
 NProgress.configure({ showSpinner: false });
 
-export default function NProgressBar() {
+const NProgressBar = () => {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -18,4 +19,6 @@ export default function NProgressBar() {
   }, [pathname]);
 
   return null;
-}
+};
+
+export default NProgressBar;

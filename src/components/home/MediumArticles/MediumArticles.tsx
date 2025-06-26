@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
-import clsx from "clsx";
-import { articleList } from "@/data/articleData";
-import { useCarousel } from "./useCarousel";
+import React from "react";
+
 import { SOCIAL_LINKS } from "@/constants/socialLinks";
-import SectionHeader from "./SectionHeader";
-import FeaturedSection from "./FeaturedSection";
+import { articleList } from "@/data/articleData";
+import { cn } from "@/utils/cn";
+
 import CarouselSection from "./CarouselSection";
+import FeaturedSection from "./FeaturedSection";
+import SectionHeader from "./SectionHeader";
+import { useCarousel } from "./useCarousel";
 
 interface MediumArticlesProps {
   /** 背景樣式，預設為 'bg-base-200' */
@@ -24,12 +26,12 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
 
   // 使用輪播 hook
   const carousel = useCarousel({
-    items: carouselArticles,
     autoplayInterval: 4000,
+    items: carouselArticles,
   });
 
   return (
-    <section className={clsx("py-20", backgroundClass)} id={sectionId}>
+    <section className={cn("py-20", backgroundClass)} id={sectionId}>
       <div className="container mx-auto px-4">
         <SectionHeader />
 
@@ -39,17 +41,17 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
 
         {/* 前往 Medium 文章頁面 */}
         <motion.div
-          className="text-center mt-12"
+          className="mt-12 text-center"
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          whileInView={{ opacity: 1 }}
         >
           <motion.a
+            className={cn("btn btn-primary btn-lg", "shadow-lg transition-all hover:shadow-xl")}
             href={SOCIAL_LINKS.MEDIUM}
-            target="_blank"
             rel="noopener noreferrer"
-            className={clsx("btn btn-primary btn-lg", "shadow-lg hover:shadow-xl transition-all")}
+            target="_blank"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

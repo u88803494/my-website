@@ -1,24 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { Article } from "@/types/article.types";
 
 interface UseCarouselProps {
-  items: Article[];
   autoplayInterval?: number;
+  items: Article[];
 }
 
 interface UseCarouselReturn {
   currentSlide: number;
+  getCurrentSlideItems: () => Article[];
+  goToSlide: (index: number) => void;
   isPlaying: boolean;
   itemsPerSlide: number;
-  totalSlides: number;
-  setIsPlaying: (playing: boolean) => void;
-  goToSlide: (index: number) => void;
   nextSlide: () => void;
   prevSlide: () => void;
-  getCurrentSlideItems: () => Article[];
+  setIsPlaying: (playing: boolean) => void;
+  totalSlides: number;
 }
 
-export const useCarousel = ({ items, autoplayInterval = 4000 }: UseCarouselProps): UseCarouselReturn => {
+export const useCarousel = ({ autoplayInterval = 4000, items }: UseCarouselProps): UseCarouselReturn => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [itemsPerSlide, setItemsPerSlide] = useState(2);
@@ -70,13 +71,13 @@ export const useCarousel = ({ items, autoplayInterval = 4000 }: UseCarouselProps
 
   return {
     currentSlide,
+    getCurrentSlideItems,
+    goToSlide,
     isPlaying,
     itemsPerSlide,
-    totalSlides,
-    setIsPlaying,
-    goToSlide,
     nextSlide,
     prevSlide,
-    getCurrentSlideItems,
+    setIsPlaying,
+    totalSlides,
   };
 };
