@@ -5,7 +5,7 @@
  *
  * 🚀 自動化更新方式：
  * 1. 將新的 Medium 文章 URL 添加到根目錄的 `article-urls.json` 文件中
- * 2. 執行腳本：`node scripts/batch-parse-articles.js`
+ * 2. 執行腳本：`npm run parse:articles` 或 `node scripts/batch-parse-articles.ts`
  * 3. 腳本會自動解析文章資訊並更新此文件
  *
  * 📝 腳本功能：
@@ -15,7 +15,7 @@
  * - 保持資料格式一致性
  *
  * 🔄 更新流程：
- * article-urls.json → batch-parse-articles.js → articleData.ts (此文件)
+ * article-urls.json → batch-parse-articles.ts → articleData.ts (此文件)
  *
  * 💡 如需修改文章資料，請修改腳本邏輯，而非直接編輯此文件
  */

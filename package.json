@@ -9,8 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "sync:latest": "node scripts/sync-latest-articles.js",
-    "parse:articles": "node scripts/batch-parse-articles.js",
+    "sync:latest": "tsx scripts/sync-latest-articles.ts",
+    "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "npm run sync:latest && npm run parse:articles",
     "prepare": "husky"
   },
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -49,6 +50,7 @@
     "prettier": "3.6.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   },
   "lint-staged": {
@@ -59,7 +61,7 @@
     "*.{json,css,scss,md,mdx,yaml,yml}": [
       "prettier --write"
     ],
-    "scripts/**/*.js": [
+    "scripts/**/*.{js,ts}": [
       "prettier --write",
       "eslint --fix --max-warnings=0"
     ],

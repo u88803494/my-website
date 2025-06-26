@@ -85,17 +85,23 @@ const eslintConfig = [
 
   // 5. Configuration for Node.js scripts (scripts folder)
   {
-    files: ["scripts/**/*.js"],
+    files: ["scripts/**/*.{js,ts}"],
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "script",
+      sourceType: "module",
       globals: { ...globals.node },
     },
     rules: {
       "no-console": "off",
       "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
       "@typescript-eslint/no-require-imports": "off",
-      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      ...importSortRules,
+      ...codeStyleRules,
+      // Perfectionist rules for scripts
+      "perfectionist/sort-imports": "off", // Defer to simple-import-sort
+      "perfectionist/sort-objects": "error",
+      "perfectionist/sort-interfaces": "error",
     },
   },
 ];
