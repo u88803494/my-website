@@ -1,64 +1,92 @@
+// --- Imports ---
+// Core
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+// ESLint
 import { FlatCompat } from "@eslint/eslintrc";
 import globals from "globals";
+// Plugins
 import perfectionist from "eslint-plugin-perfectionist";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sonarjs from "eslint-plugin-sonarjs";
 import tailwindcss from "eslint-plugin-tailwindcss";
 import unusedImports from "eslint-plugin-unused-imports";
 
+// --- Setup ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+// --- Rule Groups ---
+const reactRules = {
+  "react/function-component-definition": [
+    "error",
+    { namedComponents: "arrow-function", unnamedComponents: "arrow-function" },
+  ],
+  "react/self-closing-comp": "error",
+  "react/jsx-pascal-case": "error",
+};
 
+const codeStyleRules = {
+  "prefer-const": "error",
+  "no-var": "error",
+  "prefer-arrow-callback": "error",
+};
+
+const importSortRules = {
+  "simple-import-sort/imports": "error",
+  "unused-imports/no-unused-imports": "error",
+  "perfectionist/sort-imports": "off", // Defer to simple-import-sort
+};
+
+// --- Main Configuration ---
 const eslintConfig = [
-  // Next.js 和 TypeScript 配置（主要應用程式）
+  // 1. Base configurations for the entire project
+  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+
+  // 2. Plugin definitions, available globally
   {
-    files: ["src/**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      "simple-import-sort": simpleImportSort,
+      perfectionist,
+      sonarjs,
+      tailwindcss,
       "unused-imports": unusedImports,
-    },
-    rules: {
-      // Import 排序
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
-      // 未使用的 Import
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-        "warn",
-        {
-          vars: "all",
-          varsIgnorePattern: "^_",
-          args: "after-used",
-          argsIgnorePattern: "^_",
-        },
-      ],
+      "simple-import-sort": simpleImportSort,
     },
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  // SonarJS
-  sonarjs.configs.recommended,
-  // Tailwind CSS (使用 flat config 推薦設定)
-  ...tailwindcss.configs["flat/recommended"],
-  // Perfectionist (自然排序)
-  perfectionist.configs["eslint-plugin-perfectionist/recommended-natural"],
-  // Prettier (必須在最後)
-  ...compat.extends("prettier"),
-  
-  // Node.js 腳本配置（scripts 目錄）
+
+  // 3. Configuration for the main React application (src folder)
+  {
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
+    rules: {
+      // Perfectionist rules (code sorting and organization)
+      ...perfectionist.configs["recommended-natural"].rules,
+
+      // SonarJS rules (code quality and bug detection)
+      "sonarjs/cognitive-complexity": "error",
+      "sonarjs/no-duplicate-string": "error",
+      "sonarjs/no-duplicated-branches": "error",
+      "sonarjs/no-identical-functions": "error",
+      "sonarjs/no-redundant-boolean": "error",
+      "sonarjs/prefer-immediate-return": "error",
+
+      // Tailwind CSS rules
+      "tailwindcss/no-custom-classname": "off",
+
+      // Apply rule groups
+      ...importSortRules,
+      ...reactRules,
+      ...codeStyleRules,
+    },
+  },
+
+  // 4. Configuration for Node.js scripts (scripts folder)
   {
     files: ["scripts/**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "script",
-      globals: {
-        ...globals.node,
-      },
+      globals: { ...globals.node },
     },
     rules: {
       "no-console": "off",
