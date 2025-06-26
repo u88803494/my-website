@@ -17,7 +17,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ backgroundClass, sectionId })
     <section className={cn("hero relative min-h-screen overflow-hidden", backgroundClass)} id={sectionId}>
       <AnimatedBackground />
 
-      <div className="hero-content relative z-10 w-full flex-col gap-8 lg:flex-row-reverse lg:gap-16">
+      <div
+        className={cn(
+          "hero-content relative z-10 w-full",
+          "flex-col gap-8 pt-12",
+          "lg:flex-row-reverse lg:gap-16 lg:pt-0",
+        )}
+      >
         <HeroImage />
         <HeroContent />
       </div>
