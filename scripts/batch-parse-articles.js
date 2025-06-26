@@ -267,13 +267,13 @@ function generateArticleDataFile(articles) {
       const thumbnail = article.thumbnail ? `,\n    thumbnail: "${article.thumbnail}"` : "";
 
       return `  {
-    title: "${article.title}",
-    subtitle: "${article.subtitle}",
+    description: "${article.description}",
     publishedDate: "${article.publishedDate}",
     readTime: "${article.readTime}",
-    url: "${article.url}",
-    tags: [${article.tags.map((tag) => `"${tag}"`).join(", ")}],
-    description: "${article.description}"${thumbnail}
+    subtitle: "${article.subtitle}",
+    tags: [${article.tags.map((tag) => `"${tag}"`).join(", ")}]${thumbnail},
+    title: "${article.title}",
+    url: "${article.url}"
   }`;
     })
     .join(",\n");

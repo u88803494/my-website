@@ -9,7 +9,6 @@ import globals from "globals";
 import perfectionist from "eslint-plugin-perfectionist";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import sonarjs from "eslint-plugin-sonarjs";
-import tailwindcss from "eslint-plugin-tailwindcss";
 import unusedImports from "eslint-plugin-unused-imports";
 
 // --- Setup ---
@@ -49,7 +48,6 @@ const eslintConfig = [
     plugins: {
       perfectionist,
       sonarjs,
-      tailwindcss,
       "unused-imports": unusedImports,
       "simple-import-sort": simpleImportSort,
     },
@@ -69,9 +67,6 @@ const eslintConfig = [
       "sonarjs/no-identical-functions": "error",
       "sonarjs/no-redundant-boolean": "error",
       "sonarjs/prefer-immediate-return": "error",
-
-      // Tailwind CSS rules
-      "tailwindcss/no-custom-classname": "off",
 
       // Apply rule groups
       ...importSortRules,
