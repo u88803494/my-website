@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "npm run parse:articles && next build",
+    "build": "npm run sync:all-articles && next build",
     "build:fast": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "sync:latest": "node scripts/sync-latest-articles.js",
     "parse:articles": "node scripts/batch-parse-articles.js",
+    "sync:all-articles": "npm run sync:latest && npm run parse:articles",
     "prepare": "husky"
   },
   "dependencies": {

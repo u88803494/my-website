@@ -60,7 +60,7 @@ export const useMediumArticles = (options: UseMediumArticlesOptions = {}) => {
 
   return useInfiniteQuery({
     gcTime: 30 * 60 * 1000, // 30 分鐘
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: (lastPage: MediumArticlesResponse) => lastPage.nextCursor ?? undefined,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }) => fetchMediumArticles({ limit, pageParam }),
     queryKey: ["mediumArticles", limit],

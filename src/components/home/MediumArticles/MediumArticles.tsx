@@ -5,6 +5,7 @@ import React from "react";
 
 import { SOCIAL_LINKS } from "@/constants/socialLinks";
 import { articleList } from "@/data/articleData";
+import { latestArticles } from "@/data/latestArticles";
 import { cn } from "@/utils/cn";
 
 import CarouselSection from "./CarouselSection";
@@ -20,14 +21,10 @@ interface MediumArticlesProps {
 }
 
 const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectionId }) => {
-  // 文章分組：最新兩篇固定，其餘輪播
-  const featuredArticles = articleList.slice(0, 2);
-  const carouselArticles = articleList.slice(2);
-
-  // 使用輪播 hook
+  // 使用輪播 hook 處理精選文章
   const carousel = useCarousel({
     autoplayInterval: 4000,
-    items: carouselArticles,
+    items: articleList, // 使用全部精選文章
   });
 
   return (
@@ -35,9 +32,11 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
       <div className="container mx-auto px-4">
         <SectionHeader />
 
-        <FeaturedSection articles={featuredArticles} />
+        {/* 最新文章區塊 */}
+        <FeaturedSection articles={latestArticles} />
 
-        <CarouselSection articles={carouselArticles} {...carousel} />
+        {/* 精選文章區塊 */}
+        <CarouselSection articles={articleList} {...carousel} />
 
         {/* 前往 Medium 文章頁面 */}
         <motion.div

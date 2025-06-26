@@ -22,8 +22,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
       whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="mb-6 flex items-center gap-2">
-        <div className="bg-primary h-2 w-2 rounded-full" />
-        <h3 className="text-base-content text-xl font-semibold">最新文章</h3>
+        <h3 className="text-base-content text-xl font-semibold">📰 最新文章</h3>
       </div>
 
       <div className="grid w-full gap-6 md:grid-cols-2">

@@ -46,8 +46,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       {/* 標題和控制 */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="bg-secondary h-2 w-2 rounded-full" />
-          <h3 className="text-base-content text-xl font-semibold">更多文章</h3>
+          <h3 className="text-base-content text-xl font-semibold">⭐ 精選文章</h3>
         </div>
 
         {/* 播放控制 */}
