@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import QueryProvider from "@/components/providers/QueryProvider";
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 import NProgressBar from "@/components/shared/NProgressBar";
@@ -33,10 +34,12 @@ const RootLayout = ({
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
         suppressHydrationWarning={true}
       >
-        <Navbar />
-        <NProgressBar />
-        <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
-        <Footer />
+        <QueryProvider>
+          <Navbar />
+          <NProgressBar />
+          <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );

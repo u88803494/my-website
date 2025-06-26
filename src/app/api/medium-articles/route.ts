@@ -65,9 +65,13 @@ fragment StreamPostPreview_post on Post {
 
 export async function GET(request: NextRequest) {
   try {
-    // 從查詢參數中獲取 cursor
+    // 從查詢參數中獲取 cursor 和 limit
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor");
+    const limitParam = searchParams.get("limit");
+
+    // 解析 limit 參數，預設為 8，最大為 20
+    const limit = Math.min(Math.max(parseInt(limitParam || "8", 10), 1), 20);
 
     // 構建 GraphQL payload
     const payload = [
@@ -76,7 +80,7 @@ export async function GET(request: NextRequest) {
         query: GRAPHQL_QUERY,
         variables: {
           homepagePostsFrom: cursor || null, // 如果沒有 cursor 則為 null
-          homepagePostsLimit: 8,
+          homepagePostsLimit: limit,
           id: "cd53d8c994f6",
         },
       },

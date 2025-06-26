@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.81.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.19.1",
     "lucide-react": "^0.518.0",
