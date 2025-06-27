@@ -32,6 +32,10 @@ const codeStyleRules = {
   "prefer-arrow-callback": "error",
 };
 
+const typeScriptRules = {
+  "@typescript-eslint/no-explicit-any": "error",
+};
+
 const importSortRules = {
   "simple-import-sort/imports": "error",
   "unused-imports/no-unused-imports": "error",
@@ -72,6 +76,7 @@ const eslintConfig = [
       ...importSortRules,
       ...reactRules,
       ...codeStyleRules,
+      ...typeScriptRules,
     },
   },
 

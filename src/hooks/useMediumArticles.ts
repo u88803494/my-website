@@ -1,7 +1,26 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { API_PATHS } from "@/lib/api-paths";
-import { Article } from "@/types/article.types";
+
+/**
+ * Medium 文章資料格式 (從 API 回傳)
+ */
+export interface MediumPost {
+  collection?: {
+    name: string;
+  };
+  creator: {
+    name: string;
+    username: string;
+  };
+  extendedPreviewContent?: {
+    subtitle: string;
+  };
+  firstPublishedAt: number;
+  id: string;
+  mediumUrl: string;
+  title: string;
+}
 
 /**
  * Medium 文章 API 回應格式
@@ -10,7 +29,7 @@ interface MediumArticlesResponse {
   /** 下一頁的 cursor */
   nextCursor: null | string;
   /** 文章列表 */
-  posts: Article[];
+  posts: MediumPost[];
 }
 
 /**
