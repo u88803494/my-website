@@ -1,13 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import ArticleStatsSkeleton from "./ArticleStatsSkeleton";
+import SkeletonCard from "./SkeletonCard";
 
 const LoadingState = () => {
   return (
-    <motion.div animate={{ opacity: 1 }} className="py-20 text-center" initial={{ opacity: 0 }}>
-      <span className="loading loading-spinner loading-lg text-primary mb-4" />
-      <p className="text-base-content/70">載入文章中...</p>
-    </motion.div>
+    <div className="py-8">
+      {/* Stats skeleton */}
+      <ArticleStatsSkeleton />
+
+      {/* Skeleton cards grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 9 }, (_, index) => (
+          <SkeletonCard index={index} key={index} />
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+import SkeletonCard from "./SkeletonCard";
+
 interface LoadMoreButtonProps {
   isLoading: boolean;
   onLoadMore: () => void;
@@ -10,12 +12,14 @@ interface LoadMoreButtonProps {
 const LoadMoreButton = ({ isLoading, onLoadMore }: LoadMoreButtonProps) => {
   if (isLoading) {
     return (
-      <motion.div animate={{ opacity: 1 }} className="py-8 text-center" initial={{ opacity: 0 }}>
-        <span aria-hidden="true" className="loading loading-spinner loading-md text-primary" />
-        <p aria-live="polite" className="text-base-content/70 mt-4" role="status">
-          載入更多文章中...
-        </p>
-      </motion.div>
+      <div className="py-8">
+        {/* Loading skeleton cards */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }, (_, index) => (
+            <SkeletonCard index={index} key={index} />
+          ))}
+        </div>
+      </div>
     );
   }
 
