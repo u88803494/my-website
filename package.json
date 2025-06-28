@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "npm run sync:all-articles && next build",
-    "build:fast": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "check": "pnpm run type-check && pnpm run lint",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "npm run sync:latest && npm run parse:articles",

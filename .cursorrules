@@ -95,9 +95,9 @@ When writing code for this project, you must adhere to the following conventions
 - **TODO/FIXME**: Format consistently and track for resolution.
 
 ### Development & Testing
-- **Build Commands**: When testing code changes or checking for errors, use `pnpm run build:fast` instead of `pnpm run build` for faster feedback during development.
-- **Quick Testing**: The `build:fast` command skips article synchronization and only runs Next.js build, making it ideal for rapid iteration and error checking.
-- **Full Build**: Only use `pnpm run build` for final testing or production deployment when you need the complete build process including article updates.
+- **Code Quality Check**: When checking for errors during development, use `pnpm run check` which runs TypeScript type checking and ESLint without conflicting with the dev server.
+- **Quick Validation**: The `check` command is safe to run alongside `pnpm dev` and provides immediate feedback on code quality issues.
+- **Build Commands**: Use `pnpm run build` for production builds and deployment, which includes the complete build process with article updates.
 
 ### Git
 - **Commit Messages**: All git commits must follow the **Conventional Commits** specification (e.g., `feat: add user authentication`, `fix: correct layout bug on mobile`). 
