@@ -47,7 +47,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         <h3
           className={cn("card-title mb-2 line-clamp-2 text-lg font-bold", "group-hover:text-primary transition-colors")}
         >
-          {article.title}
+          <a href={article.url} rel="noopener noreferrer" target="_blank">
+            {article.title}
+          </a>
         </h3>
         <p className="mb-3 line-clamp-1 text-sm text-gray-600 italic">{article.subtitle}</p>
 

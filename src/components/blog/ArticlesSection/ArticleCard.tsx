@@ -72,7 +72,9 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
             "group-hover:text-primary transition-colors",
           )}
         >
-          {article.title}
+          <a href={article.mediumUrl} rel="noopener noreferrer" target="_blank">
+            {article.title}
+          </a>
         </h3>
 
         {/* Subtitle/Description */}
