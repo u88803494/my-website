@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Clock, ExternalLink, Tag } from "lucide-react";
+import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { SiMedium } from "react-icons/si";
 
@@ -94,15 +94,9 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
           </div>
         )}
 
-        {/* Author and Read time */}
-        <div className="mb-4 flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center gap-1">
-            <span>作者：{article.creator.name}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock aria-hidden="true" className="h-3 w-3" />
-            <span>5 min read</span>
-          </div>
+        {/* Author */}
+        <div className="mb-4 flex items-center text-xs text-gray-500">
+          <span>作者：{article.creator.name}</span>
         </div>
 
         {/* Read Button */}
