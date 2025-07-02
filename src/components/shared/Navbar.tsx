@@ -28,7 +28,9 @@ const Navbar = () => {
             <li>
               <Link href="/blog">部落格</Link>
             </li>
-            {/* <li><Link href="/about">關於我</Link></li> */}
+            <li>
+              <Link href="/about">關於我</Link>
+            </li>
           </ul>
         </div>
         <Link className="btn btn-ghost text-xl" href="/">
@@ -48,7 +50,11 @@ const Navbar = () => {
               部落格
             </Link>
           </li>
-          {/* <li><Link href="/about" className="text-xl">關於我</Link></li> */}
+          <li>
+            <Link className="text-xl" href="/about">
+              關於我
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="navbar-end">
