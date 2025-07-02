@@ -2,12 +2,25 @@
 
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import { cn } from "@/utils/cn";
 
 const Navbar = () => {
+  const pathname = usePathname();
+
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({
       behavior: "smooth",
     });
+  };
+
+  // 判斷是否為當前頁面的輔助函數
+  const isActivePage = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
   };
 
   return (
@@ -22,14 +35,35 @@ const Navbar = () => {
             tabIndex={0}
           >
             <li>
-              <Link href="/">首頁</Link>
+              <Link
+                className={cn({
+                  "active bg-primary text-primary-content": isActivePage("/"),
+                })}
+                href="/"
+              >
+                首頁
+              </Link>
             </li>
             {/* <li><Link href="/projects">專案</Link></li> */}
             <li>
-              <Link href="/blog">部落格</Link>
+              <Link
+                className={cn({
+                  "active bg-primary text-primary-content": isActivePage("/blog"),
+                })}
+                href="/blog"
+              >
+                部落格
+              </Link>
             </li>
             <li>
-              <Link href="/about">關於我</Link>
+              <Link
+                className={cn({
+                  "active bg-primary text-primary-content": isActivePage("/about"),
+                })}
+                href="/about"
+              >
+                關於我
+              </Link>
             </li>
           </ul>
         </div>
@@ -40,18 +74,33 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-lg">
           <li>
-            <Link className="text-xl" href="/">
+            <Link
+              className={cn("text-xl", {
+                "active bg-primary text-primary-content": isActivePage("/"),
+              })}
+              href="/"
+            >
               首頁
             </Link>
           </li>
           {/* <li><Link href="/projects" className="text-xl">專案</Link></li> */}
           <li>
-            <Link className="text-xl" href="/blog">
+            <Link
+              className={cn("text-xl", {
+                "active bg-primary text-primary-content": isActivePage("/blog"),
+              })}
+              href="/blog"
+            >
               部落格
             </Link>
           </li>
           <li>
-            <Link className="text-xl" href="/about">
+            <Link
+              className={cn("text-xl", {
+                "active bg-primary text-primary-content": isActivePage("/about"),
+              })}
+              href="/about"
+            >
               關於我
             </Link>
           </li>
