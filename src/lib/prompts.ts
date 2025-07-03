@@ -23,15 +23,14 @@ const ROLE_DEFINITION =
  * 重要提醒 - 靜態內容
  */
 const IMPORTANT_REMINDERS = `
-**重要提醒:**
-*   你的回傳必須是純粹的 JSON 格式，可以直接被程式解析。
-*   不要在 JSON 之外添加任何文字，包括 "好的，這是一個 JSON..." 或任何 markdown 標記。
+**⚠️ 嚴格要求 - 必須遵守:**
+*   你的回傳內容必須是100%純粹的JSON格式，絕對不可以有任何其他內容。
+*   第一個字元必須是 { ，最後一個字元必須是 }。
+*   不要添加任何解釋、說明、問候語或其他文字。
+*   絕對禁止使用 markdown 程式碼區塊（\`\`\`json 或 \`\`\`）。
+*   不要說 "好的" 、"以下是分析結果" 或任何開場白。
+*   如果你添加了任何非JSON內容，系統會報錯並要求重新處理。
 *   確保所有欄位都已填寫，沒有遺漏。如果不是音譯詞，\`isTransliteration\` 應為 \`false\`，\`originalForeignWord\` 和 \`originLanguage\` 應為 \`null\`。`;
-
-/**
- * 字源學專用角色定義 - 靜態內容
- */
-const ETYMOLOGY_ROLE_DEFINITION = "你是一個專業的中文字源學家，專精於漢字的歷史演變和字形結構分析。";
 
 /**
  * 建立任務說明部分
@@ -42,7 +41,7 @@ const buildTaskDescription = (word: string): string => {
   return `
 **使用者詞彙:** ${userQuery}
 
-**請嚴格按照以下 JSON 格式回傳你的分析結果，不要有任何額外的說明或註解。你的回傳必須是純粹的、可直接被程式解析的 JSON 物件。**`;
+**直接回傳以下格式的 JSON 物件，不要有任何額外內容:**`;
 };
 
 /**
@@ -68,7 +67,6 @@ const buildJSONStructure = (word: string): string => {
   const userQuery = JSON.stringify(word);
   return `
 **JSON 物件結構:**
-\`\`\`json
 {
   "queryWord": ${userQuery},
   "isTransliteration": false, // 如果是音譯詞，請設為 true
@@ -88,41 +86,7 @@ const buildJSONStructure = (word: string): string => {
       "etymology": "該字元的字源學分析，根據詞彙類型提供不同解釋"
     }
   ]
-}
-\`\`\``;
-};
-
-/**
- * 建立字源學專用 JSON 結構
- * @param word - 要查詢的中文詞彙（原始字串）
- */
-const buildEtymologyStructure = (word: string): string => {
-  const userQuery = JSON.stringify(word);
-  return `
-**JSON 物件結構:**
-\`\`\`json
-{
-  "queryWord": ${userQuery},
-  "characters": [
-    {
-      "char": "單一字元",
-      "etymology": "深入的字源學分析，包括甲骨文、金文等古代字形的演變過程"
-    }
-  ]
-}
-\`\`\``;
-};
-
-/**
- * 建立字源學任務說明
- * @param word - 要查詢的中文詞彙（原始字串）
- */
-const buildEtymologyTaskDescription = (word: string): string => {
-  const userQuery = JSON.stringify(word);
-  return `
-**使用者詞彙:** ${userQuery}
-
-**請專注於字源學分析，回傳 JSON 格式的結果。**`;
+}`;
 };
 
 /**
@@ -137,32 +101,6 @@ export const buildDictionaryPrompt = (word: string): string => {
     compress(buildAnalysisGuidelines(word)),
     buildJSONStructure(word), // JSON 結構保持原樣以確保 AI 能正確理解格式
     compress(IMPORTANT_REMINDERS),
-  ];
-
-  return promptComponents.join(" ");
-};
-
-/**
- * 建立簡化版的字典查詢 Prompt（僅包含核心功能）
- * @param word - 要查詢的中文詞彙
- * @returns 簡化版的 Prompt 字串
- */
-export const buildSimpleDictionaryPrompt = (word: string): string => {
-  const promptComponents = [compress(ROLE_DEFINITION), compress(buildTaskDescription(word)), buildJSONStructure(word)];
-
-  return promptComponents.join(" ");
-};
-
-/**
- * 建立僅包含字源學分析的 Prompt
- * @param word - 要查詢的中文詞彙
- * @returns 專注於字源學的 Prompt 字串
- */
-export const buildEtymologyPrompt = (word: string): string => {
-  const promptComponents = [
-    compress(ETYMOLOGY_ROLE_DEFINITION),
-    compress(buildEtymologyTaskDescription(word)),
-    buildEtymologyStructure(word),
   ];
 
   return promptComponents.join(" ");

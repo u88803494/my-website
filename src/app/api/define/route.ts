@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "請提供有效的中文詞彙" }, { status: 400 });
     }
 
-    // 新增：字數長度限制
     if (word.length > MAX_WORD_LENGTH) {
       return NextResponse.json({ error: `查詢詞彙過長，請勿超過 ${MAX_WORD_LENGTH} 個字元。` }, { status: 400 });
     }
@@ -32,30 +31,22 @@ export async function POST(request: NextRequest) {
       console.error("伺服器設定錯誤：缺少 GEMINI_API_KEY");
       return NextResponse.json({ error: "伺服器設定錯誤" }, { status: 500 });
     }
+
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite-preview-06-17" });
 
-    // 3. 使用標準的字典 Prompt
+    // 3. 呼叫 AI 並取得回應
     const prompt = buildDictionaryPrompt(word);
-
-    // 4. 呼叫 AI 並取得回應
     const result = await model.generateContent(prompt);
     const text = result.response.text().trim();
 
-    // 5. 處理 AI 回應
-    // 清理可能的 markdown 標記
-    let cleanedText = text;
-    if (cleanedText.startsWith("```json")) {
-      cleanedText = cleanedText.substring(7, cleanedText.length - 3).trim();
-    } else if (cleanedText.startsWith("```")) {
-      cleanedText = cleanedText.substring(3, cleanedText.length - 3).trim();
-    }
+    // 4. 處理 AI 回應
+    const cleanedText = cleanAIResponse(text);
 
     try {
       const parsedResponse: WordAnalysisResponse = JSON.parse(cleanedText);
 
-      // 簡單驗證回應結構
-      if (!parsedResponse.queryWord || !parsedResponse.definitions || !parsedResponse.characters) {
+      if (!validateResponse(parsedResponse)) {
         console.error("AI 回應資料結構不完整:", parsedResponse);
         return NextResponse.json({ error: "AI 回應資料結構不完整" }, { status: 500 });
       }
@@ -64,11 +55,65 @@ export async function POST(request: NextRequest) {
     } catch (parseError) {
       console.error("JSON 解析失敗:", parseError);
       console.error("從 AI 收到的原始文字:", text);
-      return NextResponse.json({ error: "AI 回應格式錯誤，請稍後再試" }, { status: 500 });
+      console.error("清理後的文字:", cleanedText);
+
+      return NextResponse.json(
+        {
+          debug: process.env.NODE_ENV === "development" ? { cleanedText, originalText: text } : undefined,
+          error: "AI 回應格式錯誤，請稍後再試",
+        },
+        { status: 500 },
+      );
     }
   } catch (error) {
     console.error("API 處理錯誤:", error);
     const errorMessage = error instanceof Error ? error.message : "未知錯誤";
     return NextResponse.json({ error: `伺服器內部錯誤: ${errorMessage}` }, { status: 500 });
   }
+}
+
+/**
+ * 清理 AI 回應文本，移除 markdown 標記和額外文字
+ */
+function cleanAIResponse(text: string): string {
+  let cleanedText = text.trim();
+
+  // 強力清理各種可能的 markdown 標記和額外文字
+  if (cleanedText.includes("```json")) {
+    const startIndex = cleanedText.indexOf("```json") + 7;
+    const endIndex = cleanedText.lastIndexOf("```");
+    if (endIndex > startIndex) {
+      cleanedText = cleanedText.substring(startIndex, endIndex).trim();
+    }
+  } else if (cleanedText.includes("```")) {
+    const startIndex = cleanedText.indexOf("```") + 3;
+    const endIndex = cleanedText.lastIndexOf("```");
+    if (endIndex > startIndex) {
+      cleanedText = cleanedText.substring(startIndex, endIndex).trim();
+    }
+  }
+
+  // 移除可能的前綴文字（如 "好的，這是分析結果："）
+  const jsonStart = cleanedText.indexOf("{");
+  const jsonEnd = cleanedText.lastIndexOf("}");
+  if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+    cleanedText = cleanedText.substring(jsonStart, jsonEnd + 1);
+  }
+
+  return cleanedText;
+}
+
+/**
+ * 驗證 AI 回應的結構是否完整
+ */
+function validateResponse(response: WordAnalysisResponse): boolean {
+  return !!(
+    response.queryWord &&
+    response.definitions &&
+    Array.isArray(response.definitions) &&
+    response.characters &&
+    Array.isArray(response.characters) &&
+    response.definitions.length > 0 &&
+    response.characters.length > 0
+  );
 }
