@@ -16,10 +16,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@tanstack/react-query": "^5.81.2",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "clsx": "^2.1.1",
+    "espree": "^10.4.0",
     "framer-motion": "^12.19.1",
     "lucide-react": "^0.518.0",
     "next": "15.3.4",
