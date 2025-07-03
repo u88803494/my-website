@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "伺服器設定錯誤" }, { status: 500 });
     }
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite-preview-06-17" });
 
     // 3. 使用標準的字典 Prompt
     const prompt = buildDictionaryPrompt(word);
