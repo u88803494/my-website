@@ -142,8 +142,11 @@ const AIDictionaryPage: React.FC = () => {
       <div className="border-b border-slate-200 bg-white">
         <div className="container mx-auto px-6 py-8">
           <div className="mx-auto max-w-4xl">
-            <h1 className="mb-2 text-3xl font-light text-slate-800">中文字典</h1>
-            <p className="text-slate-600">探索中文詞彙的深層含義與字源學</p>
+            <h1 className="mb-2 text-3xl font-light text-slate-800">
+              AI 智能中文字典
+              <span className="ml-3 rounded-md bg-blue-100 px-2 py-1 text-sm font-medium text-blue-700">Beta</span>
+            </h1>
+            <p className="text-slate-600">運用人工智慧技術，深度解析中文詞彙含義與字源學</p>
           </div>
         </div>
       </div>
