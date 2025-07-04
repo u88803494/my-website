@@ -8,7 +8,7 @@
 // - 添加更多動畫效果和微互動
 
 import { useMutation } from "@tanstack/react-query";
-import {useState } from "react";
+import { useState } from "react";
 
 import { API_PATHS } from "@/lib/api-paths";
 import type { APIErrorResponse, WordAnalysisResponse } from "@/types/dictionary.types";
@@ -195,17 +195,29 @@ const AIDictionaryPage: React.FC = () => {
 
           {/* Results Header */}
           {testResults.length > 0 && (
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-medium text-slate-800">
-                查詢結果 <span className="text-slate-500">({testResults.length})</span>
-              </h2>
-              <button
-                className="text-sm text-slate-500 transition-colors hover:text-slate-700"
-                onClick={handleClearResults}
-              >
-                清除所有結果
-              </button>
-            </div>
+            <>
+              {/* AI 生成內容免責聲明 */}
+              <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <div className="flex items-start gap-3">
+                  <span className="text-lg text-amber-600">📚</span>
+                  <div className="flex-1 text-sm">
+                    <p className="text-amber-800">本字典內容由 AI 生成，建議搭配傳統字典使用以確保準確性。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="text-xl font-medium text-slate-800">
+                  查詢結果 <span className="text-slate-500">({testResults.length})</span>
+                </h2>
+                <button
+                  className="text-sm text-slate-500 transition-colors hover:text-slate-700"
+                  onClick={handleClearResults}
+                >
+                  清除所有結果
+                </button>
+              </div>
+            </>
           )}
 
           {/* Results */}
