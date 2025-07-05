@@ -1,25 +1,16 @@
-"use client";
+import type { Metadata } from "next";
 
-import Contact from "@/components/home/Contact";
-import Education from "@/components/home/Education";
-import FeaturedProjects from "@/components/home/FeaturedProjects";
-import HeroSection from "@/components/home/HeroSection";
-import MediumArticles from "@/components/home/MediumArticles";
-import Skills from "@/components/home/Skills";
-import WorkExperience from "@/components/home/WorkExperience";
+import { ResumePage } from "@/features/resume";
 
-const Home = () => {
-  return (
-    <main>
-      <HeroSection backgroundClass="bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10" sectionId="hero" />
-      <WorkExperience backgroundClass="bg-base-200" sectionId="work-experience" />
-      <FeaturedProjects backgroundClass="bg-base-100" sectionId="featured-projects" />
-      <MediumArticles backgroundClass="bg-base-200" sectionId="medium-articles" />
-      <Skills backgroundClass="bg-base-100" sectionId="skills" />
-      <Education backgroundClass="bg-base-200/30" sectionId="education" />
-      <Contact backgroundClass="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5" sectionId="contact" />
-    </main>
-  );
+export const metadata: Metadata = {
+  description:
+    "Henry Lee 的個人履歷網站，展示前端開發技能、工作經歷、專案作品與技術文章。專精於 React、Next.js、TypeScript 等現代前端技術。",
+  title: "Henry Lee - 前端工程師履歷",
 };
 
-export default Home;
+// 路由級別的頁面組件
+const Page: React.FC = () => {
+  return <ResumePage />;
+};
+
+export default Page;

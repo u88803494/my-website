@@ -1,5 +1,3 @@
-import React from "react";
-
 import { projects } from "@/data/projectData";
 import { cn } from "@/utils/cn";
 

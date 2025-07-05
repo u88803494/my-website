@@ -2,10 +2,11 @@
 
 import React from "react";
 
-import AnimatedBackground from "@/components/home/HeroSection/AnimatedBackground";
-import HeroContent from "@/components/home/HeroSection/HeroContent";
-import HeroImage from "@/components/home/HeroSection/HeroImage";
 import { cn } from "@/utils/cn";
+
+import AnimatedBackground from "./AnimatedBackground";
+import HeroContent from "./HeroContent";
+import HeroImage from "./HeroImage";
 
 interface HeroSectionProps {
   backgroundClass: string;

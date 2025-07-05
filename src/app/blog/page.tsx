@@ -1,22 +1,15 @@
-"use client";
+import type { Metadata } from "next";
 
-import { BlogHero } from "@/components/blog";
-import ArticlesSection from "@/components/blog/ArticlesSection";
-import { useMediumArticles } from "@/hooks/useMediumArticles";
+import { BlogPage } from "@/features/blog";
 
-const BlogPage = () => {
-  // 使用自定義 hook 獲取文章資料
-  const mediumArticlesQuery = useMediumArticles({ limit: 9 });
-
-  return (
-    <div className="bg-base-100 min-h-screen">
-      {/* Hero Section */}
-      <BlogHero />
-
-      {/* Articles Section */}
-      <ArticlesSection {...mediumArticlesQuery} />
-    </div>
-  );
+export const metadata: Metadata = {
+  description: "探索 Henry Lee 的技術文章與開發心得，涵蓋前端開發、React、Next.js、TypeScript 等主題。",
+  title: "技術文章 | Henry Lee",
 };
 
-export default BlogPage;
+// 路由級別的頁面組件
+const Page = () => {
+  return <BlogPage />;
+};
+
+export default Page;

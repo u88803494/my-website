@@ -2,9 +2,10 @@
 
 import React from "react";
 
-import ExperienceCard from "@/components/home/WorkExperience/ExperienceCard";
 import { experiences } from "@/data/experienceData";
 import { cn } from "@/utils/cn";
+
+import ExperienceCard from "./ExperienceCard";
 
 interface WorkExperienceProps {
   backgroundClass: string;

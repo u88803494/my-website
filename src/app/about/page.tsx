@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import React from "react";
 
-import { AboutHero, PhilosophySection, StorySection, TechStackSection } from "@/components/about";
-import AnimatedBackground from "@/components/about/AnimatedBackground";
+import { AboutPage } from "@/features/about";
 
 export const metadata: Metadata = {
   description:
@@ -10,23 +8,9 @@ export const metadata: Metadata = {
   title: "關於我 | Henry Lee",
 };
 
-const AboutPage = () => {
-  return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* 動態背景 */}
-      <AnimatedBackground />
-
-      {/* 主要內容 */}
-      <div className="relative z-10 container mx-auto max-w-4xl px-4 py-12">
-        <AboutHero />
-        <main>
-          <StorySection />
-          <PhilosophySection />
-          <TechStackSection />
-        </main>
-      </div>
-    </div>
-  );
+// 路由級別的頁面組件
+const Page: React.FC = () => {
+  return <AboutPage />;
 };
 
-export default AboutPage;
+export default Page;
