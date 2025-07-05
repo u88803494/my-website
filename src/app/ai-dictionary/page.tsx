@@ -339,7 +339,7 @@ const AIDictionaryPage: React.FC = () => {
 
                         {/* Character Analysis */}
                         <div>
-                          <h4 className="mb-3 font-semibold text-slate-800">字元分析</h4>
+                          <h4 className="mb-3 font-semibold text-slate-800">字源分析</h4>
                           <div className="space-y-4">
                             {result.response.characters.map((char, charIndex) => (
                               <div className="rounded-lg border border-slate-200 p-4" key={charIndex}>
