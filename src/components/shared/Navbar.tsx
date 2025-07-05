@@ -58,6 +58,16 @@ const Navbar = () => {
             <li>
               <Link
                 className={cn({
+                  "active bg-primary text-primary-content": isActivePage("/ai-dictionary"),
+                })}
+                href="/ai-dictionary"
+              >
+                AI 字典
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={cn({
                   "active bg-primary text-primary-content": isActivePage("/about"),
                 })}
                 href="/about"
@@ -92,6 +102,16 @@ const Navbar = () => {
               href="/blog"
             >
               部落格
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={cn("text-xl", {
+                "active bg-primary text-primary-content": isActivePage("/ai-dictionary"),
+              })}
+              href="/ai-dictionary"
+            >
+              AI 字典
             </Link>
           </li>
           <li>
