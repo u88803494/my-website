@@ -1,23 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Article } from "@/types/article.types";
-
-interface UseCarouselProps {
-  autoplayInterval?: number;
-  items: Article[];
-}
-
-interface UseCarouselReturn {
-  currentSlide: number;
-  getCurrentSlideItems: () => Article[];
-  goToSlide: (index: number) => void;
-  isPlaying: boolean;
-  itemsPerSlide: number;
-  nextSlide: () => void;
-  prevSlide: () => void;
-  setIsPlaying: (playing: boolean) => void;
-  totalSlides: number;
-}
+import type { UseCarouselProps, UseCarouselReturn } from "../../types";
 
 export const useCarousel = ({ autoplayInterval = 4000, items }: UseCarouselProps): UseCarouselReturn => {
   const [currentSlide, setCurrentSlide] = useState(0);

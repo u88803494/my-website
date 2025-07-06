@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 
-import { MAX_WORD_LENGTH } from "../types";
+import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
 
 interface WordSearchFormProps {
   isLoading: boolean;

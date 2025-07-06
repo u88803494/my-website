@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 
-import { BlogPage } from "@/features/blog";
+import { BlogFeature } from "@/features/blog";
 
 export const metadata: Metadata = {
-  description: "探索 Henry Lee 的技術文章與開發心得，涵蓋前端開發、React、Next.js、TypeScript 等主題。",
-  title: "技術文章 | Henry Lee",
+  description: "Henry Lee 的技術文章與開發心得分享",
+  title: "技術部落格 - Henry Lee",
 };
 
-// 路由級別的頁面組件
-const Page = () => {
-  return <BlogPage />;
+const BlogPage: React.FC = () => {
+  return <BlogFeature />;
 };
 
-export default Page;
+export default BlogPage;

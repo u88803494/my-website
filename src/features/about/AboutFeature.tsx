@@ -1,10 +1,10 @@
-import AboutHero from "./AboutHero";
-import AnimatedBackground from "./AnimatedBackground";
-import PhilosophySection from "./PhilosophySection";
-import StorySection from "./StorySection";
-import TechStackSection from "./TechStackSection";
+import AboutHero from "./components/AboutHero";
+import AnimatedBackground from "./components/AnimatedBackground";
+import PhilosophySection from "./components/PhilosophySection";
+import StorySection from "./components/StorySection";
+import TechStackSection from "./components/TechStackSection";
 
-const AboutPage: React.FC = () => {
+const AboutFeature: React.FC = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* 動態背景 */}
@@ -23,4 +23,4 @@ const AboutPage: React.FC = () => {
   );
 };
 
-export default AboutPage;
+export default AboutFeature;

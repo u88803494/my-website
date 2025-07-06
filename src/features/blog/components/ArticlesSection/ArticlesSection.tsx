@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { type MediumPost } from "@/hooks/useMediumArticles";
-
+import { useMediumArticles } from "../../hooks/useMediumArticles";
+import type { MediumPost } from "../../types";
 import ArticleCard from "./ArticleCard";
 import ArticleStats from "./ArticleStats";
 import CompletedState from "./CompletedState";
@@ -14,36 +14,12 @@ import ErrorState from "./ErrorState";
 import LoadingState from "./LoadingState";
 import LoadMoreButton from "./LoadMoreButton";
 
-interface ArticlesSectionProps {
-  data:
-    | undefined
-    | {
-        pageParams: unknown[];
-        pages: MediumArticlesPage[];
-      };
-  error: Error | null;
-  fetchNextPage: () => void;
-  hasNextPage: boolean;
-  isError: boolean;
-  isFetchingNextPage: boolean;
-  isLoading: boolean;
-}
+const ArticlesSection: React.FC = () => {
+  // 內部調用資料 hook
+  const { data, error, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isLoading } = useMediumArticles({
+    limit: 9,
+  });
 
-// 使用 React Query 的 InfiniteQuery 回傳型別
-interface MediumArticlesPage {
-  nextCursor: null | string;
-  posts: MediumPost[];
-}
-
-const ArticlesSection = ({
-  data,
-  error,
-  fetchNextPage,
-  hasNextPage,
-  isError,
-  isFetchingNextPage,
-  isLoading,
-}: ArticlesSectionProps) => {
   // 無限滾動偵測
   const { inView, ref: loadMoreRef } = useInView({
     rootMargin: "200px",

@@ -5,8 +5,9 @@ import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { SiMedium } from "react-icons/si";
 
-import { type MediumPost } from "@/hooks/useMediumArticles";
 import { cn } from "@/utils/cn";
+
+import type { MediumPost } from "../../types";
 
 interface ArticleCardProps {
   article: MediumPost;

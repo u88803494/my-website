@@ -1,14 +1,14 @@
 "use client";
 
-import Contact from "./Contact";
-import Education from "./Education";
-import FeaturedProjects from "./FeaturedProjects";
-import HeroSection from "./HeroSection";
-import MediumArticles from "./MediumArticles";
-import Skills from "./Skills";
-import WorkExperience from "./WorkExperience";
+import Contact from "./components/Contact";
+import Education from "./components/Education";
+import FeaturedProjects from "./components/FeaturedProjects";
+import HeroSection from "./components/HeroSection";
+import MediumArticles from "./components/MediumArticles";
+import Skills from "./components/Skills";
+import WorkExperience from "./components/WorkExperience";
 
-const ResumePage: React.FC = () => {
+const ResumeFeature: React.FC = () => {
   return (
     <main>
       <HeroSection backgroundClass="bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10" sectionId="hero" />
@@ -22,4 +22,4 @@ const ResumePage: React.FC = () => {
   );
 };
 
-export default ResumePage;
+export default ResumeFeature;

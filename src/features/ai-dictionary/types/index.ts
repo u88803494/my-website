@@ -10,5 +10,3 @@ export interface APICallResult {
   timestamp: string;
   word: string;
 }
-
-export const MAX_WORD_LENGTH = 20;

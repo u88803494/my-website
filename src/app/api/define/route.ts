@@ -1,10 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
+import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
 import { buildDictionaryPrompt } from "@/lib/prompts";
 import type { WordAnalysisResponse } from "@/types/dictionary.types";
-
-const MAX_WORD_LENGTH = 20;
 
 // 處理不支援的 HTTP 方法
 export async function GET() {
