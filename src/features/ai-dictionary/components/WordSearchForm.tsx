@@ -24,9 +24,9 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
 
   return (
     <div className="mb-8 rounded-lg border border-slate-200 bg-white shadow-sm">
-      <div className="p-6">
+      <div className="px-4 py-4 sm:px-6 sm:py-6">
         <form onSubmit={handleSubmit}>
-          <div className="mb-3 flex gap-4">
+          <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:gap-4">
             <input
               className={`flex-1 rounded-lg border px-4 py-3 text-lg transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
                 isInputTooLong ? "border-red-300 focus:ring-red-500" : "border-slate-300"
@@ -38,7 +38,7 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
               value={inputWord}
             />
             <button
-              className="w-24 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-3 w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 sm:w-24"
               disabled={isLoading || !inputWord.trim() || isInputTooLong}
               type="submit"
             >

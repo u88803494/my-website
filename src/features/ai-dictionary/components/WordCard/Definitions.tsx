@@ -17,11 +17,11 @@ const Definitions: React.FC<DefinitionsProps> = ({ definitions }) => (
     </h4>
     <div className="space-y-3">
       {definitions.map((def, defIndex) => (
-        <div className="rounded-lg border border-slate-200 p-4" key={defIndex}>
-          <div className="mb-2 flex items-center gap-2">
+        <div className="rounded-lg border border-slate-200 p-3 sm:p-4" key={defIndex}>
+          <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">{def.partOfSpeech}</span>
           </div>
-          <p className="mb-2 leading-relaxed text-slate-700">{def.meaning}</p>
+          <p className="mb-2 text-sm leading-relaxed break-words text-slate-700 sm:text-base">{def.meaning}</p>
         </div>
       ))}
     </div>

@@ -30,7 +30,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
   );
 
   const buttonClass = cn(
-    "absolute top-4 right-4 rounded-md px-3 py-1 text-sm font-medium transition-all duration-300",
+    "absolute top-2 right-2 sm:top-4 sm:right-4 rounded-md px-3 py-1 text-sm font-medium transition-all duration-300",
     result.isCompleting
       ? "scale-105 bg-green-100 text-green-800"
       : "bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800",
@@ -38,7 +38,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
 
   return (
     <div className={cardClass}>
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* 完成學習按鈕 */}
         <button
           className={buttonClass}
@@ -64,9 +64,9 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
         )}
 
         {/* 單字標題 */}
-        <div className="mb-6 pr-20">
-          <h3 className="mb-2 text-2xl font-semibold text-slate-800">{result.word}</h3>
-          <p className="text-sm text-slate-500">{result.timestamp}</p>
+        <div className="mb-6 pr-0 md:pr-20">
+          <h3 className="mb-2 text-lg font-semibold text-slate-800 sm:text-2xl">{result.word}</h3>
+          <p className="text-xs text-slate-500 sm:text-sm">{result.timestamp}</p>
         </div>
 
         {isError(result.response) ? (
