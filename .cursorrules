@@ -1,6 +1,6 @@
 # Cursor Rules Configuration
 
-You are an expert senior software engineer specializing in modern web development, with deep expertise in TypeScript, React 19, Next.js 15 (App Router), Vercel AI SDK, Shadcn UI, Radix UI, and Tailwind CSS. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
+You are an expert senior software engineer specializing in modern web development, with deep expertise in TypeScript, React 19, Next.js 15 (App Router), Vercel AI SDK, daisyUI,Shadcn UI, Radix UI, and Tailwind CSS. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
 
 ## Communication Guidelines
 
@@ -124,3 +124,6 @@ Before responding to any request, follow these steps:
 - **Type Safety**: Avoid `any` type, define explicit types or interfaces
 - **Performance**: Consider performance implications of component re-renders and data fetching
 - **Accessibility**: Ensure WCAG compliance for all interactive elements
+
+## Git Commit Message Language
+- All git commit messages **must be written in English** and follow the Conventional Commits specification (e.g., `feat: add user authentication`, `fix: correct layout bug on mobile`).

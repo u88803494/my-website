@@ -17,7 +17,7 @@ const compress = (prompt: string): string => {
  * 角色定義 - 靜態內容
  */
 const ROLE_DEFINITION =
-  "你是一個專業的中文語言學家和字源學家。你的唯一任務是針對使用者提供的中文詞彙，進行深入且結構化的分析。";
+  "你是一位山達基清字專家，對中文詞彙和字源非常了解，熟悉多種語言的詞源，擅長用簡單、易懂的方式，幫助使用者徹底理解每個字詞的常見意思與來源，協助他們清除誤字，真正學會並能運用這個字詞。";
 
 /**
  * 重要提醒 - 靜態內容
@@ -27,10 +27,10 @@ const IMPORTANT_REMINDERS = `
 *   你的回傳內容必須是100%純粹的JSON格式，絕對不可以有任何其他內容。
 *   第一個字元必須是 { ，最後一個字元必須是 }。
 *   不要添加任何解釋、說明、問候語或其他文字。
-*   絕對禁止使用 markdown 程式碼區塊（\`\`\`json 或 \`\`\`）。
+*   絕對禁止任何形式的 markdown 區塊（包括所有以三個 backtick 開頭的區塊，例如「三個 backtick 加 json」、「三個 backtick 加 text」等），只允許純 JSON。
 *   不要說 "好的" 、"以下是分析結果" 或任何開場白。
 *   如果你添加了任何非JSON內容，系統會報錯並要求重新處理。
-*   確保所有欄位都已填寫，沒有遺漏。如果不是音譯詞，\`isTransliteration\` 應為 \`false\`，\`originalForeignWord\` 和 \`originLanguage\` 應為 \`null\`。`;
+*   確保所有欄位都已填寫，沒有遺漏。definitions 陣列只需列出常見意思（包含詞性）。`;
 
 /**
  * 建立任務說明部分
@@ -41,7 +41,7 @@ const buildTaskDescription = (word: string): string => {
   return `
 **使用者詞彙:** ${userQuery}
 
-**直接回傳以下格式的 JSON 物件，不要有任何額外內容:**`;
+**請直接回傳以下格式的 JSON 物件，不要有任何額外內容：**`;
 };
 
 /**
@@ -51,12 +51,17 @@ const buildTaskDescription = (word: string): string => {
 const buildAnalysisGuidelines = (word: string): string => {
   return `
 **分析指南:**
-1.  **判斷詞彙類型**: 首先判斷 \`${word}\` 是中文固有詞彙還是音譯詞。
-2.  **definitions**: 如果一個詞有多個詞性或多個意義，請在 \`definitions\` 陣列中為每一個建立一個獨立的物件。定義必須清晰、完整。
-3.  **characters**: 將查詢詞彙中的每一個字都拆開，為每個字建立一個物件。
-    *   **etymology**: 這是最重要的部分。
-        *   **如果詞彙是中文固有詞彙**：請提供深入的字源學解釋，追溯其根源，解釋字形結構（形聲、指事、會意、象形）及其意義的演變。
-        *   **如果詞彙是音譯詞**：請解釋該字在此音譯詞中主要取其發音，並說明其在此詞中無獨立的字源學意義。如果可能，簡要提及該字在音譯中的選擇原因（例如：發音相似、字義吉祥等）。`;
+1.  **列出常見意思**：請列出「${word}」在中文裡的常見定義，每一個意思都要用簡單、易懂的語言解釋，並標明詞性。
+2.  **字源分析**：
+    - 請將所有字源分析內容（包含外來語來源、每個中文字的字源）**依照查詢詞彙的語意結構順序**，全部放在 etymologyBlocks 陣列中，不可自行調整或合併。
+    - 例如：「歇斯底里的卡拉ok」必須依序為：「歇斯底里」的外來語來源 →「的」的中文字源 →「卡拉ok」的外來語來源。
+    - 外來語請用 type: "foreign"，value 欄位填寫來源、語意、演變、傳入中文的過程等。
+    - 有中文字源的字請用 type: "character"，並填寫 char、zhuyin、pinyin、etymology。
+    - 不要回傳 foreignEtymology 或 characters 欄位，只能用 etymologyBlocks。
+3.  **嚴格對應每一字或語素**：
+    - etymologyBlocks 必須與查詢詞彙的每一個字或語素一一對應，不能省略、不能多加。
+    - 若某字來源不詳，請明確標註「來源不詳」或「無法考證」。
+`;
 };
 
 /**
@@ -69,22 +74,54 @@ const buildJSONStructure = (word: string): string => {
 **JSON 物件結構:**
 {
   "queryWord": ${userQuery},
-  "isTransliteration": false, // 如果是音譯詞，請設為 true
-  "originalForeignWord": null, // 如果是音譯詞，請填寫原始外文單詞 (例如: "coffee")
-  "originLanguage": null, // 如果是音譯詞，請填寫來源語言 (例如: "English")
   "definitions": [
     {
       "partOfSpeech": "詞性 (例如：名詞, 動詞, 形容詞)",
-      "meaning": "在該詞性下的完整、清晰的中文定義"
+      "meaning": "簡單、易懂的定義"
     }
   ],
-  "characters": [
+  "etymologyBlocks": [
     {
-      "char": "單一字元",
+      "type": "foreign",
+      "value": "外來語來源說明..."
+    },
+    {
+      "type": "character",
+      "char": "有實際中文字源的單一字元",
       "zhuyin": "該字元的注音符號",
       "pinyin": "該字元的漢語拼音",
-      "etymology": "該字元的字源學分析，根據詞彙類型提供不同解釋"
+      "etymology": "該字元的字源學分析"
     }
+    // ...依照語意結構順序排列，且每一個字或語素都必須有對應區塊，不能省略、不能多加
+  ]
+}
+
+// 外來語複合詞語意結構順序範例：
+{
+  "queryWord": "歇斯底里的卡拉ok",
+  "definitions": [
+    {
+      "partOfSpeech": "形容詞",
+      "meaning": "..."
+    }
+  ],
+  "etymologyBlocks": [
+    {
+      "type": "foreign",
+      "value": "歇斯底里..."
+    },
+    {
+      "type": "character",
+      "char": "的",
+      "zhuyin": "...",
+      "pinyin": "...",
+      "etymology": "..."
+    },
+    {
+      "type": "foreign",
+      "value": "卡拉ok..."
+    }
+    // 每一個字或語素都必須有對應區塊，不能省略、不能多加
   ]
 }`;
 };
@@ -99,7 +136,7 @@ export const buildDictionaryPrompt = (word: string): string => {
     compress(ROLE_DEFINITION),
     compress(buildTaskDescription(word)),
     compress(buildAnalysisGuidelines(word)),
-    buildJSONStructure(word), // JSON 結構保持原樣以確保 AI 能正確理解格式
+    buildJSONStructure(word),
     compress(IMPORTANT_REMINDERS),
   ];
 

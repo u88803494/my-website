@@ -47,6 +47,13 @@ export async function POST(request: NextRequest) {
 
       if (!validateResponse(parsedResponse)) {
         console.error("AI 回應資料結構不完整:", parsedResponse);
+        if (process.env.NODE_ENV === "development") {
+          return NextResponse.json({
+            data: parsedResponse,
+            debug: { cleanedText, originalText: text, parsedResponse },
+            error: "AI 回應資料結構不完整 (dev 模式下仍返回資料)",
+          });
+        }
         return NextResponse.json({ error: "AI 回應資料結構不完整" }, { status: 500 });
       }
 
@@ -110,9 +117,8 @@ function validateResponse(response: WordAnalysisResponse): boolean {
     response.queryWord &&
     response.definitions &&
     Array.isArray(response.definitions) &&
-    response.characters &&
-    Array.isArray(response.characters) &&
-    response.definitions.length > 0 &&
-    response.characters.length > 0
+    response.etymologyBlocks &&
+    Array.isArray(response.etymologyBlocks) &&
+    response.definitions.length > 0
   );
 }

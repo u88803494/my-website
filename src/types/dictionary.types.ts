@@ -23,14 +23,33 @@ export interface DefineWordRequest {
 }
 
 /**
+ * 字源分析區塊型別
+ */
+export type EtymologyBlock =
+  | {
+      char: string;
+      etymology: string;
+      pinyin: string;
+      type: "character";
+      zhuyin: string;
+    }
+  | { type: "foreign"; value: string };
+
+/**
+ * 慣用語介面
+ */
+export interface Idiom {
+  example: string;
+  idiom: string;
+  meaning: string;
+}
+
+/**
  * 詞彙分析完整回應介面
  */
 export interface WordAnalysisResponse {
-  characters: CharacterAnalysis[];
   definitions: WordDefinition[];
-  isTransliteration?: boolean; // 新增：是否為音譯詞
-  originalForeignWord?: null | string; // 新增：原始外文單詞
-  originLanguage?: null | string; // 新增：來源語言
+  etymologyBlocks: EtymologyBlock[];
   queryWord: string;
 }
 
@@ -60,7 +79,7 @@ export function isValidWordAnalysis(response: unknown): response is WordAnalysis
     typeof (response as { queryWord: unknown }).queryWord === "string" &&
     "definitions" in response &&
     Array.isArray((response as { definitions: unknown }).definitions) &&
-    "characters" in response &&
-    Array.isArray((response as { characters: unknown }).characters)
+    "etymologyBlocks" in response &&
+    Array.isArray((response as { etymologyBlocks: unknown }).etymologyBlocks)
   );
 }
