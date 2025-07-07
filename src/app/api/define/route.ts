@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
+import { GEMINI_MODEL } from "@/constants/aiModels";
 import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
 import { buildDictionaryPrompt } from "@/lib/prompts";
 import type { WordAnalysisResponse } from "@/types/dictionary.types";
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite-preview-06-17" });
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
 
     // 3. 呼叫 AI 並取得回應
     const prompt = buildDictionaryPrompt(word);

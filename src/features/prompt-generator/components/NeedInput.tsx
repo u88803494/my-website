@@ -1,0 +1,53 @@
+"use client";
+
+import { Loader2, Send } from "lucide-react";
+import { useState } from "react";
+
+import { cn } from "@/utils/cn";
+
+import type { NeedInputProps } from "../types";
+
+const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, placeholder, value }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
+  return (
+    <div className="mx-auto w-full max-w-2xl">
+      <div className="relative">
+        <textarea
+          className={cn(
+            "textarea textarea-bordered h-24 w-full resize-none",
+            "focus:ring-primary focus:ring-2 focus:outline-none",
+            "transition-all duration-200",
+            isFocused && "ring-primary ring-2",
+          )}
+          disabled={isLoading}
+          onBlur={() => setIsFocused(false)}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onKeyPress={handleKeyPress}
+          placeholder={placeholder}
+          value={value}
+        />
+
+        <button
+          className={cn("btn btn-primary btn-sm absolute right-2 bottom-2", "h-8 min-h-0 w-8 p-0")}
+          disabled={isLoading || !value.trim()}
+          onClick={onSubmit}
+        >
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+        </button>
+      </div>
+
+      <div className="text-base-content/60 mt-2 text-center text-sm">按 Enter 快速生成，或點擊發送按鈕</div>
+    </div>
+  );
+};
+
+export default NeedInput;
