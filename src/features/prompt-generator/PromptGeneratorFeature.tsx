@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 
-import { PLACEHOLDER_TEXT, USAGE_TIPS } from "@/lib/prompts/helpers.prompt";
-
 import GeneratedTemplate from "./components/GeneratedTemplate";
 import NeedInput from "./components/NeedInput";
 import UsageTips from "./components/UsageTips";
+import { PLACEHOLDER_TEXT, USAGE_TIPS } from "./constants";
 import { usePromptGeneration } from "./hooks/usePromptGeneration";
 
 const PromptGeneratorFeature: React.FC = () => {

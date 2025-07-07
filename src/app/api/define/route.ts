@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { GEMINI_MODEL } from "@/constants/aiModels";
 import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
-import { buildDictionaryPrompt } from "@/lib/prompts";
+import { buildDictionaryPrompt } from "@/lib/prompts/dictionary.prompt";
 import type { WordAnalysisResponse } from "@/types/dictionary.types";
 
 // 處理不支援的 HTTP 方法

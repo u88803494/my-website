@@ -9,11 +9,20 @@ import type { NeedInputProps } from "../types";
 
 const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, placeholder, value }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const maxLength = 100;
+  const currentLength = value.length;
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSubmit();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    if (newValue.length <= maxLength) {
+      onChange(newValue);
     }
   };
 
@@ -26,10 +35,12 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
             "focus:ring-primary focus:ring-2 focus:outline-none",
             "transition-all duration-200",
             isFocused && "ring-primary ring-2",
+            currentLength >= maxLength && "textarea-error",
           )}
           disabled={isLoading}
+          maxLength={maxLength}
           onBlur={() => setIsFocused(false)}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
@@ -45,7 +56,12 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
         </button>
       </div>
 
-      <div className="text-base-content/60 mt-2 text-center text-sm">按 Enter 快速生成，或點擊發送按鈕</div>
+      <div className="mt-2 flex items-center justify-between text-sm">
+        <span className="text-base-content/60">按 Enter 快速生成，或點擊發送按鈕</span>
+        <span className={cn("text-xs", currentLength >= maxLength ? "text-error" : "text-base-content/60")}>
+          {currentLength}/{maxLength}
+        </span>
+      </div>
     </div>
   );
 };

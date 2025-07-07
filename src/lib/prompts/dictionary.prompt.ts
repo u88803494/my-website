@@ -1,5 +1,5 @@
 /**
- * AI Prompts 工具函數
+ * AI 字典查詢提示詞工具函數
  * 採用提示詞組合 (Prompt Composition) 的最佳實踐
  */
 

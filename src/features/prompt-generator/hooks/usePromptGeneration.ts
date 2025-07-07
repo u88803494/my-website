@@ -42,6 +42,7 @@ export const usePromptGeneration = () => {
       const generatedTemplate = data.template || "";
 
       setTemplate(generatedTemplate);
+      setNeedInput(""); // 清除輸入內容
       setState((prev) => ({
         ...prev,
         generatedTemplate,
