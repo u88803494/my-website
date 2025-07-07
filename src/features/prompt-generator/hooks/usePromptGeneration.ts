@@ -20,6 +20,11 @@ export const usePromptGeneration = () => {
       return;
     }
 
+    if (needInput.trim().length < 10) {
+      setState((prev) => ({ ...prev, error: "需求描述至少需要 10 個字" }));
+      return;
+    }
+
     setState((prev) => ({ ...prev, error: null, isLoading: true }));
 
     try {

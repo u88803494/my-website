@@ -10,7 +10,9 @@ import type { NeedInputProps } from "../types";
 const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, placeholder, value }) => {
   const [isFocused, setIsFocused] = useState(false);
   const maxLength = 100;
+  const minLength = 10;
   const currentLength = value.length;
+  const isValidLength = currentLength >= minLength;
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -49,7 +51,7 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
 
         <button
           className={cn("btn btn-primary btn-sm absolute right-2 bottom-2", "h-8 min-h-0 w-8 p-0")}
-          disabled={isLoading || !value.trim()}
+          disabled={isLoading || !value.trim() || !isValidLength}
           onClick={onSubmit}
         >
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
@@ -62,6 +64,12 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
           {currentLength}/{maxLength}
         </span>
       </div>
+
+      {currentLength > 0 && currentLength < minLength && (
+        <div className="text-error mt-1 text-xs">
+          請至少輸入 {minLength} 個字（目前 {currentLength} 個字）
+        </div>
+      )}
     </div>
   );
 };
