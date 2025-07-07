@@ -2,33 +2,37 @@
 
 import { useState } from "react";
 
-import { ANALYZE_NEED_PROMPT } from "@/lib/prompts/prompt-generator.prompt";
+import { ANALYZE_NEED_PROMPT } from "@/lib/prompts/ai-analyzer.prompt";
 
-export const usePromptGeneration = () => {
-  const [state, setState] = useState({
-    error: null as null | string,
-    generatedTemplate: "",
+export const useAIAnalysis = () => {
+  const [state, setState] = useState<{
+    analysisResult: string;
+    error: null | string;
+    isLoading: boolean;
+  }>({
+    analysisResult: "",
+    error: null,
     isLoading: false,
   });
 
   const [needInput, setNeedInput] = useState("");
-  const [template, setTemplate] = useState("");
+  const [analysisResult, setAnalysisResult] = useState("");
 
-  const generateTemplate = async () => {
+  const analyzeNeed = async () => {
     if (!needInput.trim()) {
-      setState((prev) => ({ ...prev, error: "請輸入您的需求" }));
+      setState((prev) => ({ ...prev, error: "請輸入您的想法或需求" }));
       return;
     }
 
     if (needInput.trim().length < 10) {
-      setState((prev) => ({ ...prev, error: "需求描述至少需要 10 個字" }));
+      setState((prev) => ({ ...prev, error: "描述至少需要 10 個字" }));
       return;
     }
 
     setState((prev) => ({ ...prev, error: null, isLoading: true }));
 
     try {
-      const response = await fetch("/api/prompt-generator", {
+      const response = await fetch("/api/ai-analyzer", {
         body: JSON.stringify({
           need: needInput,
           prompt: ANALYZE_NEED_PROMPT,
@@ -40,23 +44,23 @@ export const usePromptGeneration = () => {
       });
 
       if (!response.ok) {
-        throw new Error("生成失敗，請稍後再試");
+        throw new Error("分析失敗，請稍後再試");
       }
 
       const data = await response.json();
-      const generatedTemplate = data.template || "";
+      const analysisResult = data.analysisResult || "";
 
-      setTemplate(generatedTemplate);
+      setAnalysisResult(analysisResult);
       setNeedInput(""); // 清除輸入內容
       setState((prev) => ({
         ...prev,
-        generatedTemplate,
+        analysisResult,
         isLoading: false,
       }));
     } catch (err) {
       setState((prev) => ({
         ...prev,
-        error: err instanceof Error ? err.message : "發生未知錯誤",
+        error: err instanceof Error ? err.message : "分析過程中發生錯誤",
         isLoading: false,
       }));
     }
@@ -64,7 +68,7 @@ export const usePromptGeneration = () => {
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(template);
+      await navigator.clipboard.writeText(analysisResult);
       return true;
     } catch (err) {
       if (process.env.NODE_ENV === "development") {
@@ -75,12 +79,13 @@ export const usePromptGeneration = () => {
   };
 
   return {
-    needInput,
-    setNeedInput,
-    setTemplate,
-    template,
-    ...state,
+    analysisResult,
+    analyzeNeed,
     copyToClipboard,
-    generateTemplate,
+    error: state.error,
+    isLoading: state.isLoading,
+    needInput,
+    setAnalysisResult,
+    setNeedInput,
   };
 };

@@ -1,4 +1,10 @@
-export interface GeneratedTemplateProps {
+export interface AIAnalysisState {
+  analysisResult: string;
+  error: null | string;
+  isLoading: boolean;
+}
+
+export interface AnalysisResultProps {
   isCopying: boolean;
   onChange: (value: string) => void;
   onCopy: () => void;
@@ -11,12 +17,6 @@ export interface NeedInputProps {
   onSubmit: () => void;
   placeholder: string;
   value: string;
-}
-
-export interface PromptGenerationState {
-  error: null | string;
-  generatedTemplate: string;
-  isLoading: boolean;
 }
 
 export interface UsageTipsProps {

@@ -5,9 +5,9 @@ import { useState } from "react";
 
 import { cn } from "@/utils/cn";
 
-import type { GeneratedTemplateProps } from "../types";
+import type { AnalysisResultProps } from "../types";
 
-const GeneratedTemplate: React.FC<GeneratedTemplateProps> = ({ isCopying, onChange, onCopy, value }) => {
+const AnalysisResult: React.FC<AnalysisResultProps> = ({ isCopying, onChange, onCopy, value }) => {
   const [showCopySuccess, setShowCopySuccess] = useState(false);
 
   const handleCopy = async () => {
@@ -21,7 +21,7 @@ const GeneratedTemplate: React.FC<GeneratedTemplateProps> = ({ isCopying, onChan
   return (
     <div className="mx-auto w-full max-w-4xl space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-base-content text-lg font-semibold">AI 生成的提示詞模板</h3>
+        <h3 className="text-base-content text-lg font-semibold">AI 分析結果</h3>
         <button
           className={cn("btn btn-outline btn-sm gap-2", showCopySuccess && "btn-success")}
           disabled={isCopying}
@@ -49,7 +49,7 @@ const GeneratedTemplate: React.FC<GeneratedTemplateProps> = ({ isCopying, onChan
             "focus:ring-primary focus:ring-2 focus:outline-none",
           )}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="AI 將在這裡生成提示詞模板..."
+          placeholder="AI 將在這裡顯示分析結果..."
           value={value}
         />
 
@@ -57,10 +57,10 @@ const GeneratedTemplate: React.FC<GeneratedTemplateProps> = ({ isCopying, onChan
       </div>
 
       <div className="text-base-content/60 text-center text-sm">
-        您可以自由編輯上面的模板，然後複製到 ChatGPT、Claude 等 AI 工具中使用
+        您可以自由編輯上面的分析結果，然後複製到 ChatGPT、Claude 等 AI 工具中使用
       </div>
     </div>
   );
 };
 
-export default GeneratedTemplate;
+export default AnalysisResult;

@@ -59,7 +59,7 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
       </div>
 
       <div className="mt-2 flex items-center justify-between text-sm">
-        <span className="text-base-content/60">按 Enter 快速生成，或點擊發送按鈕</span>
+        <span className="text-base-content/60">按 Enter 快速分析，或點擊發送按鈕</span>
         <span className={cn("text-xs", currentLength >= maxLength ? "text-error" : "text-base-content/60")}>
           {currentLength}/{maxLength}
         </span>

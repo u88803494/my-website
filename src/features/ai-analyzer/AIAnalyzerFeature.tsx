@@ -2,20 +2,20 @@
 
 import { useState } from "react";
 
-import GeneratedTemplate from "./components/GeneratedTemplate";
+import AnalysisResult from "./components/AnalysisResult";
 import NeedInput from "./components/NeedInput";
 import UsageTips from "./components/UsageTips";
 import { PLACEHOLDER_TEXT, USAGE_TIPS } from "./constants";
-import { usePromptGeneration } from "./hooks/usePromptGeneration";
+import { useAIAnalysis } from "./hooks/useAIAnalysis";
 
-const PromptGeneratorFeature: React.FC = () => {
-  const { copyToClipboard, error, generateTemplate, isLoading, needInput, setNeedInput, setTemplate, template } =
-    usePromptGeneration();
+const AIAnalyzerFeature: React.FC = () => {
+  const { analysisResult, analyzeNeed, copyToClipboard, error, isLoading, needInput, setAnalysisResult, setNeedInput } =
+    useAIAnalysis();
 
   const [isCopying, setIsCopying] = useState(false);
 
   const handleSubmit = () => {
-    generateTemplate();
+    analyzeNeed();
   };
 
   const handleCopy = async () => {
@@ -28,9 +28,9 @@ const PromptGeneratorFeature: React.FC = () => {
     <div className="container mx-auto space-y-8 px-4 py-8">
       {/* 標題區域 */}
       <div className="space-y-4 text-center">
-        <h1 className="text-base-content text-4xl font-bold">AI Prompt 生成器</h1>
+        <h1 className="text-base-content text-4xl font-bold">AI 需求分析器</h1>
         <p className="text-base-content/70 mx-auto max-w-2xl text-xl">
-          想不到怎麼下提示詞嗎？用用這個工具，或許你可以釐清你的需求。
+          協助深度思考，釐清需求，學會如何給 AI 更好的提示詞
         </p>
       </div>
 
@@ -39,7 +39,7 @@ const PromptGeneratorFeature: React.FC = () => {
 
       {/* 需求輸入 */}
       <div className="space-y-4">
-        <h2 className="text-base-content text-center text-2xl font-semibold">描述您的需求</h2>
+        <h2 className="text-base-content text-center text-2xl font-semibold">描述您的想法或需求</h2>
         <NeedInput
           isLoading={isLoading}
           onChange={setNeedInput}
@@ -56,10 +56,10 @@ const PromptGeneratorFeature: React.FC = () => {
         </div>
       )}
 
-      {/* 生成的模板 */}
-      <GeneratedTemplate isCopying={isCopying} onChange={setTemplate} onCopy={handleCopy} value={template} />
+      {/* 分析結果 */}
+      <AnalysisResult isCopying={isCopying} onChange={setAnalysisResult} onCopy={handleCopy} value={analysisResult} />
     </div>
   );
 };
 
-export default PromptGeneratorFeature;
+export default AIAnalyzerFeature;

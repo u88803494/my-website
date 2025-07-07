@@ -68,11 +68,11 @@ const Navbar = () => {
             <li>
               <Link
                 className={cn({
-                  "active bg-primary text-primary-content": isActivePage("/prompt-generator"),
+                  "active bg-primary text-primary-content": isActivePage("/ai-analyzer"),
                 })}
-                href="/prompt-generator"
+                href="/ai-analyzer"
               >
-                Prompt 生成器
+                AI 需求分析器
               </Link>
             </li>
             <li>
@@ -127,11 +127,11 @@ const Navbar = () => {
           <li>
             <Link
               className={cn("text-xl", {
-                "active bg-primary text-primary-content": isActivePage("/prompt-generator"),
+                "active bg-primary text-primary-content": isActivePage("/ai-analyzer"),
               })}
-              href="/prompt-generator"
+              href="/ai-analyzer"
             >
-              Prompt 生成器
+              AI 需求分析器
             </Link>
           </li>
           <li>

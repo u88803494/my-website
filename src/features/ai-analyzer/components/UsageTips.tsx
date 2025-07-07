@@ -25,7 +25,7 @@ const UsageTips: React.FC<UsageTipsProps> = ({ tips }) => {
           >
             <div className="flex items-center gap-2">
               <Lightbulb className="text-warning h-5 w-5" />
-              <h3 className="text-base-content text-sm font-semibold">使用提示</h3>
+              <h3 className="text-base-content text-sm font-semibold">分析指南</h3>
             </div>
             {isExpanded ? (
               <ChevronDown className="text-base-content/60 h-4 w-4" />

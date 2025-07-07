@@ -26,12 +26,12 @@ export async function POST(request: NextRequest) {
     const text = response.text();
 
     return NextResponse.json({
-      template: text,
+      analysisResult: text,
     });
   } catch (error) {
-    console.error("Prompt generation error:", error);
+    console.error("AI analysis error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "生成失敗，請稍後再試" },
+      { error: error instanceof Error ? error.message : "分析失敗，請稍後再試" },
       { status: 500 },
     );
   }
