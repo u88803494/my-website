@@ -1,8 +1,10 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
+import { cn } from "@/utils/cn";
 
 interface WordSearchFormProps {
   isLoading: boolean;
@@ -26,30 +28,40 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
     <div className="mb-8 rounded-lg border border-slate-200 bg-white shadow-sm">
       <div className="px-4 py-4 sm:px-6 sm:py-6">
         <form onSubmit={handleSubmit}>
-          <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
             <input
-              className={`flex-1 rounded-lg border px-4 py-3 text-lg transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                isInputTooLong ? "border-red-300 focus:ring-red-500" : "border-slate-300"
+              aria-label="查詢詞彙"
+              className={`flex-1 rounded-lg border px-3 py-2 text-lg transition-all outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                isInputTooLong ? "border-red-500 focus:ring-red-500" : "border-slate-300"
               }`}
               disabled={isLoading}
+              maxLength={40}
               onChange={(e) => setInputWord(e.target.value)}
               placeholder="輸入中文詞彙進行查詢..."
               type="text"
               value={inputWord}
             />
             <button
-              className="mt-3 w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 sm:w-24"
+              aria-label="搜尋"
+              className={cn(
+                "flex w-full items-center justify-center rounded-lg bg-blue-600 px-3 py-2 transition-colors",
+                "hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                "disabled:cursor-not-allowed disabled:opacity-50",
+                "sm:mt-0 sm:w-14",
+              )}
               disabled={isLoading || !inputWord.trim() || isInputTooLong}
               type="submit"
             >
-              {isLoading ? "分析中..." : "查詢"}
+              {isLoading ? (
+                <div aria-hidden="true" className="flex items-center space-x-1">
+                  <span className="block h-2 w-2 animate-bounce rounded-full bg-blue-500 [animation-delay:-0.3s]" />
+                  <span className="block h-2 w-2 animate-bounce rounded-full bg-blue-400 [animation-delay:-0.15s]" />
+                  <span className="block h-2 w-2 animate-bounce rounded-full bg-blue-300" />
+                </div>
+              ) : (
+                <Search aria-hidden="true" className="h-5 w-5 text-white" />
+              )}
             </button>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-500">支援詞彙、成語及專有名詞查詢</span>
-            <span className={`text-sm ${isInputTooLong ? "text-red-500" : "text-slate-400"}`}>
-              {inputWord.length}/{MAX_WORD_LENGTH}
-            </span>
           </div>
         </form>
       </div>
