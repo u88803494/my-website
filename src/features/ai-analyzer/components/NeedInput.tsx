@@ -32,8 +32,9 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
     <div className="mx-auto w-full max-w-2xl">
       <div className="relative">
         <textarea
+          // iOS Safari 若 font-size < 16px 會自動放大，text-base = 16px
           className={cn(
-            "textarea textarea-bordered h-24 w-full resize-none",
+            "textarea textarea-bordered h-24 w-full resize-none text-base", // ← 這裡加上 text-base
             "focus:ring-primary focus:ring-2 focus:outline-none",
             "transition-all duration-200",
             isFocused && "ring-primary ring-2",
