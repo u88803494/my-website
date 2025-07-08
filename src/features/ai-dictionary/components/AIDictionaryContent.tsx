@@ -27,6 +27,18 @@ const AIDictionaryContent: React.FC = () => {
         {/* Search Form */}
         <WordSearchForm isLoading={mutation.isPending} onSubmit={handleSubmit} />
 
+        {/* AI 生成內容免責聲明：僅在尚未查詢時顯示 */}
+        {testResults.length === 0 && !mutation.isPending && (
+          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+            <div className="flex items-start gap-3">
+              <span className="text-lg text-amber-600">📚</span>
+              <div className="flex-1 text-sm">
+                <p className="text-amber-800">本字典內容由 AI 生成，建議搭配傳統字典使用以確保準確性。</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Loading State */}
         {mutation.isPending && <LoadingState />}
 
