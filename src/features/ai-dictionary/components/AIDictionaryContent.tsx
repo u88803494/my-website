@@ -27,7 +27,10 @@ const AIDictionaryContent: React.FC = () => {
         {/* Search Form */}
         <WordSearchForm isLoading={mutation.isPending} onSubmit={handleSubmit} />
 
-        {/* AI 生成內容免責聲明：僅在尚未查詢時顯示 */}
+        {/* Loading State */}
+        {mutation.isPending && <LoadingState />}
+
+        {/* 免責聲明：僅在尚未搜尋時顯示 */}
         {testResults.length === 0 && !mutation.isPending && (
           <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
             <div className="flex items-start gap-3">
@@ -38,9 +41,6 @@ const AIDictionaryContent: React.FC = () => {
             </div>
           </div>
         )}
-
-        {/* Loading State */}
-        {mutation.isPending && <LoadingState />}
 
         {/* Results */}
         <ResultsList
