@@ -22,7 +22,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   description: "Henry Lee 的個人網站，展示前端開發專案與技術經驗。專精於 Next.js、React、TypeScript 開發。",
+  openGraph: {
+    description:
+      "全端工程師 Henry Lee 的個人網站，專注於 AI、Web、技術分享與作品集。Front-end engineer portfolio, AI, web, and tech sharing.",
+    images: [
+      {
+        alt: "Henry Lee 頭像 Henry Lee Portrait",
+        height: 512,
+        url: "https://henryleelab.com/images/my-photo.jpeg",
+        width: 512,
+      },
+    ],
+    title: "Henry Lee - 前端工程師 | Henry Lee's Personal Website",
+    type: "website",
+    url: "https://henryleelab.com/",
+  },
   title: "Henry Lee - 前端工程師",
+  twitter: {
+    card: "summary",
+    description:
+      "全端工程師 Henry Lee 的個人網站，專注於 AI、Web、技術分享與作品集。Front-end engineer portfolio, AI, web, and tech sharing.",
+    images: ["https://henryleelab.com/images/my-photo.jpeg"],
+    title: "Henry Lee - 前端工程師 | Henry Lee's Personal Website",
+  },
 };
 
 const RootLayout = ({
