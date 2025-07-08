@@ -21,7 +21,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://henryleelab.com/",
+  },
+  authors: [{ name: "Henry Lee", url: "https://henryleelab.com" }],
+  creator: "Henry Lee",
   description: "Henry Lee 的個人網站，展示前端開發專案與技術經驗。專精於 Next.js、React、TypeScript 開發。",
+  keywords: ["Henry Lee", "前端工程師", "全端工程師", "Next.js", "React", "TypeScript", "AI", "作品集", "技術部落格"],
   openGraph: {
     description:
       "全端工程師 Henry Lee 的個人網站，專注於 AI、Web、技術分享與作品集。Front-end engineer portfolio, AI, web, and tech sharing.",
@@ -37,6 +43,8 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://henryleelab.com/",
   },
+  publisher: "Henry Lee",
+  robots: "index, follow",
   title: "Henry Lee - 前端工程師",
   twitter: {
     card: "summary",
@@ -47,13 +55,40 @@ export const metadata: Metadata = {
   },
 };
 
+export const Head = () => {
+  return (
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `{
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Henry Lee",
+            "url": "https://henryleelab.com",
+            "image": "https://henryleelab.com/images/my-photo.jpeg",
+            "sameAs": [
+              "https://github.com/henryleelab"
+            ],
+            "jobTitle": "前端工程師",
+            "worksFor": {
+              "@type": "Organization",
+              "name": "Henry Lee Lab"
+            }
+          }`,
+        }}
+        type="application/ld+json"
+      />
+    </>
+  );
+}
+
 const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
   return (
-    <html data-theme="corporate" lang="en">
+    <html data-theme="corporate" lang="zh-Hant">
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
         suppressHydrationWarning={true}
