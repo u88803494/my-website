@@ -14,7 +14,7 @@ const QuickNavigation: React.FC = () => {
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
-      className="mb-8"
+      className="mt-12 mb-8"
       initial={{ opacity: 0, y: 30 }}
       transition={{ delay: 1.0, duration: 0.6 }}
     >
