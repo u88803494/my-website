@@ -14,7 +14,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, className }) 
         if (block.type !== "character") return null;
         return (
           <div className="rounded-lg border border-slate-200 p-3 sm:p-4" key={block.char}>
-            <div className="mb-3 flex flex-col items-start gap-2 sm:flex-row sm:gap-4">
+            <div className="mb-3 flex flex-row items-center gap-2 sm:gap-4">
               <span className="mt-1 text-3xl font-bold text-blue-600 sm:text-4xl">{block.char}</span>
               <div className="flex-1">
                 <div className="mb-2 flex flex-wrap gap-2 sm:gap-3">
@@ -28,7 +28,6 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, className }) 
               </div>
             </div>
             <div>
-              <span className="font-medium text-slate-800">字源學:</span>
               <p className="mt-1 text-sm leading-relaxed break-words text-slate-700 sm:text-base">{block.etymology}</p>
             </div>
           </div>

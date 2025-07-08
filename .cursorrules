@@ -72,7 +72,7 @@ Before responding to any request, follow these steps:
 
 ### Styling Guidelines
 - **Styling Engine**: Use **Tailwind CSS exclusively**. No plain CSS or inline `style` attributes
-- **Class Composition**: Always use the `cn()` utility function to conditionally combine class names
+- **Class Composition**: When a component requires more than ten className attributes, use the cn() utility function. Within the function, group classes by their property type (e.g., layout, typography, colors) and segment them, keeping each logical group or line to a readable length (ideally under ten classes).
 - **UI Components**: Leverage **DaisyUI** component classes (e.g., `card`, `btn`, `badge`) where appropriate
 - **Color Usage**: Prioritize daisyUI's semantic color names (`bg-primary`, `text-base-content`) over hard-coded colors
 - **Responsive Design**: Follow mobile-first approach using Tailwind's standard breakpoints (`sm`, `md`, `lg`, `xl`)

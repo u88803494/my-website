@@ -9,7 +9,6 @@ interface DefinitionsProps {
 const Definitions: React.FC<DefinitionsProps> = ({ definitions }) => (
   <div>
     <h4 className="mb-3 flex items-center gap-2 font-semibold text-slate-800">
-      {/* 書本 icon，lucide-react 取代原 SVG */}
       <span className="mr-1 inline-block align-middle" style={{ minWidth: 20 }}>
         <BookOpen size={18} strokeWidth={2} />
       </span>
