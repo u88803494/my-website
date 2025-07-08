@@ -22,7 +22,7 @@ const Etymology: React.FC<EtymologyProps> = ({ etymologyBlocks }) => (
       block.type === "foreign" ? (
         <ForeignEtymology className={cn(idx !== 0 && "mt-4")} foreignEtymology={block.value} key={`foreign-${idx}`} />
       ) : (
-        <CharacterCard characters={[block]} className={cn(idx !== 0 && "mt-4")} key={block.char} />
+        <CharacterCard characters={[block]} className={cn(idx !== 0 && "mt-4")} key={`char-${block.char}-${idx}`} />
       ),
     )}
   </div>

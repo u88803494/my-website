@@ -2,6 +2,10 @@
 
 一個現代化的個人網站，展示專業技能、工作經驗、專案作品，並整合 Medium 文章自動化管理系統與 AI 字典功能。
 
+## 🌐 網站連結
+
+- [https://henryleelab.com](https://henryleelab.com)
+
 ## 📸 預覽畫面
 
 ### 🏠 Hero Section
@@ -105,6 +109,16 @@ pnpm dev
 ```
 
 開啟瀏覽器訪問 [http://localhost:3000](http://localhost:3000)
+
+## 🌍 公開頁面一覽
+
+| 頁面名稱         | 網址                                  | 說明                     |
+| ---------------- | ------------------------------------- | ------------------------ |
+| 首頁／履歷       | https://henryleelab.com/              | 個人履歷、技能、經驗總覽 |
+| 關於我           | https://henryleelab.com/about         | 關於 Henry Lee 的介紹    |
+| 技術部落格       | https://henryleelab.com/blog          | 技術文章與開發心得       |
+| AI 字典          | https://henryleelab.com/ai-dictionary | AI 中文字詞查詢工具      |
+| AI Prompt 生成器 | https://henryleelab.com/ai-analyzer   | AI 提示詞產生輔助工具    |
 
 ## 🤖 Medium 文章自動化使用指南
 
@@ -263,7 +277,7 @@ node scripts/batch-parse-articles.js
 
 ### 🎯 AI 字典學習卡片互動：查詢結果可標記「已完成學習」，支援撤銷，並有動畫提示，提升學習動機
 
-### �� Medium 文章自動同步與輪播：首頁與履歷頁自動同步最新文章，精選文章支援自動輪播、手動切換、動畫指示器
+### 🎯 Medium 文章自動同步與輪播：首頁與履歷頁自動同步最新文章，精選文章支援自動輪播、手動切換、動畫指示器
 
 ### 🎯 專案卡片多連結與技術標籤：每個專案卡片可快速連結至預覽、GitHub、實作心得，並標註技術棧
 
