@@ -6,13 +6,21 @@ interface ResultsListProps {
   isLoading: boolean;
   onClearResults: () => void;
   onComplete: (cardId: string) => void;
+  onOpenDonateModal: () => void;
   onUndo: (cardId: string) => void;
   results: APICallResult[];
 }
 
-const ResultsList: React.FC<ResultsListProps> = ({ isLoading, onClearResults, onComplete, onUndo, results }) => {
+const ResultsList: React.FC<ResultsListProps> = ({
+  isLoading,
+  onClearResults,
+  onComplete,
+  onOpenDonateModal,
+  onUndo,
+  results,
+}) => {
   if (results.length === 0 && !isLoading) {
-    return <EmptyState />;
+    return <EmptyState onOpenDonateModal={onOpenDonateModal} />;
   }
 
   if (results.length === 0) {

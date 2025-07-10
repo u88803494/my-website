@@ -80,7 +80,7 @@ export const Head = () => {
       />
     </>
   );
-}
+};
 
 const RootLayout = ({
   children,

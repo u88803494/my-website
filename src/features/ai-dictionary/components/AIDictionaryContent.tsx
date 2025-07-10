@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import { useWordAnalysis } from "../hooks/useWordAnalysis";
 import { useWordLearning } from "../hooks/useWordLearning";
+import DonateModal from "./DonateModal";
 import LoadingState from "./LoadingState";
 import ResultsList from "./ResultsList";
 import WordSearchForm from "./WordSearchForm";
@@ -9,6 +12,7 @@ import WordSearchForm from "./WordSearchForm";
 const AIDictionaryContent: React.FC = () => {
   const mutation = useWordAnalysis();
   const { addResult, handleClearResults, handleCompleteCard, handleUndo, testResults } = useWordLearning();
+  const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
 
   const handleSubmit = (word: string) => {
     mutation.mutate(word, {
@@ -19,6 +23,14 @@ const AIDictionaryContent: React.FC = () => {
         addResult(word, data);
       },
     });
+  };
+
+  const handleOpenDonateModal = () => {
+    setIsDonateModalOpen(true);
+  };
+
+  const handleCloseDonateModal = () => {
+    setIsDonateModalOpen(false);
   };
 
   return (
@@ -47,10 +59,14 @@ const AIDictionaryContent: React.FC = () => {
           isLoading={mutation.isPending}
           onClearResults={handleClearResults}
           onComplete={handleCompleteCard}
+          onOpenDonateModal={handleOpenDonateModal}
           onUndo={handleUndo}
           results={testResults}
         />
       </div>
+
+      {/* Donate Modal */}
+      <DonateModal isOpen={isDonateModalOpen} onClose={handleCloseDonateModal} />
     </div>
   );
 };
