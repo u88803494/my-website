@@ -16,6 +16,47 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
+// --- Import Architecture Rules ---
+// 這些規則確保專案遵循清晰的架構模式：
+// 1. Features 之間不應該直接互相 import
+// 2. 共享組件應該通過 @/components/shared 訪問
+// 3. 類型定義應該集中在 @/types 中
+// 4. App 路由組件應該只包含頁面邏輯，不包含業務邏輯
+const importRestrictionRules = {
+  "no-restricted-imports": [
+    "error",
+    {
+      patterns: [
+        // 禁止直接從 app 資料夾 import（除了 page.tsx 和 layout.tsx）
+        {
+          group: ["@/app/*"],
+          message: "請勿直接從 app 資料夾 import，應該使用對應的 feature 組件",
+        },
+        // 禁止從 shared 組件直接 import（應該通過 feature 組件）
+        {
+          group: ["@/components/shared/*"],
+          message: "請勿直接從 shared 資料夾 import，應該使用對應的 feature 組件",
+        },
+        // 禁止跨 feature 的 hooks import
+        {
+          group: ["@/features/*/hooks/*"],
+          message: "請勿直接從其他 feature 的 hooks 資料夾 import，應該在當前 feature 內創建所需的 hooks",
+        },
+        // 禁止跨 feature 的 types import
+        {
+          group: ["@/features/*/types/*"],
+          message: "請勿直接從其他 feature 的 types 資料夾 import，應該在 @/types 中定義共享類型",
+        },
+        // 禁止從其他 feature 的 components 資料夾 import
+        {
+          group: ["@/features/*/components/*"],
+          message: "請勿直接從其他 feature 的 components 資料夾 import，應該將共享組件移到 @/components/shared",
+        },
+      ],
+    },
+  ],
+};
+
 // --- Rule Groups ---
 const reactRules = {
   "react/function-component-definition": [
@@ -74,6 +115,7 @@ const eslintConfig = [
 
       // Apply rule groups
       ...importSortRules,
+      ...importRestrictionRules,
       ...reactRules,
       ...codeStyleRules,
       ...typeScriptRules,
