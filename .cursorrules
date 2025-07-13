@@ -104,9 +104,8 @@ Before responding to any request, follow these steps:
 - **TODO/FIXME**: Format consistently and track for resolution
 
 ### Development & Testing
-- **Code Quality Check**: Use `pnpm run check` for comprehensive code quality checks (TypeScript + ESLint + Prettier)
-- **Auto-fix Option**: Use `pnpm run check:fix` to automatically fix linting and formatting issues
-- **Quick Validation**: The `check` command is safe to run alongside `pnpm dev`
+- **Code Quality Check & Auto-fix**: Use `pnpm run check` for comprehensive code quality checks and automatic fixes (TypeScript + ESLint + Prettier)
+- **Quick Validation**: The `check` command automatically applies fixes and is safe to run alongside `pnpm dev`
 - **Build Commands**: Use `pnpm run build` for production builds and deployment
 - **🚨 MANDATORY RULE**: After making ANY code changes, ALWAYS run `pnpm run check` to ensure code quality
 
