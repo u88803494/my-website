@@ -3,6 +3,73 @@ import { Project } from "@/types/project.types";
 
 export const projects: Project[] = [
   {
+    category: "個人網站／履歷平台",
+    description: {
+      features: [
+        "採用 Next.js 15 + TypeScript + Tailwind CSS 打造，支援 App Router",
+        "整合 AI 字典、AI 需求分析器等自研 AI 工具",
+        "Medium 文章自動同步與輪播展示",
+        "響應式設計、豐富動畫",
+        "技能矩陣、專案卡片、工作經驗時間軸等多元展示",
+        "完整的 SEO 與社群分享優化",
+      ],
+      intro:
+        "一個現代化的個人網站，整合履歷、專案作品、AI 工具、Medium 文章自動化等多元功能，展現全端開發與產品設計能力。",
+    },
+    imageUrl: "/images/screenshots/henry-lee-hero-section.png",
+    links: [
+      { label: "預覽網站", url: "https://henryleelab.com" },
+      {
+        label: "實作文章",
+        url: "https://medium.com/@hugh-program-learning-diary-js/next-js-ai-一天搞定個人網站-0dddd23f4db3",
+      },
+    ],
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "React Query", "DaisyUI", "Shadcn UI", "Google Gemini API"],
+    title: "Henry Lee 個人網站",
+  },
+  {
+    category: "AI 工具 (個人獨立專案)",
+    description: {
+      features: [
+        "輸入需求後，AI 會自動產生結構化的分析模板，包含多個引導性問題，協助釐清目標、用戶、功能、預算等核心要素",
+        "支援複製分析結果，可直接用於 ChatGPT、Claude 等 AI 工具的 prompt 編寫",
+        "即時錯誤處理與載入狀態提示，提升互動體驗",
+        "介面簡潔，支援行動裝置瀏覽",
+        "整合 Google Gemini API，確保分析品質與多樣性",
+      ],
+      intro:
+        "一款協助深度思考與釐清需求的 AI 工具，能將模糊想法自動拆解為結構化的填空題模板，幫助用戶學會如何給 AI 更好的提示詞。適合產品規劃、專案討論、AI prompt 工程等多元場景。",
+    },
+    imageUrl: "/images/projects/ai-analyzer.png",
+    links: [
+      { label: "預覽網站", url: "https://henryleelab.com/ai-analyzer" },
+      {
+        label: "實作文章",
+        url: "https://hugh-program-learning-diary-js.medium.com/ai-溝通老是失敗-我花不到三小時-做了一個-ai-的-ai-當解方-880cecf604c4",
+      },
+    ],
+    techStack: ["Next.js", "TypeScript", "Google Gemini API", "Tailwind CSS"],
+    title: "AI 需求分析器",
+  },
+  {
+    category: "AI 工具 (個人獨立專案)",
+    description: {
+      features: [
+        "查詢結果涵蓋詞義、字源、例句等多層次資訊，並以卡片方式呈現，方便學習與複習",
+        "支援學習模式，可標記「學習完成」並支援撤銷，方便重複查看",
+        "即時互動動畫，查詢成功與學習完成皆有動態提示，提升使用者體驗",
+        "嚴謹的錯誤處理與查詢長度限制，確保查詢效率與準確性",
+        "整合 Google Gemini API，AI 智能分析中文字詞",
+      ],
+      intro:
+        "運用 Google Gemini AI 技術，讓中文詞彙的含義、字源、例句等多維度資訊一站式查詢，並結合學習卡片互動，提升學習效率。",
+    },
+    imageUrl: "/images/projects/ai-dictionary.png",
+    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-dictionary" }],
+    techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
+    title: "AI 智能中文字典",
+  },
+  {
     category: "字典網站 (個人獨立專案)",
     description: {
       features: [

@@ -117,7 +117,14 @@ const eslintConfig = [
     },
   },
 
-  // 4. Configuration for auto-generated data files
+  // 4. Configuration for all data files (disable duplicate string rule)
+  {
+    files: ["src/data/**/*.{ts,tsx}"],
+    rules: {
+      "sonarjs/no-duplicate-string": "off",
+    },
+  },
+  // 5. Configuration for auto-generated data files (still keep for future special rules)
   {
     files: ["src/data/articleData.ts"],
     rules: {
@@ -125,7 +132,7 @@ const eslintConfig = [
     },
   },
 
-  // 5. Configuration for Node.js scripts (scripts folder)
+  // 6. Configuration for Node.js scripts (scripts folder)
   {
     files: ["scripts/**/*.{js,ts}"],
     languageOptions: {
