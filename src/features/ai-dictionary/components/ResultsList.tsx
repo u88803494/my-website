@@ -7,6 +7,7 @@ interface ResultsListProps {
   onClearResults: () => void;
   onComplete: (cardId: string) => void;
   onOpenDonateModal: () => void;
+  onRegenerate: (cardId: string) => void;
   onUndo: (cardId: string) => void;
   results: APICallResult[];
 }
@@ -16,6 +17,7 @@ const ResultsList: React.FC<ResultsListProps> = ({
   onClearResults,
   onComplete,
   onOpenDonateModal,
+  onRegenerate,
   onUndo,
   results,
 }) => {
@@ -42,7 +44,13 @@ const ResultsList: React.FC<ResultsListProps> = ({
       {/* Results */}
       <div className="space-y-6">
         {results.map((result) => (
-          <WordCard key={result.id} onComplete={onComplete} onUndo={onUndo} result={result} />
+          <WordCard
+            key={result.id}
+            onComplete={onComplete}
+            onRegenerate={onRegenerate}
+            onUndo={onUndo}
+            result={result}
+          />
         ))}
       </div>
     </>

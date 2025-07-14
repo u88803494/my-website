@@ -1,4 +1,4 @@
-import { ArrowUpCircle } from "lucide-react";
+import { ArrowUpCircle, RefreshCw } from "lucide-react";
 
 import type { APIErrorResponse, WordAnalysisResponse } from "@/types/dictionary.types";
 import { cn } from "@/utils/cn";
@@ -11,17 +11,22 @@ import Etymology from "./Etymology";
 
 interface WordCardProps {
   onComplete: (cardId: string) => void;
+  onRegenerate: (cardId: string) => void;
   onUndo: (cardId: string) => void;
   result: APICallResult;
 }
 
-const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
+const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, result }) => {
   const isError = (response: APIErrorResponse | WordAnalysisResponse): response is APIErrorResponse => {
     return "error" in response;
   };
 
   const handleScrollToTop = () => {
     window.scrollTo({ behavior: "smooth", top: 0 });
+  };
+
+  const handleRegenerate = () => {
+    onRegenerate(result.id);
   };
 
   if (result.showUndoInPlace) {
@@ -67,10 +72,35 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
           </>
         )}
 
-        {/* 單字標題 */}
-        <div className={cn("mb-6")}>
-          <h3 className={cn("mb-2 text-lg font-semibold text-slate-800", "sm:text-2xl")}>{result.word}</h3>
+        {/* 時間戳 - 右上角 */}
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
           <p className={cn("text-xs text-slate-500", "sm:text-sm")}>{result.timestamp}</p>
+        </div>
+
+        {/* 單字標題區域 */}
+        <div className={cn("mb-6 pr-16")}>
+          <div className="flex items-center gap-3">
+            <h3 className={cn("text-lg font-semibold text-slate-800", "sm:text-2xl")}>{result.word}</h3>
+
+            {/* 重新生成按鈕 */}
+            <button
+              aria-label="重新生成定義"
+              className={cn(
+                "flex items-center gap-1 rounded-md px-2 py-1",
+                "text-xs text-slate-500",
+                "transition-all duration-200",
+                "hover:bg-slate-50 hover:text-slate-600",
+                "focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none",
+                "disabled:cursor-not-allowed disabled:opacity-50",
+              )}
+              disabled={result.isCompleting || result.isRemoving}
+              onClick={handleRegenerate}
+              type="button"
+            >
+              <RefreshCw className="h-3 w-3" />
+              <span>重新生成</span>
+            </button>
+          </div>
         </div>
 
         {isError(result.response) ? (

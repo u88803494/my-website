@@ -7,14 +7,44 @@ import type { APICallResult } from "../types";
 export const useWordLearning = () => {
   const [testResults, setTestResults] = useState<APICallResult[]>([]);
 
-  const addResult = (word: string, response: APIErrorResponse | WordAnalysisResponse) => {
-    const result: APICallResult = {
-      id: `${Date.now()}-${Math.random()}`,
-      response,
-      timestamp: new Date().toLocaleString("zh-TW"),
-      word,
-    };
-    setTestResults((prev) => [result, ...prev]);
+  const addResult = (word: string, response: APIErrorResponse | WordAnalysisResponse, cardId?: string) => {
+    if (cardId) {
+      // 更新現有結果
+      setTestResults((prev) =>
+        prev.map((result) =>
+          result.id === cardId
+            ? {
+                ...result,
+                response,
+                timestamp: new Date().toLocaleString("zh-TW"),
+              }
+            : result,
+        ),
+      );
+    } else {
+      // 新增結果
+      const result: APICallResult = {
+        id: `${Date.now()}-${Math.random()}`,
+        response,
+        timestamp: new Date().toLocaleString("zh-TW"),
+        word,
+      };
+      setTestResults((prev) => [result, ...prev]);
+    }
+  };
+
+  const updateResult = (cardId: string, response: APIErrorResponse | WordAnalysisResponse) => {
+    setTestResults((prev) =>
+      prev.map((result) =>
+        result.id === cardId
+          ? {
+              ...result,
+              response,
+              timestamp: new Date().toLocaleString("zh-TW"),
+            }
+          : result,
+      ),
+    );
   };
 
   const handleCompleteCard = (cardId: string) => {
@@ -77,5 +107,6 @@ export const useWordLearning = () => {
     handleCompleteCard,
     handleUndo,
     testResults,
+    updateResult,
   };
 };

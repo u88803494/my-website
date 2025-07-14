@@ -11,7 +11,8 @@ import WordSearchForm from "./WordSearchForm";
 
 const AIDictionaryContent: React.FC = () => {
   const mutation = useWordAnalysis();
-  const { addResult, handleClearResults, handleCompleteCard, handleUndo, testResults } = useWordLearning();
+  const { addResult, handleClearResults, handleCompleteCard, handleUndo, testResults, updateResult } =
+    useWordLearning();
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
 
   const handleSubmit = (word: string) => {
@@ -21,6 +22,24 @@ const AIDictionaryContent: React.FC = () => {
       },
       onSuccess: (data) => {
         addResult(word, data);
+      },
+    });
+  };
+
+  const handleRegenerate = (cardId: string) => {
+    // 找到要重新生成的卡片
+    const targetResult = testResults.find((result) => result.id === cardId);
+    if (!targetResult) return;
+
+    // 重新生成該字詞的定義
+    mutation.mutate(targetResult.word, {
+      onError: (error) => {
+        // 更新現有結果為錯誤狀態
+        updateResult(cardId, { error: error.message });
+      },
+      onSuccess: (data) => {
+        // 更新現有結果為新的成功數據
+        updateResult(cardId, data);
       },
     });
   };
@@ -60,6 +79,7 @@ const AIDictionaryContent: React.FC = () => {
           onClearResults={handleClearResults}
           onComplete={handleCompleteCard}
           onOpenDonateModal={handleOpenDonateModal}
+          onRegenerate={handleRegenerate}
           onUndo={handleUndo}
           results={testResults}
         />

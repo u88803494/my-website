@@ -124,6 +124,19 @@ const eslintConfig = [
       "sonarjs/no-duplicate-string": "off",
     },
   },
+
+  // 4.1. Configuration for UI components (disable duplicate string rule for Tailwind className)
+  {
+    files: [
+      "src/features/**/components/**/*.{ts,tsx}",
+      "src/components/**/*.{ts,tsx}",
+      "src/app/**/components/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "sonarjs/no-duplicate-string": "off",
+    },
+  },
+
   // 5. Configuration for auto-generated data files (still keep for future special rules)
   {
     files: ["src/data/articleData.ts"],
