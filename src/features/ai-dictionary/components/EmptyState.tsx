@@ -18,11 +18,11 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onOpenDonateModal }) => {
       {/* CTA 區塊 */}
       <div className="mt-12 flex flex-col items-center gap-4">
         <p className="mx-auto max-w-2xl font-medium text-slate-600">
-          <strong>如果這個工具對您有所啟發，歡迎請我喝杯咖啡，支持它持續進化。</strong>
+          <strong>如果這個工具對您有所啟發，歡迎贊助我，支持它持續進化。</strong>
         </p>
         <button className="btn btn-primary flex items-center gap-2" onClick={onOpenDonateModal}>
           <Coffee className="h-5 w-5" />
-          請我喝杯咖啡
+          贊助我，請我喝杯咖啡
         </button>
       </div>
     </div>
