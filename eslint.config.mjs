@@ -32,11 +32,6 @@ const importRestrictionRules = {
           group: ["@/app/*"],
           message: "請勿直接從 app 資料夾 import，應該使用對應的 feature 組件",
         },
-        // 禁止從 shared 組件直接 import（應該通過 feature 組件）
-        {
-          group: ["@/components/shared/*"],
-          message: "請勿直接從 shared 資料夾 import，應該使用對應的 feature 組件",
-        },
         // 禁止跨 feature 的 hooks import
         {
           group: ["@/features/*/hooks/*"],
