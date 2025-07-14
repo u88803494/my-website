@@ -41,7 +41,6 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
   // 按鈕樣式類別
   const buttonClass = cn(
     // 基礎樣式
-    "absolute top-2 right-2 sm:top-4 sm:right-4",
     "rounded-md px-3 py-1 text-sm font-medium",
     "transition-all duration-300",
     // 狀態樣式
@@ -53,15 +52,6 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
   return (
     <div className={cardClass}>
       <div className="p-4 sm:p-6">
-        {/* 完成學習按鈕 */}
-        <button
-          className={buttonClass}
-          disabled={result.isCompleting || result.isRemoving}
-          onClick={() => onComplete(result.id)}
-        >
-          {result.isCompleting ? "已完成 👍" : "學習完成"}
-        </button>
-
         {/* 成功動畫 */}
         {result.isCompleting && (
           <>
@@ -78,7 +68,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
         )}
 
         {/* 單字標題 */}
-        <div className={cn("mb-6 pr-0 md:pr-20")}>
+        <div className={cn("mb-6")}>
           <h3 className={cn("mb-2 text-lg font-semibold text-slate-800", "sm:text-2xl")}>{result.word}</h3>
           <p className={cn("text-xs text-slate-500", "sm:text-sm")}>{result.timestamp}</p>
         </div>
@@ -92,8 +82,18 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
           </div>
         )}
 
-        {/* 捲動到頂部按鈕 */}
-        <div className={cn("mt-4 flex justify-center", "border-t border-slate-100 pt-3")}>
+        {/* 底部操作區域 */}
+        <div className={cn("mt-6 flex items-center justify-between", "border-t border-slate-100 pt-4")}>
+          {/* 學習完成按鈕 */}
+          <button
+            className={buttonClass}
+            disabled={result.isCompleting || result.isRemoving}
+            onClick={() => onComplete(result.id)}
+          >
+            {result.isCompleting ? "已完成 👍" : "學習完成"}
+          </button>
+
+          {/* 捲動到頂部按鈕 */}
           <button
             aria-label="捲動到最上方"
             className={cn(
@@ -109,6 +109,9 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
             <ArrowUpCircle className="h-3 w-3" />
             <span>回到頂部</span>
           </button>
+
+          {/* 空元素 - 用於平衡佈局 */}
+          <div className="w-20" />
         </div>
       </div>
     </div>
