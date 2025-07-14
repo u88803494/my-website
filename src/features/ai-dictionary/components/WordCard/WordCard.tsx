@@ -1,3 +1,5 @@
+import { ArrowUpCircle } from "lucide-react";
+
 import type { APIErrorResponse, WordAnalysisResponse } from "@/types/dictionary.types";
 import { cn } from "@/utils/cn";
 
@@ -18,19 +20,31 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
     return "error" in response;
   };
 
+  const handleScrollToTop = () => {
+    window.scrollTo({ behavior: "smooth", top: 0 });
+  };
+
   if (result.showUndoInPlace) {
     return <CompleteBar id={result.id} onUndo={onUndo} word={result.word} />;
   }
 
-  // 狀態 className 合併
+  // 卡片樣式類別
   const cardClass = cn(
-    "relative rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-1200 ease-in-out",
+    // 基礎樣式
+    "relative rounded-lg border border-slate-200 bg-white shadow-sm",
+    "transition-all duration-1200 ease-in-out",
+    // 狀態樣式
     result.isCompleting && "border-blue-200 shadow-lg",
     result.isRemoving ? "translate-y-[-20px] scale-95 opacity-0" : "translate-y-0 scale-100 opacity-100",
   );
 
+  // 按鈕樣式類別
   const buttonClass = cn(
-    "absolute top-2 right-2 sm:top-4 sm:right-4 rounded-md px-3 py-1 text-sm font-medium transition-all duration-300",
+    // 基礎樣式
+    "absolute top-2 right-2 sm:top-4 sm:right-4",
+    "rounded-md px-3 py-1 text-sm font-medium",
+    "transition-all duration-300",
+    // 狀態樣式
     result.isCompleting
       ? "scale-105 bg-green-100 text-green-800"
       : "bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800",
@@ -51,22 +65,22 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
         {/* 成功動畫 */}
         {result.isCompleting && (
           <>
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className={cn("pointer-events-none absolute inset-0", "flex items-center justify-center")}>
               <div className="animate-bounce text-6xl">🎉</div>
             </div>
-            <div className="pointer-events-none absolute top-8 right-8">
+            <div className={cn("pointer-events-none absolute", "top-8 right-8")}>
               <div className="animate-pulse text-3xl">✨</div>
             </div>
-            <div className="pointer-events-none absolute top-12 right-12">
+            <div className={cn("pointer-events-none absolute", "top-12 right-12")}>
               <div className="animate-ping text-2xl">⭐</div>
             </div>
           </>
         )}
 
         {/* 單字標題 */}
-        <div className="mb-6 pr-0 md:pr-20">
-          <h3 className="mb-2 text-lg font-semibold text-slate-800 sm:text-2xl">{result.word}</h3>
-          <p className="text-xs text-slate-500 sm:text-sm">{result.timestamp}</p>
+        <div className={cn("mb-6 pr-0 md:pr-20")}>
+          <h3 className={cn("mb-2 text-lg font-semibold text-slate-800", "sm:text-2xl")}>{result.word}</h3>
+          <p className={cn("text-xs text-slate-500", "sm:text-sm")}>{result.timestamp}</p>
         </div>
 
         {isError(result.response) ? (
@@ -77,6 +91,25 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onUndo, result }) => {
             <Etymology etymologyBlocks={result.response.etymologyBlocks} />
           </div>
         )}
+
+        {/* 捲動到頂部按鈕 */}
+        <div className={cn("mt-4 flex justify-center", "border-t border-slate-100 pt-3")}>
+          <button
+            aria-label="捲動到最上方"
+            className={cn(
+              "flex items-center gap-1 rounded px-2 py-1",
+              "text-xs text-slate-500",
+              "transition-all duration-200",
+              "hover:bg-slate-50 hover:text-slate-600",
+              "focus:ring-1 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none",
+            )}
+            onClick={handleScrollToTop}
+            type="button"
+          >
+            <ArrowUpCircle className="h-3 w-3" />
+            <span>回到頂部</span>
+          </button>
+        </div>
       </div>
     </div>
   );
