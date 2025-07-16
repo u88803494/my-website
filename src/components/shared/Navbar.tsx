@@ -15,6 +15,12 @@ const Navbar = () => {
     });
   };
 
+  // 關閉 dropdown 的函數
+  const closeDropdown = () => {
+    const dropdown = document.activeElement as HTMLElement;
+    dropdown?.blur();
+  };
+
   // 判斷是否為當前頁面的輔助函數
   const isActivePage = (href: string) => {
     if (href === "/") {
@@ -40,6 +46,7 @@ const Navbar = () => {
                   "active bg-primary text-primary-content": isActivePage("/"),
                 })}
                 href="/"
+                onClick={closeDropdown}
               >
                 首頁
               </Link>
@@ -51,6 +58,7 @@ const Navbar = () => {
                   "active bg-primary text-primary-content": isActivePage("/blog"),
                 })}
                 href="/blog"
+                onClick={closeDropdown}
               >
                 部落格
               </Link>
@@ -61,6 +69,7 @@ const Navbar = () => {
                   "active bg-primary text-primary-content": isActivePage("/ai-dictionary"),
                 })}
                 href="/ai-dictionary"
+                onClick={closeDropdown}
               >
                 AI 字典
               </Link>
@@ -71,6 +80,7 @@ const Navbar = () => {
                   "active bg-primary text-primary-content": isActivePage("/ai-analyzer"),
                 })}
                 href="/ai-analyzer"
+                onClick={closeDropdown}
               >
                 AI 需求分析器
               </Link>
@@ -81,6 +91,7 @@ const Navbar = () => {
                   "active bg-primary text-primary-content": isActivePage("/about"),
                 })}
                 href="/about"
+                onClick={closeDropdown}
               >
                 關於我
               </Link>
