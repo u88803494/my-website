@@ -142,6 +142,7 @@ const eslintConfig = [
     files: ["src/data/articleData.ts"],
     rules: {
       "sonarjs/no-duplicate-string": "off",
+      "perfectionist/sort-objects": "off",
     },
   },
 
