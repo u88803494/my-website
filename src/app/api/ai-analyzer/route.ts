@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-import { GEMINI_MODEL } from "@/constants/aiModels";
+import { GEMINI_2_5_FLASH_LITE } from "@/constants/aiModels";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
+    const model = genAI.getGenerativeModel({ model: GEMINI_2_5_FLASH_LITE });
 
     const result = await model.generateContent(`${prompt}\n\n用戶需求：${need}`);
     const response = await result.response;
