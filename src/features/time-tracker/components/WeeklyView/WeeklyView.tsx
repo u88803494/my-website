@@ -1,19 +1,20 @@
 "use client";
 
-import { BarChart3, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import type { TimeRecord } from "@/types/time-tracker.types";
 
-import { formatMinutesToHours } from "../../utils/formatting";
 import {
   formatDateInTaiwan,
   getWeekDatesInTaiwan,
   getWeekEndInTaiwan,
   getWeekStartInTaiwan,
   isTodayInTaiwan,
-} from "../../utils/timezoneHelpers";
+} from "../../utils/time";
 import DaySection from "./DaySection";
+import WeekNavigation from "./WeekNavigation";
+import WeekStats from "./WeekStats";
 
 interface WeeklyViewProps {
   onWeekChange: (weekStart: Date) => void;
@@ -103,61 +104,21 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
         </div>
       </div>
 
-      {/* 週期間和導航 */}
-      <div className="bg-base-200 flex items-center justify-between rounded-lg p-3">
-        <button aria-label="上一週" className="btn btn-ghost btn-sm" onClick={goToPreviousWeek}>
-          <ChevronLeft aria-hidden="true" className="h-4 w-4" />
-        </button>
+      <WeekNavigation
+        currentWeekStart={currentWeekStart}
+        isCurrentWeek={isCurrentWeek}
+        onCurrentWeek={goToCurrentWeek}
+        onNextWeek={goToNextWeek}
+        onPreviousWeek={goToPreviousWeek}
+        weekEnd={weekEnd}
+      />
 
-        <div className="text-center">
-          <div className="text-base-content font-medium">
-            {currentWeekStart.toLocaleDateString("zh-TW", {
-              day: "numeric",
-              month: "long",
-            })}{" "}
-            -{" "}
-            {weekEnd.toLocaleDateString("zh-TW", {
-              day: "numeric",
-              month: "long",
-            })}
-          </div>
-          <div className="text-base-content/60 text-sm">
-            {currentWeekStart.getFullYear()} 年
-            {isCurrentWeek && <span className="badge badge-primary badge-sm ml-2">本週</span>}
-          </div>
-        </div>
-
-        <button aria-label="下一週" className="btn btn-ghost btn-sm" onClick={goToNextWeek}>
-          <ChevronRight aria-hidden="true" className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* 週統計摘要 */}
-      <div className="bg-base-200 rounded-lg p-4">
-        <div className="mb-3 flex items-center gap-2">
-          <BarChart3 aria-hidden="true" className="text-primary h-4 w-4" />
-          <h4 className="text-base-content font-medium">週統計</h4>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
-          <div>
-            <span className="text-base-content/60">總時間：</span>
-            <span className="ml-1 font-medium">{formatMinutesToHours(weekStats.totalMinutes)}</span>
-          </div>
-          <div>
-            <span className="text-base-content/60">記錄數：</span>
-            <span className="ml-1 font-medium">{weekStats.recordCount} 筆</span>
-          </div>
-          <div>
-            <span className="text-base-content/60">活躍天數：</span>
-            <span className="ml-1 font-medium">{weekStats.activeDays} 天</span>
-          </div>
-          <div>
-            <span className="text-base-content/60">日均時間：</span>
-            <span className="ml-1 font-medium">{formatMinutesToHours(weekStats.averagePerDay)}</span>
-          </div>
-        </div>
-      </div>
+      <WeekStats
+        activeDays={weekStats.activeDays}
+        averagePerDay={weekStats.averagePerDay}
+        recordCount={weekStats.recordCount}
+        totalMinutes={weekStats.totalMinutes}
+      />
 
       {/* 每日記錄 */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

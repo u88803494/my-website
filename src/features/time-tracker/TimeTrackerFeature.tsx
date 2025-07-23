@@ -7,7 +7,7 @@ import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";
 import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
 import { useTimeTracker } from "./hooks/useTimeTracker";
-import { getWeekStartInTaiwan } from "./utils/timezoneHelpers";
+import { getWeekStartInTaiwan } from "./utils/time";
 
 /**
  * 時間追蹤主要功能元件

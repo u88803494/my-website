@@ -43,6 +43,18 @@ export const getActivityTypeColor = (activityType: ActivityType): string => {
 };
 
 /**
+ * 格式化後的記錄類型
+ */
+export type FormattedRecord = {
+  activityColor: string;
+  activityType: ActivityType;
+  decimalDuration: string;
+  description: string;
+  duration: string;
+  timeRange: string;
+};
+
+/**
  * 格式化時間記錄為顯示用的格式
  */
 export const formatTimeRecord = (record: {
@@ -51,7 +63,7 @@ export const formatTimeRecord = (record: {
   duration: number;
   endTime: string;
   startTime: string;
-}) => {
+}): FormattedRecord => {
   return {
     activityColor: getActivityTypeColor(record.activityType),
     activityType: record.activityType, // 直接使用 activityType 值

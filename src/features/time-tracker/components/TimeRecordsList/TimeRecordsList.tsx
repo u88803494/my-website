@@ -1,12 +1,13 @@
 "use client";
 
-import { Filter, List, Search } from "lucide-react";
+import { List } from "lucide-react";
 import React, { useState } from "react";
 
 import type { ActivityType, TimeRecord } from "@/types/time-tracker.types";
-import { ACTIVITY_TYPE_OPTIONS } from "@/types/time-tracker.types";
 
+import EmptyState from "./EmptyState";
 import RecordItem from "./RecordItem";
+import SearchFilters from "./SearchFilters";
 
 interface TimeRecordsListProps {
   isLoading?: boolean;
@@ -99,46 +100,12 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
 
       {/* 搜尋和篩選控制項 */}
       {showSearch && (
-        <div className="flex flex-col gap-3 sm:flex-row">
-          {/* 搜尋框 */}
-          <div className="form-control flex-1">
-            <div className="input-group flex items-center gap-2">
-              <span className="bg-base-200 flex items-center justify-center">
-                <Search aria-hidden="true" className="h-4 w-4" />
-              </span>
-              <input
-                aria-label="搜尋時間記錄"
-                className="input input-bordered flex-1"
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="搜尋記錄..."
-                type="text"
-                value={searchTerm}
-              />
-            </div>
-          </div>
-
-          {/* 活動類型篩選 */}
-          <div className="form-control">
-            <div className="input-group flex items-center gap-2">
-              <span className="bg-base-200 flex items-center justify-center">
-                <Filter aria-hidden="true" className="h-4 w-4" />
-              </span>
-              <select
-                aria-label="篩選活動類型"
-                className="select select-bordered"
-                onChange={(e) => setFilterType(e.target.value as "" | ActivityType)}
-                value={filterType}
-              >
-                <option value="">所有類型</option>
-                {ACTIVITY_TYPE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <SearchFilters
+          filterType={filterType}
+          onFilterChange={setFilterType}
+          onSearchChange={setSearchTerm}
+          searchTerm={searchTerm}
+        />
       )}
 
       {/* 載入狀態 */}
@@ -161,17 +128,7 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
               />
             ))
           ) : (
-            <div className="py-8 text-center">
-              <div className="text-base-content/40 mb-2">
-                <List aria-hidden="true" className="mx-auto mb-3 h-12 w-12" />
-              </div>
-              <h4 className="text-base-content/60 mb-1 text-lg font-medium">
-                {hasFilters ? "沒有符合條件的記錄" : "尚無時間記錄"}
-              </h4>
-              <p className="text-base-content/40 text-sm">
-                {hasFilters ? "嘗試調整搜尋條件或篩選設定" : "開始記錄你的時間，追蹤日常活動"}
-              </p>
-            </div>
+            <EmptyState hasFilters={Boolean(hasFilters)} />
           )}
         </div>
       )}

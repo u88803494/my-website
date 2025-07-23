@@ -1,4 +1,4 @@
-import type { TimeCalculationResult } from "../types";
+import type { TimeCalculationResult } from "../../types";
 
 /**
  * 驗證時間格式 (HH:MM)

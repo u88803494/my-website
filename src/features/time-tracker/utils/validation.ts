@@ -1,7 +1,7 @@
 import { ActivityType } from "@/types/time-tracker.types";
 
 import type { TimeEntryFormData, ValidationError, ValidationResult } from "../types";
-import { calculateDuration, validateTimeFormat } from "./timeCalculation";
+import { calculateDuration, validateTimeFormat } from "./time";
 
 /**
  * 驗證時間記錄表單資料

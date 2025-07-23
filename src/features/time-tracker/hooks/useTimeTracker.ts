@@ -3,8 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/types/time-tracker.types";
 
 import { calculateStatistics } from "../utils/statisticsCalculation";
-import { calculateDuration } from "../utils/timeCalculation";
-import { getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/timezoneHelpers";
+import { calculateDuration, getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/time";
 import { useLocalStorage } from "./useLocalStorage";
 
 const STORAGE_KEY = "time-tracker-records";
