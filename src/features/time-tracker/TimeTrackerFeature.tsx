@@ -2,14 +2,12 @@
 
 import React from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
-
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
 import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";
 import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
 import { useTimeTracker } from "./hooks/useTimeTracker";
-import { getWeekStart } from "./utils/dateHelpers";
+import { getWeekStartInTaiwan } from "./utils/timezoneHelpers";
 
 /**
  * 時間追蹤主要功能元件
@@ -17,14 +15,6 @@ import { getWeekStart } from "./utils/dateHelpers";
  */
 const TimeTrackerFeature: React.FC = () => {
   const { addRecord, deleteRecord, error, getWeeklyRecords, isLoading, records, statistics } = useTimeTracker();
-
-  const handleAddRecord = (recordData: Omit<TimeRecord, "createdAt" | "id">) => {
-    addRecord(recordData);
-  };
-
-  const handleDeleteRecord = (id: string) => {
-    deleteRecord(id);
-  };
 
   const handleWeekChange = (weekStart: Date) => {
     // 週變更處理邏輯，目前暫時空實作
@@ -41,7 +31,7 @@ const TimeTrackerFeature: React.FC = () => {
     );
   }
 
-  const currentWeekStart = getWeekStart();
+  const currentWeekStart = getWeekStartInTaiwan();
   const weeklyRecords = getWeeklyRecords(currentWeekStart);
 
   return (
@@ -62,7 +52,7 @@ const TimeTrackerFeature: React.FC = () => {
           <div className="card bg-base-200 shadow-lg">
             <div className="card-body">
               <h2 className="card-title mb-4 text-xl">新增時間記錄</h2>
-              <TimeEntryForm isLoading={isLoading} onSubmit={handleAddRecord} />
+              <TimeEntryForm isLoading={isLoading} onSubmit={addRecord} />
             </div>
           </div>
 
@@ -73,7 +63,7 @@ const TimeTrackerFeature: React.FC = () => {
               <TimeRecordsList
                 isLoading={isLoading}
                 maxItems={10}
-                onDeleteRecord={handleDeleteRecord}
+                onDeleteRecord={deleteRecord}
                 records={records.slice(0, 10)} // 只顯示最近 10 筆
               />
             </div>

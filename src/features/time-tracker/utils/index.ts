@@ -1,5 +1,5 @@
-// 日期處理相關工具
-export * from "./dateHelpers";
+// 時區處理相關工具 (推薦使用)
+export * from "./timezoneHelpers";
 
 // 格式化相關工具
 export * from "./formatting";

@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/types/time-tracker.types";
 
-import { getCurrentDate, getWeekStart, isSameWeek } from "../utils/dateHelpers";
 import { calculateStatistics } from "../utils/statisticsCalculation";
 import { calculateDuration } from "../utils/timeCalculation";
+import { getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/timezoneHelpers";
 import { useLocalStorage } from "./useLocalStorage";
 
 const STORAGE_KEY = "time-tracker-records";
@@ -51,7 +51,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
       const newRecord: TimeRecord = {
         ...recordData,
         createdAt: new Date(),
-        date: recordData.date || getCurrentDate(),
+        date: recordData.date || getCurrentTaiwanDate(),
         duration: durationResult.duration,
         id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       };
@@ -78,7 +78,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     (weekStart: Date): TimeRecord[] => {
       return records.filter((record) => {
         const recordDate = new Date(record.date);
-        return isSameWeek(recordDate, weekStart);
+        return isSameWeekInTaiwan(recordDate, weekStart);
       });
     },
     [records],
@@ -86,10 +86,10 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
 
   // 清除本週記錄
   const clearWeek = useCallback(() => {
-    const currentWeekStart = getWeekStart();
+    const currentWeekStart = getWeekStartInTaiwan();
     const updatedRecords = records.filter((record) => {
       const recordDate = new Date(record.date);
-      return !isSameWeek(recordDate, currentWeekStart);
+      return !isSameWeekInTaiwan(recordDate, currentWeekStart);
     });
 
     setRecords(updatedRecords);

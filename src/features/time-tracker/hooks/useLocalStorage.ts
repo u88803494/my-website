@@ -8,7 +8,6 @@ import type { UseLocalStorageReturn } from "@/types/time-tracker.types";
  */
 export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorageReturn<T> => {
   const [value, setValue] = useState<T>(() => {
-    // Initializer function to read from localStorage only on first render
     if (typeof window === "undefined") {
       return defaultValue;
     }
@@ -16,28 +15,31 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorag
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.error("Error reading from localStorage", error);
+      console.error("Error reading from localStorage:", error);
       return defaultValue;
     }
   });
 
-  // Effect to update localStorage when value changes
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<null | string>(null);
+
+  // 同步到 localStorage
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(value));
+        setError(null);
       }
-    } catch (error) {
-      console.error("Error writing to localStorage", error);
+    } catch (err) {
+      const errorMessage = "Failed to save to localStorage";
+      console.error(errorMessage, err);
+      setError(errorMessage);
     }
   }, [key, value]);
 
-  const [loading, setLoading] = useState(true);
-  const [error] = useState<null | string>(null);
-
-  // 從 localStorage 讀取資料
+  // 初始化完成後設定 loading 為 false
   useEffect(() => {
-    setLoading(false); // Simplified loading state
+    setLoading(false);
   }, []);
 
   return {

@@ -77,20 +77,3 @@ export const calculateDuration = (startTime: string, endTime: string): TimeCalcu
   };
 };
 
-/**
- * 獲取當前時間的字串格式 (HH:MM)
- */
-export const getCurrentTimeString = (): string => {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-};
-
-/**
- * 獲取今天的日期字串 (YYYY-MM-DD)
- */
-export const getTodayDateString = (): string => {
-  const today = new Date();
-  return today.toISOString().split("T")[0];
-};

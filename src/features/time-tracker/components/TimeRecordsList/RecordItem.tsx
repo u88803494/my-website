@@ -5,8 +5,8 @@ import React, { useState } from "react";
 
 import type { TimeRecord } from "@/types/time-tracker.types";
 
-import { getDateDisplayName } from "../../utils/dateHelpers";
 import { formatTimeRecord } from "../../utils/formatting";
+import { getDateDisplayNameInTaiwan } from "../../utils/timezoneHelpers";
 
 interface RecordItemProps {
   isDeleting?: boolean;
@@ -22,7 +22,7 @@ const RecordItem: React.FC<RecordItemProps> = ({ isDeleting = false, onDelete, r
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const formattedRecord = formatTimeRecord(record);
-  const displayDate = getDateDisplayName(new Date(record.date));
+  const displayDate = getDateDisplayNameInTaiwan(new Date(record.date));
 
   const handleDeleteClick = () => {
     setShowDeleteConfirm(true);

@@ -28,13 +28,6 @@ export const formatMinutesToDecimalHours = (minutes: number): string => {
 };
 
 /**
- * 格式化活動類型為顯示名稱
- */
-export const formatActivityType = (activityType: ActivityType): string => {
-  return activityType;
-};
-
-/**
  * 獲取活動類型的顯示色彩
  */
 export const getActivityTypeColor = (activityType: ActivityType): string => {
@@ -61,7 +54,7 @@ export const formatTimeRecord = (record: {
 }) => {
   return {
     activityColor: getActivityTypeColor(record.activityType),
-    activityType: formatActivityType(record.activityType),
+    activityType: record.activityType, // 直接使用 activityType 值
     decimalDuration: formatMinutesToDecimalHours(record.duration),
     description: record.description || "",
     duration: formatMinutesToHours(record.duration),

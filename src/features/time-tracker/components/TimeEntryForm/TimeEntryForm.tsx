@@ -9,9 +9,9 @@ import DatePicker from "react-datepicker";
 import type { ActivityType, TimeEntryFormData, TimeRecord } from "@/types/time-tracker.types";
 
 import type { ValidationError } from "../../types";
-import { getCurrentDate } from "../../utils/dateHelpers";
 import { formatMinutesToHours } from "../../utils/formatting";
 import { calculateDuration } from "../../utils/timeCalculation";
+import { getCurrentTaiwanDate } from "../../utils/timezoneHelpers";
 import { getFieldError, validateTimeEntry } from "../../utils/validation";
 import ActivityTypeSelect from "./ActivityTypeSelect";
 
@@ -27,7 +27,7 @@ interface TimeEntryFormProps {
 const TimeEntryForm: React.FC<TimeEntryFormProps> = ({ isLoading = false, onSubmit }) => {
   const [formData, setFormData] = useState<TimeEntryFormData>({
     activityType: "" as ActivityType,
-    date: getCurrentDate(),
+    date: getCurrentTaiwanDate(),
     description: "",
     endTime: "",
     startTime: "",
@@ -133,7 +133,7 @@ const TimeEntryForm: React.FC<TimeEntryFormProps> = ({ isLoading = false, onSubm
   const handleDateChange = (date: Date | null) => {
     const dateString = date
       ? `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
-      : getCurrentDate();
+      : getCurrentTaiwanDate();
 
     setDateObj(date);
     setFormData((prev) => ({
@@ -190,7 +190,7 @@ const TimeEntryForm: React.FC<TimeEntryFormProps> = ({ isLoading = false, onSubm
       // 重置表單
       setFormData({
         activityType: "" as ActivityType,
-        date: getCurrentDate(), // 重設為今天
+        date: getCurrentTaiwanDate(), // 重設為今天
         description: "",
         endTime: "",
         startTime: "",

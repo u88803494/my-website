@@ -29,35 +29,6 @@ export const calculateStatistics = (records: TimeRecord[]): TimeStatistics => {
   return statistics;
 };
 
-/**
- * 更新統計資料（新增記錄）
- */
-export const addToStatistics = (
-  currentStats: TimeStatistics,
-  activityType: ActivityType,
-  duration: number,
-): TimeStatistics => {
-  return {
-    ...currentStats,
-    [activityType]: currentStats[activityType] + duration,
-    總計: currentStats.總計 + duration,
-  };
-};
-
-/**
- * 更新統計資料（移除記錄）
- */
-export const removeFromStatistics = (
-  currentStats: TimeStatistics,
-  activityType: ActivityType,
-  duration: number,
-): TimeStatistics => {
-  return {
-    ...currentStats,
-    [activityType]: Math.max(0, currentStats[activityType] - duration),
-    總計: Math.max(0, currentStats.總計 - duration),
-  };
-};
 
 /**
  * 計算活動類型的百分比
