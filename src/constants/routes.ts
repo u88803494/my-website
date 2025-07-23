@@ -19,6 +19,10 @@ export const routes: NavRoute[] = [
     label: "AI 需求分析器",
   },
   {
+    href: "/time-tracker",
+    label: "時間追蹤器",
+  },
+  {
     href: "/about",
     label: "關於我",
   },
