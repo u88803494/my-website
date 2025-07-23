@@ -7,14 +7,14 @@ import {
   eachDayOfInterval,
   endOfWeek,
   format,
-  isSameWeek as dateFnsIsSameWeek,
-  isToday as dateFnsIsToday,
+  isSameWeek,
+  isToday,
   isYesterday,
   parseISO,
   startOfWeek,
 } from "date-fns";
-import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import { zhTW } from "date-fns/locale";
+import { fromZonedTime, toZonedTime } from "date-fns-tz";
 
 // 定義台灣時區
 export const TAIWAN_TIMEZONE = "Asia/Taipei";
@@ -89,7 +89,7 @@ export const getWeekEndInTaiwan = (date: Date = getTaiwanNow()): Date => {
 export const isSameWeekInTaiwan = (date1: Date, date2: Date): boolean => {
   const taiwanDate1 = toZonedTime(date1, TAIWAN_TIMEZONE);
   const taiwanDate2 = toZonedTime(date2, TAIWAN_TIMEZONE);
-  return dateFnsIsSameWeek(taiwanDate1, taiwanDate2, { weekStartsOn: 1 });
+  return isSameWeek(taiwanDate1, taiwanDate2, { weekStartsOn: 1 });
 };
 
 /**
@@ -111,7 +111,7 @@ export const getWeekRangeStringInTaiwan = (date: Date = getTaiwanNow()): string 
 export const getDateDisplayNameInTaiwan = (date: Date): string => {
   const taiwanDate = toZonedTime(date, TAIWAN_TIMEZONE);
 
-  if (dateFnsIsToday(taiwanDate)) {
+  if (isToday(taiwanDate)) {
     return "今天";
   } else if (isYesterday(taiwanDate)) {
     return "昨天";
@@ -136,7 +136,7 @@ export const getWeekDatesInTaiwan = (date: Date = getTaiwanNow()): Date[] => {
 export const isTodayInTaiwan = (date: Date): boolean => {
   const taiwanDate = toZonedTime(date, TAIWAN_TIMEZONE);
   const taiwanToday = getTaiwanNow();
-  return dateFnsIsToday(taiwanDate) && formatDateInTaiwan(taiwanDate) === formatDateInTaiwan(taiwanToday);
+  return isToday(taiwanDate) && formatDateInTaiwan(taiwanDate) === formatDateInTaiwan(taiwanToday);
 };
 
 /**
@@ -158,4 +158,3 @@ export const createTaiwanDateTime = (dateString: string, timeString: string): Da
   // 將本地時間視為台灣時間並轉換為 UTC
   return fromZonedTime(localDate, TAIWAN_TIMEZONE);
 };
-

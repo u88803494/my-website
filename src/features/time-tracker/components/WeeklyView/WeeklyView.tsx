@@ -6,7 +6,13 @@ import React, { useMemo, useState } from "react";
 import type { TimeRecord } from "@/types/time-tracker.types";
 
 import { formatMinutesToHours } from "../../utils/formatting";
-import { formatDateInTaiwan, getWeekDatesInTaiwan, getWeekEndInTaiwan, getWeekStartInTaiwan, isTodayInTaiwan } from "../../utils/timezoneHelpers";
+import {
+  formatDateInTaiwan,
+  getWeekDatesInTaiwan,
+  getWeekEndInTaiwan,
+  getWeekStartInTaiwan,
+  isTodayInTaiwan,
+} from "../../utils/timezoneHelpers";
 import DaySection from "./DaySection";
 
 interface WeeklyViewProps {

@@ -7,23 +7,27 @@
 ## 主要特色
 
 ### ✅ 統一時區管理
+
 - 所有時間操作都使用台灣時區 (Asia/Taipei)
 - 避免了本地時區差異造成的問題
 - 確保不同環境下的時間一致性
 
 ### ✅ 使用現代化日期庫
+
 - **date-fns**: 現代化、輕量級、函式式的日期處理庫
 - **date-fns-tz**: 提供強大的時區處理功能
 - 完整的 TypeScript 支援
 - Tree-shaking 支援，減少打包體積
 
 ### ✅ 向後相容性
+
 - 保留了舊的 `dateHelpers.ts` API，添加了 @deprecated 標記
 - 逐步遷移，不會破壞現有功能
 
 ## 核心檔案
 
 ### `timezoneHelpers.ts`
+
 統一的時區管理工具，包含所有時區相關的函式：
 
 - `getTaiwanNow()`: 獲取當前台灣時間
@@ -45,12 +49,14 @@
 ## 環境設定
 
 ### `.env.local`
+
 ```env
 # 時區設定
 TZ=Asia/Taipei
 ```
 
 ### 依賴套件
+
 ```json
 {
   "dependencies": {
@@ -63,13 +69,14 @@ TZ=Asia/Taipei
 ## 使用方式
 
 ### 推薦用法（新）
+
 ```typescript
 import {
   getCurrentTaiwanDate,
   getCurrentTaiwanTime,
   getWeekStartInTaiwan,
-  isTodayInTaiwan
-} from './utils/timezoneHelpers';
+  isTodayInTaiwan,
+} from "./utils/timezoneHelpers";
 
 // 獲取當前台灣日期
 const today = getCurrentTaiwanDate(); // "2025-01-23"
@@ -82,21 +89,19 @@ const isToday = isTodayInTaiwan(new Date());
 ```
 
 ### 舊用法（已棄用但仍可用）
+
 ```typescript
-import {
-  getCurrentDate,
-  getWeekStart,
-  isToday
-} from './utils/dateHelpers'; // 這些函式現在內部使用台灣時區
+import { getCurrentDate, getWeekStart, isToday } from "./utils/dateHelpers"; // 這些函式現在內部使用台灣時區
 ```
 
 ## 測試工具
 
 ### `timezoneTest.ts`
+
 提供了測試函式來驗證時區設定：
 
 ```typescript
-import { testTimezone, compareTimezones } from './utils/timezoneTest';
+import { testTimezone, compareTimezones } from "./utils/timezoneTest";
 
 // 在開發時呼叫這些函式來檢查時區設定
 testTimezone();
@@ -106,12 +111,14 @@ compareTimezones();
 ## 技術細節
 
 ### 時區轉換邏輯
+
 1. **輸入時間**: 假設用戶輸入的時間都是台灣時區的時間
 2. **存儲格式**: 時間以 ISO 字串格式存儲在 localStorage
 3. **顯示邏輯**: 所有顯示的時間都轉換為台灣時區
 4. **計算邏輯**: 所有時間計算（週開始、是否今天等）都基於台灣時區
 
 ### 主要改進
+
 1. **一致性**: 無論用戶在哪個時區，都看到台灣時間
 2. **可靠性**: 避免了夏令時和時區變更的問題
 3. **可維護性**: 集中管理所有時區相關邏輯

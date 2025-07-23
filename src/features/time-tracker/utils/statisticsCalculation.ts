@@ -29,7 +29,6 @@ export const calculateStatistics = (records: TimeRecord[]): TimeStatistics => {
   return statistics;
 };
 
-
 /**
  * 計算活動類型的百分比
  */

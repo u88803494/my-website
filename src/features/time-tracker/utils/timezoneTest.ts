@@ -34,11 +34,11 @@ export const testTimezone = () => {
 export const compareTimezones = () => {
   const now = new Date();
   const taiwanNow = getTaiwanNow();
-  
+
   console.log("=== 時間比較 ===");
   console.log(`UTC 時間: ${now.toISOString()}`);
   console.log(`本地時間: ${now.toLocaleString()}`);
-  console.log(`台灣時間: ${taiwanNow.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`);
+  console.log(`台灣時間: ${taiwanNow.toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })}`);
   console.log(`時差 (分鐘): ${(taiwanNow.getTime() - now.getTime()) / (1000 * 60)}`);
   console.log("===============");
 };

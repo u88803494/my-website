@@ -76,4 +76,3 @@ export const calculateDuration = (startTime: string, endTime: string): TimeCalcu
     isValid: true,
   };
 };
-
