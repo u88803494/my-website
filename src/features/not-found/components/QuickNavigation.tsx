@@ -3,13 +3,11 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+import { routes } from "@/constants/routes";
+
 const QuickNavigation: React.FC = () => {
-  const navigationItems = [
-    { href: "/blog", label: "部落格" },
-    { href: "/ai-dictionary", label: "AI 字典" },
-    { href: "/ai-analyzer", label: "AI 需求分析器" },
-    { href: "/about", label: "關於我" },
-  ];
+  // 過濾掉首頁，因為 404 頁面通常不需要首頁連結
+  const navigationItems = routes.filter((route) => route.href !== "/");
 
   return (
     <motion.div

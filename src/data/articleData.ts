@@ -24,14 +24,35 @@ import { Article } from "@/types/article.types";
 
 export const articleList: Article[] = [
   {
-    description: "不到一小時，逆向工程 Medium 的 GraphQL API，成功搭建即時同步的個人部落格",
-    publishedDate: "2025-06-26",
-    readTime: "5 min read",
-    subtitle: "前言：擱置數年的心願，短短數天的衝刺",
-    tags: ["AI", "Programming", "Web Development", "Reverse Engineering", "GraphQL"],
-    thumbnail: "https://miro.medium.com/v2/resize:fit:1200/1*c4q7hQMgSsQd2yaSMs_BlA.png",
-    title: "我帶領 AI 的攻防戰：逆向 Medium API 實錄",
-    url: "https://hugh-program-learning-diary-js.medium.com/我帶領-ai-的攻防戰-逆向-medium-api-實錄-a8fb39952f48",
+    description: "當開發者的價值從「寫 Code」轉向「下指令」：一個真實的極速開發案例",
+    publishedDate: "2025-07-08",
+    readTime: "3 min read",
+    subtitle: "Written by Hugh's Programming life",
+    tags: ["AI", "Software Development", "Prompt Engineering", "Communication", "Technology"],
+    thumbnail: "https://miro.medium.com/v2/resize:fit:910/1*NGibNm2hfq2qdNNTG9EMXA.png",
+    title: "AI 溝通老是失敗？我花不到三小時，做了一個「AI 的 AI」當解方",
+    url: "https://hugh-program-learning-diary-js.medium.com/ai-溝通老是失敗-我花不到三小時-做了一個-ai-的-ai-當解方-880cecf604c4",
+  },
+  {
+    description: "從最初的驚艷到成為日常的討論夥伴，這是我與 AI 一同走過三年的真實心得。",
+    publishedDate: "2025-07-02",
+    readTime: "6 min read",
+    subtitle: "初探：加速開發的得力助手",
+    tags: ["AI", "Productivity", "Furture Of Work", "Generative Ai Tools", "Self Improvement"],
+    thumbnail: "https://miro.medium.com/v2/resize:fit:1200/1*myF_V71LnkFdCJ4vLBt3uw.png",
+    title: "AI 不是取代你，而是強化你：一位工程師的四大 AI 生產力實戰報告",
+    url: "https://hugh-program-learning-diary-js.medium.com/ai-不是取代你-而是強化你-一位工程師的四大-ai-生產力實戰報告-e783c497bbb3",
+  },
+  {
+    description:
+      "最近在網路上瘋傳一張圖，它巧妙地以「造一台車」來比喻在不同模式下使用 AI 進行軟體開發的結果。這張圖不僅幽默，更精準點出了許多開發者在擁抱 AI 協作時的真實體驗。",
+    publishedDate: "2025-06-16",
+    readTime: "4 min read",
+    subtitle: "Written by Hugh's Programming life",
+    tags: ["AI", "Software Development", "Productivity", "Agile Development", "Generative Ai Tools"],
+    thumbnail: "https://miro.medium.com/v2/resize:fit:800/1*OgPBqhUMpDEo-jVM3ICjwg.jpeg",
+    title: "善用 AI，使得結果：從一張圖看 AI 時代的開發心法",
+    url: "https://hugh-program-learning-diary-js.medium.com/善用-ai-使得結果-從一張圖看-ai-時代的開發心法-99defe901ba8",
   },
   {
     description: "從搜尋到深思：一個軟體工程師，在 AI 時代找回程式設計的純粹樂趣。",
