@@ -52,7 +52,6 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
 
     return {
       activeDays,
-      averagePerDay: activeDays > 0 ? Math.round(totalMinutes / activeDays) : 0,
       recordCount,
       totalMinutes,
     };
@@ -117,7 +116,6 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
 
       <WeekStats
         activeDays={weekStats.activeDays}
-        averagePerDay={weekStats.averagePerDay}
         characterMinutes={categoryTotals.character}
         recordCount={weekStats.recordCount}
         studyMinutes={categoryTotals.study}
