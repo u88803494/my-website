@@ -3,7 +3,7 @@
 import { List } from "lucide-react";
 import React, { useState } from "react";
 
-import type { ActivityType, TimeRecord } from "@/types/time-tracker.types";
+import type { ActivityType, TimeRecord } from "@/features/time-tracker/types";
 
 import EmptyState from "./EmptyState";
 import RecordItem from "./RecordItem";

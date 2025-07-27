@@ -3,7 +3,7 @@
 import { Settings } from "lucide-react";
 import React, { useCallback } from "react";
 
-import type { WeekStartDay } from "@/types/time-tracker.types";
+import type { WeekStartDay } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 

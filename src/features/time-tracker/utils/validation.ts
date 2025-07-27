@@ -1,4 +1,4 @@
-import { ActivityType } from "@/types/time-tracker.types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 import type { TimeEntryFormData, ValidationError, ValidationResult } from "../types";
 import { calculateDuration, validateTimeFormat } from "./time";

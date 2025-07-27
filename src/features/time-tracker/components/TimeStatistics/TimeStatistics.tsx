@@ -3,7 +3,7 @@
 import { BarChart3 } from "lucide-react";
 import React from "react";
 
-import type { ActivityType, TimeRecord, TimeStatistics as TimeStatisticsType } from "@/types/time-tracker.types";
+import type { ActivityType, TimeRecord, TimeStatistics as TimeStatisticsType } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "./StatisticsCard";

@@ -6,8 +6,8 @@ import { eachDayOfInterval, endOfWeek, format, isSameWeek, startOfWeek } from "d
 import { zhTW } from "date-fns/locale";
 import { toZonedTime } from "date-fns-tz";
 
-import type { WeekStartDay } from "@/types/time-tracker.types";
-import { DEFAULT_WEEK_START } from "@/types/time-tracker.types";
+import type { WeekStartDay } from "@/features/time-tracker/types";
+import { DEFAULT_WEEK_START } from "@/features/time-tracker/types";
 
 import { getTaiwanNow, TAIWAN_TIMEZONE } from "./timeUtilities";
 

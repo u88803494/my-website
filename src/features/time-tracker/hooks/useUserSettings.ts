@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { DEFAULT_WEEK_START, type UserSettings, type UseUserSettingsReturn } from "@/types/time-tracker.types";
+import { DEFAULT_WEEK_START, type UserSettings, type UseUserSettingsReturn } from "@/features/time-tracker/types";
 
 import { useLocalStorage } from "./useLocalStorage";
 

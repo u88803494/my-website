@@ -5,7 +5,7 @@ import { zhTW } from "date-fns/locale";
 import { Calendar, TrendingUp } from "lucide-react";
 import React from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 
 import StatisticsCard from "../TimeStatistics/StatisticsCard";
 import { useWeeklyStats } from "./hooks/useWeeklyStats";
