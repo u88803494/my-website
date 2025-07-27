@@ -72,22 +72,6 @@ export const getMostActiveType = (statistics: TimeStatistics): ActivityType | nu
 };
 
 /**
- * 計算平均每日時間
- */
-export const calculateDailyAverage = (records: TimeRecord[], days: number = 7): TimeStatistics => {
-  const totalStats = calculateStatistics(records);
-  const averageStats = createEmptyStatistics();
-
-  Object.keys(averageStats).forEach((key) => {
-    if (key in totalStats) {
-      averageStats[key as keyof TimeStatistics] = Math.round(totalStats[key as keyof TimeStatistics] / days);
-    }
-  });
-
-  return averageStats;
-};
-
-/**
  * 按日期分組計算統計
  */
 export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, TimeStatistics> => {
@@ -147,11 +131,9 @@ export const calculateWeeklySummary = (records: TimeRecord[]) => {
   const percentages = calculateActivityPercentages(statistics);
   const mostActiveType = getMostActiveType(statistics);
   const dailyStats = calculateDailyStatistics(records);
-  const dailyAverage = calculateDailyAverage(records);
 
   return {
     activeDays: Object.keys(dailyStats).length,
-    dailyAverage,
     dailyStats,
     mostActiveType,
     percentages,
