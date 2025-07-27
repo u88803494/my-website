@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable sonarjs/no-duplicate-string */
 
 import { BarChart3, List, Settings } from "lucide-react";
 import React, { useState } from "react";
@@ -8,10 +7,10 @@ import { ActivityType } from "@/types/time-tracker.types";
 
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
 import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";
+import StatisticsCard from "./components/TimeStatistics/StatisticsCard";
 import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
 import { UserSettings } from "./components/UserSettings";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
-import WeekStats from "./components/WeeklyView/WeekStats";
 import { useTimeTracker, useUserSettings } from "./hooks";
 import { formatMinutesToHours } from "./utils/formatting";
 import { calculateStatistics, calculateWeeklySummary } from "./utils/statisticsCalculation";
@@ -27,17 +26,21 @@ const TimeTrackerFeature: React.FC = () => {
   const ICON_CLASS = "mr-2 h-4 w-4";
   const CARD_BODY_CLASS = "card-body";
 
+  // Tab constants
+  const TAB_MAIN = "main";
+  const TAB_WEEKLY_STATS = "weekly-stats";
+  const TAB_STATISTICS = "statistics";
+
   // Tab handler functions
-   
-  const handleMainTab = () => setActiveTab("main");
-  const handleWeeklyStatsTab = () => setActiveTab("weekly-stats");
-  const handleStatisticsTab = () => setActiveTab("statistics");
+  const handleMainTab = () => setActiveTab(TAB_MAIN);
+  const handleWeeklyStatsTab = () => setActiveTab(TAB_WEEKLY_STATS);
+  const handleStatisticsTab = () => setActiveTab(TAB_STATISTICS);
   const { addRecord, deleteRecord, error, getWeeklyRecords, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
   const INITIAL_STATE = false;
   const [showSettings, setShowSettings] = useState(INITIAL_STATE);
   const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStartInTaiwan(undefined, settings.weekStartDay));
-  const [activeTab, setActiveTab] = useState<"main" | "statistics" | "weekly-stats">("main");
+  const [activeTab, setActiveTab] = useState<"main" | "statistics" | "weekly-stats">(TAB_MAIN);
   const [showAllRecords, setShowAllRecords] = useState(INITIAL_STATE);
 
   const handleWeekChange = (weekStart: Date) => {
@@ -82,24 +85,27 @@ const TimeTrackerFeature: React.FC = () => {
 
         {/* 頁籤導航 */}
         <div className="tabs tabs-boxed justify-center">
-          <button className={`tab ${activeTab === "main" ? TAB_ACTIVE_CLASS : ""}`} onClick={handleMainTab}>
+          <button className={`tab ${activeTab === TAB_MAIN ? TAB_ACTIVE_CLASS : ""}`} onClick={handleMainTab}>
             <List className={ICON_CLASS} />
             主要功能
           </button>
           <button
-            className={`tab ${activeTab === "weekly-stats" ? TAB_ACTIVE_CLASS : ""}`}
+            className={`tab ${activeTab === TAB_WEEKLY_STATS ? TAB_ACTIVE_CLASS : ""}`}
             onClick={handleWeeklyStatsTab}
           >
             <BarChart3 className={ICON_CLASS} />
             Weekly Stats
           </button>
-          <button className={`tab ${activeTab === "statistics" ? TAB_ACTIVE_CLASS : ""}`} onClick={handleStatisticsTab}>
+          <button
+            className={`tab ${activeTab === TAB_STATISTICS ? TAB_ACTIVE_CLASS : ""}`}
+            onClick={handleStatisticsTab}
+          >
             <BarChart3 className={ICON_CLASS} />
             All Stats
           </button>
         </div>
 
-        {activeTab === "main" ? (
+        {activeTab === TAB_MAIN ? (
           <>
             {/* 簡化統計 - 只顯示本週時間 */}
             <div className="mb-6 flex justify-center">
@@ -154,23 +160,80 @@ const TimeTrackerFeature: React.FC = () => {
               </div>
             </div>
           </>
-        ) : activeTab === "weekly-stats" ? (
-          /* Weekly Stats 頁面 */
-          <div className="card bg-base-200 shadow-lg">
-            <div className={CARD_BODY_CLASS}>
-              <h2 className="card-title mb-4 text-xl">Weekly Statistics</h2>
-              <WeekStats
-                activeDays={weeklySummary.activeDays}
-                averagePerDay={0}
-                characterMinutes={
-                  weeklyStatistics[ActivityType.CHARACTER] + weeklyStatistics[ActivityType.EXTRA_CHARACTER]
-                }
-                recordCount={weeklyRecords.length}
-                studyMinutes={weeklyStatistics[ActivityType.STUDY] + weeklyStatistics[ActivityType.EXTRA_STUDY]}
-                totalMinutes={weeklyStatistics.總計}
-                workMinutes={weeklyStatistics[ActivityType.WORK]}
-              />
+        ) : activeTab === TAB_WEEKLY_STATS ? (
+          /* Weekly Stats 頁面 - 卡片格式 */
+          <div className="space-y-4">
+            {/* 標題區域 */}
+            <div className="flex items-center gap-2">
+              <BarChart3 aria-hidden="true" className="text-primary h-5 w-5" />
+              <h2 className="text-base-content text-xl font-semibold">Weekly Statistics</h2>
             </div>
+
+            {/* 統計卡片網格 - 分為兩排 */}
+            <div className="space-y-4">
+              {/* 第一排：總計時間 */}
+              <div className="grid grid-cols-1 gap-4">
+                <StatisticsCard isTotal={true} label="本週總計" value={weeklyStatistics.總計} />
+              </div>
+
+              {/* 第二排：各活動類型 */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                <StatisticsCard
+                  activityType={ActivityType.WORK}
+                  label="工作時間"
+                  value={weeklyStatistics[ActivityType.WORK]}
+                />
+                <StatisticsCard
+                  activityType={ActivityType.STUDY}
+                  label="讀書時間"
+                  value={weeklyStatistics[ActivityType.STUDY] + weeklyStatistics[ActivityType.EXTRA_STUDY]}
+                />
+                <StatisticsCard
+                  activityType={ActivityType.CHARACTER}
+                  label="品格時間"
+                  value={weeklyStatistics[ActivityType.CHARACTER] + weeklyStatistics[ActivityType.EXTRA_CHARACTER]}
+                />
+              </div>
+            </div>
+
+            {/* 週統計摘要 */}
+            {weeklyStatistics.總計 > 0 && (
+              <div className="bg-base-200 rounded-lg p-4">
+                <h3 className="text-base-content mb-2 font-medium">週統計摘要</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
+                  <div>
+                    <span className="text-base-content/60">活躍天數：</span>
+                    <span className="ml-1 font-medium">{weeklySummary.activeDays} 天</span>
+                  </div>
+                  <div>
+                    <span className="text-base-content/60">記錄數：</span>
+                    <span className="ml-1 font-medium">{weeklyRecords.length} 筆</span>
+                  </div>
+                  <div>
+                    <span className="text-base-content/60">總時數：</span>
+                    <span className="ml-1 font-medium">{(weeklyStatistics.總計 / 60).toFixed(1)} 小時</span>
+                  </div>
+                  <div>
+                    <span className="text-base-content/60">日均時間：</span>
+                    <span className="ml-1 font-medium">
+                      {weeklySummary.activeDays > 0 ? Math.round(weeklyStatistics.總計 / weeklySummary.activeDays) : 0}{" "}
+                      分鐘
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 空狀態提示 */}
+            {weeklyStatistics.總計 === 0 && (
+              <div className="py-8 text-center">
+                <div className="text-base-content/40 mb-2">
+                  <BarChart3 aria-hidden="true" className="mx-auto mb-3 h-12 w-12" />
+                </div>
+                <h3 className="text-base-content/60 mb-1 text-lg font-medium">本週尚無時間記錄</h3>
+                <p className="text-base-content/40 text-sm">開始記錄你的時間，查看週統計資料</p>
+              </div>
+            )}
           </div>
         ) : (
           /* 詳細統計頁面 */
