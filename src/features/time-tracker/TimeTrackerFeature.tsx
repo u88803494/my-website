@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings } from "lucide-react";
+import { BarChart3, List, Settings } from "lucide-react";
 import React, { useState } from "react";
 
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
@@ -9,6 +9,8 @@ import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
 import { UserSettings } from "./components/UserSettings";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
 import { useTimeTracker, useUserSettings } from "./hooks";
+import { formatMinutesToHours } from "./utils/formatting";
+import { calculateStatistics } from "./utils/statisticsCalculation";
 import { getWeekStartInTaiwan } from "./utils/time";
 
 /**
@@ -20,6 +22,8 @@ const TimeTrackerFeature: React.FC = () => {
   const { settings } = useUserSettings();
   const [showSettings, setShowSettings] = useState(false);
   const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStartInTaiwan(undefined, settings.weekStartDay));
+  const [activeTab, setActiveTab] = useState<"main" | "statistics">("main");
+  const [showAllRecords, setShowAllRecords] = useState(false);
 
   const handleWeekChange = (weekStart: Date) => {
     setCurrentWeekStart(weekStart);
@@ -28,6 +32,10 @@ const TimeTrackerFeature: React.FC = () => {
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+
+  // 計算本週統計
+  const weeklyRecords = getWeeklyRecords(currentWeekStart);
+  const weeklyStatistics = calculateStatistics(weeklyRecords);
 
   if (error) {
     return (
@@ -39,7 +47,8 @@ const TimeTrackerFeature: React.FC = () => {
     );
   }
 
-  const weeklyRecords = getWeeklyRecords(currentWeekStart);
+  // 決定顯示的記錄數量
+  const displayRecords = showAllRecords ? records : records.slice(0, 5);
 
   return (
     <div className="bg-base-100 min-h-screen p-4">
@@ -55,40 +64,80 @@ const TimeTrackerFeature: React.FC = () => {
           </button>
         </div>
 
-        {/* 統計資料 */}
-        <TimeStatistics statistics={statistics} />
-
-        {/* 主要內容區域：表單與記錄並排 */}
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          {/* 左側：時間輸入表單 */}
-          <div className="card bg-base-200 shadow-lg">
-            <div className="card-body">
-              <h2 className="card-title mb-4 text-xl">新增時間記錄</h2>
-              <TimeEntryForm isLoading={isLoading} onSubmit={addRecord} />
-            </div>
-          </div>
-
-          {/* 右側：記錄列表 */}
-          <div className="card bg-base-200 shadow-lg">
-            <div className="card-body">
-              <h2 className="card-title mb-4 text-xl">最近記錄</h2>
-              <TimeRecordsList
-                isLoading={isLoading}
-                maxItems={10}
-                onDeleteRecord={deleteRecord}
-                records={records.slice(0, 10)} // 只顯示最近 10 筆
-              />
-            </div>
-          </div>
+        {/* 頁籤導航 */}
+        <div className="tabs tabs-boxed justify-center">
+          <button className={`tab ${activeTab === "main" ? "tab-active" : ""}`} onClick={() => setActiveTab("main")}>
+            <List className="mr-2 h-4 w-4" />
+            主要功能
+          </button>
+          <button
+            className={`tab ${activeTab === "statistics" ? "tab-active" : ""}`}
+            onClick={() => setActiveTab("statistics")}
+          >
+            <BarChart3 className="mr-2 h-4 w-4" />
+            詳細統計
+          </button>
         </div>
 
-        {/* 週視圖：佔據整個寬度 */}
-        <div className="card bg-base-200 shadow-lg">
-          <div className="card-body">
-            <h2 className="card-title mb-4 text-xl">本週統計</h2>
-            <WeeklyView onWeekChange={handleWeekChange} records={weeklyRecords} weekStart={currentWeekStart} />
-          </div>
-        </div>
+        {activeTab === "main" ? (
+          <>
+            {/* 簡化統計 - 只顯示本週時間 */}
+            <div className="mb-6 flex justify-center">
+              <div className="card bg-base-200 w-full max-w-md shadow-lg">
+                <div className="card-body text-center">
+                  <h3 className="mb-2 text-lg font-semibold">本週時間</h3>
+                  <div className="text-primary text-4xl font-bold">{formatMinutesToHours(weeklyStatistics.總計)}</div>
+                  <div className="text-base-content/60 text-sm">{(weeklyStatistics.總計 / 60).toFixed(1)} 小時</div>
+                </div>
+              </div>
+            </div>
+
+            {/* 主要內容區域 */}
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+              {/* 左側：時間輸入表單 */}
+              <div className="card bg-base-200 shadow-lg">
+                <div className="card-body">
+                  <h2 className="card-title mb-4 text-xl">新增時間記錄</h2>
+                  <TimeEntryForm isLoading={isLoading} onSubmit={addRecord} />
+                </div>
+              </div>
+
+              {/* 右側：記錄列表 */}
+              <div className="card bg-base-200 shadow-lg">
+                <div className="card-body">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h2 className="card-title text-xl">最近記錄</h2>
+                    <button className="btn btn-sm btn-outline" onClick={() => setShowAllRecords(!showAllRecords)}>
+                      {showAllRecords ? "顯示較少" : "顯示全部"}
+                    </button>
+                  </div>
+                  <TimeRecordsList
+                    isLoading={isLoading}
+                    maxItems={showAllRecords ? undefined : 5}
+                    onDeleteRecord={deleteRecord}
+                    records={displayRecords}
+                  />
+                  {!showAllRecords && records.length > 5 && (
+                    <div className="text-base-content/60 mt-4 text-center text-sm">
+                      還有 {records.length - 5} 筆記錄
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* 週視圖 */}
+            <div className="card bg-base-200 shadow-lg">
+              <div className="card-body">
+                <h2 className="card-title mb-4 text-xl">本週統計</h2>
+                <WeeklyView onWeekChange={handleWeekChange} records={weeklyRecords} weekStart={currentWeekStart} />
+              </div>
+            </div>
+          </>
+        ) : (
+          /* 詳細統計頁面 */
+          <TimeStatistics records={records} statistics={statistics} />
+        )}
       </div>
 
       {/* 設定模態視窗 */}

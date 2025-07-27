@@ -3,12 +3,13 @@
 import { BarChart3 } from "lucide-react";
 import React from "react";
 
-import type { ActivityType, TimeStatistics as TimeStatisticsType } from "@/types/time-tracker.types";
+import type { ActivityType, TimeRecord, TimeStatistics as TimeStatisticsType } from "@/types/time-tracker.types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "./StatisticsCard";
 
 interface TimeStatisticsProps {
+  records: TimeRecord[];
   statistics: TimeStatisticsType;
 }
 
@@ -16,7 +17,7 @@ interface TimeStatisticsProps {
  * 時間統計顯示元件
  * 整合多個統計卡片顯示完整的統計資料
  */
-const TimeStatistics: React.FC<TimeStatisticsProps> = ({ statistics }) => {
+const TimeStatistics: React.FC<TimeStatisticsProps> = ({ records, statistics }) => {
   // 計算百分比
   const percentages = calculatePercentages(statistics);
 
@@ -32,6 +33,26 @@ const TimeStatistics: React.FC<TimeStatisticsProps> = ({ statistics }) => {
     .sort((a, b) => b.value - a.value); // 按時間長度排序
 
   const hasData = statistics.總計 > 0;
+
+  // 計算統計開始時間（第一筆記錄的創建時間）
+  const getTrackingStartDate = (): null | string => {
+    if (records.length === 0) return null;
+
+    // 找到最早的記錄（按 createdAt 排序）
+    const earliestRecord = records.reduce((earliest, current) => {
+      return current.createdAt < earliest.createdAt ? current : earliest;
+    });
+
+    return earliestRecord.createdAt
+      .toLocaleDateString("zh-TW", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(/\//g, "-");
+  };
+
+  const trackingStartDate = getTrackingStartDate();
 
   return (
     <div className="space-y-4">
@@ -77,7 +98,13 @@ const TimeStatistics: React.FC<TimeStatisticsProps> = ({ statistics }) => {
       {hasData && (
         <div className="bg-base-200 rounded-lg p-4">
           <h3 className="text-base-content mb-2 font-medium">統計摘要</h3>
-          <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-5">
+            {trackingStartDate && (
+              <div>
+                <span className="text-base-content/60">統計開始時間：</span>
+                <span className="ml-1 font-medium">{trackingStartDate}</span>
+              </div>
+            )}
             <div>
               <span className="text-base-content/60">最多時間：</span>
               <span className="ml-1 font-medium">{activityStats[0]?.label || "無"}</span>
