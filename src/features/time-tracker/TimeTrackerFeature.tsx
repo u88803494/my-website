@@ -19,10 +19,10 @@ const TimeTrackerFeature: React.FC = () => {
   const { addRecord, deleteRecord, error, getWeeklyRecords, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
   const [showSettings, setShowSettings] = useState(false);
+  const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStartInTaiwan(undefined, settings.weekStartDay));
 
   const handleWeekChange = (weekStart: Date) => {
-    // 週變更處理邏輯，目前暫時空實作
-    console.log("Week changed to:", weekStart);
+    setCurrentWeekStart(weekStart);
   };
 
   const toggleSettings = () => {
@@ -39,7 +39,6 @@ const TimeTrackerFeature: React.FC = () => {
     );
   }
 
-  const currentWeekStart = getWeekStartInTaiwan(undefined, settings.weekStartDay);
   const weeklyRecords = getWeeklyRecords(currentWeekStart);
 
   return (
