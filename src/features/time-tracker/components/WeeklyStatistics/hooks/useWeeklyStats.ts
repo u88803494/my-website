@@ -3,7 +3,7 @@
 import { endOfWeek, startOfWeek } from "date-fns";
 import { useMemo } from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { getWeeklyCategoryTotals, type WeeklyCategoryTotals } from "../../../utils/statisticsCalculation";
 import { getTaiwanNow } from "../../../utils/time/timeUtilities";

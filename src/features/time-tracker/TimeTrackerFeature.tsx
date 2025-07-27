@@ -3,7 +3,7 @@
 import { BarChart3, List, Settings } from "lucide-react";
 import React, { useState } from "react";
 
-import { ActivityType } from "@/types/time-tracker.types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
 import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";

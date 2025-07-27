@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/types/time-tracker.types";
+import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/features/time-tracker/types";
 
 import { calculateStatistics } from "../utils/statisticsCalculation";
 import { calculateDuration, getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/time";
