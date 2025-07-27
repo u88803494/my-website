@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import { Settings } from "lucide-react";
+import React, { useState } from "react";
 
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
 import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";
 import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
+import { UserSettings } from "./components/UserSettings";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
-import { useTimeTracker } from "./hooks/useTimeTracker";
+import { useTimeTracker, useUserSettings } from "./hooks";
 import { getWeekStartInTaiwan } from "./utils/time";
 
 /**
@@ -15,10 +17,16 @@ import { getWeekStartInTaiwan } from "./utils/time";
  */
 const TimeTrackerFeature: React.FC = () => {
   const { addRecord, deleteRecord, error, getWeeklyRecords, isLoading, records, statistics } = useTimeTracker();
+  const { settings } = useUserSettings();
+  const [showSettings, setShowSettings] = useState(false);
 
   const handleWeekChange = (weekStart: Date) => {
     // 週變更處理邏輯，目前暫時空實作
     console.log("Week changed to:", weekStart);
+  };
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
   };
 
   if (error) {
@@ -31,16 +39,21 @@ const TimeTrackerFeature: React.FC = () => {
     );
   }
 
-  const currentWeekStart = getWeekStartInTaiwan();
+  const currentWeekStart = getWeekStartInTaiwan(undefined, settings.weekStartDay);
   const weeklyRecords = getWeeklyRecords(currentWeekStart);
 
   return (
     <div className="bg-base-100 min-h-screen p-4">
       <div className="container mx-auto max-w-7xl space-y-6">
-        {/* 頁面標題 */}
-        <div className="text-center">
+        {/* 頁面標題和設定按鈕 */}
+        <div className="relative text-center">
           <h1 className="text-base-content mb-2 text-4xl font-bold">時間追蹤器</h1>
           <p className="text-base-content/70">記錄和分析你的時間分配，提升效率管理</p>
+
+          {/* 設定按鈕 */}
+          <button className="btn btn-ghost btn-sm absolute top-0 right-0" onClick={toggleSettings} title="開啟設定">
+            <Settings className="h-5 w-5" />
+          </button>
         </div>
 
         {/* 統計資料 */}
@@ -78,6 +91,29 @@ const TimeTrackerFeature: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* 設定模態視窗 */}
+      {showSettings && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold">應用設定</h3>
+              <button className="btn btn-sm btn-circle btn-ghost" onClick={toggleSettings}>
+                ✕
+              </button>
+            </div>
+
+            <UserSettings />
+
+            <div className="modal-action">
+              <button className="btn btn-primary" onClick={toggleSettings}>
+                完成
+              </button>
+            </div>
+          </div>
+          <div className="modal-backdrop" onClick={toggleSettings} />
+        </div>
+      )}
     </div>
   );
 };
