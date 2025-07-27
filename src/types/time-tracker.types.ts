@@ -2,6 +2,10 @@
  * 時間追蹤功能的核心類型定義
  */
 
+// 週起始日類型定義
+export type WeekStartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = 週日 … 6 = 週六
+export const DEFAULT_WEEK_START: WeekStartDay = 0; // 專案預設週日
+
 // 活動類型枚舉
 export enum ActivityType {
   CHARACTER = "品格",
@@ -48,8 +52,13 @@ export interface TimeStatistics {
 export interface UseLocalStorageReturn<T> {
   error: null | string;
   loading: boolean;
-  setValue: (value: T) => void;
+  setValue: (value: ((prevValue: T) => T) | T) => void;
   value: T;
+}
+
+// 使用者設定介面
+export interface UserSettings {
+  weekStartDay: WeekStartDay;
 }
 
 // Hook 返回類型
@@ -62,6 +71,13 @@ export interface UseTimeTrackerReturn {
   isLoading: boolean;
   records: TimeRecord[];
   statistics: TimeStatistics;
+}
+
+export interface UseUserSettingsReturn {
+  error: null | string;
+  isLoading: boolean;
+  settings: UserSettings;
+  updateSettings: (settings: Partial<UserSettings>) => void;
 }
 
 // 驗證錯誤介面
