@@ -1,16 +1,20 @@
 "use client";
+/* eslint-disable sonarjs/no-duplicate-string */
 
 import { BarChart3, List, Settings } from "lucide-react";
 import React, { useState } from "react";
+
+import { ActivityType } from "@/types/time-tracker.types";
 
 import TimeEntryForm from "./components/TimeEntryForm/TimeEntryForm";
 import TimeRecordsList from "./components/TimeRecordsList/TimeRecordsList";
 import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
 import { UserSettings } from "./components/UserSettings";
 import WeeklyView from "./components/WeeklyView/WeeklyView";
+import WeekStats from "./components/WeeklyView/WeekStats";
 import { useTimeTracker, useUserSettings } from "./hooks";
 import { formatMinutesToHours } from "./utils/formatting";
-import { calculateStatistics } from "./utils/statisticsCalculation";
+import { calculateStatistics, calculateWeeklySummary } from "./utils/statisticsCalculation";
 import { getWeekStartInTaiwan } from "./utils/time";
 
 /**
@@ -18,12 +22,23 @@ import { getWeekStartInTaiwan } from "./utils/time";
  * 整合所有子元件並管理主要狀態
  */
 const TimeTrackerFeature: React.FC = () => {
+  // Constants for repeated class names and strings
+  const TAB_ACTIVE_CLASS = "tab-active";
+  const ICON_CLASS = "mr-2 h-4 w-4";
+  const CARD_BODY_CLASS = "card-body";
+
+  // Tab handler functions
+   
+  const handleMainTab = () => setActiveTab("main");
+  const handleWeeklyStatsTab = () => setActiveTab("weekly-stats");
+  const handleStatisticsTab = () => setActiveTab("statistics");
   const { addRecord, deleteRecord, error, getWeeklyRecords, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
-  const [showSettings, setShowSettings] = useState(false);
+  const INITIAL_STATE = false;
+  const [showSettings, setShowSettings] = useState(INITIAL_STATE);
   const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStartInTaiwan(undefined, settings.weekStartDay));
-  const [activeTab, setActiveTab] = useState<"main" | "statistics">("main");
-  const [showAllRecords, setShowAllRecords] = useState(false);
+  const [activeTab, setActiveTab] = useState<"main" | "statistics" | "weekly-stats">("main");
+  const [showAllRecords, setShowAllRecords] = useState(INITIAL_STATE);
 
   const handleWeekChange = (weekStart: Date) => {
     setCurrentWeekStart(weekStart);
@@ -36,6 +51,7 @@ const TimeTrackerFeature: React.FC = () => {
   // 計算本週統計
   const weeklyRecords = getWeeklyRecords(currentWeekStart);
   const weeklyStatistics = calculateStatistics(weeklyRecords);
+  const weeklySummary = calculateWeeklySummary(weeklyRecords);
 
   if (error) {
     return (
@@ -66,16 +82,20 @@ const TimeTrackerFeature: React.FC = () => {
 
         {/* 頁籤導航 */}
         <div className="tabs tabs-boxed justify-center">
-          <button className={`tab ${activeTab === "main" ? "tab-active" : ""}`} onClick={() => setActiveTab("main")}>
-            <List className="mr-2 h-4 w-4" />
+          <button className={`tab ${activeTab === "main" ? TAB_ACTIVE_CLASS : ""}`} onClick={handleMainTab}>
+            <List className={ICON_CLASS} />
             主要功能
           </button>
           <button
-            className={`tab ${activeTab === "statistics" ? "tab-active" : ""}`}
-            onClick={() => setActiveTab("statistics")}
+            className={`tab ${activeTab === "weekly-stats" ? TAB_ACTIVE_CLASS : ""}`}
+            onClick={handleWeeklyStatsTab}
           >
-            <BarChart3 className="mr-2 h-4 w-4" />
-            詳細統計
+            <BarChart3 className={ICON_CLASS} />
+            Weekly Stats
+          </button>
+          <button className={`tab ${activeTab === "statistics" ? TAB_ACTIVE_CLASS : ""}`} onClick={handleStatisticsTab}>
+            <BarChart3 className={ICON_CLASS} />
+            All Stats
           </button>
         </div>
 
@@ -96,7 +116,7 @@ const TimeTrackerFeature: React.FC = () => {
             <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
               {/* 左側：時間輸入表單 */}
               <div className="card bg-base-200 shadow-lg">
-                <div className="card-body">
+                <div className={CARD_BODY_CLASS}>
                   <h2 className="card-title mb-4 text-xl">新增時間記錄</h2>
                   <TimeEntryForm isLoading={isLoading} onSubmit={addRecord} />
                 </div>
@@ -104,7 +124,7 @@ const TimeTrackerFeature: React.FC = () => {
 
               {/* 右側：記錄列表 */}
               <div className="card bg-base-200 shadow-lg">
-                <div className="card-body">
+                <div className={CARD_BODY_CLASS}>
                   <div className="mb-4 flex items-center justify-between">
                     <h2 className="card-title text-xl">最近記錄</h2>
                     <button className="btn btn-sm btn-outline" onClick={() => setShowAllRecords(!showAllRecords)}>
@@ -128,12 +148,30 @@ const TimeTrackerFeature: React.FC = () => {
 
             {/* 週視圖 */}
             <div className="card bg-base-200 shadow-lg">
-              <div className="card-body">
+              <div className={CARD_BODY_CLASS}>
                 <h2 className="card-title mb-4 text-xl">本週統計</h2>
                 <WeeklyView onWeekChange={handleWeekChange} records={weeklyRecords} weekStart={currentWeekStart} />
               </div>
             </div>
           </>
+        ) : activeTab === "weekly-stats" ? (
+          /* Weekly Stats 頁面 */
+          <div className="card bg-base-200 shadow-lg">
+            <div className={CARD_BODY_CLASS}>
+              <h2 className="card-title mb-4 text-xl">Weekly Statistics</h2>
+              <WeekStats
+                activeDays={weeklySummary.activeDays}
+                averagePerDay={0}
+                characterMinutes={
+                  weeklyStatistics[ActivityType.CHARACTER] + weeklyStatistics[ActivityType.EXTRA_CHARACTER]
+                }
+                recordCount={weeklyRecords.length}
+                studyMinutes={weeklyStatistics[ActivityType.STUDY] + weeklyStatistics[ActivityType.EXTRA_STUDY]}
+                totalMinutes={weeklyStatistics.總計}
+                workMinutes={weeklyStatistics[ActivityType.WORK]}
+              />
+            </div>
+          </div>
         ) : (
           /* 詳細統計頁面 */
           <TimeStatistics records={records} statistics={statistics} />
