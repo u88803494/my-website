@@ -1,7 +1,7 @@
 import React from "react";
 
+import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
 import type { ActivityType } from "@/features/time-tracker/types";
-import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/types";
 
 interface ActivityTypeSelectProps {
   disabled?: boolean;

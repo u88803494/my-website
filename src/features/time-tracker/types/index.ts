@@ -2,10 +2,6 @@
  * 時間追蹤功能的核心類型定義
  */
 
-// 週起始日類型定義
-export type WeekStartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = 週日 … 6 = 週六
-export const DEFAULT_WEEK_START: WeekStartDay = 0; // 專案預設週日
-
 // 活動類型枚舉
 export enum ActivityType {
   CHARACTER = "品格",
@@ -13,6 +9,13 @@ export enum ActivityType {
   EXTRA_STUDY = "額外讀書",
   STUDY = "讀書",
   WORK = "工作",
+}
+
+// 工具函數類型
+export interface TimeCalculationResult {
+  duration: number; // 分鐘
+  error?: string;
+  isValid: boolean;
 }
 
 // 表單資料介面
@@ -86,6 +89,11 @@ export interface ValidationError {
   message: string;
 }
 
+export interface ValidationResult {
+  errors: ValidationError[];
+  isValid: boolean;
+}
+
 // 週資料介面
 export interface WeeklyData {
   records: TimeRecord[];
@@ -93,23 +101,5 @@ export interface WeeklyData {
   weekStart: string; // YYYY-MM-DD 格式
 }
 
-// 活動類型選項常數
-export const ACTIVITY_TYPE_OPTIONS = [
-  { label: ActivityType.STUDY, value: ActivityType.STUDY },
-  { label: ActivityType.WORK, value: ActivityType.WORK },
-  { label: ActivityType.CHARACTER, value: ActivityType.CHARACTER },
-  { label: ActivityType.EXTRA_STUDY, value: ActivityType.EXTRA_STUDY },
-  { label: ActivityType.EXTRA_CHARACTER, value: ActivityType.EXTRA_CHARACTER },
-] as const;
-
-// 工具函數類型
-export interface TimeCalculationResult {
-  duration: number; // 分鐘
-  error?: string;
-  isValid: boolean;
-}
-
-export interface ValidationResult {
-  errors: ValidationError[];
-  isValid: boolean;
-}
+// 週起始日類型定義
+export type WeekStartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = 週日 … 6 = 週六
