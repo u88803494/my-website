@@ -5,13 +5,8 @@ import React, { useMemo, useState } from "react";
 
 import type { TimeRecord } from "@/types/time-tracker.types";
 
-import {
-  formatDateInTaiwan,
-  getWeekDatesInTaiwan,
-  getWeekEndInTaiwan,
-  getWeekStartInTaiwan,
-  isTodayInTaiwan,
-} from "../../utils/time";
+import { useUserSettings } from "../../hooks";
+import { formatDateInTaiwan, getWeekDatesInTaiwan, getWeekEndInTaiwan, getWeekStartInTaiwan } from "../../utils/time";
 import DaySection from "./DaySection";
 import WeekNavigation from "./WeekNavigation";
 import WeekStats from "./WeekStats";
@@ -28,11 +23,12 @@ interface WeeklyViewProps {
  */
 const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStart }) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(weekStart);
+  const { settings } = useUserSettings();
 
-  // 獲取週的所有日期
+  // 獲取週的所有日期（使用用戶設定的週起始日）
   const weekDates = useMemo(() => {
-    return getWeekDatesInTaiwan(currentWeekStart);
-  }, [currentWeekStart]);
+    return getWeekDatesInTaiwan(currentWeekStart, settings.weekStartDay);
+  }, [currentWeekStart, settings.weekStartDay]);
 
   // 按日期分組記錄
   const recordsByDate = useMemo(() => {
@@ -78,13 +74,14 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
 
   // 回到本週
   const goToCurrentWeek = () => {
-    const thisWeek = getWeekStartInTaiwan();
+    const thisWeek = getWeekStartInTaiwan(undefined, settings.weekStartDay);
     setCurrentWeekStart(thisWeek);
     onWeekChange(thisWeek);
   };
 
-  const weekEnd = getWeekEndInTaiwan(currentWeekStart);
-  const isCurrentWeek = formatDateInTaiwan(currentWeekStart) === formatDateInTaiwan(getWeekStartInTaiwan());
+  const weekEnd = getWeekEndInTaiwan(currentWeekStart, settings.weekStartDay);
+  const isCurrentWeek =
+    formatDateInTaiwan(currentWeekStart) === formatDateInTaiwan(getWeekStartInTaiwan(undefined, settings.weekStartDay));
 
   return (
     <div className="space-y-4">
@@ -125,9 +122,8 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
         {weekDates.map((date) => {
           const dateStr = formatDateInTaiwan(date);
           const dayRecords = recordsByDate[dateStr] || [];
-          const isTodayDate = isTodayInTaiwan(date);
 
-          return <DaySection date={date} isToday={isTodayDate} key={dateStr} records={dayRecords} />;
+          return <DaySection date={date} key={dateStr} records={dayRecords} />;
         })}
       </div>
     </div>
