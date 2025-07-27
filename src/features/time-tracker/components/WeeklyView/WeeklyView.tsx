@@ -6,6 +6,7 @@ import React, { useMemo } from "react";
 import type { TimeRecord } from "@/types/time-tracker.types";
 
 import { useUserSettings } from "../../hooks";
+import { getWeeklyCategoryTotals } from "../../utils/statisticsCalculation";
 import { formatDateInTaiwan, getWeekDatesInTaiwan, getWeekEndInTaiwan, getWeekStartInTaiwan } from "../../utils/time";
 import DaySection from "./DaySection";
 import WeekNavigation from "./WeekNavigation";
@@ -55,6 +56,12 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
       recordCount,
       totalMinutes,
     };
+  }, [recordsByDate]);
+
+  // 計算分類總計
+  const categoryTotals = useMemo(() => {
+    const weekRecords = Object.values(recordsByDate).flat();
+    return getWeeklyCategoryTotals(weekRecords);
   }, [recordsByDate]);
 
   // 導航到上一週
@@ -111,8 +118,11 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
       <WeekStats
         activeDays={weekStats.activeDays}
         averagePerDay={weekStats.averagePerDay}
+        characterMinutes={categoryTotals.character}
         recordCount={weekStats.recordCount}
+        studyMinutes={categoryTotals.study}
         totalMinutes={weekStats.totalMinutes}
+        workMinutes={categoryTotals.work}
       />
 
       {/* 每日記錄 */}

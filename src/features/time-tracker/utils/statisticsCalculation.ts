@@ -106,6 +106,40 @@ export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, 
 };
 
 /**
+ * 週分類總計介面
+ */
+export interface WeeklyCategoryTotals {
+  character: number; // CHARACTER + EXTRA_CHARACTER
+  study: number; // STUDY + EXTRA_STUDY
+  work: number; // WORK
+}
+
+/**
+ * 計算週分類總計
+ */
+export const getWeeklyCategoryTotals = (records: TimeRecord[]): WeeklyCategoryTotals => {
+  return records.reduce(
+    (totals, record) => {
+      switch (record.activityType) {
+        case ActivityType.CHARACTER:
+        case ActivityType.EXTRA_CHARACTER:
+          totals.character += record.duration;
+          break;
+        case ActivityType.EXTRA_STUDY:
+        case ActivityType.STUDY:
+          totals.study += record.duration;
+          break;
+        case ActivityType.WORK:
+          totals.work += record.duration;
+          break;
+      }
+      return totals;
+    },
+    { character: 0, study: 0, work: 0 },
+  );
+};
+
+/**
  * 計算週統計摘要
  */
 export const calculateWeeklySummary = (records: TimeRecord[]) => {
