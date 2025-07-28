@@ -1,17 +1,13 @@
 "use client";
 
 import { Calendar } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 
-import {
-  formatDateInTaiwan,
-  getWeekDatesInTaiwan,
-  getWeekEndInTaiwan,
-  getWeekStartInTaiwan,
-  isTodayInTaiwan,
-} from "../../utils/time";
+import { useUserSettings } from "../../hooks";
+import { getWeeklyCategoryTotals } from "../../utils/statisticsCalculation";
+import { formatDateInTaiwan, getWeekDatesInTaiwan, getWeekEndInTaiwan, getWeekStartInTaiwan } from "../../utils/time";
 import DaySection from "./DaySection";
 import WeekNavigation from "./WeekNavigation";
 import WeekStats from "./WeekStats";
@@ -27,12 +23,12 @@ interface WeeklyViewProps {
  * 顯示整週的時間記錄和統計
  */
 const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStart }) => {
-  const [currentWeekStart, setCurrentWeekStart] = useState(weekStart);
+  const { settings } = useUserSettings();
 
-  // 獲取週的所有日期
+  // 獲取週的所有日期（使用用戶設定的週起始日）
   const weekDates = useMemo(() => {
-    return getWeekDatesInTaiwan(currentWeekStart);
-  }, [currentWeekStart]);
+    return getWeekDatesInTaiwan(weekStart, settings.weekStartDay);
+  }, [weekStart, settings.weekStartDay]);
 
   // 按日期分組記錄
   const recordsByDate = useMemo(() => {
@@ -46,48 +42,53 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
     return grouped;
   }, [records, weekDates]);
 
-  // 計算週統計
+  // 計算週統計 - 基於當前週的記錄
   const weekStats = useMemo(() => {
-    const totalMinutes = records.reduce((sum, record) => sum + record.duration, 0);
-    const recordCount = records.length;
+    // 使用當前週的記錄來計算統計
+    const weekRecords = Object.values(recordsByDate).flat();
+    const totalMinutes = weekRecords.reduce((sum, record) => sum + record.duration, 0);
+    const recordCount = weekRecords.length;
     const activeDays = Object.values(recordsByDate).filter((records) => records.length > 0).length;
 
     return {
       activeDays,
-      averagePerDay: activeDays > 0 ? Math.round(totalMinutes / activeDays) : 0,
       recordCount,
       totalMinutes,
     };
-  }, [records, recordsByDate]);
+  }, [recordsByDate]);
+
+  // 計算分類總計
+  const categoryTotals = useMemo(() => {
+    const weekRecords = Object.values(recordsByDate).flat();
+    return getWeeklyCategoryTotals(weekRecords);
+  }, [recordsByDate]);
 
   // 導航到上一週
   const goToPreviousWeek = () => {
-    const prevWeek = new Date(currentWeekStart);
-    prevWeek.setDate(currentWeekStart.getDate() - 7);
-    setCurrentWeekStart(prevWeek);
+    const prevWeek = new Date(weekStart);
+    prevWeek.setDate(weekStart.getDate() - 7);
     onWeekChange(prevWeek);
   };
 
   // 導航到下一週
   const goToNextWeek = () => {
-    const nextWeek = new Date(currentWeekStart);
-    nextWeek.setDate(currentWeekStart.getDate() + 7);
-    setCurrentWeekStart(nextWeek);
+    const nextWeek = new Date(weekStart);
+    nextWeek.setDate(weekStart.getDate() + 7);
     onWeekChange(nextWeek);
   };
 
   // 回到本週
   const goToCurrentWeek = () => {
-    const thisWeek = getWeekStartInTaiwan();
-    setCurrentWeekStart(thisWeek);
+    const thisWeek = getWeekStartInTaiwan(undefined, settings.weekStartDay);
     onWeekChange(thisWeek);
   };
 
-  const weekEnd = getWeekEndInTaiwan(currentWeekStart);
-  const isCurrentWeek = formatDateInTaiwan(currentWeekStart) === formatDateInTaiwan(getWeekStartInTaiwan());
+  const weekEnd = getWeekEndInTaiwan(weekStart, settings.weekStartDay);
+  const isCurrentWeek =
+    formatDateInTaiwan(weekStart) === formatDateInTaiwan(getWeekStartInTaiwan(undefined, settings.weekStartDay));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* 週導航標題 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -105,7 +106,7 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
       </div>
 
       <WeekNavigation
-        currentWeekStart={currentWeekStart}
+        currentWeekStart={weekStart}
         isCurrentWeek={isCurrentWeek}
         onCurrentWeek={goToCurrentWeek}
         onNextWeek={goToNextWeek}
@@ -115,9 +116,11 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
 
       <WeekStats
         activeDays={weekStats.activeDays}
-        averagePerDay={weekStats.averagePerDay}
+        characterMinutes={categoryTotals.character}
         recordCount={weekStats.recordCount}
+        studyMinutes={categoryTotals.study}
         totalMinutes={weekStats.totalMinutes}
+        workMinutes={categoryTotals.work}
       />
 
       {/* 每日記錄 */}
@@ -125,9 +128,8 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
         {weekDates.map((date) => {
           const dateStr = formatDateInTaiwan(date);
           const dayRecords = recordsByDate[dateStr] || [];
-          const isTodayDate = isTodayInTaiwan(date);
 
-          return <DaySection date={date} isToday={isTodayDate} key={dateStr} records={dayRecords} />;
+          return <DaySection date={date} key={dateStr} records={dayRecords} />;
         })}
       </div>
     </div>

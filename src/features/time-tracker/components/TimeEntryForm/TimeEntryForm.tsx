@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { getFieldError } from "../../utils/validation";
 import ActivityTypeSelect from "./ActivityTypeSelect";

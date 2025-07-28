@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import type { TimeRecord } from "@/types/time-tracker.types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { formatTimeRecord } from "../../utils/formatting";
 import { getDateDisplayNameInTaiwan } from "../../utils/time";

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/types/time-tracker.types";
+import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/features/time-tracker/types";
 
 import { calculateStatistics } from "../utils/statisticsCalculation";
 import { calculateDuration, getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/time";
 import { useLocalStorage } from "./useLocalStorage";
+import { useUserSettings } from "./useUserSettings";
 
 const STORAGE_KEY = "time-tracker-records";
 
@@ -20,6 +21,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     value: storedRecords,
   } = useLocalStorage<TimeRecord[]>(STORAGE_KEY, []);
   const [records, setRecords] = useState<TimeRecord[]>([]);
+  const { settings } = useUserSettings();
 
   // 同步 localStorage 的資料到本地狀態
   useEffect(() => {
@@ -77,23 +79,23 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     (weekStart: Date): TimeRecord[] => {
       return records.filter((record) => {
         const recordDate = new Date(record.date);
-        return isSameWeekInTaiwan(recordDate, weekStart);
+        return isSameWeekInTaiwan(recordDate, weekStart, settings.weekStartDay);
       });
     },
-    [records],
+    [records, settings.weekStartDay],
   );
 
   // 清除本週記錄
   const clearWeek = useCallback(() => {
-    const currentWeekStart = getWeekStartInTaiwan();
+    const currentWeekStart = getWeekStartInTaiwan(undefined, settings.weekStartDay);
     const updatedRecords = records.filter((record) => {
       const recordDate = new Date(record.date);
-      return !isSameWeekInTaiwan(recordDate, currentWeekStart);
+      return !isSameWeekInTaiwan(recordDate, currentWeekStart, settings.weekStartDay);
     });
 
     setRecords(updatedRecords);
     setStoredRecords(updatedRecords);
-  }, [records, setStoredRecords]);
+  }, [records, setStoredRecords, settings.weekStartDay]);
 
   return {
     addRecord,

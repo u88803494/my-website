@@ -1,4 +1,4 @@
-import type { ActivityType, TimeEntryFormData } from "@/types/time-tracker.types";
+import type { ActivityType, TimeEntryFormData } from "@/features/time-tracker/types";
 
 import type { ValidationError } from "../../../types";
 import { calculateDuration, getCurrentTaiwanDate } from "../../../utils/time";
