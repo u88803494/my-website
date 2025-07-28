@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import type { UseLocalStorageReturn } from "@/types/time-tracker.types";
+import type { UseLocalStorageReturn } from "@/features/time-tracker/types";
 
 /**
  * 通用的 localStorage hook

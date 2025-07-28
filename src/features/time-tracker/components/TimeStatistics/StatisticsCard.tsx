@@ -1,7 +1,7 @@
 import { Clock, TrendingUp } from "lucide-react";
 import React from "react";
 
-import type { ActivityType } from "@/types/time-tracker.types";
+import type { ActivityType } from "@/features/time-tracker/types";
 
 import { formatMinutesToDecimalHours, formatMinutesToHours, getActivityTypeColor } from "../../utils/formatting";
 

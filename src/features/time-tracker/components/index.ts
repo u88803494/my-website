@@ -2,4 +2,6 @@
 export * from "./TimeEntryForm";
 export * from "./TimeRecordsList";
 export * from "./TimeStatistics";
+export * from "./UserSettings";
+export * from "./WeeklyStatistics";
 export * from "./WeeklyView";

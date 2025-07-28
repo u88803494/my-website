@@ -1,5 +1,5 @@
-import type { TimeStatistics } from "@/types/time-tracker.types";
-import { ActivityType } from "@/types/time-tracker.types";
+import type { TimeStatistics } from "@/features/time-tracker/types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 /**
  * 將分鐘轉換為小時和分鐘的顯示格式

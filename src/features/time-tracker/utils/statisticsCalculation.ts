@@ -1,5 +1,5 @@
-import type { TimeRecord, TimeStatistics } from "@/types/time-tracker.types";
-import { ActivityType } from "@/types/time-tracker.types";
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 /**
  * 初始化空的統計資料
@@ -72,22 +72,6 @@ export const getMostActiveType = (statistics: TimeStatistics): ActivityType | nu
 };
 
 /**
- * 計算平均每日時間
- */
-export const calculateDailyAverage = (records: TimeRecord[], days: number = 7): TimeStatistics => {
-  const totalStats = calculateStatistics(records);
-  const averageStats = createEmptyStatistics();
-
-  Object.keys(averageStats).forEach((key) => {
-    if (key in totalStats) {
-      averageStats[key as keyof TimeStatistics] = Math.round(totalStats[key as keyof TimeStatistics] / days);
-    }
-  });
-
-  return averageStats;
-};
-
-/**
  * 按日期分組計算統計
  */
 export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, TimeStatistics> => {
@@ -106,6 +90,40 @@ export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, 
 };
 
 /**
+ * 週分類總計介面
+ */
+export interface WeeklyCategoryTotals {
+  character: number; // CHARACTER + EXTRA_CHARACTER
+  study: number; // STUDY + EXTRA_STUDY
+  work: number; // WORK
+}
+
+/**
+ * 計算週分類總計
+ */
+export const getWeeklyCategoryTotals = (records: TimeRecord[]): WeeklyCategoryTotals => {
+  return records.reduce(
+    (totals, record) => {
+      switch (record.activityType) {
+        case ActivityType.CHARACTER:
+        case ActivityType.EXTRA_CHARACTER:
+          totals.character += record.duration;
+          break;
+        case ActivityType.EXTRA_STUDY:
+        case ActivityType.STUDY:
+          totals.study += record.duration;
+          break;
+        case ActivityType.WORK:
+          totals.work += record.duration;
+          break;
+      }
+      return totals;
+    },
+    { character: 0, study: 0, work: 0 },
+  );
+};
+
+/**
  * 計算週統計摘要
  */
 export const calculateWeeklySummary = (records: TimeRecord[]) => {
@@ -113,15 +131,57 @@ export const calculateWeeklySummary = (records: TimeRecord[]) => {
   const percentages = calculateActivityPercentages(statistics);
   const mostActiveType = getMostActiveType(statistics);
   const dailyStats = calculateDailyStatistics(records);
-  const dailyAverage = calculateDailyAverage(records);
 
   return {
     activeDays: Object.keys(dailyStats).length,
-    dailyAverage,
     dailyStats,
     mostActiveType,
     percentages,
     statistics,
     totalRecords: records.length,
   };
+};
+
+/**
+ * 計算週統計的最多時間活動
+ */
+export const getWeeklyTopActivity = (categoryTotals: WeeklyCategoryTotals): string => {
+  const activities = [
+    { name: "Reading", value: categoryTotals.study },
+    { name: "Working", value: categoryTotals.work },
+    { name: "Character", value: categoryTotals.character },
+  ];
+  const maxActivity = activities.reduce((prev, current) => (prev.value > current.value ? prev : current));
+  return maxActivity.value > 0 ? maxActivity.name : "無";
+};
+
+/**
+ * 計算週統計的活動類型數量
+ */
+export const getWeeklyActiveTypesCount = (categoryTotals: WeeklyCategoryTotals): number => {
+  return [categoryTotals.study, categoryTotals.work, categoryTotals.character].filter((value) => value > 0).length;
+};
+
+/**
+ * 計算週統計的平均時長
+ */
+export const getWeeklyAverageTime = (categoryTotals: WeeklyCategoryTotals): number => {
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  const activeTypes = getWeeklyActiveTypesCount(categoryTotals);
+  return activeTypes > 0 ? Math.round(totalTime / activeTypes) : 0;
+};
+
+/**
+ * 計算週統計的總時數
+ */
+export const getWeeklyTotalHours = (categoryTotals: WeeklyCategoryTotals): number => {
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  return Number((totalTime / 60).toFixed(1));
+};
+
+/**
+ * 計算百分比的通用函數
+ */
+export const calculatePercentage = (value: number, total: number): number => {
+  return total > 0 ? Math.round((value / total) * 100) : 0;
 };

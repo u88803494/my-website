@@ -1,7 +1,4 @@
-"use client";
-
 import { Calendar, Clock } from "lucide-react";
-import dynamic from "next/dynamic";
 import React, { useMemo } from "react";
 
 import type { TimeRecord } from "@/features/time-tracker/types";
@@ -9,31 +6,9 @@ import { ActivityType } from "@/features/time-tracker/types";
 
 import { formatMinutesToHours, getActivityTypeColor } from "../../utils/formatting";
 
-// 動態載入客戶端日期組件
-const ClientSideWeekday = dynamic(
-  () =>
-    Promise.resolve(({ date }: { date: Date }) => {
-      return <>{new Date(date).toLocaleDateString("zh-TW", { weekday: "long" })}</>;
-    }),
-  {
-    loading: () => <span className="opacity-0">載入中...</span>,
-    ssr: false,
-  },
-);
-
-const ClientSideDateString = dynamic(
-  () =>
-    Promise.resolve(({ date }: { date: Date }) => {
-      return <>{date.toLocaleDateString("zh-TW", { day: "numeric", month: "numeric" })}</>;
-    }),
-  {
-    loading: () => <span className="opacity-0">...</span>,
-    ssr: false,
-  },
-);
-
 interface DaySectionProps {
   date: Date;
+  isToday?: boolean;
   records: TimeRecord[];
 }
 
@@ -41,18 +16,7 @@ interface DaySectionProps {
  * 單日記錄區段元件
  * 顯示特定日期的所有時間記錄
  */
-const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
-  const [isToday, setIsToday] = React.useState(false);
-
-  React.useEffect(() => {
-    const today = new Date();
-    const isTodayValue =
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear();
-    setIsToday(isTodayValue);
-  }, [date]);
-
+const DaySection: React.FC<DaySectionProps> = ({ date, isToday = false, records }) => {
   // 按活動類型分組並計算總分鐘數
   const statsByType = useMemo(() => {
     const stats: Record<ActivityType, { count: number; minutes: number }> = {
@@ -78,6 +42,12 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
     return records.reduce((sum, record) => sum + record.duration, 0);
   }, [records]);
 
+  const dayOfWeek = new Date(date).toLocaleDateString("zh-TW", { weekday: "long" });
+  const dateString = date.toLocaleDateString("zh-TW", {
+    day: "numeric",
+    month: "numeric",
+  });
+
   return (
     <div className={`card bg-base-100 border ${isToday ? "border-primary shadow-md" : "border-base-200 shadow-sm"}`}>
       <div className="card-body p-4">
@@ -86,13 +56,11 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
           <div className="flex items-center gap-2">
             <Calendar aria-hidden="true" className={`h-4 w-4 ${isToday ? "text-primary" : "text-base-content/60"}`} />
             <h3 className={`font-medium ${isToday ? "text-primary" : "text-base-content"}`}>
-              <ClientSideWeekday date={date} />
+              {dayOfWeek}
               {isToday && <span className="badge badge-primary badge-sm ml-2">今天</span>}
             </h3>
           </div>
-          <span className="text-base-content/60 text-sm">
-            <ClientSideDateString date={date} />
-          </span>
+          <span className="text-base-content/60 text-sm">{dateString}</span>
         </div>
 
         {/* 總時間顯示 */}
