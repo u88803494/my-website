@@ -88,7 +88,7 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
     formatDateInTaiwan(weekStart) === formatDateInTaiwan(getWeekStartInTaiwan(undefined, settings.weekStartDay));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* 週導航標題 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">

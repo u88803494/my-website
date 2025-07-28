@@ -141,3 +141,47 @@ export const calculateWeeklySummary = (records: TimeRecord[]) => {
     totalRecords: records.length,
   };
 };
+
+/**
+ * 計算週統計的最多時間活動
+ */
+export const getWeeklyTopActivity = (categoryTotals: WeeklyCategoryTotals): string => {
+  const activities = [
+    { name: "Reading", value: categoryTotals.study },
+    { name: "Working", value: categoryTotals.work },
+    { name: "Character", value: categoryTotals.character },
+  ];
+  const maxActivity = activities.reduce((prev, current) => (prev.value > current.value ? prev : current));
+  return maxActivity.value > 0 ? maxActivity.name : "無";
+};
+
+/**
+ * 計算週統計的活動類型數量
+ */
+export const getWeeklyActiveTypesCount = (categoryTotals: WeeklyCategoryTotals): number => {
+  return [categoryTotals.study, categoryTotals.work, categoryTotals.character].filter((value) => value > 0).length;
+};
+
+/**
+ * 計算週統計的平均時長
+ */
+export const getWeeklyAverageTime = (categoryTotals: WeeklyCategoryTotals): number => {
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  const activeTypes = getWeeklyActiveTypesCount(categoryTotals);
+  return activeTypes > 0 ? Math.round(totalTime / activeTypes) : 0;
+};
+
+/**
+ * 計算週統計的總時數
+ */
+export const getWeeklyTotalHours = (categoryTotals: WeeklyCategoryTotals): number => {
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  return Number((totalTime / 60).toFixed(1));
+};
+
+/**
+ * 計算百分比的通用函數
+ */
+export const calculatePercentage = (value: number, total: number): number => {
+  return total > 0 ? Math.round((value / total) * 100) : 0;
+};
