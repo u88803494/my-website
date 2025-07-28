@@ -16,6 +16,6 @@ export const ACTIVITY_TYPE_OPTIONS = [
 ] as const;
 
 /**
- * 預設週起始日（週日）
+ * 預設週起始日（週四）
  */
-export const DEFAULT_WEEK_START: WeekStartDay = 0;
+export const DEFAULT_WEEK_START: WeekStartDay = 4;
