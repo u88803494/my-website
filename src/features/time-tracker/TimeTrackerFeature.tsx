@@ -39,7 +39,7 @@ const TimeTrackerFeature: React.FC = () => {
   const { settings } = useUserSettings();
   const INITIAL_STATE = false;
   const [showSettings, setShowSettings] = useState(INITIAL_STATE);
-  const [activeTab, setActiveTab] = useState<"main" | "statistics" | "weekly-stats">(TAB_WEEKLY_STATS);
+  const [activeTab, setActiveTab] = useState<"main" | "statistics" | "weekly-stats">(TAB_MAIN);
   const [showAllRecords, setShowAllRecords] = useState(INITIAL_STATE);
   const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     getWeekStartInTaiwan(undefined, settings.weekStartDay),
