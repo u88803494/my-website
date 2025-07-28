@@ -5,7 +5,11 @@ import { useMemo } from "react";
 
 import type { TimeRecord } from "@/features/time-tracker/types";
 
-import { getWeeklyCategoryTotals, type WeeklyCategoryTotals } from "../../../utils/statisticsCalculation";
+import {
+  calculatePercentage,
+  getWeeklyCategoryTotals,
+  type WeeklyCategoryTotals,
+} from "../../../utils/statisticsCalculation";
 import { getTaiwanNow } from "../../../utils/time/timeUtilities";
 
 export interface UseWeeklyStatsReturn {
@@ -63,20 +67,15 @@ export const useWeeklyStats = (records: TimeRecord[]): UseWeeklyStatsReturn => {
     // 計算總時間
     const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
 
-    // 計算百分比
-    const calculatePercentage = (value: number): number => {
-      return totalTime > 0 ? Math.round((value / totalTime) * 100) : 0;
-    };
-
     return {
       character: {
         label: "Character",
-        percentage: calculatePercentage(categoryTotals.character),
+        percentage: calculatePercentage(categoryTotals.character, totalTime),
         value: categoryTotals.character,
       },
       reading: {
         label: "Reading",
-        percentage: calculatePercentage(categoryTotals.study),
+        percentage: calculatePercentage(categoryTotals.study, totalTime),
         value: categoryTotals.study,
       },
       total: {
@@ -85,7 +84,7 @@ export const useWeeklyStats = (records: TimeRecord[]): UseWeeklyStatsReturn => {
       },
       working: {
         label: "Working",
-        percentage: calculatePercentage(categoryTotals.work),
+        percentage: calculatePercentage(categoryTotals.work, totalTime),
         value: categoryTotals.work,
       },
     };
