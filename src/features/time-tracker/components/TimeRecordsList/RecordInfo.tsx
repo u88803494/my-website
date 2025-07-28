@@ -30,9 +30,9 @@ const RecordInfo: React.FC<RecordInfoProps> = ({ displayDate, formattedRecord })
 
         {/* 右側：持續時間 + 日期 */}
         <div className="flex items-center gap-4">
-          <div className="text-base-content/60 flex items-center gap-2 text-sm">
+          <div className="text-base-content/60 flex items-center gap-1 text-sm">
             <span>{formattedRecord.duration}</span>
-            <span className="text-xs">({formattedRecord.decimalDuration})</span>
+            <span className="ml-2 text-xs">({formattedRecord.decimalDuration})</span>
           </div>
           <div className="text-base-content/50 flex items-center gap-1 text-xs">
             <Calendar aria-hidden="true" className="h-3 w-3" />
