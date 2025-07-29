@@ -11,8 +11,10 @@ export const ACTIVITY_TYPE_OPTIONS = [
   { label: ActivityType.STUDY, value: ActivityType.STUDY },
   { label: ActivityType.WORK, value: ActivityType.WORK },
   { label: ActivityType.CHARACTER, value: ActivityType.CHARACTER },
+  { label: ActivityType.LISTENING, value: ActivityType.LISTENING },
   { label: ActivityType.EXTRA_STUDY, value: ActivityType.EXTRA_STUDY },
   { label: ActivityType.EXTRA_CHARACTER, value: ActivityType.EXTRA_CHARACTER },
+  { label: ActivityType.EXTRA_LISTENING, value: ActivityType.EXTRA_LISTENING },
 ] as const;
 
 /**

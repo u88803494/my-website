@@ -7,7 +7,9 @@ import { ActivityType } from "@/features/time-tracker/types";
 export const createEmptyStatistics = (): TimeStatistics => ({
   [ActivityType.CHARACTER]: 0,
   [ActivityType.EXTRA_CHARACTER]: 0,
+  [ActivityType.EXTRA_LISTENING]: 0,
   [ActivityType.EXTRA_STUDY]: 0,
+  [ActivityType.LISTENING]: 0,
   [ActivityType.STUDY]: 0,
   [ActivityType.WORK]: 0,
   總計: 0,
@@ -39,7 +41,9 @@ export const calculateActivityPercentages = (statistics: TimeStatistics): Record
     return {
       [ActivityType.CHARACTER]: 0,
       [ActivityType.EXTRA_CHARACTER]: 0,
+      [ActivityType.EXTRA_LISTENING]: 0,
       [ActivityType.EXTRA_STUDY]: 0,
+      [ActivityType.LISTENING]: 0,
       [ActivityType.STUDY]: 0,
       [ActivityType.WORK]: 0,
     };
@@ -48,7 +52,9 @@ export const calculateActivityPercentages = (statistics: TimeStatistics): Record
   return {
     [ActivityType.CHARACTER]: Math.round((statistics[ActivityType.CHARACTER] / total) * 100),
     [ActivityType.EXTRA_CHARACTER]: Math.round((statistics[ActivityType.EXTRA_CHARACTER] / total) * 100),
+    [ActivityType.EXTRA_LISTENING]: Math.round((statistics[ActivityType.EXTRA_LISTENING] / total) * 100),
     [ActivityType.EXTRA_STUDY]: Math.round((statistics[ActivityType.EXTRA_STUDY] / total) * 100),
+    [ActivityType.LISTENING]: Math.round((statistics[ActivityType.LISTENING] / total) * 100),
     [ActivityType.STUDY]: Math.round((statistics[ActivityType.STUDY] / total) * 100),
     [ActivityType.WORK]: Math.round((statistics[ActivityType.WORK] / total) * 100),
   };
@@ -94,6 +100,7 @@ export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, 
  */
 export interface WeeklyCategoryTotals {
   character: number; // CHARACTER + EXTRA_CHARACTER
+  listening: number; // LISTENING + EXTRA_LISTENING
   study: number; // STUDY + EXTRA_STUDY
   work: number; // WORK
 }
@@ -109,6 +116,10 @@ export const getWeeklyCategoryTotals = (records: TimeRecord[]): WeeklyCategoryTo
         case ActivityType.EXTRA_CHARACTER:
           totals.character += record.duration;
           break;
+        case ActivityType.EXTRA_LISTENING:
+        case ActivityType.LISTENING:
+          totals.listening += record.duration;
+          break;
         case ActivityType.EXTRA_STUDY:
         case ActivityType.STUDY:
           totals.study += record.duration;
@@ -119,7 +130,7 @@ export const getWeeklyCategoryTotals = (records: TimeRecord[]): WeeklyCategoryTo
       }
       return totals;
     },
-    { character: 0, study: 0, work: 0 },
+    { character: 0, listening: 0, study: 0, work: 0 },
   );
 };
 
@@ -150,6 +161,7 @@ export const getWeeklyTopActivity = (categoryTotals: WeeklyCategoryTotals): stri
     { name: "Reading", value: categoryTotals.study },
     { name: "Working", value: categoryTotals.work },
     { name: "Character", value: categoryTotals.character },
+    { name: "Listening", value: categoryTotals.listening },
   ];
   const maxActivity = activities.reduce((prev, current) => (prev.value > current.value ? prev : current));
   return maxActivity.value > 0 ? maxActivity.name : "無";
@@ -159,14 +171,16 @@ export const getWeeklyTopActivity = (categoryTotals: WeeklyCategoryTotals): stri
  * 計算週統計的活動類型數量
  */
 export const getWeeklyActiveTypesCount = (categoryTotals: WeeklyCategoryTotals): number => {
-  return [categoryTotals.study, categoryTotals.work, categoryTotals.character].filter((value) => value > 0).length;
+  return [categoryTotals.study, categoryTotals.work, categoryTotals.character, categoryTotals.listening].filter(
+    (value) => value > 0,
+  ).length;
 };
 
 /**
  * 計算週統計的平均時長
  */
 export const getWeeklyAverageTime = (categoryTotals: WeeklyCategoryTotals): number => {
-  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work + categoryTotals.listening;
   const activeTypes = getWeeklyActiveTypesCount(categoryTotals);
   return activeTypes > 0 ? Math.round(totalTime / activeTypes) : 0;
 };
@@ -175,7 +189,7 @@ export const getWeeklyAverageTime = (categoryTotals: WeeklyCategoryTotals): numb
  * 計算週統計的總時數
  */
 export const getWeeklyTotalHours = (categoryTotals: WeeklyCategoryTotals): number => {
-  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work;
+  const totalTime = categoryTotals.character + categoryTotals.study + categoryTotals.work + categoryTotals.listening;
   return Number((totalTime / 60).toFixed(1));
 };
 
