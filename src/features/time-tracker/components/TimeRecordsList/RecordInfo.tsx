@@ -15,7 +15,7 @@ const RecordInfo: React.FC<RecordInfoProps> = ({ displayDate, formattedRecord })
   return (
     <>
       {/* 桌面版：單行佈局 */}
-      <div className="hidden items-center justify-between sm:flex">
+      <div className="hidden items-center justify-between space-x-2 sm:flex">
         {/* 左側：活動類型 + 時間範圍 */}
         <div className="flex flex-1 items-center gap-3">
           <span className={`badge ${formattedRecord.activityColor} font-medium`}>{formattedRecord.activityType}</span>
