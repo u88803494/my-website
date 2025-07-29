@@ -58,7 +58,9 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
     const stats: Record<ActivityType, { count: number; minutes: number }> = {
       [ActivityType.CHARACTER]: { count: 0, minutes: 0 },
       [ActivityType.EXTRA_CHARACTER]: { count: 0, minutes: 0 },
+      [ActivityType.EXTRA_LISTENING]: { count: 0, minutes: 0 },
       [ActivityType.EXTRA_STUDY]: { count: 0, minutes: 0 },
+      [ActivityType.LISTENING]: { count: 0, minutes: 0 },
       [ActivityType.STUDY]: { count: 0, minutes: 0 },
       [ActivityType.WORK]: { count: 0, minutes: 0 },
     };

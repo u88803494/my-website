@@ -6,7 +6,9 @@
 export enum ActivityType {
   CHARACTER = "品格",
   EXTRA_CHARACTER = "額外品格",
+  EXTRA_LISTENING = "額外聽析",
   EXTRA_STUDY = "額外讀書",
+  LISTENING = "聽析",
   STUDY = "讀書",
   WORK = "工作",
 }
@@ -46,7 +48,9 @@ export interface TimeRecord {
 export interface TimeStatistics {
   [ActivityType.CHARACTER]: number;
   [ActivityType.EXTRA_CHARACTER]: number;
+  [ActivityType.EXTRA_LISTENING]: number;
   [ActivityType.EXTRA_STUDY]: number;
+  [ActivityType.LISTENING]: number;
   [ActivityType.STUDY]: number;
   [ActivityType.WORK]: number;
   總計: number;
