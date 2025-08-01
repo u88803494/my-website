@@ -36,21 +36,29 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
   const filteredRecords = React.useMemo(() => {
     let filtered = records;
 
-    // 按活動類型篩選
+    // 按活動類型篩選 - 獨立運作
     if (filterType) {
       filtered = filtered.filter((record) => record.activityType === filterType);
     }
 
-    // 按搜尋詞篩選
+    // 按搜尋詞篩選 - 獨立運作，只在有搜尋詞時才篩選
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter(
+      // 重新從原始記錄開始搜尋，不受類型篩選影響
+      const searchFiltered = records.filter(
         (record) =>
           record.activityType.toLowerCase().includes(term) ||
           record.description?.toLowerCase().includes(term) ||
           record.startTime.includes(term) ||
           record.endTime.includes(term),
       );
+
+      // 如果有設定類型篩選，則在搜尋結果中再套用類型篩選
+      if (filterType) {
+        filtered = searchFiltered.filter((record) => record.activityType === filterType);
+      } else {
+        filtered = searchFiltered;
+      }
     }
 
     // 限制顯示數量
@@ -133,7 +141,7 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
         </div>
       )}
 
-      {/* 顯示更多提示 */}
+      {/* 顯示更多提示 - 只在沒有篩選條件且記錄數量超過限制時顯示 */}
       {maxItems && records.length > maxItems && !hasFilters && (
         <div className="py-2 text-center">
           <p className="text-base-content/60 text-sm">
