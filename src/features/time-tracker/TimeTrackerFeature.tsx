@@ -2,14 +2,9 @@
 
 import React, { useState } from "react";
 
-import HeaderSection from "./components/HeaderSection";
-import MainTabContent from "./components/MainTabContent/MainTabContent";
-import SettingsModal from "./components/SettingsModal/SettingsModal";
-import TabNavigation from "./components/TabNavigation/TabNavigation";
-import TimeStatistics from "./components/TimeStatistics/TimeStatistics";
-import WeeklyView from "./components/WeeklyView/WeeklyView";
-import { useTimeTracker } from "./hooks";
-import { useUserSettings } from "./hooks";
+import { HeaderSection, MainTabContent, SettingsModal, TabNavigation, WeeklyView } from "./components";
+import TimeStatistics from "./components/TimeStatistics";
+import { useTimeTracker, useUserSettings } from "./hooks";
 import { Tab } from "./types";
 import { getWeekStartInTaiwan } from "./utils/time";
 
@@ -20,8 +15,7 @@ import { getWeekStartInTaiwan } from "./utils/time";
 const TimeTrackerFeature: React.FC = () => {
   const { addRecord, deleteRecord, error, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
-  const INITIAL_STATE = false;
-  const [showSettings, setShowSettings] = useState(INITIAL_STATE);
+  const [showSettings, setShowSettings] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.MAIN);
   const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     getWeekStartInTaiwan(undefined, settings.weekStartDay),

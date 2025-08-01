@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { CheckCircle, Copy, Heart, Mail } from "lucide-react";
 import React, { useState } from "react";
 
-import { ContactLinks } from "@/components";
+import ContactLinks from "@/components/shared/ContactLinks";
 import { SOCIAL_LINKS } from "@/constants/socialLinks";
 import { cn } from "@/utils/cn";
 

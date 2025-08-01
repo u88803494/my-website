@@ -2,4 +2,4 @@
  * HeaderSection 組件匯出
  */
 
-export { default } from "./HeaderSection";
+export { default, default as HeaderSection } from "./HeaderSection";
