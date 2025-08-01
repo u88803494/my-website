@@ -1,6 +1,6 @@
 import React from "react";
 
-import { UserSettings } from "../UserSettings";
+import UserSettings from "../UserSettings";
 
 export interface SettingsModalProps {
   isOpen: boolean;

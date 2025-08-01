@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-import { TechStack } from "@/components";
+import TechStack from "@/components/shared/TechStack";
 import { skillData } from "@/data/skillData";
 
 const TechStackSection = () => {

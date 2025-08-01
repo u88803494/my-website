@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-import { ContactLinks } from "@/components";
+import ContactLinks from "@/components/shared/ContactLinks";
 
 const ContactSection: React.FC = () => {
   return (
