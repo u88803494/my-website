@@ -1,4 +1,3 @@
-// import Link from 'next/link';
 import ContactLinks from "@/components/shared/ContactLinks";
 
 const Footer = () => {
