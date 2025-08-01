@@ -59,8 +59,7 @@ const TimeTrackerFeature: React.FC = () => {
     );
   }
 
-  // 決定顯示的記錄數量
-  const displayRecords = showAllRecords ? records : records.slice(0, 5);
+  // 搜尋功能需要在全部記錄中搜尋，所以不在這裡限制記錄數量
 
   return (
     <div className="bg-base-100 min-h-screen p-4">
@@ -123,7 +122,7 @@ const TimeTrackerFeature: React.FC = () => {
                     isLoading={isLoading}
                     maxItems={showAllRecords ? undefined : 5}
                     onDeleteRecord={deleteRecord}
-                    records={displayRecords}
+                    records={records}
                   />
                   {!showAllRecords && records.length > 5 && (
                     <div className="text-base-content/60 mt-4 text-center text-sm">
