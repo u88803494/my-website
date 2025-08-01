@@ -1,2 +1,2 @@
 export { default as DaySection } from "./DaySection";
-export { default } from "./WeeklyView";
+export { default, default as WeeklyView } from "./WeeklyView";

@@ -40,7 +40,10 @@ Before responding to any request, follow these steps:
 - **Hooks**: camelCase with `use` prefix (e.g., `useMediumArticles.ts`)
 - **Utilities/Helpers**: camelCase (e.g., `cn.ts`, `apiPaths.ts`)
 - **Type Definitions**: camelCase with `.types.ts` suffix (e.g., `article.types.ts`)
-- **Directory Names**: lowercase with dashes/kebab-case (e.g., `components/auth-wizard`)
+- **Directory Names**: 
+  - Feature directories: kebab-case (e.g., `features/time-tracker`, `features/ai-analyzer`)
+  - Component directories: PascalCase (e.g., `components/HeaderSection`, `components/MainTabContent`)
+  - Other directories: kebab-case (e.g., `utils/time-calculation`, `hooks/local-storage`)
 
 ### Component Architecture
 - **Component Folder Pattern**: Always create a dedicated folder for complex components
