@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
 
-import ContactLinks from "@/components/shared/ContactLinks";
+import { ContactLinks } from "@/components";
 import { cn } from "@/utils/cn";
 
 const AboutHero = () => {

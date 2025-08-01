@@ -107,3 +107,6 @@ export interface WeeklyData {
 
 // 週起始日類型定義
 export type WeekStartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = 週日 … 6 = 週六
+
+// 頁籤類型
+export * from "./tabs";

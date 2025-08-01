@@ -6,7 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { SiGithub } from "react-icons/si";
 
-import TechStack from "@/components/shared/TechStack";
+import { TechStack } from "@/components";
 import { Project } from "@/types/project.types";
 
 interface ProjectCardProps {

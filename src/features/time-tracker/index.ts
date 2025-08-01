@@ -2,9 +2,10 @@
  * 時間追蹤功能主要匯出文件
  */
 
-export { default as ActivityTypeSelect } from "./components/TimeEntryForm/ActivityTypeSelect";
-
 // 子元件
+export { default as HeaderSection } from "./components/HeaderSection";
+
+export { default as ActivityTypeSelect } from "./components/TimeEntryForm/ActivityTypeSelect";
 export { default as TimeEntryForm } from "./components/TimeEntryForm/TimeEntryForm";
 export { default as RecordItem } from "./components/TimeRecordsList/RecordItem";
 export { default as TimeRecordsList } from "./components/TimeRecordsList/TimeRecordsList";
