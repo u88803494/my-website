@@ -13,9 +13,7 @@
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
-    "sync:all-articles": "npm run sync:latest && npm run parse:articles",
-    "verify:ci": "node scripts/verify-ci-setup.js",
-    "prepare": "husky"
+    "sync:all-articles": "npm run sync:latest && npm run parse:articles"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -56,31 +54,12 @@
     "eslint-plugin-sonarjs": "^3.0.3",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.2.0",
-    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
-    "lint-staged": "^16.1.2",
     "prettier": "3.6.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
     "turbo": "^2.5.5",
     "typescript": "^5"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix --max-warnings=0"
-    ],
-    "*.{json,css,scss,md,mdx,yaml,yml}": [
-      "prettier --write"
-    ],
-    "scripts/**/*.{js,ts}": [
-      "prettier --write",
-      "eslint --fix --max-warnings=0"
-    ],
-    "*.{ts,tsx}": [
-      "bash -c 'tsc --noEmit --incremental'"
-    ],
-    "*.{html,xml,svg}": "prettier --write"
   }
 }

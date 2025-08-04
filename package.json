@@ -4,8 +4,7 @@
   "private": true,
   "packageManager": "pnpm@9.15.4",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
     "dev": "turbo run dev --ui=tui",
@@ -27,12 +26,19 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
+    "apps/my-website/src/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "eslint --fix --max-warnings=0"
+      "cd apps/my-website && eslint --fix --max-warnings=0"
+    ],
+    "apps/my-website/scripts/**/*.{js,ts}": [
+      "prettier --write",
+      "cd apps/my-website && eslint --fix --max-warnings=0"
     ],
     "**/*.{json,css,scss,md,mdx,yaml,yml}": [
       "prettier --write"
+    ],
+    "apps/my-website/**/*.{ts,tsx}": [
+      "bash -c 'cd apps/my-website && tsc --noEmit'"
     ]
   }
 }
