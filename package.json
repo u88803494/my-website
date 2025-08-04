@@ -1,89 +1,38 @@
 {
-  "name": "my-website",
+  "name": "my-website-monorepo",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@9.15.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "npm run sync:all-articles && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit",
-    "format:check": "prettier --check .",
-    "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run type-check && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
-    "turbo:dev": "turbo run dev --parallel",
-    "turbo:check": "turbo run check --parallel",
-    "turbo:build": "turbo run build --filter=my-website",
-    "sync:latest": "tsx scripts/sync-latest-articles.ts",
-    "parse:articles": "tsx scripts/batch-parse-articles.ts",
-    "sync:all-articles": "npm run sync:latest && npm run parse:articles",
-    "verify:ci": "node scripts/verify-ci-setup.js",
+    "dev": "turbo run dev --ui=tui",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
+    "check": "turbo run check",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky"
   },
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "@tanstack/react-query": "^5.81.2",
-    "@vercel/analytics": "^1.5.0",
-    "@vercel/speed-insights": "^1.2.0",
-    "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
-    "espree": "^10.4.0",
-    "framer-motion": "^12.19.1",
-    "lucide-react": "^0.518.0",
-    "next": "15.3.4",
-    "nprogress": "^0.2.0",
-    "react": "^19.0.0",
-    "react-datepicker": "^8.4.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0",
-    "react-intersection-observer": "^9.16.0",
-    "tailwind-merge": "^3.3.1"
-  },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-datepicker": "^7.0.0",
-    "@types/react-dom": "^19",
-    "axios": "^1.10.0",
-    "cheerio": "^1.1.0",
-    "daisyui": "^5.0.43",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.4",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-perfectionist": "^4.15.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-sonarjs": "^3.0.3",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "globals": "^16.2.0",
     "husky": "^9.1.7",
-    "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
     "prettier": "3.6.1",
-    "prettier-plugin-tailwindcss": "^0.6.13",
-    "tailwindcss": "^4",
-    "tsx": "^4.20.3",
     "turbo": "^2.5.5",
     "typescript": "^5"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
+    "**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint --fix --max-warnings=0"
     ],
-    "*.{json,css,scss,md,mdx,yaml,yml}": [
+    "**/*.{json,css,scss,md,mdx,yaml,yml}": [
       "prettier --write"
-    ],
-    "scripts/**/*.{js,ts}": [
-      "prettier --write",
-      "eslint --fix --max-warnings=0"
-    ],
-    "*.{ts,tsx}": [
-      "bash -c 'tsc --noEmit --incremental'"
-    ],
-    "*.{html,xml,svg}": "prettier --write"
+    ]
   }
 }

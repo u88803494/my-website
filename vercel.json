@@ -1,7 +1,0 @@
-{
-  "buildCommand": "pnpm turbo:build",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "framework": "nextjs",
-  "outputDirectory": ".next",
-  "ignoreCommand": "git diff HEAD^ HEAD --quiet ."
-}
