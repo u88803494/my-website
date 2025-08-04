@@ -2,6 +2,7 @@
   "name": "my-website",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "npm run sync:all-articles && next build",
@@ -10,9 +11,13 @@
     "type-check": "tsc --noEmit",
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run type-check && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
+    "turbo:dev": "turbo run dev --parallel",
+    "turbo:check": "turbo run check --parallel",
+    "turbo:build": "turbo run build --filter=my-website",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "npm run sync:latest && npm run parse:articles",
+    "verify:ci": "node scripts/verify-ci-setup.js",
     "prepare": "husky"
   },
   "dependencies": {
@@ -61,6 +66,7 @@
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
+    "turbo": "^2.5.5",
     "typescript": "^5"
   },
   "lint-staged": {
