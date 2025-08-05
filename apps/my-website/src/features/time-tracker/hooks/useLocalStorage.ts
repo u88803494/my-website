@@ -15,7 +15,7 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorag
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.error("Error reading from localStorage:", error);
+      console.error("從 localStorage 讀取資料時發生錯誤:", error);
       return defaultValue;
     }
   });
@@ -31,7 +31,7 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorag
         setError(null);
       }
     } catch (err) {
-      const errorMessage = "Failed to save to localStorage";
+      const errorMessage = "儲存到 localStorage 失敗";
       console.error(errorMessage, err);
       setError(errorMessage);
     }

@@ -5,7 +5,7 @@
   "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "npm run sync:all-articles && next build",
+    "build": "pnpm run sync:all-articles && next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit",
@@ -13,7 +13,7 @@
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
-    "sync:all-articles": "npm run sync:latest && npm run parse:articles"
+    "sync:all-articles": "pnpm run sync:latest && pnpm run parse:articles"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
