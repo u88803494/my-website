@@ -24,16 +24,5 @@
     "prettier": "3.6.1",
     "turbo": "^2.5.5",
     "typescript": "^5"
-  },
-  "lint-staged": {
-    "apps/my-website/src/**/*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "apps/my-website/scripts/**/*.{js,ts}": [
-      "prettier --write"
-    ],
-    "**/*.{json,css,scss,md,mdx,yaml,yml}": [
-      "prettier --write"
-    ]
   }
 }
