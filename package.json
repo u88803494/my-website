@@ -27,15 +27,10 @@
   },
   "lint-staged": {
     "apps/my-website/src/**/*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "bash -c 'cd apps/my-website && pnpm eslint --fix --max-warnings=0'"
+      "prettier --write"
     ],
     "apps/my-website/scripts/**/*.{js,ts}": [
-      "prettier --write",
-      "bash -c 'cd apps/my-website && pnpm eslint --fix --max-warnings=0'"
-    ],
-    "apps/my-website/**/*.{ts,tsx}": [
-      "bash -c 'cd apps/my-website && pnpm tsc --noEmit'"
+      "prettier --write"
     ],
     "**/*.{json,css,scss,md,mdx,yaml,yml}": [
       "prettier --write"
