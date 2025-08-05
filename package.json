@@ -26,9 +26,16 @@
     "typescript": "^5"
   },
   "lint-staged": {
-    "apps/my-website/**/*.{js,jsx,ts,tsx}": [
+    "apps/my-website/src/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "eslint --fix --max-warnings=0 --no-error-on-unmatched-pattern"
+      "bash -c 'cd apps/my-website && pnpm eslint --fix --max-warnings=0'"
+    ],
+    "apps/my-website/scripts/**/*.{js,ts}": [
+      "prettier --write",
+      "bash -c 'cd apps/my-website && pnpm eslint --fix --max-warnings=0'"
+    ],
+    "apps/my-website/**/*.{ts,tsx}": [
+      "bash -c 'cd apps/my-website && pnpm tsc --noEmit'"
     ],
     "**/*.{json,css,scss,md,mdx,yaml,yml}": [
       "prettier --write"
