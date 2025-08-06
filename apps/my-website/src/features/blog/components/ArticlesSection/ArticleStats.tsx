@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface ArticleStatsProps {
   hasNextPage: boolean;
@@ -9,12 +9,7 @@ interface ArticleStatsProps {
 
 const ArticleStats = ({ hasNextPage, totalCount }: ArticleStatsProps) => {
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      className="mb-12 text-center"
-      initial={{ opacity: 0 }}
-      transition={{ delay: 0.3 }}
-    >
+    <m.div animate={{ opacity: 1 }} className="mb-12 text-center" initial={{ opacity: 0 }} transition={{ delay: 0.3 }}>
       <div className="stats bg-base-100 shadow">
         <div className="stat">
           <div className="stat-title">已載入文章</div>
@@ -25,7 +20,7 @@ const ArticleStats = ({ hasNextPage, totalCount }: ArticleStatsProps) => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

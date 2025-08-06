@@ -1,15 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const ArticleStatsSkeleton = () => {
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      className="mb-12 text-center"
-      initial={{ opacity: 0 }}
-      transition={{ delay: 0.1 }}
-    >
+    <m.div animate={{ opacity: 1 }} className="mb-12 text-center" initial={{ opacity: 0 }} transition={{ delay: 0.1 }}>
       <div className="stats bg-base-100 shadow">
         <div className="stat">
           <div className="stat-title">
@@ -23,7 +18,7 @@ const ArticleStatsSkeleton = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

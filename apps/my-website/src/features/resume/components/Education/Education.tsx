@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Calendar, GraduationCap } from "lucide-react";
 import React from "react";
 
@@ -39,7 +39,7 @@ const Education: React.FC<EducationProps> = ({ backgroundClass, sectionId }) => 
   return (
     <section className={cn("pt-10 pb-16", backgroundClass)} id={sectionId}>
       <div className="container mx-auto max-w-4xl px-4">
-        <motion.div
+        <m.div
           className="mb-12 text-center"
           initial={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6 }}
@@ -49,11 +49,11 @@ const Education: React.FC<EducationProps> = ({ backgroundClass, sectionId }) => 
           <h2 className="text-base-content mb-4 text-4xl font-bold">學歷與進修</h2>
           <div className="bg-primary mx-auto mb-6 h-1 w-20" />
           <p className="text-base-content/80 text-lg">我的學習歷程與背景</p>
-        </motion.div>
+        </m.div>
 
         <div className="mx-auto max-w-2xl space-y-4">
           {educationData.map((edu, index) => (
-            <motion.div
+            <m.div
               className={`flex items-center justify-between rounded-lg border p-4 transition-colors duration-200 ${
                 edu.highlight
                   ? "bg-primary/5 border-primary/20 hover:bg-primary/10"
@@ -76,7 +76,7 @@ const Education: React.FC<EducationProps> = ({ backgroundClass, sectionId }) => 
                 <Calendar className="h-3 w-3" />
                 <span className="text-sm">{edu.period}</span>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

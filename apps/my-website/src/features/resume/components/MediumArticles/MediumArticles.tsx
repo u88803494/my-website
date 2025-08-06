@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import React from "react";
 
 import { SOCIAL_LINKS } from "@/constants/socialLinks";
@@ -39,14 +39,14 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
         <CarouselSection articles={articleList} {...carousel} />
 
         {/* 前往 Medium 文章頁面 */}
-        <motion.div
+        <m.div
           className="mt-12 text-center"
           initial={{ opacity: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
           viewport={{ once: true }}
           whileInView={{ opacity: 1 }}
         >
-          <motion.a
+          <m.a
             className={cn("btn btn-primary btn-lg", "shadow-lg transition-all hover:shadow-xl")}
             href={SOCIAL_LINKS.MEDIUM}
             rel="noopener noreferrer"
@@ -55,8 +55,8 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
             whileTap={{ scale: 0.95 }}
           >
             前往我的 Medium 文章頁面
-          </motion.a>
-        </motion.div>
+          </m.a>
+        </m.div>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -58,13 +58,13 @@ const ArticlesSection: React.FC = () => {
 
             {/* 文章列表 */}
             {allPosts.length > 0 && (
-              <motion.div
+              <m.div
                 animate={{ opacity: 1 }}
                 className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
                 initial={{ opacity: 0 }}
               >
                 {allPosts.map((post, index) => (
-                  <motion.div
+                  <m.div
                     animate={{ opacity: 1, y: 0 }}
                     initial={{ opacity: 0, y: 20 }}
                     key={post.id}
@@ -75,16 +75,16 @@ const ArticlesSection: React.FC = () => {
                     }}
                   >
                     <ArticleCard article={post} />
-                  </motion.div>
+                  </m.div>
                 ))}
-              </motion.div>
+              </m.div>
             )}
 
             {/* 無限滾動載入區域 */}
             {hasNextPage && (
-              <motion.div animate={{ opacity: 1 }} className="text-center" initial={{ opacity: 0 }} ref={loadMoreRef}>
+              <m.div animate={{ opacity: 1 }} className="text-center" initial={{ opacity: 0 }} ref={loadMoreRef}>
                 <LoadMoreButton isLoading={isFetchingNextPage} onLoadMore={fetchNextPage} />
-              </motion.div>
+              </m.div>
             )}
 
             {/* 完成指示器 */}

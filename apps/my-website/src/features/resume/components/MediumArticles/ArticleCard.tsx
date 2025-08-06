@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
 import React from "react";
 import { SiMedium } from "react-icons/si";
@@ -20,7 +20,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
   });
 
   return (
-    <motion.div
+    <m.div
       className={cn(
         "card bg-base-100 h-full w-full max-w-full shadow-xl",
         "border-base-200/50 hover:border-base-200 group border transition-colors duration-200",
@@ -101,7 +101,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
 
         {/* Read Button */}
         <div className="mt-auto">
-          <motion.a
+          <m.a
             className="btn btn-outline btn-sm flex w-full items-center gap-2"
             href={article.url}
             rel="noopener noreferrer"
@@ -111,10 +111,10 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
           >
             <ExternalLink className="h-4 w-4" />
             閱讀文章
-          </motion.a>
+          </m.a>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

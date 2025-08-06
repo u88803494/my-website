@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { BrainCircuit, MessageSquareQuote, Share2, Users } from "lucide-react";
 import React from "react";
 
@@ -37,7 +37,7 @@ const philosophies: Philosophy[] = [
 ];
 
 const PhilosophyCard: React.FC<{ index: number; item: Philosophy }> = ({ index, item }) => (
-  <motion.div
+  <m.div
     animate={{ opacity: 1, y: 0 }}
     className="card border-base-300 bg-base-100 h-full border shadow-sm transition-all duration-300"
     initial={{ opacity: 0, y: 30 }}
@@ -49,26 +49,26 @@ const PhilosophyCard: React.FC<{ index: number; item: Philosophy }> = ({ index, 
     }}
   >
     <div className="card-body">
-      <motion.div className="mb-4" transition={{ duration: 0.3 }} whileHover={{ rotate: 5, scale: 1.1 }}>
+      <m.div className="mb-4" transition={{ duration: 0.3 }} whileHover={{ rotate: 5, scale: 1.1 }}>
         {item.icon}
-      </motion.div>
+      </m.div>
       <h4 className="card-title mb-2">{item.title}</h4>
       <p className="text-base-content/80">{item.description}</p>
     </div>
-  </motion.div>
+  </m.div>
 );
 
 const PhilosophySection = () => {
   return (
     <section className="mb-12">
-      <motion.h3
+      <m.h3
         animate={{ opacity: 1, y: 0 }}
         className="border-primary/20 mb-6 border-b-2 pb-2 text-2xl font-bold"
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.6 }}
       >
         我的開發理念
-      </motion.h3>
+      </m.h3>
       <div className="grid gap-6 sm:grid-cols-2">
         {philosophies.map((item, index) => (
           <PhilosophyCard index={index} item={item} key={item.title} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import React from "react";
 
@@ -36,7 +36,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
   if (articles.length === 0) return null;
 
   return (
-    <motion.div
+    <m.div
       className="relative"
       initial={{ opacity: 0, y: 20 }}
       transition={{ delay: 0.4, duration: 0.6 }}
@@ -74,7 +74,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       {/* 輪播內容 */}
       <div className="relative w-full overflow-hidden">
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             animate={{ opacity: 1, x: 0 }}
             className={`grid w-full gap-6 ${itemsPerSlide === 1 ? "grid-cols-1" : "md:grid-cols-2"}`}
             exit={{ opacity: 0, x: -50 }}
@@ -86,7 +86,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             }}
           >
             {getCurrentSlideItems().map((article, idx) => (
-              <motion.div
+              <m.div
                 animate={{ opacity: 1, y: 0 }}
                 initial={{ opacity: 0, y: 20 }}
                 key={article.title + currentSlide + idx}
@@ -96,9 +96,9 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 }}
               >
                 <ArticleCard article={article} />
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
 
@@ -106,7 +106,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       {totalSlides > 1 && (
         <div className="mt-8 flex justify-center gap-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
-            <motion.button
+            <m.button
               className={`h-2 w-2 rounded-full transition-all duration-300 ${
                 index === currentSlide ? "bg-primary w-8" : "bg-base-300 hover:bg-base-content/30"
               }`}
@@ -122,7 +122,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       {/* 進度條 */}
       {isPlaying && totalSlides > 1 && (
         <div className="bg-base-300 mt-4 h-1 w-full overflow-hidden rounded-full">
-          <motion.div
+          <m.div
             animate={{ width: "100%" }}
             className="bg-primary h-full"
             initial={{ width: "0%" }}
@@ -135,7 +135,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
           />
         </div>
       )}
-    </motion.div>
+    </m.div>
   );
 };
 

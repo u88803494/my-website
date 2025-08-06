@@ -1,12 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import React from "react";
 import { SiMedium } from "react-icons/si";
 
 const SectionHeader: React.FC = () => {
   return (
-    <motion.div
+    <m.div
       className="mb-16 text-center"
       initial={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6 }}
@@ -32,7 +32,7 @@ const SectionHeader: React.FC = () => {
       <p className="text-base-content/80 mx-auto max-w-2xl px-4 text-lg">
         分享我在軟體開發路上的學習心得與技術見解，記錄成長的每一步
       </p>
-    </motion.div>
+    </m.div>
   );
 };
 

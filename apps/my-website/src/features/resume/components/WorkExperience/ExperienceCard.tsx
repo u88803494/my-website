@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ interface ExperienceCardProps {
 
 const ExperienceCard = ({ experience }: ExperienceCardProps) => {
   return (
-    <motion.div
+    <m.div
       className="card bg-base-100 shadow-xl transition-shadow duration-300 hover:shadow-2xl"
       initial={{ opacity: 0, y: 50 }}
       transition={{ duration: 0.7 }}
@@ -69,7 +69,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

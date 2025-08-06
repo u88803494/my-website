@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface CompletedStateProps {
   totalCount: number;
@@ -8,7 +8,7 @@ interface CompletedStateProps {
 
 const CompletedState = ({ totalCount }: CompletedStateProps) => {
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, y: 0 }}
       className="py-8 text-center"
       initial={{ opacity: 0, y: 20 }}
@@ -21,7 +21,7 @@ const CompletedState = ({ totalCount }: CompletedStateProps) => {
           <p className="text-base-content/70">總共 {totalCount} 篇文章</p>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 
 import { routes } from "@/constants/routes";
@@ -10,7 +10,7 @@ const QuickNavigation: React.FC = () => {
   const navigationItems = routes.filter((route) => route.href !== "/");
 
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, y: 0 }}
       className="mt-12 mb-8"
       initial={{ opacity: 0, y: 30 }}
@@ -20,13 +20,13 @@ const QuickNavigation: React.FC = () => {
       <div className="flex flex-wrap justify-center gap-3">
         {navigationItems.map((item) => (
           <Link href={item.href} key={item.href}>
-            <motion.button className="btn btn-ghost btn-sm" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <m.button className="btn btn-ghost btn-sm" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               {item.label}
-            </motion.button>
+            </m.button>
           </Link>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

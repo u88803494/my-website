@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import React from "react";
 
 const StorySection = () => {
@@ -12,17 +12,17 @@ const StorySection = () => {
 
   return (
     <section className="mb-12">
-      <motion.h3
+      <m.h3
         animate={{ opacity: 1, y: 0 }}
         className="border-primary/20 mb-6 border-b-2 pb-2 text-2xl font-bold"
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.6 }}
       >
         我的故事
-      </motion.h3>
+      </m.h3>
       <div className="text-base-content/90 space-y-4">
         {paragraphs.map((paragraph, index) => (
-          <motion.p
+          <m.p
             animate={{ opacity: 1, y: 0 }}
             initial={{ opacity: 0, y: 20 }}
             key={index}
@@ -30,7 +30,7 @@ const StorySection = () => {
             whileHover={{ x: 5 }}
           >
             {paragraph}
-          </motion.p>
+          </m.p>
         ))}
       </div>
     </section>
