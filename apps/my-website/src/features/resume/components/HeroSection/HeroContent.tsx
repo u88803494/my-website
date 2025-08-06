@@ -4,7 +4,6 @@ import { m } from "framer-motion";
 
 import ContactLinks from "@/components/shared/ContactLinks";
 import LazyM from "@/components/shared/LazyMotion";
-import ViewportMotion from "@/components/shared/ViewportMotion";
 
 import TypewriterText from "./TypewriterText";
 
@@ -38,16 +37,28 @@ const HeroContent = () => {
         >
           具備四年 Web 開發經驗，專精於使用 <b>Next.js</b> 與 <b>TypeScript</b> 打造高效能、高可維護性的應用。
         </m.p>
-        <ViewportMotion className="" delay={0.9}>
+        <m.p
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.6, duration: 0.3, ease: "easeOut" }}
+        >
           擅長主導前端架構與效能優化，曾透過創新開發方式，成功將專案成本降低 <b>50%</b>，並將關鍵頁面讀取時間由{" "}
           <b>5 秒以上</b> 縮短至 <b>1 秒內</b>。
-        </ViewportMotion>
-        <ViewportMotion className="" delay={1.1}>
+        </m.p>
+        <m.p
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.8, duration: 0.3, ease: "easeOut" }}
+        >
           團隊協作方面，負責指導兩名團隊成員導入新技術、建立標準化開發流程以提升程式碼品質，也致力於提升團隊整體生產力。
-        </ViewportMotion>
-        <ViewportMotion className="" delay={1.3}>
+        </m.p>
+        <m.p
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 1.0, duration: 0.3, ease: "easeOut" }}
+        >
           經歷一段個人成長與沈澱後，對職涯方向有了更清晰的規劃，已準備好重返職場，期待貢獻我的技術與經驗，為團隊創造實質價值。
-        </ViewportMotion>
+        </m.p>
       </div>
 
       {/* CTA Buttons */}
