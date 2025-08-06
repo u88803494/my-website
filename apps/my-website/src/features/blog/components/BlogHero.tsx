@@ -1,12 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const BlogHero = () => {
   return (
     <section className="from-primary/10 via-base-100 to-secondary/10 bg-gradient-to-br py-20">
       <div className="container mx-auto px-4">
-        <motion.div
+        <m.div
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
           initial={{ opacity: 0, y: -20 }}
@@ -16,7 +16,7 @@ const BlogHero = () => {
           <p className="text-base-content/70 mx-auto max-w-2xl text-lg leading-relaxed">
             分享我在軟體開發路上的心得與技術見解
           </p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

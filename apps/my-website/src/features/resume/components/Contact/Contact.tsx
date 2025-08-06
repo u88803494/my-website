@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { CheckCircle, Copy, Heart, Mail } from "lucide-react";
 import React, { useState } from "react";
 
@@ -30,7 +30,7 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
   return (
     <section className={cn("py-20", backgroundClass)} id={sectionId}>
       <div className="container mx-auto max-w-4xl px-4">
-        <motion.div
+        <m.div
           className="mb-12 text-center"
           initial={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.6 }}
@@ -42,10 +42,10 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
           <p className="text-base-content/80 mx-auto max-w-2xl text-lg">
             如果您對我的經歷感興趣，或者有任何工作機會，歡迎與我聊聊！我正在尋找遠端工作或全職職位。
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="grid gap-8 md:grid-cols-2">
-          <motion.div
+          <m.div
             className="bg-base-100 border-base-content/10 rounded-2xl border p-6 shadow-lg"
             initial={{ opacity: 0, x: -30 }}
             transition={{ delay: 0.1, duration: 0.7 }}
@@ -75,9 +75,9 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             className="bg-base-100 border-base-content/10 rounded-2xl border p-6 shadow-lg"
             initial={{ opacity: 0, x: 30 }}
             transition={{ delay: 0.2, duration: 0.7 }}
@@ -100,10 +100,10 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
                 <div>Email - 直接聯絡</div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
-        <motion.div
+        <m.div
           className="mt-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           transition={{ delay: 0.3, duration: 0.6 }}
@@ -119,7 +119,7 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
               <strong>回覆時間：</strong> 通常在24小時內回覆郵件
             </p>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

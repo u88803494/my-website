@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 import SkeletonCard from "./SkeletonCard";
 
@@ -24,7 +24,7 @@ const LoadMoreButton = ({ isLoading, onLoadMore }: LoadMoreButtonProps) => {
   }
 
   return (
-    <motion.button
+    <m.button
       aria-label="載入更多文章"
       className="btn btn-primary btn-lg shadow-lg transition-shadow hover:shadow-xl"
       onClick={onLoadMore}
@@ -33,7 +33,7 @@ const LoadMoreButton = ({ isLoading, onLoadMore }: LoadMoreButtonProps) => {
       whileTap={{ scale: 0.95 }}
     >
       載入更多文章
-    </motion.button>
+    </m.button>
   );
 };
 

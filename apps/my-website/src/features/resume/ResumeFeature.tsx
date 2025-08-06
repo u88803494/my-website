@@ -1,23 +1,62 @@
 "use client";
 
-import Contact from "./components/Contact";
-import Education from "./components/Education";
-import FeaturedProjects from "./components/FeaturedProjects";
+import dynamic from "next/dynamic";
+
+import LazySection from "@/components/LazySection";
+
 import HeroSection from "./components/HeroSection";
-import MediumArticles from "./components/MediumArticles";
-import Skills from "./components/Skills";
 import WorkExperience from "./components/WorkExperience";
+
+// 延遲載入非首屏組件
+const FeaturedProjects = dynamic(() => import("./components/FeaturedProjects"), {
+  ssr: false,
+});
+
+const MediumArticles = dynamic(() => import("./components/MediumArticles"), {
+  ssr: false,
+});
+
+const Skills = dynamic(() => import("./components/Skills"), {
+  ssr: false,
+});
+
+const Education = dynamic(() => import("./components/Education"), {
+  ssr: false,
+});
+
+const Contact = dynamic(() => import("./components/Contact"), {
+  ssr: false,
+});
 
 const ResumeFeature: React.FC = () => {
   return (
     <main>
       <HeroSection backgroundClass="bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10" sectionId="hero" />
       <WorkExperience backgroundClass="bg-base-200" sectionId="work-experience" />
-      <FeaturedProjects backgroundClass="bg-base-100" sectionId="featured-projects" />
-      <MediumArticles backgroundClass="bg-base-200" sectionId="medium-articles" />
-      <Skills backgroundClass="bg-base-100" sectionId="skills" />
-      <Education backgroundClass="bg-base-200/30" sectionId="education" />
-      <Contact backgroundClass="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5" sectionId="contact" />
+
+      <LazySection fallback={<div className="bg-base-100 min-h-96 animate-pulse" />}>
+        <FeaturedProjects backgroundClass="bg-base-100" sectionId="featured-projects" />
+      </LazySection>
+
+      <LazySection fallback={<div className="bg-base-200 min-h-96 animate-pulse" />}>
+        <MediumArticles backgroundClass="bg-base-200" sectionId="medium-articles" />
+      </LazySection>
+
+      <LazySection fallback={<div className="bg-base-100 min-h-80 animate-pulse" />}>
+        <Skills backgroundClass="bg-base-100" sectionId="skills" />
+      </LazySection>
+
+      <LazySection fallback={<div className="bg-base-200/30 min-h-64 animate-pulse" />}>
+        <Education backgroundClass="bg-base-200/30" sectionId="education" />
+      </LazySection>
+
+      <LazySection
+        fallback={
+          <div className="from-primary/5 via-base-100 to-secondary/5 min-h-80 animate-pulse bg-gradient-to-br" />
+        }
+      >
+        <Contact backgroundClass="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5" sectionId="contact" />
+      </LazySection>
     </main>
   );
 };

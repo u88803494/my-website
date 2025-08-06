@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { SiMedium } from "react-icons/si";
@@ -37,7 +37,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
   ]);
 
   return (
-    <motion.article
+    <m.article
       animate={{ opacity: 1, y: 0 }}
       aria-label={articleSummary}
       className={cn(
@@ -102,7 +102,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
 
         {/* Read Button */}
         <div className="mt-auto">
-          <motion.a
+          <m.a
             aria-label={`在 Medium 上閱讀文章：${article.title}`}
             className="btn btn-outline btn-sm hover:btn-primary focus:btn-primary flex w-full items-center gap-2"
             href={article.mediumUrl}
@@ -114,10 +114,10 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
           >
             <ExternalLink aria-hidden="true" className="h-4 w-4" />
             閱讀文章
-          </motion.a>
+          </m.a>
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 };
 

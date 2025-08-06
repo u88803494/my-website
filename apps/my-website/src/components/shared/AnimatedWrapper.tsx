@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useAnimation, useInView } from "framer-motion";
+import { m, useAnimation, useInView } from "framer-motion";
 import React, { useEffect, useRef } from "react";
 
 interface AnimatedWrapperProps {
@@ -21,7 +21,7 @@ const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({ children, className, 
   }, [isInView, controls]);
 
   return (
-    <motion.div
+    <m.div
       animate={controls}
       className={className}
       initial="hidden"
@@ -33,7 +33,7 @@ const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({ children, className, 
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 };
 

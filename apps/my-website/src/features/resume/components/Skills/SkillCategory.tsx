@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Eye, Star, Zap } from "lucide-react";
 import React from "react";
 
@@ -43,7 +43,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
   const config = getLevelConfig();
 
   return (
-    <motion.div
+    <m.div
       className={cn(
         "card bg-base-100 h-full shadow-xl hover:shadow-2xl",
         "border-base-200/70 border transition-shadow duration-300",
@@ -65,7 +65,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
 
         <div className="space-y-2">
           {skills.map((skill, skillIndex) => (
-            <motion.div
+            <m.div
               className={cn(
                 "badge badge-outline w-full justify-start p-3",
                 "h-auto min-h-[2rem] gap-2",
@@ -79,11 +79,11 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
             >
               <span className="flex-shrink-0">{skill.icon}</span>
               <span className="text-sm">{skill.name}</span>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 
