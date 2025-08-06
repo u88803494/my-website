@@ -1,5 +1,7 @@
 "use client";
 
+import { m } from "framer-motion";
+
 import ContactLinks from "@/components/shared/ContactLinks";
 import LazyM from "@/components/shared/LazyMotion";
 import ViewportMotion from "@/components/shared/ViewportMotion";
@@ -9,24 +11,24 @@ import TypewriterText from "./TypewriterText";
 const HeroContent = () => {
   return (
     <div className="card-body flex max-w-2xl flex-col gap-6 p-0 text-center lg:text-left">
-      <LazyM.H1
+      <m.h1
         animate={{ opacity: 1, y: 0 }}
         className="card-title mb-2 text-4xl font-bold lg:text-6xl"
         initial={{ opacity: 0, y: 30 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
       >
         <span>{"Hi, I'm "}</span>
-        <TypewriterText delay={0.8} text="Henry Lee" />
-      </LazyM.H1>
+        <TypewriterText delay={0.6} text="Henry Lee" />
+      </m.h1>
 
-      <LazyM.H2
+      <m.h2
         animate={{ opacity: 1, y: 0 }}
         className="text-secondary mb-2 text-xl font-semibold lg:text-2xl"
         initial={{ opacity: 0, y: 30 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
+        transition={{ delay: 0.2, duration: 0.4 }}
       >
         前端工程師
-      </LazyM.H2>
+      </m.h2>
 
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
         <ViewportMotion className="" delay={0.7}>
