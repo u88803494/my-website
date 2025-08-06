@@ -93,6 +93,7 @@ const RootLayout = ({
   return (
     <html data-theme="corporate" lang="zh-Hant">
       <head>
+        <link crossOrigin="" href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossOrigin="" href="https://fonts.gstatic.com" rel="preconnect" />
       </head>
       <body

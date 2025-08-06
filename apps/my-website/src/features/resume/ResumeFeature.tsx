@@ -5,9 +5,12 @@ import dynamic from "next/dynamic";
 import LazySection from "@/components/LazySection";
 
 import HeroSection from "./components/HeroSection";
-import WorkExperience from "./components/WorkExperience";
 
 // 延遲載入非首屏組件
+const WorkExperience = dynamic(() => import("./components/WorkExperience"), {
+  ssr: false,
+});
+
 const FeaturedProjects = dynamic(() => import("./components/FeaturedProjects"), {
   ssr: false,
 });
@@ -32,7 +35,10 @@ const ResumeFeature: React.FC = () => {
   return (
     <main>
       <HeroSection backgroundClass="bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10" sectionId="hero" />
-      <WorkExperience backgroundClass="bg-base-200" sectionId="work-experience" />
+
+      <LazySection fallback={<div className="bg-base-200 min-h-96 animate-pulse" />}>
+        <WorkExperience backgroundClass="bg-base-200" sectionId="work-experience" />
+      </LazySection>
 
       <LazySection fallback={<div className="bg-base-100 min-h-96 animate-pulse" />}>
         <FeaturedProjects backgroundClass="bg-base-100" sectionId="featured-projects" />

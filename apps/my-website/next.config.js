@@ -7,12 +7,25 @@ const withBundleAnalyzerInstance = withBundleAnalyzer({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
   experimental: {
-    optimizePackageImports: ["framer-motion"],
+    optimizePackageImports: ["framer-motion", "react-icons", "lucide-react"],
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
   images: {
     deviceSizes: [320, 640, 750, 828, 1080],
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [

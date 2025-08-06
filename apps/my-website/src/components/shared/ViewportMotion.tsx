@@ -18,7 +18,7 @@ const MotionP = dynamic(
       return DynamicMotionP;
     }),
   {
-    loading: () => <p className="opacity-0">載入中...</p>,
+    loading: () => <p className="opacity-50 transition-opacity duration-200" />,
     ssr: false,
   },
 );
@@ -52,15 +52,14 @@ const ViewportMotion: React.FC<ViewportMotionProps> = ({
     );
   }
 
-  // 進入視窗後才載入並渲染 m.p
+  // 進入視窗後才載入並渲柔 m.p，使用更輕量的動畫
   return (
     <MotionP
       animate={{ opacity: 1, y: 0 }}
       className={className}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       ref={ref}
-      transition={{ delay, duration: 0.6 }}
-      whileHover={{ x: 5 }}
+      transition={{ delay, duration: 0.4, ease: "easeOut" }}
       {...props}
     >
       {children}
