@@ -31,9 +31,13 @@ const HeroContent = () => {
       </m.h2>
 
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
-        <ViewportMotion className="" delay={0.7}>
+        <m.p
+          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.4, duration: 0.3, ease: "easeOut" }}
+        >
           具備四年 Web 開發經驗，專精於使用 <b>Next.js</b> 與 <b>TypeScript</b> 打造高效能、高可維護性的應用。
-        </ViewportMotion>
+        </m.p>
         <ViewportMotion className="" delay={0.9}>
           擅長主導前端架構與效能優化，曾透過創新開發方式，成功將專案成本降低 <b>50%</b>，並將關鍵頁面讀取時間由{" "}
           <b>5 秒以上</b> 縮短至 <b>1 秒內</b>。

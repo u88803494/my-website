@@ -95,6 +95,7 @@ const RootLayout = ({
       <head>
         <link crossOrigin="" href="https://fonts.googleapis.com" rel="preconnect" />
         <link crossOrigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+        <link as="image" href="/images/my-photo.jpeg" rel="preload" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
