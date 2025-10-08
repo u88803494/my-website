@@ -1,1 +1,2 @@
-export { default } from "./UserSettings";
+import UserSettings from "./UserSettings";
+export default UserSettings;

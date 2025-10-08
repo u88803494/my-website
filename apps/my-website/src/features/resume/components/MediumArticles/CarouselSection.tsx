@@ -1,10 +1,9 @@
 "use client";
 
+import { type Article } from "@packages/shared/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import React from "react";
-
-import { Article } from "@/types/article.types";
 
 import ArticleCard from "./ArticleCard";
 

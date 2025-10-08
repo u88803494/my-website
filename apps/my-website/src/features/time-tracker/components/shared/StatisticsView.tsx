@@ -1,9 +1,8 @@
 "use client";
 
+import type { ActivityType, TimeRecord, TimeStatistics } from "@packages/shared/types";
 import { BarChart3 } from "lucide-react";
 import React from "react";
-
-import type { ActivityType, TimeRecord, TimeStatistics as TimeStatisticsType } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "../TimeStatistics/StatisticsCard";
@@ -19,7 +18,7 @@ interface StatisticsViewProps {
   /** 是否顯示百分比 */
   showPercentages?: boolean;
   /** 統計資料 */
-  statistics: TimeStatisticsType;
+  statistics: TimeStatistics;
   /** 摘要配置 */
   summaryConfig?: {
     /** 自訂摘要項目 */
@@ -79,16 +78,14 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
 
     // 找到最早的記錄（按 createdAt 排序）
     const earliestRecord = records.reduce((earliest, current) => {
+      if (!current.createdAt || !earliest.createdAt) return earliest;
       return current.createdAt < earliest.createdAt ? current : earliest;
     });
 
-    return earliestRecord.createdAt
-      .toLocaleDateString("zh-TW", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .replace(/\//g, "-");
+    if (!earliestRecord.createdAt) return null;
+
+    // 如果是字符串格式的日期，直接返回
+    return earliestRecord.createdAt;
   };
 
   const trackingStartDate = getTrackingStartDate();

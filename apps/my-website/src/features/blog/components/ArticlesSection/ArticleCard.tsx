@@ -1,11 +1,10 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { useMemo } from "react";
 import { SiMedium } from "react-icons/si";
-
-import { cn } from "@/utils/cn";
 
 import type { MediumPost } from "../../types";
 

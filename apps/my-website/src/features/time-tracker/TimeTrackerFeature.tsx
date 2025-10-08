@@ -50,7 +50,7 @@ const TimeTrackerFeature: React.FC = () => {
 
         {activeTab === Tab.MAIN && (
           <MainTabContent
-            isLoading={isLoading}
+            isLoading={isLoading || false}
             onAddRecord={addRecord}
             onDeleteRecord={deleteRecord}
             records={records}

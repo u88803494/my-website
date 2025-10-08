@@ -1,4 +1,4 @@
-import type { NavRoute } from "@/types/route.types";
+import { type NavRoute } from "@packages/shared/types";
 
 // 路由設定
 export const routes: NavRoute[] = [

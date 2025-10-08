@@ -1,6 +1,6 @@
+import type { WordAnalysisResponse } from "@packages/shared/types";
+import type { APIErrorResponse } from "@packages/shared/types/dictionary.types";
 import { useState } from "react";
-
-import type { APIErrorResponse, WordAnalysisResponse } from "@/types/dictionary.types";
 
 import type { APICallResult } from "../types";
 

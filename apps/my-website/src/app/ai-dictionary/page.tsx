@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { AIDictionaryFeature } from "@/features/ai-dictionary";
+import AIDictionaryFeature from "@/features/ai-dictionary";
 
 export const metadata: Metadata = {
   description: "運用人工智慧技術，讓中文詞彙含義與字源更容易理解",

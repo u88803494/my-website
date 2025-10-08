@@ -1,8 +1,7 @@
 "use client";
 
+import { type Article } from "@packages/shared/types";
 import { motion } from "framer-motion";
-
-import { Article } from "@/types/article.types";
 
 import ArticleCard from "./ArticleCard";
 

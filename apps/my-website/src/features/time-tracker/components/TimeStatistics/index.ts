@@ -1,2 +1,3 @@
 export { default as StatisticsCard } from "./StatisticsCard";
-export { default } from "./TimeStatistics";
+import TimeStatistics from "./TimeStatistics";
+export default TimeStatistics;

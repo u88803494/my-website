@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { NextRequest, NextResponse } from "next/server";
-
-import { GEMINI_2_5_FLASH_LITE } from "@/constants/aiModels";
+import { GEMINI_2_5_FLASH_LITE } from "@packages/shared/constants";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {

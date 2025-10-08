@@ -1,4 +1,5 @@
-import type { APIErrorResponse, WordAnalysisResponse } from "@/types/dictionary.types";
+import type { WordAnalysisResponse } from "@packages/shared/types";
+import type { APIErrorResponse } from "@packages/shared/types/dictionary.types";
 
 export interface APICallResult {
   autoRemoveTimeoutId?: NodeJS.Timeout;

@@ -1,5 +1,5 @@
-import type { TimeStatistics } from "@/features/time-tracker/types";
-import { ActivityType } from "@/features/time-tracker/types";
+import type { TimeStatistics } from "@packages/shared/types";
+import { ActivityType } from "@packages/shared/types";
 
 /**
  * 將分鐘轉換為小時和分鐘的顯示格式
@@ -69,7 +69,7 @@ export const formatTimeRecord = (record: {
   return {
     activityColor: getActivityTypeColor(record.activityType),
     activityType: record.activityType, // 直接使用 activityType 值
-    decimalDuration: formatMinutesToDecimalHours(record.duration),
+    decimalDuration: formatMinutesToDecimalHours(record.duration as number),
     description: record.description || "",
     duration: formatMinutesToHours(record.duration),
     // 24 小時制顯示時間區間
@@ -88,7 +88,7 @@ export const calculatePercentages = (statistics: TimeStatistics) => {
 
   Object.entries(statistics).forEach(([key, value]) => {
     if (key !== "總計") {
-      percentages[key] = Math.round((value / total) * 100);
+      percentages[key] = Math.round(((value as number) / total) * 100);
     }
   });
 

@@ -1,9 +1,8 @@
 "use client";
 
+import type { UserSettings, WeekStartDay } from "@packages/shared/types";
 import { Settings } from "lucide-react";
 import React, { useCallback } from "react";
-
-import type { WeekStartDay } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 
@@ -11,13 +10,8 @@ import { useUserSettings } from "../../hooks";
  * 週起始日選項常數
  */
 const WEEK_START_OPTIONS = [
-  { label: "週日", value: 0 as WeekStartDay },
-  { label: "週一", value: 1 as WeekStartDay },
-  { label: "週二", value: 2 as WeekStartDay },
-  { label: "週三", value: 3 as WeekStartDay },
-  { label: "週四", value: 4 as WeekStartDay },
-  { label: "週五", value: 5 as WeekStartDay },
-  { label: "週六", value: 6 as WeekStartDay },
+  { label: "週日", value: "sunday" as WeekStartDay },
+  { label: "週一", value: "monday" as WeekStartDay },
 ] as const;
 
 /**
@@ -25,17 +19,17 @@ const WEEK_START_OPTIONS = [
  * 提供週起始日等個人化設定選項
  */
 const UserSettings: React.FC = () => {
-  const { isLoading, settings, updateSettings } = useUserSettings();
+  const { loading, settings, updateSettings } = useUserSettings();
 
   const handleWeekStartDayChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const newWeekStartDay = parseInt(event.target.value, 10) as WeekStartDay;
+      const newWeekStartDay = event.target.value as WeekStartDay;
       updateSettings({ weekStartDay: newWeekStartDay });
     },
     [updateSettings],
   );
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center p-4">
         <span className="loading loading-spinner loading-sm" />
@@ -64,7 +58,7 @@ const UserSettings: React.FC = () => {
             className="select select-bordered w-full max-w-xs"
             id="week-start-day-select"
             onChange={handleWeekStartDayChange}
-            value={settings.weekStartDay}
+            value={settings.weekStartDay || "monday"}
           >
             {WEEK_START_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>

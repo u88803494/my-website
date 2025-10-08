@@ -1,7 +1,6 @@
+import type { EtymologyBlock } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils/cn";
 import { PenLine } from "lucide-react";
-
-import type { EtymologyBlock } from "@/types/dictionary.types";
-import { cn } from "@/utils/cn";
 
 import CharacterCard from "./CharacterList"; // 直接用原 CharacterList 單卡片
 import ForeignEtymology from "./ForeignEtymology";

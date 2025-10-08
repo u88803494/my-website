@@ -1,10 +1,9 @@
 "use client";
 
+import { MAX_WORD_LENGTH } from "@packages/shared/constants";
+import { cn } from "@packages/shared/utils/cn";
 import { Search } from "lucide-react";
 import { useState } from "react";
-
-import { MAX_WORD_LENGTH } from "@/constants/dictionaryConstants";
-import { cn } from "@/utils/cn";
 
 interface WordSearchFormProps {
   isLoading: boolean;

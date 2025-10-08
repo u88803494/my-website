@@ -1,14 +1,13 @@
 "use client";
 
+import type { TimeRecord, TimeStatistics } from "@packages/shared/types";
 import React from "react";
-
-import type { TimeRecord, TimeStatistics as TimeStatisticsType } from "@/features/time-tracker/types";
 
 import StatisticsView from "../shared/StatisticsView";
 
 interface TimeStatisticsProps {
   records: TimeRecord[];
-  statistics: TimeStatisticsType;
+  statistics: TimeStatistics;
 }
 
 /**

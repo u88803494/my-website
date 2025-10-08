@@ -1,4 +1,4 @@
-import { cn } from "@/utils/cn";
+import { cn } from "@packages/shared/utils/cn";
 
 interface ForeignEtymologyProps {
   className?: string;
