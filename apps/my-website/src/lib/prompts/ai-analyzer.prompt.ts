@@ -19,6 +19,7 @@ export const buildPromptAnalysisPrompt = (userIdea: string): string => {
 - 最多只能顯示 10 個項目。
 
 ---
+
 **範例：**
 
 **如果使用者輸入：**
@@ -58,6 +59,7 @@ export const ANALYZE_NEED_PROMPT = `
 - 最多只能顯示 10 個項目。
 
 ---
+
 **範例：**
 
 **如果使用者輸入：**
@@ -76,8 +78,7 @@ export const ANALYZE_NEED_PROMPT = `
 現在，請根據以上規則與範例，為以下使用者的初步想法，生成對應的填空題模板。
 `;
 
-export const ENHANCE_PROMPT = `
-你是一個專業的提示詞優化師。請根據用戶的需求，優化並完善提示詞模板。
+export const ENHANCE_PROMPT = `你是一個專業的提示詞優化師。請根據用戶的需求，優化並完善提示詞模板。
 
 請確保：
 - 提示詞結構清晰、邏輯完整

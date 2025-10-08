@@ -1,5 +1,5 @@
-import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
-import { ActivityType } from "@/features/time-tracker/types";
+import type { TimeRecord, TimeStatistics } from "@packages/shared/types";
+import { ActivityType } from "@packages/shared/types";
 
 /**
  * 初始化空的統計資料
@@ -68,8 +68,8 @@ export const getMostActiveType = (statistics: TimeStatistics): ActivityType | nu
   let mostActiveType: ActivityType | null = null;
 
   Object.entries(statistics).forEach(([key, value]) => {
-    if (key !== "總計" && value > maxDuration) {
-      maxDuration = value;
+    if (key !== "總計" && (value as number) > maxDuration) {
+      maxDuration = value as number;
       mostActiveType = key as ActivityType;
     }
   });
@@ -88,8 +88,11 @@ export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, 
       dailyStats[record.date] = createEmptyStatistics();
     }
 
-    dailyStats[record.date][record.activityType] += record.duration;
-    dailyStats[record.date].總計 += record.duration;
+    const stats = dailyStats[record.date];
+    if (stats) {
+      stats[record.activityType] += record.duration;
+      stats.總計 += record.duration;
+    }
   });
 
   return dailyStats;

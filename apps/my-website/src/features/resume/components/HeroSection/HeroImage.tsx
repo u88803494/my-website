@@ -1,9 +1,8 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import Image from "next/image";
-
-import { cn } from "@/utils/cn";
 
 const HeroImage = () => {
   return (

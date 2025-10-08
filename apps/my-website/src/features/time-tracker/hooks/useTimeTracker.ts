@@ -1,6 +1,11 @@
+import type {
+  TimeRecord,
+  TimeStatistics,
+  UserSettings,
+  UseTimeTrackerReturn,
+  WeeklyStats,
+} from "@packages/shared/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
-
-import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/features/time-tracker/types";
 
 import { calculateStatistics } from "../utils/statisticsCalculation";
 import { calculateDuration, getCurrentTaiwanDate, getWeekStartInTaiwan, isSameWeekInTaiwan } from "../utils/time";
@@ -26,10 +31,9 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
   // 同步 localStorage 的資料到本地狀態
   useEffect(() => {
     if (!loading && storedRecords) {
-      // 轉換 createdAt 為 Date 物件
       const processedRecords = storedRecords.map((record) => ({
         ...record,
-        createdAt: new Date(record.createdAt),
+        createdAt: new Date(record.createdAt ?? Date.now()).toISOString(),
       }));
       setRecords(processedRecords);
     }
@@ -38,6 +42,14 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
   // 計算統計資料
   const statistics = useMemo((): TimeStatistics => {
     return calculateStatistics(records);
+  }, [records]);
+
+  const sortedRecords = useMemo(() => {
+    return [...records].sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return dateB - dateA;
+    });
   }, [records]);
 
   // 新增記錄
@@ -51,7 +63,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
 
       const newRecord: TimeRecord = {
         ...recordData,
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(), // 添加創建時間戳
         date: recordData.date || getCurrentTaiwanDate(),
         duration: durationResult.duration,
         id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
@@ -101,11 +113,20 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     addRecord,
     clearWeek,
     deleteRecord,
-    error,
+    error: error || undefined,
     getWeeklyRecords,
     isLoading: loading,
-    records: records.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()), // 按建立時間倒序
+    records: sortedRecords, // 按建立時間倒序
     statistics,
+    removeRecord: deleteRecord,
+    updateRecord: (_id: string, _updates: Partial<TimeRecord>) => {
+      throw new Error("Not implemented");
+    },
+    updateSettings: (_settings: Partial<UserSettings>) => {
+      throw new Error("Not implemented");
+    },
+    weeklyStatistics: {} as WeeklyStats, // Placeholder
+    settings: settings,
   };
 };
 

@@ -1,12 +1,7 @@
-// Providers
-export { default as QueryProvider } from "@/components/providers/QueryProvider";
-// Shared Components Barrel Export
-export { default as AnimatedWrapper } from "@/components/shared/AnimatedWrapper";
-export { default as ContactLinks } from "@/components/shared/ContactLinks";
-export { default as Footer } from "@/components/shared/Footer";
-// Navbar Components
-export { DesktopNavbar, MobileNavbar, Navbar, type NavRoute, routes } from "@/components/shared/Navbar";
-
-export { default as NProgressBar } from "@/components/shared/NProgressBar";
-
-export { default as TechStack } from "@/components/shared/TechStack";
+export { default as QueryProvider } from "./providers/QueryProvider";
+export { default as AnimatedWrapper } from "@packages/shared/components/AnimatedWrapper";
+export { default as ContactLinks } from "@packages/shared/components/ContactLinks";
+export { default as Footer } from "@packages/shared/components/Footer";
+export { default as Navbar } from "@packages/shared/components/Navbar";
+export { default as NProgressBar } from "@packages/shared/components/NProgressBar";
+export { default as TechStack } from "@packages/shared/components/TechStack";

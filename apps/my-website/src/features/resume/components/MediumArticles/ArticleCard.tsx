@@ -1,12 +1,11 @@
 "use client";
 
+import { type Article } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
 import React from "react";
 import { SiMedium } from "react-icons/si";
-
-import { Article } from "@/types/article.types";
-import { cn } from "@/utils/cn";
 
 interface ArticleCardProps {
   article: Article;
@@ -57,8 +56,8 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         <p className="mb-4 line-clamp-3 flex-grow text-sm text-gray-700">{article.description}</p>
 
         {/* Tags */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          {article.tags.slice(0, 3).map((tag, idx) => (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {article.tags.map((tag: string, idx: number) => (
             <span className="badge badge-outline badge-sm text-xs" key={idx}>
               {tag}
             </span>

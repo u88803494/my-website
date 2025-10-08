@@ -1,7 +1,10 @@
+import { CONTACT_LINKS } from "@packages/shared/constants/socialLinks";
 import { FileText, Mail } from "lucide-react";
+import React from "react";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
 
-import { CONTACT_LINKS } from "@/constants/socialLinks";
+// Define the type locally from the constant
+type ContactLink = (typeof CONTACT_LINKS)[number];
 
 const iconMap = {
   email: <Mail className="h-6 w-6" />,
@@ -11,7 +14,7 @@ const iconMap = {
   resume: <FileText className="h-6 w-6" />,
 } as const;
 
-const contacts = CONTACT_LINKS.map((link) => ({
+const contacts = CONTACT_LINKS.map((link: ContactLink) => ({
   ...link,
   icon: iconMap[link.key as keyof typeof iconMap],
 }));

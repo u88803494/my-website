@@ -1,8 +1,7 @@
+import { ACTIVITY_TYPE_OPTIONS } from "@packages/shared/constants";
+import type { ActivityType } from "@packages/shared/types";
 import { Filter, Search } from "lucide-react";
 import React from "react";
-
-import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
-import type { ActivityType } from "@/features/time-tracker/types";
 
 interface SearchFiltersProps {
   filterType: "" | ActivityType;
