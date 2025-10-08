@@ -4,17 +4,18 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["GEMINI_API_KEY", "NODE_ENV"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
-    },
+    "check-types": {},
     "dev": {
       "persistent": true,
-      "cache": false
+      "cache": false,
+      "env": ["GEMINI_API_KEY", "NODE_ENV"]
     },
     "lint": {
-      "outputs": []
+      "outputs": [],
+      "env": ["NODE_ENV"]
     },
     "check": {
       "dependsOn": ["lint", "check-types"],
