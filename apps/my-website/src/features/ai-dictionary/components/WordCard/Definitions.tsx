@@ -1,6 +1,5 @@
+import type { WordAnalysisResponse, WordDefinition } from "@packages/shared/types";
 import { BookOpen } from "lucide-react";
-
-import type { WordAnalysisResponse } from "@/types/dictionary.types";
 
 interface DefinitionsProps {
   definitions: WordAnalysisResponse["definitions"];
@@ -15,7 +14,7 @@ const Definitions: React.FC<DefinitionsProps> = ({ definitions }) => (
       常見意思
     </h4>
     <div className="space-y-3">
-      {definitions.map((def, defIndex) => (
+      {definitions.map((def: WordDefinition, defIndex: number) => (
         <div className="rounded-lg border border-slate-200 p-3 sm:p-4" key={defIndex}>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="rounded bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">{def.partOfSpeech}</span>

@@ -1,7 +1,6 @@
+import { ACTIVITY_TYPE_OPTIONS } from "@packages/shared/constants";
+import type { ActivityType } from "@packages/shared/types";
 import React from "react";
-
-import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
-import type { ActivityType } from "@/features/time-tracker/types";
 
 interface ActivityTypeSelectProps {
   disabled?: boolean;

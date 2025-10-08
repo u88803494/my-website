@@ -1,5 +1,5 @@
-import type { EtymologyBlock } from "@/types/dictionary.types";
-import { cn } from "@/utils/cn";
+import type { EtymologyBlock } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils/cn";
 
 interface CharacterListProps {
   characters?: EtymologyBlock[];

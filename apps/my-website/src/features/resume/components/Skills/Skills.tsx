@@ -1,10 +1,9 @@
 "use client";
 
+import { skillData } from "@packages/shared/data";
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import React from "react";
-
-import { skillData } from "@/data/skillData";
-import { cn } from "@/utils/cn";
 
 import SkillCategory from "./SkillCategory";
 
@@ -32,10 +31,9 @@ const Skills: React.FC<SkillsProps> = ({ backgroundClass, sectionId }) => {
         <div className="not-prose grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {skillData.map((category, index) => (
             <SkillCategory
-              description={category.description}
+              description={category.description || ""}
               index={index}
               key={index}
-              level={category.level}
               skills={category.skills}
               title={category.title}
             />

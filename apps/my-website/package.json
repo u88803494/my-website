@@ -17,6 +17,9 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@packages/about": "workspace:*",
+    "@packages/not-found": "workspace:*",
+    "@packages/shared": "workspace:*",
     "@tanstack/react-query": "^5.81.2",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -37,6 +40,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@packages/eslint-config": "workspace:*",
+    "@packages/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
@@ -60,6 +65,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
     "turbo": "^2.5.5",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.0.0"
   }
 }

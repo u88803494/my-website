@@ -1,11 +1,9 @@
 "use client";
 
+import { ActivityType, type TimeRecord } from "@packages/shared/types";
 import { Calendar, Clock } from "lucide-react";
 import dynamic from "next/dynamic";
 import React, { useMemo } from "react";
-
-import type { TimeRecord } from "@/features/time-tracker/types";
-import { ActivityType } from "@/features/time-tracker/types";
 
 import { formatMinutesToHours, getActivityTypeColor } from "../../utils/formatting";
 

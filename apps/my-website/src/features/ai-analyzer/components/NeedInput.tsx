@@ -1,9 +1,8 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import { Loader2, Send } from "lucide-react";
 import { useState } from "react";
-
-import { cn } from "@/utils/cn";
 
 import type { NeedInputProps } from "../types";
 

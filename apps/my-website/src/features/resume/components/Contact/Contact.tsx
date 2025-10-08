@@ -1,12 +1,11 @@
 "use client";
 
+import { ContactLinks } from "@packages/shared/components";
+import { SOCIAL_LINKS } from "@packages/shared/constants/socialLinks";
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import { CheckCircle, Copy, Heart, Mail } from "lucide-react";
 import React, { useState } from "react";
-
-import ContactLinks from "@/components/shared/ContactLinks";
-import { SOCIAL_LINKS } from "@/constants/socialLinks";
-import { cn } from "@/utils/cn";
 
 interface ContactProps {
   backgroundClass: string;

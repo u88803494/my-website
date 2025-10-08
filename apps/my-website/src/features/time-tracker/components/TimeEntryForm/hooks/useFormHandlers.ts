@@ -1,6 +1,5 @@
-import type { ActivityType, TimeEntryFormData } from "@/features/time-tracker/types";
+import { type ActivityType, type TimeEntryFormData, type ValidationError } from "@packages/shared/types";
 
-import type { ValidationError } from "../../../types";
 import { calculateDuration, getCurrentTaiwanDate } from "../../../utils/time";
 
 export const useFormHandlers = (

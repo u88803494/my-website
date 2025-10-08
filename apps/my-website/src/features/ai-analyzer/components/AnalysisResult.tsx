@@ -1,9 +1,8 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
-
-import { cn } from "@/utils/cn";
 
 import type { AnalysisResultProps } from "../types";
 

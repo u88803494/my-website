@@ -1,7 +1,7 @@
+import { type ActivityType, type TimeRecord } from "@packages/shared/types";
 import React, { useState } from "react";
 
-import type { ActivityType, TimeEntryFormData, TimeRecord } from "@/features/time-tracker/types";
-
+import type { TimeEntryFormData } from "../../../types";
 import type { ValidationError } from "../../../types";
 import { calculateDuration, getCurrentTaiwanDate } from "../../../utils/time";
 import { validateTimeEntry } from "../../../utils/validation";

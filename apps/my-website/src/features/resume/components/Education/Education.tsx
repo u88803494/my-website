@@ -1,10 +1,9 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import { Calendar, GraduationCap } from "lucide-react";
 import React from "react";
-
-import { cn } from "@/utils/cn";
 
 const educationData = [
   {

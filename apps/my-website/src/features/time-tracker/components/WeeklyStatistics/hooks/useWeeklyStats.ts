@@ -1,9 +1,8 @@
 "use client";
 
+import type { TimeRecord } from "@packages/shared/types";
 import { endOfWeek, startOfWeek } from "date-fns";
 import { useMemo } from "react";
-
-import type { TimeRecord } from "@/features/time-tracker/types";
 
 import {
   calculatePercentage,

@@ -1,12 +1,11 @@
 "use client";
 
+import { SOCIAL_LINKS } from "@packages/shared/constants/socialLinks";
+import { articles } from "@packages/shared/data";
+import { latestArticles } from "@packages/shared/data";
+import { cn } from "@packages/shared/utils/cn";
 import { motion } from "framer-motion";
 import React from "react";
-
-import { SOCIAL_LINKS } from "@/constants/socialLinks";
-import { articleList } from "@/data/articleData";
-import { latestArticles } from "@/data/latestArticles";
-import { cn } from "@/utils/cn";
 
 import CarouselSection from "./CarouselSection";
 import FeaturedSection from "./FeaturedSection";
@@ -24,7 +23,7 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
   // 使用輪播 hook 處理精選文章
   const carousel = useCarousel({
     autoplayInterval: 4000,
-    items: articleList, // 使用全部精選文章
+    items: articles, // 使用全部文章
   });
 
   return (
@@ -36,7 +35,7 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
         <FeaturedSection articles={latestArticles} />
 
         {/* 精選文章區塊 */}
-        <CarouselSection articles={articleList} {...carousel} />
+        <CarouselSection articles={articles} {...carousel} />
 
         {/* 前往 Medium 文章頁面 */}
         <motion.div

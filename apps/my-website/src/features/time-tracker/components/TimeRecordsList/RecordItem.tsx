@@ -1,8 +1,7 @@
 "use client";
 
+import type { TimeRecord } from "@packages/shared/types";
 import React, { useState } from "react";
-
-import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { formatTimeRecord } from "../../utils/formatting";
 import { getDateDisplayNameInTaiwan } from "../../utils/time";

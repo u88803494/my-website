@@ -1,8 +1,7 @@
 "use client";
 
+import { cn } from "@packages/shared/utils/cn";
 import React from "react";
-
-import { cn } from "@/utils/cn";
 
 import AnimatedBackground from "./AnimatedBackground";
 import HeroContent from "./HeroContent";

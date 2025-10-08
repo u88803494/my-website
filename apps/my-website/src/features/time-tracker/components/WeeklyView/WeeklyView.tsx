@@ -1,9 +1,8 @@
 "use client";
 
+import type { TimeRecord } from "@packages/shared/types";
 import { Calendar } from "lucide-react";
 import React, { useMemo } from "react";
-
-import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 import { getWeeklyCategoryTotals } from "../../utils/statisticsCalculation";

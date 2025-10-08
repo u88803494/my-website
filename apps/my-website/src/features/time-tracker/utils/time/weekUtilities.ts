@@ -2,12 +2,11 @@
  * 週期工具 - 處理台灣時區的週相關操作
  */
 
+import { DEFAULT_WEEK_START } from "@packages/shared/constants";
+import type { WeekStartDay } from "@packages/shared/types";
 import { eachDayOfInterval, endOfWeek, format, isSameWeek, startOfWeek } from "date-fns";
 import { zhTW } from "date-fns/locale";
 import { toZonedTime } from "date-fns-tz";
-
-import { DEFAULT_WEEK_START } from "@/features/time-tracker/constants";
-import type { WeekStartDay } from "@/features/time-tracker/types";
 
 import { getTaiwanNow, TAIWAN_TIMEZONE } from "./timeUtilities";
 
@@ -21,7 +20,8 @@ export const getWeekStartInTaiwan = (
   weekStartDay: WeekStartDay = DEFAULT_WEEK_START,
 ): Date => {
   const taiwanDate = toZonedTime(date, TAIWAN_TIMEZONE);
-  return startOfWeek(taiwanDate, { weekStartsOn: weekStartDay });
+  const weekStartsOn = weekStartDay === "monday" ? 1 : 0;
+  return startOfWeek(taiwanDate, { weekStartsOn });
 };
 
 /**
@@ -34,7 +34,8 @@ export const getWeekEndInTaiwan = (
   weekStartDay: WeekStartDay = DEFAULT_WEEK_START,
 ): Date => {
   const taiwanDate = toZonedTime(date, TAIWAN_TIMEZONE);
-  return endOfWeek(taiwanDate, { weekStartsOn: weekStartDay });
+  const weekStartsOn = weekStartDay === "monday" ? 1 : 0;
+  return endOfWeek(taiwanDate, { weekStartsOn });
 };
 
 /**
@@ -50,7 +51,8 @@ export const isSameWeekInTaiwan = (
 ): boolean => {
   const taiwanDate1 = toZonedTime(date1, TAIWAN_TIMEZONE);
   const taiwanDate2 = toZonedTime(date2, TAIWAN_TIMEZONE);
-  return isSameWeek(taiwanDate1, taiwanDate2, { weekStartsOn: weekStartDay });
+  const weekStartsOn = weekStartDay === "monday" ? 1 : 0;
+  return isSameWeek(taiwanDate1, taiwanDate2, { weekStartsOn });
 };
 
 /**

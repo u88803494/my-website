@@ -1,4 +1,4 @@
-import ContactLinks from "@/components/shared/ContactLinks";
+import { ContactLinks } from "@packages/shared/components";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

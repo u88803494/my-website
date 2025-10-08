@@ -1,4 +1,4 @@
-import NotFoundFeature from "@/features/not-found";
+import { NotFoundFeature } from "@packages/not-found";
 
 const NotFoundPage = () => {
   return <NotFoundFeature />;

@@ -1,9 +1,9 @@
 "use client";
 
+import { experiences } from "@packages/shared/data";
+import { type Experience } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils/cn";
 import React from "react";
-
-import { experiences } from "@/data/experienceData";
-import { cn } from "@/utils/cn";
 
 import ExperienceCard from "./ExperienceCard";
 
@@ -22,7 +22,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({ backgroundClass, sectio
           <p className="text-base-content/80 text-lg">我的職涯發展歷程</p>
         </div>
         <div className="flex flex-col gap-12">
-          {experiences.map((exp) => (
+          {experiences.map((exp: Experience, _index: number) => (
             <ExperienceCard experience={exp} key={exp.company + exp.period} />
           ))}
         </div>

@@ -1,2 +1,1 @@
-// Resume 功能頁面導出
-export { default as ResumeFeature } from "./ResumeFeature";
+export { default } from "./ResumeFeature";
