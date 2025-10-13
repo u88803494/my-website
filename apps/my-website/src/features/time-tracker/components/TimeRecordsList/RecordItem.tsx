@@ -1,6 +1,6 @@
 "use client";
 
-import type { TimeRecord } from "@packages/shared/types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 import React, { useState } from "react";
 
 import { formatTimeRecord } from "../../utils/formatting";

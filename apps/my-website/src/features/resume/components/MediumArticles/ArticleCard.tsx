@@ -1,7 +1,7 @@
 "use client";
 
 import { type Article } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
 import React from "react";

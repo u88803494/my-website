@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactLinks } from "@packages/shared/components";
+import { ContactLinks } from "@/components/shared";
 import { motion } from "framer-motion";
 
 import TypewriterText from "./TypewriterText";

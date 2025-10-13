@@ -17,8 +17,6 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@packages/about": "workspace:*",
-    "@packages/not-found": "workspace:*",
     "@packages/shared": "workspace:*",
     "@tanstack/react-query": "^5.81.2",
     "@vercel/analytics": "^1.5.0",

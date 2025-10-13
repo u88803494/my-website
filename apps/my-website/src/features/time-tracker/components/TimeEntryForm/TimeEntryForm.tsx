@@ -1,6 +1,6 @@
 "use client";
 
-import type { TimeRecord } from "@packages/shared/types";
+import type { TimeRecord } from "@/features/time-tracker/types";
 import React from "react";
 
 import { getFieldError } from "../../utils/validation";

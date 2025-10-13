@@ -1,7 +1,9 @@
 
 "use client";
 
-import { cn,ContactLinks } from "@packages/shared";
+import { cn } from "@packages/shared";
+
+import ContactLinks from "./ContactLinks";
 import { motion } from "framer-motion";
 import Image from "next/image";
 

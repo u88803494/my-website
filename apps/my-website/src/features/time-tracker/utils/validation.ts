@@ -1,4 +1,4 @@
-import { type TimeEntryFormData, type ValidationError, type ValidationResult } from "@packages/shared/types";
+import { type TimeEntryFormData, type ValidationError, type ValidationResult } from "@/features/time-tracker/types";
 
 import { ActivityType } from "@/features/time-tracker/types";
 

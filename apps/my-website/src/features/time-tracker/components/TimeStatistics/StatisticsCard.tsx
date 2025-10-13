@@ -1,4 +1,4 @@
-import type { ActivityType } from "@packages/shared/types";
+import type { ActivityType } from "@/features/time-tracker/types";
 import { Clock, TrendingUp } from "lucide-react";
 import React from "react";
 

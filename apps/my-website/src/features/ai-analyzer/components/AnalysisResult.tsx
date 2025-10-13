@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 

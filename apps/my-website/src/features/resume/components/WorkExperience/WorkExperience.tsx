@@ -1,8 +1,8 @@
 "use client";
 
-import { experiences } from "@packages/shared/data";
-import { type Experience } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { experiences } from "@/data/experienceData";
+import { type Experience } from "@/types/experience.types";
+import { cn } from "@/utils/cn";
 import React from "react";
 
 import ExperienceCard from "./ExperienceCard";

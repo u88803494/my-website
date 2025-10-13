@@ -1,41 +1,35 @@
 {
   "name": "@packages/shared",
   "version": "1.0.0",
-  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./constants": "./src/constants/index.ts",
-    "./constants/*": "./src/constants/*.ts",
     "./components": "./src/components/index.ts",
-    "./components/*": "./src/components/*.tsx",
-    "./types": "./src/types/index.ts",
-    "./types/*": "./src/types/*.ts",
     "./utils": "./src/utils/index.ts",
-    "./utils/*": "./src/utils/*.ts",
-    "./data": "./src/data/index.ts",
-    "./data/*": "./src/data/*.ts"
+    "./types": "./src/types/index.ts",
+    "./constants": "./src/constants/index.ts",
+    "./data": "./src/data/index.ts"
   },
   "scripts": {
     "lint": "eslint src",
     "check-types": "tsc --noEmit"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.19.1",
-    "lucide-react": "^0.518.0",
-    "next-nprogress-bar": "^2.4.7",
-    "react-icons": "^5.5.0",
-    "tailwind-merge": "^3.3.1"
   },
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@packages/eslint-config": "workspace:*",
     "@packages/tsconfig": "workspace:*",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "next": "^15.0.0",
-    "typescript": "^5.0.0"
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
   }
 }

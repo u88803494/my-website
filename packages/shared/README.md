@@ -1,47 +1,27 @@
 # @packages/shared
 
-共享的工具、類型、組件和常數，供所有 feature packages 使用。
+共用的工具函數、類型定義、常數和組件。
 
-## 包含內容
+## 內容
 
-### Components
-
-- `AnimatedWrapper` - 動畫包裝組件
-
-### Utils
-
-- `cn` - Tailwind CSS 類名合併工具
-
-### Types
-
-- `NavRoute` - 導航路由類型
-- `BaseComponent` - 基礎組件類型
-- `ApiResponse` - API 響應類型
-
-### Constants
-
-- `routes` - 應用路由配置
-- `SOCIAL_LINKS` - 社交媒體連結
-- `CONTACT_LINKS` - 聯絡方式連結
+- `utils/` - 工具函數（如 cn）
+- `types/` - TypeScript 類型定義
+- `constants/` - 常數定義
+- `data/` - 共用資料
+- `components/` - 共用 React 組件
 
 ## 使用方式
 
 ```typescript
-import { AnimatedWrapper, cn, routes, SOCIAL_LINKS } from "@packages/shared";
-```
+// Import utils
+import { cn } from "@packages/shared/utils";
 
-## 開發
+// Import types
+import type { Article, Experience } from "@packages/shared/types";
 
-```bash
-# 構建
-pnpm build
+// Import constants
+import { ROUTES, AI_MODELS } from "@packages/shared/constants";
 
-# 開發模式
-pnpm dev
-
-# 類型檢查
-pnpm check-types
-
-# Lint
-pnpm lint
+// Import data
+import { articleList, skillData } from "@packages/shared/data";
 ```
