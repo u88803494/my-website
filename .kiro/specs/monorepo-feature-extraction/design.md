@@ -2,7 +2,7 @@
 
 ## Overview
 
-本設計文件描述如何將現有的 my-website 應用重構為一個更加模組化的 monorepo 架構。重構的核心目標是將 `src/features` 目錄下的各個功能模組抽取為獨立的 packages，同時保持現有功能的完整性和 API 一致性。
+本設計文件描述如何將現有的 my-website 應用重構為一個更加模組化的 monorepo 架構。重構的核心目標是將**可重用的功能模組**抽取為獨立的 packages，同時保持 web 專用功能在 app 內，為未來開發第二個 app 做好準備。
 
 ### 重構前後對比
 
@@ -23,18 +23,19 @@ apps/my-website/
 ```
 ├── packages/
 │   ├── shared/            # 共享的 utilities, types, constants
-│   ├── ai-analyzer/       # AI 分析器功能
-│   ├── ai-dictionary/     # AI 字典功能
-│   ├── blog/             # 部落格功能
-│   ├── resume/           # 履歷功能
-│   ├── time-tracker/     # 時間追蹤功能
-│   ├── about/            # 關於頁面
-│   └── not-found/        # 404 頁面
+│   ├── ai-analyzer/       # AI 分析器功能（可重用）
+│   ├── ai-dictionary/     # AI 字典功能（可重用）
+│   ├── blog/             # 部落格功能（可重用）
+│   └── time-tracker/     # 時間追蹤功能（可重用）
 └── apps/
-    └── my-website/        # 簡化的主應用
+    └── my-website/
         └── src/
             ├── app/       # Next.js 路由
-            └── components/ # 僅保留 layout 相關組件
+            ├── features/  # Web 專用功能
+            │   ├── resume/
+            │   ├── about/
+            │   └── not-found/
+            └── components/ # Layout 組件
 ```
 
 ## Architecture
@@ -47,38 +48,39 @@ graph TD
     A --> C[@packages/ai-analyzer]
     A --> D[@packages/ai-dictionary]
     A --> E[@packages/blog]
-    A --> F[@packages/resume]
-    A --> G[@packages/time-tracker]
-    A --> H[@packages/about]
-    A --> I[@packages/not-found]
+    A --> F[@packages/time-tracker]
+    A --> G[features/resume]
+    A --> H[features/about]
+    A --> I[features/not-found]
 
     C --> B
     D --> B
     E --> B
     F --> B
-    G --> B
-    H --> B
-    I --> B
 ```
 
 ### 2. 依賴關係設計
 
-- **my-website**: 主應用，依賴所有 feature packages
+- **my-website**: 主應用，依賴可重用的 feature packages，內含 web 專用 features
 - **@packages/shared**: 基礎 package，被所有其他 packages 依賴
-- **Feature packages**: 功能 packages，只依賴 shared package，彼此獨立
+- **可重用 packages** (ai-analyzer, ai-dictionary, blog, time-tracker): 只依賴 shared package，彼此獨立
+- **Web 專用 features** (resume, about, not-found): 保留在 app 內，可依賴 shared 和其他 packages
 
 ### 3. 命名規範
 
-所有 packages 使用 `@packages/` 命名空間：
+**可重用 Packages** 使用 `@packages/` 命名空間：
 
 - `@packages/shared` - 共享工具和類型
 - `@packages/ai-analyzer` - AI 分析器
 - `@packages/ai-dictionary` - AI 字典
 - `@packages/blog` - 部落格
-- `@packages/resume` - 履歷
 - `@packages/time-tracker` - 時間追蹤
-- `@packages/about` - 關於頁面
-- `@packages/not-found` - 404 頁面
+
+**Web 專用 Features** 保留在 app 內：
+
+- `features/resume/` - 履歷頁面
+- `features/about/` - 關於頁面
+- `features/not-found/` - 404 頁面
 
 ## Components and Interfaces
 
@@ -188,9 +190,14 @@ apps/my-website/
 │   │   │   ├── define/
 │   │   │   └── medium-articles/
 │   │   ├── layout.tsx   # 根 layout
-│   │   ├── page.tsx     # 首頁
-│   │   └── {route}/     # 各功能路由
-│   └── components/      # 僅保留 layout 相關
+│   │   ├── page.tsx     # 首頁（使用 features/resume）
+│   │   ├── about/       # 使用 features/about
+│   │   └── {route}/     # 其他路由使用 packages
+│   ├── features/        # Web 專用功能
+│   │   ├── resume/
+│   │   ├── about/
+│   │   └── not-found/
+│   └── components/      # Layout 相關
 │       ├── layout/
 │       └── providers/
 ├── package.json
@@ -385,10 +392,7 @@ export async function POST(request: NextRequest) {
     "@packages/ai-analyzer": "workspace:*",
     "@packages/ai-dictionary": "workspace:*",
     "@packages/blog": "workspace:*",
-    "@packages/resume": "workspace:*",
-    "@packages/time-tracker": "workspace:*",
-    "@packages/about": "workspace:*",
-    "@packages/not-found": "workspace:*"
+    "@packages/time-tracker": "workspace:*"
   }
 }
 ```
