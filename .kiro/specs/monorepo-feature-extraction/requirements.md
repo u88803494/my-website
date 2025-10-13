@@ -2,20 +2,21 @@
 
 ## Introduction
 
-將現有 my-website 應用中的 features 重構為獨立的 packages，以提高代碼的模組化、可重用性和維護性。這個重構將使 my-website 應用更加簡潔，同時讓各個功能模組能夠獨立開發、測試和版本控制。
+將現有 my-website 應用中**可重用的功能模組**重構為獨立的 packages，同時保持 web 專用功能在 app 內。這個重構將提高代碼的模組化和可重用性，為未來開發第二個 app 做好準備，同時避免過度設計。
 
 ## Requirements
 
 ### Requirement 1
 
-**User Story:** 作為開發者，我希望將現有的 features 抽取成獨立的 packages，以便提高代碼的模組化和可重用性
+**User Story:** 作為開發者，我希望將可重用的功能模組抽取成獨立的 packages，以便未來其他 apps 可以重用這些功能
 
 #### Acceptance Criteria
 
-1. WHEN 重構完成 THEN 系統 SHALL 在 packages 目錄下包含所有抽取的 feature packages
+1. WHEN 重構完成 THEN 系統 SHALL 在 packages 目錄下包含可重用的 feature packages（shared, ai-analyzer, ai-dictionary, blog, time-tracker）
 2. WHEN 重構完成 THEN 每個 package SHALL 有自己的 package.json 和獨立的依賴管理
 3. WHEN 重構完成 THEN my-website 應用 SHALL 通過 workspace 依賴引用這些 packages
-4. WHEN 重構完成 THEN 所有現有功能 SHALL 保持完全相同的行為和 API
+4. WHEN 重構完成 THEN web 專用功能（resume, about, not-found）SHALL 保留在 apps/my-website/src/features 內
+5. WHEN 重構完成 THEN 所有現有功能 SHALL 保持完全相同的行為和 API
 
 ### Requirement 2
 
@@ -27,6 +28,7 @@
 2. WHEN 創建 package THEN 每個 package SHALL 包含自己的 TypeScript 配置
 3. WHEN 創建 package THEN 每個 package SHALL 有獨立的 build 和 lint 配置
 4. WHEN 創建 package THEN 每個 package SHALL 遵循統一的命名規範（@packages/feature-name）
+5. WHEN 創建 package THEN 只有可重用的功能 SHALL 被抽離為 package
 
 ### Requirement 3
 
