@@ -1,7 +1,7 @@
 "use client";
 
 import { type Skill } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import React from "react";
 

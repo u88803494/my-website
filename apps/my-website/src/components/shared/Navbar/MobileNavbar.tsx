@@ -1,5 +1,5 @@
 import { type NavRoute } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 

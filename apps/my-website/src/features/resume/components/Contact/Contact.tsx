@@ -1,8 +1,8 @@
 "use client";
 
-import { ContactLinks } from "@packages/shared/components";
-import { SOCIAL_LINKS } from "@packages/shared/constants/socialLinks";
-import { cn } from "@packages/shared/utils/cn";
+import { ContactLinks } from "@/components/shared";
+import { SOCIAL_LINKS } from "@packages/shared/constants";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import { CheckCircle, Copy, Heart, Mail } from "lucide-react";
 import React, { useState } from "react";

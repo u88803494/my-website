@@ -1,6 +1,5 @@
-import type { WordAnalysisResponse } from "@packages/shared/types";
-import type { APIErrorResponse } from "@packages/shared/types/dictionary.types";
-import { cn } from "@packages/shared/utils/cn";
+import type { APIErrorResponse, WordAnalysisResponse } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils";
 import { ArrowUpCircle, RefreshCw } from "lucide-react";
 
 import type { APICallResult } from "../../types";

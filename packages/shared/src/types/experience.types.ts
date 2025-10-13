@@ -1,26 +1,20 @@
-import type React from "react";
+import { type ReactNode } from "react";
 
-export interface ExperienceAchievement {
+export interface Achievement {
+  description: ReactNode;
   title: string;
-  description: React.ReactNode;
-}
-
-export interface TechStackGroup {
-  label: string;
-  items: string[];
 }
 
 export interface Experience {
-  achievements: ExperienceAchievement[];
+  achievements: Achievement[];
   company: string;
-  logoUrl?: string;
-  period?: string;
-  role?: string;
-  techStackGroups?: TechStackGroup[];
-  // 兼容舊格式
-  description?: string;
-  endDate?: string;
-  position?: string;
-  startDate?: string;
-  techStack?: string[];
+  logoUrl: string;
+  period: string;
+  role: string;
+  techStackGroups: TechStackGroup[];
+}
+
+export interface TechStackGroup {
+  items: string[];
+  label: string;
 }

@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
 
-export interface UseLocalStorageStateResult<T> {
-  value: T;
-  setValue: React.Dispatch<React.SetStateAction<T>>;
-  loading: boolean;
-  error: string | null;
-}
+import type { UseLocalStorageReturn } from "@/features/time-tracker/types";
 
 /**
  * 通用的 localStorage hook
  * 處理資料的序列化、反序列化和錯誤處理
  */
-export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorageStateResult<T> => {
+export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorageReturn<T> => {
   const [value, setValue] = useState<T>(() => {
     if (typeof window === "undefined") {
       return defaultValue;

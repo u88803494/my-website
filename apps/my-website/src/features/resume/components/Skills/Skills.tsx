@@ -1,7 +1,7 @@
 "use client";
 
-import { skillData } from "@packages/shared/data";
-import { cn } from "@packages/shared/utils/cn";
+import { skillData } from "@/data/skillData";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import React from "react";
 

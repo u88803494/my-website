@@ -1,4 +1,4 @@
-import { CONTACT_LINKS } from "@packages/shared/constants/socialLinks";
+import { CONTACT_LINKS } from "@packages/shared/constants";
 import { FileText, Mail } from "lucide-react";
 import React from "react";
 import { SiGithub, SiLinkedin, SiMedium } from "react-icons/si";
