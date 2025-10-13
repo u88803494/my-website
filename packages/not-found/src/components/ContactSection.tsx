@@ -1,8 +1,9 @@
 "use client";
 
-import { ContactLinks } from "@packages/shared";
 import { motion } from "framer-motion";
 import React from "react";
+
+import ContactLinks from "./ContactLinks";
 
 const ContactSection: React.FC = () => {
   return (

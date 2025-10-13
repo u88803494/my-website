@@ -1,6 +1,6 @@
 "use client";
 
-import { TechStack } from "@packages/shared/components";
+import { TechStack } from "@/components/shared";
 import { type Project } from "@packages/shared/types";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, FileText } from "lucide-react";

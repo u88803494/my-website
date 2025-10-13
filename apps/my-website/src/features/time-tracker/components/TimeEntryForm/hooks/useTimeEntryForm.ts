@@ -1,4 +1,4 @@
-import { type ActivityType, type TimeRecord } from "@packages/shared/types";
+import { type ActivityType, type TimeRecord } from "@/features/time-tracker/types";
 import React, { useState } from "react";
 
 import type { TimeEntryFormData } from "../../../types";

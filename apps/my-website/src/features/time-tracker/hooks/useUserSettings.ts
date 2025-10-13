@@ -1,8 +1,8 @@
-import { DEFAULT_WEEK_START, WEEKLY_GOAL_DEFAULT } from "@packages/shared/constants";
-import { type UseUserSettingsReturn } from "@packages/shared/types";
 import { useCallback } from "react";
 
-import type { UserSettings } from "../types";
+import { DEFAULT_WEEK_START } from "@/features/time-tracker/constants";
+import type { UserSettings, UseUserSettingsReturn } from "@/features/time-tracker/types";
+
 import { useLocalStorage } from "./useLocalStorage";
 
 // 使用者設定的 localStorage key
@@ -10,10 +10,6 @@ const USER_SETTINGS_KEY = "tt-user-settings";
 
 // 預設設定
 const DEFAULT_SETTINGS: UserSettings = {
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  weeklyGoal: WEEKLY_GOAL_DEFAULT,
-  preferredView: "weekly",
-  notificationEnabled: true,
   weekStartDay: DEFAULT_WEEK_START,
 };
 
@@ -49,8 +45,8 @@ export const useUserSettings = (): UseUserSettingsReturn => {
   );
 
   return {
-    error: error || undefined,
-    loading: isLoading,
+    error,
+    isLoading,
     settings,
     updateSettings,
   };

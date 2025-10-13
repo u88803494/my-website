@@ -1,6 +1,7 @@
 "use client";
 
-import { skillData,TechStack } from "@packages/shared";
+import { skillData } from "../data/skillData";
+import TechStack from "./TechStack";
 import { motion } from "framer-motion";
 
 const TechStackSection = () => {

@@ -1,5 +1,5 @@
-import type { TimeRecord, TimeStatistics } from "@packages/shared/types";
-import { ActivityType } from "@packages/shared/types";
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 /**
  * 初始化空的統計資料

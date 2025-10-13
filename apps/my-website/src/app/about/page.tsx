@@ -1,5 +1,6 @@
-import { AboutFeature } from "@packages/about";
 import type { Metadata } from "next";
+
+import { AboutFeature } from "@/features/about";
 
 export const metadata: Metadata = {
   description:

@@ -1,5 +1,5 @@
 import type { EtymologyBlock } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { PenLine } from "lucide-react";
 
 import CharacterCard from "./CharacterList"; // 直接用原 CharacterList 單卡片

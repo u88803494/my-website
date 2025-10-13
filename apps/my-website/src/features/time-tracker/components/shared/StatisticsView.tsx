@@ -1,6 +1,6 @@
 "use client";
 
-import type { ActivityType, TimeRecord, TimeStatistics } from "@packages/shared/types";
+import type { ActivityType, TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 import { BarChart3 } from "lucide-react";
 import React from "react";
 
@@ -84,8 +84,11 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
 
     if (!earliestRecord.createdAt) return null;
 
-    // 如果是字符串格式的日期，直接返回
-    return earliestRecord.createdAt;
+    // 轉換 Date 為字符串格式
+    const createdAt = earliestRecord.createdAt;
+    if (!createdAt) return null;
+    const dateStr = createdAt instanceof Date ? createdAt.toISOString().split("T")[0] : String(createdAt);
+    return dateStr || null;
   };
 
   const trackingStartDate = getTrackingStartDate();

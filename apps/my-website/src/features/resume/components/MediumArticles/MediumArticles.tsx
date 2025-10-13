@@ -1,9 +1,9 @@
 "use client";
 
-import { SOCIAL_LINKS } from "@packages/shared/constants/socialLinks";
-import { articles } from "@packages/shared/data";
+import { SOCIAL_LINKS } from "@packages/shared/constants";
+import { articleList as articles } from "@packages/shared/data";
 import { latestArticles } from "@packages/shared/data";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import React from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, Tag } from "lucide-react";
 import { useMemo } from "react";

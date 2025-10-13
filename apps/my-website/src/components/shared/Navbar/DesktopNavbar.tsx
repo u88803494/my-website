@@ -1,5 +1,5 @@
 import { type NavRoute } from "@packages/shared/types";
-import { cn } from "@packages/shared/utils/cn";
+import { cn } from "@packages/shared/utils";
 import Link from "next/link";
 
 interface DesktopNavbarProps {
