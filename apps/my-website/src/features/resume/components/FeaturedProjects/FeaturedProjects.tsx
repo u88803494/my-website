@@ -1,8 +1,9 @@
-import { projects as PROJECTS } from "@/data/projectData";
 import { type Project } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
+
+import { projects as PROJECTS } from "@/data/projectData";
 
 import ProjectCard from "./ProjectCard";
 

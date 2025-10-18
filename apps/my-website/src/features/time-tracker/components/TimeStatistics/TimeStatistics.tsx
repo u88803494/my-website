@@ -1,7 +1,8 @@
 "use client";
 
-import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 import React from "react";
+
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 
 import StatisticsView from "../shared/StatisticsView";
 

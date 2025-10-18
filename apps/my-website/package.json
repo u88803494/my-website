@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack --port 3000",
     "build": "pnpm run sync:all-articles && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "check-types": "tsc --noEmit",
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",

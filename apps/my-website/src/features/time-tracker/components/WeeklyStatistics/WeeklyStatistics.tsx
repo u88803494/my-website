@@ -1,9 +1,10 @@
 "use client";
 
-import { ActivityType, type TimeRecord } from "@/features/time-tracker/types";
 import { format } from "date-fns";
 import { zhTW } from "date-fns/locale";
 import { Calendar, TrendingUp } from "lucide-react";
+
+import { ActivityType, type TimeRecord } from "@/features/time-tracker/types";
 
 import { TIME_TRACKER_I18N } from "../../constants/i18n";
 import {

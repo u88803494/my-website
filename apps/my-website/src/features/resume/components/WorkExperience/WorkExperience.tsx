@@ -1,9 +1,10 @@
 "use client";
 
+import React from "react";
+
 import { experiences } from "@/data/experienceData";
 import { type Experience } from "@/types/experience.types";
 import { cn } from "@/utils/cn";
-import React from "react";
 
 import ExperienceCard from "./ExperienceCard";
 

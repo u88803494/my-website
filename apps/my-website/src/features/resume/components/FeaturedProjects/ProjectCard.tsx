@@ -1,12 +1,13 @@
 "use client";
 
-import { TechStack } from "@/components/shared";
 import { type Project } from "@packages/shared/types";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, FileText } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { SiGithub } from "react-icons/si";
+
+import { TechStack } from "@/components/shared";
 
 interface ProjectCardProps {
   project: Project;

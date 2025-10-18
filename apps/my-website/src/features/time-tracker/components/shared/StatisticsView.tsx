@@ -1,8 +1,9 @@
 "use client";
 
-import type { ActivityType, TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 import { BarChart3 } from "lucide-react";
 import React from "react";
+
+import type { ActivityType, TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "../TimeStatistics/StatisticsCard";

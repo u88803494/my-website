@@ -1,7 +1,8 @@
 "use client";
 
-import type { TimeRecord } from "@/features/time-tracker/types";
 import React from "react";
+
+import type { TimeRecord } from "@/features/time-tracker/types";
 
 import { getFieldError } from "../../utils/validation";
 import ActivityTypeSelect from "./ActivityTypeSelect";
