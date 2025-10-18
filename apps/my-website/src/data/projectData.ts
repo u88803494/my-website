@@ -1,5 +1,5 @@
 import { SOCIAL_LINKS } from "@/constants/socialLinks";
-import { Project } from "@/types/project.types";
+import { type Project } from "@/types/project.types";
 
 export const projects: Project[] = [
   {

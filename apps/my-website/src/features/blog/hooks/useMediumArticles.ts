@@ -1,5 +1,6 @@
-import { API_PATHS } from "@/lib/api-paths";
 import { useInfiniteQuery } from "@tanstack/react-query";
+
+import { API_PATHS } from "@/lib/api-paths";
 
 import type { MediumArticlesResponse, UseMediumArticlesOptions } from "../types";
 
