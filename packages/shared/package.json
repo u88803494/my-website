@@ -13,7 +13,7 @@
     "./data": "./src/data/index.ts"
   },
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "check-types": "tsc --noEmit"
   },
   "peerDependencies": {
