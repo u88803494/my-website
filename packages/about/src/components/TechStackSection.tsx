@@ -1,8 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import { skillData } from "../data/skillData";
 import TechStack from "./TechStack";
-import { motion } from "framer-motion";
 
 const TechStackSection = () => {
   return (

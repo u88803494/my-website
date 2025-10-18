@@ -2,10 +2,10 @@
 "use client";
 
 import { cn } from "@packages/shared";
-
-import ContactLinks from "./ContactLinks";
 import { motion } from "framer-motion";
 import Image from "next/image";
+
+import ContactLinks from "./ContactLinks";
 
 const AboutHero = () => {
   return (

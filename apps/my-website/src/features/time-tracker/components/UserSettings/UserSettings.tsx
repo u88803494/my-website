@@ -1,8 +1,9 @@
 "use client";
 
-import type { UserSettings, WeekStartDay } from "@/features/time-tracker/types";
 import { Settings } from "lucide-react";
 import React, { useCallback } from "react";
+
+import type { UserSettings, WeekStartDay } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 

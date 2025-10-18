@@ -1,9 +1,10 @@
 "use client";
 
-import { type ActivityType } from "@/features/time-tracker/types";
-import { type TimeRecord } from "@/features/time-tracker/types";
 import { List } from "lucide-react";
 import React, { useState } from "react";
+
+import { type ActivityType } from "@/features/time-tracker/types";
+import { type TimeRecord } from "@/features/time-tracker/types";
 
 import EmptyState from "./EmptyState";
 import RecordItem from "./RecordItem";

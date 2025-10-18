@@ -1,6 +1,7 @@
-import { API_PATHS } from "@/lib/api-paths";
 import type { WordAnalysisResponse } from "@packages/shared/types";
 import { useMutation } from "@tanstack/react-query";
+
+import { API_PATHS } from "@/lib/api-paths";
 
 export const useWordAnalysis = () => {
   return useMutation<WordAnalysisResponse, Error, string>({
