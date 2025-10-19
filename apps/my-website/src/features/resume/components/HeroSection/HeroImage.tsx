@@ -1,19 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 
 import { cn } from "@/utils/cn";
 
 const HeroImage = () => {
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, rotateY: 0, scale: 1 }}
       className="avatar"
       initial={{ opacity: 0, rotateY: -90, scale: 0.8 }}
-      transition={{ delay: 0.2, duration: 0.8 }}
+      transition={{ delay: 0.05, duration: 0.5 }}
     >
-      <motion.div
+      <m.div
         animate={{ y: [0, -10, 0] }}
         className={cn(
           "h-48 w-48 overflow-hidden rounded-full lg:h-64 lg:w-64",
@@ -35,8 +35,8 @@ const HeroImage = () => {
           src="/images/my-photo.jpeg"
           width={256}
         />
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 };
 

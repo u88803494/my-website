@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 import { Article } from "@/types/article.types";
 
@@ -14,7 +14,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
   if (articles.length === 0) return null;
 
   return (
-    <motion.div
+    <m.div
       className="mb-12"
       initial={{ opacity: 0, y: 20 }}
       transition={{ delay: 0.2, duration: 0.6 }}
@@ -27,7 +27,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
 
       <div className="grid w-full gap-6 md:grid-cols-2">
         {articles.map((article, idx) => (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             key={article.title + idx}
             transition={{
@@ -38,10 +38,10 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
             whileInView={{ opacity: 1, y: 0 }}
           >
             <ArticleCard article={article} />
-          </motion.div>
+          </m.div>
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

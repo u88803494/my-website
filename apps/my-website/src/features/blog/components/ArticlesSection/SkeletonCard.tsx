@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface SkeletonCardProps {
   index?: number;
@@ -8,7 +8,7 @@ interface SkeletonCardProps {
 
 const SkeletonCard = ({ index = 0 }: SkeletonCardProps) => {
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, y: 0 }}
       className="card bg-base-100 border-base-200/50 h-full w-full border shadow-xl"
       initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ const SkeletonCard = ({ index = 0 }: SkeletonCardProps) => {
           <div className="skeleton h-8 w-full" />
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { AlertCircle, RefreshCw } from "lucide-react";
 
 interface ErrorStateProps {
@@ -10,7 +10,7 @@ interface ErrorStateProps {
 
 const ErrorState = ({ error, onRetry }: ErrorStateProps) => {
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, scale: 1 }}
       aria-live="assertive"
       className="alert alert-error mx-auto mb-8 max-w-md shadow-lg"
@@ -24,7 +24,7 @@ const ErrorState = ({ error, onRetry }: ErrorStateProps) => {
         <div className="mt-1 text-sm opacity-90">{error.message}</div>
       </div>
       {onRetry && (
-        <motion.button
+        <m.button
           aria-label="重新載入文章"
           className="btn btn-sm btn-error btn-outline ml-4 gap-2"
           onClick={onRetry}
@@ -33,9 +33,9 @@ const ErrorState = ({ error, onRetry }: ErrorStateProps) => {
         >
           <RefreshCw aria-hidden="true" className="h-4 w-4" />
           重新載入
-        </motion.button>
+        </m.button>
       )}
-    </motion.div>
+    </m.div>
   );
 };
 

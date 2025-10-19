@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import { cn } from "@/utils/cn";
 
@@ -14,9 +14,23 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ backgroundClass, sectionId }) => {
+  const [showAnimatedBackground, setShowAnimatedBackground] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAnimatedBackground(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section className={cn("hero relative min-h-screen overflow-hidden", backgroundClass)} id={sectionId}>
-      <AnimatedBackground />
+      {showAnimatedBackground && (
+        <Suspense fallback={null}>
+          <AnimatedBackground />
+        </Suspense>
+      )}
 
       <div
         className={cn(

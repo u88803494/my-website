@@ -1,11 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Search } from "lucide-react";
 
 const SearchSuggestion: React.FC = () => {
   return (
-    <motion.div
+    <m.div
       animate={{ opacity: 1, y: 0 }}
       className="card bg-base-200/50"
       initial={{ opacity: 0, y: 30 }}
@@ -20,7 +20,7 @@ const SearchSuggestion: React.FC = () => {
           您可以在首頁查看我的作品集、技術文章，或使用 AI 工具來協助您找到需要的資訊。
         </p>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

@@ -5,17 +5,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { FramerProvider } from "@/components/providers/FramerProvider";
 import QueryProvider from "@/components/providers/QueryProvider";
 import Footer from "@/components/shared/Footer";
 import { Navbar } from "@/components/shared/Navbar";
 import NProgressBar from "@/components/shared/NProgressBar";
 
 const geistSans = Geist({
+  display: "swap",
   subsets: ["latin"],
   variable: "--font-geist-sans",
 });
 
 const geistMono = Geist_Mono({
+  display: "swap",
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
@@ -89,15 +92,22 @@ const RootLayout = ({
 }>) => {
   return (
     <html data-theme="corporate" lang="zh-Hant">
+      <head>
+        <link crossOrigin="" href="https://fonts.googleapis.com" rel="preconnect" />
+        <link crossOrigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+        <link as="image" href="/images/my-photo.jpeg" rel="preload" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
         suppressHydrationWarning={true}
       >
         <QueryProvider>
-          <Navbar />
-          <NProgressBar />
-          <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
-          <Footer />
+          <FramerProvider>
+            <Navbar />
+            <NProgressBar />
+            <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
+            <Footer />
+          </FramerProvider>
         </QueryProvider>
         <Analytics />
         <SpeedInsights />
