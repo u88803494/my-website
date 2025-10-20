@@ -1,10 +1,5 @@
-@import "tailwindcss";
-@plugin "daisyui" {
-  themes:
-    light --default,
-    dark --prefersdark,
-    corporate;
-}
+/* Import shared Tailwind configuration from monorepo package */
+@import "@packages/tailwind-config/style.css";
 
 :root {
   --font-sans: var(--font-geist-sans);
