@@ -4,11 +4,11 @@
  * ⚠️  重要提醒：請勿手動編輯此文件！
  *
  * 🔄 此文件由 scripts/sync-latest-articles.ts 自動生成
- * 📅 最後更新時間: 2025/10/9 下午3:03:33
+ * 📅 最後更新時間: 2025/10/19 上午12:25:24
  * 📰 包含最新 2 篇文章
  */
 
-import { type Article } from "@/types/article.types";
+import type { Article } from "@/types/article.types";
 
 export const latestArticles: Article[] = [
   {
