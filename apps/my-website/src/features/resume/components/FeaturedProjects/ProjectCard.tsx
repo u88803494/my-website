@@ -33,6 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           alt={project.title}
           className="object-contain transition-transform duration-300 group-hover:scale-105"
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           src={project.imageUrl}
         />
       </figure>
