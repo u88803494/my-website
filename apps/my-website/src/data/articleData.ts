@@ -20,7 +20,7 @@
  * 💡 如需修改文章資料，請修改腳本邏輯，而非直接編輯此文件
  */
 
-import { type Article } from "@/types/article.types";
+import type { Article } from "@/types/article.types";
 
 export const articleList: Article[] = [
   {
