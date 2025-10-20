@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Scan all packages for Tailwind classes */
+@source "../../packages/*/src/**/*.{js,ts,jsx,tsx}";
+
+/* Scan all apps for Tailwind classes */
+@source "../../apps/*/src/**/*.{js,ts,jsx,tsx}";
+
+/* DaisyUI Plugin Configuration */
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    corporate;
+}
