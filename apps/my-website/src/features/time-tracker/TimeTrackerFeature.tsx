@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { HeaderSection, MainTabContent, SettingsModal, TabNavigation, WeeklyView } from "./components";
 import TimeStatistics from "./components/TimeStatistics";
@@ -12,7 +12,7 @@ import { getWeekStartInTaiwan } from "./utils/time";
  * 時間追蹤主要功能元件
  * 整合所有子元件並管理主要狀態
  */
-const TimeTrackerFeature: React.FC = () => {
+const TimeTrackerFeature = () => {
   const { addRecord, deleteRecord, error, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
   const [showSettings, setShowSettings] = useState(false);

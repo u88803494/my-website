@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import { type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
   SiExpress,
   SiFigma,
@@ -22,7 +22,7 @@ import {
 import { TbApi, TbBrandLine, TbSettings } from "react-icons/tb";
 
 // 簡潔的圖標包裝函數，避免重複 className
-const icon = (IconComponent: React.ComponentType<React.SVGProps<SVGSVGElement>>): ReactNode => (
+const icon = (IconComponent: ComponentType<SVGProps<SVGSVGElement>>): ReactNode => (
   <IconComponent className="h-4 w-4" />
 );
 
