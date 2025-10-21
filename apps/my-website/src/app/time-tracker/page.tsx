@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { TimeTrackerFeature } from "@/features/time-tracker";
+import TimeTrackerFeature from "@/features/time-tracker";
 
 export const metadata: Metadata = {
   description:

@@ -3,6 +3,7 @@
 import React from "react";
 
 import { experiences } from "@/data/experienceData";
+import { type Experience } from "@/types/experience.types";
 import { cn } from "@/utils/cn";
 
 import ExperienceCard from "./ExperienceCard";
@@ -22,7 +23,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({ backgroundClass, sectio
           <p className="text-base-content/80 text-lg">我的職涯發展歷程</p>
         </div>
         <div className="flex flex-col gap-12">
-          {experiences.map((exp) => (
+          {experiences.map((exp: Experience, _index: number) => (
             <ExperienceCard experience={exp} key={exp.company + exp.period} />
           ))}
         </div>

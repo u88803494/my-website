@@ -80,16 +80,16 @@ export const formatTimeRecord = (record: {
 /**
  * 計算統計資料的百分比
  */
-export const calculatePercentages = (statistics: TimeStatistics) => {
+export const calculatePercentages = (statistics: TimeStatistics): Record<string, number> => {
   const total = statistics.總計;
   if (total === 0) return {};
 
   const percentages: Record<string, number> = {};
 
-  Object.entries(statistics).forEach(([key, value]) => {
-    if (key !== "總計") {
-      percentages[key] = Math.round((value / total) * 100);
-    }
+  // 使用 ActivityType enum 遍歷，避免 type assertion
+  Object.values(ActivityType).forEach((activityType) => {
+    const value = statistics[activityType];
+    percentages[activityType] = Math.round((value / total) * 100);
   });
 
   return percentages;

@@ -1,15 +1,15 @@
 "use client";
 
 import { motion, useAnimation, useInView } from "framer-motion";
-import React, { useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 
 interface AnimatedWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   delay?: number;
 }
 
-const AnimatedWrapper: React.FC<AnimatedWrapperProps> = ({ children, className, delay = 0 }) => {
+const AnimatedWrapper = ({ children, className, delay = 0 }: AnimatedWrapperProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.2, once: true });
   const controls = useAnimation();

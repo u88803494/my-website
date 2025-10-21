@@ -1,1 +1,1 @@
-export { default } from "./NotFoundFeature";
+export { default as NotFoundFeature } from "./NotFoundFeature";

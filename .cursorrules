@@ -1,6 +1,6 @@
 # Cursor Rules Configuration
 
-You are an expert senior software engineer specializing in modern web development, with deep expertise in TypeScript, React 19, Next.js 15 (App Router), Vercel AI SDK, daisyUI,Shadcn UI, Radix UI, and Tailwind CSS. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
+You are an expert senior software engineer specializing in modern web development, with deep expertise in TypeScript, React 18, Next.js 15 (App Router), Google Generative AI SDK, daisyUI, Shadcn UI, Radix UI, and Tailwind CSS. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
 
 ## Communication Guidelines
 
@@ -33,6 +33,17 @@ Before responding to any request, follow these steps:
 
 ## Project-Specific Guidelines
 
+### Monorepo Structure
+- **Workspace Packages**: Use `@packages/` prefix for internal packages
+- **Package Dependencies**: 
+  - `@packages/shared`: Common utilities, types, and components
+  - `@packages/about`: About page feature package
+  - `@packages/not-found`: 404 page feature package
+  - `@packages/eslint-config`: Shared ESLint configuration
+  - `@packages/tsconfig`: Shared TypeScript configuration
+- **Package Development**: Each package should be independently buildable and testable
+- **Cross-Package Imports**: Use workspace references (`workspace:*`) in package.json
+
 ### File and Component Naming
 - **Feature Components**: Use `*Feature.tsx` pattern (e.g., `BlogFeature.tsx`, `ResumeFeature.tsx`)
 - **Page Components**: Use `page.tsx` pattern (Next.js App Router only)
@@ -55,12 +66,15 @@ Before responding to any request, follow these steps:
 - **Type Definitions**: Use separate files in `src/types` directory for data types
 
 ### Code Style and Structure
-- **Path Aliases**: Always use the `@/` alias pointing to `src/` directory for local imports
+- **Path Aliases**: 
+  - Use `@/` alias pointing to `src/` directory for local imports within the same app
+  - Use `@packages/` alias for workspace packages (e.g., `@packages/shared`, `@packages/about`)
 - **Import Order**:
   1. React imports (`react`, `react-dom`)
   2. Next.js imports (`next/link`, `next/navigation`)
   3. Third-party packages (alphabetical order)
-  4. Local absolute imports using `@/` alias
+  4. Workspace packages (`@packages/`)
+  5. Local absolute imports using `@/` alias
 - **Component Definition**: Use `const` with arrow function: `const MyComponent: React.FC<Props> = (props) => { ... }`
 - **Logic Flow**: Use early returns to reduce nesting and improve readability
 - **Event Handlers**: Prefix with `handle` (e.g., `handleClick`, `handleSubmit`)
@@ -108,6 +122,8 @@ Before responding to any request, follow these steps:
 
 ### Development & Testing
 - **Code Quality Check & Auto-fix**: Use `pnpm run check` for comprehensive code quality checks and automatic fixes (TypeScript + ESLint + Prettier)
+- **Lint with Auto-fix**: Use `pnpm run lint` for automatic ESLint fixes across all packages
+- **Type Checking**: Use `pnpm run check-types` for TypeScript type checking across all packages
 - **Quick Validation**: The `check` command automatically applies fixes and is safe to run alongside `pnpm dev`
 - **Build Commands**: Use `pnpm run build` for production builds and deployment
 - **🚨 MANDATORY RULE**: After making ANY code changes, ALWAYS run `pnpm run check` to ensure code quality

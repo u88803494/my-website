@@ -1,13 +1,13 @@
 "use client";
 
+import { type Project } from "@packages/shared/types";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, FileText } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { SiGithub } from "react-icons/si";
 
-import TechStack from "@/components/shared/TechStack";
-import { Project } from "@/types/project.types";
+import { TechStack } from "@/components/shared";
 
 interface ProjectCardProps {
   project: Project;
@@ -33,6 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           alt={project.title}
           className="object-contain transition-transform duration-300 group-hover:scale-105"
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           src={project.imageUrl}
         />
       </figure>
@@ -44,15 +45,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </span>
         <p className="mb-3">{project.description.intro}</p>
         <ul className="mb-3 list-inside list-disc space-y-1">
-          {project.description.features.map((feature, idx) => (
+          {project.description.features.map((feature: string, idx: number) => (
             <li className="text-sm leading-relaxed" key={idx}>
               {feature}
             </li>
           ))}
         </ul>
-        <TechStack className="mb-4" techStack={project.techStack} variant="primary" />
+        <TechStack className="mt-4" techStack={project.techStack} />
         <div className="mt-auto flex flex-wrap gap-2">
-          {project.links.map((link, idx) => (
+          {project.links.map((link: { label: string; url: string }, idx: number) => (
             <motion.a
               className="btn btn-outline flex items-center gap-2 px-4 py-2"
               href={link.url}

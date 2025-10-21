@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack --port 3000",
     "build": "pnpm run sync:all-articles && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "check-types": "tsc --noEmit",
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
@@ -17,6 +17,11 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@packages/ai-analyzer": "workspace:*",
+    "@packages/ai-dictionary": "workspace:*",
+    "@packages/blog": "workspace:*",
+    "@packages/shared": "workspace:*",
+    "@packages/tailwind-config": "workspace:*",
     "@tanstack/react-query": "^5.81.2",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -37,6 +42,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@packages/eslint-config": "workspace:*",
+    "@packages/tsconfig": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20",
@@ -60,6 +67,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.20.3",
     "turbo": "^2.5.5",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.0.0"
   }
 }

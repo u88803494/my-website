@@ -13,7 +13,7 @@ export const validateTimeFormat = (time: string): boolean => {
  */
 export const timeStringToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
-  return hours * 60 + minutes;
+  return (hours ?? 0) * 60 + (minutes ?? 0);
 };
 
 /**

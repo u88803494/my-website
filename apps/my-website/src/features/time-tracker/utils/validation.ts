@@ -1,6 +1,6 @@
+import { type TimeEntryFormData, type ValidationError, type ValidationResult } from "@/features/time-tracker/types";
 import { ActivityType } from "@/features/time-tracker/types";
 
-import type { TimeEntryFormData, ValidationError, ValidationResult } from "../types";
 import { calculateDuration, validateTimeFormat } from "./time";
 
 /**

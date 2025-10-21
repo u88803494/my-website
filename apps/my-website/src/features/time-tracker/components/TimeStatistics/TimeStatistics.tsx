@@ -2,13 +2,13 @@
 
 import React from "react";
 
-import type { TimeRecord, TimeStatistics as TimeStatisticsType } from "@/features/time-tracker/types";
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
 
 import StatisticsView from "../shared/StatisticsView";
 
 interface TimeStatisticsProps {
   records: TimeRecord[];
-  statistics: TimeStatisticsType;
+  statistics: TimeStatistics;
 }
 
 /**
