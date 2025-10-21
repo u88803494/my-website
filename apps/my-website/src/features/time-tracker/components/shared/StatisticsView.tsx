@@ -3,7 +3,8 @@
 import { BarChart3 } from "lucide-react";
 import React from "react";
 
-import type { ActivityType, TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "../TimeStatistics/StatisticsCard";
@@ -60,14 +61,13 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   // 計算百分比
   const percentages = showPercentages ? calculatePercentages(statistics) : {};
 
-  // 準備活動類型統計資料
-  const activityStats = Object.entries(statistics)
-    .filter(([key]) => key !== "總計")
-    .map(([key, value]) => ({
-      activityType: key as ActivityType,
-      label: key,
-      percentage: percentages[key] || undefined,
-      value: value as number,
+  // 準備活動類型統計資料 - 使用 ActivityType enum 遍歷避免 type assertion
+  const activityStats = Object.values(ActivityType)
+    .map((activityType) => ({
+      activityType,
+      label: activityType,
+      percentage: percentages[activityType] || undefined,
+      value: statistics[activityType],
     }))
     .sort((a, b) => b.value - a.value); // 按時間長度排序
 
