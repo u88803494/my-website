@@ -22,7 +22,7 @@ export interface TimeCalculationResult {
 
 // 表單資料介面
 export interface TimeEntryFormData {
-  activityType: ActivityType;
+  activityType: ActivityType | "";
   /**
    * 記錄日期（YYYY-MM-DD 格式，必填）
    */
