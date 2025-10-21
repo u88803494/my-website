@@ -67,10 +67,12 @@ export const getMostActiveType = (statistics: TimeStatistics): ActivityType | nu
   let maxDuration = 0;
   let mostActiveType: ActivityType | null = null;
 
-  Object.entries(statistics).forEach(([key, value]) => {
-    if (key !== "總計" && (value as number) > maxDuration) {
-      maxDuration = value as number;
-      mostActiveType = key as ActivityType;
+  // 使用 ActivityType enum 來遍歷，避免type assertion
+  Object.values(ActivityType).forEach((activityType) => {
+    const duration = statistics[activityType];
+    if (duration > maxDuration) {
+      maxDuration = duration;
+      mostActiveType = activityType;
     }
   });
 
