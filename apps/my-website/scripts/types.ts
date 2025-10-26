@@ -1,13 +1,13 @@
-// 專門為腳本創建的類型定義
-export interface Article {
-  claps?: number;
-  description: string;
-  publishedDate: string;
-  readTime: string;
-  subtitle: string;
-  tags: string[];
-  thumbnail?: string;
-  title: string;
-  url: string;
-  views?: number;
+// 使用 shared package 的類型定義
+export type { Article } from "@packages/shared/types";
+
+// Script 專用的類型定義
+export interface ArticleConfig {
+  articles: string[];
+}
+
+export interface ParseStats {
+  failed: number;
+  success: number;
+  total: number;
 }

@@ -3,19 +3,7 @@ import * as cheerio from "cheerio";
 import { promises as fs } from "fs";
 import * as path from "path";
 
-import { type Article } from "../src/types/article.types";
-
-// ==================== 類型定義 ====================
-
-interface ArticleConfig {
-  articles: string[];
-}
-
-interface ParseStats {
-  failed: number;
-  success: number;
-  total: number;
-}
+import type { Article, ArticleConfig, ParseStats } from "./types";
 
 // ==================== 配置常量 ====================
 

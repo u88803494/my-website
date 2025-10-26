@@ -4,7 +4,7 @@ import { promises as fs } from "fs";
 import { JSDOM } from "jsdom";
 import * as path from "path";
 
-import { Article } from "../src/types/article.types";
+import type { Article } from "./types";
 
 // ==================== 類型定義 ====================
 
