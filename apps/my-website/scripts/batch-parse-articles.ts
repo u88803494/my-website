@@ -239,7 +239,7 @@ function generateArticleDataFile(articles: Article[]): string {
  * 💡 如需修改文章資料，請修改腳本邏輯，而非直接編輯此文件
  */`;
 
-  const imports = `import { Article } from '@/types/article.types';`;
+  const imports = `import type { Article } from '@/types/article.types';`;
 
   const articlesArray = articles
     .map((article) => {
