@@ -1,8 +1,9 @@
+import { type Project } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
-import { projects } from "@/data/projectData";
-import { cn } from "@/utils/cn";
+import { projects as PROJECTS } from "@/data/projectData";
 
 import ProjectCard from "./ProjectCard";
 
@@ -13,7 +14,6 @@ interface FeaturedProjectsProps {
 
 const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ backgroundClass, sectionId }) => {
   const [showAll, setShowAll] = useState(false);
-  const displayedProjects = showAll ? projects : projects.slice(0, 4);
   const isDev = process.env.NODE_ENV === "development";
 
   return (
@@ -28,13 +28,13 @@ const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ backgroundClass, se
 
         {/* 專案網格 */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-          {displayedProjects.map((project, idx) => (
+          {(showAll ? PROJECTS : PROJECTS.slice(0, 3)).map((project: Project, idx: number) => (
             <ProjectCard key={project.title + idx} project={project} />
           ))}
         </div>
 
         {/* 看更多/收合按鈕 */}
-        {projects.length > 4 && (
+        {PROJECTS.length > 4 && (
           <div className="mt-10 flex justify-center">
             {!showAll ? (
               <button

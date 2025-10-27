@@ -3,7 +3,8 @@
 import { BarChart3 } from "lucide-react";
 import React from "react";
 
-import type { ActivityType, TimeRecord, TimeStatistics as TimeStatisticsType } from "@/features/time-tracker/types";
+import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
+import { ActivityType } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "../TimeStatistics/StatisticsCard";
@@ -19,7 +20,7 @@ interface StatisticsViewProps {
   /** 是否顯示百分比 */
   showPercentages?: boolean;
   /** 統計資料 */
-  statistics: TimeStatisticsType;
+  statistics: TimeStatistics;
   /** 摘要配置 */
   summaryConfig?: {
     /** 自訂摘要項目 */
@@ -60,14 +61,13 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   // 計算百分比
   const percentages = showPercentages ? calculatePercentages(statistics) : {};
 
-  // 準備活動類型統計資料
-  const activityStats = Object.entries(statistics)
-    .filter(([key]) => key !== "總計")
-    .map(([key, value]) => ({
-      activityType: key as ActivityType,
-      label: key,
-      percentage: percentages[key] || undefined,
-      value: value as number,
+  // 準備活動類型統計資料 - 使用 ActivityType enum 遍歷避免 type assertion
+  const activityStats = Object.values(ActivityType)
+    .map((activityType) => ({
+      activityType,
+      label: activityType,
+      percentage: percentages[activityType] || undefined,
+      value: statistics[activityType],
     }))
     .sort((a, b) => b.value - a.value); // 按時間長度排序
 
@@ -79,16 +79,17 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
 
     // 找到最早的記錄（按 createdAt 排序）
     const earliestRecord = records.reduce((earliest, current) => {
+      if (!current.createdAt || !earliest.createdAt) return earliest;
       return current.createdAt < earliest.createdAt ? current : earliest;
     });
 
-    return earliestRecord.createdAt
-      .toLocaleDateString("zh-TW", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .replace(/\//g, "-");
+    if (!earliestRecord.createdAt) return null;
+
+    // 轉換 Date 為字符串格式
+    const createdAt = earliestRecord.createdAt;
+    if (!createdAt) return null;
+    const dateStr = createdAt instanceof Date ? createdAt.toISOString().split("T")[0] : String(createdAt);
+    return dateStr || null;
   };
 
   const trackingStartDate = getTrackingStartDate();

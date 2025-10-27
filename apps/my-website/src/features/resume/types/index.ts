@@ -1,4 +1,4 @@
-import { Article } from "@/types/article.types";
+import { type Article } from "@packages/shared/types";
 
 /**
  * useCarousel hook 的選項

@@ -3,19 +3,7 @@ import * as cheerio from "cheerio";
 import { promises as fs } from "fs";
 import * as path from "path";
 
-import { Article } from "@/types/article.types";
-
-// ==================== 類型定義 ====================
-
-interface ArticleConfig {
-  articles: string[];
-}
-
-interface ParseStats {
-  failed: number;
-  success: number;
-  total: number;
-}
+import type { Article, ArticleConfig, ParseStats } from "./types";
 
 // ==================== 配置常量 ====================
 
@@ -49,12 +37,12 @@ function cleanText(text: string | undefined): string {
  * 安全的日期解析
  */
 function parseDate(dateValue: string | undefined): string {
-  if (!dateValue) return new Date().toISOString().split("T")[0];
+  if (!dateValue) return new Date().toISOString().split("T")[0] ?? "";
 
   try {
-    return new Date(dateValue).toISOString().split("T")[0];
+    return new Date(dateValue).toISOString().split("T")[0] ?? "";
   } catch {
-    return new Date().toISOString().split("T")[0];
+    return new Date().toISOString().split("T")[0] ?? "";
   }
 }
 
@@ -140,7 +128,7 @@ async function parseMediumArticle(url: string): Promise<Article> {
 
     for (const selector of tagSelectors) {
       const tagElements = $(selector);
-      tagElements.each((i, element) => {
+      tagElements.each((_i, element) => {
         const tagText = $(element).text().trim();
         const parentHref = $(element).closest("a").attr("href");
 
@@ -167,7 +155,7 @@ async function parseMediumArticle(url: string): Promise<Article> {
     const article: Article = {
       claps: undefined,
       description,
-      publishedDate: publishedDate || new Date().toISOString().split("T")[0],
+      publishedDate: publishedDate || new Date().toISOString().split("T")[0] || "",
       readTime,
       subtitle,
       tags: tags.slice(0, CONFIG.MAX_TAG_COUNT),
@@ -185,7 +173,7 @@ async function parseMediumArticle(url: string): Promise<Article> {
     return {
       claps: undefined,
       description: "請手動更新文章描述",
-      publishedDate: new Date().toISOString().split("T")[0],
+      publishedDate: new Date().toISOString().split("T")[0] || "",
       readTime: CONFIG.DEFAULT_READ_TIME,
       subtitle: "",
       tags: ["Medium"],
@@ -239,7 +227,7 @@ function generateArticleDataFile(articles: Article[]): string {
  * 💡 如需修改文章資料，請修改腳本邏輯，而非直接編輯此文件
  */`;
 
-  const imports = `import { Article } from '@/types/article.types';`;
+  const imports = `import type { Article } from '@/types/article.types';`;
 
   const articlesArray = articles
     .map((article) => {
@@ -291,22 +279,26 @@ async function batchParseArticles(): Promise<void> {
 
   for (let i = 0; i < articleUrls.length; i++) {
     const url = articleUrls[i];
+    if (!url) continue;
+
     console.log(`📖 正在解析第 ${i + 1} 篇文章...`);
     console.log(`🔗 URL: ${url}\n`);
 
     try {
       const article = await parseMediumArticle(url);
-      articles.push(article);
-      stats.success++;
+      if (article.url) {
+        articles.push(article);
+        stats.success++;
 
-      console.log(`✅ 解析成功: ${article.title}`);
-      console.log(`📅 發布日期: ${article.publishedDate}`);
-      console.log(`🏷️  標籤: ${article.tags.join(", ")}`);
-      console.log(`⏱️  閱讀時間: ${article.readTime}\n`);
+        console.log(`✅ 解析成功: ${article.title}`);
+        console.log(`📅 發布日期: ${article.publishedDate}`);
+        console.log(`🏷️  標籤: ${article.tags.join(", ")}`);
+        console.log(`⏱️  閱讀時間: ${article.readTime}\n`);
 
-      // 添加延遲避免請求過於頻繁
-      if (i < articleUrls.length - 1) {
-        await delay(CONFIG.REQUEST_DELAY);
+        // 添加延遲避免請求過於頻繁
+        if (i < articleUrls.length - 1) {
+          await delay(CONFIG.REQUEST_DELAY);
+        }
       }
     } catch (error) {
       console.error(`❌ 解析失敗: ${error instanceof Error ? error.message : String(error)}\n`);
@@ -364,4 +356,4 @@ if (require.main === module) {
   main();
 }
 
-export { batchParseArticles, parseMediumArticle, loadArticleUrls };
+export { batchParseArticles, loadArticleUrls, parseMediumArticle };

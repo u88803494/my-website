@@ -75,6 +75,7 @@ const AboutHero = () => {
             className="h-full w-full object-cover object-top"
             fill
             priority
+            sizes="(max-width: 640px) 128px, 160px"
             src="/images/my-photo.jpeg"
           />
         </motion.div>

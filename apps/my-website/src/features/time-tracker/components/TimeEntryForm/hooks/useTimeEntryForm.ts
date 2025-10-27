@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
-import type { ActivityType, TimeEntryFormData, TimeRecord } from "@/features/time-tracker/types";
+import { type TimeRecord } from "@/features/time-tracker/types";
 
+import type { TimeEntryFormData } from "../../../types";
 import type { ValidationError } from "../../../types";
 import { calculateDuration, getCurrentTaiwanDate } from "../../../utils/time";
 import { validateTimeEntry } from "../../../utils/validation";
@@ -14,7 +15,7 @@ interface UseTimeEntryFormOptions {
 
 export const useTimeEntryForm = ({ isLoading = false, onSubmit }: UseTimeEntryFormOptions) => {
   const [formData, setFormData] = useState<TimeEntryFormData>({
-    activityType: "" as ActivityType,
+    activityType: "",
     date: getCurrentTaiwanDate(),
     description: "",
     endTime: "",
@@ -80,6 +81,11 @@ export const useTimeEntryForm = ({ isLoading = false, onSubmit }: UseTimeEntryFo
         return;
       }
 
+      // 驗證已通過，activityType 必定不是空字串
+      if (formData.activityType === "") {
+        return;
+      }
+
       const record: Omit<TimeRecord, "createdAt" | "id"> = {
         activityType: formData.activityType,
         date: formData.date,
@@ -93,7 +99,7 @@ export const useTimeEntryForm = ({ isLoading = false, onSubmit }: UseTimeEntryFo
 
       // 重置表單
       setFormData({
-        activityType: "" as ActivityType,
+        activityType: "",
         date: getCurrentTaiwanDate(),
         description: "",
         endTime: "",

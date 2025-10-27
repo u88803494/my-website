@@ -67,10 +67,12 @@ export const getMostActiveType = (statistics: TimeStatistics): ActivityType | nu
   let maxDuration = 0;
   let mostActiveType: ActivityType | null = null;
 
-  Object.entries(statistics).forEach(([key, value]) => {
-    if (key !== "總計" && value > maxDuration) {
-      maxDuration = value;
-      mostActiveType = key as ActivityType;
+  // 使用 ActivityType enum 來遍歷，避免type assertion
+  Object.values(ActivityType).forEach((activityType) => {
+    const duration = statistics[activityType];
+    if (duration > maxDuration) {
+      maxDuration = duration;
+      mostActiveType = activityType;
     }
   });
 
@@ -88,8 +90,11 @@ export const calculateDailyStatistics = (records: TimeRecord[]): Record<string, 
       dailyStats[record.date] = createEmptyStatistics();
     }
 
-    dailyStats[record.date][record.activityType] += record.duration;
-    dailyStats[record.date].總計 += record.duration;
+    const stats = dailyStats[record.date];
+    if (stats) {
+      stats[record.activityType] += record.duration;
+      stats.總計 += record.duration;
+    }
   });
 
   return dailyStats;

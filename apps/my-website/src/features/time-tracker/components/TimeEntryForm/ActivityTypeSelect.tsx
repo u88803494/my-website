@@ -1,23 +1,24 @@
-import React from "react";
-
 import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
-import type { ActivityType } from "@/features/time-tracker/types";
+import { ActivityType, type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
 
 interface ActivityTypeSelectProps {
   disabled?: boolean;
   error?: string;
-  onChange: (value: ActivityType) => void;
-  value: "" | ActivityType;
+  onChange: (value: ActivityTypeType) => void;
+  value: "" | ActivityTypeType;
 }
 
 /**
  * 活動類型選擇元件
  * 使用 daisyUI 的 select 樣式
  */
-const ActivityTypeSelect: React.FC<ActivityTypeSelectProps> = ({ disabled = false, error, onChange, value }) => {
+const ActivityTypeSelect = ({ disabled = false, error, onChange, value }: ActivityTypeSelectProps) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value as ActivityType;
-    onChange(selectedValue);
+    const selectedValue = event.target.value;
+    // 運行時驗證，確保是有效的 ActivityType
+    if (selectedValue && Object.values(ActivityType).includes(selectedValue as ActivityTypeType)) {
+      onChange(selectedValue as ActivityTypeType);
+    }
   };
 
   return (

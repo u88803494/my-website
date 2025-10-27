@@ -4,7 +4,7 @@ import { promises as fs } from "fs";
 import { JSDOM } from "jsdom";
 import * as path from "path";
 
-import { Article } from "@/types/article.types";
+import type { Article } from "./types";
 
 // ==================== 類型定義 ====================
 
@@ -348,8 +348,8 @@ async function parseArticle(url: string): Promise<Article | null> {
       claps: undefined,
       description: description || "來自 Medium 的技術文章",
       publishedDate: articleData.datePublished
-        ? new Date(articleData.datePublished).toISOString().split("T")[0]
-        : new Date().toISOString().split("T")[0],
+        ? new Date(articleData.datePublished).toISOString().split("T")[0] || ""
+        : new Date().toISOString().split("T")[0] || "",
       readTime: calculateReadTime(articleData.articleBody || ""),
       subtitle: articleData.description || description || "",
       tags: tags.length > 0 ? tags : ["Medium", "Blog"],
@@ -381,7 +381,7 @@ function generateTsFileContent(articles: Article[]): string {
  * 📰 包含最新 ${articles.length} 篇文章
  */
 
-import { Article } from "@/types/article.types";
+import type { Article } from "@/types/article.types";
 
 export const latestArticles: Article[] = ${JSON.stringify(articles, null, 2)};
 `;

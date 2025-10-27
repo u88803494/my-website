@@ -3,22 +3,22 @@
 import { Settings } from "lucide-react";
 import React, { useCallback } from "react";
 
-import type { WeekStartDay } from "@/features/time-tracker/types";
+import type { UserSettings, WeekStartDay } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 
 /**
  * 週起始日選項常數
  */
-const WEEK_START_OPTIONS = [
-  { label: "週日", value: 0 as WeekStartDay },
-  { label: "週一", value: 1 as WeekStartDay },
-  { label: "週二", value: 2 as WeekStartDay },
-  { label: "週三", value: 3 as WeekStartDay },
-  { label: "週四", value: 4 as WeekStartDay },
-  { label: "週五", value: 5 as WeekStartDay },
-  { label: "週六", value: 6 as WeekStartDay },
-] as const;
+const WEEK_START_OPTIONS: Array<{ label: string; value: WeekStartDay }> = [
+  { label: "週日", value: 0 },
+  { label: "週一", value: 1 },
+  { label: "週二", value: 2 },
+  { label: "週三", value: 3 },
+  { label: "週四", value: 4 },
+  { label: "週五", value: 5 },
+  { label: "週六", value: 6 },
+];
 
 /**
  * 用戶設定組件
@@ -29,8 +29,11 @@ const UserSettings: React.FC = () => {
 
   const handleWeekStartDayChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const newWeekStartDay = parseInt(event.target.value, 10) as WeekStartDay;
-      updateSettings({ weekStartDay: newWeekStartDay });
+      const parsed = parseInt(event.target.value, 10);
+      // 運行時驗證，確保是有效的 WeekStartDay (0-6)
+      if (parsed >= 0 && parsed <= 6) {
+        updateSettings({ weekStartDay: parsed as WeekStartDay });
+      }
     },
     [updateSettings],
   );

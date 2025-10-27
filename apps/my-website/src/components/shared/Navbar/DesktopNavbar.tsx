@@ -1,7 +1,6 @@
+import { type NavRoute } from "@packages/shared/types";
+import { cn } from "@packages/shared/utils";
 import Link from "next/link";
-
-import type { NavRoute } from "@/types/route.types";
-import { cn } from "@/utils/cn";
 
 interface DesktopNavbarProps {
   isActivePage: (href: string) => boolean;

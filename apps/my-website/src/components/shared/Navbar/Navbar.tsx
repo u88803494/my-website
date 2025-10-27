@@ -1,9 +1,8 @@
 "use client";
 
+import { routes } from "@packages/shared/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import { routes } from "@/constants/routes";
 
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";

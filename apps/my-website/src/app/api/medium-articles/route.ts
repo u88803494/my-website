@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // Medium GraphQL API 端點
 const MEDIUM_GRAPHQL_URL = "https://hugh-program-learning-diary-js.medium.com/_/graphql";

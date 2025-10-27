@@ -1,6 +1,6 @@
-export { ErrorState } from "./ErrorState";
 export type { ErrorStateProps } from "./ErrorState";
-export { LoadingState } from "./LoadingState";
+export { ErrorState } from "./ErrorState";
 export type { LoadingStateProps } from "./LoadingState";
-export { default, MainTabContent } from "./MainTabContent";
+export { LoadingState } from "./LoadingState";
 export type { MainTabContentProps } from "./MainTabContent";
+export { default, MainTabContent } from "./MainTabContent";

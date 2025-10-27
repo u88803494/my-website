@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-import ContactLinks from "@/components/shared/ContactLinks";
+import { ContactLinks } from "@/components/shared";
 
 import TypewriterText from "./TypewriterText";
 

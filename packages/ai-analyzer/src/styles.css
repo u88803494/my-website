@@ -1,0 +1,3 @@
+/* This file ensures Tailwind and daisyUI classes work in this package */
+/* The actual styling is handled by the main app's globals.css */
+/* Components in this package use daisyUI classes that will be processed by the main app's Tailwind pipeline */

@@ -4,20 +4,20 @@
  * ⚠️  重要提醒：請勿手動編輯此文件！
  *
  * 🔄 此文件由 scripts/sync-latest-articles.ts 自動生成
- * 📅 最後更新時間: 2025/8/4 下午5:57:36
+ * 📅 最後更新時間: 2025/10/27 上午12:37:21
  * 📰 包含最新 2 篇文章
  */
 
-import { Article } from "@/types/article.types";
+import type { Article } from "@/types/article.types";
 
 export const latestArticles: Article[] = [
   {
     description:
-      "到目前為止，我們已經探討了如何拆分職責 (SRP)、如何擴展功能 (OCP)、以及如何確保擴展的可靠性 (LSP)。今天，我們要來解決一個在元件化開發中非常常見的問題：一個元件到底該知道多少事？ 這就是 I — 介面隔離原則 (Interface Segregation Principle, ISP) 要探討的核心。 介面隔離原則 (ISP) 同樣由羅伯特·C·馬丁 (Uncle Bob)…",
+      "從前端視角理解 SOLID：I — 介面隔離原則，別再硬塞用不到的 Props 了！ 本文為 從前端視角理解 SOLID 系列的第五篇。 第一篇：導論，為何好懂的 React …",
     publishedDate: "2025-08-01",
     readTime: "2 min read",
     subtitle:
-      "到目前為止，我們已經探討了如何拆分職責 (SRP)、如何擴展功能 (OCP)、以及如何確保擴展的可靠性 (LSP)。今天，我們要來解決一個在元件化開發中非常常見的問題：一個元件到底該知道多少事？ 這就是 I — 介面隔離原則 (Interface Segregation Principle, ISP) 要探討的核心。 介面隔離原則 (ISP) 同樣由羅伯特·C·馬丁 (Uncle Bob)…",
+      "從前端視角理解 SOLID：I — 介面隔離原則，別再硬塞用不到的 Props 了！ 本文為 從前端視角理解 SOLID 系列的第五篇。 第一篇：導論，為何好懂的 React …",
     tags: ["AI", "Front End Development", "Life", "React", "TypeScript"],
     thumbnail: "https://miro.medium.com/v2/resize:fit:1200/1*Ca3lkjeaVYE4dV3lqqTg2w.png",
     title: "從前端視角理解 SOLID：I — 介面隔離原則，別再硬塞用不到的 Props 了！",
@@ -25,11 +25,10 @@ export const latestArticles: Article[] = [
   },
   {
     description:
-      "但一個新問題浮現了：當我們基於一個「基本款」元件，去擴展出一個「延伸款」時，要如何確保這個延伸款不會失控，甚至破壞掉原有的系統？這就是我們今天要深入探討的，SOLID 中最具哲學思辨的原則：L — 里氏替換原則 (Liskov Substitution Principle, LSP)。 他認為這只是一個樣式上的替換，但現在，他的 submitForm…",
+      "從前端視角理解 SOLID：L — 里氏替換原則，你的「延伸款」別背叛了「基本款」 本文為 從前端視角理解 SOLID …",
     publishedDate: "2025-08-01",
     readTime: "2 min read",
-    subtitle:
-      "但一個新問題浮現了：當我們基於一個「基本款」元件，去擴展出一個「延伸款」時，要如何確保這個延伸款不會失控，甚至破壞掉原有的系統？這就是我們今天要深入探討的，SOLID 中最具哲學思辨的原則：L — 里氏替換原則 (Liskov Substitution Principle, LSP)。 他認為這只是一個樣式上的替換，但現在，他的 submitForm…",
+    subtitle: "從前端視角理解 SOLID：L — 里氏替換原則，你的「延伸款」別背叛了「基本款」 本文為 從前端視角理解 SOLID …",
     tags: ["Backend", "Front End Development", "JavaScript", "Life", "React"],
     thumbnail: "https://miro.medium.com/v2/da:true/bc1f8416df0cad099e43cda2872716e5864f18a73bda2a7547ea082aca9b5632",
     title: "從前端視角理解 SOLID：L — 里氏替換原則，你的「延伸款」別背叛了「基本款」",

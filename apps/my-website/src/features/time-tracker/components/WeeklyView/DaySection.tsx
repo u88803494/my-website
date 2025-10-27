@@ -4,8 +4,7 @@ import { Calendar, Clock } from "lucide-react";
 import dynamic from "next/dynamic";
 import React, { useMemo } from "react";
 
-import type { TimeRecord } from "@/features/time-tracker/types";
-import { ActivityType } from "@/features/time-tracker/types";
+import { ActivityType, type TimeRecord } from "@/features/time-tracker/types";
 
 import { formatMinutesToHours, getActivityTypeColor } from "../../utils/formatting";
 
@@ -109,16 +108,20 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
         </div>
 
         {/* 活動類型統計 */}
-        {Object.entries(statsByType).length > 0 ? (
+        {totalMinutes > 0 ? (
           <div className="space-y-2">
             <h4 className="text-base-content/80 mb-2 text-sm font-medium">活動分佈</h4>
             <div className="space-y-2">
-              {Object.entries(statsByType).map(([type, { minutes }]) => (
-                <div className="flex items-center justify-between" key={type}>
-                  <span className={`badge badge-sm ${getActivityTypeColor(type as ActivityType)}`}>{type}</span>
-                  <span className="text-base-content/80 text-sm">{formatMinutesToHours(minutes)}</span>
-                </div>
-              ))}
+              {Object.values(ActivityType)
+                .filter((type) => statsByType[type].minutes > 0)
+                .map((type) => (
+                  <div className="flex items-center justify-between" key={type}>
+                    <span className={`badge badge-sm ${getActivityTypeColor(type)}`}>{type}</span>
+                    <span className="text-base-content/80 text-sm">
+                      {formatMinutesToHours(statsByType[type].minutes)}
+                    </span>
+                  </div>
+                ))}
             </div>
           </div>
         ) : (

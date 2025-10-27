@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Eye, Star, Zap } from "lucide-react";
 import React from "react";
 
-import { Skill } from "@/data/skillData";
+import { type Skill } from "@/data/skillData";
 import { cn } from "@/utils/cn";
 
 interface SkillCategoryProps {
@@ -20,21 +20,21 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
     switch (level) {
       case "familiar":
         return {
-          accentColor: "text-info",
-          badgeVariant: "badge-info",
+          accentColor: "text-cyan-500",
+          badgeVariant: "border-cyan-500 text-cyan-600",
           icon: <Eye className="h-5 w-5" />,
         };
       case "proficient":
         return {
-          accentColor: "text-accent",
-          badgeVariant: "badge-accent",
+          accentColor: "text-primary",
+          badgeVariant: "badge-primary",
           icon: <Zap className="h-5 w-5" />,
         };
       case "expert":
       default:
         return {
-          accentColor: "text-primary",
-          badgeVariant: "badge-primary",
+          accentColor: "text-success",
+          badgeVariant: "badge-success",
           icon: <Star className="h-5 w-5" />,
         };
     }
