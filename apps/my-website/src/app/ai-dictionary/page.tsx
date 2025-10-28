@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "AI 智能中文字典 - Henry Lee",
 };
 
+// Force dynamic rendering for this page (uses React Query)
+export const dynamic = "force-dynamic";
+
 const AIDictionaryPage: React.FC = () => {
   return <AIDictionaryFeature />;
 };
