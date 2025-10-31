@@ -7,7 +7,7 @@
     "./style.css": "./style.css"
   },
   "dependencies": {
-    "daisyui": "^5.3.10",
-    "tailwindcss": "^4.1.16"
+    "daisyui": "^5.0.43",
+    "tailwindcss": "^4"
   }
 }

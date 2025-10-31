@@ -6,9 +6,6 @@ export const metadata: Metadata = {
   title: "AI Prompt 生成器 | Henry Lee",
 };
 
-// Force dynamic rendering for this page (uses React Query)
-export const dynamic = "force-dynamic";
-
 const AIAnalyzerPage = () => {
   return <AIAnalyzerFeature />;
 };

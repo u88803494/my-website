@@ -6,9 +6,6 @@ export const metadata: Metadata = {
   title: "技術部落格 - Henry Lee",
 };
 
-// Force dynamic rendering for this page (uses React Query)
-export const dynamic = "force-dynamic";
-
 const BlogPage: React.FC = () => {
   return <BlogFeature />;
 };

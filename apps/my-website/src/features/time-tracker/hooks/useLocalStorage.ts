@@ -20,7 +20,7 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorag
     }
   });
 
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
   // 同步到 localStorage
@@ -28,18 +28,19 @@ export const useLocalStorage = <T>(key: string, defaultValue: T): UseLocalStorag
     try {
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(value));
-        // 使用 queueMicrotask 延遲 setState，避免同步調用
-        if (error !== null) {
-          queueMicrotask(() => setError(null));
-        }
+        setError(null);
       }
     } catch (err) {
       const errorMessage = "儲存到 localStorage 失敗";
       console.error(errorMessage, err);
-      // 使用 queueMicrotask 延遲 setState
-      queueMicrotask(() => setError(errorMessage));
+      setError(errorMessage);
     }
-  }, [key, value, error]);
+  }, [key, value]);
+
+  // 初始化完成後設定 loading 為 false
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   return {
     error,

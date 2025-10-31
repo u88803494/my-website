@@ -17,19 +17,19 @@
     "@packages/shared": "workspace:*"
   },
   "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "@tanstack/react-query": "^5",
     "framer-motion": "^12",
     "lucide-react": "^0.518.0",
-    "next": "^15",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "^15"
   },
   "devDependencies": {
     "@packages/eslint-config": "workspace:*",
     "@packages/tsconfig": "workspace:*",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "eslint": "^9.38.0",
-    "typescript": "^5.9.3"
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "typescript": "^5"
   }
 }
