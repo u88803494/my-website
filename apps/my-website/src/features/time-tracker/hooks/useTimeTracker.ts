@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import type { TimeRecord, TimeStatistics, UseTimeTrackerReturn } from "@/features/time-tracker/types";
 
@@ -20,19 +20,17 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     setValue: setStoredRecords,
     value: storedRecords,
   } = useLocalStorage<TimeRecord[]>(STORAGE_KEY, []);
-  const [records, setRecords] = useState<TimeRecord[]>([]);
   const { settings } = useUserSettings();
 
-  // 同步 localStorage 的資料到本地狀態
-  useEffect(() => {
-    if (!loading && storedRecords) {
-      // 轉換 createdAt 為 Date 物件
-      const processedRecords = storedRecords.map((record) => ({
+  // 直接使用 useMemo 計算處理後的記錄，完全避免 useEffect + setState
+  const records = useMemo<TimeRecord[]>(() => {
+    if (!loading && storedRecords && storedRecords.length > 0) {
+      return storedRecords.map((record) => ({
         ...record,
         createdAt: new Date(record.createdAt),
       }));
-      setRecords(processedRecords);
     }
+    return [];
   }, [storedRecords, loading]);
 
   // 計算統計資料
@@ -57,8 +55,8 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
         id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       };
 
+      // 只更新 storedRecords，records 會透過 useMemo 自動更新
       const updatedRecords = [newRecord, ...records];
-      setRecords(updatedRecords);
       setStoredRecords(updatedRecords);
     },
     [records, setStoredRecords],
@@ -67,8 +65,8 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
   // 刪除記錄
   const deleteRecord = useCallback(
     (id: string) => {
+      // 只更新 storedRecords，records 會透過 useMemo 自動更新
       const updatedRecords = records.filter((record) => record.id !== id);
-      setRecords(updatedRecords);
       setStoredRecords(updatedRecords);
     },
     [records, setStoredRecords],
@@ -93,7 +91,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
       return !isSameWeekInTaiwan(recordDate, currentWeekStart, settings.weekStartDay);
     });
 
-    setRecords(updatedRecords);
+    // 只更新 storedRecords，records 會透過 useMemo 自動更新
     setStoredRecords(updatedRecords);
   }, [records, setStoredRecords, settings.weekStartDay]);
 
