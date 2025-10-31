@@ -1,5 +1,10 @@
-import { BlogFeature } from "@packages/blog";
-import { API_PATHS } from "@packages/shared";
+import {
+  BlogFeature,
+  DEFAULT_ARTICLES_LIMIT,
+  fetchMediumArticles,
+  mediumArticlesKeys,
+  mediumArticlesQueryConfig,
+} from "@packages/blog";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import type { Metadata } from "next";
 
@@ -9,37 +14,6 @@ export const metadata: Metadata = {
   description: "Henry Lee 的技術文章與開發心得分享",
   title: "技術部落格 - Henry Lee",
 };
-
-/**
- * Fetch Medium articles for prefetching
- */
-async function fetchMediumArticles({
-  limit = 9,
-  pageParam,
-}: {
-  limit?: number;
-  pageParam?: string;
-} = {}) {
-  const params = new URLSearchParams();
-
-  if (pageParam) {
-    params.append("cursor", pageParam);
-  }
-
-  if (limit !== 8) {
-    params.append("limit", limit.toString());
-  }
-
-  const url = `${API_PATHS.MEDIUM_ARTICLES}${params.toString() ? "?" + params.toString() : ""}`;
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch Medium articles: ${response.status} ${response.statusText}`);
-  }
-
-  return response.json();
-}
 
 /**
  * Server Component: Blog Page with React Query Prefetching
@@ -56,10 +30,9 @@ export default async function BlogPage() {
 
   // Prefetch initial articles on the server
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ["mediumArticles", 9],
-    queryFn: ({ pageParam }) => fetchMediumArticles({ limit: 9, pageParam }),
-    initialPageParam: undefined,
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    queryKey: mediumArticlesKeys.list(DEFAULT_ARTICLES_LIMIT),
+    queryFn: ({ pageParam }) => fetchMediumArticles({ limit: DEFAULT_ARTICLES_LIMIT, pageParam }),
+    ...mediumArticlesQueryConfig,
     pages: 1, // Only prefetch the first page
   });
 
