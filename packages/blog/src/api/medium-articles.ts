@@ -1,7 +1,7 @@
 import { API_PATHS } from "@packages/shared";
 
-import type { MediumArticlesResponse } from "../types";
 import { DEFAULT_ARTICLES_LIMIT } from "../constants";
+import type { MediumArticlesResponse } from "../types";
 
 export interface FetchMediumArticlesParams {
   limit?: number;

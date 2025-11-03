@@ -140,6 +140,96 @@ const { data, isLoading, error } = useQuery({
 });
 ```
 
+### React Query + Next.js SSG Pattern
+
+**重要：React Query 最低版本要求 5.84.1+**（修復 SSG 相容性 bug）
+
+專案使用兩種 React Query pattern，根據需求選擇：
+
+#### Pattern 1: Server-side Prefetch（有 SEO 需求）
+
+**使用時機：**
+
+- GET requests 需要 SEO 優化
+- Infinite queries 需要初始資料
+- 提升 FCP/LCP 性能
+
+**範例：Blog 頁面**
+
+```typescript
+// apps/my-website/src/app/blog/page.tsx
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/lib/query-client";
+
+/**
+ * ✅ 使用 HydrationBoundary
+ * 理由：Server-side prefetch infinite query，提升初始載入速度和 SEO
+ */
+export default async function BlogPage() {
+  const queryClient = getQueryClient();
+
+  // Server-side prefetch
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: mediumArticlesKeys.list(limit),
+    queryFn: ({ pageParam }) => fetchMediumArticles({ limit, pageParam }),
+    ...mediumArticlesQueryConfig,
+    pages: 1, // Only prefetch the first page
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <BlogFeature />
+    </HydrationBoundary>
+  );
+}
+```
+
+#### Pattern 2: Client-only Mutation（無 SEO 需求）
+
+**使用時機：**
+
+- POST/PUT/DELETE mutations
+- 完全動態的頁面
+- 不需要 SEO 的功能頁面（如工具頁）
+
+**範例：AI Dictionary 頁面**
+
+```typescript
+// apps/my-website/src/app/ai-dictionary/page.tsx
+/**
+ * ❌ 不使用 HydrationBoundary
+ * 理由：只使用 mutation（POST），無需 server-side prefetch
+ */
+export default function AIDictionaryPage() {
+  return <AIDictionaryFeature />;  // Client Component 內部處理
+}
+```
+
+#### 決策流程圖
+
+```
+需要 React Query？
+  ├─ 是 → 是 GET request？
+  │      ├─ 是 → 需要 SEO？
+  │      │      ├─ 是 → ✅ 使用 Pattern 1 (Server Prefetch + HydrationBoundary)
+  │      │      └─ 否 → ❌ 使用 Pattern 2 (Client-only)
+  │      └─ 否 (POST/PUT/DELETE) → ❌ 使用 Pattern 2 (Client-only)
+  └─ 否 → 一般 Server Component
+```
+
+#### 重要注意事項
+
+1. **不要使用 `force-dynamic`**
+   - React Query 5.84.1+ 已修復 SSG bug
+   - 所有頁面都應該能正確生成為 Static (○)
+
+2. **`'use client'` 使用原則**
+   - 只在真正需要 client-side 功能的組件使用
+   - 純容器組件不需要（子組件已有 `'use client'`）
+
+3. **查看完整架構決策**
+   - 詳見：`docs/adr/001-react-query-ssg-pattern.md`
+
 ### Component Organization
 
 **Complex components use folder structure:**

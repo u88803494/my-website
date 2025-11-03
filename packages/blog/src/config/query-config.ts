@@ -1,5 +1,5 @@
-import type { MediumArticlesResponse } from "../types";
 import { ARTICLES_CACHE_TIME, ARTICLES_STALE_TIME } from "../constants";
+import type { MediumArticlesResponse } from "../types";
 
 /**
  * Query key factory for medium articles

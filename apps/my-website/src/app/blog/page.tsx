@@ -16,12 +16,19 @@ export const metadata: Metadata = {
 };
 
 /**
- * Server Component: Blog Page with React Query Prefetching
+ * Blog Page (Server Component with React Query Prefetching)
  *
- * This page uses Server Component prefetching to improve performance:
- * 1. Prefetch data on the server using `prefetchInfiniteQuery`
- * 2. Dehydrate the state and pass it to the client
- * 3. Use `HydrationBoundary` to hydrate the client-side QueryClient
+ * ✅ 使用 HydrationBoundary + Server-side Prefetch
+ * 理由：
+ * 1. Blog 頁面需要 SEO 優化（搜尋引擎索引文章列表）
+ * 2. Infinite query 需要初始資料以提升 FCP/LCP 性能
+ * 3. Server-side prefetch 減少 client-side loading 時間
+ *
+ * 流程：
+ * 1. Server-side prefetch data using `prefetchInfiniteQuery`
+ * 2. Dehydrate the QueryClient state
+ * 3. Pass dehydrated state to client via `HydrationBoundary`
+ * 4. Client-side QueryClient hydrates with server data
  *
  * Reference: https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr
  */
