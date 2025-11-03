@@ -1,5 +1,3 @@
-"use client";
-
 import AIDictionaryContent from "./components/AIDictionaryContent";
 import AIDictionaryHeader from "./components/AIDictionaryHeader";
 
