@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "技術部落格 - Henry Lee",
 };
 
+// Force dynamic rendering due to React Query usage in Client Components
+export const dynamic = 'force-dynamic';
+
 /**
  * Server Component: Blog Page with React Query Prefetching
  *
