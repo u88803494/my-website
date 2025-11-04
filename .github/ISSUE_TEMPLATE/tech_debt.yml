@@ -1,0 +1,136 @@
+name: ♻️ Technical Debt / Refactor
+description: 技術債、重構、效能優化
+title: "[Tech]: "
+labels: ["refactor", "p2-medium", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提出技術債、重構或效能優化需求。
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: 類型
+      description: 選擇最符合的類別
+      options:
+        - 重構 (Refactor)
+        - 效能優化 (Performance)
+        - 技術債 (Tech Debt)
+        - 架構改進 (Architecture)
+        - 安全性 (Security)
+        - 依賴更新 (Dependencies)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先級
+      description: 評估處理的急迫性
+      options:
+        - p1-high（影響開發效率或系統穩定性）
+        - p2-medium（應該處理但不緊急）
+        - p3-low（改善項目、有空再做）
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 影響範圍
+      description: 這個改進涉及哪些部分？（可複選）
+      multiple: true
+      options:
+        - 前端 (Frontend)
+        - 後端/API (Backend)
+        - AI 功能 (AI)
+        - Blog
+        - DevOps/部署
+
+  - type: textarea
+    id: current
+    attributes:
+      label: 目前狀況
+      description: 描述現有的問題或技術債
+      placeholder: |
+        目前的實作方式是...
+        存在的問題包括...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: 建議改進方式
+      description: 你建議如何改進？
+      placeholder: |
+        建議的做法是...
+        預期的改變包括...
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: 影響與好處
+      description: 這個改進會帶來什麼好處？有什麼風險？
+      placeholder: |
+        **好處**：
+        - 提升程式碼可讀性
+        - 減少重複程式碼
+        - 改善效能 X%
+
+        **風險**：
+        - 需要更新相關測試
+        - 可能影響現有功能
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 相關連結或參考資料
+      description: 貼上相關的文檔、文章或 PR 連結
+      placeholder: |
+        - https://...
+        - Issue #...
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: 預估工作量
+      description: 預估完成所需時間
+      options:
+        - effort:1-small（1-2 小時）
+        - effort:2-medium（半天）
+        - effort:3-large（1-2 天）
+        - effort:4-xlarge（3+ 天）
+
+  - type: textarea
+    id: breaking_changes
+    attributes:
+      label: Breaking Changes（如有）
+      description: 這個改動是否會造成 Breaking Changes？
+      placeholder: |
+        是 / 否
+
+        如果是，請說明：
+        - 哪些 API 會改變
+        - 如何遷移現有程式碼
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 實作檢查清單
+      description: 完成這個改進需要哪些步驟？
+      options:
+        - label: 更新相關程式碼
+        - label: 更新測試
+        - label: 更新文檔
+        - label: 檢查 Breaking Changes
+        - label: Performance benchmark
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 其他資訊
+      description: 任何其他補充資訊

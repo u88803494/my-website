@@ -235,6 +235,32 @@ pnpm sync:all-articles  # 完整同步流程
 - 🗂️ **[article-urls.json](./article-urls.json)** - Medium 文章 URL 管理
 - 🤖 **[batch-parse-articles.js](./scripts/batch-parse-articles.js)** - 自動化解析腳本
 - 📊 **[articleData.ts](./src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
+- 📋 **[Issue 管理指南](./docs/ISSUE-MANAGEMENT.md)** - P0-P3 優先級系統使用說明
+
+## 📊 Issue 管理
+
+本專案使用 [P0-P3 優先級系統](./docs/ISSUE-MANAGEMENT.md) 管理 GitHub Issues。
+
+[![Open Issues](https://img.shields.io/github/issues/u88803494/my-website)](https://github.com/u88803494/my-website/issues)
+[![P0 Critical](https://img.shields.io/github/issues/u88803494/my-website/p0-critical?color=B60205&label=P0%20Critical)](https://github.com/u88803494/my-website/labels/p0-critical)
+[![P1 High](https://img.shields.io/github/issues/u88803494/my-website/p1-high?color=D93F0B&label=P1%20High)](https://github.com/u88803494/my-website/labels/p1-high)
+[![P2 Medium](https://img.shields.io/github/issues/u88803494/my-website/p2-medium?color=FBCA04&label=P2%20Medium)](https://github.com/u88803494/my-website/labels/p2-medium)
+[![P3 Low](https://img.shields.io/github/issues/u88803494/my-website/p3-low?color=0E8A16&label=P3%20Low)](https://github.com/u88803494/my-website/labels/p3-low)
+
+### 優先級定義
+
+- **P0** 🔥 Critical - 立即處理（網站無法運作、安全漏洞）
+- **P1** ⚡ High - 本週內（核心功能損壞）
+- **P2** 📌 Medium - 本月內（重要功能、技術債）
+- **P3** 💡 Low - 有空再做（Nice-to-have）
+
+### 快速連結
+
+- 📋 [建立新 Issue](https://github.com/u88803494/my-website/issues/new/choose) - 使用 Issue Templates
+- 🔍 [需要 Triage 的 Issues](https://github.com/u88803494/my-website/labels/status%3Aneeds-triage)
+- ✅ [準備開始的 Issues](https://github.com/u88803494/my-website/labels/status%3Aready)
+
+詳細說明請參閱 [Issue 管理指南](./docs/ISSUE-MANAGEMENT.md)。
 
 ## 🌟 特色功能說明
 
