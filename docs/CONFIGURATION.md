@@ -1,6 +1,54 @@
 # Monorepo 配置文檔
 
-本文檔說明 my-website monorepo 的 TypeScript 和 ESLint 配置架構。
+本文檔說明 my-website monorepo 的 TypeScript、ESLint 和 AI 工具配置架構。
+
+## AI 工具配置
+
+本專案採用 [AGENTS.md](https://agents.md/) 業界標準進行 AI 編碼助手配置。
+
+### 配置檔案結構
+
+```
+my-website/
+├── AGENTS.md                    # 主配置檔（業界標準）
+├── CLAUDE.md                    # Claude Code 入口檔（@AGENTS.md + 專屬功能）
+├── .cursorrules → AGENTS.md     # Symbolic link（Cursor IDE）
+├── .windsurfrules → AGENTS.md   # Symbolic link（Windsurf IDE）
+└── .gemini/
+    └── settings.json            # Gemini CLI 設定（contextFileName: "AGENTS.md"）
+```
+
+### 檔案說明
+
+- **AGENTS.md** - 所有 AI 工具的共同配置（專案概述、開發命令、編碼標準、架構規範）
+- **CLAUDE.md** - Claude Code 專屬功能（React Query 模式、API 路由、Subagents、MCP 伺服器）
+- **.cursorrules** - Cursor IDE 配置（符號連結到 AGENTS.md）
+- **.windsurfrules** - Windsurf IDE 配置（符號連結到 AGENTS.md）
+- **.gemini/settings.json** - Gemini CLI 設定（指向 AGENTS.md）
+
+### 支援的 AI 工具
+
+- ✅ **Claude Code** - 透過 `@AGENTS.md` 引用讀取主配置
+- ✅ **Cursor IDE** - 原生支援 `.cursorrules` 符號連結
+- ✅ **Windsurf IDE** - 原生支援 `.windsurfrules` 符號連結
+- ✅ **Gemini CLI** - 透過 `settings.json` 設定讀取 AGENTS.md
+
+### 設計理念
+
+採用 **單一來源真相（Single Source of Truth）** 原則：
+
+- 共同規範統一維護在 AGENTS.md
+- 工具專屬功能各自獨立（如 CLAUDE.md）
+- 透過符號連結或引用自動同步
+- 減少重複內容，降低維護成本
+
+### 詳細說明
+
+參閱 [ADR 002: Adopt AGENTS.md Standard](./adr/002-agents-md-adoption.md) 瞭解完整的設計決策、實作細節和遷移指南。
+
+---
+
+## TypeScript 和 ESLint 配置
 
 ## 配置架構概覽
 
