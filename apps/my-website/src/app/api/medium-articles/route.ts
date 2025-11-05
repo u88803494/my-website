@@ -1,4 +1,4 @@
-import { createLogger, logError } from "@packages/shared/utils/logger";
+import { createLogger, logError } from "@packages/shared/utils";
 import { type NextRequest, NextResponse } from "next/server";
 
 const logger = createLogger({ context: "api/medium-articles" });

@@ -7,14 +7,6 @@ import type { NextConfig } from "next";
  */
 const nextConfig: NextConfig = {
   /**
-   * Enable instrumentation hook for logging initialization
-   * @see https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation
-   */
-  experimental: {
-    instrumentationHook: true,
-  },
-
-  /**
    * Prevent bundling server-only packages in client code
    * Required for pino and pino-pretty to work correctly
    */
