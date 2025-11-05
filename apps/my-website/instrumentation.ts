@@ -9,7 +9,7 @@
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
-    const { logger } = await import("@packages/shared/utils/logger");
+    const { logger } = await import("@packages/shared/utils");
 
     // Initialize next-logger to intercept Next.js console logs
     await import("next-logger");
