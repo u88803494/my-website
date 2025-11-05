@@ -89,6 +89,7 @@ _展示 Medium 文章自動化系統的完整佈局：「最新文章」固定�
 - **Prettier** - 代碼格式化工具
 - **PostCSS** - CSS 後處理器
 - **pnpm** - 高效能包管理器
+- **Pino + next-logger** - 結構化日誌系統
 
 ### Automation
 
@@ -232,6 +233,7 @@ pnpm sync:all-articles  # 完整同步流程
 ## 📖 相關文檔
 
 - 📝 **[Medium 文章自動化指南](./docs/MEDIUM-ARTICLES-GUIDE.md)** - 完整的自動化系統使用說明
+- 📋 **[結構化日誌指南](./docs/LOGGER-GUIDE.md)** - Logger 系統使用與最佳實踐
 - 🗂️ **[article-urls.json](./article-urls.json)** - Medium 文章 URL 管理
 - 🤖 **[batch-parse-articles.js](./scripts/batch-parse-articles.js)** - 自動化解析腳本
 - 📊 **[articleData.ts](./src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
