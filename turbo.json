@@ -5,13 +5,13 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["GEMINI_API_KEY", "NODE_ENV"]
+      "env": ["GEMINI_API_KEY", "NODE_ENV", "NEXT_RUNTIME"]
     },
     "check-types": {},
     "dev": {
       "persistent": true,
       "cache": false,
-      "env": ["GEMINI_API_KEY", "NODE_ENV"]
+      "env": ["GEMINI_API_KEY", "NODE_ENV", "NEXT_RUNTIME"]
     },
     "lint": {
       "outputs": [],

@@ -1,0 +1,103 @@
+name: ✨ Feature Request
+description: 提出新功能建議
+title: "[Feature]: "
+labels: ["enhancement", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您提出新功能建議！請提供詳細資訊幫助我們評估。
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先級
+      description: 評估這個功能的重要性
+      options:
+        - p1-high（核心功能、必須有）
+        - p2-medium（重要但非必要）
+        - p3-low（Nice-to-have）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 功能範圍
+      description: 這個功能涉及哪些部分？（可複選）
+      multiple: true
+      options:
+        - 前端 (Frontend)
+        - 後端/API (Backend)
+        - AI 功能 (AI)
+        - Blog
+        - DevOps/部署
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解決的問題
+      description: 這個功能要解決什麼問題？為什麼需要這個功能？
+      placeholder: 我遇到的問題是...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 建議的解決方案
+      description: 你建議如何實作這個功能？
+      placeholder: 我建議可以...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案（可選）
+      description: 有沒有考慮過其他替代方案？
+      placeholder: 我也考慮過...
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: 使用情境
+      description: 描述這個功能的使用場景
+      placeholder: |
+        1. 使用者想要...
+        2. 使用者可以透過...
+        3. 預期結果是...
+
+  - type: textarea
+    id: mockup
+    attributes:
+      label: Mockup 或設計稿（如有）
+      description: 如果有設計稿或參考圖片，請貼上
+      placeholder: 拖放圖片或貼上連結...
+
+  - type: dropdown
+    id: effort
+    attributes:
+      label: 預估工作量（可選）
+      description: 如果你有技術背景，可以預估實作所需時間
+      options:
+        - 不確定
+        - effort:1-small（1-2 小時）
+        - effort:2-medium（半天）
+        - effort:3-large（1-2 天）
+        - effort:4-xlarge（3+ 天）
+
+  - type: checkboxes
+    id: willing_to_contribute
+    attributes:
+      label: 願意協助實作
+      description: 你是否願意協助實作這個功能？
+      options:
+        - label: 我願意提交 Pull Request 實作這個功能
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 其他資訊
+      description: 任何其他補充資訊

@@ -1,0 +1,106 @@
+name: 🐛 Bug Report
+description: 回報一個 bug
+title: "[Bug]: "
+labels: ["bug", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝您回報 bug！請提供以下資訊以幫助我們重現和修復問題。
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先級（初步評估）
+      description: 評估這個 bug 的嚴重程度
+      options:
+        - p0-critical（網站無法運作、資料遺失）
+        - p1-high（核心功能損壞、嚴重影響使用）
+        - p2-medium（一般 bug、部分功能受影響）
+        - p3-low（小問題、視覺瑕疵）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: 影響範圍
+      description: 這個 bug 影響哪些部分？（可複選）
+      multiple: true
+      options:
+        - 前端 (Frontend)
+        - 後端/API (Backend)
+        - AI 功能 (AI)
+        - Blog
+        - DevOps/部署
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug 描述
+      description: 清楚描述發生了什麼問題
+      placeholder: 例如：點擊「送出」按鈕後沒有任何反應...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 重現步驟
+      description: 提供詳細的重現步驟
+      placeholder: |
+        1. 前往 '...'
+        2. 點擊 '...'
+        3. 捲動到 '...'
+        4. 看到錯誤
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 預期行為
+      description: 你預期應該發生什麼？
+      placeholder: 應該顯示成功訊息並導向...
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 實際行為
+      description: 實際上發生了什麼？
+      placeholder: 出現錯誤訊息：...
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截圖或螢幕錄影（如有）
+      description: 拖放圖片或影片到此處
+      placeholder: |
+        貼上截圖連結或拖放檔案...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境資訊
+      description: 請提供環境相關資訊
+      placeholder: |
+        - OS: [例如：macOS 14.0, Windows 11]
+        - Browser: [例如：Chrome 120, Safari 17]
+        - Device: [例如：Desktop, iPhone 15]
+      value: |
+        - OS:
+        - Browser:
+        - Device:
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 錯誤訊息或 Console Logs（如有）
+      description: 請貼上相關的錯誤訊息或 console logs
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 其他資訊
+      description: 任何其他有助於診斷問題的資訊
