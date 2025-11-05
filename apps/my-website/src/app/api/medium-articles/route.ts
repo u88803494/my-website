@@ -1,6 +1,9 @@
+import { createLogger, logError } from "@packages/shared/utils/logger";
 import { type NextRequest, NextResponse } from "next/server";
 
-// Medium GraphQL API 端點
+const logger = createLogger({ context: "api/medium-articles" });
+
+// Medium GraphQL API endpoint
 const MEDIUM_GRAPHQL_URL = "https://hugh-program-learning-diary-js.medium.com/_/graphql";
 
 // GraphQL Query 模板
@@ -65,28 +68,30 @@ fragment StreamPostPreview_post on Post {
 
 export async function GET(request: NextRequest) {
   try {
-    // 從查詢參數中獲取 cursor 和 limit
+    // Extract cursor and limit from query parameters
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor");
     const limitParam = searchParams.get("limit");
 
-    // 解析 limit 參數，預設為 8，最大為 20
+    // Parse limit parameter, default 8, max 20
     const limit = Math.min(Math.max(parseInt(limitParam || "8", 10), 1), 20);
 
-    // 構建 GraphQL payload
+    logger.info({ cursor, limit }, "Fetching Medium articles");
+
+    // Build GraphQL payload
     const payload = [
       {
         operationName: "UserProfileQuery",
         query: GRAPHQL_QUERY,
         variables: {
-          homepagePostsFrom: cursor || null, // 如果沒有 cursor 則為 null
+          homepagePostsFrom: cursor || null,
           homepagePostsLimit: limit,
           id: "cd53d8c994f6",
         },
       },
     ];
 
-    // 發送 POST 請求到 Medium GraphQL API
+    // Send POST request to Medium GraphQL API
     const response = await fetch(MEDIUM_GRAPHQL_URL, {
       body: JSON.stringify(payload),
       headers: {
@@ -102,20 +107,22 @@ export async function GET(request: NextRequest) {
       throw new Error(`Medium API responded with status: ${response.status}`);
     }
 
-    // 解析 JSON 回應
+    // Parse JSON response
     const data = await response.json();
 
-    // 提取文章列表和下一個 cursor
+    // Extract article list and next cursor
     const posts = data[0]?.data?.userResult?.homepagePostsConnection?.posts || [];
     const nextCursor = data[0]?.data?.userResult?.homepagePostsConnection?.pagingInfo?.next?.from || null;
 
-    // 回傳結果給前端
+    logger.info({ postsCount: posts.length, hasNextCursor: !!nextCursor }, "Medium articles fetched successfully");
+
+    // Return result to frontend
     return NextResponse.json({
       nextCursor,
       posts,
     });
   } catch (error) {
-    console.error("Error fetching Medium articles:", error);
+    logError("Failed to fetch Medium articles", error, { route: "/api/medium-articles" });
 
     return NextResponse.json(
       {
