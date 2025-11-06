@@ -70,8 +70,8 @@ const config: UserConfig = {
     // Subject must not be empty
     "subject-empty": [2, "never"],
 
-    // Subject must be lowercase
-    "subject-case": [2, "always", "lower-case"],
+    // Subject can use sentence case (allows proper nouns like CodeQL, TypeScript)
+    "subject-case": [2, "always", "sentence-case"],
 
     // Subject must not end with period
     "subject-full-stop": [2, "never", "."],

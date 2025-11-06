@@ -95,6 +95,7 @@ function isExcluded(filePath) {
 
     // Handle other patterns (exact match, no ** prefix)
     const regexPattern = pattern
+      .replace(/\\/g, "\\\\") // Escape backslashes first (security fix)
       .replace(/\./g, "\\.") // Escape dots
       .replace(/\*/g, "[^/]*"); // * matches any characters except /
 
