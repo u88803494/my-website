@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Pre-push hook: Comprehensive checks before pushing to remote
+# This runs slower checks (10-20s) that were removed from pre-commit
+# to keep pre-commit fast (< 3s)
+
+echo "🚀 Running pre-push checks..."
+
+# TypeScript type checking (moved from pre-commit)
+echo "\n📘 Type checking..."
+pnpm run check-types || { echo "\n❌ Type check failed. Please fix errors before pushing."; exit 1; }
+
+# Full ESLint check (comprehensive, not just staged files)
+echo "\n🔍 Running ESLint..."
+pnpm run lint || { echo "\n❌ Linting failed. Please fix errors before pushing."; exit 1; }
+
+echo "\n✅ All pre-push checks passed!"

@@ -1,1 +1,7 @@
+#!/bin/sh
+
+# Run lint-staged (format + lint)
 pnpm lint-staged
+
+# Validate commit size
+node scripts/validate-commit-size.js

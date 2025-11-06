@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Validate commit message format using commitlint
+# Ensures commits follow Conventional Commits specification
+# Format: <type>(<scope>): <subject>
+# Example: feat(my-website): add new feature
+
+npx --no -- commitlint --edit $1
