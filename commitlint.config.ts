@@ -8,6 +8,17 @@ import type { UserConfig } from "@commitlint/types";
  * Format: <type>(<scope>): <subject>
  * Example: feat(my-website): add new feature
  *
+ * ## Scope Guidelines for AI Assistants
+ *
+ * When modifying features in apps/my-website/src/features/,
+ * use the my-website scope with feature name in subject:
+ *
+ *   feat(my-website): [resume] add new project
+ *   fix(my-website): [time-tracker] correct calculation
+ *   feat(my-website): [about] update bio
+ *
+ * Available features: resume, time-tracker, about, not-found
+ *
  * @see https://commitlint.js.org/
  * @see https://www.conventionalcommits.org/
  */
@@ -46,21 +57,15 @@ const config: UserConfig = {
         "tsconfig",
         "eslint-config",
         "tailwind-config",
+        "blog",
+        "ai-analyzer",
+        "ai-dictionary",
 
         // Cross-cutting concerns
         "docs",
         "ci",
         "deps",
         "release",
-
-        // Features (optional, for feature-specific commits)
-        "resume",
-        "blog",
-        "ai-dictionary",
-        "ai-analyzer",
-        "time-tracker",
-        "about",
-        "not-found",
       ],
     ],
 

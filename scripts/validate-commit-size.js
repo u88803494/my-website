@@ -45,6 +45,7 @@ const EXCLUDE_PATTERNS = [
   // Scripts (single-purpose, longer acceptable)
   "scripts/**/*.ts",
   "scripts/**/*.js",
+  "scripts/**/*.sh",
 
   // Build outputs (should not be committed)
   "dist/**",
