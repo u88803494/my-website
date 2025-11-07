@@ -1,1 +1,7 @@
+#!/bin/sh
+
+# Run lint-staged (format + lint)
 pnpm lint-staged
+
+# Validate commit size
+pnpx tsx scripts/validate-commit-size.ts

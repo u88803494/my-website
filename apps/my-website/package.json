@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "pnpm run sync:all-articles && next build",
     "start": "next start",
-    "lint": "next lint --fix",
+    "lint": "next lint --fix --max-warnings=0",
     "check-types": "tsc --noEmit",
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
