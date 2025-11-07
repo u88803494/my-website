@@ -26,9 +26,9 @@ Reference documentation provides dry, precise technical information. It describe
 
 ### System & Architecture
 
-- **[Architecture](./architecture.md)** - System architecture and component relationships
-- **[Environment Variables](./environment-variables.md)** - All environment variables
-- **[CLI Commands](./cli-commands.md)** - Available pnpm scripts and commands
+- **Architecture** - System architecture and component relationships _(Coming soon)_
+- **Environment Variables** - All environment variables _(Coming soon)_
+- **CLI Commands** - Available pnpm scripts and commands _(Coming soon)_
 
 ### Git & CI/CD
 
@@ -37,10 +37,7 @@ Reference documentation provides dry, precise technical information. It describe
 
 ### API
 
-- **[API Reference](./api/)** - Complete API specifications
-  - [Define API](./api/define-api.md) - Word analysis endpoint
-  - [AI Analyzer API](./api/ai-analyzer-api.md) - General analysis endpoint
-  - [Medium Articles API](./api/medium-articles-api.md) - Blog articles endpoint
+- **API Reference** - Complete API specifications _(Coming soon)_
 
 ---
 

@@ -33,9 +33,9 @@ The Diataxis framework organizes documentation into four distinct types based on
 **Problem-oriented**: Step-by-step instructions to solve specific problems.
 
 - [Git Workflow](./guides/git-workflow.md) - Using git hooks and automation
-- [Development Setup](./guides/development-setup.md) - Setting up local environment
-- [Deployment](./guides/deployment.md) - Deploying to production
-- [Contributing](./guides/contributing.md) - How to contribute to this project
+- Development Setup - Setting up local environment _(Coming soon)_
+- Deployment - Deploying to production _(Coming soon)_
+- Contributing - How to contribute to this project _(Coming soon)_
 
 **When to use**: "How do I...?" questions
 
@@ -45,9 +45,9 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Learning-oriented**: Guided lessons to learn fundamental concepts.
 
-- [01 - Project Setup](./tutorials/01-project-setup.md) - From zero to hello world
-- [02 - Adding New Feature](./tutorials/02-adding-new-feature.md) - Feature development workflow
-- [03 - Medium Integration](./tutorials/03-medium-integration.md) - Working with Medium API
+- 01 - Project Setup - From zero to hello world _(Coming soon)_
+- 02 - Adding New Feature - Feature development workflow _(Coming soon)_
+- 03 - Medium Integration - Working with Medium API _(Coming soon)_
 
 **When to use**: Onboarding new developers or learning new concepts
 
@@ -57,12 +57,12 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Information-oriented**: Complete technical details, APIs, and configurations.
 
-- [Architecture](./reference/architecture.md) - System architecture overview
+- Architecture - System architecture overview _(Coming soon)_
 - [Commitlint Rules](./reference/commitlint-rules.md) - Commit message rules
 - [Git Hooks](./reference/git-hooks.md) - Git hooks configuration
-- [Environment Variables](./reference/environment-variables.md) - All env vars
-- [CLI Commands](./reference/cli-commands.md) - Available commands
-- [API Reference](./reference/api/) - REST API specifications
+- Environment Variables - All env vars _(Coming soon)_
+- CLI Commands - Available commands _(Coming soon)_
+- API Reference - REST API specifications _(Coming soon)_
 
 **When to use**: Looking up exact specifications or API details
 
@@ -72,10 +72,10 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Understanding-oriented**: Why things are designed this way, background knowledge.
 
-- [Feature-Based Architecture](./explanation/feature-based-architecture.md) - Why feature folders
-- [React Query Patterns](./explanation/react-query-patterns.md) - SSG + React Query strategy
+- Feature-Based Architecture - Why feature folders _(Coming soon)_
+- React Query Patterns - SSG + React Query strategy _(Coming soon)_
 - [Git Hooks Research](./explanation/git-hooks-research.md) - Industry best practices
-- [Monorepo Strategy](./explanation/monorepo-strategy.md) - Why Turborepo
+- Monorepo Strategy - Why Turborepo _(Coming soon)_
 
 **When to use**: Understanding "why" behind technical decisions
 

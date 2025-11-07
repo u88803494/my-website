@@ -26,9 +26,9 @@ Tutorials are lessons that take learners on a journey from zero knowledge to bas
 
 ### Getting Started
 
-1. **[Project Setup](./01-project-setup.md)** - From zero to running dev server
-2. **[Adding New Feature](./02-adding-new-feature.md)** - End-to-end feature development
-3. **[Medium Integration](./03-medium-integration.md)** - Working with external APIs
+1. **Project Setup** - From zero to running dev server _(Coming soon)_
+2. **Adding New Feature** - End-to-end feature development _(Coming soon)_
+3. **Medium Integration** - Working with external APIs _(Coming soon)_
 
 ---
 

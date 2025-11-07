@@ -26,9 +26,9 @@ Explanations clarify and illuminate topics. They provide context, discuss altern
 
 ### Architecture & Design
 
-- **[Feature-Based Architecture](./feature-based-architecture.md)** - Why we organize code by features
-- **[Monorepo Strategy](./monorepo-strategy.md)** - Why Turborepo and monorepo approach
-- **[React Query Patterns](./react-query-patterns.md)** - SSG + React Query integration strategy
+- **Feature-Based Architecture** - Why we organize code by features _(Coming soon)_
+- **Monorepo Strategy** - Why Turborepo and monorepo approach _(Coming soon)_
+- **React Query Patterns** - SSG + React Query integration strategy _(Coming soon)_
 
 ### Technical Decisions
 

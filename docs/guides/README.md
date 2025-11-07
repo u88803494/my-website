@@ -27,12 +27,12 @@ Guides are recipes that help you solve specific problems. They assume you unders
 ### Development
 
 - **[Git Workflow](./git-workflow.md)** - Using git hooks, commitlint, and automation
-- **[Development Setup](./development-setup.md)** - Setting up local development environment
-- **[Contributing](./contributing.md)** - How to contribute to this project
+- **Development Setup** - Setting up local development environment _(Coming soon)_
+- **Contributing** - How to contribute to this project _(Coming soon)_
 
 ### Deployment
 
-- **[Deployment](./deployment.md)** - Deploying to Vercel and managing environments
+- **Deployment** - Deploying to Vercel and managing environments _(Coming soon)_
 
 ---
 
