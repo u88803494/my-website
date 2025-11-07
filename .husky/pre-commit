@@ -4,4 +4,4 @@
 pnpm lint-staged
 
 # Validate commit size
-node scripts/validate-commit-size.js
+pnpx tsx scripts/validate-commit-size.ts
