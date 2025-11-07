@@ -2,6 +2,25 @@
 
 @AGENTS.md
 
+## 📚 Documentation System
+
+This project uses the **Diataxis framework** for AI-first documentation organization:
+
+**Navigate by task type:**
+
+- **How do I...?** → [Guides](./docs/guides/) (e.g., [Git Workflow](./docs/guides/git-workflow.md))
+- **I want to learn...** → [Tutorials](./docs/tutorials/) (e.g., [Project Setup](./docs/tutorials/01-project-setup.md))
+- **What is...?** → [Reference](./docs/reference/) (e.g., [Architecture](./docs/reference/architecture.md), [API Docs](./docs/reference/api/))
+- **Why...?** → [Explanation](./docs/explanation/) (e.g., [Feature-Based Architecture](./docs/explanation/feature-based-architecture.md))
+- **What did we decide?** → [ADR](./docs/adr/) (e.g., [ADR 001: React Query SSG](./docs/adr/001-react-query-ssg-pattern.md))
+
+**Key Resources:**
+
+- [Documentation Hub](./docs/README.md) - Start here for complete overview
+- [Development Setup](./docs/guides/development-setup.md) - Local environment setup
+- [Architecture Reference](./docs/reference/architecture.md) - System architecture
+- [API Documentation](./docs/reference/api/) - All API endpoints
+
 ## Claude Code 專屬功能
 
 This file supplements AGENTS.md with Claude Code-specific features and workflows.
