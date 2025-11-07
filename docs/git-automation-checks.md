@@ -1,5 +1,18 @@
 # Git Automation Checks - 技術決策與討論記錄
 
+> ⚠️ **DEPRECATED** - This document has been split into Diataxis framework structure.
+>
+> **New locations**:
+>
+> - **How-to Guide**: [Git Workflow Guide](./guides/git-workflow.md)
+> - **Reference**: [Commitlint Rules](./reference/commitlint-rules.md), [Git Hooks](./reference/git-hooks.md)
+> - **Explanation**: [Git Hooks Research](./explanation/git-hooks-research.md)
+> - **ADR**: [003 - Git Hooks Optimization](./adr/003-git-hooks-optimization.md)
+>
+> This file will be archived in a future update.
+
+---
+
 > 此文件記錄了關於 Git hooks、Commit 驗證、自動化檢查的完整研究和技術決策過程。
 >
 > **相關 Issue**: [#49 - Improve pre-commit/pre-push checks](https://github.com/u88803494/my-website/issues/49)

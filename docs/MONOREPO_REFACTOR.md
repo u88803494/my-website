@@ -1,5 +1,15 @@
 # Monorepo 重構完整執行計劃
 
+> ⚠️ **DEPRECATED** - This document is a historical record that will be archived.
+>
+> **Status**: ✅ Completed (2025-10-20)
+>
+> **For current architecture**: See [docs/reference/architecture.md](./reference/architecture.md)
+>
+> This file will be moved to `docs/archive/` in Phase 6.
+
+---
+
 > **最後更新**: 2025-10-20
 > **狀態**: ✅ 已完成
 > **完成日期**: 2025-10-20
