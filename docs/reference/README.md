@@ -37,7 +37,7 @@ Reference documentation provides dry, precise technical information. It describe
 
 ### API
 
-- **API Reference** - Complete API specifications _(Coming soon)_
+- **[API Reference](./api/)** - Complete API specifications for all endpoints
 
 ---
 
