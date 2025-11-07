@@ -26,7 +26,7 @@ Reference documentation provides dry, precise technical information. It describe
 
 ### System & Architecture
 
-- **Architecture** - System architecture and component relationships _(Coming soon)_
+- **[Architecture](./architecture.md)** - System architecture and component relationships
 - **Environment Variables** - All environment variables _(Coming soon)_
 - **CLI Commands** - Available pnpm scripts and commands _(Coming soon)_
 
