@@ -5,7 +5,10 @@
  *
  * Ensures commits are small and focused by enforcing:
  * - Maximum 15 files per commit
- * - Maximum 500 lines per file (with exclusions)
+ * - Maximum 400 total lines across all files (hard limit)
+ * - Warning at 300 total lines (soft limit)
+ * - Maximum 200 lines per file (hard limit)
+ * - Warning at 150 lines per file (soft limit)
  *
  * Excluded files:
  * - Lock files (pnpm-lock.yaml, package-lock.json, etc.)
@@ -29,7 +32,10 @@ const path = require("path");
 
 // Configuration
 const MAX_FILES = 15;
-const MAX_LINES_PER_FILE = 500;
+const MAX_TOTAL_LINES = 400;
+const WARNING_TOTAL_LINES = 300;
+const MAX_LINES_PER_FILE = 200;
+const WARNING_LINES_PER_FILE = 150;
 
 // File patterns to exclude from validation
 const EXCLUDE_PATTERNS = [
@@ -45,7 +51,7 @@ const EXCLUDE_PATTERNS = [
   // Scripts (single-purpose, longer acceptable)
   "scripts/**/*.ts",
   "scripts/**/*.js",
-  "scripts/**/*.sh",
+  "**/*.sh",
 
   // Build outputs (should not be committed)
   "dist/**",
@@ -169,6 +175,7 @@ function validateCommitSize() {
   console.log(`\n📊 Files to validate: ${filesToValidate.length}/${stagedFiles.length}\n`);
 
   let hasErrors = false;
+  let hasWarnings = false;
 
   // Check total file count
   if (stagedFiles.length > MAX_FILES) {
@@ -177,23 +184,53 @@ function validateCommitSize() {
     hasErrors = true;
   }
 
-  // Check lines per file
-  const violations = [];
+  // Calculate total lines and classify violations
+  let totalLines = 0;
+  const perFileViolations = [];
+  const perFileWarnings = [];
+
   filesToValidate.forEach((file) => {
     const changes = getFileLineChanges(file);
+    totalLines += changes.total;
+
     if (changes.total > MAX_LINES_PER_FILE) {
-      violations.push({ file, changes });
+      perFileViolations.push({ file, changes });
+    } else if (changes.total > WARNING_LINES_PER_FILE) {
+      perFileWarnings.push({ file, changes });
     }
   });
 
-  if (violations.length > 0) {
-    console.error(`❌ ${violations.length} file(s) exceed line limit (${MAX_LINES_PER_FILE} lines):\n`);
-    violations.forEach(({ file, changes }) => {
+  // Check total lines (hard limit)
+  if (totalLines > MAX_TOTAL_LINES) {
+    console.error(`❌ Total lines exceed limit: ${totalLines} lines (max: ${MAX_TOTAL_LINES})`);
+    console.error("   Please split your commit into smaller changes.\n");
+    hasErrors = true;
+  } else if (totalLines > WARNING_TOTAL_LINES) {
+    console.warn(`⚠️  Total lines approaching limit: ${totalLines} lines (warning: ${WARNING_TOTAL_LINES}, max: ${MAX_TOTAL_LINES})`);
+    console.warn("   Consider splitting into smaller commits.\n");
+    hasWarnings = true;
+  }
+
+  // Report per-file violations (hard limit)
+  if (perFileViolations.length > 0) {
+    console.error(`❌ ${perFileViolations.length} file(s) exceed line limit (${MAX_LINES_PER_FILE} lines):\n`);
+    perFileViolations.forEach(({ file, changes }) => {
       console.error(`   📄 ${file}`);
       console.error(`      +${changes.added} -${changes.deleted} (total: ${changes.total} lines)\n`);
     });
     console.error("   Please split large changes into smaller commits.\n");
     hasErrors = true;
+  }
+
+  // Report per-file warnings (soft limit)
+  if (perFileWarnings.length > 0 && !hasErrors) {
+    console.warn(`⚠️  ${perFileWarnings.length} file(s) approaching line limit (${WARNING_LINES_PER_FILE}-${MAX_LINES_PER_FILE} lines):\n`);
+    perFileWarnings.forEach(({ file, changes }) => {
+      console.warn(`   📄 ${file}`);
+      console.warn(`      +${changes.added} -${changes.deleted} (total: ${changes.total} lines)\n`);
+    });
+    console.warn("   Consider splitting into smaller files or commits.\n");
+    hasWarnings = true;
   }
 
   // Exit with appropriate code
@@ -205,7 +242,12 @@ function validateCommitSize() {
     process.exit(1);
   }
 
-  console.log("✅ Commit size validation passed!\n");
+  if (hasWarnings) {
+    console.log("✅ Commit size validation passed (with warnings)\n");
+  } else {
+    console.log("✅ Commit size validation passed!\n");
+  }
+
   process.exit(0);
 }
 
