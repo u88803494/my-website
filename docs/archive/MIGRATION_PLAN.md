@@ -31,9 +31,9 @@ This document tracks the migration of legacy documentation to the Diataxis frame
 
 ### 📦 Archive Only (Historical Records)
 
-| Legacy File            | Archive Status  | Notes                           |
-| ---------------------- | --------------- | ------------------------------- |
-| `MONOREPO_REFACTOR.md` | ⏳ Will archive | Completed refactor (2025-10-20) |
+| Legacy File            | Archive Status | Notes                           |
+| ---------------------- | -------------- | ------------------------------- |
+| `MONOREPO_REFACTOR.md` | ✅ Archived    | Completed refactor (2025-10-20) |
 
 ## Archive Strategy
 
@@ -41,8 +41,8 @@ This document tracks the migration of legacy documentation to the Diataxis frame
 
 1. ✅ Create `docs/archive/` directory
 2. ✅ Add deprecation notices to legacy docs
-3. ⏳ Create this migration plan
-4. ⏳ Move completed refactor docs to archive
+3. ✅ Create this migration plan
+4. ✅ Move completed refactor docs to archive
 
 ### Future Cleanup (Phase 7+)
 
