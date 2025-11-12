@@ -1,5 +1,13 @@
 # 📋 Structured Logging Guide
 
+> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
+>
+> **Future location**: `docs/guides/structured-logging.md` (Phase 3)
+>
+> This file will be archived after migration.
+
+---
+
 Complete guide for using the structured logging system in this project.
 
 ## 🎯 Overview
@@ -176,7 +184,10 @@ JSON-formatted structured logs:
 **Good:**
 
 ```typescript
-logger.info({ userId: "123", action: "purchase", amount: 99.99 }, "Purchase completed");
+logger.info(
+  { userId: "123", action: "purchase", amount: 99.99 },
+  "Purchase completed",
+);
 ```
 
 **Bad:**

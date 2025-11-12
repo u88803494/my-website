@@ -1,5 +1,13 @@
 # Time Tracker 時區管理說明
 
+> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
+>
+> **Future location**: `docs/explanation/time-tracker-timezone.md` (Phase 3)
+>
+> This file will be archived after migration.
+
+---
+
 ## 概述
 
 此時間追蹤器已經完全重構，使用 **date-fns** 和 **date-fns-tz** 來統一管理台灣時區（Asia/Taipei）。所有時間相關的操作現在都會強制使用台灣時區，確保應用程式的時間一致性。

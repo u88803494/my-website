@@ -1,5 +1,13 @@
 # Issue 管理指南
 
+> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
+>
+> **Future location**: `docs/guides/issue-management.md` (Phase 3)
+>
+> This file will be archived after migration.
+
+---
+
 本專案使用 P0-P3 四級優先級系統管理 GitHub Issues，確保開發工作有序進行。
 
 ## 📊 優先級系統

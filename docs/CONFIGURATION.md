@@ -1,5 +1,13 @@
 # Monorepo 配置文檔
 
+> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
+>
+> **Future location**: `docs/reference/configuration.md` (Phase 3)
+>
+> This file will be archived after migration.
+
+---
+
 本文檔說明 my-website monorepo 的 TypeScript、ESLint 和 AI 工具配置架構。
 
 ## AI 工具配置

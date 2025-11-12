@@ -96,6 +96,29 @@ _展示 Medium 文章自動化系統的完整佈局：「最新文章」固定�
 - **Node.js Scripts** - 文章資料自動化處理
 - **Medium API Integration** - 文章內容抓取
 
+## 📚 Documentation
+
+This project uses the **Diataxis framework** for comprehensive, AI-first documentation:
+
+- **[Documentation Hub](./docs/)** - Complete documentation organized by type
+- **[Guides](./docs/guides/)** - How-to guides for specific tasks
+- **[Tutorials](./docs/tutorials/)** - Step-by-step learning paths
+- **[Reference](./docs/reference/)** - Technical specifications and API docs
+- **[Explanation](./docs/explanation/)** - Concepts and design decisions
+- **[ADR](./docs/adr/)** - Architecture Decision Records
+
+**For AI Assistants:**
+
+- [AGENTS.md](./AGENTS.md) - Project overview and coding standards
+- [CLAUDE.md](./CLAUDE.md) - Claude Code specific instructions
+
+**Quick Links:**
+
+- [Development Setup Guide](./docs/guides/development-setup.md)
+- [Architecture Reference](./docs/reference/architecture.md)
+- [API Documentation](./docs/reference/api/)
+- [Git Workflow](./docs/guides/git-workflow.md)
+
 ## 📦 安裝與啟動
 
 ### 前置需求

@@ -1,5 +1,13 @@
 # 📝 Medium 文章自動解析系統
 
+> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
+>
+> **Future location**: `docs/guides/medium-article-sync.md` (Phase 3)
+>
+> This file will be archived after migration.
+
+---
+
 ## 🚀 使用方式
 
 ### 1. 編輯文章列表
