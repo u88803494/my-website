@@ -16,19 +16,19 @@ ai_context: |
 
 # POST /api/define
 
-AI-powered word analysis using Google Gemini 2.5 Flash Lite.
+使用 Google Gemini 2.5 Flash Lite 進行 AI 驅動的單字分析。
 
-## Endpoint
+## 端點
 
 ```
 POST /api/define
 ```
 
-## Description
+## 說明
 
-Analyzes a word and returns comprehensive information including etymology, definitions, usage examples, and related words.
+分析單字並回傳完整資訊,包含語源、定義、使用範例和相關單字。
 
-## Request
+## 請求
 
 ### Headers
 
@@ -40,12 +40,12 @@ Content-Type: application/json
 
 ```typescript
 interface DefineRequest {
-  word: string; // The word to analyze
-  type: "etymology" | "definition" | "example" | "all"; // Analysis type
+  word: string; // 要分析的單字
+  type: "etymology" | "definition" | "example" | "all"; // 分析類型
 }
 ```
 
-### Example
+### 範例
 
 ```bash
 curl -X POST https://henryleelab.com/api/define \
@@ -56,21 +56,21 @@ curl -X POST https://henryleelab.com/api/define \
   }'
 ```
 
-## Response
+## 回應
 
-### Success (200)
+### 成功 (200)
 
 ```typescript
 interface DefineResponse {
   word: string;
-  etymology?: string; // Word origin and history
-  definition?: string; // Meaning and usage
-  examples?: string[]; // Usage examples
-  relatedWords?: string[]; // Similar words
+  etymology?: string; // 單字起源和歷史
+  definition?: string; // 意義和用法
+  examples?: string[]; // 使用範例
+  relatedWords?: string[]; // 相關單字
 }
 ```
 
-### Example Response
+### 範例回應
 
 ```json
 {
@@ -85,7 +85,7 @@ interface DefineResponse {
 }
 ```
 
-### Error (400)
+### 錯誤 (400)
 
 ```json
 {
@@ -94,7 +94,7 @@ interface DefineResponse {
 }
 ```
 
-### Error (500)
+### 錯誤 (500)
 
 ```json
 {
@@ -104,44 +104,44 @@ interface DefineResponse {
 }
 ```
 
-## Implementation
+## 實作
 
-### Location
+### 位置
 
 ```
 apps/my-website/src/app/api/define/route.ts
 ```
 
-### Dependencies
+### 依賴項目
 
 - **Gemini API**: Google Generative AI SDK
-- **Model**: gemini-2.5-flash-lite
-- **Environment**: `GEMINI_API_KEY` required
+- **模型**: gemini-2.5-flash-lite
+- **環境變數**: 必須設定 `GEMINI_API_KEY`
 
-### Key Features
+### 主要特性
 
-- Structured prompts for consistent output
-- Error handling for API failures
-- Type-safe request/response validation
+- 結構化提示以確保輸出一致性
+- API 失敗的錯誤處理
+- 請求/回應的型別安全驗證
 
-## Rate Limits
+## 速率限制
 
-- **Gemini Free Tier**: 60 requests per minute
-- **No client-side limit**: Relies on Gemini's limits
+- **Gemini 免費版**: 每分鐘 60 個請求
+- **無客戶端限制**: 依賴 Gemini 的限制
 
-## Error Codes
+## 錯誤代碼
 
-| Code         | Description                 | Status |
-| ------------ | --------------------------- | ------ |
-| MISSING_WORD | Word parameter not provided | 400    |
-| API_ERROR    | Gemini API failure          | 500    |
-| INVALID_TYPE | Invalid analysis type       | 400    |
-| RATE_LIMIT   | Gemini rate limit exceeded  | 429    |
-| NO_API_KEY   | Missing GEMINI_API_KEY      | 500    |
+| 代碼         | 說明                 | 狀態碼 |
+| ------------ | -------------------- | ------ |
+| MISSING_WORD | 未提供 word 參數     | 400    |
+| API_ERROR    | Gemini API 失敗      | 500    |
+| INVALID_TYPE | 無效的分析類型       | 400    |
+| RATE_LIMIT   | 超過 Gemini 速率限制 | 429    |
+| NO_API_KEY   | 缺少 GEMINI_API_KEY  | 500    |
 
-## Usage Examples
+## 使用範例
 
-### Etymology Analysis
+### 語源分析
 
 ```javascript
 const response = await fetch("/api/define", {
@@ -157,7 +157,7 @@ const data = await response.json();
 console.log(data.etymology);
 ```
 
-### Full Analysis
+### 完整分析
 
 ```javascript
 const response = await fetch("/api/define", {
@@ -170,12 +170,12 @@ const response = await fetch("/api/define", {
 });
 
 const data = await response.json();
-// Returns all fields: etymology, definition, examples, relatedWords
+// 回傳所有欄位: etymology, definition, examples, relatedWords
 ```
 
-## React Query Integration
+## React Query 整合
 
-Used in `ai-dictionary` feature:
+用於 `ai-dictionary` 功能：
 
 ```typescript
 const { mutate, data, isPending } = useMutation({
@@ -188,8 +188,8 @@ const { mutate, data, isPending } = useMutation({
 });
 ```
 
-## Related
+## 相關文件
 
-- [API Overview](./README.md)
+- [API 概覽](./README.md)
 - [POST /api/ai-analyzer](./ai-analyzer-api.md)
-- [Architecture Reference](../architecture.md)
+- [架構參考](../architecture.md)

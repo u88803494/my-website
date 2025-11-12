@@ -1,8 +1,8 @@
-# Commitlint Rules Reference
+# Commitlint 規則參考手冊
 
 ---
 
-title: Commitlint Configuration Rules Reference
+title: Commitlint 配置規則參考手冊
 type: reference
 status: stable
 audience: [developer, ai]
@@ -20,72 +20,72 @@ related:
 
 ---
 
-## Overview
+## 概述
 
-**What this documents**: Complete specification of commitlint rules, formats, and configuration options for validating commit messages according to Conventional Commits.
+**本文件說明內容**：完整的 commitlint 規則、格式和配置選項規範，用於根據 Conventional Commits 規範驗證提交訊息。
 
-**Use cases**:
+**使用情境**：
 
-- Configure commitlint for your project
-- Understand validation error messages
-- Customize commit message requirements
-- Create team-specific commit standards
+- 為專案配置 commitlint
+- 理解驗證錯誤訊息
+- 自訂提交訊息要求
+- 建立團隊特定的提交標準
 
-**Location**: `commitlint.config.ts` or `commitlint.config.js`
-
----
-
-## Quick Reference
-
-**Most common operations:**
-
-| Operation      | Rule                                      | Description               |
-| -------------- | ----------------------------------------- | ------------------------- |
-| Require type   | `type-empty: [2, 'never']`                | Type must not be empty    |
-| Valid types    | `type-enum: [2, 'always', [...]]`         | Restrict allowed types    |
-| Scope format   | `scope-case: [2, 'always', 'kebab-case']` | Enforce scope naming      |
-| Subject length | `subject-max-length: [2, 'always', 72]`   | Limit subject length      |
-| No period      | `subject-full-stop: [2, 'never', '.']`    | Prevent trailing period   |
-| Header length  | `header-max-length: [2, 'always', 100]`   | Total header length limit |
+**檔案位置**：`commitlint.config.ts` 或 `commitlint.config.js`
 
 ---
 
-## Complete Specification
+## 快速參考
 
-### Rule Structure
+**最常用的操作：**
+
+| 操作         | 規則                                      | 說明             |
+| ------------ | ----------------------------------------- | ---------------- |
+| 要求類型     | `type-empty: [2, 'never']`                | 類型不可為空     |
+| 有效類型     | `type-enum: [2, 'always', [...]]`         | 限制允許的類型   |
+| 範圍格式     | `scope-case: [2, 'always', 'kebab-case']` | 強制範圍命名格式 |
+| 主旨長度     | `subject-max-length: [2, 'always', 72]`   | 限制主旨長度     |
+| 無句點       | `subject-full-stop: [2, 'never', '.']`    | 防止結尾句點     |
+| 標題行總長度 | `header-max-length: [2, 'always', 100]`   | 標題行總長度限制 |
+
+---
+
+## 完整規範
+
+### 規則結構
 
 ```javascript
 'rule-name': [level, applicable, value]
 ```
 
-**Parameters**:
+**參數**：
 
-- **level**: `0` (disabled) | `1` (warning) | `2` (error)
-- **applicable**: `'always'` | `'never'`
-- **value**: Rule-specific configuration value
+- **level**：`0`（停用）| `1`（警告）| `2`（錯誤）
+- **applicable**：`'always'` | `'never'`
+- **value**：規則特定的配置值
 
-**Example**:
+**範例**：
 
 ```javascript
 {
-  'type-enum': [2, 'always', ['feat', 'fix']], // Error if type not in list
-  'scope-empty': [1, 'never'],                  // Warning if scope empty
-  'body-max-length': [0]                        // Disabled
+  'type-enum': [2, 'always', ['feat', 'fix']], // 如果類型不在清單中則錯誤
+  'scope-empty': [1, 'never'],                  // 如果範圍為空則警告
+  'body-max-length': [0]                        // 已停用
 }
 ```
 
 ---
 
-## Type Rules
+## 類型規則
 
 ### type-enum
 
-- **Type**: `Array<string>`
-- **Default**: None (must configure)
-- **Required**: Recommended
-- **Description**: Restrict commit type to specific values
+- **類型**：`Array<string>`
+- **預設值**：無（必須配置）
+- **必需**：建議使用
+- **說明**：將提交類型限制為特定值
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -93,17 +93,17 @@ related:
     2,
     'always',
     [
-      'feat',      // New feature
-      'fix',       // Bug fix
-      'docs',      // Documentation
-      'style',     // Formatting
-      'refactor',  // Code refactoring
-      'perf',      // Performance
-      'test',      // Testing
-      'build',     // Build system
-      'ci',        // CI configuration
-      'chore',     // Maintenance
-      'revert',    // Revert commit
+      'feat',      // 新功能
+      'fix',       // 錯誤修復
+      'docs',      // 文件
+      'style',     // 格式化
+      'refactor',  // 程式碼重構
+      'perf',      // 效能優化
+      'test',      // 測試
+      'build',     // 建置系統
+      'ci',        // CI 配置
+      'chore',     // 維護
+      'revert',    // 還原提交
     ],
   ],
 }
@@ -113,23 +113,23 @@ related:
 
 ### type-case
 
-- **Type**: `string`
-- **Default**: None
-- **Required**: No
-- **Description**: Enforce type casing format
+- **類型**：`string`
+- **預設值**：無
+- **必需**：否
+- **說明**：強制類型的大小寫格式
 
-**Valid values**:
+**有效值**：
 
-- `lower-case` - All lowercase (recommended)
-- `upper-case` - All uppercase
-- `camel-case` - camelCase
-- `kebab-case` - kebab-case
-- `pascal-case` - PascalCase
-- `sentence-case` - Sentence case
-- `snake-case` - snake_case
-- `start-case` - Start Case
+- `lower-case` - 全小寫（建議）
+- `upper-case` - 全大寫
+- `camel-case` - 駝峰命名
+- `kebab-case` - 短橫線命名
+- `pascal-case` - 帕斯卡命名
+- `sentence-case` - 句子格式
+- `snake-case` - 底線命名
+- `start-case` - 單字首字母大寫
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -141,16 +141,16 @@ related:
 
 ### type-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Control whether type can be empty
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：控制類型是否可為空
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'type-empty': [2, 'never']  // Type must not be empty
+  'type-empty': [2, 'never']  // 類型不可為空
 }
 ```
 
@@ -158,12 +158,12 @@ related:
 
 ### type-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Maximum length for type
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：類型的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -175,12 +175,12 @@ related:
 
 ### type-min-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Minimum length for type
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：類型的最小長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -190,16 +190,16 @@ related:
 
 ---
 
-## Scope Rules
+## 範圍規則
 
 ### scope-enum
 
-- **Type**: `Array<string>`
-- **Default**: None
-- **Required**: Recommended for monorepos
-- **Description**: Restrict scope to specific values
+- **類型**：`Array<string>`
+- **預設值**：無
+- **必需**：建議用於 monorepo
+- **說明**：將範圍限制為特定值
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -234,14 +234,14 @@ related:
 
 ### scope-case
 
-- **Type**: `string`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Enforce scope casing format
+- **類型**：`string`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：強制範圍的大小寫格式
 
-**Valid values**: Same as `type-case`
+**有效值**：與 `type-case` 相同
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -253,16 +253,16 @@ related:
 
 ### scope-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: Optional
-- **Description**: Control whether scope can be empty
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：可選
+- **說明**：控制範圍是否可為空
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'scope-empty': [1, 'never']  // Warning if scope is empty
+  'scope-empty': [1, 'never']  // 如果範圍為空則警告
 }
 ```
 
@@ -270,12 +270,12 @@ related:
 
 ### scope-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Maximum length for scope
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：範圍的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -287,12 +287,12 @@ related:
 
 ### scope-min-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Minimum length for scope
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：範圍的最小長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -302,25 +302,25 @@ related:
 
 ---
 
-## Subject Rules
+## 主旨規則
 
 ### subject-case
 
-- **Type**: `string | Array<string>`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Enforce subject casing format
+- **類型**：`string | Array<string>`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：強制主旨的大小寫格式
 
-**Valid values**: Same as `type-case`
+**有效值**：與 `type-case` 相同
 
-**Example**:
+**範例**：
 
 ```typescript
 {
   'subject-case': [2, 'always', 'lower-case']
 }
 
-// Or allow multiple formats
+// 或允許多種格式
 {
   'subject-case': [
     2,
@@ -334,16 +334,16 @@ related:
 
 ### subject-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: Yes
-- **Description**: Control whether subject can be empty
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：是
+- **說明**：控制主旨是否可為空
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'subject-empty': [2, 'never']  // Subject must not be empty
+  'subject-empty': [2, 'never']  // 主旨不可為空
 }
 ```
 
@@ -351,16 +351,16 @@ related:
 
 ### subject-full-stop
 
-- **Type**: `string`
-- **Default**: `'.'`
-- **Required**: Yes (recommended)
-- **Description**: Control trailing punctuation in subject
+- **類型**：`string`
+- **預設值**：`'.'`
+- **必需**：是（建議）
+- **說明**：控制主旨結尾的標點符號
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'subject-full-stop': [2, 'never', '.']  // No trailing period
+  'subject-full-stop': [2, 'never', '.']  // 不可有結尾句點
 }
 ```
 
@@ -368,16 +368,16 @@ related:
 
 ### subject-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Maximum length for subject
+- **類型**：`number`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：主旨的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'subject-max-length': [2, 'always', 72]  // Git standard
+  'subject-max-length': [2, 'always', 72]  // Git 標準
 }
 ```
 
@@ -385,12 +385,12 @@ related:
 
 ### subject-min-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Minimum length for subject
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：主旨的最小長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -400,18 +400,18 @@ related:
 
 ---
 
-## Header Rules
+## 標題行規則
 
 ### header-case
 
-- **Type**: `string`
-- **Default**: None
-- **Required**: No
-- **Description**: Enforce header casing format
+- **類型**：`string`
+- **預設值**：無
+- **必需**：否
+- **說明**：強制標題行的大小寫格式
 
-**Valid values**: Same as `type-case`
+**有效值**：與 `type-case` 相同
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -423,12 +423,12 @@ related:
 
 ### header-full-stop
 
-- **Type**: `string`
-- **Default**: `'.'`
-- **Required**: No
-- **Description**: Control trailing punctuation in header
+- **類型**：`string`
+- **預設值**：`'.'`
+- **必需**：否
+- **說明**：控制標題行結尾的標點符號
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -440,12 +440,12 @@ related:
 
 ### header-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Maximum length for entire header line
+- **類型**：`number`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：整個標題行的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -457,12 +457,12 @@ related:
 
 ### header-min-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Minimum length for header
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：標題行的最小長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -474,12 +474,12 @@ related:
 
 ### header-trim
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: No
-- **Description**: Trim whitespace from header
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：否
+- **說明**：修剪標題行的空白字元
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -489,16 +489,16 @@ related:
 
 ---
 
-## Body Rules
+## 內文規則
 
 ### body-leading-blank
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Require blank line before body
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：要求內文前有空白行
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -510,16 +510,16 @@ related:
 
 ### body-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: No
-- **Description**: Control whether body can be empty
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：否
+- **說明**：控制內文是否可為空
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'body-empty': [1, 'never']  // Warning if body is empty
+  'body-empty': [1, 'never']  // 如果內文為空則警告
 }
 ```
 
@@ -527,12 +527,12 @@ related:
 
 ### body-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Maximum total length for body
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：內文的最大總長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -544,12 +544,12 @@ related:
 
 ### body-max-line-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Maximum length per body line
+- **類型**：`number`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：內文每行的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -561,12 +561,12 @@ related:
 
 ### body-min-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Minimum total length for body
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：內文的最小總長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -576,16 +576,16 @@ related:
 
 ---
 
-## Footer Rules
+## 頁尾規則
 
 ### footer-leading-blank
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: Yes (recommended)
-- **Description**: Require blank line before footer
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：是（建議）
+- **說明**：要求頁尾前有空白行
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -597,12 +597,12 @@ related:
 
 ### footer-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: No
-- **Description**: Control whether footer can be empty
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：否
+- **說明**：控制頁尾是否可為空
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -614,12 +614,12 @@ related:
 
 ### footer-max-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Maximum total length for footer
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：頁尾的最大總長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -631,12 +631,12 @@ related:
 
 ### footer-max-line-length
 
-- **Type**: `number`
-- **Default**: None
-- **Required**: No
-- **Description**: Maximum length per footer line
+- **類型**：`number`
+- **預設值**：無
+- **必需**：否
+- **說明**：頁尾每行的最大長度
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -646,20 +646,20 @@ related:
 
 ---
 
-## Special Rules
+## 特殊規則
 
 ### references-empty
 
-- **Type**: `boolean`
-- **Default**: None
-- **Required**: No
-- **Description**: Control issue reference requirement
+- **類型**：`boolean`
+- **預設值**：無
+- **必需**：否
+- **說明**：控制是否要求引用議題
 
-**Example**:
+**範例**：
 
 ```typescript
 {
-  'references-empty': [2, 'never']  // Must reference an issue
+  'references-empty': [2, 'never']  // 必須引用議題
 }
 ```
 
@@ -667,12 +667,12 @@ related:
 
 ### signed-off-by
 
-- **Type**: `string`
-- **Default**: `'Signed-off-by:'`
-- **Required**: No
-- **Description**: Require signed-off-by trailer
+- **類型**：`string`
+- **預設值**：`'Signed-off-by:'`
+- **必需**：否
+- **說明**：要求 signed-off-by 標記
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -684,12 +684,12 @@ related:
 
 ### trailer-exists
 
-- **Type**: `string`
-- **Default**: None
-- **Required**: No
-- **Description**: Require specific trailer to exist
+- **類型**：`string`
+- **預設值**：無
+- **必需**：否
+- **說明**：要求特定的尾部標記存在
 
-**Example**:
+**範例**：
 
 ```typescript
 {
@@ -699,7 +699,7 @@ related:
 
 ---
 
-## Complete Configuration Example
+## 完整配置範例
 
 ```typescript
 import type { UserConfig } from "@commitlint/types";
@@ -708,7 +708,7 @@ const Configuration: UserConfig = {
   extends: ["@commitlint/config-conventional"],
 
   rules: {
-    // Type rules
+    // 類型規則
     "type-enum": [
       2,
       "always",
@@ -729,7 +729,7 @@ const Configuration: UserConfig = {
     "type-case": [2, "always", "lower-case"],
     "type-empty": [2, "never"],
 
-    // Scope rules
+    // 範圍規則
     "scope-enum": [
       2,
       "always",
@@ -745,22 +745,22 @@ const Configuration: UserConfig = {
       ],
     ],
     "scope-case": [2, "always", "kebab-case"],
-    "scope-empty": [1, "never"], // Warning
+    "scope-empty": [1, "never"], // 警告
 
-    // Subject rules
+    // 主旨規則
     "subject-case": [2, "always", "lower-case"],
     "subject-empty": [2, "never"],
     "subject-full-stop": [2, "never", "."],
     "subject-max-length": [2, "always", 72],
 
-    // Header rules
+    // 標題行規則
     "header-max-length": [2, "always", 100],
 
-    // Body rules
+    // 內文規則
     "body-leading-blank": [2, "always"],
     "body-max-line-length": [2, "always", 100],
 
-    // Footer rules (optional)
+    // 頁尾規則（可選）
     "footer-leading-blank": [2, "always"],
   },
 
@@ -773,127 +773,127 @@ export default Configuration;
 
 ---
 
-## Case Format Reference
+## 大小寫格式參考
 
-| Format          | Example                   | Use Case                      |
-| --------------- | ------------------------- | ----------------------------- |
-| `lower-case`    | `feat`, `my-scope`        | Standard for types and scopes |
-| `upper-case`    | `FEAT`, `MY-SCOPE`        | Organizational style          |
-| `camel-case`    | `myScope`, `newFeature`   | JavaScript style              |
-| `kebab-case`    | `my-scope`, `new-feature` | Recommended for scopes        |
-| `pascal-case`   | `MyScope`, `NewFeature`   | Class names                   |
-| `sentence-case` | `My scope`, `New feature` | Natural language              |
-| `snake-case`    | `my_scope`, `new_feature` | Python style                  |
-| `start-case`    | `My Scope`, `New Feature` | Title case                    |
+| 格式            | 範例                      | 使用情境             |
+| --------------- | ------------------------- | -------------------- |
+| `lower-case`    | `feat`, `my-scope`        | 類型和範圍的標準格式 |
+| `upper-case`    | `FEAT`, `MY-SCOPE`        | 組織風格             |
+| `camel-case`    | `myScope`, `newFeature`   | JavaScript 風格      |
+| `kebab-case`    | `my-scope`, `new-feature` | 建議用於範圍         |
+| `pascal-case`   | `MyScope`, `NewFeature`   | 類別名稱             |
+| `sentence-case` | `My scope`, `New feature` | 自然語言             |
+| `snake-case`    | `my_scope`, `new_feature` | Python 風格          |
+| `start-case`    | `My Scope`, `New Feature` | 標題格式             |
 
 ---
 
-## Validation Examples
+## 驗證範例
 
-### Valid Commits
+### 有效的提交
 
 ```bash
-# Basic
+# 基本格式
 feat(blog): add infinite scroll
 
-# With body
+# 帶內文
 feat(blog): add infinite scroll
 
 Implement infinite scroll pagination for blog posts
 to improve user experience and reduce initial load time.
 
-# With footer
+# 帶頁尾
 fix(api): correct error handling
 
 Fixes #123
 
-# Multiple scopes (if configured)
+# 多個範圍（如果已配置）
 feat(blog,resume): add shared component
 ```
 
 ---
 
-### Invalid Commits
+### 無效的提交
 
 ```bash
-# Missing type
+# 缺少類型
 (blog): add feature
-# Error: type may not be empty
+# 錯誤：類型不可為空
 
-# Invalid type
+# 無效的類型
 added(blog): new feature
-# Error: type must be one of [feat, fix, ...]
+# 錯誤：類型必須是 [feat, fix, ...] 之一
 
-# Invalid scope
+# 無效的範圍
 feat(unknown): add feature
-# Error: scope must be one of [blog, resume, ...]
+# 錯誤：範圍必須是 [blog, resume, ...] 之一
 
-# Subject too long
+# 主旨過長
 feat(blog): add this really long feature description that exceeds the maximum allowed length
-# Error: subject must not be longer than 72 characters
+# 錯誤：主旨不得超過 72 個字元
 
-# Trailing period
+# 結尾句點
 feat(blog): add feature.
-# Error: subject may not end with '.'
+# 錯誤：主旨不得以 '.' 結尾
 
-# No blank line before body
+# 內文前無空白行
 feat(blog): add feature
 This is the body without blank line.
-# Error: body must have leading blank line
+# 錯誤：內文前必須有空白行
 ```
 
 ---
 
-## Performance Considerations
+## 效能考量
 
-- 📊 **Validation speed**: < 100ms per commit (negligible)
-- 📊 **Memory usage**: < 10MB
-- ⚡ **Optimization tip**: Use simple string patterns in `scope-enum` rather than complex regex
+- 📊 **驗證速度**：每次提交 < 100ms（可忽略）
+- 📊 **記憶體使用**：< 10MB
+- ⚡ **最佳化建議**：在 `scope-enum` 中使用簡單的字串模式而非複雜的正規表示式
 
 ---
 
-## Compatibility
+## 相容性
 
-**Supported versions**:
+**支援版本**：
 
 - commitlint: >= 17.0.0
 - Node.js: >= 16.0.0
 - Git: >= 2.0.0
 
-**Known issues**:
+**已知問題**：
 
-- Commitlint v18+ requires TypeScript 4.5+ for `.ts` config files
-- Some rules may conflict (e.g., `header-max-length` vs `subject-max-length + scope`)
-
----
-
-## See Also
-
-### Guides
-
-- [Git Workflow Guide](../guides/git-workflow.md) - Implementation steps
-
-### Explanation
-
-- [Git Hooks Research and Best Practices](../explanation/git-hooks-research.md) - Background and rationale
-
-### Related Reference
-
-- [Git Hooks Configuration Reference](./git-hooks.md) - Hook implementation details
-
-### External Documentation
-
-- [Commitlint Official Documentation](https://commitlint.js.org/)
-- [Conventional Commits Specification](https://www.conventionalcommits.org/)
+- Commitlint v18+ 的 `.ts` 配置檔需要 TypeScript 4.5+
+- 某些規則可能會衝突（例如：`header-max-length` vs `subject-max-length + scope`）
 
 ---
 
-## Changelog
+## 另請參閱
 
-### Version 1.0.0 (2025-11-05)
+### 指南
 
-- Initial commitlint configuration
-- Added monorepo-specific scopes
-- Configured recommended rules
-- Set subject and header length limits
-- Added comprehensive documentation
+- [Git 工作流程指南](../guides/git-workflow.md) - 實作步驟
+
+### 說明
+
+- [Git Hooks 研究與最佳實務](../explanation/git-hooks-research.md) - 背景與原理
+
+### 相關參考
+
+- [Git Hooks 配置參考](./git-hooks.md) - Hook 實作細節
+
+### 外部文件
+
+- [Commitlint 官方文件](https://commitlint.js.org/)
+- [Conventional Commits 規範](https://www.conventionalcommits.org/)
+
+---
+
+## 更新日誌
+
+### 版本 1.0.0 (2025-11-05)
+
+- 初始 commitlint 配置
+- 新增 monorepo 專用範圍
+- 配置建議規則
+- 設定主旨和標題行長度限制
+- 新增完整文件

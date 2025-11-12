@@ -16,19 +16,19 @@ ai_context: |
 
 # POST /api/ai-analyzer
 
-General-purpose AI analysis using Google Gemini 2.5 Flash Lite.
+使用 Google Gemini 2.5 Flash Lite 進行通用 AI 分析。
 
-## Endpoint
+## 端點
 
 ```
 POST /api/ai-analyzer
 ```
 
-## Description
+## 說明
 
-Flexible AI analysis endpoint that accepts custom analysis needs and prompts.
+彈性的 AI 分析端點,接受自訂的分析需求和提示。
 
-## Request
+## 請求
 
 ### Headers
 
@@ -40,12 +40,12 @@ Content-Type: application/json
 
 ```typescript
 interface AIAnalyzerRequest {
-  need: string; // What kind of analysis is needed
-  prompt: string; // The content or question to analyze
+  need: string; // 需要什麼類型的分析
+  prompt: string; // 要分析的內容或問題
 }
 ```
 
-### Example
+### 範例
 
 ```bash
 curl -X POST https://henryleelab.com/api/ai-analyzer \
@@ -56,17 +56,17 @@ curl -X POST https://henryleelab.com/api/ai-analyzer \
   }'
 ```
 
-## Response
+## 回應
 
-### Success (200)
+### 成功 (200)
 
 ```typescript
 interface AIAnalyzerResponse {
-  analysis: string; // AI-generated analysis result
+  analysis: string; // AI 生成的分析結果
 }
 ```
 
-### Example Response
+### 範例回應
 
 ```json
 {
@@ -74,7 +74,7 @@ interface AIAnalyzerResponse {
 }
 ```
 
-### Error (400)
+### 錯誤 (400)
 
 ```json
 {
@@ -83,7 +83,7 @@ interface AIAnalyzerResponse {
 }
 ```
 
-### Error (500)
+### 錯誤 (500)
 
 ```json
 {
@@ -92,30 +92,30 @@ interface AIAnalyzerResponse {
 }
 ```
 
-## Implementation
+## 實作
 
-### Location
+### 位置
 
 ```
 apps/my-website/src/app/api/ai-analyzer/route.ts
 ```
 
-### Dependencies
+### 依賴項目
 
 - **Gemini API**: Google Generative AI SDK
-- **Model**: gemini-2.5-flash-lite
-- **Environment**: `GEMINI_API_KEY` required
+- **模型**: gemini-2.5-flash-lite
+- **環境變數**: 必須設定 `GEMINI_API_KEY`
 
-### Prompt Structure
+### 提示結構
 
 ```typescript
 const systemPrompt = `You are an expert ${need} assistant.`;
 const userPrompt = prompt;
 ```
 
-## Use Cases
+## 使用情境
 
-### Code Review
+### 程式碼審查
 
 ```javascript
 fetch("/api/ai-analyzer", {
@@ -127,7 +127,7 @@ fetch("/api/ai-analyzer", {
 });
 ```
 
-### Content Analysis
+### 內容分析
 
 ```javascript
 fetch("/api/ai-analyzer", {
@@ -139,7 +139,7 @@ fetch("/api/ai-analyzer", {
 });
 ```
 
-### General Questions
+### 一般問題
 
 ```javascript
 fetch("/api/ai-analyzer", {
@@ -151,21 +151,21 @@ fetch("/api/ai-analyzer", {
 });
 ```
 
-## Rate Limits
+## 速率限制
 
-- **Gemini Free Tier**: 60 requests per minute
-- Same limits as `/api/define`
+- **Gemini 免費版**: 每分鐘 60 個請求
+- 與 `/api/define` 共用限制
 
-## Error Codes
+## 錯誤代碼
 
-| Code           | Description            | Status |
-| -------------- | ---------------------- | ------ |
-| MISSING_FIELDS | need or prompt missing | 400    |
-| API_ERROR      | Gemini API failure     | 500    |
-| RATE_LIMIT     | Rate limit exceeded    | 429    |
-| NO_API_KEY     | Missing API key        | 500    |
+| 代碼           | 說明                | 狀態碼 |
+| -------------- | ------------------- | ------ |
+| MISSING_FIELDS | 缺少 need 或 prompt | 400    |
+| API_ERROR      | Gemini API 失敗     | 500    |
+| RATE_LIMIT     | 超過速率限制        | 429    |
+| NO_API_KEY     | 缺少 API 金鑰       | 500    |
 
-## React Query Integration
+## React Query 整合
 
 ```typescript
 const { mutate, data, isPending } = useMutation({
@@ -178,8 +178,8 @@ const { mutate, data, isPending } = useMutation({
 });
 ```
 
-## Related
+## 相關文件
 
-- [API Overview](./README.md)
+- [API 概覽](./README.md)
 - [POST /api/define](./define-api.md)
-- [Architecture Reference](../architecture.md)
+- [架構參考](../architecture.md)

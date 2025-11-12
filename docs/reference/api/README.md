@@ -14,41 +14,41 @@ ai_context: |
   request/response formats, and error handling.
 ---
 
-# API Reference
+# API 參考文件
 
-Complete reference for all API endpoints in the my-website application.
+my-website 應用程式所有 API 端點的完整參考文件。
 
-## Overview
+## 概覽
 
 **Base URL**: `https://henryleelab.com/api`
-**Local Development**: `http://localhost:3000/api`
+**本地開發環境**: `http://localhost:3000/api`
 
-### Authentication
+### 身份驗證
 
-Currently, all APIs are public (no authentication required).
+目前所有 API 皆為公開存取（無需身份驗證）。
 
-### Rate Limiting
+### 速率限制
 
-No rate limiting implemented (relies on Vercel's default limits).
-
----
-
-## Available Endpoints
-
-### AI Features
-
-- [POST /api/define](./define-api.md) - AI word analysis with etymology, definitions, examples
-- [POST /api/ai-analyzer](./ai-analyzer-api.md) - General AI analysis for various use cases
-
-### Content
-
-- [GET /api/medium-articles](./medium-articles-api.md) - Fetch cached Medium articles with pagination
+未實作速率限制（依賴 Vercel 的預設限制）。
 
 ---
 
-## Common Response Formats
+## 可用端點
 
-### Success Response
+### AI 功能
+
+- [POST /api/define](./define-api.md) - AI 單字分析,包含語源、定義、範例
+- [POST /api/ai-analyzer](./ai-analyzer-api.md) - 通用 AI 分析,適用於各種使用情境
+
+### 內容
+
+- [GET /api/medium-articles](./medium-articles-api.md) - 取得快取的 Medium 文章,支援分頁
+
+---
+
+## 通用回應格式
+
+### 成功回應
 
 ```typescript
 {
@@ -57,7 +57,7 @@ No rate limiting implemented (relies on Vercel's default limits).
 }
 ```
 
-### Error Response
+### 錯誤回應
 
 ```typescript
 {
@@ -67,35 +67,35 @@ No rate limiting implemented (relies on Vercel's default limits).
 }
 ```
 
-### HTTP Status Codes
+### HTTP 狀態碼
 
-| Code | Meaning               | Usage                           |
-| ---- | --------------------- | ------------------------------- |
-| 200  | OK                    | Successful GET/POST             |
-| 400  | Bad Request           | Invalid input parameters        |
-| 500  | Internal Server Error | Server-side error (API failure) |
+| 狀態碼 | 說明           | 使用情境                 |
+| ------ | -------------- | ------------------------ |
+| 200    | OK             | 成功的 GET/POST 請求     |
+| 400    | Bad Request    | 無效的輸入參數           |
+| 500    | Internal Error | 伺服器端錯誤（API 故障） |
 
 ---
 
-## Error Handling
+## 錯誤處理
 
-All APIs use consistent error format:
+所有 API 使用一致的錯誤格式：
 
 ```typescript
 interface ErrorResponse {
   success: false;
-  error: string; // Human-readable error message
+  error: string; // 人類可讀的錯誤訊息
   details?: {
-    // Optional additional context
+    // 選用的額外上下文
     code?: string;
     field?: string;
   };
 }
 ```
 
-### Common Errors
+### 常見錯誤
 
-**Missing Required Fields**:
+**缺少必填欄位**：
 
 ```json
 {
@@ -105,7 +105,7 @@ interface ErrorResponse {
 }
 ```
 
-**API Rate Limit**:
+**API 速率限制**：
 
 ```json
 {
@@ -115,7 +115,7 @@ interface ErrorResponse {
 }
 ```
 
-**Server Error**:
+**伺服器錯誤**：
 
 ```json
 {
@@ -127,43 +127,43 @@ interface ErrorResponse {
 
 ---
 
-## Environment Variables
+## 環境變數
 
-Required for API functionality:
+API 功能所需的環境變數：
 
 ```bash
-GEMINI_API_KEY=your_key_here  # Required for AI features
-NODE_ENV=development           # Environment mode
+GEMINI_API_KEY=your_key_here  # AI 功能必填
+NODE_ENV=development           # 環境模式
 ```
 
-Get Gemini API key: [https://ai.google.dev/](https://ai.google.dev/)
+取得 Gemini API 金鑰：[https://ai.google.dev/](https://ai.google.dev/)
 
 ---
 
-## Testing
+## 測試
 
-### Using curl
+### 使用 curl
 
 ```bash
-# Test /api/define
+# 測試 /api/define
 curl -X POST http://localhost:3000/api/define \
   -H "Content-Type: application/json" \
   -d '{"word": "serendipity", "type": "etymology"}'
 
-# Test /api/medium-articles
+# 測試 /api/medium-articles
 curl http://localhost:3000/api/medium-articles
 ```
 
-### Using Postman
+### 使用 Postman
 
-Import collection: [API Collection](../../../scripts/postman-collection.json) _(future)_
+匯入集合：[API Collection](../../../scripts/postman-collection.json) _（未來提供）_
 
 ---
 
-## Related Documentation
+## 相關文件
 
-- [Architecture Reference](../architecture.md) - System architecture
-- [Development Setup](../../guides/development-setup.md) - Local setup
-- [POST /api/define](./define-api.md) - Word analysis endpoint
-- [POST /api/ai-analyzer](./ai-analyzer-api.md) - General AI analysis
-- [GET /api/medium-articles](./medium-articles-api.md) - Articles endpoint
+- [架構參考](../architecture.md) - 系統架構
+- [開發環境設定](../../guides/development-setup.md) - 本地設定
+- [POST /api/define](./define-api.md) - 單字分析端點
+- [POST /api/ai-analyzer](./ai-analyzer-api.md) - 通用 AI 分析
+- [GET /api/medium-articles](./medium-articles-api.md) - 文章端點

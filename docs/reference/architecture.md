@@ -1,5 +1,5 @@
 ---
-title: "System Architecture Reference"
+title: "系統架構參考文件"
 type: reference
 status: stable
 audience: [developer, architect, ai]
@@ -14,143 +14,142 @@ related:
   - adr/002-agents-md-adoption.md
   - explanation/git-hooks-research.md
 ai_context: |
-  Complete technical reference for the system architecture including monorepo structure,
-  feature-based design, data flow, and deployment architecture. Use this to understand
-  the overall system design, technology decisions, and how components interact.
+  系統架構的完整技術參考文件，包含 monorepo 結構、基於功能的設計、資料流和部署架構。
+  使用此文件了解整體系統設計、技術決策以及組件之間的互動方式。
 ---
 
-# System Architecture Reference
+# 系統架構參考文件
 
-## Overview
+## 概述
 
-**What this documents**: The complete system architecture of Henry Lee's personal website (henryleelab.com), a production Next.js 15 monorepo built with TypeScript, Turborepo, and modern React patterns.
+**本文件內容**：Henry Lee 個人網站（henryleelab.com）的完整系統架構，這是一個使用 TypeScript、Turborepo 和現代 React 模式構建的生產級 Next.js 15 monorepo 專案。
 
-**Architecture type**: Feature-based monorepo with clear boundaries, using Next.js App Router, React Server Components, and static site generation.
+**架構類型**：基於功能的 monorepo，具有明確邊界，使用 Next.js App Router、React Server Components 和靜態網站生成。
 
-**Key characteristics**:
+**主要特性**：
 
-- Monorepo managed by Turborepo and pnpm workspaces
-- Feature-based architecture with enforced boundaries (ESLint)
-- Next.js 15 App Router with RSC (React Server Components)
-- Static site generation (SSG) with selective data prefetching
-- React Query for server state management
-- Vercel deployment with automatic CI/CD
+- 由 Turborepo 和 pnpm workspaces 管理的 Monorepo
+- 基於功能的架構，具有強制執行的邊界（ESLint）
+- Next.js 15 App Router 搭配 RSC（React Server Components）
+- 靜態網站生成（SSG）搭配選擇性資料預取
+- React Query 用於伺服器狀態管理
+- Vercel 部署，具有自動 CI/CD
 
-**Project location**: `/Users/henrylee/personal/my-website`
+**專案位置**：`/Users/henrylee/personal/my-website`
 
-**Production URL**: https://henryleelab.com
+**生產環境 URL**：https://henryleelab.com
 
 ---
 
-## Quick Reference
+## 快速參考
 
-**Most common operations:**
+**最常用操作：**
 
-| Operation            | Command                                   | Description                                  |
-| -------------------- | ----------------------------------------- | -------------------------------------------- |
-| Start development    | `pnpm dev`                                | Launch dev server with Turbo TUI (port 3000) |
-| Build for production | `pnpm build`                              | Build all apps with Turborepo caching        |
-| Run quality checks   | `pnpm check`                              | Run type check + lint + format (auto-fix)    |
-| Sync Medium articles | `pnpm sync:all-articles`                  | Fetch and parse latest Medium articles       |
-| Add new feature      | Create in `apps/my-website/src/features/` | Follow feature structure pattern             |
+| 操作             | 指令                                    | 說明                                       |
+| ---------------- | --------------------------------------- | ------------------------------------------ |
+| 啟動開發環境     | `pnpm dev`                              | 使用 Turbo TUI 啟動開發伺服器（port 3000） |
+| 建置生產版本     | `pnpm build`                            | 使用 Turborepo 快取建置所有應用程式        |
+| 執行品質檢查     | `pnpm check`                            | 執行型別檢查 + lint + 格式化（自動修復）   |
+| 同步 Medium 文章 | `pnpm sync:all-articles`                | 獲取並解析最新的 Medium 文章               |
+| 新增功能         | 在 `apps/my-website/src/features/` 建立 | 遵循功能結構模式                           |
 
-**Project structure quick view:**
+**專案結構快速檢視：**
 
 ```
 my-website/
 ├── apps/
-│   └── my-website/          # Main Next.js 15 application
+│   └── my-website/          # 主要 Next.js 15 應用程式
 │       ├── src/
-│       │   ├── app/         # Next.js App Router (routes)
-│       │   ├── features/    # Feature-based modules (isolated)
-│       │   ├── components/  # Shared UI components
-│       │   ├── lib/         # Core libraries (React Query, logger)
-│       │   └── types/       # Global type definitions
-│       └── scripts/         # Build-time scripts (Medium sync)
+│       │   ├── app/         # Next.js App Router（路由）
+│       │   ├── features/    # 基於功能的模組（隔離）
+│       │   ├── components/  # 共用 UI 組件
+│       │   ├── lib/         # 核心函式庫（React Query、logger）
+│       │   └── types/       # 全域型別定義
+│       └── scripts/         # 建置時腳本（Medium 同步）
 ├── packages/
-│   ├── shared/              # Shared types, data, utilities
-│   ├── tsconfig/            # Shared TypeScript configs
-│   └── eslint-config/       # Shared ESLint configs
-└── docs/                    # Documentation (ADRs, guides, refs)
+│   ├── shared/              # 共用型別、資料、工具
+│   ├── tsconfig/            # 共用 TypeScript 設定
+│   └── eslint-config/       # 共用 ESLint 設定
+└── docs/                    # 文件（ADRs、指南、參考）
 ```
 
 ---
 
-## Technology Stack
+## 技術堆疊
 
-### Core Technologies
+### 核心技術
 
-**Runtime & Framework:**
+**執行環境與框架：**
 
-- **Next.js**: 15.4.7 (App Router, RSC, SSG)
-- **React**: 19.0.0 (Server Components, hooks)
-- **TypeScript**: 5.9.3 (strict mode)
-- **Node.js**: >= 20.x
+- **Next.js**：15.4.7（App Router、RSC、SSG）
+- **React**：19.0.0（Server Components、hooks）
+- **TypeScript**：5.9.3（strict mode）
+- **Node.js**：>= 20.x
 
-**Build & Development:**
+**建置與開發：**
 
-- **Turborepo**: 2.5.8 (monorepo build orchestration)
-- **pnpm**: 9.15.4 (package manager, workspaces)
-- **Turbopack**: Built into Next.js 15 (dev mode bundler)
-- **ESBuild**: Via Next.js (production builds)
+- **Turborepo**：2.5.8（monorepo 建置編排）
+- **pnpm**：9.15.4（套件管理器、workspaces）
+- **Turbopack**：內建於 Next.js 15（開發模式打包器）
+- **ESBuild**：透過 Next.js（生產建置）
 
-**Styling & UI:**
+**樣式與 UI：**
 
-- **Tailwind CSS**: 4.1.16 (utility-first CSS)
-- **DaisyUI**: 5.4.2 (component library)
-- **Framer Motion**: 12.23.24 (animations)
-- **lucide-react**: 0.552.0 (UI icons)
-- **react-icons**: 5.5.0 (brand/company logos)
+- **Tailwind CSS**：4.1.16（utility-first CSS）
+- **DaisyUI**：5.4.2（組件庫）
+- **Framer Motion**：12.23.24（動畫）
+- **lucide-react**：0.552.0（UI 圖示）
+- **react-icons**：5.5.0（品牌/公司標誌）
 
-**State Management & Data:**
+**狀態管理與資料：**
 
-- **React Query**: 5.81.2 (server state, caching)
-- **date-fns**: 4.1.0 (date manipulation)
-- **localStorage**: Native (time-tracker persistence)
+- **React Query**：5.81.2（伺服器狀態、快取）
+- **date-fns**：4.1.0（日期處理）
+- **localStorage**：原生（time-tracker 持久化）
 
-**AI Integration:**
+**AI 整合：**
 
-- **Google Gemini API**: 2.5 Flash Lite (AI dictionary & analyzer)
-- **@google/generative-ai**: 0.24.1 (SDK)
+- **Google Gemini API**：2.5 Flash Lite（AI 字典與分析器）
+- **@google/generative-ai**：0.24.1（SDK）
 
-**Logging & Monitoring:**
+**日誌與監控：**
 
-- **Pino**: 10.1.0 (structured logging)
-- **@vercel/analytics**: 1.5.0 (web analytics)
-- **@vercel/speed-insights**: 1.2.0 (performance tracking)
+- **Pino**：10.1.0（結構化日誌）
+- **@vercel/analytics**：1.5.0（網站分析）
+- **@vercel/speed-insights**：1.2.0（效能追蹤）
 
-**Development Tools:**
+**開發工具：**
 
-- **ESLint**: 9.39.0 (linting, flat config)
-- **Prettier**: 3.6.2 (formatting)
-- **Husky**: 9.1.7 (git hooks)
-- **lint-staged**: 16.1.2 (pre-commit checks)
-- **Commitlint**: 20.1.0 (commit message validation)
-- **tsx**: 4.20.6 (TypeScript script execution)
+- **ESLint**：9.39.0（linting、flat config）
+- **Prettier**：3.6.2（格式化）
+- **Husky**：9.1.7（git hooks）
+- **lint-staged**：16.1.2（pre-commit 檢查）
+- **Commitlint**：20.1.0（commit 訊息驗證）
+- **tsx**：4.20.6（TypeScript 腳本執行）
 
-**External Services:**
+**外部服務：**
 
-- **Medium API**: GraphQL API (article fetching)
-- **Vercel**: Deployment platform
-- **Cheerio**: 1.1.2 (HTML parsing for articles)
+- **Medium API**：GraphQL API（文章獲取）
+- **Vercel**：部署平台
+- **Cheerio**：1.1.2（文章的 HTML 解析）
 
-### Version Requirements
+### 版本要求
 
-| Technology  | Version Constraint | Reason                                |
-| ----------- | ------------------ | ------------------------------------- |
-| React Query | >= 5.84.1          | Fixed SSG compatibility bug (ADR-001) |
-| Next.js     | 15.x               | App Router, RSC, Turbopack support    |
-| React       | 19.x               | Required by Next.js 15                |
-| TypeScript  | 5.x                | Strict mode features                  |
-| pnpm        | 9.15.4+            | Workspace protocol support            |
+| 技術        | 版本限制  | 原因                            |
+| ----------- | --------- | ------------------------------- |
+| React Query | >= 5.84.1 | 修復 SSG 相容性 bug（ADR-001）  |
+| Next.js     | 15.x      | App Router、RSC、Turbopack 支援 |
+| React       | 19.x      | Next.js 15 必需                 |
+| TypeScript  | 5.x       | Strict mode 功能                |
+| pnpm        | 9.15.4+   | Workspace protocol 支援         |
 
 ---
 
-## Monorepo Structure
+## Monorepo 結構
 
-### Workspace Organization
+### Workspace 組織
 
-**Root configuration:**
+**根目錄設定：**
 
 ```json
 {
@@ -161,86 +160,86 @@ my-website/
 }
 ```
 
-**Workspace topology:**
+**Workspace 拓撲：**
 
 ```
 Root (my-website-monorepo)
 ├── apps/
 │   └── my-website (Next.js app)
-│       ├── depends on: @packages/shared
-│       ├── depends on: @packages/tsconfig
-│       ├── depends on: @packages/eslint-config
-│       ├── depends on: @packages/tailwind-config
-│       ├── depends on: @packages/ai-dictionary
-│       ├── depends on: @packages/ai-analyzer
-│       └── depends on: @packages/blog
+│       ├── 依賴：@packages/shared
+│       ├── 依賴：@packages/tsconfig
+│       ├── 依賴：@packages/eslint-config
+│       ├── 依賴：@packages/tailwind-config
+│       ├── 依賴：@packages/ai-dictionary
+│       ├── 依賴：@packages/ai-analyzer
+│       └── 依賴：@packages/blog
 └── packages/
-    ├── shared/           # No dependencies (foundation)
-    ├── tsconfig/         # No dependencies
-    ├── eslint-config/    # No dependencies
-    ├── tailwind-config/  # No dependencies
-    ├── ai-dictionary/    # depends on: @packages/shared
-    ├── ai-analyzer/      # depends on: @packages/shared
-    └── blog/             # depends on: @packages/shared
+    ├── shared/           # 無依賴（基礎）
+    ├── tsconfig/         # 無依賴
+    ├── eslint-config/    # 無依賴
+    ├── tailwind-config/  # 無依賴
+    ├── ai-dictionary/    # 依賴：@packages/shared
+    ├── ai-analyzer/      # 依賴：@packages/shared
+    └── blog/             # 依賴：@packages/shared
 ```
 
 ### Apps
 
 #### apps/my-website
 
-**Purpose**: Main Next.js 15 application serving henryleelab.com
+**用途**：主要的 Next.js 15 應用程式，服務 henryleelab.com
 
-**Technology**: Next.js 15 (App Router), React 19, TypeScript
+**技術**：Next.js 15（App Router）、React 19、TypeScript
 
-**Structure**:
+**結構**：
 
 ```
 apps/my-website/
 ├── src/
-│   ├── app/              # Next.js App Router (file-based routing)
-│   │   ├── layout.tsx    # Root layout (providers, fonts)
-│   │   ├── page.tsx      # Homepage (resume feature)
-│   │   ├── blog/         # Blog route
-│   │   ├── about/        # About route
-│   │   ├── ai-dictionary/  # AI Dictionary route
-│   │   ├── ai-analyzer/    # AI Analyzer route
-│   │   ├── time-tracker/   # Time Tracker route
-│   │   ├── api/          # API routes
-│   │   │   ├── define/       # POST - AI word analysis
-│   │   │   ├── ai-analyzer/  # POST - AI analysis
-│   │   │   └── medium-articles/ # GET - Cached articles
-│   │   └── not-found.tsx # 404 page
-│   ├── features/         # Feature modules (self-contained)
-│   │   ├── resume/       # Homepage/resume feature
-│   │   ├── blog/         # Blog listing feature
-│   │   ├── ai-dictionary/  # AI dictionary feature
-│   │   ├── ai-analyzer/    # AI analyzer feature
-│   │   ├── time-tracker/   # Time tracking feature
-│   │   ├── about/        # About page feature
-│   │   └── not-found/    # 404 feature
-│   ├── components/       # Shared UI components
-│   │   └── shared/       # Importable across features
-│   ├── lib/              # Core libraries
-│   │   ├── query-client.ts  # React Query setup
-│   │   ├── logger/          # Pino logger config
-│   │   └── medium/          # Medium API integration
-│   ├── types/            # Global type definitions
-│   ├── constants/        # Global constants
-│   ├── utils/            # Global utilities
-│   └── data/             # Static data files
-├── scripts/              # Build-time automation
-│   ├── sync-latest-articles.ts   # Fetch latest 2 articles
-│   ├── batch-parse-articles.ts   # Parse article content
-│   └── validate-commit-size.ts   # Git hook validation
-├── public/               # Static assets
-├── .next/                # Next.js build output (gitignored)
-├── tailwind.config.ts    # Tailwind CSS config
-├── tsconfig.json         # TypeScript config (extends @packages/tsconfig)
-├── eslint.config.js      # ESLint config (extends @packages/eslint-config)
-└── package.json          # Dependencies and scripts
+│   ├── app/              # Next.js App Router（基於檔案的路由）
+│   │   ├── layout.tsx    # 根 layout（providers、字體）
+│   │   ├── page.tsx      # 首頁（resume 功能）
+│   │   ├── blog/         # Blog 路由
+│   │   ├── about/        # About 路由
+│   │   ├── ai-dictionary/  # AI Dictionary 路由
+│   │   ├── ai-analyzer/    # AI Analyzer 路由
+│   │   ├── time-tracker/   # Time Tracker 路由
+│   │   ├── api/          # API 路由
+│   │   │   ├── define/       # POST - AI 單字分析
+│   │   │   ├── ai-analyzer/  # POST - AI 分析
+│   │   │   └── medium-articles/ # GET - 快取的文章
+│   │   └── not-found.tsx # 404 頁面
+│   ├── features/         # 功能模組（自包含）
+│   │   ├── resume/       # 首頁/履歷功能
+│   │   ├── blog/         # 部落格列表功能
+│   │   ├── ai-dictionary/  # AI 字典功能
+│   │   ├── ai-analyzer/    # AI 分析器功能
+│   │   ├── time-tracker/   # 時間追蹤功能
+│   │   ├── about/        # 關於頁面功能
+│   │   └── not-found/    # 404 功能
+│   ├── components/       # 共用 UI 組件
+│   │   └── shared/       # 可跨功能匯入
+│   ├── lib/              # 核心函式庫
+│   │   ├── query-client.ts  # React Query 設定
+│   │   ├── logger/          # Pino logger 設定
+│   │   └── medium/          # Medium API 整合
+│   ├── types/            # 全域型別定義
+│   ├── constants/        # 全域常數
+│   ├── utils/            # 全域工具
+│   └── data/             # 靜態資料檔案
+├── scripts/              # 建置時自動化
+│   ├── sync-latest-articles.ts   # 獲取最新 2 篇文章
+│   ├── batch-parse-articles.ts   # 解析文章內容
+│   └── validate-commit-size.ts   # Git hook 驗證
+├── public/               # 靜態資源
+├── .next/                # Next.js 建置輸出（gitignored）
+├── tailwind.config.ts    # Tailwind CSS 設定
+├── tsconfig.json         # TypeScript 設定（繼承 @packages/tsconfig）
+├── eslint.config.js      # ESLint 設定（繼承 @packages/eslint-config）
+└── package.json          # 依賴與腳本
 ```
 
-**Key scripts**:
+**關鍵腳本**：
 
 ```json
 {
@@ -255,100 +254,100 @@ apps/my-website/
 
 #### packages/shared
 
-**Purpose**: Shared types, constants, data, utilities, and components across the monorepo
+**用途**：跨 monorepo 的共用型別、常數、資料、工具和組件
 
-**Exports**:
+**匯出**：
 
-- Type definitions (articles, projects, experiences)
-- Constants (URLs, configuration)
-- Data files (articleData.ts - auto-generated)
-- Utility functions (date formatting, string manipulation)
-- Shared React components (optional)
+- 型別定義（文章、專案、經驗）
+- 常數（URLs、設定）
+- 資料檔案（articleData.ts - 自動生成）
+- 工具函式（日期格式化、字串處理）
+- 共用 React 組件（選用）
 
-**Usage**: `import { ArticleType } from '@packages/shared';`
+**使用方式**：`import { ArticleType } from '@packages/shared';`
 
-**Structure**:
+**結構**：
 
 ```
 packages/shared/
 ├── src/
-│   ├── types/        # Shared TypeScript interfaces
-│   ├── constants/    # Shared constants
-│   ├── data/         # Shared data files (articleData.ts)
-│   ├── utils/        # Shared utility functions
-│   └── components/   # Shared React components (if any)
+│   ├── types/        # 共用 TypeScript interfaces
+│   ├── constants/    # 共用常數
+│   ├── data/         # 共用資料檔案（articleData.ts）
+│   ├── utils/        # 共用工具函式
+│   └── components/   # 共用 React 組件（如果有）
 └── package.json
 ```
 
 #### packages/tsconfig
 
-**Purpose**: Shared TypeScript configuration presets
+**用途**：共用 TypeScript 設定預設
 
-**Configs**:
+**設定檔**：
 
-- `base.json` - Base config (strict mode, ES2022)
-- `nextjs.json` - Next.js-specific config (extends base)
-- `react-library.json` - React library config (extends base)
+- `base.json` - 基礎設定（strict mode、ES2022）
+- `nextjs.json` - Next.js 專用設定（繼承 base）
+- `react-library.json` - React 函式庫設定（繼承 base）
 
-**Usage**: `"extends": "@packages/tsconfig/nextjs.json"`
+**使用方式**：`"extends": "@packages/tsconfig/nextjs.json"`
 
 #### packages/eslint-config
 
-**Purpose**: Shared ESLint configuration and rules
+**用途**：共用 ESLint 設定與規則
 
-**Configs**:
+**設定檔**：
 
-- `next.js` - Next.js app configuration (App Router rules)
-- `library.js` - Library configuration (for packages)
+- `next.js` - Next.js 應用程式設定（App Router 規則）
+- `library.js` - 函式庫設定（用於 packages）
 
-**Plugins**:
+**外掛**：
 
-- `@typescript-eslint` - TypeScript rules
-- `eslint-plugin-sonarjs` - Code quality rules
-- `eslint-plugin-unused-imports` - Remove unused imports
-- `eslint-plugin-perfectionist` - Sorting/ordering
-- Custom architectural boundary rules
+- `@typescript-eslint` - TypeScript 規則
+- `eslint-plugin-sonarjs` - 程式碼品質規則
+- `eslint-plugin-unused-imports` - 移除未使用的匯入
+- `eslint-plugin-perfectionist` - 排序/順序
+- 自訂架構邊界規則
 
-**Usage**: `import nextConfig from '@packages/eslint-config/next';`
+**使用方式**：`import nextConfig from '@packages/eslint-config/next';`
 
 #### packages/tailwind-config
 
-**Purpose**: Shared Tailwind CSS configuration
+**用途**：共用 Tailwind CSS 設定
 
-**Features**:
+**功能**：
 
-- DaisyUI theme configuration
-- Custom color schemes
-- Responsive breakpoints
-- Typography settings
+- DaisyUI 主題設定
+- 自訂色彩方案
+- 響應式斷點
+- 排版設定
 
-**Usage**: `import config from '@packages/tailwind-config';`
+**使用方式**：`import config from '@packages/tailwind-config';`
 
 #### packages/ai-dictionary
 
-**Purpose**: AI-powered word analysis package (can be extracted for reuse)
+**用途**：AI 驅動的單字分析套件（可提取重用）
 
-**Features**: Word etymology, definitions, usage examples via Gemini API
+**功能**：透過 Gemini API 提供單字詞源、定義、使用範例
 
-**Structure**: Feature-based (components, hooks, types)
+**結構**：基於功能（components、hooks、types）
 
 #### packages/ai-analyzer
 
-**Purpose**: General-purpose AI analysis package (can be extracted for reuse)
+**用途**：通用 AI 分析套件（可提取重用）
 
-**Features**: Prompt-based analysis via Gemini API
+**功能**：透過 Gemini API 進行基於提示的分析
 
-**Structure**: Feature-based (components, hooks, types)
+**結構**：基於功能（components、hooks、types）
 
 #### packages/blog
 
-**Purpose**: Blog feature package (Medium integration)
+**用途**：部落格功能套件（Medium 整合）
 
-**Features**: Article listing, infinite scroll, article display
+**功能**：文章列表、無限滾動、文章顯示
 
-**Structure**: Feature-based (components, hooks, queries)
+**結構**：基於功能（components、hooks、queries）
 
-### Dependency Graph
+### 依賴圖
 
 ```mermaid
 graph TD
@@ -374,40 +373,40 @@ graph TD
     style H fill:#fbbf24
 ```
 
-**Legend:**
+**圖例：**
 
-- 🟢 Green: Main application
-- 🔵 Blue: Foundation packages (no dependencies)
-- 🟣 Purple: Configuration packages
-- 🟡 Yellow: Feature packages (depend on shared)
+- 🟢 綠色：主要應用程式
+- 🔵 藍色：基礎套件（無依賴）
+- 🟣 紫色：設定套件
+- 🟡 黃色：功能套件（依賴 shared）
 
 ---
 
-## Feature-Based Architecture
+## 基於功能的架構
 
-### Feature Isolation Principle
+### 功能隔離原則
 
-**Definition**: Each feature is a self-contained module with its own components, hooks, types, and utilities. Features cannot import from each other (enforced by ESLint).
+**定義**：每個功能都是一個自包含的模組，擁有自己的組件、hooks、型別和工具。功能之間不能互相匯入（由 ESLint 強制執行）。
 
-**Benefits**:
+**優勢**：
 
-- Clear boundaries and responsibilities
-- Easier to reason about and test
-- Prevents circular dependencies
-- Facilitates code reuse via extraction to packages
-- Improves build performance (tree-shaking)
+- 高內聚（相關程式碼在一起）
+- 低耦合（功能獨立）
+- 易於理解（所有功能程式碼在一個地方）
+- 促進程式碼重用（提取到套件）
+- 改善建置效能（tree-shaking）
 
-**Enforcement**: Custom ESLint rules prevent cross-feature imports.
+**強制執行**：自訂 ESLint 規則防止跨功能匯入。
 
-### Feature Structure Pattern
+### 功能結構模式
 
-**Standard feature structure:**
+**標準功能結構：**
 
 ```
 {feature-name}/
-├── {FeatureName}Feature.tsx  # Main orchestrator component (entry point)
-├── index.ts                  # Barrel export (export { FeatureName }Feature)
-├── components/               # Feature-specific components
+├── {FeatureName}Feature.tsx  # 主要編排組件（入口點）
+├── index.ts                  # Barrel export（export { FeatureName }Feature）
+├── components/               # 功能專用組件
 │   ├── ComponentA/
 │   │   ├── ComponentA.tsx
 │   │   ├── SubComponent.tsx
@@ -417,104 +416,104 @@ graph TD
 │   │   └── index.ts
 │   └── ComponentB/
 │       └── ComponentB.tsx
-├── hooks/                    # Feature-specific hooks
+├── hooks/                    # 功能專用 hooks
 │   ├── useFeatureData.ts
 │   └── useFeatureLogic.ts
-├── types/                    # Feature-specific types
+├── types/                    # 功能專用型別
 │   └── feature.types.ts
-├── utils/                    # Feature-specific utilities
+├── utils/                    # 功能專用工具
 │   ├── calculations.ts
 │   └── formatters.ts
-├── constants/                # Feature-specific constants
+├── constants/                # 功能專用常數
 │   └── feature.constants.ts
-└── queries/                  # React Query queries (if applicable)
+└── queries/                  # React Query queries（如適用）
     ├── queryKeys.ts
     ├── queryFns.ts
     └── queryConfigs.ts
 ```
 
-**File naming conventions:**
+**檔案命名慣例：**
 
-| Type                | Convention              | Example                |
-| ------------------- | ----------------------- | ---------------------- |
-| Feature component   | `*Feature.tsx`          | `ResumeFeature.tsx`    |
-| Page component      | `page.tsx`              | `app/blog/page.tsx`    |
-| UI component        | PascalCase              | `HeroSection.tsx`      |
-| Hook                | `use` prefix, camelCase | `useMediumArticles.ts` |
-| Type file           | camelCase + `.types.ts` | `article.types.ts`     |
-| Utility             | camelCase               | `formatDate.ts`        |
-| Constant            | camelCase or UPPER_CASE | `API_PATHS.ts`         |
-| Feature directory   | kebab-case              | `time-tracker/`        |
-| Component directory | PascalCase              | `HeaderSection/`       |
+| 型別     | 慣例                    | 範例                   |
+| -------- | ----------------------- | ---------------------- |
+| 功能組件 | `*Feature.tsx`          | `ResumeFeature.tsx`    |
+| 頁面組件 | `page.tsx`              | `app/blog/page.tsx`    |
+| UI 組件  | PascalCase              | `HeroSection.tsx`      |
+| Hook     | `use` 前綴、camelCase   | `useMediumArticles.ts` |
+| 型別檔案 | camelCase + `.types.ts` | `article.types.ts`     |
+| 工具     | camelCase               | `formatDate.ts`        |
+| 常數     | camelCase 或 UPPER_CASE | `API_PATHS.ts`         |
+| 功能目錄 | kebab-case              | `time-tracker/`        |
+| 組件目錄 | PascalCase              | `HeaderSection/`       |
 
-### Architectural Boundaries
+### 架構邊界
 
-**ESLint-enforced rules:**
+**ESLint 強制執行規則：**
 
-✅ **Allowed:**
+✅ **允許：**
 
-- Feature → `@packages/shared` (shared code)
-- Feature → `@/components/shared` (shared UI components)
-- Feature → `@/lib/*` (core libraries)
-- Feature → `@/types/*` (global types)
-- Feature → `@/constants/*` (global constants)
-- Feature → `@/utils/*` (global utilities)
-- Any → `@packages/shared/data/articleData.ts` (data files)
+- 功能 → `@packages/shared`（共用程式碼）
+- 功能 → `@/components/shared`（共用 UI 組件）
+- 功能 → `@/lib/*`（核心函式庫）
+- 功能 → `@/types/*`（全域型別）
+- 功能 → `@/constants/*`（全域常數）
+- 功能 → `@/utils/*`（全域工具）
+- 任何 → `@packages/shared/data/articleData.ts`（資料檔案）
 
-❌ **Forbidden:**
+❌ **禁止：**
 
-- Feature A → Feature B (cross-feature imports)
-- Feature → `@/app/*` (route imports)
-- Any → `@/features/{feature}/hooks` (feature-specific hooks)
-- Any → `@/features/{feature}/types` (feature-specific types)
-- Any → `@/features/{feature}/utils` (feature-specific utilities)
+- 功能 A → 功能 B（跨功能匯入）
+- 功能 → `@/app/*`（路由匯入）
+- 任何 → `@/features/{feature}/hooks`（功能專用 hooks）
+- 任何 → `@/features/{feature}/types`（功能專用型別）
+- 任何 → `@/features/{feature}/utils`（功能專用工具）
 
-**Rationale**: Enforce clear boundaries, prevent circular dependencies, enable feature extraction.
+**理由**：強制執行明確邊界，防止循環依賴，使功能提取成為可能。
 
-### Current Features
+### 當前功能
 
 #### resume
 
-**Location**: `apps/my-website/src/features/resume/`
+**位置**：`apps/my-website/src/features/resume/`
 
-**Purpose**: Homepage featuring personal introduction, experience, projects, and recent blog articles
+**用途**：首頁，展示個人介紹、經驗、專案和最新部落格文章
 
-**Route**: `/` (root)
+**路由**：`/`（根目錄）
 
-**Components**:
+**組件**：
 
-- `ResumeFeature.tsx` - Main orchestrator
-- `HeroSection` - Introduction with avatar
-- `ExperienceSection` - Work experience timeline
-- `ProjectsSection` - Featured projects
-- `RecentArticlesSection` - Latest blog articles
+- `ResumeFeature.tsx` - 主要編排器
+- `HeroSection` - 帶頭像的介紹
+- `ExperienceSection` - 工作經驗時間線
+- `ProjectsSection` - 特色專案
+- `RecentArticlesSection` - 最新部落格文章
 
-**Data sources**: Static data from `@packages/shared`
+**資料來源**：來自 `@packages/shared` 的靜態資料
 
-**State management**: None (static content)
+**狀態管理**：無（靜態內容）
 
 #### blog
 
-**Location**: `packages/blog/` (extracted as package)
+**位置**：`packages/blog/`（提取為套件）
 
-**Purpose**: Blog listing with Medium integration, infinite scroll
+**用途**：部落格列表，整合 Medium，支援無限滾動
 
-**Route**: `/blog`
+**路由**：`/blog`
 
-**Components**:
+**組件**：
 
-- `BlogFeature.tsx` - Main orchestrator
-- `ArticleCard` - Individual article preview
-- `InfiniteArticleList` - Infinite scroll container
+- `BlogFeature.tsx` - 主要編排器
+- `ArticleCard` - 單篇文章預覽
+- `InfiniteArticleList` - 無限滾動容器
 
-**Data sources**: Medium API via `@/lib/medium`
+**資料來源**：透過 `@/lib/medium` 的 Medium API
 
-**State management**: React Query (infinite query with server prefetch)
+**狀態管理**：React Query（無限查詢搭配伺服器預取）
 
-**Data flow** (ADR-001):
+**資料流**（ADR-001）：
 
 ```typescript
-// Server-side prefetch (SEO optimization)
+// 伺服器端預取（SEO 優化）
 export default async function BlogPage() {
   const queryClient = getQueryClient();
 
@@ -534,125 +533,125 @@ export default async function BlogPage() {
 
 #### ai-dictionary
 
-**Location**: `packages/ai-dictionary/` (extracted as package)
+**位置**：`packages/ai-dictionary/`（提取為套件）
 
-**Purpose**: AI-powered word analysis tool (etymology, definitions, examples)
+**用途**：AI 驅動的單字分析工具（詞源、定義、範例）
 
-**Route**: `/ai-dictionary`
+**路由**：`/ai-dictionary`
 
-**Components**:
+**組件**：
 
-- `AIDictionaryFeature.tsx` - Main orchestrator
-- `WordInput` - User input form
-- `AnalysisResult` - Display analysis results
-- `LoadingState` - Loading animation
-- `ErrorState` - Error handling
+- `AIDictionaryFeature.tsx` - 主要編排器
+- `WordInput` - 使用者輸入表單
+- `AnalysisResult` - 顯示分析結果
+- `LoadingState` - 載入動畫
+- `ErrorState` - 錯誤處理
 
-**API endpoint**: `POST /api/define`
+**API 端點**：`POST /api/define`
 
-**State management**: React Query (mutation, client-only)
+**狀態管理**：React Query（mutation、僅客戶端）
 
-**Data flow** (ADR-001):
+**資料流**（ADR-001）：
 
 ```typescript
-// Client-only mutation (no SEO needed)
+// 僅客戶端 mutation（無需 SEO）
 export default function AIDictionaryPage() {
-  return <AIDictionaryFeature />;  // Client Component handles mutation
+  return <AIDictionaryFeature />;  // Client Component 處理 mutation
 }
 ```
 
-**AI integration**: Google Gemini API (Gemini 2.5 Flash Lite)
+**AI 整合**：Google Gemini API（Gemini 2.5 Flash Lite）
 
 #### ai-analyzer
 
-**Location**: `packages/ai-analyzer/` (extracted as package)
+**位置**：`packages/ai-analyzer/`（提取為套件）
 
-**Purpose**: General-purpose AI analysis tool
+**用途**：通用 AI 分析工具
 
-**Route**: `/ai-analyzer`
+**路由**：`/ai-analyzer`
 
-**API endpoint**: `POST /api/ai-analyzer`
+**API 端點**：`POST /api/ai-analyzer`
 
-**State management**: React Query (mutation, client-only)
+**狀態管理**：React Query（mutation、僅客戶端）
 
-**Similar structure to ai-dictionary**
+**類似於 ai-dictionary 的結構**
 
 #### time-tracker
 
-**Location**: `apps/my-website/src/features/time-tracker/`
+**位置**：`apps/my-website/src/features/time-tracker/`
 
-**Purpose**: Time tracking application with task management, statistics, and settings
+**用途**：時間追蹤應用程式，具有任務管理、統計和設定
 
-**Route**: `/time-tracker`
+**路由**：`/time-tracker`
 
-**Components**:
+**組件**：
 
-- `TimeTrackerFeature.tsx` - Main orchestrator
-- `MainTabContent` - Active tracking interface
-- `WeeklyStatsContent` - Weekly statistics view
-- `SettingsContent` - User preferences
+- `TimeTrackerFeature.tsx` - 主要編排器
+- `MainTabContent` - 活動追蹤介面
+- `WeeklyStatsContent` - 每週統計檢視
+- `SettingsContent` - 使用者偏好設定
 
-**Hooks**:
+**Hooks**：
 
-- `useTimeTracker` - Main tracking logic
-- `useWeeklyStats` - Statistics calculations
-- `useUserSettings` - Settings persistence
-- `useLocalStorage` - localStorage abstraction
+- `useTimeTracker` - 主要追蹤邏輯
+- `useWeeklyStats` - 統計計算
+- `useUserSettings` - 設定持久化
+- `useLocalStorage` - localStorage 抽象
 
-**Utilities**:
+**工具**：
 
-- `calculations.ts` - Time calculations
-- `formatters.ts` - Display formatting
-- `validation.ts` - Input validation
+- `calculations.ts` - 時間計算
+- `formatters.ts` - 顯示格式化
+- `validation.ts` - 輸入驗證
 
-**Persistence**: localStorage (no backend)
+**持久化**：localStorage（無後端）
 
-**State management**: React hooks with localStorage sync
+**狀態管理**：React hooks 搭配 localStorage 同步
 
 #### about
 
-**Location**: `apps/my-website/src/features/about/`
+**位置**：`apps/my-website/src/features/about/`
 
-**Purpose**: About page with personal information
+**用途**：關於頁面，包含個人資訊
 
-**Route**: `/about`
+**路由**：`/about`
 
-**State management**: None (static content)
+**狀態管理**：無（靜態內容）
 
 #### not-found
 
-**Location**: `apps/my-website/src/features/not-found/`
+**位置**：`apps/my-website/src/features/not-found/`
 
-**Purpose**: Custom 404 error page
+**用途**：自訂 404 錯誤頁面
 
-**Route**: N/A (shown for unknown routes)
+**路由**：N/A（顯示於未知路由）
 
-**State management**: None (static content)
+**狀態管理**：無（靜態內容）
 
 ---
 
-## Data Flow
+## 資料流
 
-### Data Flow Patterns
+### 資料流模式
 
-**Pattern overview:**
+**模式概述：**
 
 ```mermaid
 graph TD
-    subgraph "Server-side (RSC)"
+    subgraph "伺服器端 (RSC)"
         A[Page Component] --> B[getQueryClient]
         B --> C[prefetchQuery]
         C --> D[dehydrate]
         D --> E[HydrationBoundary]
     end
 
-    subgraph "Client-side"
+    subgraph "客戶端"
         E --> F[Feature Component]
         F --> G[useQuery/useMutation]
         G --> H[React Query Cache]
     end
 
-    subgraph "API Layer"
+    subgraph "API 層"
         H --> I[API Routes]
         I --> J[External APIs]
         J --> K[Medium/Gemini]
@@ -663,25 +662,25 @@ graph TD
     style I fill:#fbbf24
 ```
 
-### React Query Architecture
+### React Query 架構
 
-**Setup** (`lib/query-client.ts`):
+**設定**（`lib/query-client.ts`）：
 
 ```typescript
 import { QueryClient } from "@tanstack/react-query";
 
-// Server-side: Create new client per request
+// 伺服器端：每個請求建立新 client
 export function getQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000, // 1 minute
+        staleTime: 60 * 1000, // 1 分鐘
       },
     },
   });
 }
 
-// Client-side: Create singleton client
+// 客戶端：建立單例 client
 let clientQueryClient: QueryClient | undefined;
 
 export function getClientQueryClient() {
@@ -698,7 +697,7 @@ export function getClientQueryClient() {
 }
 ```
 
-**Query organization pattern:**
+**查詢組織模式：**
 
 ```typescript
 // queries/queryKeys.ts
@@ -720,38 +719,38 @@ export async function fetchMediumArticles({
 
 // queries/queryConfigs.ts
 export const mediumArticlesQueryConfig = {
-  staleTime: 5 * 60 * 1000, // 5 minutes
-  gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+  staleTime: 5 * 60 * 1000, // 5 分鐘
+  gcTime: 10 * 60 * 1000, // 10 分鐘（以前的 cacheTime）
   retry: 2,
   initialPageParam: 0,
   getNextPageParam: (lastPage) => lastPage.nextCursor,
 };
 ```
 
-### Pattern 1: Server-side Prefetch (SEO-optimized)
+### 模式 1：伺服器端預取（SEO 優化）
 
-**When to use** (ADR-001):
+**何時使用**（ADR-001）：
 
-- GET requests requiring SEO
-- Infinite queries needing initial data
-- Content-heavy pages benefiting from SSG
+- 需要 SEO 的 GET 請求
+- 需要初始資料的無限查詢
+- 受益於 SSG 的內容密集頁面
 
-**Implementation:**
+**實作：**
 
 ```typescript
-// app/blog/page.tsx (Server Component)
+// app/blog/page.tsx（Server Component）
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient } from "@/lib/query-client";
 
 export default async function BlogPage() {
   const queryClient = getQueryClient();
 
-  // Prefetch on server
+  // 在伺服器上預取
   await queryClient.prefetchInfiniteQuery({
     queryKey: mediumArticlesKeys.list(6),
     queryFn: ({ pageParam }) => fetchMediumArticles({ limit: 6, pageParam }),
     ...mediumArticlesQueryConfig,
-    pages: 1,  // Only prefetch first page
+    pages: 1,  // 只預取第一頁
   });
 
   return (
@@ -763,7 +762,7 @@ export default async function BlogPage() {
 ```
 
 ```typescript
-// features/blog/BlogFeature.tsx (Client Component)
+// features/blog/BlogFeature.tsx（Client Component）
 "use client";
 
 export const BlogFeature = () => {
@@ -773,37 +772,37 @@ export const BlogFeature = () => {
     ...mediumArticlesQueryConfig,
   });
 
-  // Data is already hydrated from server prefetch
-  // Client can immediately display data + fetch more pages
+  // 資料已從伺服器預取注水
+  // 客戶端可以立即顯示資料 + 獲取更多頁面
 };
 ```
 
-**Benefits**:
+**優勢**：
 
-- SEO-friendly (content in initial HTML)
-- Fast First Contentful Paint (FCP)
-- Progressive enhancement (works with JS disabled)
+- 對 SEO 友好（內容在初始 HTML 中）
+- 快速的首次內容繪製（FCP）
+- 漸進增強（無 JS 也能運作）
 
-### Pattern 2: Client-only Mutation (no SEO)
+### 模式 2：僅客戶端 Mutation（無 SEO）
 
-**When to use** (ADR-001):
+**何時使用**（ADR-001）：
 
 - POST/PUT/DELETE mutations
-- Dynamic user interactions
-- Pages without SEO requirements
+- 動態使用者互動
+- 無 SEO 要求的頁面
 
-**Implementation:**
+**實作：**
 
 ```typescript
-// app/ai-dictionary/page.tsx (Server Component)
+// app/ai-dictionary/page.tsx（Server Component）
 export default function AIDictionaryPage() {
-  // No prefetch, no HydrationBoundary
+  // 無預取，無 HydrationBoundary
   return <AIDictionaryFeature />;
 }
 ```
 
 ```typescript
-// features/ai-dictionary/AIDictionaryFeature.tsx (Client Component)
+// features/ai-dictionary/AIDictionaryFeature.tsx（Client Component）
 "use client";
 
 export const AIDictionaryFeature = () => {
@@ -817,39 +816,39 @@ export const AIDictionaryFeature = () => {
     },
   });
 
-  // Pure client-side interaction
+  // 純客戶端互動
 };
 ```
 
-**Benefits**:
+**優勢**：
 
-- Simpler implementation (no hydration complexity)
-- Faster page load (no server prefetch)
-- Appropriate for user actions (not content)
+- 更簡單的實作（無注水複雜性）
+- 更快的頁面載入（無伺服器預取）
+- 適合使用者操作（非內容）
 
-### Pattern Decision Flowchart
+### 模式決策流程圖
 
 ```
-Does the page use React Query?
-├─ Yes → Is it a GET request?
-│        ├─ Yes → Does it need SEO?
-│        │        ├─ Yes → ✅ Pattern 1 (Server Prefetch)
-│        │        └─ No  → ❌ Pattern 2 (Client-only)
-│        └─ No (POST/PUT/DELETE) → ❌ Pattern 2 (Client-only)
-└─ No → Regular Server Component (no React Query)
+頁面是否使用 React Query？
+├─ 是 → 是 GET 請求？
+│        ├─ 是 → 需要 SEO？
+│        │        ├─ 是 → ✅ 模式 1（伺服器預取）
+│        │        └─ 否  → ❌ 模式 2（僅客戶端）
+│        └─ 否（POST/PUT/DELETE）→ ❌ 模式 2（僅客戶端）
+└─ 否 → 一般 Server Component（無 React Query）
 ```
 
 ### API Routes
 
-**Location**: `apps/my-website/src/app/api/`
+**位置**：`apps/my-website/src/app/api/`
 
 #### POST /api/define
 
-**Purpose**: AI-powered word analysis via Gemini API
+**用途**：透過 Gemini API 進行 AI 驅動的單字分析
 
-**Handler**: `app/api/define/route.ts`
+**處理器**：`app/api/define/route.ts`
 
-**Request:**
+**請求：**
 
 ```typescript
 interface WordAnalysisRequest {
@@ -858,7 +857,7 @@ interface WordAnalysisRequest {
 }
 ```
 
-**Response:**
+**回應：**
 
 ```typescript
 interface WordAnalysisResponse {
@@ -868,30 +867,30 @@ interface WordAnalysisResponse {
 }
 ```
 
-**Flow**:
+**流程**：
 
 ```
-Client → POST /api/define → Gemini API → Response
+客戶端 → POST /api/define → Gemini API → 回應
 ```
 
-**Error handling**: Returns 400/500 with error message
+**錯誤處理**：返回 400/500 帶錯誤訊息
 
 #### POST /api/ai-analyzer
 
-**Purpose**: General AI analysis via Gemini API
+**用途**：透過 Gemini API 進行通用 AI 分析
 
-**Handler**: `app/api/ai-analyzer/route.ts`
+**處理器**：`app/api/ai-analyzer/route.ts`
 
-**Request:**
+**請求：**
 
 ```typescript
 interface AIAnalysisRequest {
-  need: string; // Analysis type
-  prompt: string; // User input
+  need: string; // 分析類型
+  prompt: string; // 使用者輸入
 }
 ```
 
-**Response:**
+**回應：**
 
 ```typescript
 interface AIAnalysisResponse {
@@ -902,20 +901,20 @@ interface AIAnalysisResponse {
 
 #### GET /api/medium-articles
 
-**Purpose**: Fetch cached Medium articles
+**用途**：獲取快取的 Medium 文章
 
-**Handler**: `app/api/medium-articles/route.ts`
+**處理器**：`app/api/medium-articles/route.ts`
 
-**Query params:**
+**查詢參數：**
 
 ```typescript
 interface MediumArticlesQuery {
-  limit?: number; // Default: 10
-  cursor?: number; // For pagination
+  limit?: number; // 預設：10
+  cursor?: number; // 用於分頁
 }
 ```
 
-**Response:**
+**回應：**
 
 ```typescript
 interface MediumArticlesResponse {
@@ -925,19 +924,19 @@ interface MediumArticlesResponse {
 }
 ```
 
-**Data source**: `@packages/shared/data/articleData.ts` (auto-generated)
+**資料來源**：`@packages/shared/data/articleData.ts`（自動生成）
 
-### Medium Article Automation
+### Medium 文章自動化
 
-**Workflow:**
+**工作流程：**
 
 ```mermaid
 graph LR
     A[article-urls.json] --> B[sync-latest-articles.ts]
     B --> C[Medium GraphQL API]
-    C --> D[Temp article data]
+    C --> D[暫存文章資料]
     D --> E[batch-parse-articles.ts]
-    E --> F[Cheerio HTML parsing]
+    E --> F[Cheerio HTML 解析]
     F --> G[articleData.ts]
     G --> H[Blog feature]
     G --> I[Resume feature]
@@ -948,9 +947,9 @@ graph LR
     style I fill:#fbbf24
 ```
 
-**Step-by-step:**
+**步驟說明：**
 
-1. **Source**: `apps/my-website/article-urls.json`
+1. **來源**：`apps/my-website/article-urls.json`
 
    ```json
    {
@@ -961,47 +960,47 @@ graph LR
    }
    ```
 
-2. **Script 1**: `scripts/sync-latest-articles.ts`
-   - Fetches latest 2 articles from Medium GraphQL API
-   - Extracts metadata (title, description, publishedAt)
-   - Saves to temporary JSON file
+2. **腳本 1**：`scripts/sync-latest-articles.ts`
+   - 從 Medium GraphQL API 獲取最新 2 篇文章
+   - 提取元資料（標題、描述、發布日期）
+   - 儲存到暫存 JSON 檔案
 
-3. **Script 2**: `scripts/batch-parse-articles.ts`
-   - Reads temporary article data
-   - Fetches full HTML content
-   - Parses with Cheerio (extract body, images, code blocks)
-   - Generates `@packages/shared/data/articleData.ts`
+3. **腳本 2**：`scripts/batch-parse-articles.ts`
+   - 讀取暫存文章資料
+   - 獲取完整 HTML 內容
+   - 使用 Cheerio 解析（提取正文、圖片、程式碼區塊）
+   - 生成 `@packages/shared/data/articleData.ts`
 
-4. **Output**: `packages/shared/data/articleData.ts`
+4. **輸出**：`packages/shared/data/articleData.ts`
 
    ```typescript
    export const articles: ArticleType[] = [
      {
        id: "article-1",
-       title: "Article Title",
-       description: "Brief description",
+       title: "文章標題",
+       description: "簡短描述",
        url: "https://medium.com/@user/article-1",
        publishedAt: "2025-01-01",
        readingTime: 5,
        tags: ["tag1", "tag2"],
-       content: "<parsed HTML content>",
+       content: "<解析後的 HTML 內容>",
      },
    ];
    ```
 
-5. **Consumption**: Blog and Resume features import and display articles
+5. **使用**：Blog 和 Resume 功能匯入並顯示文章
 
-**Trigger timing:**
+**觸發時機：**
 
-- **Automatic**: `pnpm build` runs `sync:all-articles` before build
-- **Manual**: `pnpm sync:all-articles` (or `sync:latest` + `parse:articles`)
-- **Development**: Cached articles used (no need to sync frequently)
+- **自動**：`pnpm build` 會在建置前執行 `sync:all-articles`
+- **手動**：`pnpm sync:all-articles`（或 `sync:latest` + `parse:articles`）
+- **開發**：使用快取的文章（無需頻繁同步）
 
-**Important**: `articleData.ts` is auto-generated, **do NOT edit manually**.
+**重要**：`articleData.ts` 是自動生成的，**請勿手動編輯**。
 
-### localStorage Persistence (Time Tracker)
+### localStorage 持久化（Time Tracker）
 
-**Pattern:**
+**模式：**
 
 ```typescript
 // hooks/useLocalStorage.ts
@@ -1027,7 +1026,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
-      console.error("localStorage error:", error);
+      console.error("localStorage 錯誤：", error);
     }
   };
 
@@ -1035,7 +1034,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 }
 ```
 
-**Usage in time-tracker:**
+**在 time-tracker 中使用：**
 
 ```typescript
 const [tasks, setTasks] = useLocalStorage<Task[]>("timeTracker.tasks", []);
@@ -1045,26 +1044,26 @@ const [settings, setSettings] = useLocalStorage<Settings>(
 );
 ```
 
-**Data persisted:**
+**持久化的資料：**
 
-- Active and completed tasks
-- User preferences (work hours, break duration)
-- Weekly statistics cache
+- 活動和已完成的任務
+- 使用者偏好設定（工作時數、休息時間）
+- 每週統計快取
 
-**Benefits**:
+**優勢**：
 
-- No backend required
-- Instant sync
-- Works offline
-- Privacy (data stays on device)
+- 無需後端
+- 即時同步
+- 離線運作
+- 隱私（資料保存在裝置上）
 
 ---
 
-## Build & Deploy
+## 建置與部署
 
-### Turborepo Build System
+### Turborepo 建置系統
 
-**Configuration**: `turbo.json`
+**設定**：`turbo.json`
 
 ```json
 {
@@ -1094,136 +1093,136 @@ const [settings, setSettings] = useLocalStorage<Settings>(
 }
 ```
 
-**Task dependencies:**
+**任務依賴：**
 
 ```mermaid
 graph TD
     A[pnpm build] --> B[turbo run build]
-    B --> C[Build packages in topological order]
-    C --> D1[Build shared]
-    C --> D2[Build tsconfig]
-    C --> D3[Build eslint-config]
-    D1 --> E[Build apps/my-website]
+    B --> C[按拓撲順序建置套件]
+    C --> D1[建置 shared]
+    C --> D2[建置 tsconfig]
+    C --> D3[建置 eslint-config]
+    D1 --> E[建置 apps/my-website]
     E --> F[sync:all-articles]
     F --> G[next build]
-    G --> H[.next/ output]
+    G --> H[.next/ 輸出]
 
     style A fill:#4ade80
     style H fill:#60a5fa
 ```
 
-**Build flow:**
+**建置流程：**
 
-1. **Dependency resolution**: Turborepo topologically sorts packages
-2. **Parallel builds**: Independent packages build in parallel
-3. **Article sync**: `sync:all-articles` runs before Next.js build
-4. **Next.js build**: Generates static pages (SSG)
-5. **Cache**: Turborepo caches outputs for faster rebuilds
+1. **依賴解析**：Turborepo 按拓撲順序排序套件
+2. **並行建置**：獨立套件並行建置
+3. **文章同步**：`sync:all-articles` 在 Next.js 建置前執行
+4. **Next.js 建置**：生成靜態頁面（SSG）
+5. **快取**：Turborepo 快取輸出以加速重建
 
-**Caching strategy:**
+**快取策略：**
 
-| Task          | Cache  | Reason                               |
-| ------------- | ------ | ------------------------------------ |
-| `build`       | ✅ Yes | Deterministic output based on inputs |
-| `dev`         | ❌ No  | Persistent process, not cacheable    |
-| `lint`        | ✅ Yes | Deterministic, fast invalidation     |
-| `check-types` | ✅ Yes | Deterministic TypeScript checks      |
-| `check`       | ✅ Yes | Depends on cached lint + check-types |
+| 任務          | 快取  | 原因                          |
+| ------------- | ----- | ----------------------------- |
+| `build`       | ✅ 是 | 基於輸入的確定性輸出          |
+| `dev`         | ❌ 否 | 持久化程序，無法快取          |
+| `lint`        | ✅ 是 | 確定性，快速失效              |
+| `check-types` | ✅ 是 | 確定性的 TypeScript 檢查      |
+| `check`       | ✅ 是 | 依賴快取的 lint + check-types |
 
-**Cache invalidation:**
+**快取失效：**
 
-- Source code changes (`src/**`)
-- Configuration changes (`tsconfig.json`, `eslint.config.js`)
-- Dependency changes (`package.json`, `pnpm-lock.yaml`)
-- Environment variable changes (defined in `turbo.json`)
+- 原始碼變更（`src/**`）
+- 設定變更（`tsconfig.json`、`eslint.config.js`）
+- 依賴變更（`package.json`、`pnpm-lock.yaml`）
+- 環境變數變更（在 `turbo.json` 中定義）
 
-**Remote caching**: Not configured (can be enabled via Vercel or custom cache)
+**遠端快取**：未設定（可透過 Vercel 或自訂快取啟用）
 
-### Next.js Build Process
+### Next.js 建置流程
 
-**Build command**: `pnpm build` (in `apps/my-website`)
+**建置指令**：`pnpm build`（在 `apps/my-website`）
 
-**Full build sequence:**
+**完整建置序列：**
 
 ```bash
-pnpm run sync:all-articles  # Fetch and parse Medium articles
+pnpm run sync:all-articles  # 獲取並解析 Medium 文章
 → tsx scripts/sync-latest-articles.ts
 → tsx scripts/batch-parse-articles.ts
-→ Generate packages/shared/data/articleData.ts
+→ 生成 packages/shared/data/articleData.ts
 
-next build  # Build Next.js app
-→ Compile TypeScript
-→ Bundle with Turbopack (production mode)
-→ Generate static pages (SSG)
-→ Optimize images
-→ Create .next/ output directory
+next build  # 建置 Next.js 應用程式
+→ 編譯 TypeScript
+→ 使用 Turbopack 打包（生產模式）
+→ 生成靜態頁面（SSG）
+→ 優化圖片
+→ 建立 .next/ 輸出目錄
 ```
 
-**Static page generation:**
+**靜態頁面生成：**
 
-Next.js 15 automatically generates static pages for all routes without dynamic segments:
+Next.js 15 會自動為所有沒有動態區段的路由生成靜態頁面：
 
-| Route                  | Type       | Reason                          |
-| ---------------------- | ---------- | ------------------------------- |
-| `/`                    | Static (○) | Resume feature, static content  |
-| `/blog`                | Static (○) | Server-side prefetch with SSG   |
-| `/about`               | Static (○) | Static content                  |
-| `/time-tracker`        | Static (○) | Client-side only (localStorage) |
-| `/ai-dictionary`       | Static (○) | Client-side mutation            |
-| `/ai-analyzer`         | Static (○) | Client-side mutation            |
-| `/api/define`          | Lambda (λ) | API route                       |
-| `/api/ai-analyzer`     | Lambda (λ) | API route                       |
-| `/api/medium-articles` | Lambda (λ) | API route                       |
+| 路由                   | 類型       | 原因                     |
+| ---------------------- | ---------- | ------------------------ |
+| `/`                    | Static (○) | Resume 功能、靜態內容    |
+| `/blog`                | Static (○) | 伺服器端預取搭配 SSG     |
+| `/about`               | Static (○) | 靜態內容                 |
+| `/time-tracker`        | Static (○) | 僅客戶端（localStorage） |
+| `/ai-dictionary`       | Static (○) | 客戶端 mutation          |
+| `/ai-analyzer`         | Static (○) | 客戶端 mutation          |
+| `/api/define`          | Lambda (λ) | API 路由                 |
+| `/api/ai-analyzer`     | Lambda (λ) | API 路由                 |
+| `/api/medium-articles` | Lambda (λ) | API 路由                 |
 
-**Build output:**
+**建置輸出：**
 
 ```
 .next/
-├── static/              # Static assets (CSS, JS, images)
-├── server/              # Server-side code (API routes, RSC)
-├── cache/               # Build cache (for incremental builds)
-└── standalone/          # Standalone deployment (optional)
+├── static/              # 靜態資源（CSS、JS、圖片）
+├── server/              # 伺服器端程式碼（API 路由、RSC）
+├── cache/               # 建置快取（用於增量建置）
+└── standalone/          # 獨立部署（選用）
 ```
 
-**Build optimizations:**
+**建置優化：**
 
-- **Code splitting**: Automatic route-based splitting
-- **Tree shaking**: Remove unused code
-- **Image optimization**: Next.js Image component (on-demand)
-- **Font optimization**: Automatic font subsetting
-- **CSS optimization**: Tailwind CSS purging
+- **程式碼分割**：自動基於路由的分割
+- **Tree shaking**：移除未使用的程式碼
+- **圖片優化**：Next.js Image 組件（按需）
+- **字體優化**：自動字體子集化
+- **CSS 優化**：Tailwind CSS 清除
 
-### Vercel Deployment
+### Vercel 部署
 
-**Platform**: Vercel (https://vercel.com)
+**平台**：Vercel（https://vercel.com）
 
-**Deployment URL**: https://henryleelab.com
+**部署 URL**：https://henryleelab.com
 
-**Deployment strategy**: Git-based automatic deployments
+**部署策略**：基於 Git 的自動部署
 
-**Workflow:**
+**工作流程：**
 
 ```mermaid
 graph LR
     A[git push] --> B[GitHub]
     B --> C[Vercel Webhook]
-    C --> D[Install deps]
-    D --> E[Run build]
-    E --> F[Deploy to Edge]
-    F --> G[Update DNS]
+    C --> D[安裝依賴]
+    D --> E[執行建置]
+    E --> F[部署到 Edge]
+    F --> G[更新 DNS]
 
     style A fill:#4ade80
     style G fill:#60a5fa
 ```
 
-**Deployment types:**
+**部署類型：**
 
-| Branch         | Deployment Type | URL                                     |
-| -------------- | --------------- | --------------------------------------- |
-| `main`         | Production      | https://henryleelab.com                 |
-| Other branches | Preview         | `https://<branch>-<project>.vercel.app` |
+| 分支     | 部署類型   | URL                                     |
+| -------- | ---------- | --------------------------------------- |
+| `main`   | Production | https://henryleelab.com                 |
+| 其他分支 | Preview    | `https://<branch>-<project>.vercel.app` |
 
-**Build configuration** (inferred by Vercel):
+**建置設定**（由 Vercel 推斷）：
 
 ```json
 {
@@ -1234,7 +1233,7 @@ graph LR
 }
 ```
 
-**Environment variables** (configured in Vercel dashboard):
+**環境變數**（在 Vercel 控制台設定）：
 
 ```
 GEMINI_API_KEY=<secret>
@@ -1242,61 +1241,61 @@ NODE_ENV=production
 NEXT_RUNTIME=nodejs
 ```
 
-**Deployment process:**
+**部署流程：**
 
-1. **Trigger**: Git push to GitHub
-2. **Build**: Vercel runs `pnpm build`
-   - Installs dependencies with pnpm
-   - Runs Medium article sync
-   - Builds Next.js app with Turborepo
-3. **Deploy**: Upload build artifacts to Vercel Edge Network
-4. **DNS**: Update DNS records (if production)
-5. **Notification**: Deployment status in GitHub
+1. **觸發**：Git push 到 GitHub
+2. **建置**：Vercel 執行 `pnpm build`
+   - 使用 pnpm 安裝依賴
+   - 執行 Medium 文章同步
+   - 使用 Turborepo 建置 Next.js 應用程式
+3. **部署**：上傳建置產物到 Vercel Edge Network
+4. **DNS**：更新 DNS 記錄（僅生產環境）
+5. **通知**：在 GitHub 中顯示部署狀態
 
-**Edge Network:**
+**Edge Network：**
 
-- **CDN**: Global content delivery network
-- **Serverless Functions**: API routes run on-demand
-- **Static files**: Served from CDN (cache headers)
-- **ISR**: Incremental Static Regeneration (if enabled)
+- **CDN**：全球內容交付網路
+- **Serverless Functions**：API 路由按需執行
+- **靜態檔案**：從 CDN 提供（快取標頭）
+- **ISR**：增量靜態再生（如啟用）
 
-**Deployment settings:**
+**部署設定：**
 
-- **Framework**: Next.js
-- **Node version**: 20.x (automatically detected)
-- **Build command**: `pnpm build` (default)
-- **Output directory**: `.next` (default)
-- **Install command**: `pnpm install` (auto-detected)
+- **框架**：Next.js
+- **Node 版本**：20.x（自動偵測）
+- **建置指令**：`pnpm build`（預設）
+- **輸出目錄**：`.next`（預設）
+- **安裝指令**：`pnpm install`（自動偵測）
 
-**Performance features:**
+**效能功能：**
 
-- **Edge caching**: Static assets cached at edge locations
-- **Brotli compression**: Automatic compression for text assets
-- **HTTP/2**: Multiplexed connections
-- **Smart CDN**: Automatic cache purging on new deployments
+- **Edge 快取**：靜態資源在 edge 位置快取
+- **Brotli 壓縮**：文字資源自動壓縮
+- **HTTP/2**：多路複用連接
+- **智慧 CDN**：新部署時自動清除快取
 
 ---
 
-## CI/CD Architecture
+## CI/CD 架構
 
-### Git Hooks (Husky + lint-staged)
+### Git Hooks（Husky + lint-staged）
 
-**Configuration**: `.husky/` directory
+**設定**：`.husky/` 目錄
 
-**Installed hooks:**
+**已安裝的 hooks：**
 
 #### pre-commit
 
-**Location**: `.husky/pre-commit`
+**位置**：`.husky/pre-commit`
 
-**Executes:**
+**執行：**
 
 ```bash
-pnpm lint-staged  # Format + lint staged files
-pnpx tsx scripts/validate-commit-size.ts  # Validate commit size
+pnpm lint-staged  # 格式化 + lint 暫存檔案
+pnpx tsx scripts/validate-commit-size.ts  # 驗證 commit 大小
 ```
 
-**lint-staged configuration** (`package.json`):
+**lint-staged 設定**（`package.json`）：
 
 ```json
 {
@@ -1307,31 +1306,31 @@ pnpx tsx scripts/validate-commit-size.ts  # Validate commit size
 }
 ```
 
-**commit size validation**:
+**commit 大小驗證**：
 
-- Max 15 files per commit
-- Max 500 lines changed per commit
-- Encourages focused, reviewable commits
+- 每個 commit 最多 15 個檔案
+- 每個 commit 最多 500 行變更
+- 鼓勵聚焦、可審查的 commits
 
-**Execution time**: 1-3 seconds (fast by design)
+**執行時間**：1-3 秒（設計上快速）
 
-**Rationale** (see `docs/explanation/git-hooks-research.md`):
+**理由**（參見 `docs/explanation/git-hooks-research.md`）：
 
-- Pre-commit must be fast (< 3 seconds) to avoid disrupting flow
-- Type checking moved to pre-push for speed
-- 87% of developers expect < 3s pre-commit time
+- Pre-commit 必須快速（< 3 秒）以避免打斷流程
+- 型別檢查移至 pre-push 以提高速度
+- 87% 的開發者期望 < 3 秒的 pre-commit 時間
 
 #### commit-msg
 
-**Location**: `.husky/commit-msg`
+**位置**：`.husky/commit-msg`
 
-**Executes:**
+**執行：**
 
 ```bash
 pnpx commitlint --edit "$1"
 ```
 
-**commitlint configuration** (`commitlint.config.js`):
+**commitlint 設定**（`commitlint.config.js`）：
 
 ```javascript
 module.exports = {
@@ -1341,16 +1340,16 @@ module.exports = {
       2,
       "always",
       [
-        "feat", // New feature
-        "fix", // Bug fix
-        "docs", // Documentation
-        "style", // Code style (formatting)
-        "refactor", // Code refactoring
-        "perf", // Performance improvement
-        "test", // Tests
-        "chore", // Maintenance
-        "revert", // Revert commit
-        "build", // Build system
+        "feat", // 新功能
+        "fix", // Bug 修復
+        "docs", // 文件
+        "style", // 程式碼風格（格式化）
+        "refactor", // 程式碼重構
+        "perf", // 效能改善
+        "test", // 測試
+        "chore", // 維護
+        "revert", // 還原 commit
+        "build", // 建置系統
         "ci", // CI/CD
       ],
     ],
@@ -1359,206 +1358,207 @@ module.exports = {
 };
 ```
 
-**Examples:**
+**範例：**
 
 ```bash
 ✅ feat: add dark mode toggle to settings
 ✅ fix: correct layout bug on mobile devices
 ✅ docs: update API documentation for /define endpoint
 ✅ refactor: simplify time calculation logic in time-tracker
-❌ Add dark mode  # Missing type prefix
-❌ feat: Add Dark Mode  # Subject should be sentence case
+❌ Add dark mode  # 缺少類型前綴
+❌ feat: Add Dark Mode  # 主旨應該是 sentence case
 ```
 
-**Benefits**:
+**優勢**：
 
-- Consistent commit history
-- Automated changelog generation
-- Semantic versioning support
-- Better git history navigation
+- 一致的 commit 歷史
+- 自動生成變更日誌
+- 支援語意化版本
+- 更好的 git 歷史導覽
 
 #### pre-push
 
-**Location**: `.husky/pre-push`
+**位置**：`.husky/pre-push`
 
-**Executes:**
+**執行：**
 
 ```bash
-pnpm run check  # Type check + lint + format
+pnpm run check  # 型別檢查 + lint + 格式化
 ```
 
-**Includes:**
+**包含：**
 
-1. **Type checking**: `tsc --noEmit` (full project)
-2. **Linting**: `next lint --fix --max-warnings=0`
-3. **Formatting**: `prettier --write .`
+1. **型別檢查**：`tsc --noEmit`（完整專案）
+2. **Linting**：`next lint --fix --max-warnings=0`
+3. **格式化**：`prettier --write .`
 
-**Execution time**: 5-15 seconds (cached: 2-5 seconds)
+**執行時間**：5-15 秒（快取：2-5 秒）
 
-**Rationale** (see `docs/explanation/git-hooks-research.md`):
+**理由**（參見 `docs/explanation/git-hooks-research.md`）：
 
-- Comprehensive checks before sharing code
-- Catches type errors missed by pre-commit
-- Turborepo caching makes subsequent runs fast
-- Last line of defense before CI/CD
+- 分享程式碼前的全面檢查
+- 捕獲 pre-commit 遺漏的型別錯誤
+- Turborepo 快取使後續執行快速
+- CI/CD 前的最後防線
 
-**Bypass**: `git push --no-verify` (use sparingly)
+**繞過**：`git push --no-verify`（謹慎使用）
 
-### Git Hooks Strategy Summary
+### Git Hooks 策略總結
 
-**Philosophy** (based on industry research):
+**理念**（基於產業研究）：
 
 ```
-Pre-commit: Fast formatting + linting (< 3s)
+Pre-commit：快速格式化 + linting（< 3s）
      ↓
-Commit-msg: Validate commit message format
+Commit-msg：驗證 commit 訊息格式
      ↓
-Pre-push: Comprehensive checks (type check + full lint)
+Pre-push：全面檢查（型別檢查 + 完整 lint）
      ↓
-CI/CD: Final quality gate (build + tests)
+CI/CD：最終品質閘門（建置 + 測試）
 ```
 
-**Benefits:**
+**優勢：**
 
-- Fast commit flow (87% developer satisfaction)
-- No type check false positives (cache issues)
-- Comprehensive validation before team impact
-- Clear separation of concerns
+- 快速的 commit 流程（87% 開發者滿意度）
+- 無型別檢查誤報（快取問題）
+- 團隊影響前的全面驗證
+- 明確的關注點分離
 
-**Trade-offs:**
+**取捨：**
 
-- Some local commits may have type errors (caught at pre-push)
-- Requires discipline (don't bypass pre-push)
-- Developers must understand the strategy
+- 某些本地 commits 可能有型別錯誤（在 pre-push 捕獲）
+- 需要紀律（不要繞過 pre-push）
+- 開發者必須理解策略
 
-**Industry alignment:**
+**產業對齊：**
 
-- 52% of successful projects use lightweight pre-commit
-- 64% use comprehensive pre-push validation
-- Major projects (Next.js, React, Turborepo) follow similar patterns
+- 52% 的成功專案使用輕量級 pre-commit
+- 64% 使用全面的 pre-push 驗證
+- 主要專案（Next.js、React、Turborepo）遵循類似模式
 
-**Further reading**: See `docs/explanation/git-hooks-research.md` for comprehensive research and rationale.
+**延伸閱讀**：參見 `docs/explanation/git-hooks-research.md` 了解全面的研究和理由。
 
-### Continuous Integration (CI)
+### 持續整合（CI）
 
-**Platform**: GitHub Actions (configured via Vercel integration)
+**平台**：GitHub Actions（透過 Vercel 整合設定）
 
-**Automatic on:**
+**自動執行於：**
 
-- Pull request creation
-- Push to `main` branch
-- Push to any branch (preview deployment)
+- Pull request 建立
+- Push 到 `main` 分支
+- Push 到任何分支（預覽部署）
 
-**CI workflow** (Vercel-managed):
+**CI 工作流程**（Vercel 管理）：
 
 ```mermaid
 graph TD
     A[Push/PR] --> B[Vercel CI]
-    B --> C[Install dependencies]
-    C --> D[Run type check]
-    D --> E[Run lint]
-    E --> F[Run build]
-    F --> G{Success?}
-    G -->|Yes| H[Deploy preview]
-    G -->|No| I[Fail CI]
-    H --> J[Comment on PR]
+    B --> C[安裝依賴]
+    C --> D[執行型別檢查]
+    D --> E[執行 lint]
+    E --> F[執行建置]
+    F --> G{成功？}
+    G -->|是| H[部署預覽]
+    G -->|否| I[CI 失敗]
+    H --> J[在 PR 評論]
 
     style A fill:#4ade80
     style H fill:#60a5fa
     style I fill:#ef4444
 ```
 
-**Checks performed:**
+**執行的檢查：**
 
-1. Dependency installation
-2. Type checking (`tsc --noEmit`)
-3. Linting (`next lint`)
-4. Build (`pnpm build`)
-5. Preview deployment (if PR)
+1. 依賴安裝
+2. 型別檢查（`tsc --noEmit`）
+3. Linting（`next lint`）
+4. 建置（`pnpm build`）
+5. 預覽部署（如果是 PR）
 
-**Status checks:**
+**狀態檢查：**
 
-- ✅ All checks pass → PR mergeable
-- ❌ Any check fails → PR blocked
+- ✅ 所有檢查通過 → PR 可合併
+- ❌ 任何檢查失敗 → PR 被阻止
 
-**Notifications:**
+**通知：**
 
-- GitHub status checks on PR
-- Vercel deployment preview comment
-- Email notification on failure
+- PR 上的 GitHub 狀態檢查
+- Vercel 部署預覽評論
+- 失敗時的電子郵件通知
 
-### Continuous Deployment (CD)
+### 持續部署（CD）
 
-**Deployment triggers:**
+**部署觸發：**
 
-| Event          | Trigger          | Deployment         |
-| -------------- | ---------------- | ------------------ |
-| Push to `main` | Automatic        | Production         |
-| Push to branch | Automatic        | Preview            |
-| Manual deploy  | Vercel dashboard | Production/Preview |
+| 事件           | 觸發          | 部署               |
+| -------------- | ------------- | ------------------ |
+| Push 到 `main` | 自動          | Production         |
+| Push 到分支    | 自動          | Preview            |
+| 手動部署       | Vercel 控制台 | Production/Preview |
 
-**Deployment process:**
+**部署流程：**
 
-1. CI passes (all checks green)
-2. Vercel starts deployment
-3. Build completes
-4. Deploy to Edge Network
-5. Update DNS (production only)
-6. Cache invalidation
-7. Deployment complete
+1. CI 通過（所有檢查綠燈）
+2. Vercel 開始部署
+3. 建置完成
+4. 部署到 Edge Network
+5. 更新 DNS（僅生產環境）
+6. 快取失效
+7. 部署完成
 
-**Rollback strategy:**
+**回滾策略：**
 
-- Vercel dashboard: Instant rollback to previous deployment
-- Git revert: Revert commit, push to `main`
-- Manual: Deploy specific commit from Vercel
+- Vercel 控制台：即時回滾到上一個部署
+- Git revert：還原 commit，push 到 `main`
+- 手動：從 Vercel 部署特定 commit
 
-**Monitoring:**
+**監控：**
 
-- Vercel Analytics (web vitals)
-- Vercel Speed Insights (performance)
-- Pino logs (server-side structured logging)
+- Vercel Analytics（web vitals）
+- Vercel Speed Insights（效能）
+- Pino 日誌（伺服器端結構化日誌）
 
 ---
 
-## Key Patterns
+## 關鍵模式
 
-### Design Patterns
+### 設計模式
 
-#### 1. Feature-Based Modularization
+#### 1. 基於功能的模組化
 
-**Pattern**: Organize code by feature (vertical slices) rather than by layer (horizontal slices).
+**模式**：按功能組織程式碼（垂直切片），而非按層（水平切片）。
 
-**Structure:**
+**結構：**
 
 ```
 features/
-├── blog/              # All blog-related code
+├── blog/              # 所有 blog 相關程式碼
 │   ├── components/
 │   ├── hooks/
 │   ├── types/
 │   └── queries/
-└── time-tracker/      # All time-tracker code
+└── time-tracker/      # 所有 time-tracker 程式碼
     ├── components/
     ├── hooks/
     ├── types/
     └── utils/
 ```
 
-**Benefits:**
+**優勢：**
 
-- High cohesion (related code together)
-- Low coupling (features independent)
-- Easy to reason about (all feature code in one place)
-- Facilitates code reuse (extract to package)
+- 高內聚（相關程式碼在一起）
+- 低耦合（功能獨立）
+- 易於理解（所有功能程式碼在一個地方）
+- 促進程式碼重用（提取到套件）
+- 改善建置效能（tree-shaking）
 
-**Enforcement**: ESLint rules prevent cross-feature imports.
+**強制執行**：ESLint 規則防止跨功能匯入。
 
 #### 2. Barrel Exports
 
-**Pattern**: Use `index.ts` files to create public APIs for modules.
+**模式**：使用 `index.ts` 檔案為模組建立公開 API。
 
-**Example:**
+**範例：**
 
 ```typescript
 // features/blog/components/ArticleCard/index.ts
@@ -1566,57 +1566,57 @@ export { ArticleCard } from "./ArticleCard";
 export type { ArticleCardProps } from "./ArticleCard";
 ```
 
-**Usage:**
+**使用方式：**
 
 ```typescript
-// Clean import
+// 乾淨的匯入
 import { ArticleCard } from "@/features/blog/components/ArticleCard";
 
-// Instead of
+// 而不是
 import { ArticleCard } from "@/features/blog/components/ArticleCard/ArticleCard";
 ```
 
-**Benefits:**
+**優勢：**
 
-- Clean import statements
-- Abstraction (internal structure hidden)
-- Easy refactoring (change internals without affecting imports)
+- 乾淨的匯入陳述
+- 抽象化（隱藏內部結構）
+- 易於重構（改變內部不影響匯入）
 
-#### 3. State Component Pattern
+#### 3. 狀態組件模式
 
-**Pattern**: Explicitly handle loading, error, and empty states in all data-fetching components.
+**模式**：在所有資料獲取組件中明確處理載入、錯誤和空狀態。
 
-**Structure:**
+**結構：**
 
 ```typescript
 const MyComponent = () => {
   const { data, isLoading, error } = useQuery(...);
 
-  // 1. Loading state
+  // 1. 載入狀態
   if (isLoading) return <LoadingState />;
 
-  // 2. Error state
+  // 2. 錯誤狀態
   if (error) return <ErrorState error={error} />;
 
-  // 3. Empty state
+  // 3. 空狀態
   if (!data || data.length === 0) return <EmptyState />;
 
-  // 4. Success state (main content)
+  // 4. 成功狀態（主要內容）
   return <MainContent data={data} />;
 };
 ```
 
-**Benefits:**
+**優勢：**
 
-- Better UX (users know what's happening)
-- Defensive programming (handle all cases)
-- Easier testing (explicit state branches)
+- 更好的 UX（使用者知道發生什麼事）
+- 防禦性程式設計（處理所有情況）
+- 更容易測試（明確的狀態分支）
 
-#### 4. React Query Organization
+#### 4. React Query 組織
 
-**Pattern**: Separate query keys, functions, and configurations into dedicated files.
+**模式**：將查詢鍵、函式和設定分離到專用檔案。
 
-**Structure:**
+**結構：**
 
 ```typescript
 // queries/queryKeys.ts
@@ -1640,18 +1640,18 @@ export const articlesQueryConfig = {
 };
 ```
 
-**Benefits:**
+**優勢：**
 
-- Consistent query keys (no typos)
-- Reusable query functions
-- Centralized configuration
-- Easier to invalidate queries
+- 一致的查詢鍵（無拼寫錯誤）
+- 可重用的查詢函式
+- 集中設定
+- 更容易使查詢失效
 
-#### 5. Path Aliases
+#### 5. 路徑別名
 
-**Pattern**: Use TypeScript path aliases for clean, maintainable imports.
+**模式**：使用 TypeScript 路徑別名實現乾淨、可維護的匯入。
 
-**Configuration** (`tsconfig.json`):
+**設定**（`tsconfig.json`）：
 
 ```json
 {
@@ -1665,75 +1665,75 @@ export const articlesQueryConfig = {
 }
 ```
 
-**Usage:**
+**使用方式：**
 
 ```typescript
-// Clean
+// 乾淨
 import { ArticleType } from "@packages/shared";
 import { BlogFeature } from "@/features/blog";
 
-// Instead of
+// 而不是
 import { ArticleType } from "../../packages/shared";
 import { BlogFeature } from "../../../features/blog";
 ```
 
-**Benefits:**
+**優勢：**
 
-- Absolute imports (no relative path confusion)
-- Refactoring-friendly (paths don't change)
-- Cleaner diffs (no path changes)
+- 絕對匯入（無相對路徑混淆）
+- 重構友好（路徑不變）
+- 更乾淨的差異（無路徑變更）
 
-### Architectural Patterns
+### 架構模式
 
-#### 1. Monorepo with Workspaces
+#### 1. Monorepo 搭配 Workspaces
 
-**Pattern**: Single repository containing multiple packages with shared dependencies.
+**模式**：單一儲存庫包含多個套件，共用依賴。
 
-**Tools:**
+**工具：**
 
-- pnpm workspaces (package management)
-- Turborepo (build orchestration)
+- pnpm workspaces（套件管理）
+- Turborepo（建置編排）
 
-**Benefits:**
+**優勢：**
 
-- Atomic commits across packages
-- Shared dependencies (no version conflicts)
-- Easy refactoring (cross-package changes)
-- Consistent tooling (ESLint, TypeScript)
+- 跨套件的原子 commits
+- 共用依賴（無版本衝突）
+- 易於重構（跨套件變更）
+- 一致的工具（ESLint、TypeScript）
 
-#### 2. App Router with RSC
+#### 2. App Router 搭配 RSC
 
-**Pattern**: Next.js App Router with React Server Components (default) and Client Components (opt-in).
+**模式**：Next.js App Router 搭配 React Server Components（預設）和 Client Components（選擇加入）。
 
-**File convention:**
+**檔案慣例：**
 
 ```typescript
-// Server Component (default)
+// Server Component（預設）
 export default async function Page() {
-  const data = await fetchData();  // Server-side data fetching
+  const data = await fetchData();  // 伺服器端資料獲取
   return <div>{data}</div>;
 }
 
-// Client Component (opt-in)
+// Client Component（選擇加入）
 'use client';
 export function ClientComponent() {
-  const [state, setState] = useState();  // Client-side state
+  const [state, setState] = useState();  // 客戶端狀態
   return <div>{state}</div>;
 }
 ```
 
-**Benefits:**
+**優勢：**
 
-- Zero JS for server components (faster page loads)
-- Server-side data fetching (no waterfalls)
-- SEO-friendly (content in initial HTML)
-- Progressive enhancement
+- Server components 零 JS（更快的頁面載入）
+- 伺服器端資料獲取（無瀑布流）
+- 對 SEO 友好（內容在初始 HTML 中）
+- 漸進增強
 
-#### 3. Static Site Generation (SSG)
+#### 3. 靜態網站生成（SSG）
 
-**Pattern**: Generate static HTML at build time for all pages without dynamic segments.
+**模式**：在建置時為所有沒有動態區段的頁面生成靜態 HTML。
 
-**Build output:**
+**建置輸出：**
 
 ```
 Route                    Type
@@ -1743,48 +1743,48 @@ Route                    Type
 λ /api/define            Lambda (λ)
 ```
 
-**Benefits:**
+**優勢：**
 
-- Fast page loads (static HTML from CDN)
-- No server required (except API routes)
-- SEO-optimized (content in HTML)
-- Cost-effective (fewer serverless invocations)
+- 快速的頁面載入（從 CDN 提供靜態 HTML）
+- 不需要伺服器（除了 API 路由）
+- SEO 優化（內容在 HTML 中）
+- 成本效益（更少的 serverless 調用）
 
-#### 4. Shared Package Strategy
+#### 4. 共用套件策略
 
-**Pattern**: Extract common code to shared packages for reuse across apps.
+**模式**：將通用程式碼提取到共用套件以跨應用程式重用。
 
-**When to extract:**
+**何時提取：**
 
-- Code used by 2+ features
-- Code with no feature-specific dependencies
-- Utilities, types, constants
-- UI components (if reused)
+- 被 2 個以上功能使用的程式碼
+- 無功能特定依賴的程式碼
+- 工具、型別、常數
+- UI 組件（如果重用）
 
-**Process:**
+**流程：**
 
-1. Create package in `packages/`
-2. Move code to package
-3. Update imports in features
-4. Add to workspace dependencies
+1. 在 `packages/` 建立套件
+2. 將程式碼移至套件
+3. 更新功能中的匯入
+4. 新增到 workspace 依賴
 
-**Benefits:**
+**優勢：**
 
-- DRY (Don't Repeat Yourself)
-- Single source of truth
-- Easier testing (isolated)
-- Potential for open-sourcing
+- DRY（Don't Repeat Yourself）
+- 單一真實來源
+- 更容易測試（隔離）
+- 開源的潛力
 
 ---
 
-## Component Relationships
+## 組件關係
 
-### High-Level Component Diagram
+### 高層組件圖
 
 ```mermaid
 graph TD
-    subgraph "Browser (Client)"
-        A[User] --> B[Next.js App Router]
+    subgraph "瀏覽器（客戶端）"
+        A[使用者] --> B[Next.js App Router]
     end
 
     subgraph "Next.js App (apps/my-website)"
@@ -1798,7 +1798,7 @@ graph TD
         E2 --> F[React Query]
         E3 --> F
 
-        E1 --> G[Shared Components]
+        E1 --> G[共用組件]
         E2 --> G
         E3 --> G
         E4 --> G
@@ -1806,7 +1806,7 @@ graph TD
         D --> H[API Routes]
     end
 
-    subgraph "Shared Packages"
+    subgraph "共用套件"
         G --> I[packages/shared]
         F --> I
         E1 --> I
@@ -1815,15 +1815,15 @@ graph TD
         E4 --> I
     end
 
-    subgraph "External APIs"
+    subgraph "外部 APIs"
         H --> J[Gemini API]
         H --> K[Medium GraphQL API]
     end
 
-    subgraph "Build System"
+    subgraph "建置系統"
         L[Turborepo] --> M[apps/my-website]
         L --> N[packages/*]
-        M --> O[Vercel Deployment]
+        M --> O[Vercel 部署]
     end
 
     style A fill:#4ade80
@@ -1834,19 +1834,19 @@ graph TD
     style O fill:#8b5cf6
 ```
 
-### Feature Interaction Matrix
+### 功能互動矩陣
 
-| Feature       | Shared Packages | API Routes              | External APIs | React Query       |
-| ------------- | --------------- | ----------------------- | ------------- | ----------------- |
-| Resume        | ✅ articleData  | ❌                      | ❌            | ❌                |
-| Blog          | ✅ types, utils | ✅ /api/medium-articles | ✅ Medium     | ✅ Infinite query |
-| AI Dictionary | ✅ types        | ✅ /api/define          | ✅ Gemini     | ✅ Mutation       |
-| AI Analyzer   | ✅ types        | ✅ /api/ai-analyzer     | ✅ Gemini     | ✅ Mutation       |
-| Time Tracker  | ✅ types, utils | ❌                      | ❌            | ❌ (localStorage) |
-| About         | ✅ types        | ❌                      | ❌            | ❌                |
-| Not Found     | ❌              | ❌                      | ❌            | ❌                |
+| 功能          | 共用套件        | API Routes              | 外部 APIs | React Query        |
+| ------------- | --------------- | ----------------------- | --------- | ------------------ |
+| Resume        | ✅ articleData  | ❌                      | ❌        | ❌                 |
+| Blog          | ✅ types、utils | ✅ /api/medium-articles | ✅ Medium | ✅ Infinite query  |
+| AI Dictionary | ✅ types        | ✅ /api/define          | ✅ Gemini | ✅ Mutation        |
+| AI Analyzer   | ✅ types        | ✅ /api/ai-analyzer     | ✅ Gemini | ✅ Mutation        |
+| Time Tracker  | ✅ types、utils | ❌                      | ❌        | ❌（localStorage） |
+| About         | ✅ types        | ❌                      | ❌        | ❌                 |
+| Not Found     | ❌              | ❌                      | ❌        | ❌                 |
 
-### Data Flow by Feature
+### 按功能的資料流
 
 #### Resume Feature
 
@@ -1862,9 +1862,9 @@ graph LR
     style F fill:#60a5fa
 ```
 
-**Data sources**: Static imports from `@packages/shared`
+**資料來源**：從 `@packages/shared` 靜態匯入
 
-**State**: None (static content)
+**狀態**：無（靜態內容）
 
 #### Blog Feature
 
@@ -1883,9 +1883,9 @@ graph LR
     style H fill:#fbbf24
 ```
 
-**Data sources**: Medium articles via API route
+**資料來源**：透過 API 路由的 Medium 文章
 
-**State**: React Query (infinite query with server prefetch)
+**狀態**：React Query（無限查詢搭配伺服器預取）
 
 #### AI Dictionary Feature
 
@@ -1894,7 +1894,7 @@ graph LR
     A[AIDictionaryFeature] --> B[useMutation]
     B --> C[POST /api/define]
     C --> D[Gemini API]
-    D --> E[Response]
+    D --> E[回應]
     E --> B
     B --> A
 
@@ -1902,9 +1902,9 @@ graph LR
     style D fill:#ef4444
 ```
 
-**Data sources**: Gemini API via API route
+**資料來源**：透過 API 路由的 Gemini API
 
-**State**: React Query (mutation, client-only)
+**狀態**：React Query（mutation、僅客戶端）
 
 #### Time Tracker Feature
 
@@ -1927,152 +1927,152 @@ graph LR
     style D fill:#60a5fa
 ```
 
-**Data sources**: Browser localStorage
+**資料來源**：瀏覽器 localStorage
 
-**State**: React hooks with localStorage persistence
+**狀態**：React hooks 搭配 localStorage 持久化
 
 ---
 
-## Performance Considerations
+## 效能考量
 
-### Build Performance
+### 建置效能
 
-**Turborepo caching:**
+**Turborepo 快取：**
 
-- **First build**: 60-120 seconds (no cache)
-- **Cached build**: 5-15 seconds (no changes)
-- **Partial cache**: 20-40 seconds (some changes)
+- **首次建置**：60-120 秒（無快取）
+- **快取建置**：5-15 秒（無變更）
+- **部分快取**：20-40 秒（某些變更）
 
-**Optimization strategies:**
+**優化策略：**
 
-1. **Topological builds**: Packages build in dependency order
-2. **Parallel execution**: Independent packages build concurrently
-3. **Incremental builds**: Only rebuild changed packages
-4. **Output caching**: Reuse previous build outputs
+1. **拓撲建置**：套件按依賴順序建置
+2. **並行執行**：獨立套件並行建置
+3. **增量建置**：只重建變更的套件
+4. **輸出快取**：重用之前的建置輸出
 
-**Cache invalidation triggers:**
+**快取失效觸發：**
 
-- Source code changes
-- Configuration changes
-- Dependency changes
-- Environment variable changes
+- 原始碼變更
+- 設定變更
+- 依賴變更
+- 環境變數變更
 
-### Development Performance
+### 開發效能
 
-**Turbopack (dev mode):**
+**Turbopack（開發模式）：**
 
-- **Cold start**: 2-5 seconds
-- **Hot reload**: 50-200ms
-- **Full page refresh**: 300-500ms
+- **冷啟動**：2-5 秒
+- **熱重載**：50-200ms
+- **完整頁面重新整理**：300-500ms
 
-**Features:**
+**功能：**
 
-- Incremental compilation (Rust-based)
-- Optimized module resolution
-- Fast refresh (React Server Components)
-- Built-in into Next.js 15 (`next dev --turbopack`)
+- 增量編譯（基於 Rust）
+- 優化的模組解析
+- Fast Refresh（React Server Components）
+- 內建於 Next.js 15（`next dev --turbopack`）
 
-### Runtime Performance
+### 執行時效能
 
-**Core Web Vitals targets:**
+**Core Web Vitals 目標：**
 
-| Metric                             | Target  | Current (typical) |
-| ---------------------------------- | ------- | ----------------- |
-| **LCP** (Largest Contentful Paint) | < 2.5s  | ~1.8s             |
-| **FID** (First Input Delay)        | < 100ms | ~50ms             |
-| **CLS** (Cumulative Layout Shift)  | < 0.1   | ~0.05             |
-| **FCP** (First Contentful Paint)   | < 1.8s  | ~1.2s             |
-| **TTFB** (Time to First Byte)      | < 600ms | ~300ms            |
+| 指標                                | 目標    | 當前（典型） |
+| ----------------------------------- | ------- | ------------ |
+| **LCP**（Largest Contentful Paint） | < 2.5s  | ~1.8s        |
+| **FID**（First Input Delay）        | < 100ms | ~50ms        |
+| **CLS**（Cumulative Layout Shift）  | < 0.1   | ~0.05        |
+| **FCP**（First Contentful Paint）   | < 1.8s  | ~1.2s        |
+| **TTFB**（Time to First Byte）      | < 600ms | ~300ms       |
 
-**Optimization techniques:**
+**優化技術：**
 
-1. **Static generation**: Pages pre-rendered at build time (SSG)
-2. **Image optimization**: Next.js Image component (WebP, lazy loading)
-3. **Font optimization**: Automatic font subsetting and preloading
-4. **Code splitting**: Route-based automatic splitting
-5. **React Query caching**: Reduce unnecessary API calls
-6. **Vercel Edge Network**: Global CDN with edge caching
+1. **靜態生成**：頁面在建置時預渲染（SSG）
+2. **圖片優化**：Next.js Image 組件（WebP、延遲載入）
+3. **字體優化**：自動字體子集化和預載入
+4. **程式碼分割**：基於路由的自動分割
+5. **React Query 快取**：減少不必要的 API 呼叫
+6. **Vercel Edge Network**：全球 CDN 搭配 edge 快取
 
-**Bundle size optimizations:**
+**打包大小優化：**
 
-- **Tree shaking**: Remove unused code
-- **Tailwind CSS purging**: Remove unused styles
-- **Dynamic imports**: Load code on-demand
-- **React Query**: Only include used features
+- **Tree shaking**：移除未使用的程式碼
+- **Tailwind CSS 清除**：移除未使用的樣式
+- **動態匯入**：按需載入程式碼
+- **React Query**：只包含使用的功能
 
-**Monitoring:**
+**監控：**
 
-- **Vercel Analytics**: Real User Monitoring (RUM)
-- **Vercel Speed Insights**: Core Web Vitals tracking
-- **Pino logging**: Server-side performance logging
+- **Vercel Analytics**：真實使用者監控（RUM）
+- **Vercel Speed Insights**：Core Web Vitals 追蹤
+- **Pino 日誌**：伺服器端效能日誌
 
-### Query Performance
+### 查詢效能
 
-**React Query optimizations:**
+**React Query 優化：**
 
-1. **Stale time**: Prevent unnecessary refetches
-
-   ```typescript
-   staleTime: 5 * 60 * 1000,  // 5 minutes
-   ```
-
-2. **Garbage collection**: Clean up unused cached data
+1. **Stale time**：防止不必要的重新獲取
 
    ```typescript
-   gcTime: 10 * 60 * 1000,  // 10 minutes
+   staleTime: 5 * 60 * 1000,  // 5 分鐘
    ```
 
-3. **Retry strategy**: Reduce failed request overhead
+2. **垃圾回收**：清理未使用的快取資料
 
    ```typescript
-   retry: 2,  // Retry failed requests twice
+   gcTime: 10 * 60 * 1000,  // 10 分鐘
    ```
 
-4. **Prefetching**: Reduce perceived loading time
+3. **重試策略**：減少失敗請求開銷
+
+   ```typescript
+   retry: 2,  // 重試失敗的請求兩次
+   ```
+
+4. **預取**：減少感知載入時間
 
    ```typescript
    await queryClient.prefetchInfiniteQuery({ ... });
    ```
 
-5. **Pagination**: Load data incrementally
+5. **分頁**：增量載入資料
    ```typescript
    useInfiniteQuery({
      getNextPageParam: (lastPage) => lastPage.nextCursor,
    });
    ```
 
-**API route optimizations:**
+**API 路由優化：**
 
-1. **Caching**: Return cached data when possible
-2. **Error handling**: Fast failure paths
-3. **Response streaming**: Stream large responses
-4. **Edge Functions**: Run close to users (if needed)
+1. **快取**：在可能時返回快取資料
+2. **錯誤處理**：快速失敗路徑
+3. **回應串流**：串流大型回應
+4. **Edge Functions**：在靠近使用者的地方執行（如需要）
 
-### Build Size Analysis
+### 建置大小分析
 
-**Typical build sizes:**
+**典型建置大小：**
 
-| Asset           | Size (gzipped) | Type                   |
-| --------------- | -------------- | ---------------------- |
-| Main JavaScript | ~80-100 KB     | Essential runtime      |
-| Page bundles    | ~20-40 KB each | Route-specific code    |
-| CSS (Tailwind)  | ~15-20 KB      | Purged utility classes |
-| React + Next.js | ~120 KB        | Framework runtime      |
-| React Query     | ~12 KB         | State management       |
-| Total (initial) | ~200-250 KB    | First page load        |
+| 資源            | 大小（gzipped） | 類型           |
+| --------------- | --------------- | -------------- |
+| Main JavaScript | ~80-100 KB      | 必要執行環境   |
+| Page bundles    | 每個 ~20-40 KB  | 路由專用程式碼 |
+| CSS (Tailwind)  | ~15-20 KB       | 清除的工具類別 |
+| React + Next.js | ~120 KB         | 框架執行環境   |
+| React Query     | ~12 KB          | 狀態管理       |
+| 總計（初始）    | ~200-250 KB     | 首次頁面載入   |
 
-**Optimization guidelines:**
+**優化指南：**
 
-- Keep page bundles < 50 KB
-- Total initial bundle < 300 KB
-- Use dynamic imports for heavy features
-- Monitor with Vercel Analytics
+- 保持頁面包 < 50 KB
+- 總初始包 < 300 KB
+- 對重型功能使用動態匯入
+- 使用 Vercel Analytics 監控
 
 ---
 
-## Configuration Files
+## 設定檔案
 
-### Root Level
+### 根層級
 
 #### package.json
 
@@ -2116,7 +2116,7 @@ dist/
 pnpm-lock.yaml
 ```
 
-### App Level (apps/my-website)
+### App 層級（apps/my-website）
 
 #### tsconfig.json
 
@@ -2160,7 +2160,7 @@ import nextConfig from "@packages/eslint-config/next";
 export default [
   ...nextConfig,
   {
-    // App-specific rules
+    // 應用程式專用規則
   },
 ];
 ```
@@ -2181,161 +2181,161 @@ export default config;
 
 ---
 
-## Environment Variables
+## 環境變數
 
-### Required Variables
+### 必要變數
 
-#### Development (.env.local)
+#### 開發環境（.env.local）
 
 ```bash
-# AI Integration (required for AI features)
+# AI 整合（AI 功能必需）
 GEMINI_API_KEY=your_api_key_here
 
-# Environment
+# 環境
 NODE_ENV=development
 
-# Next.js Runtime (optional)
+# Next.js 執行環境（選用）
 NEXT_RUNTIME=nodejs
 ```
 
-#### Production (Vercel Environment Variables)
+#### 生產環境（Vercel 環境變數）
 
 ```bash
-# AI Integration (required)
+# AI 整合（必需）
 GEMINI_API_KEY=<secret>
 
-# Environment (auto-set by Vercel)
+# 環境（由 Vercel 自動設定）
 NODE_ENV=production
 VERCEL=1
 VERCEL_ENV=production
 VERCEL_URL=henryleelab.com
 
-# Next.js Runtime (optional)
+# Next.js 執行環境（選用）
 NEXT_RUNTIME=nodejs
 ```
 
-### Environment Variable Loading
+### 環境變數載入
 
-**Next.js environment variable loading order:**
+**Next.js 環境變數載入順序：**
 
-1. `.env.local` (local overrides, gitignored)
-2. `.env.development` (dev-specific, committed)
-3. `.env.production` (prod-specific, committed)
-4. `.env` (default, committed)
-5. Vercel Environment Variables (production only)
+1. `.env.local`（本地覆蓋，gitignored）
+2. `.env.development`（開發專用，已提交）
+3. `.env.production`（生產專用，已提交）
+4. `.env`（預設，已提交）
+5. Vercel 環境變數（僅生產環境）
 
-**Access in code:**
+**在程式碼中存取：**
 
 ```typescript
-// Server-side (API routes, Server Components)
+// 伺服器端（API 路由、Server Components）
 const apiKey = process.env.GEMINI_API_KEY;
 
-// Client-side (requires NEXT_PUBLIC_ prefix)
+// 客戶端（需要 NEXT_PUBLIC_ 前綴）
 const publicUrl = process.env.NEXT_PUBLIC_API_URL;
 ```
 
-**Security notes:**
+**安全注意事項：**
 
-- Never commit `.env.local` (contains secrets)
-- Never use `NEXT_PUBLIC_` prefix for secrets
-- Server-side env vars are not exposed to browser
-- Vercel encrypts environment variables
+- 永遠不要提交 `.env.local`（包含機密）
+- 永遠不要對機密使用 `NEXT_PUBLIC_` 前綴
+- 伺服器端環境變數不會暴露給瀏覽器
+- Vercel 會加密環境變數
 
 ---
 
-## Compatibility
+## 相容性
 
-### Browser Support
+### 瀏覽器支援
 
-**Supported browsers:**
+**支援的瀏覽器：**
 
-- Chrome/Edge: Last 2 versions
-- Firefox: Last 2 versions
-- Safari: Last 2 versions
-- iOS Safari: Last 2 versions
-- Android Chrome: Last 2 versions
+- Chrome/Edge：最近 2 個版本
+- Firefox：最近 2 個版本
+- Safari：最近 2 個版本
+- iOS Safari：最近 2 個版本
+- Android Chrome：最近 2 個版本
 
-**Polyfills**: Not required (modern browsers only)
+**Polyfills**：不需要（僅現代瀏覽器）
 
-**Progressive enhancement**: Core functionality works without JavaScript (for static pages)
+**漸進增強**：核心功能在沒有 JavaScript 的情況下運作（對於靜態頁面）
 
-### Node.js Support
+### Node.js 支援
 
-**Required Node version**: >= 20.x
+**必要的 Node 版本**：>= 20.x
 
-**Reason**: Next.js 15 requires Node 20+
+**原因**：Next.js 15 需要 Node 20+
 
-**Package manager**: pnpm 9.15.4 (locked)
+**套件管理器**：pnpm 9.15.4（鎖定）
 
-### Device Support
+### 裝置支援
 
-**Responsive breakpoints** (Tailwind):
+**響應式斷點**（Tailwind）：
 
 ```typescript
 {
-  sm: '640px',   // Mobile landscape
-  md: '768px',   // Tablet portrait
-  lg: '1024px',  // Tablet landscape
-  xl: '1280px',  // Desktop
-  '2xl': '1536px'  // Large desktop
+  sm: '640px',   // 手機橫向
+  md: '768px',   // 平板直向
+  lg: '1024px',  // 平板橫向
+  xl: '1280px',  // 桌面
+  '2xl': '1536px'  // 大型桌面
 }
 ```
 
-**Mobile-first design**: All features responsive
+**行動優先設計**：所有功能響應式
 
-**Touch optimization**: Touch-friendly UI components
+**觸控優化**：觸控友好的 UI 組件
 
 ---
 
-## See Also
+## 另見
 
-### Guides
+### 指南
 
-- [Git Workflow Setup Guide](../guides/git-workflow-setup.md) - Set up git hooks and commitlint
-- [Development Workflow Guide](../guides/development-workflow.md) - Daily development process
-- [Deployment Guide](../guides/deployment.md) - Deploy to Vercel
+- [Git 工作流程設定指南](../guides/git-workflow-setup.md) - 設定 git hooks 和 commitlint
+- [開發工作流程指南](../guides/development-workflow.md) - 日常開發流程
+- [部署指南](../guides/deployment.md) - 部署到 Vercel
 
-### Explanations
+### 說明
 
-- [Feature-Based Architecture Explanation](../explanation/feature-based-architecture.md) - Why feature-based design
-- [Monorepo Strategy Explanation](../explanation/monorepo-strategy.md) - Monorepo benefits and trade-offs
-- [Git Hooks Research](../explanation/git-hooks-research.md) - Industry research on git hooks
+- [基於功能的架構說明](../explanation/feature-based-architecture.md) - 為何選擇基於功能的設計
+- [Monorepo 策略說明](../explanation/monorepo-strategy.md) - Monorepo 的優勢與取捨
+- [Git Hooks 研究](../explanation/git-hooks-research.md) - 關於 git hooks 的產業研究
 
 ### ADRs
 
-- [ADR-001: React Query SSG Pattern](../adr/001-react-query-ssg-pattern.md) - Server prefetch vs client-only
-- [ADR-002: AGENTS.md Adoption](../adr/002-agents-md-adoption.md) - AI configuration standard
-- [ADR-003: Git Hooks Optimization](../adr/003-git-hooks-optimization.md) - Pre-commit vs pre-push strategy
+- [ADR-001：React Query SSG 模式](../adr/001-react-query-ssg-pattern.md) - 伺服器預取 vs 僅客戶端
+- [ADR-002：AGENTS.md 採用](../adr/002-agents-md-adoption.md) - AI 設定標準
+- [ADR-003：Git Hooks 優化](../adr/003-git-hooks-optimization.md) - Pre-commit vs pre-push 策略
 
-### External Documentation
+### 外部文件
 
-- [Next.js 15 Documentation](https://nextjs.org/docs) - Official Next.js docs
-- [Turborepo Documentation](https://turbo.build/repo/docs) - Monorepo build system
-- [React Query Documentation](https://tanstack.com/query/latest) - Server state management
-- [Vercel Documentation](https://vercel.com/docs) - Deployment platform
+- [Next.js 15 文件](https://nextjs.org/docs) - 官方 Next.js 文件
+- [Turborepo 文件](https://turbo.build/repo/docs) - Monorepo 建置系統
+- [React Query 文件](https://tanstack.com/query/latest) - 伺服器狀態管理
+- [Vercel 文件](https://vercel.com/docs) - 部署平台
 
 ---
 
-## Changelog
+## 變更日誌
 
-### Version 1.0.0 (2025-11-07)
+### Version 1.0.0（2025-11-07）
 
-**Initial version**:
+**初始版本**：
 
-- Complete architecture documentation
-- Technology stack reference
-- Monorepo structure explanation
-- Feature-based architecture details
-- Data flow patterns
-- Build & deployment architecture
-- CI/CD configuration
-- Performance considerations
-- Component relationships
+- 完整的架構文件
+- 技術堆疊參考
+- Monorepo 結構說明
+- 基於功能的架構細節
+- 資料流模式
+- 建置與部署架構
+- CI/CD 設定
+- 效能考量
+- 組件關係
 
-**Based on**:
+**基於**：
 
-- AGENTS.md (project overview)
-- CLAUDE.md (additional patterns)
-- ADR-001 (React Query patterns)
-- ADR-002 (documentation architecture)
-- Git hooks research (CI/CD strategy)
+- AGENTS.md（專案概述）
+- CLAUDE.md（額外模式）
+- ADR-001（React Query 模式）
+- ADR-002（文件架構）
+- Git hooks 研究（CI/CD 策略）

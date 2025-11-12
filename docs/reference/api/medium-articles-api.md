@@ -17,40 +17,40 @@ ai_context: |
 
 # GET /api/medium-articles
 
-Fetch cached Medium articles with pagination.
+取得快取的 Medium 文章,支援分頁功能。
 
-## Endpoint
+## 端點
 
 ```
 GET /api/medium-articles?offset=0&limit=10
 ```
 
-## Description
+## 說明
 
-Returns cached Medium articles from `@packages/shared/data/articleData.ts`. Articles are synced via `sync:all-articles` script before builds.
+從 `@packages/shared/data/articleData.ts` 回傳快取的 Medium 文章。文章會在建置前透過 `sync:all-articles` 腳本同步。
 
-## Request
+## 請求
 
 ### Query Parameters
 
-| Parameter | Type   | Required | Default | Description        |
-| --------- | ------ | -------- | ------- | ------------------ |
-| offset    | number | No       | 0       | Pagination offset  |
-| limit     | number | No       | 10      | Number of articles |
+| 參數   | 類型   | 必填 | 預設值 | 說明       |
+| ------ | ------ | ---- | ------ | ---------- |
+| offset | number | 否   | 0      | 分頁偏移量 |
+| limit  | number | 否   | 10     | 文章數量   |
 
-### Example
+### 範例
 
 ```bash
-# First page (10 articles)
+# 第一頁（10 篇文章）
 curl https://henryleelab.com/api/medium-articles?offset=0&limit=10
 
-# Second page
+# 第二頁
 curl https://henryleelab.com/api/medium-articles?offset=10&limit=10
 ```
 
-## Response
+## 回應
 
-### Success (200)
+### 成功 (200)
 
 ```typescript
 interface MediumArticlesResponse {
@@ -64,14 +64,14 @@ interface Article {
   title: string;
   subtitle: string;
   url: string;
-  publishedAt: string; // ISO 8601 date
-  readingTime: number; // minutes
+  publishedAt: string; // ISO 8601 日期格式
+  readingTime: number; // 分鐘數
   tags: string[];
   claps: number;
 }
 ```
 
-### Example Response
+### 範例回應
 
 ```json
 {
@@ -92,7 +92,7 @@ interface Article {
 }
 ```
 
-### Error (400)
+### 錯誤 (400)
 
 ```json
 {
@@ -101,37 +101,37 @@ interface Article {
 }
 ```
 
-## Implementation
+## 實作
 
-### Location
+### 位置
 
 ```
 apps/my-website/src/app/api/medium-articles/route.ts
 ```
 
-### Data Source
+### 資料來源
 
 ```
 packages/shared/data/articleData.ts
 ```
 
-### Update Process
+### 更新流程
 
-1. **Manually**: Run `pnpm sync:all-articles`
-2. **Automatically**: Runs before `pnpm build`
-3. **Scripts**:
-   - `scripts/sync-latest-articles.ts` - Fetch latest 2 articles
-   - `scripts/batch-parse-articles.ts` - Parse full content
+1. **手動方式**: 執行 `pnpm sync:all-articles`
+2. **自動方式**: 在 `pnpm build` 之前執行
+3. **相關腳本**:
+   - `scripts/sync-latest-articles.ts` - 取得最新 2 篇文章
+   - `scripts/batch-parse-articles.ts` - 解析完整內容
 
-### Caching
+### 快取機制
 
-- Articles cached at build time
-- No runtime API calls to Medium
-- Data embedded in bundle
+- 文章在建置時快取
+- 執行期不會呼叫 Medium API
+- 資料嵌入在打包檔案中
 
-## Pagination
+## 分頁
 
-### Infinite Scroll Pattern
+### 無限捲動模式
 
 ```typescript
 const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
@@ -146,22 +146,22 @@ const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
 });
 ```
 
-### Manual Pagination
+### 手動分頁
 
 ```javascript
-// Page 1
+// 第 1 頁
 const page1 = await fetch("/api/medium-articles?offset=0&limit=10");
 
-// Page 2
+// 第 2 頁
 const page2 = await fetch("/api/medium-articles?offset=10&limit=10");
 
-// Page 3
+// 第 3 頁
 const page3 = await fetch("/api/medium-articles?offset=20&limit=10");
 ```
 
-## SSG Integration
+## SSG 整合
 
-### Server Prefetch
+### 伺服器端預取
 
 ```typescript
 // apps/my-website/src/app/blog/page.tsx
@@ -183,43 +183,43 @@ export default async function BlogPage() {
 }
 ```
 
-See: [React Query Patterns](../../explanation/react-query-patterns.md)
+參考：[React Query Patterns](../../explanation/react-query-patterns.md)
 
-## Article Sync Scripts
+## 文章同步腳本
 
-### Sync Latest Articles
+### 同步最新文章
 
 ```bash
 pnpm sync:all-articles
 ```
 
-Fetches latest 2 articles and updates `article-urls.json`.
+取得最新 2 篇文章並更新 `article-urls.json`。
 
-### Batch Parse All Articles
+### 批次解析所有文章
 
 ```bash
 pnpm parse:all-articles
 ```
 
-Parses full content for all articles in `article-urls.json`.
+解析 `article-urls.json` 中所有文章的完整內容。
 
-## Error Handling
+## 錯誤處理
 
-| Code           | Description           | Status |
-| -------------- | --------------------- | ------ |
-| INVALID_OFFSET | offset < 0            | 400    |
-| INVALID_LIMIT  | limit < 1 or > 100    | 400    |
-| NO_DATA        | articleData not found | 500    |
+| 代碼           | 說明               | 狀態碼 |
+| -------------- | ------------------ | ------ |
+| INVALID_OFFSET | offset < 0         | 400    |
+| INVALID_LIMIT  | limit < 1 或 > 100 | 400    |
+| NO_DATA        | 找不到 articleData | 500    |
 
-## Performance
+## 效能
 
-- **Response time**: <10ms (cached data)
-- **Data size**: ~2KB per article
-- **Bundle impact**: Articles embedded in build
+- **回應時間**: <10ms（快取資料）
+- **資料大小**: 每篇文章約 2KB
+- **打包影響**: 文章嵌入在建置檔案中
 
-## Related
+## 相關文件
 
-- [API Overview](./README.md)
+- [API 概覽](./README.md)
 - [React Query Patterns](../../explanation/react-query-patterns.md)
-- [Architecture Reference](../architecture.md)
-- [Medium Article Sync Guide](../../../MEDIUM-ARTICLES-GUIDE.md) _(deprecated)_
+- [架構參考](../architecture.md)
+- [Medium Article Sync Guide](../../../MEDIUM-ARTICLES-GUIDE.md) _（已棄用）_

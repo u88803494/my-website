@@ -1,8 +1,8 @@
-# Git Hooks Configuration Reference
+# Git Hooks 配置參考手冊
 
 ---
 
-title: Git Hooks Configuration and Implementation Reference
+title: Git Hooks 配置與實作參考手冊
 type: reference
 status: stable
 audience: [developer, ai]
@@ -22,84 +22,84 @@ related:
 
 ---
 
-## Overview
+## 概述
 
-**What this documents**: Complete specification of git hooks configuration, including pre-commit, commit-msg, and pre-push hooks using Husky, lint-staged, and custom validation scripts.
+**本文件說明內容**：完整的 git hooks 配置規範，包含使用 Husky、lint-staged 和自訂驗證腳本的 pre-commit、commit-msg 和 pre-push hooks。
 
-**Use cases**:
+**使用情境**：
 
-- Configure automated code quality checks
-- Set up commit message validation
-- Implement commit size limits
-- Troubleshoot git hook issues
+- 配置自動化程式碼品質檢查
+- 設定提交訊息驗證
+- 實作提交大小限制
+- 排查 git hook 問題
 
-**Location**: `.husky/` directory in project root
-
----
-
-## Quick Reference
-
-**Most common operations:**
-
-| Operation        | File                              | Command                                |
-| ---------------- | --------------------------------- | -------------------------------------- |
-| Fast format/lint | `.husky/pre-commit`               | `pnpm lint-staged`                     |
-| Validate message | `.husky/commit-msg`               | `npx commitlint --edit $1`             |
-| Full type check  | `.husky/pre-push`                 | `pnpm run check-types`                 |
-| Validate size    | `scripts/validate-commit-size.js` | `node scripts/validate-commit-size.js` |
-| Skip hooks       | CLI                               | `git commit --no-verify`               |
+**檔案位置**：專案根目錄的 `.husky/` 目錄
 
 ---
 
-## Complete Specification
+## 快速參考
+
+**最常用的操作：**
+
+| 操作            | 檔案                              | 指令                                   |
+| --------------- | --------------------------------- | -------------------------------------- |
+| 快速格式化/檢查 | `.husky/pre-commit`               | `pnpm lint-staged`                     |
+| 驗證提交訊息    | `.husky/commit-msg`               | `npx commitlint --edit $1`             |
+| 完整型別檢查    | `.husky/pre-push`                 | `pnpm run check-types`                 |
+| 驗證提交大小    | `scripts/validate-commit-size.js` | `node scripts/validate-commit-size.js` |
+| 略過 hooks      | CLI                               | `git commit --no-verify`               |
+
+---
+
+## 完整規範
 
 ### Pre-commit Hook
 
-**Location**: `.husky/pre-commit`
+**位置**：`.husky/pre-commit`
 
-**Purpose**: Fast validation on staged files before commit
+**目的**：在提交前對暫存檔案進行快速驗證
 
-**Execution time**: ~1-5 seconds
+**執行時間**：約 1-5 秒
 
-**Configuration**:
+**配置**：
 
 ```bash
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Lint staged files
+# 檢查暫存檔案
 pnpm lint-staged
 
-# Validate commit size
+# 驗證提交大小
 node scripts/validate-commit-size.js
 ```
 
-**Execution Flow**:
+**執行流程**：
 
 ```
-1. git commit triggered
-2. Run lint-staged (Prettier + ESLint on staged files)
-3. Run commit size validation
-4. If all pass → proceed to commit-msg hook
-5. If any fail → abort commit
+1. 觸發 git commit
+2. 執行 lint-staged（對暫存檔案執行 Prettier + ESLint）
+3. 執行提交大小驗證
+4. 如果全部通過 → 繼續到 commit-msg hook
+5. 如果任一失敗 → 中止提交
 ```
 
-**Exit codes**:
+**結束代碼**：
 
-- `0` - Success, continue to commit-msg hook
-- `1` - Failure, abort commit
+- `0` - 成功，繼續到 commit-msg hook
+- `1` - 失敗，中止提交
 
 ---
 
 ### Commit-msg Hook
 
-**Location**: `.husky/commit-msg`
+**位置**：`.husky/commit-msg`
 
-**Purpose**: Validate commit message format
+**目的**：驗證提交訊息格式
 
-**Execution time**: ~0.1 seconds
+**執行時間**：約 0.1 秒
 
-**Configuration**:
+**配置**：
 
 ```bash
 #!/usr/bin/env sh
@@ -108,36 +108,36 @@ node scripts/validate-commit-size.js
 npx --no -- commitlint --edit $1
 ```
 
-**Parameters**:
+**參數**：
 
-- `$1` - Path to commit message file (`.git/COMMIT_EDITMSG`)
+- `$1` - 提交訊息檔案的路徑（`.git/COMMIT_EDITMSG`）
 
-**Execution Flow**:
+**執行流程**：
 
 ```
-1. Pre-commit hook passed
-2. Read commit message from $1
-3. Validate against commitlint rules
-4. If pass → create commit
-5. If fail → abort commit
+1. Pre-commit hook 通過
+2. 從 $1 讀取提交訊息
+3. 根據 commitlint 規則驗證
+4. 如果通過 → 建立提交
+5. 如果失敗 → 中止提交
 ```
 
-**Exit codes**:
+**結束代碼**：
 
-- `0` - Valid commit message
-- `1` - Invalid commit message
+- `0` - 有效的提交訊息
+- `1` - 無效的提交訊息
 
 ---
 
 ### Pre-push Hook
 
-**Location**: `.husky/pre-push`
+**位置**：`.husky/pre-push`
 
-**Purpose**: Comprehensive validation before push
+**目的**：在推送前進行全面驗證
 
-**Execution time**: ~10-20 seconds (first run), ~2-5 seconds (cached)
+**執行時間**：約 10-20 秒（首次執行），約 2-5 秒（快取後）
 
-**Configuration**:
+**配置**：
 
 ```bash
 #!/usr/bin/env sh
@@ -146,11 +146,11 @@ npx --no -- commitlint --edit $1
 echo "🔍 Running comprehensive checks before push..."
 echo ""
 
-# TypeScript type checking
+# TypeScript 型別檢查
 echo "📘 Type checking..."
 pnpm run check-types || { echo "\n❌ Type check failed. Please fix errors before pushing."; exit 1; }
 
-# ESLint full check
+# ESLint 完整檢查
 echo ""
 echo "🔧 Linting..."
 pnpm run lint || { echo "\n❌ Linting failed. Please fix errors before pushing."; exit 1; }
@@ -159,36 +159,36 @@ echo ""
 echo "✅ All pre-push checks passed!"
 ```
 
-**Commands executed**:
+**執行的指令**：
 
-1. `pnpm run check-types` - TypeScript full project check
-2. `pnpm run lint` - ESLint full project check with `--max-warnings=0`
+1. `pnpm run check-types` - TypeScript 完整專案檢查
+2. `pnpm run lint` - ESLint 完整專案檢查，設定 `--max-warnings=0`
 
-**Execution Flow**:
+**執行流程**：
 
 ```
-1. git push triggered
-2. Run TypeScript type check on entire project
-3. If fail → abort push with error message
-4. Run ESLint on entire project
-5. If fail → abort push with error message
-6. If all pass → proceed with push
+1. 觸發 git push
+2. 在整個專案上執行 TypeScript 型別檢查
+3. 如果失敗 → 顯示錯誤訊息並中止推送
+4. 在整個專案上執行 ESLint
+5. 如果失敗 → 顯示錯誤訊息並中止推送
+6. 如果全部通過 → 繼續推送
 ```
 
-**Exit codes**:
+**結束代碼**：
 
-- `0` - All checks passed
-- `1` - Type check failed or linting failed
+- `0` - 所有檢查通過
+- `1` - 型別檢查失敗或檢查程式碼失敗
 
 ---
 
-## lint-staged Configuration
+## lint-staged 配置
 
-**Location**: `lint-staged.config.js`
+**位置**：`lint-staged.config.js`
 
-**Purpose**: Run formatters and linters only on staged files
+**目的**：僅在暫存檔案上執行格式化工具和檢查工具
 
-**Configuration**:
+**配置**：
 
 ```javascript
 module.exports = {
@@ -204,46 +204,46 @@ module.exports = {
 };
 ```
 
-**File Patterns**:
+**檔案模式**：
 
-| Pattern                                | Files Matched                 | Commands          |
-| -------------------------------------- | ----------------------------- | ----------------- |
-| `apps/my-website/**/*.{js,jsx,ts,tsx}` | App JavaScript/TypeScript     | Prettier + ESLint |
-| `packages/**/*.{js,jsx,ts,tsx}`        | Package JavaScript/TypeScript | Prettier + ESLint |
-| `**/*.{json,css,scss,md,mdx,yaml,yml}` | All config/style/docs         | Prettier only     |
+| 模式                                   | 符合的檔案                       | 指令              |
+| -------------------------------------- | -------------------------------- | ----------------- |
+| `apps/my-website/**/*.{js,jsx,ts,tsx}` | App 的 JavaScript/TypeScript     | Prettier + ESLint |
+| `packages/**/*.{js,jsx,ts,tsx}`        | Package 的 JavaScript/TypeScript | Prettier + ESLint |
+| `**/*.{json,css,scss,md,mdx,yaml,yml}` | 所有配置/樣式/文件檔案           | 僅 Prettier       |
 
-**Command Sequence**:
+**指令順序**：
 
-1. `prettier --write` - Format code
-2. `eslint --fix --max-warnings=0` - Lint and auto-fix
+1. `prettier --write` - 格式化程式碼
+2. `eslint --fix --max-warnings=0` - 檢查並自動修復
 
-**Important Notes**:
+**重要注意事項**：
 
-- Commands run sequentially on each file
-- Files are auto-staged after modification
-- Process aborts on first error
-- TypeScript checking NOT included (moved to pre-push)
+- 指令按順序對每個檔案執行
+- 修改後的檔案會自動重新暫存
+- 遇到第一個錯誤時中止流程
+- 不包含 TypeScript 檢查（已移至 pre-push）
 
 ---
 
-## Commit Size Validation Script
+## 提交大小驗證腳本
 
-**Location**: `scripts/validate-commit-size.js`
+**位置**：`scripts/validate-commit-size.js`
 
-**Purpose**: Prevent excessively large commits
+**目的**：防止過大的提交
 
-**Configuration**:
+**配置**：
 
 ```javascript
 #!/usr/bin/env node
 
 const { execSync } = require("child_process");
 
-// Configuration
+// 配置
 const MAX_FILES = 15;
 const MAX_LINES = 500;
 
-// Exclude patterns
+// 排除模式
 const EXCLUDE_PATTERNS = [
   "pnpm-lock.yaml",
   "package-lock.json",
@@ -264,37 +264,37 @@ const EXCLUDE_PATTERNS = [
 ];
 ```
 
-**Parameters**:
+**參數**：
 
-| Parameter          | Type       | Default    | Description                  |
-| ------------------ | ---------- | ---------- | ---------------------------- |
-| `MAX_FILES`        | `number`   | 15         | Maximum staged files allowed |
-| `MAX_LINES`        | `number`   | 500        | Maximum total line changes   |
-| `EXCLUDE_PATTERNS` | `string[]` | See config | Files to ignore              |
+| 參數               | 類型       | 預設值 | 說明                 |
+| ------------------ | ---------- | ------ | -------------------- |
+| `MAX_FILES`        | `number`   | 15     | 允許的最大暫存檔案數 |
+| `MAX_LINES`        | `number`   | 500    | 最大總行數變更       |
+| `EXCLUDE_PATTERNS` | `string[]` | 見配置 | 要忽略的檔案         |
 
-**Validation Logic**:
+**驗證邏輯**：
 
 ```javascript
 function isExcluded(filePath) {
   return EXCLUDE_PATTERNS.some((pattern) => {
-    // Handle **/ prefix (any depth)
+    // 處理 **/ 前綴（任意深度）
     if (pattern.startsWith("**/")) {
       const suffix = pattern.substring(3);
 
-      // Handle **/*.ext pattern
+      // 處理 **/*.ext 模式
       if (suffix.startsWith("*.")) {
         const ext = suffix.substring(1);
         return filePath.endsWith(ext);
       }
 
-      // Handle **/<path> pattern
+      // 處理 **/<path> 模式
       return filePath.endsWith(suffix) || filePath.includes("/" + suffix);
     }
 
-    // Handle other patterns
+    // 處理其他模式
     const regexPattern = pattern
-      .replace(/\./g, "\\.") // Escape dots
-      .replace(/\*/g, "[^/]*"); // * matches any chars except /
+      .replace(/\./g, "\\.") // 轉義點號
+      .replace(/\*/g, "[^/]*"); // * 符合除 / 外的任何字元
 
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(filePath);
@@ -302,19 +302,19 @@ function isExcluded(filePath) {
 }
 ```
 
-**Git Commands Used**:
+**使用的 Git 指令**：
 
 ```bash
-# Get staged files
+# 取得暫存檔案
 git diff --cached --name-only
 
-# Get diff statistics
+# 取得差異統計
 git diff --cached --numstat
 ```
 
-**Output Format**:
+**輸出格式**：
 
-**Success**:
+**成功**：
 
 ```
 ✅ Commit size validation passed:
@@ -322,7 +322,7 @@ git diff --cached --numstat
    Lines: 250/500 (Added: 200, Deleted: 50)
 ```
 
-**Failure (too many files)**:
+**失敗（檔案過多）**：
 
 ```
 ❌ Commit contains too many files: 20/15
@@ -335,7 +335,7 @@ Modified files:
   ...
 ```
 
-**Failure (too many lines)**:
+**失敗（行數過多）**：
 
 ```
 ❌ Commit changes too many lines: 650/500
@@ -344,16 +344,16 @@ Modified files:
 📝 Please split changes into smaller commits
 ```
 
-**Exit codes**:
+**結束代碼**：
 
-- `0` - Validation passed
-- `1` - Validation failed or error occurred
+- `0` - 驗證通過
+- `1` - 驗證失敗或發生錯誤
 
 ---
 
-## Exclude Patterns Reference
+## 排除模式參考
 
-### Lock Files
+### 鎖定檔案
 
 ```javascript
 'pnpm-lock.yaml',
@@ -362,32 +362,32 @@ Modified files:
 'bun.lockb',
 ```
 
-**Reason**: Auto-generated, often 9000+ lines
+**原因**：自動產生，通常超過 9000 行
 
 ---
 
-### Documentation
+### 文件
 
 ```javascript
 '**/*.md',
 ```
 
-**Reason**: Documentation files can be long without complexity issues
+**原因**：文件檔案可能很長但不會造成複雜度問題
 
 ---
 
-### Scripts
+### 腳本
 
 ```javascript
 'scripts/**/*.ts',
 'scripts/**/*.js',
 ```
 
-**Reason**: Single-purpose scripts may legitimately be longer
+**原因**：單一用途的腳本可能合理地較長
 
 ---
 
-### Build Outputs
+### 建置輸出
 
 ```javascript
 'dist/**',
@@ -397,22 +397,22 @@ Modified files:
 'out/**',
 ```
 
-**Reason**: Should not be committed, but pattern prevents accidents
+**原因**：不應提交，但模式可防止意外
 
 ---
 
-### Generated Files
+### 產生的檔案
 
 ```javascript
 '*.generated.*',
 '*.gen.*',
 ```
 
-**Reason**: Auto-generated code
+**原因**：自動產生的程式碼
 
 ---
 
-### Configuration Files
+### 配置檔案
 
 ```javascript
 '*.config.ts',
@@ -421,292 +421,292 @@ Modified files:
 '*.config.cjs',
 ```
 
-**Reason**: Config files can be comprehensive
+**原因**：配置檔案可能很完整
 
 ---
 
-### AI/Tool Outputs
+### AI/工具輸出
 
 ```javascript
 '.serena/memories/**',
 '.kiro/specs/**',
 ```
 
-**Reason**: Tool-generated content
+**原因**：工具產生的內容
 
 ---
 
-### Type Declarations
+### 型別宣告
 
 ```javascript
 '*.d.ts',
 ```
 
-**Reason**: Type definition files can be extensive
+**原因**：型別定義檔案可能很大
 
 ---
 
-### Test Snapshots
+### 測試快照
 
 ```javascript
 '**/__snapshots__/**',
 ```
 
-**Reason**: Test snapshots can be large
+**原因**：測試快照可能很大
 
 ---
 
-## Hook Bypass
+## Hook 略過
 
-### Bypass Pre-commit and Commit-msg
+### 略過 Pre-commit 和 Commit-msg
 
 ```bash
 git commit --no-verify -m "commit message"
-# or
+# 或
 git commit -n -m "commit message"
 ```
 
-**Skips**:
+**略過項目**：
 
-- lint-staged (Prettier + ESLint)
-- Commit size validation
-- Commitlint message validation
+- lint-staged（Prettier + ESLint）
+- 提交大小驗證
+- Commitlint 訊息驗證
 
 ---
 
-### Bypass Pre-push
+### 略過 Pre-push
 
 ```bash
 git push --no-verify
-# or
+# 或
 git push -n
 ```
 
-**Skips**:
+**略過項目**：
 
-- TypeScript type checking
-- ESLint full project check
-
----
-
-### Usage Guidelines
-
-**When to use `--no-verify`**:
-
-- ✅ Emergency production fixes
-- ✅ Temporary commits on feature branch (plan to rebase)
-- ✅ Known false positives from tools
-
-**When NOT to use**:
-
-- ❌ Regular development workflow
-- ❌ Commits going directly to main/master
-- ❌ To avoid fixing legitimate issues
-
-**Monitoring**:
-
-- Track bypass usage (should be < 5% of commits)
-- Review bypassed commits in PR reviews
-- Address patterns requiring frequent bypasses
+- TypeScript 型別檢查
+- ESLint 完整專案檢查
 
 ---
 
-## Troubleshooting Reference
+### 使用指南
 
-### Hook Not Executing
+**何時使用 `--no-verify`**：
 
-**Symptoms**: Commits succeed without running hooks
+- ✅ 緊急生產修復
+- ✅ 功能分支上的臨時提交（計畫 rebase）
+- ✅ 已知的工具誤報
 
-**Possible causes**:
+**何時不要使用**：
 
-1. Hooks not executable
-2. Husky not installed
-3. `.git/hooks` not pointing to `.husky`
+- ❌ 常規開發工作流程
+- ❌ 直接提交到 main/master 的提交
+- ❌ 為了避免修復合法問題
 
-**Solutions**:
+**監控**：
+
+- 追蹤略過使用（應 < 5% 的提交）
+- 在 PR 審查中檢視略過的提交
+- 處理需要頻繁略過的模式
+
+---
+
+## 疑難排解參考
+
+### Hook 未執行
+
+**症狀**：提交成功但未執行 hooks
+
+**可能原因**：
+
+1. Hooks 不可執行
+2. Husky 未安裝
+3. `.git/hooks` 未指向 `.husky`
+
+**解決方案**：
 
 ```bash
-# Reinstall Husky
+# 重新安裝 Husky
 pnpm exec husky install
 
-# Set executable permissions
+# 設定執行權限
 chmod +x .husky/pre-commit
 chmod +x .husky/commit-msg
 chmod +x .husky/pre-push
 
-# Verify hook files exist
+# 驗證 hook 檔案存在
 ls -la .husky/
 ```
 
 ---
 
-### Pre-commit Too Slow
+### Pre-commit 太慢
 
-**Symptoms**: Pre-commit takes > 5 seconds
+**症狀**：Pre-commit 超過 5 秒
 
-**Possible causes**:
+**可能原因**：
 
-1. Too many staged files
-2. Large file sizes
-3. Slow ESLint rules
+1. 暫存檔案過多
+2. 檔案大小過大
+3. ESLint 規則緩慢
 
-**Solutions**:
+**解決方案**：
 
 ```bash
-# Check staged files
+# 檢查暫存檔案
 git diff --cached --name-only | wc -l
 
-# Stage fewer files at once
+# 一次暫存較少檔案
 git add file1.ts file2.ts
 git commit -m "..."
 
-# Consider splitting into multiple commits
+# 考慮分成多個提交
 ```
 
 ---
 
-### Pre-push Always Fails
+### Pre-push 總是失敗
 
-**Symptoms**: Type check or lint fails even after fixes
+**症狀**：即使修復後型別檢查或檢查仍失敗
 
-**Possible causes**:
+**可能原因**：
 
-1. Errors in unstaged files
-2. Turborepo cache corruption
-3. Dependencies out of sync
+1. 未暫存檔案中的錯誤
+2. Turborepo 快取損壞
+3. 依賴不同步
 
-**Solutions**:
+**解決方案**：
 
 ```bash
-# Clear Turborepo cache
+# 清除 Turborepo 快取
 rm -rf .turbo
 
-# Reinstall dependencies
+# 重新安裝依賴
 pnpm install
 
-# Run checks manually
+# 手動執行檢查
 pnpm run check-types
 pnpm run lint
 
-# Check for unstaged changes
+# 檢查未暫存的變更
 git status
 ```
 
 ---
 
-### Commit Size Validation False Positive
+### 提交大小驗證誤報
 
-**Symptoms**: Legitimate commits rejected
+**症狀**：合法的提交被拒絕
 
-**Possible causes**:
+**可能原因**：
 
-1. File should be excluded
-2. Limits too strict for project
-3. Pattern matching issue
+1. 檔案應該被排除
+2. 限制對專案過於嚴格
+3. 模式匹配問題
 
-**Solutions**:
+**解決方案**：
 
 ```javascript
-// Add to EXCLUDE_PATTERNS in scripts/validate-commit-size.js
+// 在 scripts/validate-commit-size.js 中新增到 EXCLUDE_PATTERNS
 const EXCLUDE_PATTERNS = [
-  // ... existing patterns
-  "src/specific-file.ts", // Exclude specific file
-  "migrations/**", // Exclude directory
+  // ... 現有模式
+  "src/specific-file.ts", // 排除特定檔案
+  "migrations/**", // 排除目錄
 ];
 
-// Or adjust limits
-const MAX_FILES = 20; // Increase from 15
-const MAX_LINES = 800; // Increase from 500
+// 或調整限制
+const MAX_FILES = 20; // 從 15 增加
+const MAX_LINES = 800; // 從 500 增加
 ```
 
 ---
 
-## Performance Metrics
+## 效能指標
 
 ### Pre-commit Hook
 
-| Operation           | Time      | Cache   |
-| ------------------- | --------- | ------- |
-| Prettier (1 file)   | ~0.1s     | No      |
-| ESLint (1 file)     | ~0.3s     | Yes     |
-| Commit size check   | ~0.1s     | No      |
-| **Total (typical)** | **~1-3s** | Partial |
+| 操作               | 時間          | 快取 |
+| ------------------ | ------------- | ---- |
+| Prettier（1 檔案） | 約 0.1 秒     | 無   |
+| ESLint（1 檔案）   | 約 0.3 秒     | 是   |
+| 提交大小檢查       | 約 0.1 秒     | 無   |
+| **總計（典型）**   | **約 1-3 秒** | 部分 |
 
 ---
 
 ### Commit-msg Hook
 
-| Operation             | Time  | Cache |
-| --------------------- | ----- | ----- |
-| Commitlint validation | ~0.1s | No    |
+| 操作            | 時間      | 快取 |
+| --------------- | --------- | ---- |
+| Commitlint 驗證 | 約 0.1 秒 | 無   |
 
 ---
 
 ### Pre-push Hook
 
-| Operation                 | Time        | Cache |
-| ------------------------- | ----------- | ----- |
-| TypeScript check (first)  | ~10-15s     | No    |
-| TypeScript check (cached) | ~2-3s       | Yes   |
-| ESLint (first)            | ~5-8s       | No    |
-| ESLint (cached)           | ~1-2s       | Yes   |
-| **Total (first)**         | **~15-23s** | No    |
-| **Total (cached)**        | **~3-5s**   | Yes   |
+| 操作                    | 時間            | 快取 |
+| ----------------------- | --------------- | ---- |
+| TypeScript 檢查（首次） | 約 10-15 秒     | 無   |
+| TypeScript 檢查（快取） | 約 2-3 秒       | 是   |
+| ESLint（首次）          | 約 5-8 秒       | 無   |
+| ESLint（快取）          | 約 1-2 秒       | 是   |
+| **總計（首次）**        | **約 15-23 秒** | 無   |
+| **總計（快取）**        | **約 3-5 秒**   | 是   |
 
 ---
 
-## Compatibility
+## 相容性
 
-**Supported versions**:
+**支援版本**：
 
 - Git: >= 2.0.0
 - Node.js: >= 16.0.0
 - Husky: >= 8.0.0
 - lint-staged: >= 13.0.0
 
-**Known issues**:
+**已知問題**：
 
-- Git worktrees may require separate Husky setup
-- Windows requires Git Bash or WSL for shell scripts
-- Some CI environments need explicit Husky installation
+- Git worktrees 可能需要單獨設定 Husky
+- Windows 需要 Git Bash 或 WSL 來執行 shell 腳本
+- 某些 CI 環境需要明確安裝 Husky
 
 ---
 
-## See Also
+## 另請參閱
 
-### Guides
+### 指南
 
-- [Git Workflow Implementation Guide](../guides/git-workflow.md) - Step-by-step setup
+- [Git 工作流程實作指南](../guides/git-workflow.md) - 逐步設定說明
 
-### Reference
+### 參考
 
-- [Commitlint Rules Reference](./commitlint-rules.md) - Complete commitlint configuration
+- [Commitlint 規則參考](./commitlint-rules.md) - 完整的 commitlint 配置
 
-### Explanation
+### 說明
 
-- [Git Hooks Research and Best Practices](../explanation/git-hooks-research.md) - Why these decisions
+- [Git Hooks 研究與最佳實務](../explanation/git-hooks-research.md) - 為何做出這些決策
 
 ### ADR
 
-- [ADR-003: Git Hooks Optimization](../adr/003-git-hooks-optimization.md) - Technical decisions
+- [ADR-003：Git Hooks 最佳化](../adr/003-git-hooks-optimization.md) - 技術決策
 
-### External Documentation
+### 外部文件
 
-- [Husky Documentation](https://typicode.github.io/husky/)
-- [lint-staged Documentation](https://github.com/lint-staged/lint-staged)
-- [Git Hooks Documentation](https://git-scm.com/docs/githooks)
+- [Husky 文件](https://typicode.github.io/husky/)
+- [lint-staged 文件](https://github.com/lint-staged/lint-staged)
+- [Git Hooks 文件](https://git-scm.com/docs/githooks)
 
 ---
 
-## Changelog
+## 更新日誌
 
-### Version 1.0.0 (2025-11-05)
+### 版本 1.0.0 (2025-11-05)
 
-- Initial git hooks configuration
-- Implemented pre-commit with lint-staged
-- Added commit-msg with commitlint
-- Created pre-push with full validation
-- Implemented commit size validation script
-- Added comprehensive exclude patterns
-- Fixed pre-push exit code checking
-- Fixed markdown exclusion pattern matching
+- 初始 git hooks 配置
+- 實作帶 lint-staged 的 pre-commit
+- 新增帶 commitlint 的 commit-msg
+- 建立帶完整驗證的 pre-push
+- 實作提交大小驗證腳本
+- 新增完整的排除模式
+- 修復 pre-push 結束代碼檢查
+- 修復 markdown 排除模式匹配
