@@ -33,7 +33,7 @@ The Diataxis framework organizes documentation into four distinct types based on
 **Problem-oriented**: Step-by-step instructions to solve specific problems.
 
 - [Git Workflow](./guides/git-workflow.md) - Using git hooks and automation
-- Development Setup - Setting up local environment _(Coming soon)_
+- [Development Setup](./guides/development-setup.md) - Setting up local environment
 - Deployment - Deploying to production _(Coming soon)_
 - Contributing - How to contribute to this project _(Coming soon)_
 
@@ -45,7 +45,7 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Learning-oriented**: Guided lessons to learn fundamental concepts.
 
-- 01 - Project Setup - From zero to hello world _(Coming soon)_
+- [01 - Project Setup](./tutorials/01-project-setup.md) - From zero to hello world
 - 02 - Adding New Feature - Feature development workflow _(Coming soon)_
 - 03 - Medium Integration - Working with Medium API _(Coming soon)_
 
@@ -57,12 +57,12 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Information-oriented**: Complete technical details, APIs, and configurations.
 
-- Architecture - System architecture overview _(Coming soon)_
+- [Architecture](./reference/architecture.md) - System architecture overview
+- [API Reference](./reference/api/) - REST API specifications
 - [Commitlint Rules](./reference/commitlint-rules.md) - Commit message rules
 - [Git Hooks](./reference/git-hooks.md) - Git hooks configuration
 - Environment Variables - All env vars _(Coming soon)_
 - CLI Commands - Available commands _(Coming soon)_
-- API Reference - REST API specifications _(Coming soon)_
 
 **When to use**: Looking up exact specifications or API details
 
@@ -72,10 +72,10 @@ The Diataxis framework organizes documentation into four distinct types based on
 
 **Understanding-oriented**: Why things are designed this way, background knowledge.
 
-- Feature-Based Architecture - Why feature folders _(Coming soon)_
-- React Query Patterns - SSG + React Query strategy _(Coming soon)_
+- [Feature-Based Architecture](./explanation/feature-based-architecture.md) - Why feature folders
+- [React Query Patterns](./explanation/react-query-patterns.md) - SSG + React Query strategy
+- [Monorepo Strategy](./explanation/monorepo-strategy.md) - Why Turborepo
 - [Git Hooks Research](./explanation/git-hooks-research.md) - Industry best practices
-- Monorepo Strategy - Why Turborepo _(Coming soon)_
 
 **When to use**: Understanding "why" behind technical decisions
 
@@ -160,7 +160,7 @@ Documents link to related content using relative paths. AI agents should:
 2. Use the appropriate template from [`docs/.templates/`](./.templates/)
 3. Include YAML frontmatter with all required fields
 4. Add cross-references to related documents
-5. Follow the project's writing style (see [CONTRIBUTING.md](../CONTRIBUTING.md))
+5. Follow the project's writing style (check [AGENTS.md](../AGENTS.md) for code standards)
 6. Update this README if adding new top-level documents
 
 ---

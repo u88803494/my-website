@@ -1,8 +1,5 @@
-# System Architecture Reference
-
 ---
-
-title: System Architecture Reference
+title: "System Architecture Reference"
 type: reference
 status: stable
 audience: [developer, architect, ai]
@@ -11,18 +8,18 @@ created: 2025-11-07
 updated: 2025-11-07
 version: 1.0.0
 related:
-
-- explanation/feature-based-architecture.md
-- explanation/monorepo-strategy.md
-- adr/001-react-query-ssg-pattern.md
-- adr/002-agents-md-adoption.md
-- explanation/git-hooks-research.md
-  ai_context: |
+  - explanation/feature-based-architecture.md
+  - explanation/monorepo-strategy.md
+  - adr/001-react-query-ssg-pattern.md
+  - adr/002-agents-md-adoption.md
+  - explanation/git-hooks-research.md
+ai_context: |
   Complete technical reference for the system architecture including monorepo structure,
   feature-based design, data flow, and deployment architecture. Use this to understand
   the overall system design, technology decisions, and how components interact.
-
 ---
+
+# System Architecture Reference
 
 ## Overview
 
