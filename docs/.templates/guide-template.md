@@ -1,103 +1,103 @@
-# [Title]: How to [Achieve Goal]
+# [標題]：如何 [達成目標]
 
 ---
 
-title: [Full title]
+title: [完整標題]
 type: guide
 status: draft|review|stable|deprecated
 audience: [developer, end-user, ai]
-tags: [tag1, tag2, tag3]
+tags: [標籤1, 標籤2, 標籤3]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 difficulty: beginner|intermediate|advanced
-estimated_time: X minutes
+estimated_time: X 分鐘
 related:
 
 - reference/related-reference.md
 - explanation/related-concept.md
 - tutorials/related-tutorial.md
   ai_context: |
-  Brief context about what this guide helps accomplish.
+  關於此指南協助完成什麼任務的簡要說明。
 
 ---
 
-## Overview
+## 概述
 
-**What you'll accomplish:**
-Brief description of the specific goal this guide helps achieve.
+**你將完成的目標：**
+簡要描述此指南協助達成的具體目標。
 
-**Why this matters:**
-One sentence explaining the value or importance.
-
----
-
-## Prerequisites
-
-Before starting, ensure you have:
-
-- [ ] Prerequisite 1 (with link if applicable)
-- [ ] Prerequisite 2
-- [ ] Prerequisite 3
-
-**Assumed knowledge:**
-
-- Knowledge area 1
-- Knowledge area 2
+**為何重要：**
+一句話說明其價值或重要性。
 
 ---
 
-## Steps
+## 前置需求
 
-### Step 1: [Action Description]
+開始之前，請確保你已具備：
 
-Clear description of what to do.
+- [ ] 前置需求 1（如適用，附上連結）
+- [ ] 前置需求 2
+- [ ] 前置需求 3
+
+**假定知識：**
+
+- 知識領域 1
+- 知識領域 2
+
+---
+
+## 步驟
+
+### 步驟 1：[動作描述]
+
+清楚描述要做什麼。
 
 ```bash
-# Command or code example
+# 指令或程式碼範例
 command here
 ```
 
-**Expected outcome**: What you should see after this step.
+**預期結果**：完成此步驟後你應該看到的結果。
 
-**Why this step**: Brief explanation of purpose (optional).
+**此步驟的目的**：簡要說明目的（選填）。
 
 ---
 
-### Step 2: [Action Description]
+### 步驟 2：[動作描述]
 
-Clear description of what to do.
+清楚描述要做什麼。
 
 ```typescript
 // Code example
 const example = "code";
 ```
 
-**Expected outcome**: What you should see after this step.
+**預期結果**：完成此步驟後你應該看到的結果。
 
 ---
 
-### Step 3: [Action Description]
+### 步驟 3：[動作描述]
 
-Continue with additional steps as needed...
+依需要繼續新增更多步驟...
 
 ---
 
-## Verification
+## 驗證
 
-**How to verify success:**
+**如何驗證成功：**
 
-1. Check 1: What to verify and expected result
-2. Check 2: What to verify and expected result
-3. Check 3: What to verify and expected result
+1. 檢查項目 1：要驗證的內容及預期結果
+2. 檢查項目 2：要驗證的內容及預期結果
+3. 檢查項目 3：要驗證的內容及預期結果
 
-**Verification command:**
+**驗證指令：**
 
 ```bash
 # Command to verify
 verify-command
 ```
 
-**Expected output:**
+**預期輸出：**
 
 ```
 Expected output here
@@ -105,30 +105,15 @@ Expected output here
 
 ---
 
-## Troubleshooting
+## 疑難排解
 
-### Issue 1: [Common Problem]
+### 問題 1：[常見問題]
 
-**Symptoms**: How this problem manifests.
+**症狀**：此問題的表現方式。
 
-**Cause**: Why this happens.
+**原因**：為何發生此問題。
 
-**Solution**:
-
-```bash
-# Fix command
-solution-command
-```
-
----
-
-### Issue 2: [Common Problem]
-
-**Symptoms**: How this problem manifests.
-
-**Cause**: Why this happens.
-
-**Solution**:
+**解決方案**：
 
 ```bash
 # Fix command
@@ -137,58 +122,73 @@ solution-command
 
 ---
 
-## Tips & Best Practices
+### 問題 2：[常見問題]
 
-- 💡 **Tip 1**: Helpful suggestion
-- 💡 **Tip 2**: Helpful suggestion
-- ⚠️ **Warning**: Things to avoid
+**症狀**：此問題的表現方式。
 
----
+**原因**：為何發生此問題。
 
-## Related Documentation
+**解決方案**：
 
-### Concepts
-
-- [Related Concept](../explanation/concept.md) - Background understanding
-
-### Reference
-
-- [Technical Reference](../reference/tech-spec.md) - Detailed specifications
-
-### Tutorials
-
-- [Related Tutorial](../tutorials/tutorial.md) - Learning from scratch
+```bash
+# Fix command
+solution-command
+```
 
 ---
 
-## Next Steps
+## 提示與最佳實踐
 
-After completing this guide, you might want to:
-
-1. [Next action or guide to follow]
-2. [Advanced topic to explore]
-3. [Related guide to check out]
+- 💡 **提示 1**：有用的建議
+- 💡 **提示 2**：有用的建議
+- ⚠️ **警告**：應避免的事項
 
 ---
 
-## Template Instructions (Remove this section)
+## 相關文件
 
-**How to use this guide template:**
+### 概念說明
 
-1. **Title**: Use format "How to [Achieve Goal]"
-2. **Frontmatter**: Fill in all YAML fields
-3. **Overview**: State goal clearly in 1-2 sentences
-4. **Prerequisites**: List everything needed before starting
-5. **Steps**: Number each step, provide clear commands/code
-6. **Verification**: Always include verification steps
-7. **Troubleshooting**: Document common issues you encountered
-8. **Related**: Link to relevant docs
+- [相關概念](../explanation/concept.md) - 背景知識理解
 
-**Best practices:**
+### 參考文件
 
-- Focus on achieving ONE specific goal
-- Make steps actionable (start with verbs)
-- Include actual commands/code that work
-- Test all commands before publishing
-- Keep explanations brief (link to Explanation docs for "why")
-- Update "updated" date when making changes
+- [技術參考](../reference/tech-spec.md) - 詳細規格說明
+
+### 教學文件
+
+- [相關教學](../tutorials/tutorial.md) - 從零開始學習
+
+---
+
+## 後續步驟
+
+完成此指南後，你可能會想要：
+
+1. [接下來要執行的動作或遵循的指南]
+2. [要探索的進階主題]
+3. [要查看的相關指南]
+
+---
+
+## 模板使用說明（完成後請刪除此段落）
+
+**如何使用此指南模板：**
+
+1. **標題**：使用格式「如何 [達成目標]」
+2. **Frontmatter**：填寫所有 YAML 欄位
+3. **概述**：用 1-2 句話清楚陳述目標
+4. **前置需求**：列出開始之前需要的所有條件
+5. **步驟**：為每個步驟編號，提供清楚的指令/程式碼
+6. **驗證**：務必包含驗證步驟
+7. **疑難排解**：記錄你遇到的常見問題
+8. **相關文件**：連結到相關文件
+
+**最佳實踐：**
+
+- 專注於達成單一具體目標
+- 讓步驟可執行（以動詞開頭）
+- 包含實際可用的指令/程式碼
+- 發布前測試所有指令
+- 保持說明簡潔（連結到說明文件以解釋「為什麼」）
+- 進行變更時更新「updated」日期

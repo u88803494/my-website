@@ -1,15 +1,15 @@
-# Tutorial: [Learning Topic]
+# Tutorial: [學習主題]
 
 ---
 
-title: [Full title]
+title: [完整標題]
 type: tutorial
 status: draft|review|stable|deprecated
 audience: [beginner, intermediate, advanced]
 tags: [tag1, tag2, tag3]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-estimated_time: X minutes
+estimated_time: X 分鐘
 tutorial_number: 01|02|03|etc
 prerequisites:
 
@@ -19,248 +19,248 @@ prerequisites:
 - guides/related-guide.md
 - explanation/related-concept.md
   ai_context: |
-  Brief context about what concepts this tutorial teaches.
+  關於本教學涵蓋哪些概念的簡要說明。
 
 ---
 
-## What You'll Learn
+## 你將學到什麼
 
-By the end of this tutorial, you will be able to:
+完成本教學後，你將能夠：
 
-- ✅ Learning objective 1
-- ✅ Learning objective 2
-- ✅ Learning objective 3
-
----
-
-## Prerequisites
-
-### Required Knowledge
-
-Before starting, you should understand:
-
-- [ ] Concept 1
-- [ ] Concept 2
-- [ ] Concept 3
-
-### Required Setup
-
-You need to have:
-
-- [ ] Tool 1 installed
-- [ ] Tool 2 configured
-- [ ] Previous tutorial completed (if applicable)
-
-**Time estimate**: Approximately X minutes
+- ✅ 學習目標 1
+- ✅ 學習目標 2
+- ✅ 學習目標 3
 
 ---
 
-## Introduction
+## 前置需求
 
-**What we're building:**
-Brief description of what you'll create in this tutorial.
+### 必要知識
 
-**Why this matters:**
-Explain the relevance and real-world application.
+開始前，你應該理解：
 
-**What you'll need:**
+- [ ] 概念 1
+- [ ] 概念 2
+- [ ] 概念 3
 
-- Resource 1
-- Resource 2
+### 必要設定
+
+你需要具備：
+
+- [ ] 已安裝工具 1
+- [ ] 已設定工具 2
+- [ ] 已完成前一個教學（如適用）
+
+**預估時間**：大約 X 分鐘
 
 ---
 
-## Lesson Steps
+## 簡介
 
-### Part 1: [Concept Introduction]
+**我們要建立什麼：**
+簡要說明你將在本教學中建立什麼。
 
-**Goal**: What you'll learn in this part.
+**為什麼這很重要：**
+解釋其相關性和實際應用。
 
-#### Step 1: [Learning Point]
+**你需要準備：**
 
-Explanation of the concept before showing code/commands.
+- 資源 1
+- 資源 2
 
-**Why this matters**: Brief explanation of the principle.
+---
+
+## 課程步驟
+
+### 第一部分：[概念介紹]
+
+**目標**：你將在這部分學到什麼。
+
+#### 步驟 1：[學習要點]
+
+在展示程式碼/指令之前先解釋概念。
+
+**為什麼這很重要**：簡要說明原理。
 
 ```bash
-# Example command with explanation
+# 帶有說明的範例指令
 command-here
 ```
 
-**What's happening here**:
+**這裡發生了什麼**：
 
-- Point 1 about what the code does
-- Point 2 about why we do it this way
+- 關於程式碼做什麼的要點 1
+- 關於為什麼我們這樣做的要點 2
 
-**Try it yourself**:
+**自己試試看**：
 
 ```bash
-# Practice command for learner
+# 供學習者練習的指令
 practice-command
 ```
 
 ---
 
-#### Step 2: [Learning Point]
+#### 步驟 2：[學習要點]
 
-Continue with explanation and practice...
+繼續說明和練習...
 
 ```typescript
-// Code example with detailed comments
+// 帶有詳細註解的程式碼範例
 const example = "code";
 ```
 
-**Checkpoint**: At this point, you should have [expected state].
+**檢查點**：此時，你應該已經達到 [預期狀態]。
 
 ---
 
-### Part 2: [Building on Concepts]
+### 第二部分：[建立在概念之上]
 
-**Goal**: What you'll learn in this part.
+**目標**：你將在這部分學到什麼。
 
-#### Step 3: [Learning Point]
+#### 步驟 3：[學習要點]
 
-Gradually increase complexity...
-
----
-
-### Part 3: [Putting It Together]
-
-**Goal**: Integrate everything you've learned.
-
-#### Step 4: [Integration]
-
-Show how concepts connect...
+逐漸增加複雜度...
 
 ---
 
-## What You've Learned
+### 第三部分：[整合應用]
 
-Let's recap what you accomplished:
+**目標**：整合你學到的所有內容。
 
-- ✅ You learned concept 1
-- ✅ You practiced skill 2
-- ✅ You built feature 3
+#### 步驟 4：[整合]
 
-**Key takeaways:**
-
-1. Important principle 1
-2. Important principle 2
-3. Important principle 3
+展示概念如何連結...
 
 ---
 
-## Practice Exercises
+## 你學到了什麼
 
-Now it's your turn to experiment:
+讓我們回顧你完成的內容：
 
-### Exercise 1: [Challenge]
+- ✅ 你學會了概念 1
+- ✅ 你練習了技能 2
+- ✅ 你建立了功能 3
 
-**Task**: Describe what to modify or build.
+**關鍵要點：**
 
-**Goal**: What they should achieve.
+1. 重要原則 1
+2. 重要原則 2
+3. 重要原則 3
 
-**Hints** (expandable):
+---
+
+## 練習題
+
+現在換你來實驗：
+
+### 練習 1：[挑戰]
+
+**任務**：描述要修改或建立什麼。
+
+**目標**：他們應該達成什麼。
+
+**提示**（可展開）：
 
 <details>
-<summary>Click for hints</summary>
+<summary>點擊查看提示</summary>
 
-- Hint 1
-- Hint 2
+- 提示 1
+- 提示 2
 </details>
 
-**Solution** (expandable):
+**解答**（可展開）：
 
 <details>
-<summary>Click for solution</summary>
+<summary>點擊查看解答</summary>
 
 ```typescript
-// Solution code
+// 解答程式碼
 ```
 
-**Explanation**: Why this solution works.
+**說明**：為什麼這個解答有效。
 
 </details>
 
 ---
 
-### Exercise 2: [Challenge]
+### 練習 2：[挑戰]
 
-(Add more exercises as needed)
-
----
-
-## Common Questions
-
-### Question 1: [Common Confusion]
-
-**Answer**: Clear explanation addressing the confusion.
+（根據需要新增更多練習）
 
 ---
 
-### Question 2: [Common Confusion]
+## 常見問題
 
-**Answer**: Clear explanation.
+### 問題 1：[常見困惑]
 
----
-
-## Next Steps
-
-### Where to Go From Here
-
-Now that you've completed this tutorial:
-
-1. **Next Tutorial**: [Tutorial Name](./0X-next-tutorial.md) - What you'll learn
-2. **Practice**: Try [specific suggestion]
-3. **Deep Dive**: Read [Explanation](../explanation/concept.md) to understand why
-
-### Additional Resources
-
-- [Related Guide](../guides/guide.md) - Practical application
-- [Reference](../reference/tech.md) - Technical details
-- [External Resource](https://example.com) - Further learning
+**回答**：清楚解釋並解決困惑。
 
 ---
 
-## Feedback
+### 問題 2：[常見困惑]
 
-Found something confusing? Please:
-
-- [Open an issue](../CONTRIBUTING.md)
-- Suggest improvements
-- Share what worked well
+**回答**：清楚解釋。
 
 ---
 
-## Template Instructions (Remove this section)
+## 下一步
 
-**How to use this tutorial template:**
+### 接下來要做什麼
 
-1. **Title**: Use format "Tutorial: [Learning Topic]"
-2. **Frontmatter**: Fill in all YAML fields, including tutorial_number
-3. **What You'll Learn**: Clear learning objectives
-4. **Prerequisites**: Everything needed before starting
-5. **Introduction**: Set context and motivation
-6. **Lesson Steps**: Break into logical parts with checkpoints
-7. **Recap**: Summarize what was learned
-8. **Practice**: Include exercises for reinforcement
-9. **Next Steps**: Guide to what to learn next
+現在你已經完成本教學：
 
-**Best practices:**
+1. **下一個教學**：[教學名稱](./0X-next-tutorial.md) - 你將學到什麼
+2. **練習**：嘗試 [具體建議]
+3. **深入探討**：閱讀 [說明文件](../explanation/concept.md) 以理解原理
 
-- Teach ONE core concept per tutorial
-- Build gradually from simple to complex
-- Include lots of explanation (not just commands)
-- Provide working examples that learners can run
-- Add checkpoints to verify progress
-- Encourage experimentation at the end
-- Link to next tutorial in the sequence
-- Test with someone unfamiliar with the topic
-- Update based on feedback
+### 額外資源
 
-**Tutorial vs Guide:**
+- [相關指南](../guides/guide.md) - 實際應用
+- [參考文件](../reference/tech.md) - 技術細節
+- [外部資源](https://example.com) - 進階學習
 
-- **Tutorial**: "Let me teach you React hooks through examples"
-- **Guide**: "Here's how to use useEffect to fetch data"
+---
 
-Tutorials teach concepts. Guides solve problems.
+## 回饋
+
+發現有令人困惑的地方嗎？請：
+
+- [開啟 issue](../CONTRIBUTING.md)
+- 建議改進方式
+- 分享哪些部分有效
+
+---
+
+## 範本使用說明（請移除本段落）
+
+**如何使用本教學範本：**
+
+1. **標題**：使用格式「Tutorial: [學習主題]」
+2. **Frontmatter**：填寫所有 YAML 欄位，包括 tutorial_number
+3. **你將學到什麼**：清楚的學習目標
+4. **前置需求**：開始前需要的所有內容
+5. **簡介**：設定背景和動機
+6. **課程步驟**：分成有邏輯的部分並加入檢查點
+7. **回顧**：總結學到的內容
+8. **練習**：包含練習題以強化學習
+9. **下一步**：指引下一步要學習什麼
+
+**最佳實踐：**
+
+- 每個教學教授一個核心概念
+- 從簡單到複雜逐步建立
+- 包含大量說明（不只是指令）
+- 提供學習者可以執行的實際範例
+- 加入檢查點以驗證進度
+- 在最後鼓勵實驗
+- 連結到序列中的下一個教學
+- 與不熟悉該主題的人一起測試
+- 根據回饋更新
+
+**Tutorial 與 Guide 的差異：**
+
+- **Tutorial**：「讓我透過範例教你 React hooks」
+- **Guide**：「以下是如何使用 useEffect 來取得資料」
+
+Tutorials 教授概念。Guides 解決問題。

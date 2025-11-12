@@ -1,8 +1,8 @@
-# [Concept/Pattern/Decision Name]
+# [概念/模式/決策名稱]
 
 ---
 
-title: [Full title]
+title: [完整標題]
 type: explanation
 status: draft|review|stable|deprecated
 audience: [developer, ai, architect]
@@ -15,69 +15,69 @@ related:
 - reference/related-tech.md
 - guides/related-guide.md
   ai_context: |
-  Brief context about what concept or pattern this explains.
+  關於此文件解釋的概念或模式的簡短說明。
 
 ---
 
-## Overview
+## 概述
 
-**What this explains**: One-sentence description of the concept or pattern.
+**解釋內容**：用一句話描述此概念或模式。
 
-**Why this matters**: Brief explanation of the relevance and importance.
+**重要性**：簡要說明其相關性和重要性。
 
-**Key insight**: The core principle or understanding you want readers to take away.
-
----
-
-## Context
-
-### The Problem Space
-
-What problem or challenge does this concept address?
-
-- Problem 1
-- Problem 2
-- Problem 3
-
-### Why This Matters
-
-Explain the significance:
-
-- Impact on development workflow
-- Impact on code quality
-- Impact on maintainability
-- Impact on performance
-
-### Historical Context (optional)
-
-How did we get here? What led to this approach?
+**核心洞察**：希望讀者從中獲得的核心原則或理解。
 
 ---
 
-## The Core Concept
+## 背景
 
-### What Is [Concept]?
+### 問題空間
 
-Fundamental explanation of the concept in simple terms.
+此概念解決了哪些問題或挑戰？
 
-**Key characteristics**:
+- 問題 1
+- 問題 2
+- 問題 3
 
-- Characteristic 1
-- Characteristic 2
-- Characteristic 3
+### 為何重要
 
-### How It Works
+說明其重要性：
 
-Detailed explanation of the mechanism or pattern:
+- 對開發工作流程的影響
+- 對程式碼品質的影響
+- 對可維護性的影響
+- 對效能的影響
 
-1. **Step/Aspect 1**: Explanation
-2. **Step/Aspect 2**: Explanation
-3. **Step/Aspect 3**: Explanation
+### 歷史背景（選填）
 
-**Diagram** (if helpful):
+我們是如何走到這一步的？是什麼導致了這種方法？
+
+---
+
+## 核心概念
+
+### 什麼是 [概念]？
+
+以簡單的術語對概念進行基本解釋。
+
+**核心特徵**：
+
+- 特徵 1
+- 特徵 2
+- 特徵 3
+
+### 運作方式
+
+對機制或模式的詳細解釋：
+
+1. **步驟/面向 1**：說明
+2. **步驟/面向 2**：說明
+3. **步驟/面向 3**：說明
+
+**示意圖**（如有幫助）：
 
 ```
-Visual representation of concept
+概念的視覺化呈現
 ┌─────────┐
 │Component│
 └────┬────┘
@@ -88,237 +88,237 @@ Visual representation of concept
 └─────────┘
 ```
 
-### Core Principles
+### 核心原則
 
-The fundamental rules or principles:
+基本規則或原則：
 
-- **Principle 1**: Explanation and why it matters
-- **Principle 2**: Explanation and why it matters
-- **Principle 3**: Explanation and why it matters
-
----
-
-## When to Use This Approach
-
-### Ideal Use Cases
-
-This approach works well when:
-
-- ✅ Scenario 1 - Explanation
-- ✅ Scenario 2 - Explanation
-- ✅ Scenario 3 - Explanation
-
-### When NOT to Use
-
-This approach may not be suitable when:
-
-- ❌ Scenario 1 - Explanation
-- ❌ Scenario 2 - Explanation
-- ❌ Scenario 3 - Explanation
+- **原則 1**：說明以及為何重要
+- **原則 2**：說明以及為何重要
+- **原則 3**：說明以及為何重要
 
 ---
 
-## Alternatives & Trade-offs
+## 何時使用此方法
 
-### Alternative 1: [Name]
+### 理想使用情境
 
-**What it is**: Brief description.
+此方法在以下情況下效果良好：
 
-**How it differs**: Key differences from the main approach.
+- ✅ 情境 1 - 說明
+- ✅ 情境 2 - 說明
+- ✅ 情境 3 - 說明
 
-**Trade-offs**:
-| Aspect | This Approach | Alternative 1 |
+### 不適用情境
+
+此方法可能不適合以下情況：
+
+- ❌ 情境 1 - 說明
+- ❌ 情境 2 - 說明
+- ❌ 情境 3 - 說明
+
+---
+
+## 替代方案與取捨
+
+### 替代方案 1：[名稱]
+
+**內容**：簡要描述。
+
+**差異**：與主要方法的關鍵差異。
+
+**取捨**：
+| 面向 | 此方法 | 替代方案 1 |
 |--------|--------------|---------------|
-| Complexity | Low | High |
-| Performance | Fast | Slower |
-| Flexibility | Moderate | High |
+| 複雜度 | 低 | 高 |
+| 效能 | 快 | 較慢 |
+| 彈性 | 中等 | 高 |
 
-**When to prefer**: Use Alternative 1 when [scenario].
+**何時選用**：在 [情境] 時使用替代方案 1。
 
 ---
 
-### Alternative 2: [Name]
+### 替代方案 2：[名稱]
 
-**What it is**: Brief description.
+**內容**：簡要描述。
 
-**How it differs**: Key differences.
+**差異**：關鍵差異。
 
-**Trade-offs**:
-| Aspect | This Approach | Alternative 2 |
+**取捨**：
+| 面向 | 此方法 | 替代方案 2 |
 |--------|--------------|---------------|
-| Learning curve | Gentle | Steep |
-| Maintenance | Easy | Complex |
-| Scalability | Good | Excellent |
+| 學習曲線 | 平緩 | 陡峭 |
+| 維護性 | 容易 | 複雜 |
+| 擴展性 | 良好 | 優秀 |
 
-**When to prefer**: Use Alternative 2 when [scenario].
-
----
-
-## Real-World Implications
-
-### Impact on Development
-
-**Positive impacts**:
-
-- ✅ Impact 1
-- ✅ Impact 2
-- ✅ Impact 3
-
-**Challenges**:
-
-- ⚠️ Challenge 1
-- ⚠️ Challenge 2
-- ⚠️ Challenge 3
-
-### Impact on Team
-
-How this affects team dynamics and workflow:
-
-- Team consideration 1
-- Team consideration 2
-
-### Impact on Architecture
-
-How this shapes system design:
-
-- Architectural implication 1
-- Architectural implication 2
+**何時選用**：在 [情境] 時使用替代方案 2。
 
 ---
 
-## Common Misconceptions
+## 實際影響
 
-### Misconception 1: [Common Misunderstanding]
+### 對開發的影響
 
-**The misconception**: What people incorrectly believe.
+**正面影響**：
 
-**The reality**: What's actually true.
+- ✅ 影響 1
+- ✅ 影響 2
+- ✅ 影響 3
 
-**Why this matters**: Impact of the misconception.
+**挑戰**：
 
----
+- ⚠️ 挑戰 1
+- ⚠️ 挑戰 2
+- ⚠️ 挑戰 3
 
-### Misconception 2: [Common Misunderstanding]
+### 對團隊的影響
 
-**The misconception**: What people incorrectly believe.
+這如何影響團隊動態和工作流程：
 
-**The reality**: What's actually true.
+- 團隊考量 1
+- 團隊考量 2
 
----
+### 對架構的影響
 
-## Industry Perspective
+這如何塑造系統設計：
 
-### How Others Approach This
-
-**Company/Project A**:
-
-- Their approach
-- Key differences
-- Results
-
-**Company/Project B**:
-
-- Their approach
-- Key differences
-- Results
-
-### Best Practices from Industry
-
-- Best practice 1 (Source: [Company/Research])
-- Best practice 2 (Source: [Company/Research])
-- Best practice 3 (Source: [Company/Research])
+- 架構影響 1
+- 架構影響 2
 
 ---
 
-## Example Scenarios
+## 常見誤解
 
-### Scenario 1: [Real-World Case]
+### 誤解 1：[常見誤解]
 
-**Context**: Describe the situation.
+**誤解內容**：人們錯誤相信的內容。
 
-**How the concept applies**: Explain application.
+**實際情況**：實際上的真相。
 
-**Outcome**: What happens as a result.
-
-**Key lesson**: What to learn from this scenario.
+**為何重要**：誤解的影響。
 
 ---
 
-### Scenario 2: [Real-World Case]
+### 誤解 2：[常見誤解]
 
-**Context**: Describe the situation.
+**誤解內容**：人們錯誤相信的內容。
 
-**How the concept applies**: Explain application.
-
-**Outcome**: What happens as a result.
+**實際情況**：實際上的真相。
 
 ---
 
-## Further Reading
+## 業界觀點
 
-### Internal Documentation
+### 業界如何處理
 
-- [ADR: Specific Decision](../adr/XXX-decision.md) - Our implementation
-- [Reference: Technical Specs](../reference/tech.md) - Detailed specifications
-- [Guide: How to Implement](../guides/how-to.md) - Practical application
+**公司/專案 A**：
 
-### External Resources
+- 其方法
+- 關鍵差異
+- 結果
 
-- [Research Paper/Article](https://example.com) - Original research
-- [Industry Blog Post](https://example.com) - Practical perspective
-- [Documentation](https://example.com) - Official docs
+**公司/專案 B**：
 
-### Related Concepts
+- 其方法
+- 關鍵差異
+- 結果
 
-- [Related Concept 1](./related-concept-1.md)
-- [Related Concept 2](./related-concept-2.md)
+### 業界最佳實踐
 
----
-
-## Summary
-
-**Key takeaways**:
-
-1. **Takeaway 1**: Core principle or understanding
-2. **Takeaway 2**: Important trade-off or consideration
-3. **Takeaway 3**: When to apply this approach
-
-**In practice**: Brief statement of how to think about this in daily work.
+- 最佳實踐 1（來源：[公司/研究]）
+- 最佳實踐 2（來源：[公司/研究]）
+- 最佳實踐 3（來源：[公司/研究]）
 
 ---
 
-## Template Instructions (Remove this section)
+## 範例情境
 
-**How to use this explanation template:**
+### 情境 1：[實際案例]
 
-1. **Title**: Use format "[Concept/Pattern/Decision Name]" (not "How to...")
-2. **Frontmatter**: Fill in all YAML fields
-3. **Overview**: State what concept you're explaining
-4. **Context**: Explain why this concept exists
-5. **Core Concept**: Detailed explanation of how it works
-6. **When to Use**: Guidance on applicability
-7. **Alternatives**: Discuss other approaches fairly
-8. **Implications**: Real-world effects
-9. **Misconceptions**: Address common confusions
-10. **Examples**: Concrete scenarios
+**背景**：描述情況。
 
-**Best practices:**
+**概念如何應用**：說明應用方式。
 
-- Focus on understanding, not instruction
-- Discuss alternatives objectively
-- Explain "why" not "how"
-- Connect to broader principles
-- Include real-world context
-- Link to ADRs for specific decisions
-- Link to Guides for implementation
-- Update when understanding evolves
+**結果**：產生的結果。
 
-**Explanation vs other doc types:**
+**關鍵學習**：從此情境中學到什麼。
 
-- **Explanation**: "React Query enables efficient data synchronization between server and client by..."
-- **Reference**: "React Query API: `useQuery(queryKey, queryFn, options)`"
-- **Guide**: "How to use React Query to fetch user data"
-- **Tutorial**: "Learn React Query by building a todo app"
-- **ADR**: "We decided to use React Query because..."
+---
 
-Explanations deepen understanding of concepts. They're conceptual, not procedural.
+### 情境 2：[實際案例]
+
+**背景**：描述情況。
+
+**概念如何應用**：說明應用方式。
+
+**結果**：產生的結果。
+
+---
+
+## 延伸閱讀
+
+### 內部文件
+
+- [ADR: 特定決策](../adr/XXX-decision.md) - 我們的實作
+- [Reference: 技術規格](../reference/tech.md) - 詳細規格
+- [Guide: 如何實作](../guides/how-to.md) - 實際應用
+
+### 外部資源
+
+- [研究論文/文章](https://example.com) - 原始研究
+- [業界部落格文章](https://example.com) - 實務觀點
+- [文件](https://example.com) - 官方文件
+
+### 相關概念
+
+- [相關概念 1](./related-concept-1.md)
+- [相關概念 2](./related-concept-2.md)
+
+---
+
+## 總結
+
+**關鍵要點**：
+
+1. **要點 1**：核心原則或理解
+2. **要點 2**：重要的取捨或考量
+3. **要點 3**：何時應用此方法
+
+**實務應用**：在日常工作中如何思考此概念的簡要說明。
+
+---
+
+## 模板使用說明（請移除此區段）
+
+**如何使用此解釋模板：**
+
+1. **標題**：使用格式「[概念/模式/決策名稱]」（不是「如何...」）
+2. **Frontmatter**：填寫所有 YAML 欄位
+3. **概述**：說明你要解釋的概念
+4. **背景**：解釋為何此概念存在
+5. **核心概念**：詳細解釋其運作方式
+6. **何時使用**：關於適用性的指引
+7. **替代方案**：公平討論其他方法
+8. **影響**：實際效果
+9. **誤解**：處理常見困惑
+10. **範例**：具體情境
+
+**最佳實踐：**
+
+- 聚焦於理解，而非指導
+- 客觀討論替代方案
+- 解釋「為什麼」而非「如何做」
+- 連結到更廣泛的原則
+- 包含實際背景
+- 連結到 ADR 以了解具體決策
+- 連結到 Guide 以了解實作方式
+- 當理解演進時更新文件
+
+**Explanation 與其他文件類型的差異：**
+
+- **Explanation**：「React Query 透過...來實現 server 和 client 之間的高效資料同步」
+- **Reference**：「React Query API：`useQuery(queryKey, queryFn, options)`」
+- **Guide**：「如何使用 React Query 來獲取使用者資料」
+- **Tutorial**：「透過建立 todo app 來學習 React Query」
+- **ADR**：「我們決定使用 React Query，因為...」
+
+Explanation 加深對概念的理解。它們是概念性的，而非程序性的。
