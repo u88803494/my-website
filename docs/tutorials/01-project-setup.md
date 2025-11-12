@@ -1,5 +1,5 @@
 ---
-title: "Tutorial 01: Project Setup - From Zero to Hello World"
+title: "教學 01：專案設定 - 從零開始到 Hello World"
 type: tutorial
 status: stable
 audience: [developer]
@@ -17,109 +17,109 @@ related:
   - reference/architecture.md
   - tutorials/02-adding-new-feature.md
 ai_context: |
-  Learning-oriented tutorial that guides developers from zero to a working
-  development environment with their first code change committed.
+  以學習為導向的教學，引導開發者從零開始建立可運作的開發環境，
+  並完成第一次程式碼變更的提交。
 ---
 
-# Tutorial 01: Project Setup
+# 教學 01：專案設定
 
-Welcome! In this tutorial, you'll set up the my-website monorepo from scratch and make your first contribution. By the end, you'll have a working development environment and understand the basic workflow.
+歡迎！在這個教學中，你將從頭開始設定 my-website monorepo，並完成第一次貢獻。完成後，你將擁有一個可運作的開發環境，並理解基本的工作流程。
 
-## 🎯 What You'll Learn
+## 🎯 你將學到什麼
 
-- Clone and install the my-website monorepo
-- Understand the project structure
-- Start the development server
-- Make your first code change
-- Commit using the project's conventions
-- Navigate the documentation system
+- Clone 並安裝 my-website monorepo
+- 理解專案結構
+- 啟動開發伺服器
+- 進行第一次程式碼變更
+- 使用專案的慣例進行 commit
+- 瀏覽文件系統
 
-## ⏱️ Time Estimate
+## ⏱️ 預估時間
 
-**45 minutes** (including installations)
+**45 分鐘**（包含安裝時間）
 
-## 📚 Prerequisites
+## 📚 前置需求
 
-- **Node.js 18+** installed ([Download](https://nodejs.org/))
-- **Basic terminal/command line** knowledge
-- **Git** installed ([Download](https://git-scm.com/))
-- **Text editor** (VS Code recommended)
+- **Node.js 18+** 已安裝（[下載](https://nodejs.org/)）
+- **基本的終端機/命令列**知識
+- **Git** 已安裝（[下載](https://git-scm.com/)）
+- **文字編輯器**（推薦使用 VS Code）
 
 ---
 
-## Step 1: Install pnpm (5 minutes)
+## 步驟 1：安裝 pnpm（5 分鐘）
 
-This project uses **pnpm** as the package manager. Let's install it:
+此專案使用 **pnpm** 作為套件管理器。讓我們來安裝它：
 
 ```bash
 npm install -g pnpm
 ```
 
-**Verify installation:**
+**驗證安裝：**
 
 ```bash
 pnpm --version
-# Should show: 8.x.x or higher
+# 應該顯示：8.x.x 或更高版本
 ```
 
-**Why pnpm?**
+**為什麼選擇 pnpm？**
 
-- **Faster** than npm/yarn
-- **Disk efficient** (uses hard links)
-- **Strict** dependency management (prevents phantom dependencies)
+- 比 npm/yarn **更快**
+- **節省磁碟空間**（使用 hard links）
+- **嚴格**的依賴管理（防止 phantom dependencies）
 
-✅ **Checkpoint**: `pnpm --version` shows a version number.
+✅ **檢查點**：`pnpm --version` 顯示版本號碼。
 
 ---
 
-## Step 2: Clone the Repository (2 minutes)
+## 步驟 2：Clone Repository（2 分鐘）
 
 ```bash
-# Navigate to your projects folder
-cd ~/projects  # Or wherever you keep your code
+# 導航到你的專案資料夾
+cd ~/projects  # 或是你存放程式碼的任何位置
 
-# Clone the repository
+# Clone repository
 git clone https://github.com/u88803494/my-website.git
 
-# Enter the project directory
+# 進入專案目錄
 cd my-website
 ```
 
-**Explore the structure:**
+**探索結構：**
 
 ```bash
 ls -la
 ```
 
-You should see:
+你應該會看到：
 
 ```
-apps/             # Applications (my-website)
-packages/         # Shared packages
-docs/             # Documentation (you're reading this!)
-scripts/          # Build and utility scripts
+apps/             # 應用程式（my-website）
+packages/         # 共用套件
+docs/             # 文件（你正在閱讀的內容！）
+scripts/          # 建置和工具腳本
 .husky/           # Git hooks
 pnpm-workspace.yaml
 package.json
 ```
 
-✅ **Checkpoint**: You're inside the `my-website` directory.
+✅ **檢查點**：你位於 `my-website` 目錄內。
 
 ---
 
-## Step 3: Install Dependencies (3 minutes)
+## 步驟 3：安裝依賴套件（3 分鐘）
 
 ```bash
 pnpm install
 ```
 
-**What's happening:**
+**正在進行的動作：**
 
-- Installing all dependencies for all workspaces
-- Setting up git hooks (husky) for commit validation
-- Linking internal packages (`@packages/*`)
+- 為所有 workspaces 安裝所有依賴套件
+- 設定 git hooks（husky）進行 commit 驗證
+- 連結內部套件（`@packages/*`）
 
-**Expected output:**
+**預期輸出：**
 
 ```
 Lockfile is up to date, resolution step is skipped
@@ -128,21 +128,21 @@ Packages: +XXX
 Done in X.Xs
 ```
 
-✅ **Checkpoint**: No error messages, dependencies installed successfully.
+✅ **檢查點**：沒有錯誤訊息，依賴套件成功安裝。
 
 ---
 
-## Step 4: Set Up Environment Variables (3 minutes)
+## 步驟 4：設定環境變數（3 分鐘）
 
-The project needs some environment variables to run.
+專案需要一些環境變數才能執行。
 
-**Create `.env.local` file:**
+**建立 `.env.local` 檔案：**
 
 ```bash
 touch .env.local
 ```
 
-**Add the following:**
+**加入以下內容：**
 
 ```bash
 # Development environment
@@ -153,21 +153,21 @@ NODE_ENV=development
 GEMINI_API_KEY=your_key_here
 ```
 
-**Note**: AI features (AI Dictionary, AI Analyzer) won't work without the API key, but the site will still run.
+**注意**：沒有 API key 的話 AI 功能（AI Dictionary、AI Analyzer）將無法運作，但網站仍然可以執行。
 
-✅ **Checkpoint**: `.env.local` file created in project root.
+✅ **檢查點**：`.env.local` 檔案已在專案根目錄建立。
 
 ---
 
-## Step 5: Start Development Server (5 minutes)
+## 步驟 5：啟動開發伺服器（5 分鐘）
 
-Let's see the site in action!
+讓我們看看網站的實際運作！
 
 ```bash
 pnpm dev
 ```
 
-**Expected output:**
+**預期輸出：**
 
 ```
 • Packages in scope: my-website
@@ -177,98 +177,98 @@ pnpm dev
 ○ Local: http://localhost:3000
 ```
 
-**Open your browser:**
+**開啟你的瀏覽器：**
 
-- Navigate to [http://localhost:3000](http://localhost:3000)
-- You should see the homepage with:
-  - Navigation bar
-  - Hero section
-  - Experience timeline
-  - Featured projects
+- 導航到 [http://localhost:3000](http://localhost:3000)
+- 你應該會看到首頁，包含：
+  - 導航列
+  - Hero 區塊
+  - 經歷時間軸
+  - 精選專案
 
-**Explore the site:**
+**探索網站：**
 
-- Click "Blog" → See Medium articles
-- Click "Time Tracker" → Try the time tracking app
-- Try "AI Dictionary" (needs API key)
+- 點擊「Blog」→ 查看 Medium 文章
+- 點擊「Time Tracker」→ 試用時間追蹤應用程式
+- 試試「AI Dictionary」（需要 API key）
 
-✅ **Checkpoint**: Website loads at localhost:3000 with no errors.
+✅ **檢查點**：網站在 localhost:3000 載入且沒有錯誤。
 
 ---
 
-## Step 6: Understand the Project Structure (5 minutes)
+## 步驟 6：理解專案結構（5 分鐘）
 
-Let's explore the codebase:
+讓我們探索程式碼庫：
 
 ```bash
-# View the main app structure
+# 查看主要 app 結構
 tree apps/my-website/src -L 2
 ```
 
 ### Feature-Based Architecture
 
-Each feature is self-contained in `apps/my-website/src/features/`:
+每個 feature 都是獨立的，位於 `apps/my-website/src/features/`：
 
 ```
 features/
-├── resume/           # Homepage/resume feature
-├── blog/             # Blog listing feature
-├── ai-dictionary/    # AI word analysis feature
-├── ai-analyzer/      # AI prompt analyzer
-├── time-tracker/     # Time tracking app
-├── about/            # About page
-└── not-found/        # 404 page
+├── resume/           # 首頁/履歷 feature
+├── blog/             # 部落格列表 feature
+├── ai-dictionary/    # AI 單字分析 feature
+├── ai-analyzer/      # AI prompt 分析器
+├── time-tracker/     # 時間追蹤應用程式
+├── about/            # 關於頁面
+└── not-found/        # 404 頁面
 ```
 
-### Feature Structure
+### Feature 結構
 
-Each feature follows this pattern:
+每個 feature 遵循此模式：
 
 ```
 {feature-name}/
-├── {FeatureName}Feature.tsx    # Main orchestrator
-├── components/                 # Feature-specific components
-├── hooks/                      # Feature-specific hooks
-├── types/                      # Feature-specific types
-├── utils/                      # Feature-specific utilities
+├── {FeatureName}Feature.tsx    # 主要協調器
+├── components/                 # Feature 專屬元件
+├── hooks/                      # Feature 專屬 hooks
+├── types/                      # Feature 專屬 types
+├── utils/                      # Feature 專屬工具函式
 └── index.ts                    # Barrel export
 ```
 
-### Shared Code
+### 共用程式碼
 
-Shared code lives in `packages/shared/`:
+共用程式碼位於 `packages/shared/`：
 
 ```
 packages/shared/
 ├── src/
-│   ├── components/   # Shared components
-│   ├── types/        # Shared types
-│   ├── constants/    # Shared constants
-│   └── utils/        # Shared utilities
-└── data/             # Shared data (e.g., articleData.ts)
+│   ├── components/   # 共用元件
+│   ├── types/        # 共用 types
+│   ├── constants/    # 共用常數
+│   └── utils/        # 共用工具函式
+└── data/             # 共用資料（例如：articleData.ts）
 ```
 
-✅ **Checkpoint**: You understand where features live and how they're organized.
+✅ **檢查點**：你了解 features 的位置以及它們的組織方式。
 
 ---
 
-## Step 7: Make Your First Code Change (10 minutes)
+## 步驟 7：進行第一次程式碼變更（10 分鐘）
 
-Let's make a simple change to see the dev workflow.
+讓我們做一個簡單的變更來了解開發工作流程。
 
-### 7.1 Create a New Branch
+### 7.1 建立新分支
 
 ```bash
 git checkout -b feat/my-first-change
 ```
 
-**Branch naming**: `feat/`, `fix/`, `docs/`, `refactor/`
+**分支命名**：`feat/`、`fix/`、`docs/`、`refactor/`
 
-### 7.2 Edit the Hero Section
+### 7.2 編輯 Hero Section
 
-Open `apps/my-website/src/features/resume/components/HeroSection/HeroSection.tsx`
+開啟 `apps/my-website/src/features/resume/components/HeroSection/HeroSection.tsx`
 
-**Find this line** (around line 20):
+**找到這一行**（大約在第 20 行）：
 
 ```typescript
 <h1 className="text-4xl font-bold md:text-6xl">
@@ -276,7 +276,7 @@ Open `apps/my-website/src/features/resume/components/HeroSection/HeroSection.tsx
 </h1>
 ```
 
-**Change it to:**
+**改成：**
 
 ```typescript
 <h1 className="text-4xl font-bold md:text-6xl">
@@ -285,37 +285,37 @@ Open `apps/my-website/src/features/resume/components/HeroSection/HeroSection.tsx
 </h1>
 ```
 
-### 7.3 See Your Change
+### 7.3 查看你的變更
 
-**Your browser should hot-reload automatically!**
+**你的瀏覽器應該會自動熱重載！**
 
-- Go to [http://localhost:3000](http://localhost:3000)
-- You should see a 👋 emoji next to "Henry Lee"
+- 前往 [http://localhost:3000](http://localhost:3000)
+- 你應該會在「Henry Lee」旁邊看到 👋 emoji
 
-**If it doesn't reload:**
+**如果沒有重新載入：**
 
-- Check the terminal for errors
-- Refresh the browser manually
+- 檢查終端機是否有錯誤
+- 手動重新整理瀏覽器
 
-✅ **Checkpoint**: You see the emoji in the browser.
+✅ **檢查點**：你在瀏覽器中看到了 emoji。
 
 ---
 
-## Step 8: Run Quality Checks (5 minutes)
+## 步驟 8：執行品質檢查（5 分鐘）
 
-Before committing, let's ensure code quality:
+在 commit 之前，讓我們確保程式碼品質：
 
 ```bash
 pnpm check
 ```
 
-**This runs:**
+**這會執行：**
 
-1. **Type checking** - Ensures TypeScript types are correct
-2. **Linting** - Checks code style (ESLint)
-3. **Formatting** - Formats code (Prettier)
+1. **Type checking** - 確保 TypeScript types 正確
+2. **Linting** - 檢查程式碼風格（ESLint）
+3. **Formatting** - 格式化程式碼（Prettier）
 
-**Expected output:**
+**預期輸出：**
 
 ```
 ✓ Type checking passed
@@ -323,206 +323,206 @@ pnpm check
 ✓ Formatting passed
 ```
 
-**If there are errors:**
+**如果有錯誤：**
 
-- Most will be auto-fixed
-- Run `pnpm check` again to verify
+- 大部分會自動修復
+- 再次執行 `pnpm check` 以驗證
 
-✅ **Checkpoint**: All checks pass with no errors.
+✅ **檢查點**：所有檢查通過且沒有錯誤。
 
 ---
 
-## Step 9: Commit Your Change (5 minutes)
+## 步驟 9：Commit 你的變更（5 分鐘）
 
-### 9.1 Stage Your Changes
+### 9.1 Stage 你的變更
 
 ```bash
 git add apps/my-website/src/features/resume/components/HeroSection/HeroSection.tsx
 ```
 
-### 9.2 Commit with Conventional Commits
+### 9.2 使用 Conventional Commits 進行 Commit
 
 ```bash
 git commit -m "feat(my-website): Add wave emoji to hero section"
 ```
 
-**Commit format**: `<type>(<scope>): <subject>`
+**Commit 格式**：`<type>(<scope>): <subject>`
 
-- **type**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-- **scope**: `my-website`, `shared`, `docs`, etc.
-- **subject**: Short description in sentence-case
+- **type**：`feat`、`fix`、`docs`、`style`、`refactor`、`test`、`chore`
+- **scope**：`my-website`、`shared`、`docs` 等
+- **subject**：簡短描述，使用 sentence-case
 
-**What happens:**
+**會發生什麼事：**
 
-1. **pre-commit hook** runs:
-   - Linting staged files
-   - Formatting staged files
-2. **commit-msg hook** runs:
-   - Validates commit message format
-   - Checks commit size limits
-3. Commit is created ✅
+1. **pre-commit hook** 執行：
+   - 對 staged files 進行 linting
+   - 對 staged files 進行 formatting
+2. **commit-msg hook** 執行：
+   - 驗證 commit message 格式
+   - 檢查 commit 大小限制
+3. Commit 建立成功 ✅
 
-✅ **Checkpoint**: Commit created successfully.
+✅ **檢查點**：Commit 成功建立。
 
 ---
 
-## Step 10: Understanding Git Hooks (3 minutes)
+## 步驟 10：理解 Git Hooks（3 分鐘）
 
-You just experienced git hooks! Let's understand what happened:
+你剛才體驗了 git hooks！讓我們了解發生了什麼：
 
 ### Pre-commit Hook
 
-Runs **before** commit is created:
+在 commit 建立**之前**執行：
 
-- ✅ Lint and format staged files
-- ✅ Run type checks (optional)
+- ✅ Lint 和 format staged files
+- ✅ 執行 type checks（選用）
 
 ### Commit-msg Hook
 
-Runs **after** commit message is entered:
+在輸入 commit message **之後**執行：
 
-- ✅ Validate commit message format (Conventional Commits)
-- ✅ Check commit size limits (warns if >10 files)
+- ✅ 驗證 commit message 格式（Conventional Commits）
+- ✅ 檢查 commit 大小限制（如果超過 10 個檔案會警告）
 
 ### Pre-push Hook
 
-Runs **before** pushing to remote:
+在推送到 remote **之前**執行：
 
-- ✅ Run full type checks
-- ✅ Run ESLint on all files
+- ✅ 執行完整的 type checks
+- ✅ 對所有檔案執行 ESLint
 
-**Read more**: [Git Workflow Guide](../guides/git-workflow.md)
+**了解更多**：[Git Workflow Guide](../guides/git-workflow.md)
 
 ---
 
-## Step 11: Explore Documentation (2 minutes)
+## 步驟 11：探索文件（2 分鐘）
 
-This project uses the **Diataxis framework** for documentation:
+此專案使用 **Diataxis framework** 來組織文件：
 
 ```
 docs/
-├── guides/           # How-to guides (like "How to deploy")
-├── tutorials/        # Learning paths (like this one!)
-├── reference/        # Technical specs (API docs, configs)
-├── explanation/      # Concepts (why things work this way)
+├── guides/           # How-to guides（如「如何部署」）
+├── tutorials/        # 學習路徑（就像這一篇！）
+├── reference/        # 技術規格（API 文件、設定）
+├── explanation/      # 概念說明（為什麼這樣運作）
 └── adr/              # Architecture Decision Records
 ```
 
-**Key documents:**
+**關鍵文件：**
 
-- [Architecture Reference](../reference/architecture.md) - System architecture
-- [Git Workflow Guide](../guides/git-workflow.md) - Git procedures
-- [React Query Patterns](../explanation/react-query-patterns.md) - Data fetching patterns
+- [Architecture Reference](../reference/architecture.md) - 系統架構
+- [Git Workflow Guide](../guides/git-workflow.md) - Git 流程
+- [React Query Patterns](../explanation/react-query-patterns.md) - 資料抓取模式
 
-**For AI assistants:**
+**給 AI 助理的文件：**
 
-- [AGENTS.md](../../AGENTS.md) - Project overview
-- [CLAUDE.md](../../CLAUDE.md) - Claude Code specific instructions
-
----
-
-## 🎉 What You've Learned
-
-Congratulations! You've completed the first tutorial. You now know how to:
-
-- ✅ Install and configure the development environment
-- ✅ Start the development server
-- ✅ Navigate the feature-based architecture
-- ✅ Make code changes with hot-reload
-- ✅ Run quality checks before committing
-- ✅ Commit using Conventional Commits format
-- ✅ Understand git hooks and automation
-- ✅ Navigate the documentation system
+- [AGENTS.md](../../AGENTS.md) - 專案概覽
+- [CLAUDE.md](../../CLAUDE.md) - Claude Code 專屬指示
 
 ---
 
-## 🚀 Next Steps
+## 🎉 你學到了什麼
 
-### Continue Learning
+恭喜！你完成了第一個教學。你現在知道如何：
 
-- **[Tutorial 02: Adding a New Feature](./02-adding-new-feature.md)** - Create a complete feature from scratch
-- **[Tutorial 03: Medium Integration](./03-medium-integration.md)** - Work with external APIs
-
-### Deepen Understanding
-
-- **[Feature-Based Architecture](../explanation/feature-based-architecture.md)** - Why we organize code by features
-- **[React Query Patterns](../explanation/react-query-patterns.md)** - SSG + React Query integration
-- **[Monorepo Strategy](../explanation/monorepo-strategy.md)** - Why Turborepo
-
-### Start Building
-
-- **[Git Workflow Guide](../guides/git-workflow.md)** - Complete git procedures
-- **[API Reference](../reference/api/)** - API endpoints documentation
-- **[Architecture Reference](../reference/architecture.md)** - Complete system architecture
+- ✅ 安裝並設定開發環境
+- ✅ 啟動開發伺服器
+- ✅ 導航 feature-based architecture
+- ✅ 使用熱重載進行程式碼變更
+- ✅ 在 commit 前執行品質檢查
+- ✅ 使用 Conventional Commits 格式進行 commit
+- ✅ 理解 git hooks 和自動化
+- ✅ 導航文件系統
 
 ---
 
-## 💡 Tips for Success
+## 🚀 接下來的步驟
 
-### Development Best Practices
+### 繼續學習
 
-1. **Always run `pnpm check`** before committing
-2. **Follow commit message conventions** (enforced by hooks)
-3. **Keep features isolated** (respect architecture boundaries)
-4. **Use TypeScript strictly** (no `any` types)
-5. **Test locally** before pushing
+- **[教學 02：新增新功能](./02-adding-new-feature.md)** - 從頭建立完整的 feature
+- **[教學 03：Medium 整合](./03-medium-integration.md)** - 使用外部 APIs
 
-### Common Pitfalls
+### 深入理解
 
-❌ **Don't**: Import across feature boundaries
-✅ **Do**: Use `@packages/shared` for shared code
+- **[Feature-Based Architecture](../explanation/feature-based-architecture.md)** - 為什麼我們用 features 組織程式碼
+- **[React Query Patterns](../explanation/react-query-patterns.md)** - SSG + React Query 整合
+- **[Monorepo Strategy](../explanation/monorepo-strategy.md)** - 為什麼選擇 Turborepo
 
-❌ **Don't**: Skip quality checks with `--no-verify`
-✅ **Do**: Fix issues found by linters/type checks
+### 開始建置
 
-❌ **Don't**: Commit large binary files (images >1MB)
-✅ **Do**: Use external storage (Vercel assets)
-
-### Getting Help
-
-- **Documentation**: Start at [docs/README.md](../README.md)
-- **Issues**: Check [GitHub Issues](https://github.com/u88803494/my-website/issues)
-- **Architecture Decisions**: Browse [ADR directory](../adr/)
+- **[Git Workflow Guide](../guides/git-workflow.md)** - 完整的 git 流程
+- **[API Reference](../reference/api/)** - API endpoints 文件
+- **[Architecture Reference](../reference/architecture.md)** - 完整的系統架構
 
 ---
 
-## 🔍 Troubleshooting
+## 💡 成功的秘訣
 
-### Port Already in Use
+### 開發最佳實務
+
+1. **總是在 commit 前執行 `pnpm check`**
+2. **遵循 commit message 慣例**（由 hooks 強制執行）
+3. **保持 features 隔離**（遵守架構邊界）
+4. **嚴格使用 TypeScript**（不使用 `any` types）
+5. **在推送前先在本地測試**
+
+### 常見陷阱
+
+❌ **不要**：跨 feature 邊界 import
+✅ **要**：使用 `@packages/shared` 來共用程式碼
+
+❌ **不要**：使用 `--no-verify` 跳過品質檢查
+✅ **要**：修復 linters/type checks 發現的問題
+
+❌ **不要**：Commit 大型二進位檔案（圖片 >1MB）
+✅ **要**：使用外部儲存（Vercel assets）
+
+### 取得協助
+
+- **文件**：從 [docs/README.md](../README.md) 開始
+- **Issues**：檢查 [GitHub Issues](https://github.com/u88803494/my-website/issues)
+- **架構決策**：瀏覽 [ADR directory](../adr/)
+
+---
+
+## 🔍 疑難排解
+
+### Port 已被使用
 
 ```bash
-# Kill process on port 3000
+# 終止 port 3000 上的程序
 lsof -ti:3000 | xargs kill -9
 
-# Or use different port
+# 或使用不同的 port
 PORT=3001 pnpm dev
 ```
 
-### Git Hooks Not Running
+### Git Hooks 沒有執行
 
 ```bash
-# Reinstall hooks
+# 重新安裝 hooks
 pnpm install
 ```
 
-### Type Errors After Pull
+### Pull 後出現 Type 錯誤
 
 ```bash
-# Clean and reinstall
+# 清除並重新安裝
 rm -rf node_modules
 pnpm install
 ```
 
 ---
 
-## Related Documentation
+## 相關文件
 
-- [Development Setup Guide](../guides/development-setup.md) - Complete setup reference
-- [Architecture Reference](../reference/architecture.md) - System architecture
-- [Git Workflow Guide](../guides/git-workflow.md) - Git procedures
-- [Commitlint Rules](../reference/commitlint-rules.md) - Commit message rules
-- [Tutorial 02: Adding New Feature](./02-adding-new-feature.md) - Next tutorial
+- [Development Setup Guide](../guides/development-setup.md) - 完整的設定參考
+- [Architecture Reference](../reference/architecture.md) - 系統架構
+- [Git Workflow Guide](../guides/git-workflow.md) - Git 流程
+- [Commitlint Rules](../reference/commitlint-rules.md) - Commit message 規則
+- [教學 02：新增新功能](./02-adding-new-feature.md) - 下一個教學
 
 ---
 
-**Ready for more?** Continue to [Tutorial 02: Adding a New Feature](./02-adding-new-feature.md) to learn how to create a complete feature from scratch!
+**準備好了嗎？** 繼續前往 [教學 02：新增新功能](./02-adding-new-feature.md) 學習如何從頭建立完整的 feature！

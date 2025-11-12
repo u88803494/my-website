@@ -1,8 +1,8 @@
-# Git Workflow Guide: Implementing Pre-commit and Pre-push Checks
+# Git Workflow Guide：實作 Pre-commit 與 Pre-push 檢查
 
 ---
 
-title: Git Workflow Guide - Pre-commit and Pre-push Checks
+title: Git Workflow Guide - Pre-commit 與 Pre-push 檢查
 type: guide
 status: stable
 audience: [developer]
@@ -18,57 +18,56 @@ related:
 - explanation/git-hooks-research.md
 - adr/003-git-hooks-optimization.md
   ai_context: |
-  Step-by-step guide for implementing git automation checks including pre-commit hooks,
-  pre-push validation, commitlint, and commit size validation.
+  實作 git 自動化檢查的逐步指南，包含 pre-commit hooks、pre-push 驗證、commitlint 與 commit 大小驗證。
 
 ---
 
-## Overview
+## 概覽
 
-**What you'll accomplish:**
-Set up automated git hooks for code quality checks, commit message validation, and commit size limits in a Turborepo monorepo project.
+**您將完成的目標：**
+在 Turborepo monorepo 專案中設定自動化 git hooks，用於程式碼品質檢查、commit 訊息驗證與 commit 大小限制。
 
-**Why this matters:**
-Automated git hooks catch errors early, enforce code standards, and improve developer experience by providing fast feedback without slowing down the development workflow.
-
----
-
-## Prerequisites
-
-Before starting, ensure you have:
-
-- [ ] Node.js and pnpm installed
-- [ ] Husky installed in your project
-- [ ] Turborepo configured with lint and type-check scripts
-- [ ] Basic understanding of git hooks
-
-**Assumed knowledge:**
-
-- Git basics (commit, push, staging)
-- Package.json script configuration
-- TypeScript and ESLint fundamentals
+**重要性：**
+自動化 git hooks 可及早發現錯誤、強制執行程式碼標準，並透過快速回饋改善開發體驗，且不會拖慢開發流程。
 
 ---
 
-## Steps
+## 先決條件
 
-### Step 1: Install Required Dependencies
+開始之前，請確保您具備：
 
-Install commitlint and its configuration:
+- [ ] 已安裝 Node.js 與 pnpm
+- [ ] 專案中已安裝 Husky
+- [ ] Turborepo 已設定 lint 與 type-check scripts
+- [ ] 對 git hooks 有基本理解
+
+**假定知識：**
+
+- Git 基礎（commit、push、staging）
+- Package.json script 設定
+- TypeScript 與 ESLint 基礎
+
+---
+
+## 步驟
+
+### 步驟 1：安裝必要相依套件
+
+安裝 commitlint 及其設定檔：
 
 ```bash
 pnpm add -D @commitlint/cli @commitlint/config-conventional
 ```
 
-**Expected outcome**: Dependencies added to `package.json` and `node_modules`.
+**預期結果**：相依套件已新增至 `package.json` 與 `node_modules`。
 
-**Why this step**: Commitlint validates commit messages against Conventional Commits specification.
+**此步驟原因**：Commitlint 依 Conventional Commits 規範驗證 commit 訊息。
 
 ---
 
-### Step 2: Create Commit Size Validation Script
+### 步驟 2：建立 Commit 大小驗證腳本
 
-Create `scripts/validate-commit-size.js`:
+建立 `scripts/validate-commit-size.js`：
 
 ```javascript
 #!/usr/bin/env node
@@ -191,13 +190,13 @@ try {
 }
 ```
 
-**Expected outcome**: Script file created in `scripts/` directory.
+**預期結果**：在 `scripts/` 目錄建立腳本檔案。
 
 ---
 
-### Step 3: Create Commitlint Configuration
+### 步驟 3：建立 Commitlint 設定檔
 
-Create `commitlint.config.ts` in project root:
+在專案根目錄建立 `commitlint.config.ts`：
 
 ```typescript
 import type { UserConfig } from "@commitlint/types";
@@ -265,13 +264,13 @@ const Configuration: UserConfig = {
 export default Configuration;
 ```
 
-**Expected outcome**: Commitlint configuration file created.
+**預期結果**：Commitlint 設定檔已建立。
 
 ---
 
-### Step 4: Configure Git Hooks
+### 步驟 4：設定 Git Hooks
 
-#### 4.1 Update `.husky/pre-commit`
+#### 4.1 更新 `.husky/pre-commit`
 
 ```bash
 #!/usr/bin/env sh
@@ -284,7 +283,7 @@ pnpm lint-staged
 node scripts/validate-commit-size.js
 ```
 
-#### 4.2 Create `.husky/commit-msg`
+#### 4.2 建立 `.husky/commit-msg`
 
 ```bash
 #!/usr/bin/env sh
@@ -293,7 +292,7 @@ node scripts/validate-commit-size.js
 npx --no -- commitlint --edit $1
 ```
 
-#### 4.3 Create `.husky/pre-push`
+#### 4.3 建立 `.husky/pre-push`
 
 ```bash
 #!/usr/bin/env sh
@@ -315,20 +314,20 @@ echo ""
 echo "✅ All pre-push checks passed!"
 ```
 
-**Expected outcome**: Three git hook files created and configured.
+**預期結果**：三個 git hook 檔案已建立並設定完成。
 
 ---
 
-### Step 5: Update lint-staged Configuration
+### 步驟 5：更新 lint-staged 設定
 
-Modify `lint-staged.config.js` to remove TypeScript checking:
+修改 `lint-staged.config.js` 以移除 TypeScript 檢查：
 
 ```javascript
 module.exports = {
   "apps/my-website/**/*.{js,jsx,ts,tsx}": [
     "prettier --write",
     "eslint --fix --max-warnings=0",
-    // ❌ Removed: tsc --noEmit
+    // ❌ 已移除：tsc --noEmit
   ],
   "packages/**/*.{js,jsx,ts,tsx}": [
     "prettier --write",
@@ -338,13 +337,13 @@ module.exports = {
 };
 ```
 
-**Expected outcome**: lint-staged only runs fast checks (Prettier + ESLint).
+**預期結果**：lint-staged 僅執行快速檢查（Prettier + ESLint）。
 
 ---
 
-### Step 6: Set File Permissions
+### 步驟 6：設定檔案權限
 
-Make all hook files executable:
+為所有 hook 檔案設定執行權限：
 
 ```bash
 chmod +x .husky/pre-commit
@@ -353,58 +352,58 @@ chmod +x .husky/commit-msg
 chmod +x scripts/validate-commit-size.js
 ```
 
-**Expected outcome**: All scripts have execute permissions.
+**預期結果**：所有腳本都具備執行權限。
 
 ---
 
-## Verification
+## 驗證
 
-**How to verify success:**
+**如何驗證成功：**
 
-1. **Pre-commit speed test**: Modify a file and commit. Should complete in < 5 seconds.
-2. **Commitlint validation**: Try invalid commit message. Should be rejected.
-3. **Commit size limit**: Try committing 20 files. Should be rejected.
-4. **Pre-push validation**: Push with type errors. Should be blocked.
+1. **Pre-commit 速度測試**：修改檔案並 commit。應在 < 5 秒內完成。
+2. **Commitlint 驗證**：嘗試無效的 commit 訊息。應被拒絕。
+3. **Commit 大小限制**：嘗試 commit 20 個檔案。應被拒絕。
+4. **Pre-push 驗證**：在有型別錯誤時 push。應被阻擋。
 
-**Verification commands:**
+**驗證指令：**
 
 ```bash
-# Test 1: Pre-commit speed
+# 測試 1：Pre-commit 速度
 echo "// test" >> test.ts
 git add test.ts
 time git commit -m "test: verify speed"
-# Expected: < 5 seconds
+# 預期：< 5 秒
 
-# Test 2: Invalid commit message
+# 測試 2：無效的 commit 訊息
 git commit -m "Add feature"
-# Expected: ❌ Error
+# 預期：❌ 錯誤
 
-# Test 3: Valid commit message
+# 測試 3：有效的 commit 訊息
 git commit -m "feat(test): add test file"
-# Expected: ✅ Success
+# 預期：✅ 成功
 
-# Test 4: Pre-push (with clean code)
+# 測試 4：Pre-push（程式碼正常時）
 git push
-# Expected: ✅ Success after checks
+# 預期：檢查後 ✅ 成功
 ```
 
 ---
 
-## Troubleshooting
+## 疑難排解
 
-### Issue 1: Pre-commit Hook Not Running
+### 問題 1：Pre-commit Hook 未執行
 
-**Symptoms**: Commits succeed without running hooks.
+**症狀**：Commit 成功但未執行 hooks。
 
-**Cause**: Git hooks not properly initialized or permissions issue.
+**原因**：Git hooks 未正確初始化或權限問題。
 
-**Solution**:
+**解決方法**：
 
 ```bash
-# Reinstall husky
+# 重新安裝 husky
 pnpm exec husky install
 
-# Set permissions
+# 設定權限
 chmod +x .husky/pre-commit
 chmod +x .husky/commit-msg
 chmod +x .husky/pre-push
@@ -412,21 +411,21 @@ chmod +x .husky/pre-push
 
 ---
 
-### Issue 2: Commitlint Fails on Valid Message
+### 問題 2：Commitlint 對有效訊息失敗
 
-**Symptoms**: Error "scope must be one of [...]" for valid scope.
+**症狀**：錯誤訊息「scope must be one of [...]」但 scope 有效。
 
-**Cause**: Scope not in configured list.
+**原因**：Scope 不在設定清單中。
 
-**Solution**:
-Add the scope to `commitlint.config.ts`:
+**解決方法**：
+將 scope 新增至 `commitlint.config.ts`：
 
 ```typescript
 "scope-enum": [
   2,
   "always",
   [
-    // ... existing scopes
+    // ... 現有 scopes
     "your-new-scope",
   ],
 ],
@@ -434,111 +433,111 @@ Add the scope to `commitlint.config.ts`:
 
 ---
 
-### Issue 3: Pre-push Too Slow
+### 問題 3：Pre-push 太慢
 
-**Symptoms**: Pre-push takes more than 20 seconds.
+**症狀**：Pre-push 執行時間超過 20 秒。
 
-**Cause**: No Turborepo cache.
+**原因**：沒有 Turborepo cache。
 
-**Solution**:
-First push will be slower. Subsequent pushes use cache (~3-5 seconds). For emergency bypass:
+**解決方法**：
+第一次 push 會較慢。後續 push 會使用 cache（約 3-5 秒）。緊急情況下可使用：
 
 ```bash
 git push --no-verify
 ```
 
-⚠️ **Warning**: Only use `--no-verify` in emergencies. Monitoring usage should be < 5%.
+⚠️ **警告**：僅在緊急情況使用 `--no-verify`。使用率應 < 5%。
 
 ---
 
-### Issue 4: Lock Files Counted in Commit Size
+### 問題 4：Lock 檔案被計入 Commit 大小
 
-**Symptoms**: `pnpm-lock.yaml` changes trigger size limit.
+**症狀**：`pnpm-lock.yaml` 變更觸發大小限制。
 
-**Cause**: File not in exclude patterns.
+**原因**：檔案不在排除模式中。
 
-**Solution**:
-Lock files are already excluded. If issue persists, verify `EXCLUDE_PATTERNS` in `scripts/validate-commit-size.js`.
-
----
-
-## Tips & Best Practices
-
-- 💡 **Tip 1**: Use descriptive scopes matching your project structure (features, packages)
-- 💡 **Tip 2**: Run `pnpm run check` locally before committing to catch issues early
-- 💡 **Tip 3**: If you need to bypass hooks temporarily, use `--no-verify` sparingly
-- 💡 **Tip 4**: Adjust `MAX_FILES` and `MAX_LINES` in validation script based on your team's needs
-- ⚠️ **Warning**: Never disable hooks permanently - they're your safety net
+**解決方法**：
+Lock 檔案已被排除。如問題持續，請驗證 `scripts/validate-commit-size.js` 中的 `EXCLUDE_PATTERNS`。
 
 ---
 
-## Related Documentation
+## 技巧與最佳實踐
 
-### Concepts
+- 💡 **技巧 1**：使用符合專案結構的描述性 scopes（features、packages）
+- 💡 **技巧 2**：在 commit 前先在本地執行 `pnpm run check` 以及早發現問題
+- 💡 **技巧 3**：如需暫時繞過 hooks，請謹慎使用 `--no-verify`
+- 💡 **技巧 4**：根據團隊需求調整驗證腳本中的 `MAX_FILES` 與 `MAX_LINES`
+- ⚠️ **警告**：永遠不要永久停用 hooks - 它們是您的安全網
 
-- [Git Hooks Research and Best Practices](../explanation/git-hooks-research.md) - Industry research and rationale
+---
 
-### Reference
+## 相關文件
 
-- [Commitlint Rules Reference](../reference/commitlint-rules.md) - Complete rule specifications
-- [Git Hooks Configuration Reference](../reference/git-hooks.md) - Hook implementation details
+### 概念
+
+- [Git Hooks 研究與最佳實踐](../explanation/git-hooks-research.md) - 業界研究與理論基礎
+
+### 參考
+
+- [Commitlint 規則參考](../reference/commitlint-rules.md) - 完整規則規範
+- [Git Hooks 設定參考](../reference/git-hooks.md) - Hook 實作細節
 
 ### ADR
 
-- [ADR-003: Git Hooks Optimization](../adr/003-git-hooks-optimization.md) - Technical decisions
+- [ADR-003：Git Hooks 最佳化](../adr/003-git-hooks-optimization.md) - 技術決策
 
 ---
 
-## FAQ
+## 常見問題
 
-### Q1: Why not do TypeScript check in pre-commit?
+### Q1：為何不在 pre-commit 執行 TypeScript 檢查？
 
-**A**: TypeScript must check the entire project (8-15 seconds), which is too slow for pre-commit. 87% of developers expect pre-commit to complete in < 3 seconds. We moved type checking to pre-push instead.
+**A**：TypeScript 必須檢查整個專案（8-15 秒），對 pre-commit 來說太慢。87% 的開發者期望 pre-commit 在 < 3 秒內完成。我們將型別檢查移至 pre-push。
 
 ---
 
-### Q2: Can I skip these checks in emergencies?
+### Q2：緊急情況下可以跳過這些檢查嗎？
 
-**A**: Yes, use `--no-verify` flag:
+**A**：可以，使用 `--no-verify` flag：
 
 ```bash
-# Skip pre-commit and commit-msg
+# 跳過 pre-commit 與 commit-msg
 git commit --no-verify -m "emergency fix"
 
-# Skip pre-push
+# 跳過 pre-push
 git push --no-verify
 ```
 
-However, this should be rare (< 5% of commits).
+然而，這應該很少使用（< 5% 的 commits）。
 
 ---
 
-### Q3: How do I exclude specific files from size validation?
+### Q3：如何從大小驗證中排除特定檔案？
 
-**A**: Add patterns to `EXCLUDE_PATTERNS` in `scripts/validate-commit-size.js`:
+**A**：將 patterns 新增至 `scripts/validate-commit-size.js` 的 `EXCLUDE_PATTERNS`：
 
 ```javascript
 const EXCLUDE_PATTERNS = [
-  // ... existing patterns
-  "src/legacy/**", // Exclude directory
-  "migration-*.ts", // Exclude pattern
+  // ... 現有 patterns
+  "src/legacy/**", // 排除目錄
+  "migration-*.ts", // 排除 pattern
 ];
 ```
 
 ---
 
-### Q4: What if my commit legitimately needs 20 files?
+### Q4：如果我的 commit 確實需要 20 個檔案怎麼辦？
 
-**A**: Consider whether it can be split logically. If not, adjust `MAX_FILES` in the validation script or use `--no-verify` with justification.
+**A**：考慮是否可以邏輯性分割。如果不行，調整驗證腳本中的 `MAX_FILES` 或使用 `--no-verify` 並說明理由。
 
 ---
 
-## Next Steps
+## 下一步
 
-After completing this guide, you might want to:
+完成本指南後，您可能想要：
 
-1. [Understand the research behind these decisions](../explanation/git-hooks-research.md)
-2. [Review complete commitlint configuration options](../reference/commitlint-rules.md)
-3. [Read the architectural decision record](../adr/003-git-hooks-optimization.md)
-4. Set up CI/CD to run the same checks
-5. Consider adding conventional changelog generation
+1. [理解這些決策背後的研究](../explanation/git-hooks-research.md)
+2. [檢視完整的 commitlint 設定選項](../reference/commitlint-rules.md)
+3. [閱讀架構決策記錄](../adr/003-git-hooks-optimization.md)
+4. 設定 CI/CD 以執行相同的檢查
+5. 考慮新增 conventional changelog 生成

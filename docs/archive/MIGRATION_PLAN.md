@@ -1,128 +1,128 @@
-# Documentation Migration Plan
+# 文件遷移計畫
 
-## Overview
+## 概述
 
-This document tracks the migration of legacy documentation to the Diataxis framework structure.
+本文件追蹤舊有文件遷移至 Diataxis 框架結構的進度。
 
-**Status**: ✅ Phase 1-5 Complete | ⏳ Phase 6 Cleanup In Progress
+**狀態**：✅ 階段 1-5 完成 | ⏳ 階段 6 清理進行中
 
-## Migration Status
+## 遷移狀態
 
-### ✅ Completed Migrations
+### ✅ 已完成遷移
 
-| Legacy File                     | New Location                             | Status     |
-| ------------------------------- | ---------------------------------------- | ---------- |
-| `docs/git-automation-checks.md` | Multiple files in Diataxis structure     | ✅ Split   |
-| -                               | `docs/guides/git-workflow.md`            | ✅ Created |
-| -                               | `docs/reference/commitlint-rules.md`     | ✅ Created |
-| -                               | `docs/reference/git-hooks.md`            | ✅ Created |
-| -                               | `docs/explanation/git-hooks-research.md` | ✅ Created |
-| -                               | `docs/adr/003-git-hooks-optimization.md` | ✅ Created |
+| 舊有檔案                        | 新位置                                   | 狀態      |
+| ------------------------------- | ---------------------------------------- | --------- |
+| `docs/git-automation-checks.md` | Diataxis 結構中的多個檔案                | ✅ 已拆分 |
+| -                               | `docs/guides/git-workflow.md`            | ✅ 已建立 |
+| -                               | `docs/reference/commitlint-rules.md`     | ✅ 已建立 |
+| -                               | `docs/reference/git-hooks.md`            | ✅ 已建立 |
+| -                               | `docs/explanation/git-hooks-research.md` | ✅ 已建立 |
+| -                               | `docs/adr/003-git-hooks-optimization.md` | ✅ 已建立 |
 
-### ⏳ Pending Migrations
+### ⏳ 待遷移項目
 
-| Legacy File                | Future Location                             | Priority | Notes                         |
-| -------------------------- | ------------------------------------------- | -------- | ----------------------------- |
-| `LOGGER-GUIDE.md`          | `docs/guides/structured-logging.md`         | Medium   | Structured logging guide      |
-| `ISSUE-MANAGEMENT.md`      | `docs/guides/issue-management.md`           | Medium   | P0-P3 issue system            |
-| `MEDIUM-ARTICLES-GUIDE.md` | `docs/guides/medium-article-sync.md`        | Low      | Article sync process          |
-| `time-tracker-timezone.md` | `docs/explanation/time-tracker-timezone.md` | Low      | Timezone handling explanation |
-| `CONFIGURATION.md`         | `docs/reference/configuration.md`           | Low      | Monorepo configuration        |
+| 舊有檔案                   | 未來位置                                    | 優先級 | 備註               |
+| -------------------------- | ------------------------------------------- | ------ | ------------------ |
+| `LOGGER-GUIDE.md`          | `docs/guides/structured-logging.md`         | 中     | 結構化日誌指南     |
+| `ISSUE-MANAGEMENT.md`      | `docs/guides/issue-management.md`           | 中     | P0-P3 問題管理系統 |
+| `MEDIUM-ARTICLES-GUIDE.md` | `docs/guides/medium-article-sync.md`        | 低     | 文章同步流程       |
+| `time-tracker-timezone.md` | `docs/explanation/time-tracker-timezone.md` | 低     | 時區處理說明       |
+| `CONFIGURATION.md`         | `docs/reference/configuration.md`           | 低     | Monorepo 設定      |
 
-### 📦 Archive Only (Historical Records)
+### 📦 僅存檔（歷史記錄）
 
-| Legacy File            | Archive Status | Notes                           |
-| ---------------------- | -------------- | ------------------------------- |
-| `MONOREPO_REFACTOR.md` | ✅ Archived    | Completed refactor (2025-10-20) |
+| 舊有檔案               | 存檔狀態  | 備註                     |
+| ---------------------- | --------- | ------------------------ |
+| `MONOREPO_REFACTOR.md` | ✅ 已存檔 | 已完成重構（2025-10-20） |
 
-## Archive Strategy
+## 存檔策略
 
-### Phase 6 Cleanup (Current)
+### 階段 6 清理（當前進行中）
 
-1. ✅ Create `docs/archive/` directory
-2. ✅ Add deprecation notices to legacy docs
-3. ✅ Create this migration plan
-4. ✅ Move completed refactor docs to archive
+1. ✅ 建立 `docs/archive/` 目錄
+2. ✅ 在舊有文件中添加棄用通知
+3. ✅ 建立此遷移計畫
+4. ✅ 將已完成的重構文件移至存檔
 
-### Future Cleanup (Phase 7+)
+### 未來清理（階段 7+）
 
-1. Migrate remaining legacy docs (as needed)
-2. Move archived docs to `docs/archive/`
-3. Update all references to archived docs
-4. Remove or archive deprecated files
+1. 遷移剩餘的舊有文件（按需進行）
+2. 將已存檔文件移至 `docs/archive/`
+3. 更新所有對已存檔文件的引用
+4. 移除或存檔已棄用的檔案
 
-## New Documentation Created
+## 已建立的新文件
 
-### Phase 1: Framework Skeleton
+### 階段 1：框架骨架
 
-- ✅ `docs/README.md` - Main documentation hub
-- ✅ `docs/{guides,tutorials,reference,explanation}/README.md` - Category landing pages
-- ✅ `docs/adr/{README.md,template.md}` - ADR system
-- ✅ `docs/.templates/*.md` - Document templates (4 files)
+- ✅ `docs/README.md` - 主要文件中心
+- ✅ `docs/{guides,tutorials,reference,explanation}/README.md` - 類別首頁
+- ✅ `docs/adr/{README.md,template.md}` - ADR 系統
+- ✅ `docs/.templates/*.md` - 文件範本（4 個檔案）
 
-### Phase 2: Git Automation Split
+### 階段 2：Git 自動化拆分
 
-- ✅ 5 documents split from `git-automation-checks.md`
+- ✅ 從 `git-automation-checks.md` 拆分出 5 份文件
 
-### Phase 3: Key Documents
+### 階段 3：核心文件
 
-- ✅ `docs/guides/development-setup.md` - Setup guide
-- ✅ `docs/tutorials/01-project-setup.md` - First tutorial
-- ✅ `docs/explanation/feature-based-architecture.md` - Architecture explanation
-- ✅ `docs/explanation/react-query-patterns.md` - React Query patterns
-- ✅ `docs/explanation/monorepo-strategy.md` - Monorepo explanation
+- ✅ `docs/guides/development-setup.md` - 設定指南
+- ✅ `docs/tutorials/01-project-setup.md` - 第一份教學
+- ✅ `docs/explanation/feature-based-architecture.md` - 架構說明
+- ✅ `docs/explanation/react-query-patterns.md` - React Query 模式
+- ✅ `docs/explanation/monorepo-strategy.md` - Monorepo 策略說明
 
-### Phase 4: API Documentation
+### 階段 4：API 文件
 
-- ✅ `docs/reference/api/README.md` - API overview
-- ✅ `docs/reference/api/define-api.md` - /api/define endpoint
-- ✅ `docs/reference/api/ai-analyzer-api.md` - /api/ai-analyzer endpoint
-- ✅ `docs/reference/api/medium-articles-api.md` - /api/medium-articles endpoint
+- ✅ `docs/reference/api/README.md` - API 概覽
+- ✅ `docs/reference/api/define-api.md` - /api/define 端點
+- ✅ `docs/reference/api/ai-analyzer-api.md` - /api/ai-analyzer 端點
+- ✅ `docs/reference/api/medium-articles-api.md` - /api/medium-articles 端點
 
-### Phase 5: Navigation
+### 階段 5：導覽
 
-- ✅ `README.md` - Added Documentation section
-- ✅ `CLAUDE.md` - Added Documentation System section
+- ✅ `README.md` - 新增文件區塊
+- ✅ `CLAUDE.md` - 新增文件系統區塊
 
-### Critical Fixes
+### 關鍵修復
 
-- ✅ Fixed broken links in all READMEs
-- ✅ Created `docs/reference/architecture.md` (2209 lines)
-- ✅ Marked all legacy docs as deprecated
+- ✅ 修復所有 README 中的失效連結
+- ✅ 建立 `docs/reference/architecture.md`（2209 行）
+- ✅ 標記所有舊有文件為已棄用
 
-## Statistics
+## 統計資料
 
-**Total Documents Created**: 27+ files
-**Total Lines Written**: 10,000+ lines
-**Phases Completed**: 5/6
-**Coverage**: ~80% of planned documentation
+**建立的文件總數**：27+ 個檔案
+**撰寫的總行數**：10,000+ 行
+**完成的階段**：5/6
+**覆蓋率**：約 80% 的規劃文件
 
-## Next Actions
+## 下一步行動
 
-1. **Immediate** (Phase 6):
-   - [ ] Archive `MONOREPO_REFACTOR.md`
-   - [x] Validate key internal links
-   - [ ] Final commit and PR
+1. **即時行動**（階段 6）：
+   - [ ] 存檔 `MONOREPO_REFACTOR.md`
+   - [x] 驗證核心內部連結
+   - [ ] 最終提交與 PR
 
-2. **Future** (Post-merge):
-   - [ ] Migrate logger guide when structured logging changes
-   - [ ] Migrate issue management guide when P0-P3 system changes
-   - [ ] Create remaining tutorials (02, 03)
-   - [ ] Create environment variables reference
-   - [ ] Create CLI commands reference
+2. **未來行動**（合併後）：
+   - [ ] 在結構化日誌變更時遷移日誌指南
+   - [ ] 在 P0-P3 系統變更時遷移問題管理指南
+   - [ ] 建立剩餘的教學（02、03）
+   - [ ] 建立環境變數參考文件
+   - [ ] 建立 CLI 命令參考文件
 
-## Success Criteria
+## 成功標準
 
-- ✅ All critical docs have Diataxis equivalents
-- ✅ All new docs have YAML frontmatter and AI context
-- ✅ Cross-references are complete
-- ✅ Root README and CLAUDE.md updated
-- ⏳ Legacy docs marked as deprecated
-- ⏳ Archive directory created
-- ⏳ Migration plan documented
+- ✅ 所有關鍵文件都有對應的 Diataxis 版本
+- ✅ 所有新文件都有 YAML frontmatter 和 AI context
+- ✅ 交叉引用完整
+- ✅ 根目錄 README 和 CLAUDE.md 已更新
+- ⏳ 舊有文件已標記為棄用
+- ⏳ 存檔目錄已建立
+- ⏳ 遷移計畫已記錄
 
-## Related
+## 相關資源
 
-- [Issue #50](https://github.com/u88803494/my-website/issues/50) - Adopt Diataxis framework
-- [Diataxis Framework](https://diataxis.fr/) - Official documentation
-- [docs/README.md](../README.md) - Documentation hub
+- [Issue #50](https://github.com/u88803494/my-website/issues/50) - 採用 Diataxis 框架
+- [Diataxis Framework](https://diataxis.fr/) - 官方文件
+- [docs/README.md](../README.md) - 文件中心

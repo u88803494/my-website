@@ -1,202 +1,202 @@
-# ADR-XXX: [Short Title of Decision]
+# ADR-XXX: [決策簡短標題]
 
 ---
 
-title: [Full title]
+title: [完整標題]
 type: adr
 status: proposed|accepted|rejected|superseded|deprecated
 date: YYYY-MM-DD
-deciders: [List of people involved]
-consulted: [List of people consulted]
-informed: [List of people informed]
-supersedes: [ADR-XXX if applicable]
-superseded_by: [ADR-XXX if applicable]
+deciders: [參與決策人員名單]
+consulted: [諮詢人員名單]
+informed: [通知人員名單]
+supersedes: [若適用則填入 ADR-XXX]
+superseded_by: [若適用則填入 ADR-XXX]
 tags: [tag1, tag2, tag3]
 related:
 
 - path/to/explanation.md
 - path/to/reference.md
   ai_context: |
-  Brief context about what decision was made and why.
+  關於決策內容及原因的簡要背景說明。
 
 ---
 
-## Status
+## 狀態
 
-**[Proposed | Accepted | Rejected | Superseded | Deprecated]**
+**[提議中 | 已接受 | 已拒絕 | 已取代 | 已棄用]**
 
-- Proposed: YYYY-MM-DD
-- Accepted: YYYY-MM-DD (if applicable)
-- Superseded by: [ADR-XXX](./XXX-title.md) (if applicable)
+- 提議日期：YYYY-MM-DD
+- 接受日期：YYYY-MM-DD（若適用）
+- 取代者：[ADR-XXX](./XXX-title.md)（若適用）
 
-## Context
+## 背景
 
-**What is the issue or problem we're facing?**
+**我們面臨的議題或問題是什麼？**
 
-Describe the forces at play:
+描述影響因素：
 
-- Technical constraints
-- Business requirements
-- User needs
-- Team capabilities
-- Timeline constraints
+- 技術限制
+- 業務需求
+- 使用者需求
+- 團隊能力
+- 時程限制
 
-Include relevant background information that helps understand why this decision was necessary.
+包含有助於理解為何需要此決策的相關背景資訊。
 
-## Decision
+## 決策
 
-**What decision have we made?**
+**我們做出了什麼決策？**
 
-State the decision clearly and concisely. This should be a complete sentence that can stand alone.
+清楚簡潔地陳述決策。這應該是一個能夠獨立理解的完整句子。
 
-Example: "We will use React Query with Next.js SSG by implementing server-side prefetch with HydrationBoundary."
+範例：「我們將透過實作 server-side prefetch 搭配 HydrationBoundary，在 Next.js SSG 環境中使用 React Query。」
 
-## Consequences
+## 後果
 
-### Positive Consequences
+### 正面影響
 
-What benefits does this decision bring?
+此決策帶來哪些好處？
 
-- ✅ Benefit 1
-- ✅ Benefit 2
-- ✅ Benefit 3
+- ✅ 好處 1
+- ✅ 好處 2
+- ✅ 好處 3
 
-### Negative Consequences
+### 負面影響
 
-What drawbacks or trade-offs does this decision introduce?
+此決策引入哪些缺點或取捨？
 
-- ❌ Drawback 1
-- ❌ Drawback 2
-- ❌ Drawback 3
+- ❌ 缺點 1
+- ❌ 缺點 2
+- ❌ 缺點 3
 
-### Neutral Consequences
+### 中性影響
 
-What other effects does this decision have?
+此決策還有哪些其他影響？
 
-- ℹ️ Effect 1
-- ℹ️ Effect 2
+- ℹ️ 影響 1
+- ℹ️ 影響 2
 
-## Alternatives Considered
+## 考慮過的替代方案
 
-### Alternative 1: [Name]
+### 替代方案 1：[名稱]
 
-**Description**: Brief explanation of this alternative.
+**描述**：此替代方案的簡要說明。
 
-**Pros**:
+**優點**：
 
-- Pro 1
-- Pro 2
+- 優點 1
+- 優點 2
 
-**Cons**:
+**缺點**：
 
-- Con 1
-- Con 2
+- 缺點 1
+- 缺點 2
 
-**Why not chosen**: Explain why this alternative was not selected.
-
----
-
-### Alternative 2: [Name]
-
-**Description**: Brief explanation of this alternative.
-
-**Pros**:
-
-- Pro 1
-- Pro 2
-
-**Cons**:
-
-- Con 1
-- Con 2
-
-**Why not chosen**: Explain why this alternative was not selected.
+**未選擇原因**：解釋為何未選擇此替代方案。
 
 ---
 
-### Alternative 3: [Name]
+### 替代方案 2：[名稱]
 
-(Add more alternatives as needed)
+**描述**：此替代方案的簡要說明。
 
-## Implementation
+**優點**：
 
-**How will this decision be implemented?**
+- 優點 1
+- 優點 2
 
-- Implementation step 1
-- Implementation step 2
-- Implementation step 3
+**缺點**：
 
-**Timeline**: Expected completion date or milestones.
+- 缺點 1
+- 缺點 2
 
-**Dependencies**: What needs to be in place before implementation?
-
-## Validation
-
-**How will we know if this decision was correct?**
-
-- Success criterion 1
-- Success criterion 2
-- Success criterion 3
-
-**Review date**: YYYY-MM-DD (when to revisit this decision)
-
-## Related Documents
-
-### Explanation
-
-- [Concept/Pattern Explanation](../explanation/concept.md) - Background on the concept
-
-### Reference
-
-- [Technical Reference](../reference/tech-spec.md) - Detailed specifications
-
-### Guides
-
-- [Implementation Guide](../guides/how-to-implement.md) - How to apply this decision
-
-### Related ADRs
-
-- [ADR-XXX: Related Decision](./XXX-related.md)
+**未選擇原因**：解釋為何未選擇此替代方案。
 
 ---
 
-## Notes
+### 替代方案 3：[名稱]
 
-Any additional notes, research links, or context that doesn't fit elsewhere.
+（視需要新增更多替代方案）
 
-### Research & References
+## 實作
 
-- [Link to research 1](https://example.com)
-- [Link to research 2](https://example.com)
+**此決策將如何實作？**
 
-### Discussion History
+- 實作步驟 1
+- 實作步驟 2
+- 實作步驟 3
 
-- YYYY-MM-DD: Initial proposal
-- YYYY-MM-DD: Team discussion
-- YYYY-MM-DD: Decision made
+**時程**：預期完成日期或里程碑。
+
+**相依性**：實作前需要具備什麼條件？
+
+## 驗證
+
+**我們如何確認此決策是正確的？**
+
+- 成功標準 1
+- 成功標準 2
+- 成功標準 3
+
+**審查日期**：YYYY-MM-DD（何時重新檢視此決策）
+
+## 相關文件
+
+### 說明文件 (Explanation)
+
+- [概念/模式說明](../explanation/concept.md) - 概念背景
+
+### 參考文件 (Reference)
+
+- [技術參考](../reference/tech-spec.md) - 詳細規格
+
+### 指南 (Guides)
+
+- [實作指南](../guides/how-to-implement.md) - 如何應用此決策
+
+### 相關 ADR
+
+- [ADR-XXX: 相關決策](./XXX-related.md)
 
 ---
 
-## Template Instructions (Remove this section)
+## 備註
 
-**How to use this template:**
+任何不適合放在其他地方的額外註記、研究連結或背景資訊。
 
-1. **Title**: Use format "ADR-XXX: Short Title" where XXX is next sequential number
-2. **Frontmatter**: Fill in all YAML fields
-3. **Status**: Start with "Proposed", update as decision progresses
-4. **Context**: Explain the problem and forces driving the decision
-5. **Decision**: State the decision clearly in one sentence
-6. **Consequences**: Be honest about pros and cons
-7. **Alternatives**: Document at least 2-3 alternatives considered
-8. **Implementation**: Practical steps to implement
-9. **Validation**: How to measure success
-10. **Related**: Link to all related documentation
+### 研究與參考資料
 
-**Best practices:**
+- [研究連結 1](https://example.com)
+- [研究連結 2](https://example.com)
 
-- Write for future readers who don't have current context
-- Be objective and honest about trade-offs
-- Document the "why" not just the "what"
-- Include research and references
-- Update status as decision evolves
-- If superseded, create new ADR and link both ways
+### 討論歷程
+
+- YYYY-MM-DD：初步提議
+- YYYY-MM-DD：團隊討論
+- YYYY-MM-DD：決策確定
+
+---
+
+## 模板使用說明（請移除此區段）
+
+**如何使用此模板：**
+
+1. **標題**：使用格式「ADR-XXX: 簡短標題」，其中 XXX 為下一個順序編號
+2. **Frontmatter**：填寫所有 YAML 欄位
+3. **狀態**：從「提議中」開始，隨決策進展更新
+4. **背景**：解釋問題及驅動決策的因素
+5. **決策**：用一句話清楚陳述決策
+6. **後果**：誠實說明優缺點
+7. **替代方案**：記錄至少 2-3 個考慮過的替代方案
+8. **實作**：實作的實際步驟
+9. **驗證**：如何衡量成功
+10. **相關文件**：連結所有相關文件
+
+**最佳實踐：**
+
+- 為未來不具備當前背景的讀者撰寫
+- 客觀且誠實地說明取捨
+- 記錄「為什麼」而非只是「是什麼」
+- 包含研究與參考資料
+- 隨決策演進更新狀態
+- 若被取代，建立新 ADR 並雙向連結

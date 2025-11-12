@@ -1,5 +1,5 @@
 ---
-title: Monorepo Strategy with Turborepo
+title: Monorepo Strategy with Turborepo（使用 Turborepo 的 Monorepo 策略）
 type: explanation
 status: stable
 audience: [developer, architect]
@@ -11,93 +11,93 @@ related:
   - explanation/feature-based-architecture.md
   - guides/development-setup.md
 ai_context: |
-  Explains why this project uses a monorepo architecture with Turborepo,
-  its benefits, trade-offs, and how it scales with project growth.
+  解釋為什麼本專案使用 Turborepo 的 monorepo 架構、
+  其優勢、權衡取捨，以及如何隨專案成長而擴展。
 ---
 
-# Monorepo Strategy with Turborepo
+# Monorepo Strategy with Turborepo（使用 Turborepo 的 Monorepo 策略）
 
-## Overview
+## 概述
 
-This project uses a **monorepo** (single repository containing multiple packages) managed by **Turborepo** and **pnpm workspaces**.
+本專案使用 **monorepo**（單一儲存庫包含多個 packages），由 **Turborepo** 和 **pnpm workspaces** 管理。
 
-**Key principle**: One repository, multiple packages, shared tooling.
+**核心原則**：一個儲存庫、多個 packages、共享工具。
 
 ---
 
-## Why Monorepo?
+## 為什麼使用 Monorepo？
 
-### Traditional Multi-Repo Problems
+### 傳統多儲存庫的問題
 
-In a multi-repo setup, code is split across repositories:
+在多儲存庫設定中，程式碼分散在多個儲存庫中：
 
 ```
-my-website-app/           # Main application
-my-website-shared/        # Shared utilities
+my-website-app/           # 主應用程式
+my-website-shared/        # 共享 utilities
 my-website-tsconfig/      # TypeScript configs
 ```
 
-**Problems:**
+**問題**：
 
-1. **Version synchronization** - Ensure all repos use compatible versions
-2. **Cross-repo changes** - Need multiple PRs for single feature
-3. **Tooling duplication** - ESLint/Prettier configs repeated everywhere
-4. **Dependency management** - Complex inter-repo dependency tracking
-5. **CI/CD complexity** - Multiple pipelines to maintain
-6. **Developer experience** - Clone/install/setup multiple repos
+1. **版本同步** - 確保所有儲存庫使用相容版本
+2. **跨儲存庫變更** - 單一功能需要多個 PRs
+3. **工具重複** - ESLint/Prettier configs 到處重複
+4. **依賴管理** - 複雜的儲存庫間依賴追蹤
+5. **CI/CD 複雜性** - 多個 pipelines 需要維護
+6. **開發者體驗** - 需要 clone/install/setup 多個儲存庫
 
 ---
 
-## Monorepo Solution
+## Monorepo 解決方案
 
-All code in one repository:
+所有程式碼在一個儲存庫中：
 
 ```
 my-website/
 ├── apps/
-│   └── my-website/           # Main Next.js app
+│   └── my-website/           # 主要 Next.js app
 ├── packages/
-│   ├── shared/               # Shared utilities/types
-│   ├── tsconfig/             # Shared TypeScript configs
-│   ├── eslint-config/        # Shared ESLint configs
-│   └── tailwind-config/      # Shared Tailwind configs
-└── pnpm-workspace.yaml       # Workspace configuration
+│   ├── shared/               # 共享 utilities/types
+│   ├── tsconfig/             # 共享 TypeScript configs
+│   ├── eslint-config/        # 共享 ESLint configs
+│   └── tailwind-config/      # 共享 Tailwind configs
+└── pnpm-workspace.yaml       # Workspace 配置
 ```
 
-**Benefits:**
+**優勢**：
 
-1. ✅ **Atomic changes** - One PR for cross-package changes
-2. ✅ **Shared tooling** - One ESLint/Prettier config for all
-3. ✅ **Single dependency tree** - pnpm manages everything
-4. ✅ **Fast CI/CD** - Turborepo caches and parallelizes
-5. ✅ **Developer experience** - Clone once, run everywhere
+1. ✅ **原子變更** - 跨 package 變更只需一個 PR
+2. ✅ **共享工具** - 一個 ESLint/Prettier config 適用所有
+3. ✅ **單一依賴樹** - pnpm 管理所有東西
+4. ✅ **快速 CI/CD** - Turborepo 快取和並行化
+5. ✅ **開發者體驗** - clone 一次，到處執行
 
 ---
 
-## Architecture
+## 架構
 
-### Workspace Structure
+### Workspace 結構
 
 ```
 root/
-├── apps/                     # Applications (deployable)
-│   └── my-website/           # Main Next.js 15 application
+├── apps/                     # 應用程式（可部署）
+│   └── my-website/           # 主要 Next.js 15 應用程式
 │       ├── src/
-│       ├── package.json      # App-specific dependencies
-│       └── tsconfig.json     # Extends @packages/tsconfig
-├── packages/                 # Shared packages (libraries)
-│   ├── shared/               # Utilities, types, constants
+│       ├── package.json      # App 特定的依賴
+│       └── tsconfig.json     # 擴展 @packages/tsconfig
+├── packages/                 # 共享 packages（libraries）
+│   ├── shared/               # Utilities、types、constants
 │   │   ├── src/
 │   │   └── package.json
-│   ├── tsconfig/             # Shared TS configs
+│   ├── tsconfig/             # 共享 TS configs
 │   │   ├── base.json
 │   │   ├── nextjs.json
 │   │   └── package.json
-│   ├── eslint-config/        # Shared ESLint configs
-│   └── tailwind-config/      # Shared Tailwind configs
-├── pnpm-workspace.yaml       # Defines workspace packages
-├── turbo.json                # Turborepo pipeline configuration
-└── package.json              # Root package.json (workspace commands)
+│   ├── eslint-config/        # 共享 ESLint configs
+│   └── tailwind-config/      # 共享 Tailwind configs
+├── pnpm-workspace.yaml       # 定義 workspace packages
+├── turbo.json                # Turborepo pipeline 配置
+└── package.json              # Root package.json（workspace 命令）
 ```
 
 ### Workspace Configuration
@@ -105,77 +105,77 @@ root/
 ```yaml
 # pnpm-workspace.yaml
 packages:
-  - "apps/*" # All apps
-  - "packages/*" # All packages
+  - "apps/*" # 所有 apps
+  - "packages/*" # 所有 packages
 ```
 
-**Result**: pnpm treats each directory as a workspace.
+**結果**：pnpm 將每個目錄視為一個 workspace。
 
 ---
 
-## Turborepo Benefits
+## Turborepo 優勢
 
-### 1. Smart Caching
+### 1. 智能快取
 
-**Without Turborepo:**
+**沒有 Turborepo**：
 
 ```bash
-pnpm run build    # Builds everything, every time (slow!)
+pnpm run build    # 每次都建置所有東西（慢！）
 ```
 
-**With Turborepo:**
+**使用 Turborepo**：
 
 ```bash
-pnpm run build    # First run: builds all
-pnpm run build    # Second run: cache hit, instant! ⚡
+pnpm run build    # 首次執行：建置全部
+pnpm run build    # 第二次執行：快取命中，瞬間完成！⚡
 ```
 
-**How it works:**
+**運作原理**：
 
-- Turborepo hashes inputs (source files, dependencies, env vars)
-- If hash matches previous run, uses cached output
-- If hash changes, rebuilds only affected packages
+- Turborepo 對輸入（原始檔、依賴、env vars）進行雜湊
+- 如果雜湊匹配之前的執行，使用快取的輸出
+- 如果雜湊改變，只重新建置受影響的 packages
 
-### 2. Parallel Execution
+### 2. 並行執行
 
-**Without Turborepo:**
+**沒有 Turborepo**：
 
 ```bash
-# Sequential execution
+# 序列執行
 cd packages/shared && pnpm build
 cd apps/my-website && pnpm build
-# Total: 5 minutes
+# 總計：5 分鐘
 ```
 
-**With Turborepo:**
+**使用 Turborepo**：
 
 ```bash
-# Parallel execution
+# 並行執行
 turbo run build
-# Runs shared + my-website in parallel
-# Total: 2 minutes ⚡
+# 並行執行 shared + my-website
+# 總計：2 分鐘 ⚡
 ```
 
-### 3. Incremental Builds
+### 3. 增量建置
 
-**Changed a single package?** Turborepo rebuilds only that package and its dependents.
+**只改變了單一 package？** Turborepo 只重新建置該 package 及其依賴者。
 
 ```bash
-# Changed packages/shared
+# 改變了 packages/shared
 turbo run build
-# Rebuilds:
-#  - packages/shared (changed)
-#  - apps/my-website (depends on shared)
-# Skips: Other packages (not affected)
+# 重新建置：
+#  - packages/shared（已改變）
+#  - apps/my-website（依賴 shared）
+# 跳過：其他 packages（未受影響）
 ```
 
 ---
 
-## Dependency Management
+## 依賴管理
 
-### Internal Dependencies
+### 內部依賴
 
-Packages can depend on each other:
+Packages 可以相互依賴：
 
 ```json
 // apps/my-website/package.json
@@ -186,15 +186,15 @@ Packages can depend on each other:
 }
 ```
 
-**`workspace:*`** = "Use the version in this workspace".
+**`workspace:*`** = "使用此 workspace 中的版本"。
 
-**Benefits:**
+**優勢**：
 
-- No need to publish to npm
-- Changes immediately available
-- Type-safe across packages
+- 不需要發布到 npm
+- 變更立即可用
+- 跨 packages 的 type-safe
 
-### External Dependencies
+### 外部依賴
 
 ```json
 // apps/my-website/package.json
@@ -206,9 +206,9 @@ Packages can depend on each other:
 }
 ```
 
-**pnpm** deduplicates dependencies across workspaces.
+**pnpm** 在 workspaces 間去重依賴。
 
-**Result**: If two packages use `react@19.0.0`, only one copy is installed.
+**結果**：如果兩個 packages 使用 `react@19.0.0`，只安裝一份副本。
 
 ---
 
@@ -232,55 +232,55 @@ Packages can depend on each other:
 }
 ```
 
-**Pipeline rules:**
+**Pipeline 規則**：
 
-- **`build`**: Depends on dependencies' `build` (`^build`)
-- **`check-types`**: Depends on dependencies' `build`
-- **`lint`**: Cacheable (no dependencies)
+- **`build`**：依賴依賴項的 `build`（`^build`）
+- **`check-types`**：依賴依賴項的 `build`
+- **`lint`**：可快取（無依賴）
 
-**Result**: Turborepo knows execution order and can parallelize safely.
+**結果**：Turborepo 知道執行順序，可以安全地並行化。
 
 ---
 
-## Development Workflow
+## 開發工作流程
 
-### Installing Dependencies
+### 安裝依賴
 
 ```bash
-# Install all workspaces
+# 安裝所有 workspaces
 pnpm install
 
-# Add dependency to specific workspace
+# 為特定 workspace 新增依賴
 pnpm --filter my-website add next
 pnpm --filter @packages/shared add date-fns
 
-# Add dev dependency to root
+# 為 root 新增 dev 依賴
 pnpm add -D -w turbo
 ```
 
-### Running Commands
+### 執行命令
 
 ```bash
-# Run across all workspaces (Turborepo)
-pnpm dev          # Starts all dev servers
-pnpm build        # Builds all packages
-pnpm check-types  # Type checks all packages
+# 在所有 workspaces 中執行（Turborepo）
+pnpm dev          # 啟動所有 dev servers
+pnpm build        # 建置所有 packages
+pnpm check-types  # 檢查所有 packages 的類型
 
-# Run in specific workspace
+# 在特定 workspace 中執行
 pnpm --filter my-website dev
 pnpm --filter @packages/shared build
 
-# Run in all packages matching pattern
+# 在所有符合模式的 packages 中執行
 pnpm --filter "@packages/*" build
 ```
 
-### Adding New Package
+### 新增 Package
 
 ```bash
-# Create package directory
+# 建立 package 目錄
 mkdir -p packages/new-package/src
 
-# Create package.json
+# 建立 package.json
 cat > packages/new-package/package.json << EOF
 {
   "name": "@packages/new-package",
@@ -290,24 +290,24 @@ cat > packages/new-package/package.json << EOF
 }
 EOF
 
-# pnpm automatically detects it
+# pnpm 自動偵測它
 pnpm install
 ```
 
 ---
 
-## Shared Configurations
+## 共享配置
 
 ### TypeScript Configs
 
 ```
 packages/tsconfig/
-├── base.json          # Shared base config
-├── nextjs.json        # Next.js-specific config
+├── base.json          # 共享 base config
+├── nextjs.json        # Next.js 特定 config
 └── package.json
 ```
 
-**Usage in apps:**
+**在 apps 中使用**：
 
 ```json
 // apps/my-website/tsconfig.json
@@ -321,22 +321,22 @@ packages/tsconfig/
 }
 ```
 
-**Benefits:**
+**優勢**：
 
-- Single source of truth for TS settings
-- Update once, applies everywhere
-- Type consistency across packages
+- TS 設定的單一真相來源
+- 更新一次，到處應用
+- 跨 packages 的類型一致性
 
 ### ESLint Configs
 
 ```
 packages/eslint-config/
-├── next.js            # Next.js-specific rules
-├── base.js            # Shared base rules
+├── next.js            # Next.js 特定規則
+├── base.js            # 共享 base 規則
 └── package.json
 ```
 
-**Usage:**
+**使用**：
 
 ```js
 // apps/my-website/.eslintrc.js
@@ -347,96 +347,96 @@ module.exports = {
 
 ---
 
-## Alternatives Considered
+## 考慮過的替代方案
 
 ### 1. Nx
 
-**Pros:**
+**優點**：
 
-- More features (affected commands, graph visualization)
-- Better for large enterprises
-- Plugin ecosystem
+- 更多功能（affected commands、graph visualization）
+- 更適合大型企業
+- Plugin 生態系統
 
-**Cons:**
+**缺點**：
 
-- More complex configuration
-- Steeper learning curve
-- Heavier tooling
+- 更複雜的配置
+- 更陡峭的學習曲線
+- 更重的工具
 
-**Why not chosen**: Turborepo simpler for small/medium projects.
+**為什麼不選擇**：Turborepo 對中小型專案更簡單。
 
 ### 2. Lerna
 
-**Pros:**
+**優點**：
 
-- Mature, widely adopted
-- Good for publishing to npm
+- 成熟、廣泛採用
+- 適合發布到 npm
 
-**Cons:**
+**缺點**：
 
-- Slower than Turborepo (no caching)
-- Less active development
-- No smart task scheduling
+- 比 Turborepo 慢（沒有快取）
+- 較不活躍的開發
+- 沒有智能任務排程
 
-**Why not chosen**: Turborepo faster and more modern.
+**為什麼不選擇**：Turborepo 更快更現代。
 
-### 3. Yarn Workspaces (alone)
+### 3. Yarn Workspaces（單獨）
 
-**Pros:**
+**優點**：
 
-- Simple, built into Yarn
-- Good dependency management
+- 簡單，內建於 Yarn
+- 良好的依賴管理
 
-**Cons:**
+**缺點**：
 
-- No task orchestration (no Turborepo features)
-- No caching
-- Manual parallelization
+- 沒有任務編排（沒有 Turborepo 功能）
+- 沒有快取
+- 手動並行化
 
-**Why not chosen**: Need Turborepo's speed and caching.
+**為什麼不選擇**：需要 Turborepo 的速度和快取。
 
-### 4. Multi-Repo (Polyrepo)
+### 4. Multi-Repo（Polyrepo）
 
-**Pros:**
+**優點**：
 
-- Independent versioning
-- Clear boundaries
-- Isolated CI/CD
+- 獨立版本控制
+- 清楚的邊界
+- 隔離的 CI/CD
 
-**Cons:**
+**缺點**：
 
-- Version synchronization hell
-- Cross-repo changes painful
-- Tooling duplication
+- 版本同步地獄
+- 跨儲存庫變更痛苦
+- 工具重複
 
-**Why not chosen**: Monorepo DX is superior for this project size.
-
----
-
-## Trade-offs
-
-### What We Gain
-
-- ✅ **Atomic changes** - Single PR for cross-package features
-- ✅ **Shared tooling** - One config to rule them all
-- ✅ **Fast builds** - Turborepo caching saves hours
-- ✅ **Type safety** - TypeScript across workspace boundaries
-
-### What We Accept
-
-- ⚠️ **Larger repo** - More files in one place
-- ⚠️ **Build complexity** - More moving parts
-- ⚠️ **Merge conflicts** - More developers in same repo (mitigated by feature-based arch)
+**為什麼不選擇**：對本專案規模而言，Monorepo 的 DX 更優。
 
 ---
 
-## Scaling Strategy
+## 權衡取捨
 
-### Current State (Small Project)
+### 我們獲得的
+
+- ✅ **原子變更** - 跨 package 功能只需單一 PR
+- ✅ **共享工具** - 一個 config 統治一切
+- ✅ **快速建置** - Turborepo 快取節省數小時
+- ✅ **類型安全** - 跨 workspace 邊界的 TypeScript
+
+### 我們接受的
+
+- ⚠️ **更大的儲存庫** - 更多檔案在一處
+- ⚠️ **建置複雜性** - 更多活動部件
+- ⚠️ **Merge conflicts** - 更多開發者在同一個儲存庫中（透過基於功能的架構緩解）
+
+---
+
+## 擴展策略
+
+### 目前狀態（小型專案）
 
 ```
 apps/
-└── my-website/       # Single app
+└── my-website/       # 單一 app
 
 packages/
 ├── shared/           # Utilities
@@ -445,30 +445,30 @@ packages/
 └── tailwind-config/  # Configs
 ```
 
-**3-5 packages, 1 app, manageable size.**
+**3-5 個 packages，1 個 app，可管理的大小。**
 
-### Future Growth (Medium Project)
+### 未來成長（中型專案）
 
 ```
 apps/
-├── my-website/       # Main site
-└── admin-panel/      # Admin interface
+├── my-website/       # 主網站
+└── admin-panel/      # Admin 介面
 
 packages/
-├── ui/               # Shared UI components
+├── ui/               # 共享 UI components
 ├── api-client/       # API client library
 ├── shared/           # Utilities
-└── configs/          # Shared configs
+└── configs/          # 共享 configs
 ```
 
-**5-10 packages, 2-3 apps, Turborepo shines.**
+**5-10 個 packages，2-3 個 apps，Turborepo 發光。**
 
-### Enterprise Scale (Large Project)
+### 企業規模（大型專案）
 
 ```
 apps/
-├── web/              # Main website
-├── mobile/           # Mobile app (React Native)
+├── web/              # 主網站
+├── mobile/           # Mobile app（React Native）
 ├── admin/            # Admin panel
 └── api/              # Backend API
 
@@ -477,32 +477,32 @@ packages/
 ├── models/           # Data models
 ├── api-client/       # API client
 ├── utils/            # Utilities
-└── configs/          # Shared configs
+└── configs/          # 共享 configs
 ```
 
-**10+ packages, 5+ apps, may need Nx.**
+**10+ packages，5+ apps，可能需要 Nx。**
 
 ---
 
-## Best Practices
+## 最佳實踐
 
-### ✅ Do
+### ✅ 應該做的
 
-1. **Use workspace protocol** - `workspace:*` for internal deps
-2. **Share configs** - One ESLint/TS config per project
-3. **Cache aggressively** - Let Turborepo cache everything
-4. **Document dependencies** - Update turbo.json when adding deps
+1. **使用 workspace protocol** - 對內部依賴使用 `workspace:*`
+2. **共享 configs** - 每個專案一個 ESLint/TS config
+3. **積極快取** - 讓 Turborepo 快取所有東西
+4. **記錄依賴** - 新增依賴時更新 turbo.json
 
-### ❌ Don't
+### ❌ 不應該做的
 
-1. **Don't nest workspaces** - Keep flat structure
-2. **Don't skip turbo.json** - Configure pipelines properly
-3. **Don't ignore cache** - Use cache for speed
-4. **Don't duplicate configs** - Extract to packages/
+1. **不要嵌套 workspaces** - 保持扁平結構
+2. **不要跳過 turbo.json** - 正確配置 pipelines
+3. **不要忽略快取** - 使用快取提升速度
+4. **不要重複 configs** - 提取到 packages/
 
 ---
 
-## CI/CD Integration
+## CI/CD 整合
 
 ### Vercel Deployment
 
@@ -518,11 +518,11 @@ packages/
 }
 ```
 
-**Vercel automatically**:
+**Vercel 自動**：
 
-- Detects Turborepo
-- Uses remote caching
-- Builds only changed apps
+- 偵測 Turborepo
+- 使用遠端快取
+- 只建置變更的 apps
 
 ### GitHub Actions
 
@@ -532,25 +532,25 @@ packages/
   run: pnpm install
 
 - name: Build
-  run: pnpm build # Uses Turborepo caching
+  run: pnpm build # 使用 Turborepo 快取
 
 - name: Test
   run: pnpm test
 ```
 
-**Turborepo caches** speed up CI dramatically.
+**Turborepo 快取** 大幅加速 CI。
 
 ---
 
-## Related Documentation
+## 相關文件
 
-- [Architecture Reference](../reference/architecture.md) - Complete system architecture
-- [Feature-Based Architecture](./feature-based-architecture.md) - Code organization
-- [Development Setup](../guides/development-setup.md) - Local setup
+- [Architecture Reference](../reference/architecture.md) - 完整系統架構
+- [Feature-Based Architecture](./feature-based-architecture.md) - 程式碼組織
+- [Development Setup](../guides/development-setup.md) - 本地設定
 
 ---
 
-## Further Reading
+## 延伸閱讀
 
 - [Turborepo Docs](https://turbo.build/repo/docs)
 - [pnpm Workspaces](https://pnpm.io/workspaces)

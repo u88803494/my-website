@@ -1,220 +1,220 @@
-# ADR 002: Adopt AGENTS.md Standard for AI Configuration
+# ADR 002: 採用 AGENTS.md 標準進行 AI 配置
 
-## Status
+## 狀態
 
-Accepted
+已接受
 
-## Date
+## 日期
 
 2025-11-04
 
-## Context
+## 背景
 
-### Problem
+### 問題
 
-Multiple AI coding tools require separate configuration files, creating duplication and maintenance burden:
+多個 AI 編碼工具需要各自獨立的配置檔案，造成重複與維護負擔：
 
-- **Claude Code**: Required `CLAUDE.md` (13KB)
-- **Cursor IDE**: Required `.cursorrules` (8.7KB)
-- **Windsurf IDE**: No configuration file
-- **Gemini CLI**: Configurable via `settings.json`
-- **Qwen**: Deprecated, using `PROJECT_SUMMARY.md`
+- **Claude Code**：需要 `CLAUDE.md`（13KB）
+- **Cursor IDE**：需要 `.cursorrules`（8.7KB）
+- **Windsurf IDE**：無配置檔案
+- **Gemini CLI**：可透過 `settings.json` 配置
+- **Qwen**：已棄用，使用 `PROJECT_SUMMARY.md`
 
-**Issues with this approach:**
+**此方法的問題：**
 
-- ❌ Content duplication (~70% overlap between CLAUDE.md and .cursorrules)
-- ❌ Synchronization burden (updating 3+ files for each change)
-- ❌ Inconsistency risk across different AI tools
-- ❌ No industry standard for configuration
+- ❌ 內容重複（CLAUDE.md 與 .cursorrules 之間約 70% 重疊）
+- ❌ 同步負擔（每次變更需更新 3+ 個檔案）
+- ❌ 不同 AI 工具間存在不一致風險
+- ❌ 缺乏業界標準配置格式
 
-### Industry Standard: AGENTS.md
+### 業界標準：AGENTS.md
 
-Research revealed [AGENTS.md](https://agents.md/) as an emerging open standard:
+研究發現 [AGENTS.md](https://agents.md/) 為新興開放標準：
 
-- **Adoption**: 20,000+ GitHub repositories
-- **Support**: Cursor, Windsurf, Gemini CLI, RooCode, Zed, GitHub Copilot
-- **Community**: Strong community support (e.g., GitHub Issue #6235 with 1000+ 👍)
-- **Apache Superset** and other major projects already using it
+- **採用度**：20,000+ GitHub repositories
+- **支援工具**：Cursor、Windsurf、Gemini CLI、RooCode、Zed、GitHub Copilot
+- **社群**：強大社群支持（例如 GitHub Issue #6235 獲得 1000+ 👍）
+- **Apache Superset** 及其他主要專案已採用
 
-**Current Claude Code Status:**
+**Claude Code 現況：**
 
-- Does NOT natively support AGENTS.md yet (as of Nov 2025)
-- Feature request pending: https://github.com/anthropics/claude-code/issues/6235
-- **Workaround available**: Reference AGENTS.md via `@AGENTS.md` syntax in CLAUDE.md
+- 截至 2025 年 11 月尚未原生支援 AGENTS.md
+- 功能請求待處理：https://github.com/anthropics/claude-code/issues/6235
+- **可用的變通方案**：在 CLAUDE.md 中透過 `@AGENTS.md` 語法引用
 
-## Decision
+## 決策
 
-Adopt **AGENTS.md as the single source of truth** for common AI configuration, with tool-specific wrappers:
+採用 **AGENTS.md 作為通用 AI 配置的唯一真實來源**，並搭配工具特定的包裝檔案：
 
 ```
-AGENTS.md                    # Main configuration (industry standard, ~200 lines)
-├── CLAUDE.md                # Claude Code entry (@AGENTS.md + specific features)
-├── .cursorrules → AGENTS.md # Symbolic link (Cursor IDE)
-└── .windsurfrules → AGENTS.md # Symbolic link (Windsurf IDE)
+AGENTS.md                    # 主要配置（業界標準，約 200 行）
+├── CLAUDE.md                # Claude Code 入口（@AGENTS.md + 特定功能）
+├── .cursorrules → AGENTS.md # 符號連結（Cursor IDE）
+└── .windsurfrules → AGENTS.md # 符號連結（Windsurf IDE）
 ```
 
-### Configuration Strategy
+### 配置策略
 
-**AGENTS.md contains:**
+**AGENTS.md 包含：**
 
-- Project overview and communication guidelines
-- Monorepo structure and development commands
-- Architecture patterns and boundaries
-- Code standards (TypeScript, naming, import order)
-- Styling guidelines (Tailwind, DaisyUI)
-- State management patterns
-- Git conventions
+- 專案概述與溝通準則
+- Monorepo 結構與開發指令
+- 架構模式與邊界
+- 程式碼標準（TypeScript、命名、import 順序）
+- 樣式指南（Tailwind、DaisyUI）
+- 狀態管理模式
+- Git 慣例
 
-**CLAUDE.md contains:**
+**CLAUDE.md 包含：**
 
-- `@AGENTS.md` reference (imports all common config)
-- Claude Code-specific features:
+- `@AGENTS.md` 引用（匯入所有通用配置）
+- Claude Code 特定功能：
   - React Query + Next.js SSG patterns
-  - API routes documentation
-  - Medium article automation
-  - Subagents usage guide
-  - MCP servers configuration
-  - TodoWrite task management
-  - Instruction hierarchy
-  - Workflow best practices
+  - API routes 文件
+  - Medium 文章自動化
+  - Subagents 使用指南
+  - MCP servers 配置
+  - TodoWrite 任務管理
+  - 指令層級結構
+  - 工作流程最佳實踐
 
-**Tool-specific setup:**
+**工具特定設定：**
 
-- **Cursor**: Reads `.cursorrules` (symlink → AGENTS.md)
-- **Windsurf**: Reads `.windsurfrules` (symlink → AGENTS.md)
-- **Gemini CLI**: Configured via `settings.json` → `"contextFileName": "AGENTS.md"`
-- **Claude Code**: Reads `CLAUDE.md` → references `@AGENTS.md`
+- **Cursor**：讀取 `.cursorrules`（符號連結 → AGENTS.md）
+- **Windsurf**：讀取 `.windsurfrules`（符號連結 → AGENTS.md）
+- **Gemini CLI**：透過 `settings.json` 配置 → `"contextFileName": "AGENTS.md"`
+- **Claude Code**：讀取 `CLAUDE.md` → 引用 `@AGENTS.md`
 
-## Consequences
+## 後果
 
-### Positive
+### 正面影響
 
-✅ **Single Source of Truth**
+✅ **唯一真實來源**
 
-- Common configuration maintained in one place (AGENTS.md)
-- Updates propagate automatically via symlinks and references
+- 通用配置維護於單一位置（AGENTS.md）
+- 更新透過符號連結與引用自動傳播
 
-✅ **Industry Standard**
+✅ **業界標準**
 
-- Follows widely adopted AGENTS.md specification
-- Future-proof as more tools adopt the standard
-- VS Code Copilot also planning support
+- 遵循廣泛採用的 AGENTS.md 規範
+- 隨更多工具採用標準而具備未來性
+- VS Code Copilot 也計劃支援
 
-✅ **Tool-Specific Customization**
+✅ **工具特定客製化**
 
-- Claude Code retains CLAUDE.md for specific features
-- Other tools can add tool-specific configs if needed
+- Claude Code 保留 CLAUDE.md 以支援特定功能
+- 其他工具可視需要新增工具特定配置
 
-✅ **Reduced Maintenance**
+✅ **降低維護成本**
 
-- Update once in AGENTS.md vs 3+ separate files
-- Automatic sync for Cursor/Windsurf via symlinks
+- 在 AGENTS.md 更新一次 vs 更新 3+ 個獨立檔案
+- Cursor/Windsurf 透過符號連結自動同步
 
-✅ **Backward Compatible**
+✅ **向後相容**
 
-- Existing tools continue working immediately
-- No breaking changes to current workflows
+- 現有工具立即繼續運作
+- 不會破壞當前工作流程
 
-### Negative
+### 負面影響
 
-⚠️ **Claude Code Workaround**
+⚠️ **Claude Code 變通方案**
 
-- Requires `@AGENTS.md` reference until native support
-- Adds one level of indirection
-- Depends on Issue #6235 for full native support
+- 需要 `@AGENTS.md` 引用直到原生支援
+- 增加一層間接引用
+- 依賴 Issue #6235 以獲得完整原生支援
 
-⚠️ **Symbolic Link Limitations**
+⚠️ **符號連結限制**
 
-- Windows requires Developer Mode or admin rights
-- Known bugs in Claude Code with symlinks (Issues #764, #1388, #3575)
-- Cursor/Windsurf symlink support needs testing
+- Windows 需要開發者模式或管理員權限
+- Claude Code 已知符號連結 bug（Issues #764、#1388、#3575）
+- Cursor/Windsurf 符號連結支援需測試
 
-⚠️ **File Structure Change**
+⚠️ **檔案結構變更**
 
-- New file structure may confuse developers initially
-- Requires documentation update
+- 新檔案結構可能最初讓開發者困惑
+- 需要文件更新
 
-⚠️ **Content Split Decisions**
+⚠️ **內容分割決策**
 
-- Determining what goes in AGENTS.md vs CLAUDE.md requires judgment
-- May need iteration and refinement
+- 決定哪些內容放在 AGENTS.md vs CLAUDE.md 需要判斷
+- 可能需要迭代與改進
 
-### Mitigations
+### 緩解措施
 
-- **Documentation**: Comprehensive ADR and updated project docs explain rationale
-- **Testing**: Verify all AI tools read configuration correctly
-- **Fallback**: If symlinks fail on Windows, can use copy scripts as backup
-- **Iteration**: Content split can be adjusted based on usage feedback
+- **文件**：詳盡的 ADR 與更新的專案文件說明理由
+- **測試**：驗證所有 AI 工具正確讀取配置
+- **備案**：若 Windows 符號連結失敗，可使用複製腳本作為備案
+- **迭代**：內容分割可根據使用回饋調整
 
-## Implementation
+## 實作
 
-### Files Created
+### 建立的檔案
 
-- `AGENTS.md` - Main configuration (207 lines)
-- `CLAUDE.md` - Claude Code wrapper with @AGENTS.md reference (202 lines)
+- `AGENTS.md` - 主要配置（207 行）
+- `CLAUDE.md` - Claude Code 包裝檔案，含 @AGENTS.md 引用（202 行）
 
-### Files Modified
+### 修改的檔案
 
-- `.gemini/settings.json` - Added `"contextFileName": "AGENTS.md"`
+- `.gemini/settings.json` - 新增 `"contextFileName": "AGENTS.md"`
 
-### Symbolic Links Created
+### 建立的符號連結
 
 - `.cursorrules → AGENTS.md`
 - `.windsurfrules → AGENTS.md`
 
-### Files Removed
+### 移除的檔案
 
-- `.qwen/` directory (deprecated)
+- `.qwen/` 目錄（已棄用）
 
-### Total Size Impact
+### 總大小影響
 
-- **Before**: CLAUDE.md (13KB) + .cursorrules (8.7KB) = 21.7KB
-- **After**: AGENTS.md (7.9KB) + CLAUDE.md (6.5KB) + symlinks (0 bytes) = 14.4KB
-- **Reduction**: ~33% smaller with no duplication
+- **之前**：CLAUDE.md (13KB) + .cursorrules (8.7KB) = 21.7KB
+- **之後**：AGENTS.md (7.9KB) + CLAUDE.md (6.5KB) + 符號連結 (0 bytes) = 14.4KB
+- **減少**：約 33% 更小且無重複
 
-## References
+## 參考資料
 
-- [AGENTS.md Specification](https://agents.md/)
+- [AGENTS.md 規範](https://agents.md/)
 - [AGENT.md GitHub Repository](https://github.com/agentmd/agent.md)
-- [Claude Code Issue #6235: Support AGENTS.md](https://github.com/anthropics/claude-code/issues/6235)
-- [Factory's AGENTS.md Implementation Guide](https://docs.factory.ai/cli/configuration/agents-md)
-- [Apache Superset Implementation](https://github.com/apache/superset)
+- [Claude Code Issue #6235: 支援 AGENTS.md](https://github.com/anthropics/claude-code/issues/6235)
+- [Factory's AGENTS.md 實作指南](https://docs.factory.ai/cli/configuration/agents-md)
+- [Apache Superset 實作](https://github.com/apache/superset)
 
-## Future Considerations
+## 未來考量
 
-### When Claude Code Adds Native AGENTS.md Support
+### 當 Claude Code 新增原生 AGENTS.md 支援時
 
-Once Issue #6235 is resolved:
+一旦 Issue #6235 解決：
 
-1. **Simplify CLAUDE.md**: Remove `@AGENTS.md` reference, keep only Claude-specific content
-2. **Priority Order**: Claude Code will likely check CLAUDE.md first, then AGENTS.md
-3. **No Breaking Changes**: Current structure remains forward-compatible
-4. **Optional**: Consider moving Claude-specific content to separate file
+1. **簡化 CLAUDE.md**：移除 `@AGENTS.md` 引用，僅保留 Claude 特定內容
+2. **優先順序**：Claude Code 可能會先檢查 CLAUDE.md，然後檢查 AGENTS.md
+3. **無破壞性變更**：當前結構保持向前相容
+4. **可選**：考慮將 Claude 特定內容移至獨立檔案
 
-### Monorepo Modularity (Optional)
+### Monorepo 模組化（可選）
 
-AGENTS.md supports hierarchical configuration:
+AGENTS.md 支援階層式配置：
 
 ```
-apps/my-website/AGENTS.md    # App-specific rules (optional)
-packages/shared/AGENTS.md    # Package-specific rules (optional)
+apps/my-website/AGENTS.md    # App 特定規則（可選）
+packages/shared/AGENTS.md    # Package 特定規則（可選）
 ```
 
-Priority: Closest file wins → Parent directory → Root directory
+優先順序：最接近的檔案優先 → 父目錄 → 根目錄
 
-This can be added later if specific packages need unique configurations.
+這可以在特定 packages 需要獨特配置時再新增。
 
-## Testing
+## 測試
 
-- [x] Claude Code reads CLAUDE.md and @AGENTS.md reference
-- [x] Cursor reads .cursorrules symlink
-- [x] Windsurf reads .windsurfrules symlink
-- [x] Gemini CLI reads AGENTS.md via settings.json
-- [x] `pnpm check` passes
-- [x] No build errors
-- [x] Git operations work correctly
+- [x] Claude Code 讀取 CLAUDE.md 和 @AGENTS.md 引用
+- [x] Cursor 讀取 .cursorrules 符號連結
+- [x] Windsurf 讀取 .windsurfrules 符號連結
+- [x] Gemini CLI 透過 settings.json 讀取 AGENTS.md
+- [x] `pnpm check` 通過
+- [x] 無建置錯誤
+- [x] Git 操作正常運作
 
-## Approval
+## 批准
 
-Approved by: Henry Lee
-Date: 2025-11-04
+批准者：Henry Lee
+日期：2025-11-04

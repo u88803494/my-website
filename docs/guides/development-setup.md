@@ -1,5 +1,5 @@
 ---
-title: Development Setup Guide
+title: Development 環境設定指南
 type: guide
 status: stable
 audience: [developer]
@@ -13,71 +13,70 @@ related:
   - reference/cli-commands.md
   - tutorials/01-project-setup.md
 ai_context: |
-  Step-by-step guide for setting up local development environment for the my-website
-  monorepo, including prerequisites, installation, and verification.
+  針對 my-website monorepo 設定本地開發環境的逐步指南，包含先決條件、安裝步驟與驗證流程。
 ---
 
-# Development Setup Guide
+# Development 環境設定指南
 
-This guide will help you set up a local development environment for the my-website monorepo.
+本指南將協助您為 my-website monorepo 設定本地開發環境。
 
-## Prerequisites
+## 先決條件
 
-Before you begin, ensure you have the following installed:
+開始之前，請確保您已安裝以下工具：
 
-### Required
+### 必要條件
 
-- **Node.js** 18.x or later ([Download](https://nodejs.org/))
-- **pnpm** 8.x or later
+- **Node.js** 18.x 或更高版本 ([下載](https://nodejs.org/))
+- **pnpm** 8.x 或更高版本
   ```bash
   npm install -g pnpm
   ```
-- **Git** ([Download](https://git-scm.com/))
+- **Git** ([下載](https://git-scm.com/))
 
-### Recommended
+### 建議安裝
 
-- **VS Code** ([Download](https://code.visualstudio.com/)) with extensions:
+- **VS Code** ([下載](https://code.visualstudio.com/)) 搭配擴充功能：
   - ESLint
   - Prettier
   - TypeScript and JavaScript Language Features
-- **GitHub CLI** (for PR/issue management)
+- **GitHub CLI** (用於 PR/issue 管理)
   ```bash
   brew install gh  # macOS
   ```
 
-### Optional
+### 選用工具
 
-- **Cursor IDE** - AI-powered editor ([Download](https://cursor.sh/))
-- **Claude Code CLI** - For AI-assisted development
+- **Cursor IDE** - AI 驅動的編輯器 ([下載](https://cursor.sh/))
+- **Claude Code CLI** - AI 輔助開發工具
 
 ---
 
-## Step 1: Clone the Repository
+## 步驟 1：Clone Repository
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/u88803494/my-website.git
 
-# Navigate to project directory
+# 進入專案目錄
 cd my-website
 ```
 
 ---
 
-## Step 2: Install Dependencies
+## 步驟 2：安裝相依套件
 
 ```bash
-# Install all dependencies using pnpm
+# 使用 pnpm 安裝所有相依套件
 pnpm install
 ```
 
-**What happens:**
+**執行內容：**
 
-- Installs all dependencies for all workspaces
-- Sets up git hooks (husky)
-- Links internal packages
+- 安裝所有 workspace 的相依套件
+- 設定 git hooks (husky)
+- 連結內部 packages
 
-**Expected output:**
+**預期輸出：**
 
 ```
 Lockfile is up to date, resolution step is skipped
@@ -87,45 +86,45 @@ Done in X.Xs
 
 ---
 
-## Step 3: Environment Variables
+## 步驟 3：環境變數設定
 
-Create `.env.local` in the root directory:
+在根目錄建立 `.env.local`：
 
 ```bash
-# Copy example file (if available)
+# 複製範例檔案（如果有）
 cp .env.example .env.local
 
-# Or create manually
+# 或手動建立
 touch .env.local
 ```
 
-Add required environment variables:
+新增必要的環境變數：
 
 ```bash
-# Required for AI features
+# AI 功能必要
 GEMINI_API_KEY=your_api_key_here
 
-# Development environment
+# 開發環境
 NODE_ENV=development
 ```
 
-**Get API keys:**
+**取得 API keys：**
 
-- **Gemini API**: [Get API Key](https://ai.google.dev/)
+- **Gemini API**：[取得 API Key](https://ai.google.dev/)
 
 ---
 
-## Step 4: Start Development Server
+## 步驟 4：啟動開發伺服器
 
 ```bash
-# Start dev server with Turbo TUI
+# 使用 Turbo TUI 啟動開發伺服器
 pnpm dev
 
-# Or start without TUI
+# 或不使用 TUI
 pnpm --filter my-website dev
 ```
 
-**Expected output:**
+**預期輸出：**
 
 ```
 • Packages in scope: my-website
@@ -135,28 +134,28 @@ pnpm --filter my-website dev
 ○ Local: http://localhost:3000
 ```
 
-**Open your browser:**
+**開啟瀏覽器：**
 
-- Navigate to [http://localhost:3000](http://localhost:3000)
-- You should see the homepage
+- 前往 [http://localhost:3000](http://localhost:3000)
+- 您應該會看到首頁
 
 ---
 
-## Step 5: Verify Installation
+## 步驟 5：驗證安裝
 
-Run the full check suite:
+執行完整檢查套件：
 
 ```bash
 pnpm check
 ```
 
-This runs:
+這會執行：
 
-1. **Type checking** (`tsc --noEmit`)
+1. **型別檢查** (`tsc --noEmit`)
 2. **Linting** (`eslint --fix`)
-3. **Format** (`prettier --write`)
+3. **格式化** (`prettier --write`)
 
-**Expected output:**
+**預期輸出：**
 
 ```
 ✅ Type checking passed
@@ -166,177 +165,177 @@ This runs:
 
 ---
 
-## Project Structure
+## 專案結構
 
-Understanding the monorepo structure:
+理解 monorepo 結構：
 
 ```
 my-website/
 ├── apps/
-│   └── my-website/           # Main Next.js application
+│   └── my-website/           # 主要 Next.js 應用程式
 │       ├── src/
 │       │   ├── app/          # Next.js App Router pages
-│       │   ├── features/     # Feature-based modules
-│       │   └── components/   # Shared components
+│       │   ├── features/     # Feature-based 模組
+│       │   └── components/   # 共用元件
 │       └── package.json
 ├── packages/
-│   ├── shared/               # Shared utilities, types, constants
-│   ├── tsconfig/             # Shared TypeScript configs
-│   ├── eslint-config/        # Shared ESLint configs
-│   └── tailwind-config/      # Shared Tailwind configs
-├── docs/                     # Documentation (Diataxis framework)
-├── scripts/                  # Build and utility scripts
-├── pnpm-workspace.yaml       # Workspace configuration
-└── package.json              # Root package.json
+│   ├── shared/               # 共用工具、types、常數
+│   ├── tsconfig/             # 共用 TypeScript configs
+│   ├── eslint-config/        # 共用 ESLint configs
+│   └── tailwind-config/      # 共用 Tailwind configs
+├── docs/                     # 文件（Diataxis framework）
+├── scripts/                  # Build 和工具腳本
+├── pnpm-workspace.yaml       # Workspace 設定
+└── package.json              # 根目錄 package.json
 ```
 
-**Key directories:**
+**關鍵目錄：**
 
-- **`apps/my-website/src/features/`**: Feature-based architecture (resume, blog, ai-dictionary, etc.)
-- **`packages/shared/`**: Shared code across all apps
-- **`docs/`**: All documentation organized by Diataxis framework
-
----
-
-## Common Commands
-
-| Command                    | Description                          |
-| -------------------------- | ------------------------------------ |
-| `pnpm dev`                 | Start development server (Turbo TUI) |
-| `pnpm build`               | Build all apps for production        |
-| `pnpm check`               | Run type check + lint + format       |
-| `pnpm check-types`         | Run TypeScript checks only           |
-| `pnpm lint`                | Run ESLint only                      |
-| `pnpm format`              | Format code with Prettier            |
-| `pnpm sync:all-articles`   | Sync Medium articles                 |
-| `pnpm --filter my-website` | Run command in specific workspace    |
-
-For complete command reference, see [CLI Commands](../reference/cli-commands.md).
+- **`apps/my-website/src/features/`**：Feature-based 架構（resume、blog、ai-dictionary 等）
+- **`packages/shared/`**：所有應用程式共用的程式碼
+- **`docs/`**：依 Diataxis framework 組織的所有文件
 
 ---
 
-## Development Workflow
+## 常用指令
 
-### Making Changes
+| 指令                       | 說明                           |
+| -------------------------- | ------------------------------ |
+| `pnpm dev`                 | 啟動開發伺服器（Turbo TUI）    |
+| `pnpm build`               | 建置所有應用程式供正式環境使用 |
+| `pnpm check`               | 執行型別檢查 + lint + format   |
+| `pnpm check-types`         | 僅執行 TypeScript 檢查         |
+| `pnpm lint`                | 僅執行 ESLint                  |
+| `pnpm format`              | 使用 Prettier 格式化程式碼     |
+| `pnpm sync:all-articles`   | 同步 Medium 文章               |
+| `pnpm --filter my-website` | 在特定 workspace 執行指令      |
 
-1. **Create a new branch**
+完整指令參考請見 [CLI Commands](../reference/cli-commands.md)。
+
+---
+
+## 開發工作流程
+
+### 進行修改
+
+1. **建立新分支**
 
    ```bash
    git checkout -b feat/your-feature-name
    ```
 
-2. **Make your changes**
-   - Follow [feature-based architecture](../explanation/feature-based-architecture.md)
-   - Use TypeScript strict mode
-   - Add tests if applicable
+2. **進行變更**
+   - 遵循 [feature-based architecture](../explanation/feature-based-architecture.md)
+   - 使用 TypeScript strict mode
+   - 必要時新增測試
 
-3. **Run checks**
+3. **執行檢查**
 
    ```bash
    pnpm check
    ```
 
-4. **Commit your changes**
+4. **提交變更**
 
    ```bash
    git add .
    git commit -m "feat(my-website): Add new feature"
    ```
 
-   Commits follow [Conventional Commits](../reference/commitlint-rules.md).
+   Commit 訊息遵循 [Conventional Commits](../reference/commitlint-rules.md) 規範。
 
-5. **Push and create PR**
+5. **Push 並建立 PR**
    ```bash
    git push origin feat/your-feature-name
    ```
 
-See [Git Workflow Guide](./git-workflow.md) for detailed git procedures.
+詳細 git 流程請見 [Git Workflow Guide](./git-workflow.md)。
 
 ---
 
-## Troubleshooting
+## 疑難排解
 
-### Port 3000 Already in Use
+### Port 3000 已被使用
 
-**Error:**
+**錯誤訊息：**
 
 ```
 Error: listen EADDRINUSE: address already in use :::3000
 ```
 
-**Solution:**
+**解決方法：**
 
 ```bash
-# Find and kill process using port 3000
+# 找到並終止使用 port 3000 的程序
 lsof -ti:3000 | xargs kill -9
 
-# Or use a different port
+# 或使用不同的 port
 PORT=3001 pnpm dev
 ```
 
-### Module Not Found
+### 找不到模組
 
-**Error:**
+**錯誤訊息：**
 
 ```
 Module not found: Can't resolve '@packages/shared'
 ```
 
-**Solution:**
+**解決方法：**
 
 ```bash
-# Reinstall dependencies
+# 重新安裝相依套件
 pnpm install
 
-# Clear Next.js cache
+# 清除 Next.js cache
 rm -rf apps/my-website/.next
 pnpm dev
 ```
 
-### Type Errors
+### 型別錯誤
 
-**Error:**
+**錯誤訊息：**
 
 ```
 TS2307: Cannot find module '@packages/shared/types'
 ```
 
-**Solution:**
+**解決方法：**
 
 ```bash
-# Rebuild TypeScript projects
+# 重建 TypeScript 專案
 pnpm run check-types
 
-# If still failing, check tsconfig paths
+# 如果仍然失敗，檢查 tsconfig paths
 cat apps/my-website/tsconfig.json
 ```
 
-### Git Hooks Not Running
+### Git Hooks 未執行
 
-**Error:**
+**錯誤訊息：**
 
 ```
 Commit created without running pre-commit hooks
 ```
 
-**Solution:**
+**解決方法：**
 
 ```bash
-# Reinstall husky
+# 重新安裝 husky
 pnpm install
 npx husky install
 
-# Verify hooks are installed
+# 驗證 hooks 已安裝
 ls -la .husky/
 ```
 
 ---
 
-## Editor Configuration
+## 編輯器設定
 
 ### VS Code Settings
 
-Create `.vscode/settings.json`:
+建立 `.vscode/settings.json`：
 
 ```json
 {
@@ -356,9 +355,9 @@ Create `.vscode/settings.json`:
 }
 ```
 
-### Recommended VS Code Extensions
+### 建議的 VS Code 擴充功能
 
-Install from Extensions marketplace:
+從 Extensions marketplace 安裝：
 
 ```
 dbaeumer.vscode-eslint
@@ -369,28 +368,28 @@ formulahendry.auto-rename-tag
 
 ---
 
-## Next Steps
+## 下一步
 
-Once your environment is set up:
+環境設定完成後：
 
-1. **Learn the architecture**: Read [Architecture Reference](../reference/architecture.md)
-2. **Follow a tutorial**: Start with [Tutorial 01: Project Setup](../tutorials/01-project-setup.md)
-3. **Understand patterns**: Read [React Query Patterns](../explanation/react-query-patterns.md)
-4. **Make your first change**: Follow [Git Workflow Guide](./git-workflow.md)
-
----
-
-## Related Documentation
-
-- [Architecture Reference](../reference/architecture.md) - Complete system architecture
-- [CLI Commands Reference](../reference/cli-commands.md) - All available commands
-- [Git Workflow Guide](./git-workflow.md) - Git procedures and automation
-- [Tutorial 01: Project Setup](../tutorials/01-project-setup.md) - Hands-on learning path
+1. **學習架構**：閱讀 [Architecture Reference](../reference/architecture.md)
+2. **跟隨教學**：從 [Tutorial 01: Project Setup](../tutorials/01-project-setup.md) 開始
+3. **理解模式**：閱讀 [React Query Patterns](../explanation/react-query-patterns.md)
+4. **進行第一次修改**：遵循 [Git Workflow Guide](./git-workflow.md)
 
 ---
 
-## Getting Help
+## 相關文件
 
-- **Documentation**: Browse [docs/](../)
-- **Issues**: [GitHub Issues](https://github.com/u88803494/my-website/issues)
-- **Architecture Decisions**: [ADR directory](../adr/)
+- [Architecture Reference](../reference/architecture.md) - 完整系統架構
+- [CLI Commands Reference](../reference/cli-commands.md) - 所有可用指令
+- [Git Workflow Guide](./git-workflow.md) - Git 流程與自動化
+- [Tutorial 01: Project Setup](../tutorials/01-project-setup.md) - 實作學習路徑
+
+---
+
+## 取得協助
+
+- **文件**：瀏覽 [docs/](../)
+- **Issues**：[GitHub Issues](https://github.com/u88803494/my-website/issues)
+- **架構決策**：[ADR directory](../adr/)

@@ -1,5 +1,5 @@
 ---
-title: React Query Patterns with Next.js SSG
+title: React Query Patterns with Next.js SSG（React Query 與 Next.js SSG 的模式）
 type: explanation
 status: stable
 audience: [developer, ai]
@@ -11,30 +11,30 @@ related:
   - adr/001-react-query-ssg-pattern.md
   - explanation/feature-based-architecture.md
 ai_context: |
-  Explains the strategy for integrating React Query with Next.js SSG, covering
-  two patterns: server prefetch for SEO and client-only for mutations.
+  解釋整合 React Query 與 Next.js SSG 的策略，
+  涵蓋兩種模式：用於 SEO 的 server prefetch 和用於 mutations 的 client-only。
 ---
 
-# React Query Patterns with Next.js SSG
+# React Query Patterns with Next.js SSG（React Query 與 Next.js SSG 的模式）
 
-## Overview
+## 概述
 
-This project uses **React Query** (TanStack Query) for client-side data management with **Next.js SSG** (Static Site Generation).
+本專案使用 **React Query**（TanStack Query）進行客戶端資料管理，並搭配 **Next.js SSG**（Static Site Generation）。
 
-**Challenge**: React Query is client-side, Next.js SSG is server-side. How do they work together?
+**挑戰**：React Query 是客戶端的，Next.js SSG 是伺服器端的。它們如何協同工作？
 
-**Solution**: Two patterns based on SEO needs.
+**解決方案**：基於 SEO 需求的兩種模式。
 
 ---
 
-## Why React Query?
+## 為什麼使用 React Query？
 
-### Problems Without React Query
+### 沒有 React Query 的問題
 
-Traditional Next.js data fetching:
+傳統的 Next.js 資料獲取：
 
 ```typescript
-// ❌ Without React Query
+// ❌ 沒有 React Query
 export default function BlogPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -54,18 +54,18 @@ export default function BlogPage() {
 }
 ```
 
-**Problems:**
+**問題**：
 
-- Manual loading/error state management
-- No caching (refetch on every mount)
-- No background updates
-- No pagination/infinite scroll support
-- Boilerplate code in every component
+- 手動管理 loading/error 狀態
+- 沒有快取（每次 mount 都重新獲取）
+- 沒有背景更新
+- 沒有 pagination/infinite scroll 支援
+- 每個元件都需要樣板程式碼
 
-### Solution With React Query
+### 使用 React Query 的解決方案
 
 ```typescript
-// ✅ With React Query
+// ✅ 使用 React Query
 export default function BlogPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["articles"],
@@ -78,23 +78,23 @@ export default function BlogPage() {
 }
 ```
 
-**Benefits:**
+**優勢**：
 
-- ✅ Automatic caching and deduplication
-- ✅ Background refetching
-- ✅ Stale-while-revalidate strategy
-- ✅ Built-in pagination/infinite scroll
-- ✅ Minimal boilerplate
+- ✅ 自動快取和去重
+- ✅ 背景重新獲取
+- ✅ Stale-while-revalidate 策略
+- ✅ 內建 pagination/infinite scroll
+- ✅ 最少的樣板程式碼
 
 ---
 
-## Pattern 1: Server Prefetch (With SEO)
+## Pattern 1：Server Prefetch（有 SEO 需求）
 
-**Use when**: GET requests that need SEO optimization.
+**使用時機**：需要 SEO 優化的 GET requests。
 
-**Example**: Blog article listing page.
+**範例**：部落格文章列表頁面。
 
-### Server Component (page.tsx)
+### Server Component（page.tsx）
 
 ```typescript
 // apps/my-website/src/app/blog/page.tsx
@@ -104,14 +104,14 @@ import { getQueryClient } from "@/lib/query-client";
 export default async function BlogPage() {
   const queryClient = getQueryClient();
 
-  // Prefetch data on server
+  // 在伺服器上預取資料
   await queryClient.prefetchInfiniteQuery({
     queryKey: mediumArticlesKeys.list(limit),
     queryFn: ({ pageParam }) => fetchMediumArticles({ limit, pageParam }),
     pages: 1,
   });
 
-  // Pass dehydrated state to client
+  // 將脫水狀態傳遞給客戶端
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <BlogFeature />
@@ -120,7 +120,7 @@ export default async function BlogPage() {
 }
 ```
 
-### Client Component (BlogFeature.tsx)
+### Client Component（BlogFeature.tsx）
 
 ```typescript
 // apps/my-website/src/features/blog/BlogFeature.tsx
@@ -133,51 +133,51 @@ export const BlogFeature: React.FC = () => {
     ...mediumArticlesQueryConfig,
   });
 
-  // Data is already available from server prefetch!
+  // 資料已經從 server prefetch 中獲得！
   return <ArticleList data={data} loadMore={fetchNextPage} />;
 };
 ```
 
-### How It Works
+### 運作原理
 
-1. **Server (Build Time)**:
-   - Next.js runs `page.tsx` as Server Component
-   - `prefetchInfiniteQuery` fetches data on server
-   - `dehydrate(queryClient)` serializes cache to JSON
-   - HTML is generated with data embedded
+1. **Server（建置時）**：
+   - Next.js 將 `page.tsx` 作為 Server Component 執行
+   - `prefetchInfiniteQuery` 在伺服器上獲取資料
+   - `dehydrate(queryClient)` 將快取序列化為 JSON
+   - 生成嵌入資料的 HTML
 
-2. **Client (Runtime)**:
-   - Browser receives HTML with data
-   - React Query hydrates from dehydrated state
-   - No flash of loading state
-   - Further interactions use React Query cache
+2. **Client（執行時）**：
+   - 瀏覽器接收帶有資料的 HTML
+   - React Query 從脫水狀態中 hydrate
+   - 沒有 loading 狀態的閃爍
+   - 進一步的互動使用 React Query 快取
 
-### Benefits
+### 優勢
 
-- ✅ **SEO**: Bots see full HTML with content
-- ✅ **Performance**: No client-side loading spinner
-- ✅ **UX**: Instant content on first load
-- ✅ **Interactivity**: Client-side updates after hydration
+- ✅ **SEO**：爬蟲看到完整的 HTML 內容
+- ✅ **效能**：沒有客戶端的 loading spinner
+- ✅ **UX**：首次載入時立即顯示內容
+- ✅ **互動性**：hydration 後的客戶端更新
 
 ---
 
-## Pattern 2: Client-Only (No SEO)
+## Pattern 2：Client-Only（無 SEO 需求）
 
-**Use when**: POST/PUT/DELETE mutations or pages without SEO needs.
+**使用時機**：POST/PUT/DELETE mutations 或沒有 SEO 需求的頁面。
 
-**Example**: AI Dictionary (mutation-based, no SEO value).
+**範例**：AI Dictionary（基於 mutation，沒有 SEO 價值）。
 
-### Server Component (page.tsx)
+### Server Component（page.tsx）
 
 ```typescript
 // apps/my-website/src/app/ai-dictionary/page.tsx
 export default function AIDictionaryPage() {
-  // Just render the client component
+  // 只渲染 client component
   return <AIDictionaryFeature />;
 }
 ```
 
-### Client Component (AIDictionaryFeature.tsx)
+### Client Component（AIDictionaryFeature.tsx）
 
 ```typescript
 // apps/my-website/src/features/ai-dictionary/AIDictionaryFeature.tsx
@@ -198,15 +198,15 @@ export const AIDictionaryFeature: React.FC = () => {
 };
 ```
 
-### Benefits
+### 優勢
 
-- ✅ **Simplicity**: No server prefetch needed
-- ✅ **Mutations**: POST/PUT/DELETE work naturally
-- ✅ **Cache control**: React Query handles everything
+- ✅ **簡單性**：不需要 server prefetch
+- ✅ **Mutations**：POST/PUT/DELETE 自然運作
+- ✅ **快取控制**：React Query 處理所有事情
 
 ---
 
-## Decision Flow
+## 決策流程
 
 ```
 需要 React Query？
@@ -220,32 +220,32 @@ export const AIDictionaryFeature: React.FC = () => {
 
 ---
 
-## Key Concepts
+## 核心概念
 
 ### Query Keys
 
-**Purpose**: Unique identifier for cache entries.
+**目的**：快取條目的唯一識別符。
 
 ```typescript
-// ✅ Good: Hierarchical query keys
+// ✅ 好：階層式 query keys
 const mediumArticlesKeys = {
   all: ["medium-articles"] as const,
   lists: () => [...mediumArticlesKeys.all, "list"] as const,
   list: (limit: number) => [...mediumArticlesKeys.lists(), { limit }] as const,
 };
 
-// Use in queries
+// 在 queries 中使用
 useInfiniteQuery({
   queryKey: mediumArticlesKeys.list(10),
   // ...
 });
 ```
 
-**Benefits:**
+**優勢**：
 
 - Type-safe query keys
-- Easy cache invalidation
-- Hierarchical organization
+- 易於快取失效
+- 階層式組織
 
 ### Query Configuration
 
@@ -255,21 +255,21 @@ export const mediumArticlesQueryConfig = {
   initialPageParam: 0,
   getNextPageParam: (lastPage, allPages, lastPageParam) =>
     lastPage.hasMore ? lastPageParam + lastPage.data.length : undefined,
-  staleTime: 1000 * 60 * 5, // 5 minutes
-  gcTime: 1000 * 60 * 30, // 30 minutes
+  staleTime: 1000 * 60 * 5, // 5 分鐘
+  gcTime: 1000 * 60 * 30, // 30 分鐘
 };
 ```
 
-**Key options:**
+**關鍵選項**：
 
-- `staleTime`: How long data is considered fresh
-- `gcTime`: How long unused data stays in cache
-- `initialPageParam`: Starting parameter for infinite queries
-- `getNextPageParam`: Logic for determining next page
+- `staleTime`：資料被認為是新鮮的時間
+- `gcTime`：未使用的資料保留在快取中的時間
+- `initialPageParam`：infinite queries 的起始參數
+- `getNextPageParam`：決定下一頁的邏輯
 
 ---
 
-## Common Patterns
+## 常見模式
 
 ### Infinite Scroll
 
@@ -283,7 +283,7 @@ const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
       lastPage.hasMore ? lastPage.nextCursor : undefined,
   });
 
-// Render
+// 渲染
 <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
   {data.pages.map((page) => page.data.map((item) => <Item key={item.id} />))}
 </InfiniteScroll>;
@@ -295,23 +295,23 @@ const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
 const { mutate } = useMutation({
   mutationFn: updateArticle,
   onMutate: async (newData) => {
-    // Cancel outgoing refetches
+    // 取消進行中的 refetches
     await queryClient.cancelQueries({ queryKey: ["articles"] });
 
-    // Snapshot current value
+    // 快照當前值
     const previous = queryClient.getQueryData(["articles"]);
 
-    // Optimistically update cache
+    // 樂觀更新快取
     queryClient.setQueryData(["articles"], (old) => [...old, newData]);
 
     return { previous };
   },
   onError: (err, newData, context) => {
-    // Rollback on error
+    // 錯誤時回滾
     queryClient.setQueryData(["articles"], context.previous);
   },
   onSettled: () => {
-    // Refetch after mutation
+    // mutation 後重新獲取
     queryClient.invalidateQueries({ queryKey: ["articles"] });
   },
 });
@@ -319,11 +319,11 @@ const { mutate } = useMutation({
 
 ---
 
-## Important Version Note
+## 重要版本說明
 
-**⚠️ React Query 5.84.1+ Required**
+**⚠️ React Query 5.84.1+ 必需**
 
-Earlier versions had SSG compatibility issues:
+較早的版本有 SSG 相容性問題：
 
 ```json
 // package.json
@@ -334,84 +334,84 @@ Earlier versions had SSG compatibility issues:
 }
 ```
 
-**Bug fixed**: Server prefetch + HydrationBoundary now works correctly with SSG.
+**修復的 bug**：Server prefetch + HydrationBoundary 現在可以正確與 SSG 協作。
 
-**Do NOT use**: `force-dynamic` or `'use client'` on page level (not needed with 5.84.1+).
+**不要使用**：`force-dynamic` 或頁面層級的 `'use client'`（5.84.1+ 不需要）。
 
 ---
 
-## Alternatives Considered
+## 考慮過的替代方案
 
 ### 1. SWR
 
-**Pros**: Simpler API, lighter weight
+**優點**：更簡單的 API，更輕量
 
-**Cons**: Less features (no infinite scroll, weaker mutations)
+**缺點**：較少功能（沒有 infinite scroll，較弱的 mutations）
 
-**Why not chosen**: React Query more powerful for complex use cases.
+**為什麼不選擇**：React Query 對複雜用例更強大。
 
 ### 2. Apollo Client
 
-**Pros**: Full GraphQL solution
+**優點**：完整的 GraphQL 解決方案
 
-**Cons**: Overkill for REST APIs, heavier bundle
+**缺點**：對 REST APIs 來說過度複雜，bundle 更重
 
-**Why not chosen**: No GraphQL in this project.
+**為什麼不選擇**：本專案沒有 GraphQL。
 
 ### 3. Plain fetch + useEffect
 
-**Pros**: No dependencies
+**優點**：沒有依賴
 
-**Cons**: Manual cache management, lots of boilerplate
+**缺點**：手動快取管理，大量樣板程式碼
 
-**Why not chosen**: React Query provides too much value.
-
----
-
-## Trade-offs
-
-### What We Gain
-
-- ✅ Powerful caching and invalidation
-- ✅ Built-in loading/error states
-- ✅ Optimistic updates
-- ✅ Background refetching
-
-### What We Accept
-
-- ⚠️ Bundle size (+13KB gzipped)
-- ⚠️ Learning curve (query keys, config options)
-- ⚠️ Server/client split (Pattern 1 requires careful setup)
+**為什麼不選擇**：React Query 提供的價值太大。
 
 ---
 
-## Best Practices
+## 權衡取捨
 
-### ✅ Do
+### 我們獲得的
 
-1. Use **query keys** consistently
-2. Configure `staleTime` and `gcTime` appropriately
-3. Handle loading/error states explicitly
-4. Use Pattern 1 for SEO-critical pages
+- ✅ 強大的快取和失效機制
+- ✅ 內建 loading/error 狀態
+- ✅ 樂觀更新
+- ✅ 背景重新獲取
 
-### ❌ Don't
+### 我們接受的
 
-1. Don't use `'use client'` on page level
-2. Don't skip `HydrationBoundary` for server prefetch
-3. Don't forget `initialPageParam` for infinite queries
-4. Don't use Pattern 1 for mutations
-
----
-
-## Related Documentation
-
-- [ADR 001: React Query SSG Pattern](../adr/001-react-query-ssg-pattern.md) - Decision record
-- [Architecture Reference](../reference/architecture.md) - Complete architecture
-- [Feature-Based Architecture](./feature-based-architecture.md) - Code organization
+- ⚠️ Bundle 大小（+13KB gzipped）
+- ⚠️ 學習曲線（query keys、config 選項）
+- ⚠️ Server/client 分離（Pattern 1 需要仔細設定）
 
 ---
 
-## Further Reading
+## 最佳實踐
+
+### ✅ 應該做的
+
+1. 一致地使用 **query keys**
+2. 適當配置 `staleTime` 和 `gcTime`
+3. 明確處理 loading/error 狀態
+4. 對 SEO 關鍵頁面使用 Pattern 1
+
+### ❌ 不應該做的
+
+1. 不要在頁面層級使用 `'use client'`
+2. 不要跳過 server prefetch 的 `HydrationBoundary`
+3. 不要忘記 infinite queries 的 `initialPageParam`
+4. 不要對 mutations 使用 Pattern 1
+
+---
+
+## 相關文件
+
+- [ADR 001: React Query SSG Pattern](../adr/001-react-query-ssg-pattern.md) - 決策記錄
+- [Architecture Reference](../reference/architecture.md) - 完整架構
+- [Feature-Based Architecture](./feature-based-architecture.md) - 程式碼組織
+
+---
+
+## 延伸閱讀
 
 - [TanStack Query Docs](https://tanstack.com/query/latest)
 - [Next.js Server Components](https://nextjs.org/docs/app/building-your-application/rendering/server-components)

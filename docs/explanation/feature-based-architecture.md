@@ -1,5 +1,5 @@
 ---
-title: Feature-Based Architecture
+title: Feature-Based Architecture (基於功能的架構)
 type: explanation
 status: stable
 audience: [developer, architect, ai]
@@ -12,74 +12,74 @@ related:
   - adr/002-agents-md-adoption.md
   - guides/development-setup.md
 ai_context: |
-  Explains the reasoning behind feature-based architecture, its benefits over
-  traditional layered architecture, and how it scales with project growth.
+  解釋基於功能架構背後的理由、其優於傳統分層架構的優勢，
+  以及如何隨著專案成長而擴展。
 ---
 
-# Feature-Based Architecture
+# Feature-Based Architecture (基於功能的架構)
 
-## Overview
+## 概述
 
-This project uses **feature-based architecture** where code is organized by features (resume, blog, ai-dictionary) rather than by technical layers (components, hooks, utils).
+本專案採用 **feature-based architecture（基於功能的架構）**，程式碼按功能（resume、blog、ai-dictionary）組織，而非按技術層級（components、hooks、utils）。
 
-**Key principle**: Everything related to a feature lives together in one directory.
+**核心原則**：與一個功能相關的所有內容都放在同一個目錄中。
 
 ---
 
-## Why Feature-Based Architecture?
+## 為什麼選擇 Feature-Based Architecture？
 
-### Traditional Layered Architecture Problems
+### 傳統分層架構的問題
 
-In a traditional architecture, code is organized by type:
+在傳統架構中，程式碼按類型組織：
 
 ```
 src/
-├── components/          # ALL components
+├── components/          # 所有 components
 │   ├── HeroSection.tsx
 │   ├── ExperienceCard.tsx
 │   ├── BlogList.tsx
 │   ├── DictionaryForm.tsx
 │   └── TimeTrackerMain.tsx
-├── hooks/              # ALL hooks
+├── hooks/              # 所有 hooks
 │   ├── useMediumArticles.ts
 │   ├── useTimeTracker.ts
 │   └── useDictionary.ts
-├── types/              # ALL types
+├── types/              # 所有 types
 │   ├── article.types.ts
 │   ├── timeEntry.types.ts
 │   └── dictionary.types.ts
-└── utils/              # ALL utilities
+└── utils/              # 所有 utilities
     ├── articleParser.ts
     ├── timeCalculator.ts
     └── wordAnalyzer.ts
 ```
 
-**Problems as project grows:**
+**隨著專案成長的問題**：
 
-1. **Hard to find related code** - Time tracker logic scattered across 4+ directories
-2. **Difficult to delete features** - Must hunt through every directory for related files
-3. **Unclear dependencies** - Can't tell which components depend on which hooks
-4. **Merge conflicts** - Multiple developers editing same directories
-5. **Cognitive overload** - Must mentally map relationships across directories
-6. **No clear ownership** - Who owns "components"? Everyone and no one
+1. **難以找到相關程式碼** - Time tracker 邏輯分散在 4 個以上的目錄中
+2. **難以刪除功能** - 必須在每個目錄中搜尋相關檔案
+3. **依賴關係不清楚** - 無法分辨哪些 components 依賴哪些 hooks
+4. **merge conflicts** - 多個開發者編輯相同的目錄
+5. **認知負擔** - 必須在心中建立跨目錄的關係映射
+6. **ownership 不明確** - 誰擁有 "components"？每個人都擁有，也沒人擁有
 
 ---
 
-## Feature-Based Architecture Solution
+## Feature-Based Architecture 解決方案
 
-Instead, organize by **features**:
+改為按 **功能** 組織：
 
 ```
 src/features/
-├── resume/                     # Resume/homepage feature
+├── resume/                     # Resume/homepage 功能
 │   ├── ResumeFeature.tsx       # Orchestrator
-│   ├── components/             # Resume-specific components
+│   ├── components/             # Resume 專用 components
 │   │   ├── HeroSection/
 │   │   └── ExperienceCard/
-│   ├── hooks/                  # Resume-specific hooks
-│   ├── types/                  # Resume-specific types
+│   ├── hooks/                  # Resume 專用 hooks
+│   ├── types/                  # Resume 專用 types
 │   └── index.ts                # Barrel export
-├── blog/                       # Blog feature
+├── blog/                       # Blog 功能
 │   ├── BlogFeature.tsx
 │   ├── components/
 │   │   └── BlogList/
@@ -89,7 +89,7 @@ src/features/
 │   │   └── article.types.ts
 │   └── utils/
 │       └── articleParser.ts
-├── time-tracker/               # Time tracking feature
+├── time-tracker/               # Time tracking 功能
 │   ├── TimeTrackerFeature.tsx
 │   ├── components/
 │   ├── hooks/
@@ -98,7 +98,7 @@ src/features/
 │   │   └── timeEntry.types.ts
 │   └── utils/
 │       └── timeCalculator.ts
-└── ai-dictionary/              # AI dictionary feature
+└── ai-dictionary/              # AI dictionary 功能
     ├── AIDictionaryFeature.tsx
     ├── components/
     │   └── DictionaryForm/
@@ -110,99 +110,99 @@ src/features/
         └── wordAnalyzer.ts
 ```
 
-**Benefits:**
+**優勢**：
 
-1. ✅ **Co-location** - All related code in one place
-2. ✅ **Easy deletion** - Remove entire feature directory
-3. ✅ **Clear dependencies** - Obvious what a feature needs
-4. ✅ **Reduced conflicts** - Teams work in separate directories
-5. ✅ **Cognitive clarity** - Understand feature without jumping around
-6. ✅ **Clear ownership** - Each feature has defined owners
+1. ✅ **Co-location（共置）** - 所有相關程式碼在同一處
+2. ✅ **易於刪除** - 移除整個功能目錄即可
+3. ✅ **清楚的依賴關係** - 一目了然功能需要什麼
+4. ✅ **減少衝突** - 團隊在不同目錄中工作
+5. ✅ **認知清晰** - 無需跳轉就能理解功能
+6. ✅ **明確的 ownership** - 每個功能都有定義的擁有者
 
 ---
 
-## Architecture Rules
+## 架構規則
 
-### ❌ Prohibited: Cross-Feature Imports
+### ❌ 禁止：跨功能 Imports
 
-Features **cannot** import from each other:
+功能之間 **不能** 相互 import：
 
 ```typescript
-// ❌ WRONG: ai-dictionary importing from blog
+// ❌ 錯誤：ai-dictionary 從 blog import
 import { useMediumArticles } from "@/features/blog/hooks";
 ```
 
-**Why?** Creates tight coupling and dependency chains.
+**為什麼？** 會造成緊密耦合和依賴鏈。
 
-**Enforcement**: ESLint rule (`no-restricted-imports`) blocks this at build time.
+**強制執行**：ESLint 規則（`no-restricted-imports`）在建置時阻止這種行為。
 
-### ✅ Allowed: Shared Package Imports
+### ✅ 允許：Shared Package Imports
 
-Use `@packages/shared` for code used by multiple features:
+使用 `@packages/shared` 存放多個功能使用的程式碼：
 
 ```typescript
-// ✅ CORRECT: Import from shared package
+// ✅ 正確：從 shared package import
 import { cn } from "@packages/shared/utils";
 import type { Article } from "@packages/shared/types";
 ```
 
-**What goes in shared:**
+**什麼應該放在 shared 中**：
 
-- **Components**: Used by 2+ features (Button, Card, Modal)
-- **Types**: Shared data structures (Article, User)
-- **Constants**: App-wide constants (API paths, config)
-- **Utilities**: Generic helpers (cn, formatDate)
+- **Components**：被 2 個以上功能使用（Button、Card、Modal）
+- **Types**：共享的資料結構（Article、User）
+- **Constants**：全應用程式的常數（API paths、config）
+- **Utilities**：通用的 helpers（cn、formatDate）
 
-### ✅ Allowed: Data Imports
+### ✅ 允許：Data Imports
 
-Data files (like `articleData.ts`) can be imported anywhere:
+資料檔案（如 `articleData.ts`）可以在任何地方 import：
 
 ```typescript
-// ✅ CORRECT: Import data files
+// ✅ 正確：Import 資料檔案
 import { articleData } from "@packages/shared/data/articleData";
 ```
 
 ---
 
-## Feature Structure Pattern
+## Feature 結構模式
 
-Every feature follows this consistent structure:
+每個功能都遵循一致的結構：
 
 ```
 {feature-name}/
-├── {FeatureName}Feature.tsx    # Main orchestrator component
-├── components/                 # Feature-specific components
+├── {FeatureName}Feature.tsx    # 主要 orchestrator component
+├── components/                 # 功能專用 components
 │   ├── ComponentA/
 │   │   ├── ComponentA.tsx
 │   │   ├── SubComponent.tsx
 │   │   └── index.ts
 │   └── ComponentB/
-├── hooks/                      # Feature-specific hooks
+├── hooks/                      # 功能專用 hooks
 │   ├── useFeatureData.ts
 │   └── useFeatureLogic.ts
-├── types/                      # Feature-specific types
+├── types/                      # 功能專用 types
 │   └── feature.types.ts
-├── utils/                      # Feature-specific utilities
+├── utils/                      # 功能專用 utilities
 │   └── featureHelpers.ts
-├── constants/                  # Feature-specific constants
+├── constants/                  # 功能專用 constants
 │   └── featureConstants.ts
-└── index.ts                    # Barrel export (exports Feature component)
+└── index.ts                    # Barrel export（匯出 Feature component）
 ```
 
-### The "Feature" Component
+### "Feature" Component
 
-Each feature has a main orchestrator component:
+每個功能都有一個主要 orchestrator component：
 
 ```typescript
 // TimeTrackerFeature.tsx
 export const TimeTrackerFeature: React.FC = () => {
-  // 1. Data fetching and state management
+  // 1. 資料獲取和狀態管理
   const { entries, isLoading } = useTimeTracker();
 
-  // 2. Early returns for edge cases
+  // 2. 邊界情況的提前返回
   if (isLoading) return <LoadingState />;
 
-  // 3. Main render with sub-components
+  // 3. 使用子元件的主要渲染
   return (
     <div>
       <HeaderSection />
@@ -213,75 +213,75 @@ export const TimeTrackerFeature: React.FC = () => {
 };
 ```
 
-**Responsibilities:**
+**職責**：
 
-- Coordinate sub-components
-- Manage feature-level state
-- Handle data fetching
-- Control error/loading/empty states
+- 協調子元件
+- 管理功能層級的狀態
+- 處理資料獲取
+- 控制 error/loading/empty 狀態
 
 ---
 
-## Scalability Benefits
+## 可擴展性優勢
 
-### Easy Feature Addition
+### 易於新增功能
 
-**Adding a new feature:**
+**新增新功能**：
 
 ```bash
-# Create feature directory
+# 建立功能目錄
 mkdir -p src/features/new-feature/components
 
-# Copy from template
+# 從模板複製
 cp src/features/resume/ResumeFeature.tsx \
    src/features/new-feature/NewFeature.tsx
 ```
 
-No need to modify existing code. Feature is isolated.
+無需修改現有程式碼。功能是隔離的。
 
-### Easy Feature Removal
+### 易於移除功能
 
-**Removing a feature:**
+**移除功能**：
 
 ```bash
-# Delete feature directory
+# 刪除功能目錄
 rm -rf src/features/old-feature
 
-# Remove route (if any)
+# 移除路由（如果有）
 rm src/app/old-feature/page.tsx
 ```
 
-No hunt-and-delete across multiple directories.
+無需在多個目錄中搜尋並刪除。
 
-### Team Collaboration
+### 團隊協作
 
-**Multiple teams working simultaneously:**
+**多個團隊同時工作**：
 
-- **Team A**: Works in `features/resume/`
-- **Team B**: Works in `features/blog/`
-- **Team C**: Works in `features/time-tracker/`
+- **Team A**：在 `features/resume/` 中工作
+- **Team B**：在 `features/blog/` 中工作
+- **Team C**：在 `features/time-tracker/` 中工作
 
-**Result**: Zero merge conflicts in most cases.
+**結果**：大多數情況下零 merge conflicts。
 
-### Code Understanding
+### 程式碼理解
 
-**New developer onboarding:**
+**新開發者入職**：
 
 ```bash
-# "Where's the time tracker logic?"
+# "Time tracker 邏輯在哪裡？"
 cd src/features/time-tracker
-# Everything is here!
+# 所有東西都在這裡！
 ```
 
-No need to learn the entire codebase structure.
+無需學習整個程式碼庫結構。
 
 ---
 
-## Alternatives Considered
+## 考慮過的替代方案
 
 ### 1. Domain-Driven Design (DDD)
 
-**Structure:**
+**結構**：
 
 ```
 src/domains/
@@ -290,22 +290,22 @@ src/domains/
 └── time/
 ```
 
-**Pros:**
+**優點**：
 
-- Aligns with business domains
-- Clear domain boundaries
+- 與業務領域一致
+- 清楚的領域邊界
 
-**Cons:**
+**缺點**：
 
-- Overkill for small projects
-- Complex domain mapping
-- More abstraction layers
+- 對小專案來說過度複雜
+- 複雜的領域映射
+- 更多抽象層
 
-**Why not chosen**: Too heavyweight for a personal portfolio site.
+**為什麼不選擇**：對個人作品集網站來說太重量級。
 
-### 2. Layered Architecture
+### 2. Layered Architecture（分層架構）
 
-**Structure:**
+**結構**：
 
 ```
 src/
@@ -315,22 +315,22 @@ src/
 └── infrastructure/
 ```
 
-**Pros:**
+**優點**：
 
-- Clear separation of concerns
-- Follows clean architecture
+- 清楚的關注點分離
+- 遵循 clean architecture
 
-**Cons:**
+**缺點**：
 
-- Hard to navigate
-- Scattered feature logic
-- Overkill for frontend
+- 難以導覽
+- 功能邏輯分散
+- 對前端來說過度複雜
 
-**Why not chosen**: Too many layers for a Next.js app.
+**為什麼不選擇**：對 Next.js 應用程式來說層級太多。
 
 ### 3. Atomic Design
 
-**Structure:**
+**結構**：
 
 ```
 src/components/
@@ -340,54 +340,54 @@ src/components/
 └── templates/
 ```
 
-**Pros:**
+**優點**：
 
-- Good for design systems
-- Clear component hierarchy
+- 適合設計系統
+- 清楚的元件層級
 
-**Cons:**
+**缺點**：
 
-- Focuses only on UI
-- Doesn't organize hooks/utils
-- Hard to categorize components
+- 只關注 UI
+- 不組織 hooks/utils
+- 難以分類元件
 
-**Why not chosen**: Doesn't solve the feature isolation problem.
-
----
-
-## Trade-offs
-
-### What We Gain
-
-- ✅ **Co-location** - Related code stays together
-- ✅ **Scalability** - Easy to add/remove features
-- ✅ **Team velocity** - Reduced conflicts and cognitive load
-- ✅ **Maintainability** - Clear ownership and boundaries
-
-### What We Accept
-
-- ⚠️ **Duplication** - Some code might be duplicated across features (acceptable)
-- ⚠️ **Refactoring cost** - Extracting shared code requires moving to `@packages/shared`
-- ⚠️ **File navigation** - More directories to navigate (mitigated by editor search)
-
-### Duplication vs Coupling
-
-**Philosophy**: Prefer duplication over wrong coupling.
-
-**Example**: Two features need date formatting.
-
-**❌ Wrong**: Create `@packages/shared/utils/formatDate.ts` immediately
-**✅ Right**: Let each feature implement it first, extract to shared only when 3+ features need it
-
-**Why?** Premature abstraction is worse than duplication. Wait until the pattern is clear.
+**為什麼不選擇**：無法解決功能隔離問題。
 
 ---
 
-## Implementation Details
+## 權衡取捨
 
-### ESLint Enforcement
+### 我們獲得的
 
-The architecture is enforced by ESLint:
+- ✅ **Co-location** - 相關程式碼保持在一起
+- ✅ **可擴展性** - 易於新增/移除功能
+- ✅ **團隊效率** - 減少衝突和認知負擔
+- ✅ **可維護性** - 清楚的 ownership 和邊界
+
+### 我們接受的
+
+- ⚠️ **重複** - 某些程式碼可能在功能間重複（可接受）
+- ⚠️ **重構成本** - 提取共享程式碼需要移到 `@packages/shared`
+- ⚠️ **檔案導覽** - 更多目錄需要導覽（可透過編輯器搜尋緩解）
+
+### 重複 vs 耦合
+
+**哲學**：優先選擇重複而非錯誤的耦合。
+
+**範例**：兩個功能需要日期格式化。
+
+**❌ 錯誤**：立即建立 `@packages/shared/utils/formatDate.ts`
+**✅ 正確**：先讓每個功能各自實作，當 3 個以上功能需要時才提取到 shared
+
+**為什麼？** 過早抽象比重複更糟。等到模式清楚再行動。
+
+---
+
+## 實作細節
+
+### ESLint 強制執行
+
+架構由 ESLint 強制執行：
 
 ```javascript
 // .eslintrc.js
@@ -406,7 +406,7 @@ rules: {
 }
 ```
 
-**Result**: Build fails if you try to import across features.
+**結果**：如果嘗試跨功能 import，建置會失敗。
 
 ### TypeScript Path Aliases
 
@@ -422,51 +422,51 @@ rules: {
 }
 ```
 
-**Result**: Clean imports with clear boundaries.
+**結果**：清楚邊界的乾淨 imports。
 
 ---
 
-## Evolution Path
+## 演進路徑
 
-### Phase 1: Small Project (Current)
+### Phase 1：小型專案（目前）
 
-- Features as directories
-- Minimal shared code
-- Direct feature imports in pages
+- 功能作為目錄
+- 最少的共享程式碼
+- 在 pages 中直接 import 功能
 
-### Phase 2: Medium Project (Future)
+### Phase 2：中型專案（未來）
 
-- Extract common patterns to `@packages/shared`
-- Create feature flags for A/B testing
-- Add inter-feature communication via event bus
+- 提取常見模式到 `@packages/shared`
+- 建立 feature flags 用於 A/B 測試
+- 透過 event bus 新增功能間通訊
 
-### Phase 3: Large Project (If Needed)
+### Phase 3：大型專案（如果需要）
 
-- Split features into separate packages
-- Implement micro-frontends
-- Add feature-level dependency injection
+- 將功能分割為獨立 packages
+- 實作 micro-frontends
+- 新增功能層級的 dependency injection
 
-**Current state**: Phase 1. Will evolve as needed.
+**目前狀態**：Phase 1。將根據需要演進。
 
 ---
 
-## Related Patterns
+## 相關模式
 
-### Next.js App Router Integration
+### Next.js App Router 整合
 
 ```
 src/
-├── app/                    # Next.js routes
-│   ├── page.tsx            # → resume feature
-│   ├── blog/page.tsx       # → blog feature
-│   └── time-tracker/page.tsx  # → time-tracker feature
-└── features/               # Feature implementations
+├── app/                    # Next.js 路由
+│   ├── page.tsx            # → resume 功能
+│   ├── blog/page.tsx       # → blog 功能
+│   └── time-tracker/page.tsx  # → time-tracker 功能
+└── features/               # 功能實作
     ├── resume/
     ├── blog/
     └── time-tracker/
 ```
 
-**Pages** are thin wrappers that import **features**.
+**Pages** 是輕量級的包裝，import **功能**。
 
 ### Shared Component Library
 
@@ -474,39 +474,39 @@ src/
 packages/shared/
 └── src/
     └── components/
-        ├── ui/             # Generic UI (Button, Modal)
-        └── layout/         # Layout components (Header, Footer)
+        ├── ui/             # 通用 UI（Button、Modal）
+        └── layout/         # Layout components（Header、Footer）
 ```
 
-**Shared components** have no feature-specific logic.
+**Shared components** 沒有功能特定的邏輯。
 
 ---
 
-## Best Practices
+## 最佳實踐
 
-### ✅ Do
+### ✅ 應該做的
 
-1. **Co-locate everything** - Keep feature code together
-2. **Use feature orchestrators** - Main Feature component coordinates sub-components
-3. **Extract to shared only when needed** - Wait for 3+ usages
-4. **Follow consistent structure** - All features look the same
-5. **Respect boundaries** - No cross-feature imports
+1. **Co-locate 所有東西** - 保持功能程式碼在一起
+2. **使用 feature orchestrators** - 主要 Feature component 協調子元件
+3. **只在需要時提取到 shared** - 等待 3 個以上的使用
+4. **遵循一致結構** - 所有功能看起來都一樣
+5. **尊重邊界** - 不跨功能 import
 
-### ❌ Don't
+### ❌ 不應該做的
 
-1. **Don't import across features** - Use `@packages/shared` instead
-2. **Don't create shared code prematurely** - Wait for clear patterns
-3. **Don't mix feature and shared logic** - Keep them separate
-4. **Don't nest features deeply** - Keep feature directories flat
-5. **Don't skip the Feature component** - Always create the orchestrator
+1. **不要跨功能 import** - 使用 `@packages/shared` 代替
+2. **不要過早建立 shared 程式碼** - 等待清楚的模式
+3. **不要混合功能和 shared 邏輯** - 保持它們分離
+4. **不要深層嵌套功能** - 保持功能目錄扁平
+5. **不要跳過 Feature component** - 總是建立 orchestrator
 
 ---
 
-## Real-World Examples
+## 真實世界範例
 
-### Example 1: Time Tracker Feature
+### 範例 1：Time Tracker Feature
 
-**Structure:**
+**結構**：
 
 ```
 features/time-tracker/
@@ -531,16 +531,16 @@ features/time-tracker/
     └── timeEntry.types.ts          # TimeEntry, UserSettings
 ```
 
-**Why it works:**
+**為什麼有效**：
 
-- All time tracker logic in one place
-- Can delete entire feature without hunting files
-- Team can work on time tracker without conflicts
-- New developer finds everything in `features/time-tracker/`
+- 所有 time tracker 邏輯在一處
+- 可以刪除整個功能而不需搜尋檔案
+- 團隊可以在 time tracker 上工作而不產生衝突
+- 新開發者在 `features/time-tracker/` 中找到所有東西
 
-### Example 2: Blog Feature
+### 範例 2：Blog Feature
 
-**Structure:**
+**結構**：
 
 ```
 features/blog/
@@ -554,40 +554,40 @@ features/blog/
     └── article.types.ts            # Article type (extends shared Article)
 ```
 
-**Why it works:**
+**為什麼有效**：
 
-- Simple feature, simple structure
-- Uses React Query for data fetching
-- Reuses shared `Article` type but extends it
-- No utils needed (uses shared utilities)
-
----
-
-## Conclusion
-
-Feature-based architecture is the right choice for this project because:
-
-1. **Scalability**: Easy to add/remove features as requirements change
-2. **Maintainability**: Clear boundaries and ownership
-3. **Developer Experience**: Reduced cognitive load and merge conflicts
-4. **Flexibility**: Can evolve to more complex patterns if needed
-
-**Philosophy**: Start simple, evolve as needed, prioritize developer experience.
+- 簡單的功能，簡單的結構
+- 使用 React Query 進行資料獲取
+- 重用 shared `Article` type 但擴展它
+- 不需要 utils（使用 shared utilities）
 
 ---
 
-## Related Documentation
+## 結論
 
-- [Architecture Reference](../reference/architecture.md) - Complete system architecture
-- [Monorepo Strategy](./monorepo-strategy.md) - Why Turborepo
-- [Development Setup](../guides/development-setup.md) - How to set up locally
-- [ADR 002: AGENTS.md Adoption](../adr/002-agents-md-adoption.md) - AI-first development
+Feature-based architecture 是本專案的正確選擇，因為：
+
+1. **可擴展性**：隨需求變化易於新增/移除功能
+2. **可維護性**：清楚的邊界和 ownership
+3. **開發者體驗**：減少認知負擔和 merge conflicts
+4. **靈活性**：如果需要可以演進到更複雜的模式
+
+**哲學**：從簡單開始，根據需要演進，優先考慮開發者體驗。
 
 ---
 
-## Further Reading
+## 相關文件
 
-- [Feature-Sliced Design](https://feature-sliced.design/) - Similar methodology
-- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html) - Enterprise alternative
-- [The Mikado Method](https://mikadomethod.info/) - Refactoring strategy
-- [Modular Monoliths](https://www.kamilgrzybek.com/blog/posts/modular-monolith-primer) - Architecture evolution
+- [Architecture Reference](../reference/architecture.md) - 完整系統架構
+- [Monorepo Strategy](./monorepo-strategy.md) - 為什麼選擇 Turborepo
+- [Development Setup](../guides/development-setup.md) - 如何本地設定
+- [ADR 002: AGENTS.md Adoption](../adr/002-agents-md-adoption.md) - AI 優先開發
+
+---
+
+## 延伸閱讀
+
+- [Feature-Sliced Design](https://feature-sliced.design/) - 類似方法論
+- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html) - 企業級替代方案
+- [The Mikado Method](https://mikadomethod.info/) - 重構策略
+- [Modular Monoliths](https://www.kamilgrzybek.com/blog/posts/modular-monolith-primer) - 架構演進
