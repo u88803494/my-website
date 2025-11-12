@@ -1,119 +1,119 @@
-# 📋 Reference
+# 📋 參考文件
 
-**Information-oriented documentation** - Complete technical specifications, APIs, configurations, and factual information.
+**資訊導向文件** - 完整的技術規格、API、配置及實務資訊。
 
-## 📖 Philosophy
+## 📖 理念
 
-Reference documentation provides dry, precise technical information. It describes how things work without teaching or guiding.
+參考文件提供精確、不摻雜情感的技術資訊。它描述事物如何運作，但不進行教學或指導。
 
-**Characteristics:**
+**特點：**
 
-- ✅ Information-oriented (stating facts)
-- ✅ Comprehensive and accurate
-- ✅ Well-organized and structured
-- ✅ Consistent format
-- ✅ Easy to scan and search
+- ✅ 資訊導向（陳述事實）
+- ✅ 全面且準確
+- ✅ 組織良好且結構化
+- ✅ 格式一致
+- ✅ 易於掃描和搜尋
 
-**Not for:**
+**不適用於：**
 
-- ❌ Explaining concepts (use [Explanation](../explanation/))
-- ❌ Teaching step-by-step (use [Tutorials](../tutorials/))
-- ❌ Solving problems (use [Guides](../guides/))
+- ❌ 解釋概念（請使用 [說明文件](../explanation/)）
+- ❌ 逐步教學（請使用 [教學文件](../tutorials/)）
+- ❌ 解決問題（請使用 [指南](../guides/)）
 
 ---
 
-## 📚 Available Reference Documentation
+## 📚 可用的參考文件
 
-### System & Architecture
+### 系統與架構
 
-- **[Architecture](./architecture.md)** - System architecture and component relationships
-- **Environment Variables** - All environment variables _(Coming soon)_
-- **CLI Commands** - Available pnpm scripts and commands _(Coming soon)_
+- **[架構](./architecture.md)** - 系統架構與組件關係
+- **環境變數** - 所有環境變數 _(即將推出)_
+- **CLI 指令** - 可用的 pnpm scripts 和指令 _(即將推出)_
 
-### Git & CI/CD
+### Git 與 CI/CD
 
-- **[Commitlint Rules](./commitlint-rules.md)** - Commit message rules and scopes
-- **[Git Hooks](./git-hooks.md)** - Pre-commit, commit-msg, pre-push configurations
+- **[Commitlint 規則](./commitlint-rules.md)** - Commit 訊息規則與範圍
+- **[Git Hooks](./git-hooks.md)** - Pre-commit、commit-msg、pre-push 配置
 
 ### API
 
-- **[API Reference](./api/)** - Complete API specifications for all endpoints
+- **[API 參考](./api/)** - 所有端點的完整 API 規格
 
 ---
 
-## 🔍 Organization Principles
+## 🔍 組織原則
 
-### By Technical Domain
+### 按技術領域分類
 
-Reference docs are organized by technical area, not by user task:
+參考文件按技術領域組織，而非按使用者任務：
 
-- **System**: Architecture, environment, CLI
-- **Git/CI**: Commit rules, hooks, automation
-- **API**: REST endpoints, GraphQL queries
-- **Components**: React components, hooks, utilities (if needed)
+- **System**：架構、環境、CLI
+- **Git/CI**：Commit 規則、hooks、自動化
+- **API**：REST endpoints、GraphQL queries
+- **Components**：React 組件、hooks、工具函式（如有需要）
 
-### Consistent Structure
+### 一致的結構
 
-Each reference doc follows a standard format:
+每份參考文件都遵循標準格式：
 
-1. **Overview**: Brief description
-2. **Specification**: Complete technical details
-3. **Parameters/Options**: All available configurations
-4. **Examples**: Minimal working examples
-5. **Related**: Links to guides and explanations
+1. **概述**：簡短描述
+2. **規格**：完整的技術細節
+3. **參數/選項**：所有可用的配置
+4. **範例**：最小可運作範例
+5. **相關**：連結到指南和說明文件
 
 ---
 
-## 🆕 Creating New Reference Docs
+## 🆕 建立新的參考文件
 
-Use the [reference template](../.templates/reference-template.md):
+使用[參考文件範本](../.templates/reference-template.md)：
 
 ```bash
 cp docs/.templates/reference-template.md docs/reference/your-reference.md
 ```
 
-**Naming Convention:**
+**命名慣例：**
 
-- Use kebab-case: `your-reference.md`
-- Be specific: `commitlint-rules.md` not `rules.md`
-- Factual names: `git-hooks.md` not `git-hooks-guide.md`
+- 使用 kebab-case：`your-reference.md`
+- 具體明確：`commitlint-rules.md` 而非 `rules.md`
+- 事實性名稱：`git-hooks.md` 而非 `git-hooks-guide.md`
 
-**Required Sections:**
+**必要章節：**
 
-1. Overview (what this documents)
-2. Specification (complete details)
-3. All Options/Parameters (exhaustive list)
-4. Examples (minimal, working code)
-5. Related Docs (cross-references)
+1. 概述（記錄什麼）
+2. 規格（完整細節）
+3. 所有選項/參數（詳盡清單）
+4. 範例（最小、可運作的程式碼）
+5. 相關文件（交叉引用）
 
-**Best Practices:**
+**最佳實踐：**
 
-- Be exhaustively complete
-- Use tables for structured data
-- Include type signatures
-- Provide minimal examples (not tutorials)
-- Keep explanations brief (link to Explanation docs)
+- 內容務求詳盡完整
+- 使用表格呈現結構化資料
+- 包含型別簽名
+- 提供最小範例（非教學）
+- 保持說明簡短（連結到說明文件）
 
 ---
 
-## 🤖 For AI Agents
+## 🤖 給 AI Agents
 
-When user asks for **technical specs** or **"what is"** questions:
+當使用者詢問**技術規格**或**「什麼是」**類型的問題時：
 
-1. Check if reference doc exists
-2. If not, create using template
-3. Focus on facts, not procedures
-4. Include all options/parameters
-5. Link to Guides for how-to, Explanation for why
+1. 檢查參考文件是否存在
+2. 如不存在，使用範本建立
+3. 專注於事實，而非流程
+4. 包含所有選項/參數
+5. 連結到指南了解操作方式，連結到說明文件了解原因
 
-**Example mapping:**
+**範例對應：**
 
-- "What commit types are allowed?" → Commitlint Rules reference
-- "What env vars are available?" → Environment Variables reference
-- "How do I use git hooks?" → Git Workflow guide (not reference)
-- "Why do we use this pattern?" → Explanation (not reference)
+- 「允許哪些 commit 類型？」 → Commitlint Rules 參考
+- 「有哪些環境變數可用？」 → Environment Variables 參考
+- 「如何使用 git hooks？」 → Git Workflow 指南（非參考文件）
+- 「為什麼我們使用這個模式？」 → 說明文件（非參考文件）
 
-**API Documentation Format:**
+**API 文件格式：**
 
 ```markdown
 # POST /api/endpoint

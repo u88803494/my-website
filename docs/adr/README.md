@@ -1,146 +1,146 @@
 # 📝 Architecture Decision Records (ADRs)
 
-**Decision-oriented documentation** - Recording significant architectural and technical decisions made in this project.
+**以決策為導向的文件** - 記錄本專案中重要的架構與技術決策。
 
-## 📖 What are ADRs?
+## 📖 什麼是 ADRs？
 
-Architecture Decision Records document important decisions that affect the structure, patterns, or technologies used in this project. They capture:
+Architecture Decision Records 記錄影響專案結構、模式或技術的重要決策。它們捕捉：
 
-- **What** decision was made
-- **Why** it was made
-- **What alternatives** were considered
-- **What consequences** resulted
+- **做了什麼**決策
+- **為什麼**做這個決策
+- 考慮了**哪些替代方案**
+- 產生了**什麼後果**
 
-ADRs are immutable historical records. Once written, they should not be changed (except for formatting). If a decision is reversed, create a new ADR that supersedes the old one.
+ADRs 是不可變的歷史記錄。一旦撰寫完成，就不應該更改（除了格式調整）。如果決策被推翻，應該建立新的 ADR 來取代舊的。
 
 ---
 
-## 📚 ADR Index
+## 📚 ADR 索引
 
-### Active Decisions
+### 活躍決策
 
 - **[001 - React Query SSG Pattern](./001-react-query-ssg-pattern.md)** ✅
-  - Decision: Use React Query with Next.js SSG via HydrationBoundary
-  - Status: Accepted
-  - Date: 2024-12-15
+  - 決策：透過 HydrationBoundary 使用 React Query 搭配 Next.js SSG
+  - 狀態：已接受
+  - 日期：2024-12-15
 
 - **[002 - Agents.md Adoption](./002-agents-md-adoption.md)** ✅
-  - Decision: Adopt Agents.md standard for AI agent configuration
-  - Status: Accepted
-  - Date: 2024-12-28
+  - 決策：採用 Agents.md 標準進行 AI agent 設定
+  - 狀態：已接受
+  - 日期：2024-12-28
 
 - **[003 - Git Hooks Optimization](./003-git-hooks-optimization.md)** ✅
-  - Decision: Two-tier commit size limits with pre-commit/pre-push strategy
-  - Status: Accepted
-  - Date: 2025-01-07
+  - 決策：採用兩層式 commit 大小限制與 pre-commit/pre-push 策略
+  - 狀態：已接受
+  - 日期：2025-01-07
 
-### Superseded Decisions
+### 已取代決策
 
-_(None yet)_
+_(尚無)_
 
-### Deprecated Decisions
+### 已廢棄決策
 
-_(None yet)_
+_(尚無)_
 
 ---
 
-## 🆕 Creating New ADRs
+## 🆕 建立新 ADRs
 
-### When to Create an ADR
+### 何時建立 ADR
 
-Create an ADR when making decisions about:
+在做以下決策時建立 ADR：
 
-- ✅ **Architecture**: System structure, component boundaries
-- ✅ **Technology choices**: Frameworks, libraries, tools
-- ✅ **Patterns**: Design patterns, coding conventions
-- ✅ **Infrastructure**: Deployment, CI/CD, hosting
-- ✅ **Standards**: Documentation, testing, code style
+- ✅ **架構**：系統結構、元件邊界
+- ✅ **技術選擇**：框架、函式庫、工具
+- ✅ **模式**：設計模式、程式碼慣例
+- ✅ **基礎設施**：部署、CI/CD、託管
+- ✅ **標準**：文件、測試、程式碼風格
 
-**Don't create ADRs for:**
+**不應建立 ADRs 的情況：**
 
-- ❌ Implementation details (code-level decisions)
-- ❌ Temporary or easily reversible choices
-- ❌ Obvious decisions with no alternatives
-- ❌ Personal preferences without technical merit
+- ❌ 實作細節（程式碼層級的決策）
+- ❌ 暫時性或容易回復的選擇
+- ❌ 沒有替代方案的顯而易見決策
+- ❌ 缺乏技術價值的個人偏好
 
-### Process
+### 流程
 
-1. **Copy the template**:
+1. **複製模板**：
 
    ```bash
    cp docs/adr/template.md docs/adr/00X-your-decision.md
    ```
 
-2. **Number sequentially**: Use next available number (004, 005, etc.)
+2. **依序編號**：使用下一個可用編號（004、005 等）
 
-3. **Fill out all sections**: Follow the template structure
+3. **填寫所有章節**：遵循模板結構
 
-4. **Link related docs**: Connect to Explanations, Guides, References
+4. **連結相關文件**：連接到 Explanations、Guides、References
 
-5. **Commit**: Create a separate commit for the ADR
+5. **提交**：為 ADR 建立獨立的 commit
 
-6. **Update this README**: Add your ADR to the index above
-
----
-
-## 📋 ADR Template
-
-See [template.md](./template.md) for the standard ADR format.
-
-**Required sections:**
-
-1. Title and metadata
-2. Status
-3. Context
-4. Decision
-5. Consequences
-6. Alternatives Considered
+6. **更新此 README**：將你的 ADR 加入上方索引
 
 ---
 
-## 🔗 Relationship with Other Doc Types
+## 📋 ADR 模板
+
+請參考 [template.md](./template.md) 取得標準 ADR 格式。
+
+**必要章節：**
+
+1. 標題與 metadata
+2. 狀態
+3. 背景脈絡
+4. 決策
+5. 後果
+6. 考慮的替代方案
+
+---
+
+## 🔗 與其他文件類型的關係
 
 ```
-Research & Analysis
+研究與分析
       ↓
-Explanation Doc (discusses concepts broadly)
+Explanation Doc（廣泛討論概念）
       ↓
-ADR (records specific decision for this project)
+ADR（記錄本專案的特定決策）
       ↓
-Reference Doc (technical specifications)
+Reference Doc（技術規格）
       ↓
-Guide (how to implement)
+Guide（如何實作）
 ```
 
-**Example:**
+**範例：**
 
-- [Explanation: Git Hooks Research](../explanation/git-hooks-research.md) - Industry research
-- [ADR 003: Git Hooks Optimization](./003-git-hooks-optimization.md) - Our decision
-- [Reference: Git Hooks](../reference/git-hooks.md) - Technical specs
-- [Guide: Git Workflow](../guides/git-workflow.md) - How to use
+- [Explanation: Git Hooks Research](../explanation/git-hooks-research.md) - 產業研究
+- [ADR 003: Git Hooks Optimization](./003-git-hooks-optimization.md) - 我們的決策
+- [Reference: Git Hooks](../reference/git-hooks.md) - 技術規格
+- [Guide: Git Workflow](../guides/git-workflow.md) - 如何使用
 
 ---
 
-## 🤖 For AI Agents
+## 🤖 給 AI Agents
 
-### When to Create ADRs
+### 何時建立 ADRs
 
-If user is making a **significant technical decision**:
+如果使用者正在做**重要的技術決策**：
 
-1. Suggest creating an ADR
-2. Use the template
-3. Research alternatives thoroughly
-4. Document trade-offs honestly
-5. Link to related Explanation docs
+1. 建議建立 ADR
+2. 使用模板
+3. 徹底研究替代方案
+4. 誠實記錄權衡取捨
+5. 連結到相關的 Explanation 文件
 
 ### ADR vs Explanation
 
-- **ADR**: "We decided to use X for Y because Z"
-- **Explanation**: "Here's how X works and when to use it"
+- **ADR**：「我們決定在 Y 情況使用 X，因為 Z」
+- **Explanation**：「這裡說明 X 如何運作以及何時使用」
 
-An ADR is project-specific and decision-focused. An Explanation is general and understanding-focused.
+ADR 是專案特定且以決策為焦點的。Explanation 是通用且以理解為焦點的。
 
-### Status Transitions
+### 狀態轉換
 
 ```
                  ┌─────────────┐
@@ -166,15 +166,15 @@ An ADR is project-specific and decision-focused. An Explanation is general and u
     └────────────┘
 ```
 
-- **Proposed**: Under review, not yet decided
-- **Accepted**: Decision made and implemented
-- **Rejected**: Considered but not chosen
-- **Superseded**: Replaced by newer ADR
-- **Deprecated**: No longer applicable
+- **Proposed**：審查中，尚未決定
+- **Accepted**：已決定並實作
+- **Rejected**：已考慮但未選用
+- **Superseded**：被新的 ADR 取代
+- **Deprecated**：不再適用
 
 ---
 
-## 📖 Further Reading
+## 📖 延伸閱讀
 
 - [Architecture Decision Records (GitHub)](https://adr.github.io/)
 - [ADR Best Practices](https://github.com/joelparkerhenderson/architecture-decision-record)

@@ -1,99 +1,99 @@
-# 📖 Tutorials
+# 📖 教學文件（Tutorials）
 
-**Learning-oriented documentation** - Guided lessons that teach fundamental concepts through hands-on practice.
+**以學習為導向的文件** - 透過實作練習教導基礎概念的引導式課程。
 
-## 📖 Philosophy
+## 📖 設計理念
 
-Tutorials are lessons that take learners on a journey from zero knowledge to basic competence. They are meant for learning, not problem-solving.
+教學文件是帶領學習者從零知識到基本能力的課程。它們是為了學習而設計，而非解決問題。
 
-**Characteristics:**
+**特性：**
 
-- ✅ Learning-oriented (building understanding)
-- ✅ Gentle introduction to concepts
-- ✅ Safe, reproducible environment
-- ✅ Immediate feedback and success
-- ✅ Minimal choices (clear path forward)
+- ✅ 以學習為導向（建立理解）
+- ✅ 溫和地介紹概念
+- ✅ 安全、可重現的環境
+- ✅ 即時反饋與成功體驗
+- ✅ 最少選擇（清晰的前進路徑）
 
-**Not for:**
+**不適用於：**
 
-- ❌ Solving specific problems (use [Guides](../guides/))
-- ❌ Comprehensive reference material (use [Reference](../reference/))
-- ❌ Deep conceptual explanations (use [Explanation](../explanation/))
-
----
-
-## 📚 Available Tutorials
-
-### Getting Started
-
-1. **Project Setup** - From zero to running dev server _(Coming soon)_
-2. **Adding New Feature** - End-to-end feature development _(Coming soon)_
-3. **Medium Integration** - Working with external APIs _(Coming soon)_
+- ❌ 解決特定問題（請使用 [Guides](../guides/)）
+- ❌ 全面的參考資料（請使用 [Reference](../reference/)）
+- ❌ 深入的概念解釋（請使用 [Explanation](../explanation/)）
 
 ---
 
-## 🎯 Learning Path
+## 📚 可用的教學文件
+
+### 入門指南
+
+1. **專案設置** - 從零開始到執行開發伺服器 _（即將推出）_
+2. **新增功能** - 端到端的功能開發 _（即將推出）_
+3. **Medium 整合** - 使用外部 API _（即將推出）_
+
+---
+
+## 🎯 學習路徑
 
 ```
-01. Project Setup
-    └─> Set up tools, clone, install, run
+01. 專案設置
+    └─> 設置工具、複製、安裝、執行
         │
         ↓
-02. Adding New Feature
-    └─> Create feature folder, components, add route
+02. 新增功能
+    └─> 建立 feature 資料夾、元件、新增路由
         │
         ↓
-03. Medium Integration
-    └─> Fetch data, parse, display, handle errors
+03. Medium 整合
+    └─> 取得資料、解析、顯示、處理錯誤
 ```
 
 ---
 
-## 🆕 Creating New Tutorials
+## 🆕 建立新的教學文件
 
-Use the [tutorial template](../.templates/tutorial-template.md):
+使用 [教學文件範本](../.templates/tutorial-template.md)：
 
 ```bash
 cp docs/.templates/tutorial-template.md docs/tutorials/0X-tutorial-name.md
 ```
 
-**Naming Convention:**
+**命名規範：**
 
-- Prefix with number: `01-`, `02-`, `03-`
-- Use kebab-case: `01-your-tutorial.md`
-- Describe the journey: `getting-started.md` not `setup.md`
+- 使用數字前綴：`01-`、`02-`、`03-`
+- 使用 kebab-case：`01-your-tutorial.md`
+- 描述學習旅程：使用 `getting-started.md` 而非 `setup.md`
 
-**Required Sections:**
+**必要的章節：**
 
-1. What You'll Learn (learning objectives)
-2. Prerequisites (assumed knowledge)
-3. Time Estimate (how long it takes)
-4. Lesson Steps (guided, numbered)
-5. What You've Learned (recap)
-6. Next Steps (where to go from here)
+1. 你將學到什麼（學習目標）
+2. 先備知識（假設的知識）
+3. 預估時間（需要多久）
+4. 課程步驟（引導式、有編號）
+5. 你學到了什麼（總結）
+6. 下一步（接下來可以學什麼）
 
-**Best Practices:**
+**最佳實踐：**
 
-- Start simple, add complexity gradually
-- Explain _why_ each step matters
-- Include code examples that work
-- Provide checkpoints for verification
-- Encourage experimentation at the end
+- 從簡單開始，逐步增加複雜度
+- 解釋每個步驟*為什麼*重要
+- 包含可運作的程式碼範例
+- 提供驗證的檢查點
+- 在結尾鼓勵實驗
 
 ---
 
-## 🤖 For AI Agents
+## 🤖 給 AI Agent 的指引
 
-When user is **learning** or **onboarding**:
+當使用者在**學習**或**初次接觸**時：
 
-1. Start with Tutorial 01 if completely new
-2. Guide through tutorials sequentially
-3. Provide context and explanations (not just commands)
-4. Encourage experimentation after core learning
-5. Link to Guides for specific tasks afterward
+1. 如果完全是新手，從教學 01 開始
+2. 依序引導完成教學文件
+3. 提供脈絡和解釋（不只是指令）
+4. 在核心學習後鼓勵實驗
+5. 之後連結到 Guides 進行特定任務
 
-**Example mapping:**
+**範例對應：**
 
-- "I'm new to this project" → Start with Tutorial 01
-- "How does the feature system work?" → Tutorial 02
-- "I want to add authentication" → Create new tutorial (if teaching concept) or Guide (if solving problem)
+- 「我是這個專案的新手」→ 從教學 01 開始
+- 「feature 系統是如何運作的？」→ 教學 02
+- 「我想新增身份驗證」→ 建立新的教學文件（如果是教導概念）或 Guide（如果是解決問題）

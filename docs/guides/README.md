@@ -1,78 +1,78 @@
-# 🛠️ How-to Guides
+# 🛠️ 操作指南
 
-**Problem-oriented documentation** - Practical step-by-step instructions to achieve specific goals.
+**以問題為導向的文件** - 實用的逐步說明，幫助達成特定目標。
 
-## 📖 Philosophy
+## 📖 理念
 
-Guides are recipes that help you solve specific problems. They assume you understand the basics and focus on practical steps to accomplish tasks.
+操作指南是幫助你解決特定問題的食譜。它們假設你已經理解基礎知識，並專注於完成任務的實際步驟。
 
-**Characteristics:**
+**特性：**
 
-- ✅ Goal-oriented (achieving specific outcomes)
-- ✅ Step-by-step instructions
-- ✅ Minimal explanation (link to [Explanation](../explanation/) for "why")
-- ✅ Practical examples
-- ✅ Troubleshooting sections
+- ✅ 目標導向（達成特定成果）
+- ✅ 逐步操作說明
+- ✅ 最少的解釋（連結到[說明文件](../explanation/)了解「為什麼」）
+- ✅ 實際範例
+- ✅ 疑難排解章節
 
-**Not for:**
+**不適用於：**
 
-- ❌ Teaching concepts from scratch (use [Tutorials](../tutorials/))
-- ❌ Complete technical specifications (use [Reference](../reference/))
-- ❌ Explaining "why" (use [Explanation](../explanation/))
-
----
-
-## 📚 Available Guides
-
-### Development
-
-- **[Git Workflow](./git-workflow.md)** - Using git hooks, commitlint, and automation
-- **Development Setup** - Setting up local development environment _(Coming soon)_
-- **Contributing** - How to contribute to this project _(Coming soon)_
-
-### Deployment
-
-- **Deployment** - Deploying to Vercel and managing environments _(Coming soon)_
+- ❌ 從零開始教學概念（使用[教學文件](../tutorials/)）
+- ❌ 完整技術規格（使用[參考文件](../reference/)）
+- ❌ 解釋「為什麼」（使用[說明文件](../explanation/)）
 
 ---
 
-## 🆕 Creating New Guides
+## 📚 可用的操作指南
 
-Use the [guide template](../.templates/guide-template.md):
+### 開發相關
+
+- **[Git 工作流程](./git-workflow.md)** - 使用 git hooks、commitlint 和自動化
+- **開發環境設定** - 設定本地開發環境 _(即將推出)_
+- **貢獻指南** - 如何貢獻此專案 _(即將推出)_
+
+### 部署相關
+
+- **部署指南** - 部署到 Vercel 和管理環境 _(即將推出)_
+
+---
+
+## 🆕 建立新的操作指南
+
+使用[指南模板](../.templates/guide-template.md)：
 
 ```bash
 cp docs/.templates/guide-template.md docs/guides/your-guide-name.md
 ```
 
-**Naming Convention:**
+**命名慣例：**
 
-- Use kebab-case: `your-guide-name.md`
-- Be specific: `deploying-to-vercel.md` not `deployment.md`
-- Action-oriented: `adding-api-endpoint.md` not `api-endpoints.md`
+- 使用 kebab-case：`your-guide-name.md`
+- 具體明確：`deploying-to-vercel.md` 而非 `deployment.md`
+- 動作導向：`adding-api-endpoint.md` 而非 `api-endpoints.md`
 
-**Required Sections:**
+**必要章節：**
 
-1. Overview (what you'll achieve)
-2. Prerequisites (what you need first)
-3. Steps (numbered, actionable)
-4. Verification (how to check success)
-5. Troubleshooting (common issues)
-6. Related (links to related docs)
+1. 概述（你將達成什麼）
+2. 前置需求（你需要先準備什麼）
+3. 步驟（編號、可執行的）
+4. 驗證（如何檢查成功）
+5. 疑難排解（常見問題）
+6. 相關資源（連結到相關文件）
 
 ---
 
-## 🤖 For AI Agents
+## 🤖 給 AI Agent 的指引
 
-When user asks **"How do I..."** questions:
+當使用者詢問 **「我該如何...」** 問題時：
 
-1. Check if existing guide covers it
-2. If not, create new guide using template
-3. Focus on actionable steps, not theory
-4. Link to Reference for technical details
-5. Link to Explanation for background context
+1. 檢查是否有現有指南涵蓋此問題
+2. 若無，使用模板建立新指南
+3. 專注於可執行步驟，而非理論
+4. 連結到參考文件以了解技術細節
+5. 連結到說明文件以了解背景脈絡
 
-**Example mapping:**
+**範例對應：**
 
-- "How do I set up the dev environment?" → Development Setup guide
-- "How do I add a new API endpoint?" → Create new guide
-- "How do git hooks work?" → Link to Explanation (not a guide)
+- 「我該如何設定開發環境？」 → 開發環境設定指南
+- 「我該如何新增 API endpoint？」 → 建立新指南
+- 「git hooks 如何運作？」 → 連結到說明文件（非操作指南）
