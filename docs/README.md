@@ -34,6 +34,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 
 - [Git Workflow](./guides/git-workflow.md) - 使用 git hooks 和自動化
 - [Development Setup](./guides/development-setup.md) - 設定本地開發環境
+- [Rental Finder Automation](./guides/rental-finder-automation.md) - 台北租屋自動化完整操作指南
 - Deployment - 部署到正式環境 _(規劃中)_
 - Contributing - 如何貢獻此專案 _(規劃中)_
 
@@ -61,6 +62,13 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [API Reference](./reference/api/) - REST API 規格
 - [Commitlint Rules](./reference/commitlint-rules.md) - Commit 訊息規則
 - [Git Hooks](./reference/git-hooks.md) - Git hooks 設定
+- **Rental Finder** - 租屋自動化技術參考
+  - [Facebook Groups](./reference/rental-finder/facebook-groups.md) - 18 個租屋社團清單
+  - [Facebook Scraper](./reference/rental-finder/facebook-scraper.md) - Facebook 爬蟲邏輯
+  - [591 Scraper](./reference/rental-finder/591-scraper.md) - 591 爬蟲規則
+  - [API Endpoints](./reference/rental-finder/api-endpoints.md) - API 規格說明
+  - [Data Schema](./reference/rental-finder/data-schema.md) - 資料庫 Schema
+  - [Telegram Config](./reference/rental-finder/telegram-config.md) - Telegram Bot 設定
 - Environment Variables - 所有環境變數 _(規劃中)_
 - CLI Commands - 可用指令 _(規劃中)_
 
@@ -76,6 +84,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [React Query Patterns](./explanation/react-query-patterns.md) - SSG + React Query 策略
 - [Monorepo Strategy](./explanation/monorepo-strategy.md) - 為什麼用 Turborepo
 - [Git Hooks Research](./explanation/git-hooks-research.md) - 業界最佳實踐
+- [Rental Finder Automation Strategy](./explanation/rental-finder-automation-strategy.md) - 租屋自動化技術選型
 
 **何時使用**：理解技術決策背後的「為什麼」
 
@@ -89,6 +98,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [001 - React Query SSG Pattern](./adr/001-react-query-ssg-pattern.md)
 - [002 - Agents.md Adoption](./adr/002-agents-md-adoption.md)
 - [003 - Git Hooks Optimization](./adr/003-git-hooks-optimization.md)
+- [004 - Rental Finder Feature](./adr/004-rental-finder-feature.md) - 台北租屋自動化整合決策
 
 **何時使用**：做出或理解重大架構決策
 
@@ -151,6 +161,7 @@ ai_context: |
 - **架構**: [Architecture Reference](./reference/architecture.md), [Feature-Based Explanation](./explanation/feature-based-architecture.md)
 - **API**: [API Reference](./reference/api/)
 - **React Query**: [React Query Patterns](./explanation/react-query-patterns.md), [ADR 001](./adr/001-react-query-ssg-pattern.md)
+- **租屋自動化**: [Automation Guide](./guides/rental-finder-automation.md), [Technical Strategy](./explanation/rental-finder-automation-strategy.md), [Facebook Groups](./reference/rental-finder/facebook-groups.md), [API Endpoints](./reference/rental-finder/api-endpoints.md), [ADR 004](./adr/004-rental-finder-feature.md)
 
 ---
 
