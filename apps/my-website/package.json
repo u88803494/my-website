@@ -7,10 +7,10 @@
     "dev": "next dev --turbopack",
     "build": "pnpm run sync:all-articles && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src --fix",
     "check-types": "tsc --noEmit",
     "format:check": "prettier --check .",
-    "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint --fix && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
+    "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "pnpm run sync:latest && pnpm run parse:articles"
