@@ -30,8 +30,13 @@ export const metadata: Metadata = {
  * 3. Pass dehydrated state to client via `HydrationBoundary`
  * 4. Client-side QueryClient hydrates with server data
  *
+ * TEMPORARY: Using dynamic rendering due to React 19.2.3 SSG compatibility issue
+ * TODO: Remove after React Query + React 19.2.3 SSG issue is resolved
+ *
  * Reference: https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr
  */
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage() {
   const queryClient = getQueryClient();
 
