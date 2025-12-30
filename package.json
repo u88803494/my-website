@@ -17,8 +17,7 @@
     "clean": "turbo run clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
-    "verify:deps": "bash scripts/verify-dependencies.sh",
-    "postinstall": "bash scripts/verify-dependencies.sh"
+    "verify:deps": "bash scripts/verify-dependencies.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
