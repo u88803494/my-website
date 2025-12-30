@@ -16,7 +16,9 @@
     "check": "turbo run check",
     "clean": "turbo run clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "verify:deps": "bash scripts/verify-dependencies.sh",
+    "postinstall": "bash scripts/verify-dependencies.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
@@ -33,8 +35,15 @@
     "overrides": {
       "react": "19.2.3",
       "react-dom": "19.2.3",
-      "@types/react": "^19.0.0",
-      "@types/react-dom": "^19.0.0"
+      "@types/react": "19.0.0",
+      "@types/react-dom": "19.0.0",
+      "@tanstack/react-query": "5.84.1"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "19.2.3",
+        "react-dom": "19.2.3"
+      }
     }
   }
 }
