@@ -7,6 +7,12 @@ import type { NextConfig } from "next";
  */
 const nextConfig: NextConfig = {
   /**
+   * Transpile workspace packages for proper React Context sharing
+   * Required for monorepo packages to work correctly with React Query
+   */
+  transpilePackages: ["@packages/blog", "@packages/shared", "@packages/ai-dictionary", "@packages/ai-analyzer"],
+
+  /**
    * Prevent bundling server-only packages in client code
    * Required for pino and pino-pretty to work correctly
    */
