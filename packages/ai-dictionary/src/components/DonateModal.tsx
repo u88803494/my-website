@@ -1,7 +1,6 @@
 "use client";
 
 import { X } from "lucide-react";
-import Image from "next/image";
 
 interface DonateModalProps {
   isOpen: boolean;
@@ -27,11 +26,10 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
           {/* 街口支付 */}
           <div className="text-center">
             <div className="mb-4 inline-block rounded-lg bg-white p-4 shadow-md">
-              <Image
+              <img
                 alt="街口支付 QR Code"
                 className="mx-auto"
                 height={200}
-                priority
                 src="/images/donate/jkopay-barcode.png"
                 width={200}
               />
@@ -43,11 +41,10 @@ const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
           {/* Buy Me a Coffee */}
           <div className="text-center">
             <div className="mb-4 inline-block rounded-lg bg-white p-4 shadow-md">
-              <Image
+              <img
                 alt="Buy Me a Coffee QR Code"
                 className="mx-auto"
                 height={200}
-                priority
                 src="/images/donate/bmc-qr.png"
                 width={200}
               />

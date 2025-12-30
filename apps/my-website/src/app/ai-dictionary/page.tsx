@@ -12,7 +12,11 @@ export const metadata: Metadata = {
  * ❌ 不使用 HydrationBoundary
  * 理由：此頁面僅使用 React Query mutations (POST requests)，
  * 不需要 server-side data prefetch，所有資料獲取都在 client-side 進行。
+ *
+ * Dynamic rendering required for client-only mutations
  */
+export const dynamic = "force-dynamic";
+
 const AIDictionaryPage: React.FC = () => {
   return <AIDictionaryFeature />;
 };
