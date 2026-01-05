@@ -26,6 +26,7 @@
     "@packages/blog": "workspace:*",
     "@packages/shared": "workspace:*",
     "@packages/tailwind-config": "workspace:*",
+    "@t3-oss/env-nextjs": "^0.13.10",
     "@tanstack/react-query": "^5.84.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
