@@ -10,7 +10,8 @@
         "GROQ_API_KEY",
         "MISTRAL_API_KEY",
         "NODE_ENV",
-        "NEXT_RUNTIME"
+        "NEXT_RUNTIME",
+        "SKIP_ENV_VALIDATION"
       ]
     },
     "check-types": {},
@@ -27,7 +28,7 @@
     },
     "lint": {
       "outputs": [],
-      "env": ["NODE_ENV"]
+      "env": ["NODE_ENV", "SKIP_ENV_VALIDATION"]
     },
     "check": {
       "dependsOn": ["lint", "check-types"],
