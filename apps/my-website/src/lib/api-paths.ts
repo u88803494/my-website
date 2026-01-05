@@ -2,6 +2,8 @@
  * 集中管理所有 API 路徑
  */
 export const API_PATHS = {
+  /** AI 聊天相關 API */
+  AI_CHAT: "/api/chat",
   /** AI 字典相關 API */
   DICTIONARY_DEFINE: "/api/define",
   /** Medium 文章相關 API */
