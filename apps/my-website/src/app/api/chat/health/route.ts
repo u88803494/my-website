@@ -1,6 +1,8 @@
 import { AI_MODELS, type AIModelProvider } from "@packages/shared";
 import { NextResponse } from "next/server";
 
+import { env } from "@/env";
+
 interface ProviderStatus {
   configured: boolean;
   modelCount: number;
@@ -21,15 +23,15 @@ interface HealthResponse {
 export async function GET() {
   const providers: Record<AIModelProvider, ProviderStatus> = {
     google: {
-      configured: Boolean(process.env.GEMINI_API_KEY),
+      configured: Boolean(env.GEMINI_API_KEY),
       modelCount: AI_MODELS.filter((m) => m.provider === "google").length,
     },
     groq: {
-      configured: Boolean(process.env.GROQ_API_KEY),
+      configured: Boolean(env.GROQ_API_KEY),
       modelCount: AI_MODELS.filter((m) => m.provider === "groq").length,
     },
     mistral: {
-      configured: Boolean(process.env.MISTRAL_API_KEY),
+      configured: Boolean(env.MISTRAL_API_KEY),
       modelCount: AI_MODELS.filter((m) => m.provider === "mistral").length,
     },
   };

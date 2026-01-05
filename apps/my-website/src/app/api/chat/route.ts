@@ -14,6 +14,7 @@ import { createLogger, getErrorStatusCode, logError, parseAIErrorMessage } from 
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/env";
 import { checkRateLimit, getClientIP } from "@/lib/rateLimit";
 
 const logger = createLogger({ context: "api/chat" });
@@ -53,15 +54,15 @@ interface ProviderConfig {
 function getProviderConfig(): Record<AIModelProvider, ProviderConfig> {
   return {
     google: {
-      apiKey: process.env.GEMINI_API_KEY,
+      apiKey: env.GEMINI_API_KEY,
       models: AI_MODELS.filter((m) => m.provider === "google").map((m) => m.id),
     },
     groq: {
-      apiKey: process.env.GROQ_API_KEY,
+      apiKey: env.GROQ_API_KEY,
       models: AI_MODELS.filter((m) => m.provider === "groq").map((m) => m.id),
     },
     mistral: {
-      apiKey: process.env.MISTRAL_API_KEY,
+      apiKey: env.MISTRAL_API_KEY,
       models: AI_MODELS.filter((m) => m.provider === "mistral").map((m) => m.id),
     },
   };
