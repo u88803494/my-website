@@ -100,15 +100,28 @@ function createProviderInstance(provider: AIModelProvider, apiKey: string) {
 // Message Validation
 // =============================================================================
 
-interface ValidatedMessage {
-  role: (typeof VALID_ROLES)[number];
-  content: string;
-}
-
 interface MessageValidationResult {
   success: boolean;
-  messages?: ValidatedMessage[];
+  messages?: UIMessage[];
   error?: string;
+}
+
+// Extract text content from UIMessage (parts array) or CoreMessage (content string)
+function extractMessageContent(msg: Record<string, unknown>): string | null {
+  // UIMessage format: has parts array
+  if (Array.isArray(msg.parts)) {
+    const textParts = msg.parts
+      .filter((part): part is { type: string; text: string } => part?.type === "text" && typeof part?.text === "string")
+      .map((part) => part.text);
+    return textParts.length > 0 ? textParts.join("\n") : null;
+  }
+
+  // CoreMessage format: has content string
+  if (typeof msg.content === "string") {
+    return msg.content;
+  }
+
+  return null;
 }
 
 function validateMessages(messages: unknown): MessageValidationResult {
@@ -134,15 +147,17 @@ function validateMessages(messages: unknown): MessageValidationResult {
       return { success: false, error: `訊息 ${i + 1} 格式不正確` };
     }
 
-    const { role, content } = msg as Record<string, unknown>;
+    const msgObj = msg as Record<string, unknown>;
+    const { role } = msgObj;
 
     // Validate role
     if (!VALID_ROLES.includes(role as (typeof VALID_ROLES)[number])) {
       return { success: false, error: `訊息 ${i + 1} 的角色不正確` };
     }
 
-    // Validate content
-    if (typeof content !== "string") {
+    // Extract and validate content (supports both UIMessage and CoreMessage formats)
+    const content = extractMessageContent(msgObj);
+    if (content === null) {
       return { success: false, error: `訊息 ${i + 1} 的內容格式不正確` };
     }
     if (content.trim().length === 0) {
@@ -153,7 +168,7 @@ function validateMessages(messages: unknown): MessageValidationResult {
     }
   }
 
-  return { success: true, messages: messages as ValidatedMessage[] };
+  return { success: true, messages: messages as UIMessage[] };
 }
 
 // =============================================================================
