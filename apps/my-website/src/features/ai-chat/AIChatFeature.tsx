@@ -4,7 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { parseAIErrorMessage } from "@packages/shared/utils";
 import { DefaultChatTransport } from "ai";
 import { AlertTriangle, MessageSquare, RefreshCw, Trash2 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import { ChatContainer, ChatInput, ModelSelector } from "./components";
 import { DEFAULT_MODEL_ID, isValidModelId } from "./constants/models";
@@ -31,19 +31,22 @@ const AIChatFeature: React.FC = () => {
     return parseAIErrorMessage(error.message);
   }, [error]);
 
-  const handleSend = (message: string) => {
-    sendMessage({ text: message });
-  };
+  const handleSend = useCallback(
+    (message: string) => {
+      sendMessage({ text: message });
+    },
+    [sendMessage],
+  );
 
-  const handleClearChat = () => {
+  const handleClearChat = useCallback(() => {
     setMessages([]);
-  };
+  }, [setMessages]);
 
-  const handleModelChange = (modelId: string) => {
+  const handleModelChange = useCallback((modelId: string) => {
     if (isValidModelId(modelId)) {
       setSelectedModel(modelId);
     }
-  };
+  }, []);
 
   return (
     <div className="bg-base-100 flex flex-1 flex-col overflow-hidden">

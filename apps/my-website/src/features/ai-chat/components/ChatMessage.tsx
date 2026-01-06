@@ -2,19 +2,24 @@
 
 import type { UIMessage } from "ai";
 import { Bot, User } from "lucide-react";
+import { memo, useMemo } from "react";
 
 interface ChatMessageProps {
   message: UIMessage;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
   const isUser = message.role === "user";
 
-  // Extract text content from parts
-  const textContent = message.parts
-    ?.filter((part): part is { type: "text"; text: string } => part.type === "text")
-    .map((part) => part.text)
-    .join("\n");
+  // Extract text content from parts (memoized to prevent recalculation)
+  const textContent = useMemo(
+    () =>
+      message.parts
+        ?.filter((part): part is { type: "text"; text: string } => part.type === "text")
+        .map((part) => part.text)
+        .join("\n"),
+    [message.parts],
+  );
 
   return (
     <div className={`chat ${isUser ? "chat-end" : "chat-start"}`}>
@@ -41,6 +46,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       </div>
     </div>
   );
-};
+});
+
+ChatMessage.displayName = "ChatMessage";
 
 export default ChatMessage;

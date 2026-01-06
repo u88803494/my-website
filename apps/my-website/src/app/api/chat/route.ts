@@ -145,6 +145,9 @@ function validateMessages(messages: unknown): MessageValidationResult {
     if (typeof content !== "string") {
       return { success: false, error: `訊息 ${i + 1} 的內容格式不正確` };
     }
+    if (content.trim().length === 0) {
+      return { success: false, error: `訊息 ${i + 1} 不能為空白` };
+    }
     if (content.length > MAX_MESSAGE_LENGTH) {
       return { success: false, error: `訊息 ${i + 1} 超過長度限制 (${MAX_MESSAGE_LENGTH / 1024}KB)` };
     }
@@ -199,6 +202,13 @@ export async function POST(request: NextRequest) {
         },
       },
     );
+  }
+
+  // Content-Type validation (security: prevent non-JSON requests)
+  const contentType = request.headers.get("content-type");
+  if (!contentType?.includes("application/json")) {
+    logger.warn({ contentType }, "Invalid Content-Type");
+    return NextResponse.json({ error: "Content-Type 必須是 application/json" }, { status: 415 });
   }
 
   // Parse JSON body with error handling
