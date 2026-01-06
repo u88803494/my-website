@@ -48,7 +48,9 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
   if (messages.length === 0) {
     return (
       <div className="text-base-content/60 from-base-100 to-base-200/50 flex flex-1 flex-col items-center justify-center bg-gradient-to-b">
-        <div className="mb-6 text-7xl opacity-80">💬</div>
+        <div className="mb-6 text-7xl opacity-80" aria-hidden="true">
+          💬
+        </div>
         <h2 className="mb-3 text-2xl font-bold">{UI_STRINGS.emptyStateTitle}</h2>
         <p className="text-center text-sm">
           {UI_STRINGS.emptyStateDescription}
@@ -64,6 +66,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
       <div
         ref={containerRef}
         onScroll={handleScroll}
+        role="log"
+        aria-label={UI_STRINGS.ariaChatHistory}
+        aria-live="polite"
+        aria-busy={isLoading}
         className="from-base-100 to-base-200/50 absolute inset-0 overflow-y-auto bg-gradient-to-b p-4"
       >
         <div className="mx-auto max-w-4xl space-y-6">
@@ -72,14 +78,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
             return <ChatMessage key={message.id} message={message} isStreaming={isLastAssistantMessage && isLoading} />;
           })}
           {isLoading && (
-            <div className="chat chat-start">
+            <div className="chat chat-start" aria-label={UI_STRINGS.ariaLoadingMessage}>
               <div className="chat-image avatar">
                 <div className="bg-secondary flex h-11 w-11 items-center justify-center rounded-full shadow-sm">
-                  <span className="loading loading-dots loading-sm text-secondary-content" />
+                  <span className="loading loading-dots loading-sm text-secondary-content" aria-hidden="true" />
                 </div>
               </div>
               <div className="chat-bubble chat-bubble-secondary shadow-sm">
-                <span className="loading loading-dots loading-sm" />
+                <span className="loading loading-dots loading-sm" aria-hidden="true" />
               </div>
             </div>
           )}
@@ -93,7 +99,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
           className="btn btn-circle btn-sm btn-primary absolute right-4 bottom-4 shadow-lg"
           aria-label={UI_STRINGS.scrollToBottom}
         >
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className="h-4 w-4" aria-hidden="true" />
         </button>
       )}
     </div>

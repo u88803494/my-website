@@ -29,6 +29,13 @@ export const UI_STRINGS = {
   // Errors
   quotaErrorSuggestion: "建議使用 Groq 或 Mistral 系列模型",
   markdownErrorFallback: "無法渲染內容",
+
+  // Accessibility (ARIA labels)
+  ariaMessageInput: "訊息輸入框",
+  ariaSendMessage: "發送訊息",
+  ariaChatHistory: "對話歷史",
+  ariaModelSelector: "選擇 AI 模型",
+  ariaLoadingMessage: "AI 正在回應中",
 } as const;
 
 export type UIStringKey = keyof typeof UI_STRINGS;

@@ -22,14 +22,22 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelCha
   };
 
   return (
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className={`btn btn-sm btn-ghost gap-2 ${disabled ? "btn-disabled" : ""}`}>
+    <div className="dropdown dropdown-end" role="combobox" aria-haspopup="listbox" aria-expanded="false">
+      <label
+        tabIndex={0}
+        aria-label={UI_STRINGS.ariaModelSelector}
+        className={`btn btn-sm btn-ghost gap-2 ${disabled ? "btn-disabled" : ""}`}
+      >
         <span className="text-sm font-medium">{currentModel?.name ?? UI_STRINGS.modelSelectorPlaceholder}</span>
-        <ChevronDown className="h-4 w-4" />
+        <ChevronDown className="h-4 w-4" aria-hidden="true" />
       </label>
-      <ul tabIndex={0} className="menu dropdown-content rounded-box bg-base-200 z-50 mt-2 w-64 p-2 shadow-lg">
+      <ul
+        tabIndex={0}
+        role="listbox"
+        className="menu dropdown-content rounded-box bg-base-200 z-50 mt-2 w-64 p-2 shadow-lg"
+      >
         {AI_MODELS.map((model) => (
-          <li key={model.id}>
+          <li key={model.id} role="option" aria-selected={selectedModel === model.id}>
             <button
               onClick={() => handleModelSelect(model.id)}
               className={`flex flex-col items-start ${selectedModel === model.id ? "active" : ""}`}

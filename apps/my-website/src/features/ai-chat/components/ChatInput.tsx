@@ -59,12 +59,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading, disabled = fal
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={UI_STRINGS.inputPlaceholder}
+        aria-label={UI_STRINGS.ariaMessageInput}
         className="max-h-52 min-h-12 flex-1 resize-none border-0 bg-transparent px-2 py-3 text-base focus:outline-none"
         disabled={isLoading || disabled}
         rows={1}
       />
       <button
         type="submit"
+        aria-label={UI_STRINGS.ariaSendMessage}
+        aria-busy={isLoading}
         className="btn btn-primary rounded-xl shadow-sm transition-all hover:shadow-md"
         disabled={!input.trim() || isLoading || disabled}
       >

@@ -54,7 +54,7 @@ const AIChatFeature: React.FC = () => {
       <header className="navbar border-base-300/50 bg-base-200/80 relative z-20 border-b px-4 backdrop-blur-sm">
         <div className="flex-1">
           <h1 className="flex items-center gap-2 text-xl font-bold">
-            <MessageSquare className="text-primary h-6 w-6" />
+            <MessageSquare className="text-primary h-6 w-6" aria-hidden="true" />
             {UI_STRINGS.featureTitle}
           </h1>
         </div>
@@ -64,10 +64,10 @@ const AIChatFeature: React.FC = () => {
             <button
               onClick={handleClearChat}
               className="btn btn-ghost btn-sm hover:bg-error/10 hover:text-error transition-all"
-              title={UI_STRINGS.clearChat}
+              aria-label={UI_STRINGS.clearChat}
               disabled={isLoading}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -79,8 +79,8 @@ const AIChatFeature: React.FC = () => {
 
         {/* Error Display */}
         {parsedError && (
-          <div className={`alert mx-4 mb-2 ${parsedError.isQuotaError ? "alert-warning" : "alert-error"}`}>
-            <AlertTriangle className="h-5 w-5 shrink-0" />
+          <div role="alert" className={`alert mx-4 mb-2 ${parsedError.isQuotaError ? "alert-warning" : "alert-error"}`}>
+            <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden="true" />
             <div className="flex flex-col gap-1">
               <span className="font-medium">{parsedError.message}</span>
               {parsedError.isQuotaError && (
@@ -89,7 +89,7 @@ const AIChatFeature: React.FC = () => {
             </div>
             {parsedError.isRetryable && (
               <button onClick={() => window.location.reload()} className="btn btn-ghost btn-sm gap-1">
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4" aria-hidden="true" />
                 {UI_STRINGS.retry}
               </button>
             )}
