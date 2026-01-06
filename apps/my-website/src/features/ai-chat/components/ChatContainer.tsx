@@ -4,6 +4,7 @@ import type { UIMessage } from "ai";
 import { ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { SCROLL_BOTTOM_THRESHOLD, UI_STRINGS } from "../constants";
 import ChatMessage from "./ChatMessage";
 
 interface ChatContainerProps {
@@ -15,11 +16,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
   const containerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // Check if user is at/near bottom (within 100px threshold)
+  // Check if user is at/near bottom (within threshold)
   const checkIfAtBottom = useCallback(() => {
     if (!containerRef.current) return true;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    return scrollHeight - scrollTop - clientHeight < 100;
+    return scrollHeight - scrollTop - clientHeight < SCROLL_BOTTOM_THRESHOLD;
   }, []);
 
   // Handle scroll events to track user position
@@ -48,11 +49,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
     return (
       <div className="text-base-content/60 from-base-100 to-base-200/50 flex flex-1 flex-col items-center justify-center bg-gradient-to-b">
         <div className="mb-6 text-7xl opacity-80">💬</div>
-        <h2 className="mb-3 text-2xl font-bold">開始對話</h2>
+        <h2 className="mb-3 text-2xl font-bold">{UI_STRINGS.emptyStateTitle}</h2>
         <p className="text-center text-sm">
-          輸入訊息開始與 AI 助手對話
+          {UI_STRINGS.emptyStateDescription}
           <br />
-          支援多種 AI 模型切換
+          {UI_STRINGS.emptyStateSubDescription}
         </p>
       </div>
     );
@@ -90,7 +91,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
         <button
           onClick={scrollToBottom}
           className="btn btn-circle btn-sm btn-primary absolute right-4 bottom-4 shadow-lg"
-          aria-label="跳到底部"
+          aria-label={UI_STRINGS.scrollToBottom}
         >
           <ChevronDown className="h-4 w-4" />
         </button>

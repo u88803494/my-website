@@ -4,6 +4,7 @@ import type { UIMessage } from "ai";
 import { Bot, User } from "lucide-react";
 import { memo, useMemo } from "react";
 
+import { UI_STRINGS } from "../constants";
 import MarkdownRenderer from "./MarkdownRenderer";
 
 interface ChatMessageProps {
@@ -39,7 +40,7 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message, isStreaming = f
           )}
         </div>
       </div>
-      <div className="chat-header mb-1 opacity-70">{isUser ? "你" : "AI 助手"}</div>
+      <div className="chat-header mb-1 opacity-70">{isUser ? UI_STRINGS.userLabel : UI_STRINGS.assistantLabel}</div>
       <div
         className={`chat-bubble max-w-none ${
           isUser ? "chat-bubble-primary shadow-md" : "bg-slate-700 text-slate-100 shadow-sm"
@@ -52,7 +53,7 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message, isStreaming = f
             <MarkdownRenderer content={textContent} isStreaming={isStreaming} />
           )
         ) : (
-          "..."
+          UI_STRINGS.emptyContentFallback
         )}
       </div>
     </div>
