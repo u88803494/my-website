@@ -1,7 +1,8 @@
 "use client";
 
 import type { UIMessage } from "ai";
-import { useEffect, useRef } from "react";
+import { ChevronDown } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import ChatMessage from "./ChatMessage";
 
@@ -12,13 +13,36 @@ interface ChatContainerProps {
 
 const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
+  // Check if user is at/near bottom (within 100px threshold)
+  const checkIfAtBottom = useCallback(() => {
+    if (!containerRef.current) return true;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+    return scrollHeight - scrollTop - clientHeight < 100;
+  }, []);
+
+  // Handle scroll events to track user position
+  const handleScroll = useCallback(() => {
+    setIsAtBottom(checkIfAtBottom());
+  }, [checkIfAtBottom]);
+
+  // Scroll to bottom function
+  const scrollToBottom = useCallback(() => {
     if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  // Smart auto-scroll: only scroll if user is already at bottom
+  useEffect(() => {
+    if (isAtBottom && containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, isAtBottom]);
 
   if (messages.length === 0) {
     return (
@@ -35,24 +59,41 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
   }
 
   return (
-    <div ref={containerRef} className="from-base-100 to-base-200/50 flex-1 overflow-y-auto bg-gradient-to-b p-4">
-      <div className="mx-auto max-w-4xl space-y-6">
-        {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
-        ))}
-        {isLoading && (
-          <div className="chat chat-start">
-            <div className="chat-image avatar">
-              <div className="bg-secondary flex h-11 w-11 items-center justify-center rounded-full shadow-sm">
-                <span className="loading loading-dots loading-sm text-secondary-content" />
+    <div className="relative flex-1">
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="from-base-100 to-base-200/50 absolute inset-0 overflow-y-auto bg-gradient-to-b p-4"
+      >
+        <div className="mx-auto max-w-4xl space-y-6">
+          {messages.map((message) => (
+            <ChatMessage key={message.id} message={message} />
+          ))}
+          {isLoading && (
+            <div className="chat chat-start">
+              <div className="chat-image avatar">
+                <div className="bg-secondary flex h-11 w-11 items-center justify-center rounded-full shadow-sm">
+                  <span className="loading loading-dots loading-sm text-secondary-content" />
+                </div>
+              </div>
+              <div className="chat-bubble chat-bubble-secondary shadow-sm">
+                <span className="loading loading-dots loading-sm" />
               </div>
             </div>
-            <div className="chat-bubble chat-bubble-secondary shadow-sm">
-              <span className="loading loading-dots loading-sm" />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {/* Scroll to bottom button - shown when user has scrolled up */}
+      {!isAtBottom && messages.length > 0 && (
+        <button
+          onClick={scrollToBottom}
+          className="btn btn-circle btn-sm btn-primary absolute right-4 bottom-4 shadow-lg"
+          aria-label="跳到底部"
+        >
+          <ChevronDown className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 };

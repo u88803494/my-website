@@ -27,6 +27,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading, disabled = fal
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Don't submit during IME composition (e.g., Zhuyin/注音 input)
+    if (e.nativeEvent.isComposing || e.keyCode === 229) {
+      return;
+    }
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
