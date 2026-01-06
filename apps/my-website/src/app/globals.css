@@ -27,6 +27,11 @@ body {
   color: inherit;
 }
 
+/* Inline code (not inside code blocks) */
+.streamdown-content :not(pre) > code {
+  @apply rounded bg-black/40 px-1.5 py-0.5 text-sm text-amber-400;
+}
+
 /* Headings - spacing adjustments */
 .streamdown-content h1,
 .streamdown-content h2,

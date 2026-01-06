@@ -1,6 +1,5 @@
 "use client";
 
-import type { ComponentPropsWithoutRef } from "react";
 import { Streamdown } from "streamdown";
 
 interface MarkdownRendererProps {
@@ -24,13 +23,6 @@ const darkModeStyles: React.CSSProperties = {
   "--ring": "212.7 26.8% 83.9%",
 };
 
-// Custom inline code component for dark theme
-const InlineCode = ({ children, ...props }: ComponentPropsWithoutRef<"code">) => (
-  <code {...props} className="rounded bg-black/40 px-1.5 py-0.5 text-sm text-amber-400">
-    {children}
-  </code>
-);
-
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isStreaming = false }) => {
   return (
     <div style={darkModeStyles}>
@@ -39,9 +31,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isStreamin
         isAnimating={isStreaming}
         shikiTheme={["github-dark", "github-dark"]}
         className="streamdown-content"
-        components={{
-          code: InlineCode,
-        }}
       >
         {content}
       </Streamdown>
