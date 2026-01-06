@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import QueryProvider from "@/components/providers/QueryProvider";
-import Footer from "@/components/shared/Footer";
+import ConditionalFooter from "@/components/shared/ConditionalFooter";
 import { Navbar } from "@/components/shared/Navbar";
 import NProgressBar from "@/components/shared/NProgressBar";
 
@@ -97,7 +97,7 @@ const RootLayout = ({
           <Navbar />
           <NProgressBar />
           <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
-          <Footer />
+          <ConditionalFooter />
         </QueryProvider>
         <Analytics />
         <SpeedInsights />

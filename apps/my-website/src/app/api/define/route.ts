@@ -2,6 +2,8 @@ import { analyzeWord } from "@packages/ai-dictionary/services";
 import { createLogger, logError } from "@packages/shared/utils";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/env";
+
 const logger = createLogger({ context: "api/define" });
 
 // Handle unsupported HTTP methods
@@ -15,12 +17,8 @@ export async function POST(request: NextRequest) {
     const { word } = await request.json();
     logger.info({ word }, "Word analysis request received");
 
-    // Read environment variables
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      logger.error("Missing GEMINI_API_KEY in environment variables");
-      return NextResponse.json({ error: "伺服器設定錯誤" }, { status: 500 });
-    }
+    // Get validated API key from env
+    const apiKey = env.GEMINI_API_KEY;
 
     // Call service
     const result = await analyzeWord(word, apiKey);

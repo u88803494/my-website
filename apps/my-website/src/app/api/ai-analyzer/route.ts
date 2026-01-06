@@ -2,6 +2,8 @@ import { analyzeWithAI } from "@packages/ai-analyzer/services";
 import { createLogger, logError } from "@packages/shared/utils";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/env";
+
 const logger = createLogger({ context: "api/ai-analyzer" });
 
 export async function POST(request: NextRequest) {
@@ -15,11 +17,8 @@ export async function POST(request: NextRequest) {
 
     logger.info({ need }, "AI analysis request received");
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      logger.error("Missing GEMINI_API_KEY in environment variables");
-      return NextResponse.json({ error: "伺服器設定錯誤" }, { status: 500 });
-    }
+    // Get validated API key from env
+    const apiKey = env.GEMINI_API_KEY;
 
     const result = await analyzeWithAI(need, prompt, apiKey);
     logger.info({ need, success: true }, "AI analysis completed");

@@ -16,15 +16,21 @@
     "sync:all-articles": "pnpm run sync:latest && pnpm run parse:articles"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.2",
+    "@ai-sdk/groq": "^3.0.2",
+    "@ai-sdk/mistral": "^3.0.2",
+    "@ai-sdk/react": "^3.0.5",
     "@google/generative-ai": "^0.24.1",
     "@packages/ai-analyzer": "workspace:*",
     "@packages/ai-dictionary": "workspace:*",
     "@packages/blog": "workspace:*",
     "@packages/shared": "workspace:*",
     "@packages/tailwind-config": "workspace:*",
+    "@t3-oss/env-nextjs": "^0.13.10",
     "@tanstack/react-query": "^5.84.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "ai": "^6.0.5",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
@@ -40,7 +46,8 @@
     "react-dom": "^19.2.3",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^10.0.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.3.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

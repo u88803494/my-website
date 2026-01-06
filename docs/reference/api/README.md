@@ -29,7 +29,8 @@ my-website 應用程式所有 API 端點的完整參考文件。
 
 ### 速率限制
 
-未實作速率限制（依賴 Vercel 的預設限制）。
+- `/api/chat`: 已實作 IP-based Rate Limiting (20 req/min)
+- 其他 API: 依賴 Vercel 的預設限制
 
 ---
 
@@ -37,6 +38,7 @@ my-website 應用程式所有 API 端點的完整參考文件。
 
 ### AI 功能
 
+- [POST /api/chat](./chat-api.md) - AI 對話 API,支援多 Provider 串流回應
 - [POST /api/define](./define-api.md) - AI 單字分析,包含語源、定義、範例
 - [POST /api/ai-analyzer](./ai-analyzer-api.md) - 通用 AI 分析,適用於各種使用情境
 
@@ -73,7 +75,11 @@ my-website 應用程式所有 API 端點的完整參考文件。
 | ------ | -------------- | ------------------------ |
 | 200    | OK             | 成功的 GET/POST 請求     |
 | 400    | Bad Request    | 無效的輸入參數           |
+| 413    | Payload Large  | 請求內容過大             |
+| 415    | Unsupported    | Content-Type 不正確      |
+| 429    | Too Many Reqs  | 超過速率限制             |
 | 500    | Internal Error | 伺服器端錯誤（API 故障） |
+| 503    | Unavailable    | 服務暫時不可用           |
 
 ---
 
@@ -132,7 +138,9 @@ interface ErrorResponse {
 API 功能所需的環境變數：
 
 ```bash
-GEMINI_API_KEY=your_key_here  # AI 功能必填
+GEMINI_API_KEY=your_key_here   # AI 功能必填
+GROQ_API_KEY=your_key_here     # Groq 模型 (選用)
+MISTRAL_API_KEY=your_key_here  # Mistral 模型 (選用)
 NODE_ENV=development           # 環境模式
 ```
 
@@ -164,6 +172,7 @@ curl http://localhost:3000/api/medium-articles
 
 - [架構參考](../architecture.md) - 系統架構
 - [開發環境設定](../../guides/development-setup.md) - 本地設定
+- [POST /api/chat](./chat-api.md) - AI 對話 API
 - [POST /api/define](./define-api.md) - 單字分析端點
 - [POST /api/ai-analyzer](./ai-analyzer-api.md) - 通用 AI 分析
 - [GET /api/medium-articles](./medium-articles-api.md) - 文章端點
