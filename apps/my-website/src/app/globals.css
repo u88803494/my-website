@@ -1,6 +1,8 @@
 /* Import shared Tailwind configuration from monorepo package */
 @import "@packages/tailwind-config/style.css";
 
+/* Note: Streamdown default styles disabled - using custom chat bubble integration */
+
 :root {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -17,4 +19,98 @@ body {
 
 .tooltip-custom::after {
   @apply border-t-white;
+}
+
+/* Streamdown styling for chat bubble integration (dark mode) */
+.streamdown-content {
+  background: transparent;
+  color: inherit;
+}
+
+/* Headings - spacing adjustments */
+.streamdown-content h1,
+.streamdown-content h2,
+.streamdown-content h3,
+.streamdown-content h4 {
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.streamdown-content h1:first-child,
+.streamdown-content h2:first-child,
+.streamdown-content h3:first-child {
+  margin-top: 0;
+}
+
+/* Paragraphs and text */
+.streamdown-content p {
+  margin: 0.5em 0;
+}
+
+/* Lists */
+.streamdown-content ul,
+.streamdown-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.streamdown-content li {
+  margin: 0.25em 0;
+}
+
+/* Code blocks - use data attribute for high specificity */
+.streamdown-content [data-streamdown="code-block"] {
+  @apply my-3 overflow-hidden rounded-lg bg-black/40;
+}
+
+.streamdown-content [data-streamdown="code-block"] pre {
+  @apply overflow-x-auto bg-transparent p-4;
+}
+
+.streamdown-content [data-streamdown="code-block"] code {
+  @apply text-sm;
+}
+
+/* Code block header (language label + buttons) */
+.streamdown-content [data-streamdown="code-block-header"] {
+  @apply flex items-center justify-between border-b border-white/10 bg-black/20 px-4 py-2 text-xs text-white/70;
+}
+
+/* Copy/Download buttons */
+.streamdown-content [data-streamdown="code-block-header"] button {
+  @apply rounded p-1 text-white/80 opacity-70 transition-opacity hover:opacity-100;
+}
+
+/* Blockquotes */
+.streamdown-content blockquote {
+  @apply my-2 border-l-4 border-white/30 pl-4 italic opacity-90;
+}
+
+/* Horizontal rules */
+.streamdown-content hr {
+  @apply my-4 border-white/20;
+}
+
+/* Tables */
+.streamdown-content table {
+  @apply my-3 w-full border-collapse text-sm;
+}
+
+.streamdown-content th,
+.streamdown-content td {
+  @apply border border-white/20 px-3 py-2;
+}
+
+.streamdown-content th {
+  @apply bg-white/10 font-semibold;
+}
+
+/* Links */
+.streamdown-content a {
+  @apply text-blue-300 underline underline-offset-2;
+}
+
+.streamdown-content a:hover {
+  @apply opacity-80;
 }

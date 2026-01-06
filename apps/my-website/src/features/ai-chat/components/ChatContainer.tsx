@@ -66,9 +66,10 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
         className="from-base-100 to-base-200/50 absolute inset-0 overflow-y-auto bg-gradient-to-b p-4"
       >
         <div className="mx-auto max-w-4xl space-y-6">
-          {messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
-          ))}
+          {messages.map((message, index) => {
+            const isLastAssistantMessage = message.role === "assistant" && index === messages.length - 1;
+            return <ChatMessage key={message.id} message={message} isStreaming={isLastAssistantMessage && isLoading} />;
+          })}
           {isLoading && (
             <div className="chat chat-start">
               <div className="chat-image avatar">
