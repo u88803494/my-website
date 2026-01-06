@@ -12,11 +12,14 @@ interface RateLimitRecord {
 }
 
 const rateLimitMap = new Map<string, RateLimitRecord>();
+const dailyLimitMap = new Map<string, RateLimitRecord>();
 
 // Clean up expired entries periodically to prevent memory leaks
 const CLEANUP_INTERVAL = 60 * 1000; // 1 minute
+const DAILY_CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour (daily entries change less frequently)
 const MAX_MAP_SIZE = 10000; // Maximum entries to prevent memory exhaustion
 let lastCleanup = Date.now();
+let lastDailyCleanup = Date.now();
 
 function cleanupExpiredEntries(): void {
   const now = Date.now();
@@ -28,6 +31,18 @@ function cleanupExpiredEntries(): void {
     }
   }
   lastCleanup = now;
+}
+
+function cleanupExpiredDailyEntries(): void {
+  const now = Date.now();
+  if (now - lastDailyCleanup < DAILY_CLEANUP_INTERVAL) return;
+
+  for (const [key, record] of dailyLimitMap.entries()) {
+    if (now > record.resetTime) {
+      dailyLimitMap.delete(key);
+    }
+  }
+  lastDailyCleanup = now;
 }
 
 // Evict oldest entries when map exceeds size limit
@@ -92,6 +107,52 @@ export function checkRateLimit(identifier: string, limit: number = 20, windowMs:
   return {
     success: true,
     remaining: limit - record.count,
+    resetTime: record.resetTime,
+  };
+}
+
+/**
+ * Check if a request is within daily rate limits
+ * @param identifier - Unique identifier (e.g., IP address, user ID)
+ * @param dailyLimit - Maximum requests allowed per day (default: 100)
+ * @param windowMs - Time window in milliseconds (default: 24 hours)
+ * @returns Result object with success status, remaining requests, and reset time
+ */
+export function checkDailyLimit(
+  identifier: string,
+  dailyLimit: number = 100,
+  windowMs: number = 24 * 60 * 60 * 1000,
+): RateLimitResult {
+  cleanupExpiredDailyEntries();
+
+  const now = Date.now();
+  const record = dailyLimitMap.get(identifier);
+
+  // First request of the day or window expired
+  if (!record || now > record.resetTime) {
+    const resetTime = now + windowMs;
+    dailyLimitMap.set(identifier, { count: 1, resetTime });
+    return {
+      success: true,
+      remaining: dailyLimit - 1,
+      resetTime,
+    };
+  }
+
+  // Within window, check limit
+  if (record.count >= dailyLimit) {
+    return {
+      success: false,
+      remaining: 0,
+      resetTime: record.resetTime,
+    };
+  }
+
+  // Increment count
+  record.count++;
+  return {
+    success: true,
+    remaining: dailyLimit - record.count,
     resetTime: record.resetTime,
   };
 }

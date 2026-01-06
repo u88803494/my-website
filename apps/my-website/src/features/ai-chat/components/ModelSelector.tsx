@@ -13,6 +13,14 @@ interface ModelSelectorProps {
 const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelChange, disabled = false }) => {
   const currentModel = getModelById(selectedModel);
 
+  const handleModelSelect = (modelId: string) => {
+    onModelChange(modelId);
+    // Close dropdown by blurring the active element
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className={`btn btn-sm btn-ghost gap-2 ${disabled ? "btn-disabled" : ""}`}>
@@ -23,7 +31,7 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelCha
         {AI_MODELS.map((model) => (
           <li key={model.id}>
             <button
-              onClick={() => onModelChange(model.id)}
+              onClick={() => handleModelSelect(model.id)}
               className={`flex flex-col items-start ${selectedModel === model.id ? "active" : ""}`}
             >
               <span className="font-medium">{model.name}</span>

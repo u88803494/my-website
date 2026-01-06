@@ -5,9 +5,11 @@
 
 export const RATE_LIMIT_CONFIG = {
   chat: {
-    limit: 20, // requests per window
+    limit: 20, // requests per minute
     unknownIpLimit: 5, // stricter limit for unidentified IPs
     windowMs: 60 * 1000, // 1 minute
+    dailyLimit: 100, // max requests per IP per day (prevents excessive usage)
+    dailyWindowMs: 24 * 60 * 60 * 1000, // 24 hours
   },
   define: {
     limit: 30,

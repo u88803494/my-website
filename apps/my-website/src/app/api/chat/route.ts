@@ -15,7 +15,7 @@ import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { env } from "@/env";
-import { checkRateLimit, getClientIP } from "@/lib/rateLimit";
+import { checkDailyLimit, checkRateLimit, getClientIP } from "@/lib/rateLimit";
 
 const logger = createLogger({ context: "api/chat" });
 
@@ -28,6 +28,8 @@ const {
   limit: RATE_LIMIT,
   unknownIpLimit: RATE_LIMIT_UNKNOWN_IP,
   windowMs: RATE_LIMIT_WINDOW,
+  dailyLimit: DAILY_LIMIT,
+  dailyWindowMs: DAILY_LIMIT_WINDOW,
 } = RATE_LIMIT_CONFIG.chat;
 
 // Request size limits (DoS protection)
@@ -219,6 +221,27 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Daily limit check (prevents excessive usage over time)
+  const dailyLimitResult = checkDailyLimit(clientIP, DAILY_LIMIT, DAILY_LIMIT_WINDOW);
+  if (!dailyLimitResult.success) {
+    const hoursUntilReset = Math.ceil((dailyLimitResult.resetTime - Date.now()) / (1000 * 60 * 60));
+    logger.warn({ ip: clientIP, resetTime: dailyLimitResult.resetTime }, "Daily limit exceeded");
+    return NextResponse.json(
+      {
+        error: `今日使用次數已達上限 (${DAILY_LIMIT} 次)，請 ${hoursUntilReset} 小時後再試`,
+        retryAfter: Math.ceil((dailyLimitResult.resetTime - Date.now()) / 1000),
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil((dailyLimitResult.resetTime - Date.now()) / 1000)),
+          "X-DailyLimit-Remaining": "0",
+          "X-DailyLimit-Reset": String(Math.floor(dailyLimitResult.resetTime / 1000)),
+        },
+      },
+    );
+  }
+
   // Content-Type validation (security: prevent non-JSON requests)
   const contentType = request.headers.get("content-type");
   if (!contentType?.includes("application/json")) {
@@ -282,6 +305,8 @@ export async function POST(request: NextRequest) {
     const response = result.toUIMessageStreamResponse();
     response.headers.set("X-RateLimit-Remaining", String(rateLimitResult.remaining));
     response.headers.set("X-RateLimit-Reset", String(Math.floor(rateLimitResult.resetTime / 1000)));
+    response.headers.set("X-DailyLimit-Remaining", String(dailyLimitResult.remaining));
+    response.headers.set("X-DailyLimit-Reset", String(Math.floor(dailyLimitResult.resetTime / 1000)));
     // Security headers
     response.headers.set("X-Content-Type-Options", "nosniff");
     response.headers.set("X-Frame-Options", "DENY");

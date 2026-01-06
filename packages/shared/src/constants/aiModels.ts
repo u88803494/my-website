@@ -74,7 +74,7 @@ export const AI_MODELS: AIModelInfo[] = [
   },
 ] as const;
 
-export const DEFAULT_MODEL_ID: AIModelId = "gemini-2.5-flash";
+export const DEFAULT_MODEL_ID: AIModelId = "mistral-large";
 
 // Helper functions
 export const getModelById = (id: string): AIModelInfo | undefined => {
