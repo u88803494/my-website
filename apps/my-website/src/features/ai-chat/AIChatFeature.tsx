@@ -7,7 +7,7 @@ import { AlertTriangle, MessageSquare, RefreshCw, Trash2 } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 
 import { ChatContainer, ChatInput, ModelSelector } from "./components";
-import { DEFAULT_MODEL_ID, isValidModelId } from "./constants/models";
+import { DEFAULT_MODEL_ID, isValidModelId, UI_STRINGS } from "./constants";
 
 const AIChatFeature: React.FC = () => {
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL_ID);
@@ -54,8 +54,8 @@ const AIChatFeature: React.FC = () => {
       <header className="navbar border-base-300/50 bg-base-200/80 relative z-20 border-b px-4 backdrop-blur-sm">
         <div className="flex-1">
           <h1 className="flex items-center gap-2 text-xl font-bold">
-            <MessageSquare className="text-primary h-6 w-6" />
-            AI Chat
+            <MessageSquare className="text-primary h-6 w-6" aria-hidden="true" />
+            {UI_STRINGS.featureTitle}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -64,10 +64,10 @@ const AIChatFeature: React.FC = () => {
             <button
               onClick={handleClearChat}
               className="btn btn-ghost btn-sm hover:bg-error/10 hover:text-error transition-all"
-              title="清除對話"
+              aria-label={UI_STRINGS.clearChat}
               disabled={isLoading}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
             </button>
           )}
         </div>
@@ -79,18 +79,18 @@ const AIChatFeature: React.FC = () => {
 
         {/* Error Display */}
         {parsedError && (
-          <div className={`alert mx-4 mb-2 ${parsedError.isQuotaError ? "alert-warning" : "alert-error"}`}>
-            <AlertTriangle className="h-5 w-5 shrink-0" />
+          <div role="alert" className={`alert mx-4 mb-2 ${parsedError.isQuotaError ? "alert-warning" : "alert-error"}`}>
+            <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden="true" />
             <div className="flex flex-col gap-1">
               <span className="font-medium">{parsedError.message}</span>
               {parsedError.isQuotaError && (
-                <span className="text-sm opacity-80">建議使用 Groq 或 Mistral 系列模型</span>
+                <span className="text-sm opacity-80">{UI_STRINGS.quotaErrorSuggestion}</span>
               )}
             </div>
             {parsedError.isRetryable && (
               <button onClick={() => window.location.reload()} className="btn btn-ghost btn-sm gap-1">
-                <RefreshCw className="h-4 w-4" />
-                重試
+                <RefreshCw className="h-4 w-4" aria-hidden="true" />
+                {UI_STRINGS.retry}
               </button>
             )}
           </div>

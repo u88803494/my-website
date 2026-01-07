@@ -4,12 +4,16 @@ import type { ErrorInfo, ReactNode } from "react";
 import { Component, memo } from "react";
 import { Streamdown } from "streamdown";
 
+import { UI_STRINGS } from "../constants";
+
 interface MarkdownRendererProps {
   content: string;
   isStreaming?: boolean;
 }
 
 // Error Boundary for catching Streamdown render errors
+// Note: Error Boundaries MUST be class components - React doesn't provide a hooks API for this
+// See: https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
@@ -31,7 +35,11 @@ class MarkdownErrorBoundary extends Component<{ children: ReactNode; fallback?: 
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? <div className="bg-error/10 text-error rounded p-2 text-sm">無法渲染內容</div>;
+      return (
+        this.props.fallback ?? (
+          <div className="bg-error/10 text-error rounded p-2 text-sm">{UI_STRINGS.markdownErrorFallback}</div>
+        )
+      );
     }
     return this.props.children;
   }
