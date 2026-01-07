@@ -12,6 +12,8 @@ interface MarkdownRendererProps {
 }
 
 // Error Boundary for catching Streamdown render errors
+// Note: Error Boundaries MUST be class components - React doesn't provide a hooks API for this
+// See: https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
