@@ -70,6 +70,23 @@ export const projects: Project[] = [
     title: "AI 智能中文字典",
   },
   {
+    category: "AI 工具 (個人獨立專案)",
+    description: {
+      features: [
+        "支援多種 AI 模型切換（GPT、Claude、Gemini），統一介面體驗",
+        "Streaming UI 串流顯示，優化 LLM 回應等待體驗",
+        "完整 Markdown 渲染，支援程式碼語法高亮",
+        "對話歷史管理與匯出功能",
+        "整合 Vercel AI SDK 實現統一模型介面",
+      ],
+      intro: "支援多模型切換的智慧對話介面，整合 Streaming UI 實現即時回應體驗，展現 AI-Native 應用開發能力。",
+    },
+    imageUrl: "/images/projects/ai-chat.png",
+    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-chat" }],
+    techStack: ["Next.js 15", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
+    title: "AI Chat - 多模型對話介面",
+  },
+  {
     category: "字典網站 (個人獨立專案)",
     description: {
       features: [
