@@ -3,6 +3,23 @@ import { type Project } from "@/types/project.types";
 
 export const projects: Project[] = [
   {
+    category: "AI 工具 (個人獨立專案)",
+    description: {
+      features: [
+        "支援多種 AI 模型切換（GPT、Claude、Gemini），統一介面體驗",
+        "Streaming UI 串流顯示，優化 LLM 回應等待體驗",
+        "完整 Markdown 渲染，支援程式碼語法高亮",
+        "對話歷史管理與匯出功能",
+        "整合 Vercel AI SDK 實現統一模型介面",
+      ],
+      intro: "支援多模型切換的智慧對話介面，整合 Streaming UI 實現即時回應體驗，展現 AI-Native 應用開發能力。",
+    },
+    imageUrl: "/images/projects/ai-chat.png",
+    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-chat" }],
+    techStack: ["Next.js 15", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
+    title: "AI Chat - 多模型對話介面",
+  },
+  {
     category: "個人網站／履歷平台",
     description: {
       features: [
@@ -31,6 +48,24 @@ export const projects: Project[] = [
     category: "AI 工具 (個人獨立專案)",
     description: {
       features: [
+        "查詢結果涵蓋詞義、字源、例句等多層次資訊，並以卡片方式呈現，方便學習與複習",
+        "支援學習模式，可標記「學習完成」並支援撤銷，方便重複查看",
+        "即時互動動畫，查詢成功與學習完成皆有動態提示，提升使用者體驗",
+        "嚴謹的錯誤處理與查詢長度限制，確保查詢效率與準確性",
+        "整合 Google Gemini API，AI 智能分析中文字詞",
+      ],
+      intro:
+        "運用 Google Gemini AI 技術，讓中文詞彙的含義、字源、例句等多維度資訊一站式查詢，並結合學習卡片互動，提升學習效率。",
+    },
+    imageUrl: "/images/projects/ai-dictionary.png",
+    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-dictionary" }],
+    techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
+    title: "AI 智能中文字典",
+  },
+  {
+    category: "AI 工具 (個人獨立專案)",
+    description: {
+      features: [
         "輸入需求後，AI 會自動產生結構化的分析模板，包含多個引導性問題，協助釐清目標、用戶、功能、預算等核心要素",
         "支援複製分析結果，可直接用於 ChatGPT、Claude 等 AI 工具的 prompt 編寫",
         "即時錯誤處理與載入狀態提示，提升互動體驗",
@@ -50,41 +85,6 @@ export const projects: Project[] = [
     ],
     techStack: ["Next.js", "TypeScript", "Google Gemini API", "Tailwind CSS"],
     title: "AI 需求分析器",
-  },
-  {
-    category: "AI 工具 (個人獨立專案)",
-    description: {
-      features: [
-        "查詢結果涵蓋詞義、字源、例句等多層次資訊，並以卡片方式呈現，方便學習與複習",
-        "支援學習模式，可標記「學習完成」並支援撤銷，方便重複查看",
-        "即時互動動畫，查詢成功與學習完成皆有動態提示，提升使用者體驗",
-        "嚴謹的錯誤處理與查詢長度限制，確保查詢效率與準確性",
-        "整合 Google Gemini API，AI 智能分析中文字詞",
-      ],
-      intro:
-        "運用 Google Gemini AI 技術，讓中文詞彙的含義、字源、例句等多維度資訊一站式查詢，並結合學習卡片互動，提升學習效率。",
-    },
-    imageUrl: "/images/projects/ai-dictionary.png",
-    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-dictionary" }],
-    techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
-    title: "AI 智能中文字典",
-  },
-  {
-    category: "AI 工具 (個人獨立專案)",
-    description: {
-      features: [
-        "支援多種 AI 模型切換（GPT、Claude、Gemini），統一介面體驗",
-        "Streaming UI 串流顯示，優化 LLM 回應等待體驗",
-        "完整 Markdown 渲染，支援程式碼語法高亮",
-        "對話歷史管理與匯出功能",
-        "整合 Vercel AI SDK 實現統一模型介面",
-      ],
-      intro: "支援多模型切換的智慧對話介面，整合 Streaming UI 實現即時回應體驗，展現 AI-Native 應用開發能力。",
-    },
-    imageUrl: "/images/projects/ai-chat.png",
-    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-chat" }],
-    techStack: ["Next.js 15", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
-    title: "AI Chat - 多模型對話介面",
   },
   {
     category: "字典網站 (個人獨立專案)",
