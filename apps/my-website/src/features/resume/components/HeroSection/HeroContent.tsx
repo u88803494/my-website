@@ -25,7 +25,7 @@ const HeroContent = () => {
         initial={{ opacity: 0, y: 30 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        前端工程師
+        Senior AI Frontend Engineer
       </motion.h2>
 
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
@@ -35,7 +35,7 @@ const HeroContent = () => {
           transition={{ delay: 0.7, duration: 0.6 }}
           whileHover={{ x: 5 }}
         >
-          具備四年 Web 開發經驗，專精於使用 <b>Next.js</b> 與 <b>TypeScript</b> 打造高效能、高可維護性的應用。
+          具備五年以上 Web 開發經驗，專注於 <b>Next.js 15</b> 與<b>生成式 AI 應用</b>整合開發。
         </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
@@ -43,8 +43,7 @@ const HeroContent = () => {
           transition={{ delay: 0.9, duration: 0.6 }}
           whileHover={{ x: 5 }}
         >
-          擅長主導前端架構與效能優化，曾透過創新開發方式，成功將專案成本降低 <b>50%</b>，並將關鍵頁面讀取時間由{" "}
-          <b>5 秒以上</b> 縮短至 <b>1 秒內</b>。
+          建立基於 <b>Claude Code</b> 的文件驅動開發流程，達成每日交付 <b>1-2 個</b>生產就緒功能的目標。
         </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
@@ -52,7 +51,8 @@ const HeroContent = () => {
           transition={{ delay: 1.1, duration: 0.6 }}
           whileHover={{ x: 5 }}
         >
-          團隊協作方面，負責指導兩名團隊成員導入新技術、建立標準化開發流程以提升程式碼品質，也致力於提升團隊整體生產力。
+          獨立開發多個 AI 應用，包括 <b>AI Chat</b>、<b>AI Dictionary</b>、<b>AI Analyzer</b>{" "}
+          等，展現完整的產品開發能力。
         </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
@@ -60,7 +60,7 @@ const HeroContent = () => {
           transition={{ delay: 1.3, duration: 0.6 }}
           whileHover={{ x: 5 }}
         >
-          經歷一段個人成長與沉澱後，對職涯方向有了更清晰的規劃，已準備好重返職場，期待貢獻我的技術與經驗，為團隊創造實質價值。
+          持續探索 <b>AI-Native 開發模式</b>與最佳實踐，並提供技術顧問服務，協助團隊導入現代化開發工具。
         </motion.p>
       </div>
 

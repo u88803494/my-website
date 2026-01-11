@@ -7,6 +7,8 @@ import { projects as PROJECTS } from "@/data/projectData";
 
 import ProjectCard from "./ProjectCard";
 
+const INITIAL_DISPLAY_COUNT = 4;
+
 interface FeaturedProjectsProps {
   backgroundClass: string;
   sectionId: string;
@@ -28,13 +30,13 @@ const FeaturedProjects: React.FC<FeaturedProjectsProps> = ({ backgroundClass, se
 
         {/* 專案網格 */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-          {(showAll ? PROJECTS : PROJECTS.slice(0, 3)).map((project: Project, idx: number) => (
+          {(showAll ? PROJECTS : PROJECTS.slice(0, INITIAL_DISPLAY_COUNT)).map((project: Project, idx: number) => (
             <ProjectCard key={project.title + idx} project={project} />
           ))}
         </div>
 
         {/* 看更多/收合按鈕 */}
-        {PROJECTS.length > 4 && (
+        {PROJECTS.length > INITIAL_DISPLAY_COUNT && (
           <div className="mt-10 flex justify-center">
             {!showAll ? (
               <button

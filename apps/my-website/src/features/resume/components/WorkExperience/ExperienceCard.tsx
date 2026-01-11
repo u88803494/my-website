@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
+import { getAchievementGridClass } from "../../utils/gridUtils";
+
 interface ExperienceCardProps {
   experience: Experience;
 }
@@ -37,7 +39,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
         </div>
         <div className="mb-6">
           <h4 className="text-base-content mb-3 text-lg font-semibold">主要成就</h4>
-          <ul className="space-y-3">
+          <ul className={`grid gap-3 ${getAchievementGridClass(experience.achievements.length)}`}>
             {experience.achievements.map((achievement, achievementIndex) => (
               <li
                 className="text-base-content/80 flex items-start gap-2 text-sm leading-relaxed"

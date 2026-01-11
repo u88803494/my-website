@@ -1,25 +1,20 @@
 import { type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
   SiExpress,
-  SiFigma,
   SiGithub,
-  SiJavascript,
-  SiJest,
-  SiMocha,
+  SiGooglegemini,
   SiMongodb,
-  SiMui,
   SiNextdotjs,
   SiOpenai,
-  SiPhp,
   SiReact,
   SiReactquery,
-  SiRedux,
-  SiSass,
-  SiStyledcomponents,
+  SiSupabase,
   SiTailwindcss,
+  SiTurborepo,
   SiTypescript,
+  SiVercel,
 } from "react-icons/si";
-import { TbApi, TbBrandLine, TbSettings } from "react-icons/tb";
+import { TbApi, TbBrandDaysCounter, TbMessageChatbot, TbPaw } from "react-icons/tb";
 
 // 簡潔的圖標包裝函數，避免重複 className
 const icon = (IconComponent: ComponentType<SVGProps<SVGSVGElement>>): ReactNode => (
@@ -32,7 +27,6 @@ export interface Skill {
 }
 
 export interface SkillCategory {
-  description: string;
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
   title: string;
@@ -40,45 +34,44 @@ export interface SkillCategory {
 
 export const skillData: SkillCategory[] = [
   {
-    description: "Expert",
     level: "expert",
     skills: [
-      { icon: icon(SiNextdotjs), name: "Next.js" },
-      { icon: icon(SiReact), name: "React" },
-      { icon: icon(SiTypescript), name: "TypeScript" },
-      { icon: icon(SiJavascript), name: "JavaScript (ES6+)" },
-      { icon: icon(SiRedux), name: "狀態管理：Redux、Zustand" },
-      { icon: icon(SiTailwindcss), name: "Tailwind CSS" },
-      { icon: icon(SiOpenai), name: "Ai 輔助開發" },
+      { icon: icon(SiVercel), name: "Vercel AI SDK" },
+      { icon: icon(SiGooglegemini), name: "Google Gemini API" },
+      { icon: icon(TbMessageChatbot), name: "Prompt Engineering" },
+      { icon: icon(TbApi), name: "Streaming UI" },
     ],
-    title: "核心專長",
+    title: "AI 應用開發",
   },
   {
-    description: "Proficient",
+    level: "expert",
+    skills: [
+      { icon: icon(SiNextdotjs), name: "Next.js 15" },
+      { icon: icon(SiReact), name: "React 19" },
+      { icon: icon(SiTypescript), name: "TypeScript" },
+      { icon: icon(SiReactquery), name: "TanStack Query" },
+      { icon: icon(TbPaw), name: "Zustand" },
+    ],
+    title: "現代前端架構",
+  },
+  {
     level: "proficient",
     skills: [
-      { icon: icon(SiReactquery), name: "React-Query / TanStack Query" },
-      { icon: icon(SiMui), name: "Material UI" },
-      { icon: icon(SiStyledcomponents), name: "Styled-components" },
-      { icon: icon(SiSass), name: "SASS / SCSS" },
-      { icon: icon(SiGithub), name: "Git & GitHub / GitLab" },
-      { icon: icon(TbApi), name: "AJAX(RESTful API)" },
-      { icon: icon(SiFigma), name: "Figma / Zeplin" },
+      { icon: icon(SiTailwindcss), name: "Tailwind CSS / DaisyUI" },
+      { icon: icon(SiTurborepo), name: "Turborepo (Monorepo)" },
+      { icon: icon(SiOpenai), name: "Claude Code 輔助開發" },
+      { icon: icon(SiGithub), name: "Git & GitHub" },
+      { icon: icon(TbBrandDaysCounter), name: "Figma / Zeplin" },
     ],
-    title: "熟悉使用",
+    title: "UI / 開發工具",
   },
   {
-    description: "Familiar",
     level: "familiar",
     skills: [
-      { icon: icon(TbBrandLine), name: "Line LIFF" },
-      { icon: icon(SiJest), name: "Jest" },
+      { icon: icon(SiExpress), name: "Node.js / Express" },
       { icon: icon(SiMongodb), name: "MongoDB" },
-      { icon: icon(SiExpress), name: "Express.js" },
-      { icon: icon(SiPhp), name: "PHP / MySQL" },
-      { icon: icon(TbSettings), name: "CI/CD" },
-      { icon: icon(SiMocha), name: "Mocha" },
+      { icon: icon(SiSupabase), name: "Supabase" },
     ],
-    title: "有涉獵",
+    title: "後端經驗",
   },
 ];

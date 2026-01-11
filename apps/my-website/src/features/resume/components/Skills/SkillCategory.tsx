@@ -8,14 +8,13 @@ import { type Skill } from "@/data/skillData";
 import { cn } from "@/utils/cn";
 
 interface SkillCategoryProps {
-  description: string;
   index: number;
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
   title: string;
 }
 
-const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level, skills, title }) => {
+const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, title }) => {
   const getLevelConfig = () => {
     switch (level) {
       case "familiar":
@@ -23,12 +22,14 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
           accentColor: "text-cyan-500",
           badgeVariant: "border-cyan-500 text-cyan-600",
           icon: <Eye className="h-5 w-5" />,
+          label: "Familiar",
         };
       case "proficient":
         return {
           accentColor: "text-primary",
           badgeVariant: "badge-primary",
           icon: <Zap className="h-5 w-5" />,
+          label: "Proficient",
         };
       case "expert":
       default:
@@ -36,6 +37,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
           accentColor: "text-success",
           badgeVariant: "badge-success",
           icon: <Star className="h-5 w-5" />,
+          label: "Expert",
         };
     }
   };
@@ -59,7 +61,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ description, index, level
           <div className={cn(config.accentColor, "mr-3")}>{config.icon}</div>
           <div>
             <h3 className="card-title text-base-content text-xl font-bold">{title}</h3>
-            <p className={cn("text-sm font-semibold", config.accentColor)}>({description})</p>
+            <p className={cn("text-sm font-semibold", config.accentColor)}>({config.label})</p>
           </div>
         </div>
 
