@@ -29,7 +29,7 @@ const Skills: React.FC<SkillsProps> = ({ backgroundClass, sectionId }) => {
           <p className="text-base-content/80 text-lg">我在軟體開發領域的技能分佈，從核心專長到各種涉獵的技術棧</p>
         </motion.div>
 
-        <div className="not-prose grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="not-prose grid grid-cols-1 gap-8 md:grid-cols-2">
           {skillData.map((category, index) => (
             <SkillCategory
               description={category.description}
