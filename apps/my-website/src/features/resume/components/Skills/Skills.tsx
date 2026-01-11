@@ -32,7 +32,6 @@ const Skills: React.FC<SkillsProps> = ({ backgroundClass, sectionId }) => {
         <div className="not-prose grid grid-cols-1 gap-8 md:grid-cols-2">
           {skillData.map((category, index) => (
             <SkillCategory
-              description={category.description}
               index={index}
               key={index}
               level={category.level}

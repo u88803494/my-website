@@ -8,14 +8,13 @@ import {
   SiOpenai,
   SiReact,
   SiReactquery,
-  SiRedux,
   SiSupabase,
   SiTailwindcss,
   SiTurborepo,
   SiTypescript,
   SiVercel,
 } from "react-icons/si";
-import { TbApi, TbBrandDaysCounter, TbMessageChatbot } from "react-icons/tb";
+import { TbApi, TbBrandDaysCounter, TbMessageChatbot, TbPaw } from "react-icons/tb";
 
 // 簡潔的圖標包裝函數，避免重複 className
 const icon = (IconComponent: ComponentType<SVGProps<SVGSVGElement>>): ReactNode => (
@@ -28,7 +27,6 @@ export interface Skill {
 }
 
 export interface SkillCategory {
-  description: string;
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
   title: string;
@@ -36,7 +34,6 @@ export interface SkillCategory {
 
 export const skillData: SkillCategory[] = [
   {
-    description: "Expert",
     level: "expert",
     skills: [
       { icon: icon(SiVercel), name: "Vercel AI SDK" },
@@ -47,19 +44,17 @@ export const skillData: SkillCategory[] = [
     title: "AI 應用開發",
   },
   {
-    description: "Expert",
     level: "expert",
     skills: [
       { icon: icon(SiNextdotjs), name: "Next.js 15" },
       { icon: icon(SiReact), name: "React 19" },
       { icon: icon(SiTypescript), name: "TypeScript" },
       { icon: icon(SiReactquery), name: "TanStack Query" },
-      { icon: icon(SiRedux), name: "Zustand" },
+      { icon: icon(TbPaw), name: "Zustand" },
     ],
     title: "現代前端架構",
   },
   {
-    description: "Proficient",
     level: "proficient",
     skills: [
       { icon: icon(SiTailwindcss), name: "Tailwind CSS / DaisyUI" },
@@ -71,7 +66,6 @@ export const skillData: SkillCategory[] = [
     title: "UI / 開發工具",
   },
   {
-    description: "Familiar",
     level: "familiar",
     skills: [
       { icon: icon(SiExpress), name: "Node.js / Express" },
