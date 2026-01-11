@@ -8,6 +8,7 @@
       "env": [
         "GEMINI_API_KEY",
         "GROQ_API_KEY",
+        "LOG_LEVEL",
         "MISTRAL_API_KEY",
         "NODE_ENV",
         "NEXT_RUNTIME",
@@ -21,6 +22,7 @@
       "env": [
         "GEMINI_API_KEY",
         "GROQ_API_KEY",
+        "LOG_LEVEL",
         "MISTRAL_API_KEY",
         "NODE_ENV",
         "NEXT_RUNTIME"
@@ -28,7 +30,7 @@
     },
     "lint": {
       "outputs": [],
-      "env": ["NODE_ENV", "SKIP_ENV_VALIDATION"]
+      "env": ["LOG_LEVEL", "NODE_ENV", "SKIP_ENV_VALIDATION"]
     },
     "check": {
       "dependsOn": ["lint", "check-types"],
