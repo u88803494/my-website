@@ -1,0 +1,104 @@
+{
+  "Metadata": {
+    "title": "Henry Lee | Senior AI Frontend Engineer",
+    "description": "Senior AI Frontend Engineer with 5+ years of web development experience, specializing in Next.js 15 and generative AI application integration."
+  },
+  "Navigation": {
+    "home": "Home",
+    "blog": "Blog",
+    "projects": "Projects",
+    "about": "About",
+    "aiChat": "AI Chat",
+    "aiDictionary": "AI Dictionary",
+    "aiAnalyzer": "AI Analyzer",
+    "timeTracker": "Time Tracker"
+  },
+  "Hero": {
+    "greeting": "Hi, I'm",
+    "name": "Henry Lee",
+    "title": "Senior AI Frontend Engineer",
+    "intro1": "With over 5 years of web development experience, specializing in <b>Next.js 15</b> and <b>generative AI application</b> integration.",
+    "intro2": "Established a documentation-driven development workflow based on <b>Claude Code</b>, achieving a goal of delivering <b>1-2 production-ready</b> features daily.",
+    "intro3": "Independently developed multiple AI applications, including <b>AI Chat</b>, <b>AI Dictionary</b>, and <b>AI Analyzer</b>, demonstrating comprehensive product development capabilities.",
+    "intro4": "Continuously exploring <b>AI-Native development paradigms</b> and best practices, while providing technical consulting services to help teams adopt modern development tools.",
+    "viewWork": "View My Work",
+    "viewWorkTooltip": "Browse my featured projects",
+    "downloadResume": "Download Resume",
+    "downloadResumeTooltip": "Download my resume PDF"
+  },
+  "Skills": {
+    "title": "Skills",
+    "subtitle": "My skill distribution in software development",
+    "categories": {
+      "aiDev": "AI Application Development",
+      "frontend": "Modern Frontend Architecture",
+      "tools": "UI / Dev Tools",
+      "backend": "Backend Experience"
+    },
+    "levels": {
+      "expert": "Expert",
+      "proficient": "Proficient",
+      "familiar": "Familiar"
+    },
+    "skills": {
+      "vercelAiSdk": "Vercel AI SDK",
+      "geminiApi": "Google Gemini API",
+      "promptEngineering": "Prompt Engineering",
+      "streamingUi": "Streaming UI",
+      "nextjs": "Next.js 15",
+      "react": "React 19",
+      "typescript": "TypeScript",
+      "tanstackQuery": "TanStack Query",
+      "zustand": "Zustand",
+      "tailwind": "Tailwind CSS / DaisyUI",
+      "turborepo": "Turborepo (Monorepo)",
+      "claudeCode": "Claude Code Assisted Dev",
+      "git": "Git & GitHub",
+      "figma": "Figma / Zeplin",
+      "nodejs": "Node.js / Express",
+      "mongodb": "MongoDB",
+      "supabase": "Supabase"
+    }
+  },
+  "Experience": {
+    "title": "Work Experience",
+    "present": "Present",
+    "achievements": "Key Achievements",
+    "techStack": "Tech Stack"
+  },
+  "Projects": {
+    "title": "Featured Projects",
+    "subtitle": "A collection of projects showcasing my skills in AI integration, full-stack development, and modern frontend architecture",
+    "viewProject": "View Project",
+    "viewCode": "View Code",
+    "readArticle": "Read Article"
+  },
+  "Education": {
+    "title": "Education",
+    "degree": "Bachelor of Arts in Mass Communication",
+    "school": "National Chengchi University",
+    "location": "Taipei, Taiwan"
+  },
+  "Contact": {
+    "title": "Contact",
+    "subtitle": "Feel free to reach out for collaboration or opportunities",
+    "email": "Email",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "medium": "Medium"
+  },
+  "Footer": {
+    "copyright": "© {year} Henry Lee. All rights reserved.",
+    "builtWith": "Built with Next.js, TypeScript, and Tailwind CSS"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "noResults": "No results found"
+  }
+}

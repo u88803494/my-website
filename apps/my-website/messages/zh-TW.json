@@ -1,0 +1,104 @@
+{
+  "Metadata": {
+    "title": "Henry Lee | 資深 AI 前端工程師",
+    "description": "具備五年以上 Web 開發經驗的資深 AI 前端工程師，專注於 Next.js 15 與生成式 AI 應用整合開發。"
+  },
+  "Navigation": {
+    "home": "首頁",
+    "blog": "部落格",
+    "projects": "專案",
+    "about": "關於我",
+    "aiChat": "AI 對話",
+    "aiDictionary": "AI 字典",
+    "aiAnalyzer": "AI 分析器",
+    "timeTracker": "時間追蹤"
+  },
+  "Hero": {
+    "greeting": "Hi, I'm",
+    "name": "Henry Lee",
+    "title": "Senior AI Frontend Engineer",
+    "intro1": "具備五年以上 Web 開發經驗，專注於 <b>Next.js 15</b> 與<b>生成式 AI 應用</b>整合開發。",
+    "intro2": "建立基於 <b>Claude Code</b> 的文件驅動開發流程，達成每日交付 <b>1-2 個</b>生產就緒功能的目標。",
+    "intro3": "獨立開發多個 AI 應用，包括 <b>AI Chat</b>、<b>AI Dictionary</b>、<b>AI Analyzer</b>，展現完整的產品開發能力。",
+    "intro4": "持續探索 <b>AI-Native 開發模式</b>與最佳實踐，並提供技術顧問服務，協助團隊導入現代化開發工具。",
+    "viewWork": "View My Work",
+    "viewWorkTooltip": "瀏覽我的精選專案作品",
+    "downloadResume": "Download Resume",
+    "downloadResumeTooltip": "下載我的履歷 PDF 檔案"
+  },
+  "Skills": {
+    "title": "技能",
+    "subtitle": "我在軟體開發領域的技能分佈",
+    "categories": {
+      "aiDev": "AI 應用開發",
+      "frontend": "現代前端架構",
+      "tools": "UI / 開發工具",
+      "backend": "後端經驗"
+    },
+    "levels": {
+      "expert": "Expert",
+      "proficient": "Proficient",
+      "familiar": "Familiar"
+    },
+    "skills": {
+      "vercelAiSdk": "Vercel AI SDK",
+      "geminiApi": "Google Gemini API",
+      "promptEngineering": "Prompt Engineering",
+      "streamingUi": "Streaming UI",
+      "nextjs": "Next.js 15",
+      "react": "React 19",
+      "typescript": "TypeScript",
+      "tanstackQuery": "TanStack Query",
+      "zustand": "Zustand",
+      "tailwind": "Tailwind CSS / DaisyUI",
+      "turborepo": "Turborepo (Monorepo)",
+      "claudeCode": "Claude Code 輔助開發",
+      "git": "Git & GitHub",
+      "figma": "Figma / Zeplin",
+      "nodejs": "Node.js / Express",
+      "mongodb": "MongoDB",
+      "supabase": "Supabase"
+    }
+  },
+  "Experience": {
+    "title": "工作經歷",
+    "present": "至今",
+    "achievements": "主要成就",
+    "techStack": "技術棧"
+  },
+  "Projects": {
+    "title": "精選專案",
+    "subtitle": "展示我在 AI 整合、全端開發與現代前端架構方面技能的專案集合",
+    "viewProject": "查看專案",
+    "viewCode": "查看程式碼",
+    "readArticle": "閱讀文章"
+  },
+  "Education": {
+    "title": "學歷",
+    "degree": "大眾傳播學系學士",
+    "school": "國立政治大學",
+    "location": "台灣台北"
+  },
+  "Contact": {
+    "title": "聯絡方式",
+    "subtitle": "歡迎聯繫我討論合作或工作機會",
+    "email": "電子郵件",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "medium": "Medium"
+  },
+  "Footer": {
+    "copyright": "© {year} Henry Lee. 保留所有權利。",
+    "builtWith": "使用 Next.js、TypeScript 和 Tailwind CSS 建構"
+  },
+  "Common": {
+    "loading": "載入中...",
+    "error": "發生錯誤",
+    "retry": "重試",
+    "close": "關閉",
+    "save": "儲存",
+    "cancel": "取消",
+    "search": "搜尋",
+    "noResults": "找不到結果"
+  }
+}
