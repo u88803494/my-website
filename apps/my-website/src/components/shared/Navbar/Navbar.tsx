@@ -3,12 +3,15 @@
 import { routes } from "@packages/shared/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import DesktopNavbar from "./DesktopNavbar";
+import LanguageSwitcher from "./LanguageSwitcher";
 import MobileNavbar from "./MobileNavbar";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const t = useTranslations("Contact");
 
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({
@@ -41,9 +44,10 @@ const Navbar: React.FC = () => {
 
       <DesktopNavbar isActivePage={isActivePage} routes={routes} />
 
-      <div className="navbar-end">
+      <div className="navbar-end gap-2">
+        <LanguageSwitcher />
         <button className="btn btn-primary btn-md" onClick={scrollToContact}>
-          聯絡我
+          {t("title")}
         </button>
       </div>
     </nav>
