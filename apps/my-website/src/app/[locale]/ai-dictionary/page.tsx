@@ -1,10 +1,9 @@
 import { AIDictionaryFeature } from "@packages/ai-dictionary";
-import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  description: "運用人工智慧技術，讓中文詞彙含義與字源更容易理解",
-  title: "AI 智能中文字典 - Henry Lee",
-};
+interface AIDictionaryPageProps {
+  params: Promise<{ locale: string }>;
+}
 
 /**
  * AI Dictionary Page (Server Component)
@@ -17,7 +16,12 @@ export const metadata: Metadata = {
  */
 export const dynamic = "force-dynamic";
 
-const AIDictionaryPage: React.FC = () => {
+const AIDictionaryPage = async ({ params }: AIDictionaryPageProps) => {
+  const { locale } = await params;
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   return <AIDictionaryFeature />;
 };
 

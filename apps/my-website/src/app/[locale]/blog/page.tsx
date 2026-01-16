@@ -6,14 +6,13 @@ import {
   mediumArticlesQueryConfig,
 } from "@packages/blog";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 
 import { getQueryClient } from "@/lib/query-client";
 
-export const metadata: Metadata = {
-  description: "Henry Lee 的技術文章與開發心得分享",
-  title: "技術部落格 - Henry Lee",
-};
+interface BlogPageProps {
+  params: Promise<{ locale: string }>;
+}
 
 /**
  * Blog Page (Server Component with React Query Prefetching)
@@ -37,7 +36,12 @@ export const metadata: Metadata = {
  */
 export const dynamic = "force-dynamic";
 
-export default async function BlogPage() {
+export default async function BlogPage({ params }: BlogPageProps) {
+  const { locale } = await params;
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const queryClient = getQueryClient();
 
   // Prefetch initial articles on the server
