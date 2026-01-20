@@ -62,30 +62,268 @@
   },
   "Experience": {
     "title": "Work Experience",
-    "present": "Present",
+    "subtitle": "My career journey and professional growth",
     "achievements": "Key Achievements",
-    "techStack": "Tech Stack"
+    "techLabels": {
+      "aiDev": "AI Development",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "tools": "Tools",
+      "other": "Others"
+    },
+    "freelance": {
+      "company": "Independent Developer / Freelancer",
+      "role": "Senior AI Frontend Engineer",
+      "period": "Apr 2024 ~ Present",
+      "achievements": {
+        "aiDev": {
+          "title": "AI Application Development & Integration",
+          "description": "Built a personal brand tech platform (henryleelab.com) integrating multiple AI application modules including <strong>AI Chat</strong>, <strong>AI Dictionary</strong>, and <strong>AI Analyzer</strong>, demonstrating comprehensive product development capabilities."
+        },
+        "aiNative": {
+          "title": "AI-Native Interface Design",
+          "description": "Developed <strong>Streaming UI</strong> interactive interfaces to solve LLM response latency UX issues, implementing real-time streaming display and Markdown rendering."
+        },
+        "devProcess": {
+          "title": "Development Process Innovation",
+          "description": "Established a documentation-driven development workflow based on <strong>Claude Code</strong>, achieving the goal of delivering <strong>1-2 production-ready</strong> features daily."
+        },
+        "consulting": {
+          "title": "Technical Consulting Services",
+          "description": "Providing AI integration and frontend architecture consulting, helping teams adopt modern development tools and AI-Native development paradigms."
+        }
+      }
+    },
+    "eucare": {
+      "company": "Eucare Health Co., Ltd.",
+      "role": "Frontend Engineer",
+      "period": "Mar 2022 ~ Apr 2024",
+      "achievements": {
+        "telemedicine": {
+          "title": "Co-designed & Developed Telemedicine System",
+          "description": "Led the development and planning of the video consultation system web interface, including doctor, patient (LINE Mini), and admin panels, using Mono Repo architecture to integrate multiple projects."
+        },
+        "video": {
+          "title": "Video Feature Implementation & Process Simplification",
+          "description": "Successfully deployed Twilio SDK, overcoming technical integration challenges, simplifying the integration process, and implementing video consultation and screen sharing features to meet remote healthcare needs."
+        },
+        "cost": {
+          "title": "Cost & Performance Optimization",
+          "description": "Proposed innovative development approaches that reduced development costs by <strong>50%</strong> and improved UI/UX/DX design, significantly enhancing development convenience by <strong>60%</strong>."
+        },
+        "dataflow": {
+          "title": "Technical Upgrade & Data Flow Optimization",
+          "description": "Improved frontend-backend data flow logic using TypeScript to enhance synchronization and code readability, significantly improving development efficiency and code maintainability."
+        },
+        "upgrade": {
+          "title": "Comprehensive Upgrade & Project Refactoring",
+          "description": "Completed the company's React product line upgrade to the latest version, refactoring <strong>99%</strong> of the codebase, comprehensively improving product stability and developer experience (DX)."
+        },
+        "aiTools": {
+          "title": "AI-Assisted Development Introduction",
+          "description": "Pioneered the introduction of AI-assisted development tools in the team, improving code writing efficiency and quality, laying the foundation for subsequent AI application development."
+        }
+      }
+    },
+    "wishmobile": {
+      "company": "Wishmobile Inc.",
+      "role": "Frontend Engineer",
+      "period": "Sep 2021 ~ Mar 2022",
+      "achievements": {
+        "mentoring": {
+          "title": "Frontend Technical Guidance & Team Collaboration",
+          "description": "Led and mentored <strong>2</strong> team members (including the app team lead), helping them quickly get up to speed with React and develop independently."
+        },
+        "modular": {
+          "title": "Designed & Implemented Modular Architecture",
+          "description": "Collaborated with the app team to lead modular architecture design and implementation, developing multiple reusable packages and libraries to support rapid project assembly."
+        },
+        "standards": {
+          "title": "Technical Standardization & Tool Introduction",
+          "description": "Established coding style guidelines, introduced eslint, prettier, and husky, optimized code review processes, and improved code quality and consistency."
+        },
+        "docs": {
+          "title": "Documentation & Cross-team Collaboration",
+          "description": "Wrote project-related documentation (such as repo initialization, folder structure, etc.), significantly reducing communication costs and unifying development standards."
+        }
+      }
+    },
+    "arisan": {
+      "company": "Arisan Smart Technology Inc.",
+      "role": "Full-Stack Engineer",
+      "period": "Jun 2020 ~ May 2021",
+      "achievements": {
+        "performance": {
+          "title": "Achieved Critical Performance Breakthrough",
+          "description": "Collaborated with colleagues to improve multi-channel video playback loading efficiency, reducing load time from <strong>over 5 seconds</strong> to <strong>under 1 second</strong>."
+        },
+        "migration": {
+          "title": "Led Website Tech Stack Migration",
+          "description": "Independently responsible for migrating the company website (www.arisan.io) from legacy jQuery architecture to React, successfully improving website interactivity and long-term maintainability."
+        },
+        "efficiency": {
+          "title": "Improved Frontend Development Process Efficiency",
+          "description": "Developed more efficient SCSS writing methods and established a shared component library, improving specific template development efficiency by over <strong>50%</strong>."
+        },
+        "components": {
+          "title": "Developed Shared Components & Optimization",
+          "description": "Developed multiple shared components to save development time and optimized full-page form component styles and architecture."
+        }
+      }
+    }
   },
   "Projects": {
     "title": "Featured Projects",
-    "subtitle": "A collection of projects showcasing my skills in AI integration, full-stack development, and modern frontend architecture",
+    "subtitle": "Explore my technical journey, a complete portfolio from learning stages to professional development",
     "viewProject": "View Project",
     "viewCode": "View Code",
-    "readArticle": "Read Article"
+    "viewWebsite": "View Website",
+    "readArticle": "Read Article",
+    "readArticle2": "Read Article 2",
+    "showMore": "Show More Projects",
+    "collapse": "Collapse",
+    "devOnly": "Dev Only",
+    "aiChat": {
+      "title": "AI Chat - Multi-Model Conversation Interface",
+      "category": "AI Tool (Personal Project)",
+      "intro": "Smart conversation interface supporting multi-model switching, integrated with Streaming UI for real-time response experience, demonstrating AI-Native application development capabilities.",
+      "features": {
+        "0": "Supports multiple AI model switching (GPT, Claude, Gemini) with unified interface experience",
+        "1": "Streaming UI for real-time display, optimizing LLM response waiting experience",
+        "2": "Complete Markdown rendering with code syntax highlighting support",
+        "3": "Conversation history management and export functionality",
+        "4": "Integrated Vercel AI SDK for unified model interface"
+      }
+    },
+    "personalSite": {
+      "title": "Henry Lee Personal Website",
+      "category": "Personal Website / Resume Platform",
+      "intro": "A modern personal website integrating resume, project portfolio, AI tools, Medium article automation, and more, showcasing full-stack development and product design capabilities.",
+      "features": {
+        "0": "Built with Next.js 15 + TypeScript + Tailwind CSS, supporting App Router",
+        "1": "Integrated self-developed AI tools including AI Dictionary and AI Requirements Analyzer",
+        "2": "Automatic Medium article sync and carousel display",
+        "3": "Responsive design with rich animations",
+        "4": "Skill matrix, project cards, work experience timeline, and diverse displays",
+        "5": "Complete SEO and social sharing optimization"
+      }
+    },
+    "aiDictionary": {
+      "title": "AI Smart Chinese Dictionary",
+      "category": "AI Tool (Personal Project)",
+      "intro": "Using Google Gemini AI technology, enabling one-stop query of Chinese vocabulary meanings, etymology, example sentences, and multi-dimensional information, combined with learning card interaction to improve learning efficiency.",
+      "features": {
+        "0": "Query results cover meaning, etymology, examples, and multi-level information displayed as cards for easy learning and review",
+        "1": "Supports learning mode, can mark 'Learning Complete' with undo support for repeated viewing",
+        "2": "Real-time interactive animations with dynamic prompts for successful queries and completed learning",
+        "3": "Rigorous error handling and query length limits ensuring query efficiency and accuracy",
+        "4": "Integrated Google Gemini API for AI-powered Chinese vocabulary analysis"
+      }
+    },
+    "aiAnalyzer": {
+      "title": "AI Requirements Analyzer",
+      "category": "AI Tool (Personal Project)",
+      "intro": "An AI tool for deep thinking and requirement clarification, automatically breaking down vague ideas into structured fill-in-the-blank templates, helping users learn how to give AI better prompts. Suitable for product planning, project discussion, AI prompt engineering, and more.",
+      "features": {
+        "0": "After entering requirements, AI automatically generates structured analysis templates with guiding questions to help clarify goals, users, features, budgets, and core elements",
+        "1": "Supports copying analysis results for direct use in ChatGPT, Claude, and other AI tools' prompt writing",
+        "2": "Real-time error handling and loading status prompts for better interaction experience",
+        "3": "Clean interface with mobile device browsing support",
+        "4": "Integrated Google Gemini API ensuring analysis quality and diversity"
+      }
+    },
+    "newDictionary": {
+      "title": "New Dictionary",
+      "category": "Dictionary Website (Personal Project)",
+      "intro": "An online Chinese dictionary application connecting to MOE Dictionary data source, aiming to optimize Chinese vocabulary learning and query experience. Independently completed project design, development, and deployment from scratch.",
+      "features": {
+        "0": "Connected to 'MOE Dictionary' API for real-time word definition queries with dynamic routing for word-URL synchronization",
+        "1": "Self-designed UI from scratch with Tailwind CSS for cross-device responsive interface (RWD)",
+        "2": "Developed with Next.js and TypeScript ensuring type safety and excellent developer experience",
+        "3": "Used Redux Toolkit for global state management with Thunk for async API data fetching"
+      }
+    },
+    "tzuchiShop": {
+      "title": "Buddhist Product Display Static Website",
+      "category": "Static E-commerce Website (AI Collaboration Project)",
+      "intro": "A practical project exploring AI collaborative development workflow. The goal is to build a professional, modern, and fully responsive product display website from scratch using AI tools in a very short time.",
+      "features": {
+        "0": "Actual result: Completed the full process from design to deployment in 3 working days, successfully validating the high efficiency of AI-assisted development",
+        "1": "Tech stack: Built with Next.js, TypeScript, and Tailwind CSS, deployed and hosted globally via Vercel",
+        "2": "Website features: Implemented pure static product category switching, product hover interaction effects, with complete responsive design (RWD)",
+        "3": "(Project start date: 2025/06/09)"
+      }
+    },
+    "reactBlog": {
+      "title": "React Blog System (Learning Project)",
+      "category": "React Blog (Learning Project)",
+      "intro": "This is my earliest complete independent development application, aiming to practice a full-stack blog system with complete backend management features. The project covers user authentication, complete article CRUD (Create, Read, Update, Delete) workflow, and frontend error handling mechanism, laying a solid foundation for handling complex web applications.",
+      "features": {
+        "0": "Integrated Google Firebase Authentication for secure third-party login and user identity verification",
+        "1": "Implemented complete article management workflow including permission-based article publishing, editing, and deletion (CRUD) backend features",
+        "2": "Built single-page application (SPA) with React Router, managed async operations and global state with Redux Thunk",
+        "3": "Refactored with React Hooks in later stages, greatly simplifying component logic and improving code readability and maintainability",
+        "4": "(Project start date: 2019/11/29)"
+      }
+    },
+    "arisanWebsite": {
+      "title": "Company Official Website",
+      "category": "Company Official Website (Led Development)",
+      "intro": "Led the frontend development of the company official website (www.arisan.io), independently responsible for transforming design mockups into high-precision, high-performance interactive web pages. All UI components in this project were handcrafted from scratch for optimal customization and performance.",
+      "features": {
+        "0": "Responsible for core page development: Independently completed development of 'Service Overview', 'Product Introduction (Clio, Faceta)' three main pages and site-wide form functionality",
+        "1": "Precisely implemented UI/UX: Built highly maintainable SCSS architecture using BEM (Block, Element, Modifier) methodology with 4K high-resolution screen support",
+        "2": "Optimized user interaction: Used React Context API for global popup forms and developed smooth scroll-to-section functionality",
+        "3": "Introduced automated testing: Integrated Jest and Puppeteer for end-to-end (E2E) testing connected to GitLab CI/CD workflow ensuring quality for each deployment"
+      }
+    }
+  },
+  "About": {
+    "techStack": "My Tech Stack"
   },
   "Education": {
-    "title": "Education",
-    "degree": "Bachelor of Arts in Mass Communication",
-    "school": "National Chengchi University",
-    "location": "Taipei, Taiwan"
+    "title": "Education & Training",
+    "subtitle": "My learning journey and background",
+    "items": {
+      "mentorProgram": {
+        "title": "Lidemy Mentor Program 3rd Batch",
+        "description": "Student",
+        "period": "Apr 2019 ~ Dec 2019"
+      },
+      "minghsin": {
+        "title": "Minghsin University of Science and Technology",
+        "description": "Bachelor of Science, Chemical and Materials Engineering",
+        "period": "2009 ~ 2011"
+      },
+      "isu": {
+        "title": "I-Shou University",
+        "description": "Associate Degree, Chemical Engineering",
+        "period": "2007 ~ 2009"
+      }
+    }
   },
   "Contact": {
-    "title": "Contact",
-    "subtitle": "Feel free to reach out for collaboration or opportunities",
-    "email": "Email",
-    "github": "GitHub",
-    "linkedin": "LinkedIn",
-    "medium": "Medium"
+    "title": "Let's Work Together",
+    "subtitle": "If you're interested in my experience or have any job opportunities, feel free to reach out! I'm looking for remote or full-time positions.",
+    "email": {
+      "title": "Email",
+      "description": "Best way to contact me. I usually respond within 24 hours.",
+      "copied": "Copied",
+      "copy": "Copy"
+    },
+    "otherPlatforms": {
+      "title": "Other Platforms",
+      "description": "Learn more about me on these platforms",
+      "github": "GitHub - Code",
+      "linkedin": "LinkedIn - Resume",
+      "medium": "Medium - Articles",
+      "email": "Email - Direct Contact"
+    },
+    "lookingFor": {
+      "position": "<strong>Looking for:</strong> Frontend Engineer, Full-Stack Engineer (Remote or On-site)",
+      "skills": "<strong>Skills:</strong> React, Next.js, TypeScript, Frontend Development",
+      "responseTime": "<strong>Response Time:</strong> Usually respond to emails within 24 hours"
+    }
   },
   "Footer": {
     "copyright": "© {year} Henry Lee. All rights reserved.",
