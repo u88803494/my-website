@@ -1,9 +1,11 @@
 "use client";
 
-import { type Experience } from "@packages/shared/types";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+
+import { type Experience } from "@/types/experience.types";
 
 import { getAchievementGridClass } from "../../utils/gridUtils";
 
@@ -12,6 +14,8 @@ interface ExperienceCardProps {
 }
 
 const ExperienceCard = ({ experience }: ExperienceCardProps) => {
+  const t = useTranslations("Experience");
+
   return (
     <motion.div
       className="card bg-base-100 shadow-xl transition-shadow duration-300 hover:shadow-2xl"
@@ -24,7 +28,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
         <div className="mb-4 flex items-center">
           {experience.logoUrl && (
             <Image
-              alt={`${experience.company} logo`}
+              alt={`${t(experience.companyKey)} logo`}
               className="mr-4 rounded-full object-cover shadow"
               height={48}
               src={experience.logoUrl}
@@ -32,13 +36,13 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
             />
           )}
           <div>
-            <h3 className="card-title text-base-content text-xl font-bold">{experience.company}</h3>
-            {experience.role && <p className="text-primary font-semibold">{experience.role}</p>}
-            {experience.period && <p className="text-base-content/80 text-sm">{experience.period}</p>}
+            <h3 className="card-title text-base-content text-xl font-bold">{t(experience.companyKey)}</h3>
+            {experience.roleKey && <p className="text-primary font-semibold">{t(experience.roleKey)}</p>}
+            {experience.periodKey && <p className="text-base-content/80 text-sm">{t(experience.periodKey)}</p>}
           </div>
         </div>
         <div className="mb-6">
-          <h4 className="text-base-content mb-3 text-lg font-semibold">主要成就</h4>
+          <h4 className="text-base-content mb-3 text-lg font-semibold">{t("achievements")}</h4>
           <ul className={`grid gap-3 ${getAchievementGridClass(experience.achievements.length)}`}>
             {experience.achievements.map((achievement, achievementIndex) => (
               <li
@@ -47,8 +51,8 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
               >
                 <CheckCircle2 className="text-secondary mt-0.5 h-5 w-5 shrink-0" />
                 <p>
-                  <strong className="text-base-content font-bold">{achievement.title}：</strong>
-                  {achievement.description}
+                  <strong className="text-base-content font-bold">{t(achievement.titleKey)}：</strong>
+                  <span dangerouslySetInnerHTML={{ __html: t.raw(achievement.descriptionKey) }} />
                 </p>
               </li>
             ))}
@@ -57,8 +61,8 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
         {experience.techStackGroups && (
           <div className="flex flex-wrap gap-8">
             {experience.techStackGroups.map((group, groupIdx) => (
-              <div className="min-w-[120px]" key={group.label}>
-                <h5 className="text-md text-base-content mb-2 font-semibold">{group.label}</h5>
+              <div className="min-w-[120px]" key={group.labelKey}>
+                <h5 className="text-md text-base-content mb-2 font-semibold">{t(group.labelKey)}</h5>
                 <div className="flex flex-wrap gap-2">
                   {group.items.map((tech, techIndex) => (
                     <div

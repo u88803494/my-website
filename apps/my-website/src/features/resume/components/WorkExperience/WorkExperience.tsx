@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import { experiences } from "@/data/experienceData";
@@ -14,17 +15,19 @@ interface WorkExperienceProps {
 }
 
 const WorkExperience: React.FC<WorkExperienceProps> = ({ backgroundClass, sectionId }) => {
+  const t = useTranslations("Experience");
+
   return (
     <section className={cn("py-20", backgroundClass)} id={sectionId}>
       <div className="prose prose-neutral container mx-auto max-w-4xl px-2 md:px-4">
         <div className="mb-16 text-center">
-          <h2 className="text-base-content mb-4 text-4xl font-bold">Work Experience</h2>
+          <h2 className="text-base-content mb-4 text-4xl font-bold">{t("title")}</h2>
           <div className="bg-primary mx-auto mb-6 h-1 w-20" />
-          <p className="text-base-content/80 text-lg">我的職涯發展歷程</p>
+          <p className="text-base-content/80 text-lg">{t("subtitle")}</p>
         </div>
         <div className="flex flex-col gap-12">
-          {experiences.map((exp: Experience, _index: number) => (
-            <ExperienceCard experience={exp} key={exp.company + exp.period} />
+          {experiences.map((exp: Experience) => (
+            <ExperienceCard experience={exp} key={exp.companyKey} />
           ))}
         </div>
       </div>
