@@ -4,6 +4,7 @@ import { type Project } from "@packages/shared/types";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, FileText } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import React from "react";
 import { SiGithub } from "react-icons/si";
 
@@ -14,6 +15,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+  const t = useTranslations("Projects");
+
   return (
     <motion.div
       className="card bg-base-100 border-base-200/50 hover:border-base-200 group h-full border shadow-xl transition-colors duration-200"
@@ -30,7 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     >
       <figure className="bg-base-100 border-base-200/30 relative flex aspect-[4/3] items-center justify-center overflow-hidden border-b">
         <Image
-          alt={project.title}
+          alt={t(project.titleKey)}
           className="object-contain transition-transform duration-300 group-hover:scale-105"
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -38,37 +41,43 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         />
       </figure>
       <div className="card-body flex flex-col">
-        <h2 className="card-title mb-1">{project.title}</h2>
+        <h2 className="card-title mb-1">{t(project.titleKey)}</h2>
         <span className="mb-3 flex items-center gap-1 text-sm text-gray-500">
           <Calendar className="h-4 w-4" />
-          {project.category}
+          {t(project.categoryKey)}
         </span>
-        <p className="mb-3">{project.description.intro}</p>
+        <p className="mb-3">{t(project.descriptionKeys.introKey)}</p>
         <ul className="mb-3 list-inside list-disc space-y-1">
-          {project.description.features.map((feature: string, idx: number) => (
+          {project.descriptionKeys.featureKeys.map((featureKey: string, idx: number) => (
             <li className="text-sm leading-relaxed" key={idx}>
-              {feature}
+              {t(featureKey)}
             </li>
           ))}
         </ul>
         <TechStack className="mt-4" techStack={project.techStack} />
         <div className="mt-auto flex flex-wrap gap-2">
-          {project.links.map((link: { label: string; url: string }, idx: number) => (
-            <motion.a
-              className="btn btn-outline flex items-center gap-2 px-4 py-2"
-              href={link.url}
-              key={idx}
-              rel="noopener noreferrer"
-              target="_blank"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {link.label === "預覽網站" && <ExternalLink className="h-4 w-4" />}
-              {link.label.includes("GitHub") && <SiGithub className="h-4 w-4" />}
-              {(link.label.includes("文章") || link.label.includes("心得")) && <FileText className="h-4 w-4" />}
-              {link.label}
-            </motion.a>
-          ))}
+          {project.links.map((link, idx: number) => {
+            const label = t(link.labelKey);
+            return (
+              <motion.a
+                className="btn btn-outline flex items-center gap-2 px-4 py-2"
+                href={link.url}
+                key={idx}
+                rel="noopener noreferrer"
+                target="_blank"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {link.labelKey === "viewProject" && <ExternalLink className="h-4 w-4" />}
+                {link.labelKey === "viewWebsite" && <ExternalLink className="h-4 w-4" />}
+                {link.labelKey === "viewCode" && <SiGithub className="h-4 w-4" />}
+                {(link.labelKey === "readArticle" || link.labelKey === "readArticle2") && (
+                  <FileText className="h-4 w-4" />
+                )}
+                {label}
+              </motion.a>
+            );
+          })}
         </div>
       </div>
     </motion.div>
