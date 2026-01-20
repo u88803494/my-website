@@ -16,62 +16,62 @@ import {
 } from "react-icons/si";
 import { TbApi, TbBrandDaysCounter, TbMessageChatbot, TbPaw } from "react-icons/tb";
 
-// 簡潔的圖標包裝函數，避免重複 className
+// Wrapper function to apply consistent icon styling
 const icon = (IconComponent: ComponentType<SVGProps<SVGSVGElement>>): ReactNode => (
   <IconComponent className="h-4 w-4" />
 );
 
 export interface Skill {
   icon: ReactNode;
-  name: string;
+  nameKey: string; // Translation key for skill name
 }
 
 export interface SkillCategory {
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
-  title: string;
+  titleKey: string; // Translation key for category title
 }
 
 export const skillData: SkillCategory[] = [
   {
     level: "expert",
     skills: [
-      { icon: icon(SiVercel), name: "Vercel AI SDK" },
-      { icon: icon(SiGooglegemini), name: "Google Gemini API" },
-      { icon: icon(TbMessageChatbot), name: "Prompt Engineering" },
-      { icon: icon(TbApi), name: "Streaming UI" },
+      { icon: icon(SiVercel), nameKey: "vercelAiSdk" },
+      { icon: icon(SiGooglegemini), nameKey: "geminiApi" },
+      { icon: icon(TbMessageChatbot), nameKey: "promptEngineering" },
+      { icon: icon(TbApi), nameKey: "streamingUi" },
     ],
-    title: "AI 應用開發",
+    titleKey: "aiDev",
   },
   {
     level: "expert",
     skills: [
-      { icon: icon(SiNextdotjs), name: "Next.js 15" },
-      { icon: icon(SiReact), name: "React 19" },
-      { icon: icon(SiTypescript), name: "TypeScript" },
-      { icon: icon(SiReactquery), name: "TanStack Query" },
-      { icon: icon(TbPaw), name: "Zustand" },
+      { icon: icon(SiNextdotjs), nameKey: "nextjs" },
+      { icon: icon(SiReact), nameKey: "react" },
+      { icon: icon(SiTypescript), nameKey: "typescript" },
+      { icon: icon(SiReactquery), nameKey: "tanstackQuery" },
+      { icon: icon(TbPaw), nameKey: "zustand" },
     ],
-    title: "現代前端架構",
+    titleKey: "frontend",
   },
   {
     level: "proficient",
     skills: [
-      { icon: icon(SiTailwindcss), name: "Tailwind CSS / DaisyUI" },
-      { icon: icon(SiTurborepo), name: "Turborepo (Monorepo)" },
-      { icon: icon(SiOpenai), name: "Claude Code 輔助開發" },
-      { icon: icon(SiGithub), name: "Git & GitHub" },
-      { icon: icon(TbBrandDaysCounter), name: "Figma / Zeplin" },
+      { icon: icon(SiTailwindcss), nameKey: "tailwind" },
+      { icon: icon(SiTurborepo), nameKey: "turborepo" },
+      { icon: icon(SiOpenai), nameKey: "claudeCode" },
+      { icon: icon(SiGithub), nameKey: "git" },
+      { icon: icon(TbBrandDaysCounter), nameKey: "figma" },
     ],
-    title: "UI / 開發工具",
+    titleKey: "tools",
   },
   {
     level: "familiar",
     skills: [
-      { icon: icon(SiExpress), name: "Node.js / Express" },
-      { icon: icon(SiMongodb), name: "MongoDB" },
-      { icon: icon(SiSupabase), name: "Supabase" },
+      { icon: icon(SiExpress), nameKey: "nodejs" },
+      { icon: icon(SiMongodb), nameKey: "mongodb" },
+      { icon: icon(SiSupabase), nameKey: "supabase" },
     ],
-    title: "後端經驗",
+    titleKey: "backend",
   },
 ];
