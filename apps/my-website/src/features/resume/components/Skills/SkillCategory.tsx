@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Eye, Star, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import { type Skill } from "@/data/skillData";
@@ -11,10 +12,12 @@ interface SkillCategoryProps {
   index: number;
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
-  title: string;
+  titleKey: string;
 }
 
-const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, title }) => {
+const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, titleKey }) => {
+  const t = useTranslations("Skills");
+
   const getLevelConfig = () => {
     switch (level) {
       case "familiar":
@@ -22,14 +25,14 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, tit
           accentColor: "text-cyan-500",
           badgeVariant: "border-cyan-500 text-cyan-600",
           icon: <Eye className="h-5 w-5" />,
-          label: "Familiar",
+          label: t("levels.familiar"),
         };
       case "proficient":
         return {
           accentColor: "text-primary",
           badgeVariant: "badge-primary",
           icon: <Zap className="h-5 w-5" />,
-          label: "Proficient",
+          label: t("levels.proficient"),
         };
       case "expert":
       default:
@@ -37,7 +40,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, tit
           accentColor: "text-success",
           badgeVariant: "badge-success",
           icon: <Star className="h-5 w-5" />,
-          label: "Expert",
+          label: t("levels.expert"),
         };
     }
   };
@@ -60,7 +63,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, tit
         <div className="mb-4 flex items-center">
           <div className={cn(config.accentColor, "mr-3")}>{config.icon}</div>
           <div>
-            <h3 className="card-title text-base-content text-xl font-bold">{title}</h3>
+            <h3 className="card-title text-base-content text-xl font-bold">{t(`categories.${titleKey}`)}</h3>
             <p className={cn("text-sm font-semibold", config.accentColor)}>({config.label})</p>
           </div>
         </div>
@@ -80,7 +83,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({ index, level, skills, tit
               whileInView={{ opacity: 1, x: 0 }}
             >
               <span className="flex-shrink-0">{skill.icon}</span>
-              <span className="text-sm">{skill.name}</span>
+              <span className="text-sm">{t(`skills.${skill.nameKey}`)}</span>
             </motion.div>
           ))}
         </div>

@@ -1,12 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { ContactLinks } from "@/components/shared";
 
 import TypewriterText from "./TypewriterText";
 
 const HeroContent = () => {
+  const t = useTranslations("Hero");
+
   return (
     <div className="card-body flex max-w-2xl flex-col gap-6 p-0 text-center lg:text-left">
       <motion.h1
@@ -15,8 +18,8 @@ const HeroContent = () => {
         initial={{ opacity: 0, y: 30 }}
         transition={{ delay: 0.3, duration: 0.6 }}
       >
-        <span>{"Hi, I'm "}</span>
-        <TypewriterText delay={0.8} text="Henry Lee" />
+        <span>{t("greeting")}</span>
+        <TypewriterText delay={0.8} text={t("name")} />
       </motion.h1>
 
       <motion.h2
@@ -25,43 +28,38 @@ const HeroContent = () => {
         initial={{ opacity: 0, y: 30 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        Senior AI Frontend Engineer
+        {t("title")}
       </motion.h2>
 
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
         <motion.p
           animate={{ opacity: 1, y: 0 }}
+          dangerouslySetInnerHTML={{ __html: t.raw("intro1") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.7, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        >
-          具備五年以上 Web 開發經驗，專注於 <b>Next.js 15</b> 與<b>生成式 AI 應用</b>整合開發。
-        </motion.p>
+        />
         <motion.p
           animate={{ opacity: 1, y: 0 }}
+          dangerouslySetInnerHTML={{ __html: t.raw("intro2") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.9, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        >
-          建立基於 <b>Claude Code</b> 的文件驅動開發流程，達成每日交付 <b>1-2 個</b>生產就緒功能的目標。
-        </motion.p>
+        />
         <motion.p
           animate={{ opacity: 1, y: 0 }}
+          dangerouslySetInnerHTML={{ __html: t.raw("intro3") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 1.1, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        >
-          獨立開發多個 AI 應用，包括 <b>AI Chat</b>、<b>AI Dictionary</b>、<b>AI Analyzer</b>{" "}
-          等，展現完整的產品開發能力。
-        </motion.p>
+        />
         <motion.p
           animate={{ opacity: 1, y: 0 }}
+          dangerouslySetInnerHTML={{ __html: t.raw("intro4") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 1.3, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        >
-          持續探索 <b>AI-Native 開發模式</b>與最佳實踐，並提供技術顧問服務，協助團隊導入現代化開發工具。
-        </motion.p>
+        />
       </div>
 
       {/* CTA Buttons */}
@@ -73,7 +71,7 @@ const HeroContent = () => {
       >
         <motion.button
           className="btn btn-primary btn-lg group tooltip tooltip-custom tooltip-top relative overflow-hidden shadow-md transition-all hover:shadow-xl"
-          data-tip="瀏覽我的精選專案作品"
+          data-tip={t("viewWorkTooltip")}
           onClick={() => {
             const projectsSection = document.getElementById("featured-projects");
             projectsSection?.scrollIntoView({ behavior: "smooth" });
@@ -81,7 +79,7 @@ const HeroContent = () => {
           whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)", scale: 1.07 }}
           whileTap={{ scale: 0.95 }}
         >
-          <span className="relative z-10">View My Work</span>
+          <span className="relative z-10">{t("viewWork")}</span>
           <motion.div
             className="from-primary to-secondary pointer-events-none absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20"
             initial={{ x: "-100%" }}
@@ -91,7 +89,7 @@ const HeroContent = () => {
         </motion.button>
         <motion.button
           className="btn btn-outline btn-lg tooltip tooltip-custom tooltip-top shadow-md transition-all hover:shadow-xl"
-          data-tip="下載我的履歷 PDF 檔案"
+          data-tip={t("downloadResumeTooltip")}
           onClick={() => {
             const link = document.createElement("a");
             link.href = "/documents/henry-lee-resume-20250618.pdf";
@@ -103,7 +101,7 @@ const HeroContent = () => {
           whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)", scale: 1.07 }}
           whileTap={{ scale: 0.95 }}
         >
-          Download Resume
+          {t("downloadResume")}
         </motion.button>
       </motion.div>
 
