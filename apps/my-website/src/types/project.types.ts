@@ -1,18 +1,18 @@
 export interface Project {
-  category: string;
-  description: ProjectDescription;
+  categoryKey: string; // Translation key for category
+  descriptionKeys: ProjectDescriptionKeys;
   imageUrl: string;
   links: ProjectLink[];
-  techStack: string[];
-  title: string;
+  techStack: string[]; // Tech names stay as-is
+  titleKey: string; // Translation key for title
 }
 
-export interface ProjectDescription {
-  features: string[];
-  intro: string;
+export interface ProjectDescriptionKeys {
+  featureKeys: string[]; // Translation keys for features
+  introKey: string; // Translation key for intro
 }
 
 export interface ProjectLink {
-  label: string;
+  labelKey: string; // Translation key for label
   url: string;
 }
