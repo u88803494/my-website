@@ -3,178 +3,166 @@ import { type Project } from "@/types/project.types";
 
 export const projects: Project[] = [
   {
-    category: "AI 工具 (個人獨立專案)",
-    description: {
-      features: [
-        "支援多種 AI 模型切換（GPT、Claude、Gemini），統一介面體驗",
-        "Streaming UI 串流顯示，優化 LLM 回應等待體驗",
-        "完整 Markdown 渲染，支援程式碼語法高亮",
-        "對話歷史管理與匯出功能",
-        "整合 Vercel AI SDK 實現統一模型介面",
+    categoryKey: "aiChat.category",
+    descriptionKeys: {
+      featureKeys: [
+        "aiChat.features.0",
+        "aiChat.features.1",
+        "aiChat.features.2",
+        "aiChat.features.3",
+        "aiChat.features.4",
       ],
-      intro: "支援多模型切換的智慧對話介面，整合 Streaming UI 實現即時回應體驗，展現 AI-Native 應用開發能力。",
+      introKey: "aiChat.intro",
     },
     imageUrl: "/images/projects/ai-chat.png",
-    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-chat" }],
+    links: [{ labelKey: "viewProject", url: "https://henryleelab.com/ai-chat" }],
     techStack: ["Next.js 15", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
-    title: "AI Chat - 多模型對話介面",
+    titleKey: "aiChat.title",
   },
   {
-    category: "個人網站／履歷平台",
-    description: {
-      features: [
-        "採用 Next.js 15 + TypeScript + Tailwind CSS 打造，支援 App Router",
-        "整合 AI 字典、AI 需求分析器等自研 AI 工具",
-        "Medium 文章自動同步與輪播展示",
-        "響應式設計、豐富動畫",
-        "技能矩陣、專案卡片、工作經驗時間軸等多元展示",
-        "完整的 SEO 與社群分享優化",
+    categoryKey: "personalSite.category",
+    descriptionKeys: {
+      featureKeys: [
+        "personalSite.features.0",
+        "personalSite.features.1",
+        "personalSite.features.2",
+        "personalSite.features.3",
+        "personalSite.features.4",
+        "personalSite.features.5",
       ],
-      intro:
-        "一個現代化的個人網站，整合履歷、專案作品、AI 工具、Medium 文章自動化等多元功能，展現全端開發與產品設計能力。",
+      introKey: "personalSite.intro",
     },
     imageUrl: "/images/screenshots/henry-lee-hero-section.png",
     links: [
-      { label: "預覽網站", url: "https://henryleelab.com" },
+      { labelKey: "viewProject", url: "https://henryleelab.com" },
       {
-        label: "實作文章",
+        labelKey: "readArticle",
         url: "https://medium.com/@hugh-program-learning-diary-js/next-js-ai-一天搞定個人網站-0dddd23f4db3",
       },
     ],
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "React Query", "DaisyUI", "Shadcn UI", "Google Gemini API"],
-    title: "Henry Lee 個人網站",
+    titleKey: "personalSite.title",
   },
   {
-    category: "AI 工具 (個人獨立專案)",
-    description: {
-      features: [
-        "查詢結果涵蓋詞義、字源、例句等多層次資訊，並以卡片方式呈現，方便學習與複習",
-        "支援學習模式，可標記「學習完成」並支援撤銷，方便重複查看",
-        "即時互動動畫，查詢成功與學習完成皆有動態提示，提升使用者體驗",
-        "嚴謹的錯誤處理與查詢長度限制，確保查詢效率與準確性",
-        "整合 Google Gemini API，AI 智能分析中文字詞",
+    categoryKey: "aiDictionary.category",
+    descriptionKeys: {
+      featureKeys: [
+        "aiDictionary.features.0",
+        "aiDictionary.features.1",
+        "aiDictionary.features.2",
+        "aiDictionary.features.3",
+        "aiDictionary.features.4",
       ],
-      intro:
-        "運用 Google Gemini AI 技術，讓中文詞彙的含義、字源、例句等多維度資訊一站式查詢，並結合學習卡片互動，提升學習效率。",
+      introKey: "aiDictionary.intro",
     },
     imageUrl: "/images/projects/ai-dictionary.png",
-    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-dictionary" }],
+    links: [{ labelKey: "viewProject", url: "https://henryleelab.com/ai-dictionary" }],
     techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
-    title: "AI 智能中文字典",
+    titleKey: "aiDictionary.title",
   },
   {
-    category: "AI 工具 (個人獨立專案)",
-    description: {
-      features: [
-        "輸入需求後，AI 會自動產生結構化的分析模板，包含多個引導性問題，協助釐清目標、用戶、功能、預算等核心要素",
-        "支援複製分析結果，可直接用於 ChatGPT、Claude 等 AI 工具的 prompt 編寫",
-        "即時錯誤處理與載入狀態提示，提升互動體驗",
-        "介面簡潔，支援行動裝置瀏覽",
-        "整合 Google Gemini API，確保分析品質與多樣性",
+    categoryKey: "aiAnalyzer.category",
+    descriptionKeys: {
+      featureKeys: [
+        "aiAnalyzer.features.0",
+        "aiAnalyzer.features.1",
+        "aiAnalyzer.features.2",
+        "aiAnalyzer.features.3",
+        "aiAnalyzer.features.4",
       ],
-      intro:
-        "一款協助深度思考與釐清需求的 AI 工具，能將模糊想法自動拆解為結構化的填空題模板，幫助用戶學會如何給 AI 更好的提示詞。適合產品規劃、專案討論、AI prompt 工程等多元場景。",
+      introKey: "aiAnalyzer.intro",
     },
     imageUrl: "/images/projects/ai-analyzer.png",
     links: [
-      { label: "預覽網站", url: "https://henryleelab.com/ai-analyzer" },
+      { labelKey: "viewProject", url: "https://henryleelab.com/ai-analyzer" },
       {
-        label: "實作文章",
+        labelKey: "readArticle",
         url: "https://hugh-program-learning-diary-js.medium.com/ai-溝通老是失敗-我花不到三小時-做了一個-ai-的-ai-當解方-880cecf604c4",
       },
     ],
     techStack: ["Next.js", "TypeScript", "Google Gemini API", "Tailwind CSS"],
-    title: "AI 需求分析器",
+    titleKey: "aiAnalyzer.title",
   },
   {
-    category: "字典網站 (個人獨立專案)",
-    description: {
-      features: [
-        "串接「萌典」API 提供即時字義查詢，並實現字詞與 URL 同步的動態路由功能",
-        "從無到有自主設計 UI，並採用 Tailwind CSS 實現跨裝置的響應式介面 (RWD)",
-        "採用 Next.js 搭配 TypeScript 進行開發，確保專案的型別安全與優良開發體驗",
-        "使用 Redux Toolkit 進行全域狀態管理，並透過 Thunk 處理非同步的 API 資料獲取",
+    categoryKey: "newDictionary.category",
+    descriptionKeys: {
+      featureKeys: [
+        "newDictionary.features.0",
+        "newDictionary.features.1",
+        "newDictionary.features.2",
+        "newDictionary.features.3",
       ],
-      intro:
-        "一個串接萌典資料來源的線上中文字典應用，旨在優化中文字詞的學習與查詢體驗。從零到一獨立完成專案的設計、開發與部署。",
+      introKey: "newDictionary.intro",
     },
     imageUrl: "/images/projects/new-dictionary.png",
     links: [
-      { label: "預覽網站", url: "https://dictionary-u88803494.vercel.app/" },
+      { labelKey: "viewProject", url: "https://dictionary-u88803494.vercel.app/" },
       {
-        label: "實作文章 1",
+        labelKey: "readArticle",
         url: "https://hugh-program-learning-diary-js.medium.com/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E5%AD%97%E5%85%B8%E7%B6%B2%E7%AB%99-%E5%A4%A7%E7%B6%B1-9ba7f20d5c68",
       },
       {
-        label: "實作文章 2",
+        labelKey: "readArticle2",
         url: "https://hugh-program-learning-diary-js.medium.com/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E5%AD%97%E5%85%B8%E7%B6%B2%E7%AB%99-%E9%96%8B%E5%A7%8B%E5%89%8D%E6%A7%8B%E6%80%9D-f58b4b8c12b2",
       },
     ],
     techStack: ["Next.js", "TypeScript", "Redux Toolkit", "Thunk", "Tailwind CSS"],
-    title: "新典",
+    titleKey: "newDictionary.title",
   },
   {
-    category: "靜態電商網站 (AI 協作專案)",
-    description: {
-      features: [
-        "實際成果：在 3 個工作日內完成從設計到部署的完整流程，成功驗證了 AI 輔助開發的高效率",
-        "技術棧：採用 Next.js、TypeScript 與 Tailwind CSS 打造，並透過 Vercel 進行全球部署與託管",
-        "網站功能：實現了純靜態的商品類別切換、產品 Hover 互動效果，並具備完整的響應式設計 (RWD)",
-        "(專案起始日期：2025/06/09)",
-      ],
-      intro:
-        "一個探索 AI 協同開發流程的實踐專案。目標是在極短的時間內，利用 AI 工具輔助，從零到一建構出一個專業、現代且完全響應式的產品展示網站。",
+    categoryKey: "tzuchiShop.category",
+    descriptionKeys: {
+      featureKeys: ["tzuchiShop.features.0", "tzuchiShop.features.1", "tzuchiShop.features.2", "tzuchiShop.features.3"],
+      introKey: "tzuchiShop.intro",
     },
     imageUrl: "/images/projects/tzuchi-shop.png",
     links: [
-      { label: "預覽網站", url: "https://buddhist-shop.vercel.app/" },
-      { label: "GitHub", url: `${SOCIAL_LINKS.GITHUB}/buddhistShop` },
+      { labelKey: "viewProject", url: "https://buddhist-shop.vercel.app/" },
+      { labelKey: "viewCode", url: `${SOCIAL_LINKS.GITHUB}/buddhistShop` },
     ],
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "AI 輔助開發"],
-    title: "慈濟產品展示靜態網站",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "AI Assisted Dev"],
+    titleKey: "tzuchiShop.title",
   },
   {
-    category: "React blog(學習專案)",
-    description: {
-      features: [
-        "整合 Google Firebase Authentication，實現安全的第三方登入與使用者身份驗證功能",
-        "實現了完整的文章管理流程，包括基於權限的文章發布、編輯、刪除 (CRUD) 等後台功能",
-        "採用 React Router 打造單頁式應用 (SPA)，並透過 Redux Thunk 管理非同步操作與全域狀態",
-        "專案後期以 React Hooks 進行重構，大幅簡化了組件邏輯，提升程式碼的可讀性與可維護性",
-        "(專案起始日期：2019/11/29)",
+    categoryKey: "reactBlog.category",
+    descriptionKeys: {
+      featureKeys: [
+        "reactBlog.features.0",
+        "reactBlog.features.1",
+        "reactBlog.features.2",
+        "reactBlog.features.3",
+        "reactBlog.features.4",
       ],
-      intro:
-        "這是我早期最完整的獨立開發應用，旨在實踐一個具備完整後台管理功能的全端部落格系統。專案涵蓋了使用者身份驗證、完整的文章 CRUD（建立、讀取、更新、刪除）流程與前端錯誤處理機制，奠定了我處理複雜 Web 應用的堅實基礎。",
+      introKey: "reactBlog.intro",
     },
     imageUrl: "/images/projects/react-blog.png",
     links: [
-      { label: "預覽網站", url: "https://u88803494.github.io/react_blog/#/posts" },
-      { label: "GitHub 介紹", url: `${SOCIAL_LINKS.GITHUB}/react_blog?tab=readme-ov-file#react-spa-blog` },
+      { labelKey: "viewProject", url: "https://u88803494.github.io/react_blog/#/posts" },
+      { labelKey: "viewCode", url: `${SOCIAL_LINKS.GITHUB}/react_blog?tab=readme-ov-file#react-spa-blog` },
     ],
     techStack: ["React", "Redux", "Firebase Auth", "Bootstrap"],
-    title: "React 部落格系統 (學習專案)",
+    titleKey: "reactBlog.title",
   },
   {
-    category: "公司官方網站 (主導開發)",
-    description: {
-      features: [
-        "負責核心頁面開發：獨立完成「服務總覽 (Service)」、「產品介紹 (Clio, Faceta)」三大主要頁面的開發與全站表單功能",
-        "精準實現 UI/UX：採用 BEM (Block, Element, Modifier) 方法論建構高可維護性的 SCSS 架構，並支援 4K 高解析度螢幕顯示",
-        "優化使用者互動：利用 React Context API 實現全域彈出式表單，並開發指定區塊的平滑滾動跳轉功能",
-        "導入自動化測試：整合 Jest 與 Puppeteer 進行端對端 (E2E) 測試，並串接至 GitLab CI/CD 流程，確保每次部署的品質",
+    categoryKey: "arisanWebsite.category",
+    descriptionKeys: {
+      featureKeys: [
+        "arisanWebsite.features.0",
+        "arisanWebsite.features.1",
+        "arisanWebsite.features.2",
+        "arisanWebsite.features.3",
       ],
-      intro:
-        "主導公司官方網站（www.arisan.io）的前端開發，獨立負責將設計稿轉化為高精度、高效能的互動式網頁。此專案所有 UI 組件均為純手工打造，以確保最佳的客製化程度與效能。",
+      introKey: "arisanWebsite.intro",
     },
     imageUrl: "/images/projects/arisan-website.png",
     links: [
-      { label: "官網連結", url: "https://www.arisan.io/#/clio" },
+      { labelKey: "viewWebsite", url: "https://www.arisan.io/#/clio" },
       {
-        label: "實作心得",
+        labelKey: "readArticle",
         url: "https://hugh-program-learning-diary-js.medium.com/%E8%BD%89%E8%81%B7%E5%85%A8%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%AB%E4%B8%89%E5%80%8B%E6%9C%88%E7%9A%84%E5%BF%83%E5%BE%97-%E6%8F%90%E6%97%A9%E8%84%AB%E9%9B%A2%E8%A8%93%E7%B7%B4%E6%9C%9F-1ce9213d0b26",
       },
     ],
     techStack: ["React", "SCSS (BEM)", "Jest", "Puppeteer"],
-    title: "公司官方網站",
+    titleKey: "arisanWebsite.title",
   },
 ];
