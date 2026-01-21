@@ -36,9 +36,9 @@
       "backend": "後端經驗"
     },
     "levels": {
-      "expert": "Expert",
-      "proficient": "Proficient",
-      "familiar": "Familiar"
+      "expert": "精通",
+      "proficient": "熟練",
+      "familiar": "熟悉"
     },
     "skills": {
       "vercelAiSdk": "Vercel AI SDK",
@@ -176,7 +176,7 @@
     "title": "精選專案",
     "subtitle": "探索我的技術旅程，從學習階段到專業開發的完整作品集",
     "viewProject": "預覽網站",
-    "viewCode": "GitHub",
+    "viewCode": "查看原始碼",
     "viewWebsite": "官網連結",
     "readArticle": "實作文章",
     "readArticle2": "實作文章 2",
