@@ -29,7 +29,7 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
     <div className={cn("mb-8", "rounded-lg border border-slate-200", "bg-white shadow-sm")}>
       <div className={cn("px-4 py-4", "sm:px-6 sm:py-6")}>
         <form onSubmit={handleSubmit}>
-          <div className={cn("flex flex-col gap-3", "sm:flex-row sm:gap-4")}>
+          <div className={cn("flex flex-row gap-2", "sm:gap-4")}>
             <input
               aria-label="查詢詞彙"
               className={cn(
@@ -49,13 +49,13 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
             <button
               aria-label="搜尋"
               className={cn(
-                "hidden sm:flex",
+                "flex",
                 "items-center justify-center",
                 "rounded-lg bg-blue-600 px-3 py-2",
                 "transition-colors",
                 "hover:bg-blue-700",
                 "disabled:cursor-not-allowed disabled:opacity-50",
-                "sm:w-14",
+                "w-12 sm:w-14",
               )}
               disabled={isLoading || !inputWord.trim() || isInputTooLong}
               type="submit"
