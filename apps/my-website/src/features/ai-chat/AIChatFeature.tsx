@@ -4,12 +4,14 @@ import { useChat } from "@ai-sdk/react";
 import { parseAIErrorMessage } from "@packages/shared/utils";
 import { DefaultChatTransport } from "ai";
 import { AlertTriangle, MessageSquare, RefreshCw, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useMemo, useRef, useState } from "react";
 
 import { ChatContainer, ChatInput, ModelSelector } from "./components";
-import { DEFAULT_MODEL_ID, isValidModelId, UI_STRINGS } from "./constants";
+import { DEFAULT_MODEL_ID, isValidModelId } from "./constants";
 
 const AIChatFeature: React.FC = () => {
+  const t = useTranslations("AIChat");
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL_ID);
   const modelRef = useRef(selectedModel);
   modelRef.current = selectedModel;
@@ -55,7 +57,7 @@ const AIChatFeature: React.FC = () => {
         <div className="flex-1">
           <h1 className="flex items-center gap-2 text-xl font-bold">
             <MessageSquare className="text-primary h-6 w-6" aria-hidden="true" />
-            {UI_STRINGS.featureTitle}
+            {t("featureTitle")}
           </h1>
         </div>
         <div className="flex items-center gap-2">
@@ -64,7 +66,7 @@ const AIChatFeature: React.FC = () => {
             <button
               onClick={handleClearChat}
               className="btn btn-ghost btn-sm hover:bg-error/10 hover:text-error transition-all"
-              aria-label={UI_STRINGS.clearChat}
+              aria-label={t("clearChat")}
               disabled={isLoading}
             >
               <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -83,14 +85,12 @@ const AIChatFeature: React.FC = () => {
             <AlertTriangle className="h-5 w-5 shrink-0" aria-hidden="true" />
             <div className="flex flex-col gap-1">
               <span className="font-medium">{parsedError.message}</span>
-              {parsedError.isQuotaError && (
-                <span className="text-sm opacity-80">{UI_STRINGS.quotaErrorSuggestion}</span>
-              )}
+              {parsedError.isQuotaError && <span className="text-sm opacity-80">{t("quotaErrorSuggestion")}</span>}
             </div>
             {parsedError.isRetryable && (
               <button onClick={() => window.location.reload()} className="btn btn-ghost btn-sm gap-1">
                 <RefreshCw className="h-4 w-4" aria-hidden="true" />
-                {UI_STRINGS.retry}
+                {t("retry")}
               </button>
             )}
           </div>

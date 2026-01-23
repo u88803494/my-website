@@ -2,9 +2,10 @@
 
 import type { UIMessage } from "ai";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { SCROLL_BOTTOM_THRESHOLD, UI_STRINGS } from "../constants";
+import { SCROLL_BOTTOM_THRESHOLD } from "../constants";
 import ChatMessage from "./ChatMessage";
 
 interface ChatContainerProps {
@@ -13,6 +14,7 @@ interface ChatContainerProps {
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) => {
+  const t = useTranslations("AIChat");
   const containerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
@@ -51,11 +53,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
         <div className="mb-6 text-7xl opacity-80" aria-hidden="true">
           💬
         </div>
-        <h2 className="mb-3 text-2xl font-bold">{UI_STRINGS.emptyStateTitle}</h2>
+        <h2 className="mb-3 text-2xl font-bold">{t("emptyStateTitle")}</h2>
         <p className="text-center text-sm">
-          {UI_STRINGS.emptyStateDescription}
+          {t("emptyStateDescription")}
           <br />
-          {UI_STRINGS.emptyStateSubDescription}
+          {t("emptyStateSubDescription")}
         </p>
       </div>
     );
@@ -67,7 +69,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
         ref={containerRef}
         onScroll={handleScroll}
         role="log"
-        aria-label={UI_STRINGS.ariaChatHistory}
+        aria-label={t("ariaChatHistory")}
         aria-live="polite"
         aria-busy={isLoading}
         className="from-base-100 to-base-200/50 absolute inset-0 overflow-y-auto bg-gradient-to-b p-4"
@@ -78,7 +80,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
             return <ChatMessage key={message.id} message={message} isStreaming={isLastAssistantMessage && isLoading} />;
           })}
           {isLoading && (
-            <div className="chat chat-start" aria-label={UI_STRINGS.ariaLoadingMessage}>
+            <div className="chat chat-start" aria-label={t("ariaLoadingMessage")}>
               <div className="chat-image avatar">
                 <div className="bg-secondary flex h-11 w-11 items-center justify-center rounded-full shadow-sm">
                   <span className="loading loading-dots loading-sm text-secondary-content" aria-hidden="true" />
@@ -97,7 +99,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ messages, isLoading }) =>
         <button
           onClick={scrollToBottom}
           className="btn btn-circle btn-sm btn-primary absolute right-4 bottom-4 shadow-lg"
-          aria-label={UI_STRINGS.scrollToBottom}
+          aria-label={t("scrollToBottom")}
         >
           <ChevronDown className="h-4 w-4" aria-hidden="true" />
         </button>

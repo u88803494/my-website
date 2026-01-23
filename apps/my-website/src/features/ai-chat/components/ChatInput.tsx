@@ -1,9 +1,10 @@
 "use client";
 
 import { Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
-import { IME_KEYCODE, TEXTAREA_MAX_HEIGHT, UI_STRINGS } from "../constants";
+import { IME_KEYCODE, TEXTAREA_MAX_HEIGHT } from "../constants";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -12,6 +13,7 @@ interface ChatInputProps {
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading, disabled = false }) => {
+  const t = useTranslations("AIChat");
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -58,15 +60,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading, disabled = fal
         value={input}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder={UI_STRINGS.inputPlaceholder}
-        aria-label={UI_STRINGS.ariaMessageInput}
+        placeholder={t("inputPlaceholder")}
+        aria-label={t("ariaMessageInput")}
         className="max-h-52 min-h-12 flex-1 resize-none border-0 bg-transparent px-2 py-3 text-base focus:outline-none"
         disabled={isLoading || disabled}
         rows={1}
       />
       <button
         type="submit"
-        aria-label={UI_STRINGS.ariaSendMessage}
+        aria-label={t("ariaSendMessage")}
         aria-busy={isLoading}
         className="btn btn-primary rounded-xl shadow-sm transition-all hover:shadow-md"
         disabled={!input.trim() || isLoading || disabled}

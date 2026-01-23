@@ -325,6 +325,27 @@
       "responseTime": "<strong>回覆時間：</strong> 通常在24小時內回覆郵件"
     }
   },
+  "AIChat": {
+    "featureTitle": "AI Chat",
+    "clearChat": "清除對話",
+    "retry": "重試",
+    "scrollToBottom": "跳到底部",
+    "emptyStateTitle": "開始對話",
+    "emptyStateDescription": "輸入訊息開始與 AI 助手對話",
+    "emptyStateSubDescription": "支援多種 AI 模型切換",
+    "inputPlaceholder": "輸入訊息... (Shift+Enter 換行)",
+    "userLabel": "你",
+    "assistantLabel": "AI 助手",
+    "emptyContentFallback": "...",
+    "modelSelectorPlaceholder": "選擇模型",
+    "quotaErrorSuggestion": "建議使用 Groq 或 Mistral 系列模型",
+    "markdownErrorFallback": "無法渲染內容",
+    "ariaMessageInput": "訊息輸入框",
+    "ariaSendMessage": "發送訊息",
+    "ariaChatHistory": "對話歷史",
+    "ariaModelSelector": "選擇 AI 模型",
+    "ariaLoadingMessage": "AI 正在回應中"
+  },
   "Footer": {
     "copyright": "© {year} Henry Lee. 保留所有權利。",
     "builtWith": "使用 Next.js、TypeScript 和 Tailwind CSS 建構"

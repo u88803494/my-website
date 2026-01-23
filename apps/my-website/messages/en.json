@@ -325,6 +325,27 @@
       "responseTime": "<strong>Response Time:</strong> Usually respond to emails within 24 hours"
     }
   },
+  "AIChat": {
+    "featureTitle": "AI Chat",
+    "clearChat": "Clear Chat",
+    "retry": "Retry",
+    "scrollToBottom": "Scroll to Bottom",
+    "emptyStateTitle": "Start a Conversation",
+    "emptyStateDescription": "Enter a message to start chatting with the AI assistant",
+    "emptyStateSubDescription": "Supports multiple AI model switching",
+    "inputPlaceholder": "Type a message... (Shift+Enter for new line)",
+    "userLabel": "You",
+    "assistantLabel": "AI Assistant",
+    "emptyContentFallback": "...",
+    "modelSelectorPlaceholder": "Select Model",
+    "quotaErrorSuggestion": "Try using Groq or Mistral models",
+    "markdownErrorFallback": "Unable to render content",
+    "ariaMessageInput": "Message input",
+    "ariaSendMessage": "Send message",
+    "ariaChatHistory": "Chat history",
+    "ariaModelSelector": "Select AI model",
+    "ariaLoadingMessage": "AI is responding"
+  },
   "Footer": {
     "copyright": "© {year} Henry Lee. All rights reserved.",
     "builtWith": "Built with Next.js, TypeScript, and Tailwind CSS"

@@ -1,10 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { ErrorInfo, ReactNode } from "react";
 import { Component, memo } from "react";
 import { Streamdown } from "streamdown";
-
-import { UI_STRINGS } from "../constants";
 
 interface MarkdownRendererProps {
   content: string;
@@ -19,8 +18,14 @@ interface ErrorBoundaryState {
   error?: Error;
 }
 
-class MarkdownErrorBoundary extends Component<{ children: ReactNode; fallback?: ReactNode }, ErrorBoundaryState> {
-  constructor(props: { children: ReactNode; fallback?: ReactNode }) {
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  errorMessage: string;
+}
+
+class MarkdownErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -37,7 +42,7 @@ class MarkdownErrorBoundary extends Component<{ children: ReactNode; fallback?: 
     if (this.state.hasError) {
       return (
         this.props.fallback ?? (
-          <div className="bg-error/10 text-error rounded p-2 text-sm">{UI_STRINGS.markdownErrorFallback}</div>
+          <div className="bg-error/10 text-error rounded p-2 text-sm">{this.props.errorMessage}</div>
         )
       );
     }
@@ -62,6 +67,7 @@ const darkModeStyles: React.CSSProperties = {
 };
 
 const MarkdownRenderer = memo<MarkdownRendererProps>(({ content, isStreaming = false }) => {
+  const t = useTranslations("AIChat");
   // Defensive check for empty/invalid content
   const safeContent = content?.trim() || "";
 
@@ -70,7 +76,7 @@ const MarkdownRenderer = memo<MarkdownRendererProps>(({ content, isStreaming = f
   }
 
   return (
-    <MarkdownErrorBoundary>
+    <MarkdownErrorBoundary errorMessage={t("markdownErrorFallback")}>
       <div style={darkModeStyles}>
         <Streamdown
           mode={isStreaming ? "streaming" : "static"}

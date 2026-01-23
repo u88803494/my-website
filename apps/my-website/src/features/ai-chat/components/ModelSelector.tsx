@@ -1,8 +1,9 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-import { AI_MODELS, getModelById, UI_STRINGS } from "../constants";
+import { AI_MODELS, getModelById } from "../constants";
 
 interface ModelSelectorProps {
   selectedModel: string;
@@ -11,6 +12,7 @@ interface ModelSelectorProps {
 }
 
 const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelChange, disabled = false }) => {
+  const t = useTranslations("AIChat");
   const currentModel = getModelById(selectedModel);
 
   const handleModelSelect = (modelId: string) => {
@@ -25,10 +27,10 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onModelCha
     <div className="dropdown dropdown-end" role="combobox" aria-haspopup="listbox" aria-expanded="false">
       <label
         tabIndex={0}
-        aria-label={UI_STRINGS.ariaModelSelector}
+        aria-label={t("ariaModelSelector")}
         className={`btn btn-sm btn-ghost gap-2 ${disabled ? "btn-disabled" : ""}`}
       >
-        <span className="text-sm font-medium">{currentModel?.name ?? UI_STRINGS.modelSelectorPlaceholder}</span>
+        <span className="text-sm font-medium">{currentModel?.name ?? t("modelSelectorPlaceholder")}</span>
         <ChevronDown className="h-4 w-4" aria-hidden="true" />
       </label>
       <ul
