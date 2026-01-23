@@ -1,7 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
+
 interface ProjectsPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 const ProjectsPage = async ({ params }: ProjectsPageProps) => {

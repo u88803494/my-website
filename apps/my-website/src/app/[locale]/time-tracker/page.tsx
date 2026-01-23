@@ -1,9 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 
 import TimeTrackerFeature from "@/features/time-tracker";
+import type { Locale } from "@/i18n/routing";
 
 interface TimeTrackerPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 /**

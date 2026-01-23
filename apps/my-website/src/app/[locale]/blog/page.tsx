@@ -8,10 +8,11 @@ import {
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
 import { getQueryClient } from "@/lib/query-client";
 
 interface BlogPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 /**

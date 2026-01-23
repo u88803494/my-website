@@ -1,8 +1,10 @@
 import { AIDictionaryFeature } from "@packages/ai-dictionary";
 import { setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
+
 interface AIDictionaryPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 /**

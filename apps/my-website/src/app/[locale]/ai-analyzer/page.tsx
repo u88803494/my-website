@@ -1,8 +1,10 @@
 import { AIAnalyzerFeature } from "@packages/ai-analyzer";
 import { setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
+
 interface AIAnalyzerPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 /**

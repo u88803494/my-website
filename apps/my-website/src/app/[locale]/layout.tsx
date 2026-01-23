@@ -12,7 +12,7 @@ import QueryProvider from "@/components/providers/QueryProvider";
 import ConditionalFooter from "@/components/shared/ConditionalFooter";
 import { Navbar } from "@/components/shared/Navbar";
 import NProgressBar from "@/components/shared/NProgressBar";
-import { routing } from "@/i18n/routing";
+import { type Locale, routing } from "@/i18n/routing";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -30,7 +30,7 @@ export function generateStaticParams() {
 }
 
 // Generate metadata based on locale
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 const LocaleLayout = async ({ children, params }: LocaleLayoutProps) => {

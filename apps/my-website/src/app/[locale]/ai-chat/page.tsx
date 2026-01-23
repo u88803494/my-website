@@ -1,9 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 
 import { AIChatFeature } from "@/features/ai-chat";
+import type { Locale } from "@/i18n/routing";
 
 interface AIChatPageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 /**

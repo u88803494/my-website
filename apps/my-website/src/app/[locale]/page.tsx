@@ -1,9 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 
 import ResumeFeature from "@/features/resume";
+import type { Locale } from "@/i18n/routing";
 
 interface HomePageProps {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }
 
 const HomePage = async ({ params }: HomePageProps) => {
