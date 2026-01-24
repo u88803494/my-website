@@ -528,5 +528,69 @@
       "percentage": "Percentage",
       "noData": "No records"
     }
+  },
+  "AIDictionary": {
+    "header": {
+      "title": "AI Chinese Dictionary",
+      "beta": "Beta",
+      "subtitle": "Using AI technology to make Chinese vocabulary meanings and etymology easier to understand"
+    },
+    "search": {
+      "placeholder": "Enter Chinese words to search...",
+      "ariaLabel": "Search vocabulary",
+      "searchButton": "Search"
+    },
+    "disclaimer": {
+      "text": "Dictionary content is AI-generated. We recommend using it alongside traditional dictionaries for accuracy."
+    },
+    "results": {
+      "title": "Search Results",
+      "clearAll": "Clear all results"
+    },
+    "emptyState": {
+      "title": "Start Your Vocabulary Journey",
+      "description": "Enter Chinese words in the search box above to explore their meanings and etymology",
+      "donatePrompt": "If this tool has inspired you, consider supporting me to help it continue evolving.",
+      "donateButton": "Buy me a coffee"
+    },
+    "loading": {
+      "analyzing": "Analyzing vocabulary, please wait..."
+    },
+    "donateModal": {
+      "close": "Close",
+      "title": "Thank you for your support!",
+      "jkopay": {
+        "alt": "JKOPay QR Code",
+        "title": "JKOPay",
+        "description": "Recommended for Taiwan users"
+      },
+      "buyMeACoffee": {
+        "alt": "Buy Me a Coffee QR Code",
+        "title": "Buy Me a Coffee",
+        "description": "Recommended for international or credit card users"
+      },
+      "fallbackLink": "Having trouble scanning? Try the direct link:"
+    },
+    "wordCard": {
+      "regenerate": "Regenerate",
+      "regenerateAria": "Regenerate definition",
+      "completed": "Completed 👍",
+      "markComplete": "Mark as learned",
+      "scrollToTop": "Back to top",
+      "scrollToTopAria": "Scroll to top"
+    },
+    "completeBar": {
+      "completed": "Completed learning \"{word}\"",
+      "undo": "Undo"
+    },
+    "sections": {
+      "definitions": "Common Meanings",
+      "etymology": "Etymology Analysis",
+      "foreignOrigin": "Foreign Language Origin"
+    },
+    "character": {
+      "zhuyin": "Zhuyin:",
+      "pinyin": "Pinyin:"
+    }
   }
 }

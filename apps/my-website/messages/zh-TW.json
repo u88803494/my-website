@@ -528,5 +528,69 @@
       "percentage": "佔比",
       "noData": "尚無記錄"
     }
+  },
+  "AIDictionary": {
+    "header": {
+      "title": "AI 智能中文字典",
+      "beta": "Beta",
+      "subtitle": "運用人工智慧技術，讓中文詞彙含義與字源更容易理解"
+    },
+    "search": {
+      "placeholder": "輸入中文詞彙進行查詢...",
+      "ariaLabel": "查詢詞彙",
+      "searchButton": "搜尋"
+    },
+    "disclaimer": {
+      "text": "本字典內容由 AI 生成，建議搭配傳統字典使用以確保準確性。"
+    },
+    "results": {
+      "title": "查詢結果",
+      "clearAll": "清除所有結果"
+    },
+    "emptyState": {
+      "title": "開始您的詞彙探索之旅",
+      "description": "在上方搜索框輸入中文詞彙，開始深入了解其含義與字源",
+      "donatePrompt": "如果這個工具對您有所啟發，歡迎贊助我，支持它持續進化。",
+      "donateButton": "贊助我，請我喝杯咖啡"
+    },
+    "loading": {
+      "analyzing": "正在分析詞彙，請稍候..."
+    },
+    "donateModal": {
+      "close": "關閉",
+      "title": "感謝您的支持！",
+      "jkopay": {
+        "alt": "街口支付 QR Code",
+        "title": "街口支付",
+        "description": "推薦台灣用戶使用街口支付"
+      },
+      "buyMeACoffee": {
+        "alt": "Buy Me a Coffee QR Code",
+        "title": "Buy Me a Coffee",
+        "description": "海外或信用卡用戶推薦"
+      },
+      "fallbackLink": "QR Code 掃描有問題？試試直接連結："
+    },
+    "wordCard": {
+      "regenerate": "重新生成",
+      "regenerateAria": "重新生成定義",
+      "completed": "已完成 👍",
+      "markComplete": "學習完成",
+      "scrollToTop": "回到頂部",
+      "scrollToTopAria": "捲動到最上方"
+    },
+    "completeBar": {
+      "completed": "已完成學習「{word}」",
+      "undo": "撤銷"
+    },
+    "sections": {
+      "definitions": "常見意思",
+      "etymology": "字源分析",
+      "foreignOrigin": "外來語來源"
+    },
+    "character": {
+      "zhuyin": "注音:",
+      "pinyin": "拼音:"
+    }
   }
 }
