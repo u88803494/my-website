@@ -359,5 +359,16 @@
     "cancel": "取消",
     "search": "搜尋",
     "noResults": "找不到結果"
+  },
+  "NotFound": {
+    "pageNotFound": "頁面不見了",
+    "description": "看起來您要找的頁面已經搬家了，或者從來沒有存在過。",
+    "dontWorry": "別擔心，讓我們一起找到正確的方向！",
+    "goBack": "返回上頁",
+    "goHome": "回到首頁",
+    "quickNavigation": "快速導航",
+    "cantFindContent": "找不到想要的內容？",
+    "searchSuggestionDescription": "您可以在首頁查看我的作品集、技術文章，或使用 AI 工具來協助您找到需要的資訊。",
+    "contactIfError": "如果這是個錯誤，歡迎聯絡我"
   }
 }

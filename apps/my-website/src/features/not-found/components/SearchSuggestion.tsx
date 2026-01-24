@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const SearchSuggestion: React.FC = () => {
+  const t = useTranslations("NotFound");
+
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
@@ -14,11 +17,9 @@ const SearchSuggestion: React.FC = () => {
       <div className="card-body p-4">
         <div className="mb-2 flex items-center gap-2">
           <Search className="text-primary h-4 w-4" />
-          <span className="text-base-content text-sm font-medium">找不到想要的內容？</span>
+          <span className="text-base-content text-sm font-medium">{t("cantFindContent")}</span>
         </div>
-        <p className="text-base-content/70 text-sm">
-          您可以在首頁查看我的作品集、技術文章，或使用 AI 工具來協助您找到需要的資訊。
-        </p>
+        <p className="text-base-content/70 text-sm">{t("searchSuggestionDescription")}</p>
       </div>
     </motion.div>
   );

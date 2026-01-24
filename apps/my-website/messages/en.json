@@ -359,5 +359,16 @@
     "cancel": "Cancel",
     "search": "Search",
     "noResults": "No results found"
+  },
+  "NotFound": {
+    "pageNotFound": "Page Not Found",
+    "description": "It looks like the page you're looking for has moved, or maybe it never existed.",
+    "dontWorry": "Don't worry, let's find the right direction!",
+    "goBack": "Go Back",
+    "goHome": "Go Home",
+    "quickNavigation": "Quick Navigation",
+    "cantFindContent": "Can't find what you're looking for?",
+    "searchSuggestionDescription": "You can browse my portfolio, technical articles on the homepage, or use AI tools to help you find what you need.",
+    "contactIfError": "If this is an error, feel free to contact me"
   }
 }

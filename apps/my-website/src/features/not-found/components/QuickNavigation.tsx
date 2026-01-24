@@ -2,12 +2,19 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-import { routes } from "@/constants/routes";
+const navigationItems = [
+  { href: "/blog", labelKey: "blog" },
+  { href: "/ai-dictionary", labelKey: "aiDictionary" },
+  { href: "/ai-analyzer", labelKey: "aiAnalyzer" },
+  { href: "/time-tracker", labelKey: "timeTracker" },
+  { href: "/about", labelKey: "about" },
+] as const;
 
 const QuickNavigation: React.FC = () => {
-  // 過濾掉首頁，因為 404 頁面通常不需要首頁連結
-  const navigationItems = routes.filter((route) => route.href !== "/");
+  const t = useTranslations("NotFound");
+  const tNav = useTranslations("Navigation");
 
   return (
     <motion.div
@@ -16,12 +23,12 @@ const QuickNavigation: React.FC = () => {
       initial={{ opacity: 0, y: 30 }}
       transition={{ delay: 1.0, duration: 0.6 }}
     >
-      <h3 className="text-base-content mb-4 text-lg font-semibold">快速導航</h3>
+      <h3 className="text-base-content mb-4 text-lg font-semibold">{t("quickNavigation")}</h3>
       <div className="flex flex-wrap justify-center gap-3">
         {navigationItems.map((item) => (
           <Link href={item.href} key={item.href}>
             <motion.button className="btn btn-ghost btn-sm" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              {item.label}
+              {tNav(item.labelKey)}
             </motion.button>
           </Link>
         ))}

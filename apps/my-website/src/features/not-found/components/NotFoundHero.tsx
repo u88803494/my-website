@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const NotFoundHero: React.FC = () => {
+  const t = useTranslations("NotFound");
+
   return (
     <div className="card bg-base-100/80 shadow-2xl backdrop-blur-sm">
       <div className="card-body max-w-2xl text-center">
@@ -25,7 +28,7 @@ const NotFoundHero: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
-          頁面不見了
+          {t("pageNotFound")}
         </motion.h2>
 
         {/* 描述 */}
@@ -35,9 +38,9 @@ const NotFoundHero: React.FC = () => {
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.6, duration: 0.6 }}
         >
-          看起來您要找的頁面已經搬家了，或者從來沒有存在過。
+          {t("description")}
           <br />
-          別擔心，讓我們一起找到正確的方向！
+          {t("dontWorry")}
         </motion.p>
 
         {/* 按鈕組 */}
@@ -54,7 +57,7 @@ const NotFoundHero: React.FC = () => {
             whileTap={{ scale: 0.95 }}
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
-            <span className="relative z-10">返回上頁</span>
+            <span className="relative z-10">{t("goBack")}</span>
             <motion.div
               className="from-primary to-secondary pointer-events-none absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20"
               initial={{ x: "-100%" }}
@@ -70,7 +73,7 @@ const NotFoundHero: React.FC = () => {
               whileTap={{ scale: 0.95 }}
             >
               <Home className="mr-2 h-5 w-5" />
-              回到首頁
+              {t("goHome")}
             </motion.button>
           </Link>
         </motion.div>
