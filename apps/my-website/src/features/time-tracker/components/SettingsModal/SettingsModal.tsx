@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import UserSettings from "../UserSettings";
@@ -8,6 +11,8 @@ export interface SettingsModalProps {
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
+  const t = useTranslations("TimeTracker");
+
   // 早回傳檢查
   if (!isOpen) return null;
 
@@ -21,7 +26,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     <div className="modal modal-open" onClick={handleBackdropClick}>
       <div className="modal-box max-w-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-bold">應用設定</h3>
+          <h3 className="text-lg font-bold">{t("settings.title")}</h3>
           <button className="btn btn-sm btn-circle btn-ghost" onClick={onClose}>
             ✕
           </button>
@@ -31,7 +36,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
         <div className="modal-action">
           <button className="btn btn-primary" onClick={onClose}>
-            完成
+            {t("settings.done")}
           </button>
         </div>
       </div>

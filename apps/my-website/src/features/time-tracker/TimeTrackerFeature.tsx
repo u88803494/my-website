@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { HeaderSection, MainTabContent, SettingsModal, TabNavigation, WeeklyView } from "./components";
@@ -13,6 +14,7 @@ import { getWeekStartInTaiwan } from "./utils/time";
  * 整合所有子元件並管理主要狀態
  */
 const TimeTrackerFeature = () => {
+  const t = useTranslations("TimeTracker");
   const { addRecord, deleteRecord, error, isLoading, records, statistics } = useTimeTracker();
   const { settings } = useUserSettings();
   const [showSettings, setShowSettings] = useState(false);
@@ -29,7 +31,7 @@ const TimeTrackerFeature = () => {
     return (
       <div className="container mx-auto p-4">
         <div className="alert alert-error">
-          <span>發生錯誤：{error}</span>
+          <span>{t("error", { error })}</span>
         </div>
       </div>
     );
