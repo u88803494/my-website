@@ -15,7 +15,12 @@ const ClientSideDate = dynamic(() => import("./ClientSideDate"), {
 const ClientSideYear = dynamic(
   () =>
     Promise.resolve(({ date, yearSuffix }: { date: Date; yearSuffix: string }) => {
-      return <>{date.getFullYear()}{yearSuffix}</>;
+      return (
+        <>
+          {date.getFullYear()}
+          {yearSuffix}
+        </>
+      );
     }),
   {
     loading: () => <span className="opacity-0">...</span>,

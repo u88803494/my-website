@@ -38,11 +38,15 @@ const WeekStats: React.FC<WeekStatsProps> = ({
         <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-3 lg:grid-cols-5">
           <div>
             <span className="text-base-content/60">{t("statistics.recordCount")}</span>
-            <span className="ml-1 font-medium">{recordCount} {t("statistics.recordsUnit")}</span>
+            <span className="ml-1 font-medium">
+              {recordCount} {t("statistics.recordsUnit")}
+            </span>
           </div>
           <div>
             <span className="text-base-content/60">{t("statistics.activeDays")}</span>
-            <span className="ml-1 font-medium">{activeDays} {t("statistics.daysUnit")}</span>
+            <span className="ml-1 font-medium">
+              {activeDays} {t("statistics.daysUnit")}
+            </span>
           </div>
           <div>
             <span className="text-base-content/60">{t("statistics.workTime")}</span>

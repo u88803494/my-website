@@ -21,7 +21,11 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ onToggleSettings }) => {
       <p className="text-base-content/70">{t("description")}</p>
 
       {/* 設定按鈕 */}
-      <button className="btn btn-ghost btn-sm absolute top-0 right-0" onClick={onToggleSettings} title={t("openSettings")}>
+      <button
+        className="btn btn-ghost btn-sm absolute top-0 right-0"
+        onClick={onToggleSettings}
+        title={t("openSettings")}
+      >
         <Settings aria-hidden="true" className="h-5 w-5" />
       </button>
     </div>

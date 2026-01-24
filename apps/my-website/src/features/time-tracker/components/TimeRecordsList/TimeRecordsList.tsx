@@ -97,7 +97,9 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
           <h3 className="text-base-content font-medium">
             {t("records.title")}
             {filteredRecords.length > 0 && (
-              <span className="text-base-content/60 ml-2 text-sm">({t("records.count", { count: filteredRecords.length })})</span>
+              <span className="text-base-content/60 ml-2 text-sm">
+                ({t("records.count", { count: filteredRecords.length })})
+              </span>
             )}
           </h3>
         </div>

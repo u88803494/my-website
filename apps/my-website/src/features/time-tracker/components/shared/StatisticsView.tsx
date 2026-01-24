@@ -170,7 +170,11 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
         <div className="grid grid-cols-1 gap-4">
           <StatisticsCard
             isTotal={true}
-            label={title.includes(t("statistics.weeklyStatistics")) ? t("statistics.totalTimeThisWeek") : t("statistics.totalTime")}
+            label={
+              title.includes(t("statistics.weeklyStatistics"))
+                ? t("statistics.totalTimeThisWeek")
+                : t("statistics.totalTime")
+            }
             value={statistics.總計}
           />
         </div>

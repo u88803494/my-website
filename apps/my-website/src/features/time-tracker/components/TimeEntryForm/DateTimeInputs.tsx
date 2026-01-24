@@ -44,7 +44,8 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 日期選擇器 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            {t("form.date")}<span className="text-error ml-1">*</span>
+            {t("form.date")}
+            <span className="text-error ml-1">*</span>
           </label>
           <DatePicker
             aria-label={t("form.date")}
@@ -59,7 +60,8 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 開始時間 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            {t("form.startTime")}<span className="text-error ml-1">*</span>
+            {t("form.startTime")}
+            <span className="text-error ml-1">*</span>
           </label>
           <DatePicker
             aria-label={t("form.startTime")}
@@ -80,7 +82,8 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 結束時間 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            {t("form.endTime")}<span className="text-error ml-1">*</span>
+            {t("form.endTime")}
+            <span className="text-error ml-1">*</span>
           </label>
           <DatePicker
             aria-label={t("form.endTime")}
