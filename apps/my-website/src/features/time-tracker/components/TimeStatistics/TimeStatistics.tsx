@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
@@ -16,11 +17,13 @@ interface TimeStatisticsProps {
  * 整合多個統計卡片顯示完整的統計資料
  */
 const TimeStatistics: React.FC<TimeStatisticsProps> = ({ records, statistics }) => {
+  const t = useTranslations("TimeTracker");
+
   return (
     <StatisticsView
       emptyStateText={{
-        description: "開始記錄你的時間，查看詳細統計資料",
-        title: "尚無時間記錄",
+        description: t("statistics.emptyDescription"),
+        title: t("statistics.emptyTitle"),
       }}
       records={records}
       showPercentages
@@ -32,7 +35,7 @@ const TimeStatistics: React.FC<TimeStatisticsProps> = ({ records, statistics }) 
         showTotalHours: true,
         showTrackingStartDate: true,
       }}
-      title="全部統計"
+      title={t("statistics.allStatistics")}
     />
   );
 };

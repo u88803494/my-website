@@ -1,4 +1,7 @@
+"use client";
+
 import { Clock, TrendingUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import type { ActivityType } from "@/features/time-tracker/types";
@@ -18,6 +21,7 @@ interface StatisticsCardProps {
  * 顯示單一統計項目的資訊
  */
 const StatisticsCard: React.FC<StatisticsCardProps> = ({ activityType, isTotal = false, label, percentage, value }) => {
+  const t = useTranslations("TimeTracker");
   const formattedTime = formatMinutesToHours(value);
   const decimalHours = formatMinutesToDecimalHours(value);
 
@@ -61,12 +65,12 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({ activityType, isTotal =
         {percentage !== undefined && percentage > 0 && (
           <div className="mt-2">
             <div className="text-base-content/60 mb-1 flex items-center justify-between text-xs">
-              <span>佔比</span>
+              <span>{t("statisticsCard.percentage")}</span>
               <span>{percentage}%</span>
             </div>
             <div className="bg-base-200 h-1.5 w-full rounded-full">
               <div
-                aria-label={`${label} 佔 ${percentage}%`}
+                aria-label={`${label} ${percentage}%`}
                 aria-valuemax={100}
                 aria-valuemin={0}
                 aria-valuenow={percentage}
@@ -79,7 +83,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({ activityType, isTotal =
         )}
 
         {/* 空狀態 */}
-        {value === 0 && <div className="text-base-content/40 mt-1 text-xs">尚無記錄</div>}
+        {value === 0 && <div className="text-base-content/40 mt-1 text-xs">{t("statisticsCard.noData")}</div>}
       </div>
     </div>
   );

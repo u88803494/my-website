@@ -1,13 +1,25 @@
 "use client";
 
 import { BarChart3 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import type { TimeRecord, TimeStatistics } from "@/features/time-tracker/types";
-import { ActivityType } from "@/features/time-tracker/types";
+import { ActivityType, type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
 
 import { calculatePercentages } from "../../utils/formatting";
 import StatisticsCard from "../TimeStatistics/StatisticsCard";
+
+// Map ActivityType enum values to translation keys
+const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
+  [ActivityType.WORK]: "activityTypes.work",
+  [ActivityType.STUDY]: "activityTypes.study",
+  [ActivityType.CHARACTER]: "activityTypes.character",
+  [ActivityType.LISTENING]: "activityTypes.listening",
+  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
+  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
+  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
+};
 
 interface StatisticsViewProps {
   /** 空狀態提示文字 */
@@ -49,15 +61,20 @@ interface StatisticsViewProps {
  */
 const StatisticsView: React.FC<StatisticsViewProps> = ({
   title,
-  emptyStateText = {
-    description: "開始記錄你的時間，查看統計資料",
-    title: "尚無時間記錄",
-  },
+  emptyStateText,
   records,
   showPercentages = false,
   statistics,
   summaryConfig = {},
 }) => {
+  const t = useTranslations("TimeTracker");
+
+  // Default empty state text with translations
+  const defaultEmptyStateText = {
+    description: t("statistics.emptyDescription"),
+    title: t("statistics.emptyTitle"),
+  };
+  const effectiveEmptyStateText = emptyStateText || defaultEmptyStateText;
   // 計算百分比
   const percentages = showPercentages ? calculatePercentages(statistics) : {};
 
@@ -65,7 +82,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   const activityStats = Object.values(ActivityType)
     .map((activityType) => ({
       activityType,
-      label: activityType,
+      label: t(ACTIVITY_TYPE_TO_KEY[activityType]),
       percentage: percentages[activityType] || undefined,
       value: statistics[activityType],
     }))
@@ -99,22 +116,22 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
 
   if (summaryConfig.showTrackingStartDate && trackingStartDate) {
     summaryItems.push({
-      label: "統計開始時間：",
+      label: t("statistics.trackingStartDate"),
       value: trackingStartDate,
     });
   }
 
   if (summaryConfig.showTopActivity) {
     summaryItems.push({
-      label: "最多時間：",
-      value: activityStats[0]?.label || "無",
+      label: t("statistics.topActivity"),
+      value: activityStats[0]?.label || t("statistics.none"),
     });
   }
 
   if (summaryConfig.showActivityCount) {
     summaryItems.push({
-      label: "活動類型：",
-      value: `${activityStats.filter((s) => s.value > 0).length} 種`,
+      label: t("statistics.activityTypeCount"),
+      value: `${activityStats.filter((s) => s.value > 0).length} ${t("statistics.typesUnit")}`,
     });
   }
 
@@ -122,15 +139,15 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
     const activeActivities = activityStats.filter((s) => s.value > 0);
     const averageTime = activeActivities.length > 0 ? Math.round(statistics.總計 / activeActivities.length) : 0;
     summaryItems.push({
-      label: "平均時長：",
-      value: `${averageTime} 分鐘`,
+      label: t("statistics.averageTime"),
+      value: `${averageTime} ${t("statistics.minutesUnit")}`,
     });
   }
 
   if (summaryConfig.showTotalHours) {
     summaryItems.push({
-      label: "總時數：",
-      value: `${(statistics.總計 / 60).toFixed(1)} 小時`,
+      label: t("statistics.totalHours"),
+      value: `${(statistics.總計 / 60).toFixed(1)} ${t("statistics.hoursUnit")}`,
     });
   }
 
@@ -153,7 +170,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
         <div className="grid grid-cols-1 gap-4">
           <StatisticsCard
             isTotal={true}
-            label={title.includes("週") ? "本週總計" : "總計時間"}
+            label={title.includes(t("statistics.weeklyStatistics")) ? t("statistics.totalTimeThisWeek") : t("statistics.totalTime")}
             value={statistics.總計}
           />
         </div>
@@ -178,15 +195,15 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
           <div className="text-base-content/40 mb-2">
             <BarChart3 aria-hidden="true" className="mx-auto mb-3 h-12 w-12" />
           </div>
-          <h3 className="text-base-content/60 mb-1 text-lg font-medium">{emptyStateText.title}</h3>
-          <p className="text-base-content/40 text-sm">{emptyStateText.description}</p>
+          <h3 className="text-base-content/60 mb-1 text-lg font-medium">{effectiveEmptyStateText.title}</h3>
+          <p className="text-base-content/40 text-sm">{effectiveEmptyStateText.description}</p>
         </div>
       )}
 
       {/* 統計摘要 */}
       {hasData && summaryItems.length > 0 && (
         <div className="bg-base-200 rounded-lg p-4">
-          <h3 className="text-base-content mb-2 font-medium">統計摘要</h3>
+          <h3 className="text-base-content mb-2 font-medium">{t("statistics.statisticsSummary")}</h3>
           <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-5">
             {summaryItems.map((item, index) => (
               <div key={index}>
