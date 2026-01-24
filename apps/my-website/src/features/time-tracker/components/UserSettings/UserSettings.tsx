@@ -1,31 +1,37 @@
 "use client";
 
 import { Settings } from "lucide-react";
-import React, { useCallback } from "react";
+import { useTranslations } from "next-intl";
+import React, { useCallback, useMemo } from "react";
 
 import type { UserSettings, WeekStartDay } from "@/features/time-tracker/types";
 
 import { useUserSettings } from "../../hooks";
 
 /**
- * 週起始日選項常數
- */
-const WEEK_START_OPTIONS: Array<{ label: string; value: WeekStartDay }> = [
-  { label: "週日", value: 0 },
-  { label: "週一", value: 1 },
-  { label: "週二", value: 2 },
-  { label: "週三", value: 3 },
-  { label: "週四", value: 4 },
-  { label: "週五", value: 5 },
-  { label: "週六", value: 6 },
-];
-
-/**
  * 用戶設定組件
  * 提供週起始日等個人化設定選項
  */
 const UserSettings: React.FC = () => {
+  const t = useTranslations("TimeTracker");
   const { isLoading, settings, updateSettings } = useUserSettings();
+
+  // Build week start options with translations
+  const weekStartOptions = useMemo(() => {
+    const weekdayKeys: Array<{ key: string; value: WeekStartDay }> = [
+      { key: "sunday", value: 0 },
+      { key: "monday", value: 1 },
+      { key: "tuesday", value: 2 },
+      { key: "wednesday", value: 3 },
+      { key: "thursday", value: 4 },
+      { key: "friday", value: 5 },
+      { key: "saturday", value: 6 },
+    ];
+    return weekdayKeys.map(({ key, value }) => ({
+      label: t(`settings.weekdays.${key}`),
+      value,
+    }));
+  }, [t]);
 
   const handleWeekStartDayChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -42,7 +48,7 @@ const UserSettings: React.FC = () => {
     return (
       <div className="flex items-center justify-center p-4">
         <span className="loading loading-spinner loading-sm" />
-        <span className="ml-2">載入設定中...</span>
+        <span className="ml-2">{t("settings.loadingSettings")}</span>
       </div>
     );
   }
@@ -52,7 +58,7 @@ const UserSettings: React.FC = () => {
       {/* 標題 */}
       <div className="flex items-center gap-2">
         <Settings aria-hidden="true" className="text-primary h-5 w-5" />
-        <h3 className="text-base-content font-medium">用戶設定</h3>
+        <h3 className="text-base-content font-medium">{t("settings.userSettings")}</h3>
       </div>
 
       {/* 設定表單 */}
@@ -60,8 +66,8 @@ const UserSettings: React.FC = () => {
         {/* 週起始日設定 */}
         <div className="form-control">
           <label className="label" htmlFor="week-start-day-select">
-            <span className="label-text font-medium">週起始日</span>
-            <span className="label-text-alt text-xs">設定週視圖的第一天</span>
+            <span className="label-text font-medium">{t("settings.weekStartDay")}</span>
+            <span className="label-text-alt text-xs">{t("settings.weekStartDayDescription")}</span>
           </label>
           <select
             className="select select-bordered w-full max-w-xs"
@@ -69,14 +75,14 @@ const UserSettings: React.FC = () => {
             onChange={handleWeekStartDayChange}
             value={settings.weekStartDay}
           >
-            {WEEK_START_OPTIONS.map((option) => (
+            {weekStartOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
           <label className="label">
-            <span className="label-text-alt text-xs opacity-70">更改此設定會立即影響週視圖的顯示方式</span>
+            <span className="label-text-alt text-xs opacity-70">{t("settings.weekStartDayNote")}</span>
           </label>
         </div>
 
@@ -92,11 +98,11 @@ const UserSettings: React.FC = () => {
               />
             </svg>
             <div className="text-sm">
-              <p className="mb-1 font-medium">設定說明</p>
+              <p className="mb-1 font-medium">{t("settings.settingsInfo")}</p>
               <ul className="list-inside list-disc space-y-1 text-xs opacity-80">
-                <li>週起始日設定會影響週視圖、統計計算等功能</li>
-                <li>設定會自動儲存到本地儲存空間</li>
-                <li>預設為週日開始（與多數日曆應用一致）</li>
+                <li>{t("settings.settingsInfoItem1")}</li>
+                <li>{t("settings.settingsInfoItem2")}</li>
+                <li>{t("settings.settingsInfoItem3")}</li>
               </ul>
             </div>
           </div>

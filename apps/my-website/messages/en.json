@@ -405,5 +405,128 @@
     "cantFindContent": "Can't find what you're looking for?",
     "searchSuggestionDescription": "You can browse my portfolio, technical articles on the homepage, or use AI tools to help you find what you need.",
     "contactIfError": "If this is an error, feel free to contact me"
+  },
+  "TimeTracker": {
+    "title": "Time Tracker",
+    "description": "Track and analyze your time allocation to improve efficiency",
+    "error": "An error occurred: {error}",
+    "openSettings": "Open Settings",
+    "tabs": {
+      "main": "Main",
+      "weeklyStats": "Weekly Stats",
+      "allStatistics": "All Statistics"
+    },
+    "activityTypes": {
+      "work": "Work",
+      "study": "Study",
+      "character": "Character",
+      "listening": "Listening",
+      "extraStudy": "Extra Study",
+      "extraCharacter": "Extra Character",
+      "extraListening": "Extra Listening"
+    },
+    "form": {
+      "addRecord": "Add Time Record",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "time": "Time",
+      "activityType": "Activity Type",
+      "selectActivityType": "Please select activity type",
+      "description": "Description",
+      "descriptionOptional": "Optional",
+      "descriptionPlaceholder": "Enter activity description...",
+      "activityDescription": "Activity description",
+      "submit": "Add Record",
+      "submitting": "Adding...",
+      "estimatedDuration": "Estimated duration: {duration}",
+      "timeFormat24Hour": "※ All times are in 24-hour format (00:00~23:59)"
+    },
+    "records": {
+      "title": "Time Records",
+      "count": "{count} records",
+      "searchPlaceholder": "Search records...",
+      "searchRecords": "Search time records",
+      "filterByType": "Filter by activity type",
+      "allTypes": "All Types",
+      "clearFilters": "Clear Filters",
+      "noRecords": "No time records",
+      "noRecordsDescription": "Start tracking your time to see daily activities",
+      "noMatchingRecords": "No matching records",
+      "noMatchingRecordsDescription": "Try adjusting search terms or filter settings",
+      "showingRecent": "Showing recent {shown} records, total {total}"
+    },
+    "weeklyView": {
+      "title": "Weekly View",
+      "backToThisWeek": "Back to This Week",
+      "thisWeek": "This Week",
+      "previousWeek": "Previous Week",
+      "nextWeek": "Next Week",
+      "year": "{year}",
+      "today": "Today",
+      "noRecords": "No records",
+      "noRecordsToday": "No records today",
+      "noRecordsThisDay": "No records this day",
+      "activityDistribution": "Activity Distribution",
+      "detailedRecords": "Detailed Records ({count})"
+    },
+    "statistics": {
+      "allStatistics": "All Statistics",
+      "weeklyStatistics": "Weekly Statistics",
+      "totalTime": "Total Time",
+      "totalTimeThisWeek": "Total Time This Week",
+      "cumulativeTotalTime": "Cumulative Total Time",
+      "recordCount": "Records:",
+      "recordsUnit": "records",
+      "activeDays": "Active Days:",
+      "daysUnit": "days",
+      "workTime": "Work Time:",
+      "studyTime": "Study Time:",
+      "characterTime": "Character Time:",
+      "statisticsSummary": "Statistics Summary",
+      "trackingStartDate": "Tracking Start Date:",
+      "topActivity": "Top Activity:",
+      "none": "None",
+      "activityTypeCount": "Activity Types:",
+      "typesUnit": "types",
+      "averageTime": "Average Time:",
+      "minutesUnit": "minutes",
+      "totalHours": "Total Hours:",
+      "hoursUnit": "hours",
+      "emptyTitle": "No time records",
+      "emptyDescription": "Start tracking your time to see detailed statistics"
+    },
+    "settings": {
+      "title": "App Settings",
+      "userSettings": "User Settings",
+      "weekStartDay": "Week Start Day",
+      "weekStartDayDescription": "Set the first day of the week view",
+      "weekStartDayNote": "Changing this setting will immediately affect the week view display",
+      "settingsInfo": "Settings Info",
+      "settingsInfoItem1": "Week start day affects weekly view, statistics calculations, etc.",
+      "settingsInfoItem2": "Settings are automatically saved to local storage",
+      "settingsInfoItem3": "Default is Sunday start (consistent with most calendar apps)",
+      "loadingSettings": "Loading settings...",
+      "done": "Done",
+      "weekdays": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+      }
+    },
+    "delete": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "deleting": "Deleting...",
+      "deleteRecord": "Delete {itemName} record"
+    },
+    "statisticsCard": {
+      "percentage": "Percentage",
+      "noData": "No records"
+    }
   }
 }

@@ -405,5 +405,128 @@
     "cantFindContent": "找不到想要的內容？",
     "searchSuggestionDescription": "您可以在首頁查看我的作品集、技術文章，或使用 AI 工具來協助您找到需要的資訊。",
     "contactIfError": "如果這是個錯誤，歡迎聯絡我"
+  },
+  "TimeTracker": {
+    "title": "時間追蹤器",
+    "description": "記錄和分析你的時間分配，提升效率管理",
+    "error": "發生錯誤：{error}",
+    "openSettings": "開啟設定",
+    "tabs": {
+      "main": "主要功能",
+      "weeklyStats": "週統計",
+      "allStatistics": "全部統計"
+    },
+    "activityTypes": {
+      "work": "工作",
+      "study": "讀書",
+      "character": "品格",
+      "listening": "聽析",
+      "extraStudy": "額外讀書",
+      "extraCharacter": "額外品格",
+      "extraListening": "額外聽析"
+    },
+    "form": {
+      "addRecord": "新增時間記錄",
+      "date": "日期",
+      "startTime": "開始時間",
+      "endTime": "結束時間",
+      "time": "時間",
+      "activityType": "活動類型",
+      "selectActivityType": "請選擇活動類型",
+      "description": "描述",
+      "descriptionOptional": "選填",
+      "descriptionPlaceholder": "輸入活動描述...",
+      "activityDescription": "活動描述",
+      "submit": "新增記錄",
+      "submitting": "新增中...",
+      "estimatedDuration": "預計持續時間：{duration}",
+      "timeFormat24Hour": "※ 所有時間皆以 24 小時制（00:00~23:59）輸入與顯示"
+    },
+    "records": {
+      "title": "時間記錄",
+      "count": "{count} 筆",
+      "searchPlaceholder": "搜尋記錄...",
+      "searchRecords": "搜尋時間記錄",
+      "filterByType": "篩選活動類型",
+      "allTypes": "所有類型",
+      "clearFilters": "清除篩選",
+      "noRecords": "尚無時間記錄",
+      "noRecordsDescription": "開始記錄你的時間，追蹤日常活動",
+      "noMatchingRecords": "沒有符合條件的記錄",
+      "noMatchingRecordsDescription": "嘗試調整搜尋條件或篩選設定",
+      "showingRecent": "顯示最近 {shown} 筆記錄，共 {total} 筆"
+    },
+    "weeklyView": {
+      "title": "週視圖",
+      "backToThisWeek": "回到本週",
+      "thisWeek": "本週",
+      "previousWeek": "上一週",
+      "nextWeek": "下一週",
+      "year": "{year} 年",
+      "today": "今天",
+      "noRecords": "無記錄",
+      "noRecordsToday": "今天還沒有記錄",
+      "noRecordsThisDay": "這天沒有記錄",
+      "activityDistribution": "活動分佈",
+      "detailedRecords": "詳細記錄 ({count} 筆)"
+    },
+    "statistics": {
+      "allStatistics": "全部統計",
+      "weeklyStatistics": "週統計",
+      "totalTime": "總計時間",
+      "totalTimeThisWeek": "本週總計",
+      "cumulativeTotalTime": "累計總時數",
+      "recordCount": "記錄數：",
+      "recordsUnit": "筆",
+      "activeDays": "活躍天數：",
+      "daysUnit": "天",
+      "workTime": "工作時間：",
+      "studyTime": "讀書時間：",
+      "characterTime": "品格時間：",
+      "statisticsSummary": "統計摘要",
+      "trackingStartDate": "統計開始時間：",
+      "topActivity": "最多時間：",
+      "none": "無",
+      "activityTypeCount": "活動類型：",
+      "typesUnit": "種",
+      "averageTime": "平均時長：",
+      "minutesUnit": "分鐘",
+      "totalHours": "總時數：",
+      "hoursUnit": "小時",
+      "emptyTitle": "尚無時間記錄",
+      "emptyDescription": "開始記錄你的時間，查看詳細統計資料"
+    },
+    "settings": {
+      "title": "應用設定",
+      "userSettings": "用戶設定",
+      "weekStartDay": "週起始日",
+      "weekStartDayDescription": "設定週視圖的第一天",
+      "weekStartDayNote": "更改此設定會立即影響週視圖的顯示方式",
+      "settingsInfo": "設定說明",
+      "settingsInfoItem1": "週起始日設定會影響週視圖、統計計算等功能",
+      "settingsInfoItem2": "設定會自動儲存到本地儲存空間",
+      "settingsInfoItem3": "預設為週日開始（與多數日曆應用一致）",
+      "loadingSettings": "載入設定中...",
+      "done": "完成",
+      "weekdays": {
+        "sunday": "週日",
+        "monday": "週一",
+        "tuesday": "週二",
+        "wednesday": "週三",
+        "thursday": "週四",
+        "friday": "週五",
+        "saturday": "週六"
+      }
+    },
+    "delete": {
+      "confirm": "確認",
+      "cancel": "取消",
+      "deleting": "刪除中...",
+      "deleteRecord": "刪除 {itemName} 記錄"
+    },
+    "statisticsCard": {
+      "percentage": "佔比",
+      "noData": "尚無記錄"
+    }
   }
 }
