@@ -6,7 +6,6 @@ export interface NeedInputProps {
   onChange: Dispatch<SetStateAction<string>>;
   onSubmit: () => void;
   isLoading: boolean;
-  placeholder?: string;
 }
 
 export interface AnalysisResultProps {

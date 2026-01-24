@@ -2,11 +2,13 @@
 
 import { cn } from "@packages/shared/utils";
 import { ChevronDown, ChevronUp, Lightbulb } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import type { UsageTipsProps } from "../types";
 
 const UsageTips: React.FC<UsageTipsProps> = ({ tips }) => {
+  const t = useTranslations("AIAnalyzer");
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -24,7 +26,7 @@ const UsageTips: React.FC<UsageTipsProps> = ({ tips }) => {
           >
             <div className="flex items-center gap-2">
               <Lightbulb className="text-warning h-5 w-5" />
-              <h3 className="text-base-content text-sm font-semibold">分析指南</h3>
+              <h3 className="text-base-content text-sm font-semibold">{t("tips.title")}</h3>
             </div>
             {isExpanded ? (
               <ChevronDown className="text-base-content/60 h-4 w-4" />

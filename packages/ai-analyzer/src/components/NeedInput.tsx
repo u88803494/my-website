@@ -2,11 +2,13 @@
 
 import { cn } from "@packages/shared/utils";
 import { Loader2, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import type { NeedInputProps } from "../types";
 
-const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, placeholder, value }) => {
+const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, value }) => {
+  const t = useTranslations("AIAnalyzer");
   const [isFocused, setIsFocused] = useState(false);
   const maxLength = 100;
   const minLength = 10;
@@ -31,9 +33,9 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
     <div className="mx-auto w-full max-w-2xl">
       <div className="relative">
         <textarea
-          // iOS Safari 若 font-size < 16px 會自動放大，text-base = 16px
+          // iOS Safari auto-zooms if font-size < 16px, text-base = 16px
           className={cn(
-            "textarea textarea-bordered h-24 w-full resize-none text-base", // ← 這裡加上 text-base
+            "textarea textarea-bordered h-24 w-full resize-none text-base",
             "focus:ring-primary focus:ring-2 focus:outline-none",
             "transition-all duration-200",
             isFocused && "ring-primary ring-2",
@@ -45,7 +47,7 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onKeyPress={handleKeyPress}
-          placeholder={placeholder}
+          placeholder={t("input.placeholder")}
           value={value}
         />
 
@@ -59,7 +61,7 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
       </div>
 
       <div className="mt-2 flex items-center justify-between text-sm">
-        <span className="text-base-content/60">按 Enter 快速分析，或點擊發送按鈕</span>
+        <span className="text-base-content/60">{t("input.hint")}</span>
         <span className={cn("text-xs", currentLength >= maxLength ? "text-error" : "text-base-content/60")}>
           {currentLength}/{maxLength}
         </span>
@@ -67,7 +69,7 @@ const NeedInput: React.FC<NeedInputProps> = ({ isLoading, onChange, onSubmit, pl
 
       {currentLength > 0 && currentLength < minLength && (
         <div className="text-error mt-1 text-xs">
-          請至少輸入 {minLength} 個字（目前 {currentLength} 個字）
+          {t("input.minLengthError", { minLength, currentLength })}
         </div>
       )}
     </div>
