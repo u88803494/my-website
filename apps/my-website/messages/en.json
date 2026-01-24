@@ -279,7 +279,42 @@
     }
   },
   "About": {
-    "techStack": "My Tech Stack"
+    "techStack": "My Tech Stack",
+    "hero": {
+      "subtitle": "Frontend Engineer | Tech Enthusiast | Sharer",
+      "intro": "Hello, I'm Henry. A frontend engineer passionate about software craftsmanship, focused on building high-performance, maintainable applications with excellent user experiences using the latest web technologies."
+    },
+    "story": {
+      "title": "My Story",
+      "paragraph1": "My engineering journey began with a pure love for problem-solving. From building full-stack blogs with React and Redux in my early days, to leading complex system development in my professional career, I've always enjoyed transforming abstract concepts into concrete products.",
+      "paragraph2": "At 'Eucare Health', I led the web interface development for a telemedicine system, significantly improving development efficiency and reducing costs by 50% through Mono Repo architecture and data flow optimization. At 'Wishmobile', I established frontend team technical standards and designed modular architecture, providing a solid technical foundation for rapidly iterating business needs.",
+      "paragraph3": "I believe the best code isn't just code that works—it's code that's clear, scalable, and easy to collaborate on. This belief drives me to keep learning, share knowledge, and integrate emerging technologies like AI-assisted development into my workflow, continuously exploring greater efficiency and possibilities in software development."
+    },
+    "philosophy": {
+      "title": "My Development Philosophy",
+      "codeAsCommunication": {
+        "title": "Code as Communication",
+        "description": "I believe the best code is the best documentation. I strive to write clear, structured, and understandable code—not just for machines to execute, but to facilitate efficient communication between team members and my future self."
+      },
+      "userCentered": {
+        "title": "User-Centered Design",
+        "description": "Technology ultimately serves people. I insist on thinking from the user's perspective, considering every interaction detail to create products that are not only powerful but also intuitive and easy to use."
+      },
+      "aiCollaboration": {
+        "title": "AI Collaboration Paradigm",
+        "description": "I actively embrace AI tools to improve development efficiency, automating repetitive work so I can focus on solving complex business logic and creative challenges."
+      },
+      "sharingGrowth": {
+        "title": "Sharing & Growth",
+        "description": "I believe sharing is the best way to learn. I enjoy publishing my learning insights and practical experiences on Medium, growing together with the community."
+      }
+    },
+    "cta": {
+      "title": "Interested?",
+      "description": "I'm open to new job opportunities, project collaborations, or simply technical discussions. Looking forward to chatting with you!",
+      "linkedinButton": "Connect via LinkedIn",
+      "emailButton": "Send Email"
+    }
   },
   "Education": {
     "title": "Education & Training",

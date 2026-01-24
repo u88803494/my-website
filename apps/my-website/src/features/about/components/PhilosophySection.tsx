@@ -2,41 +2,44 @@
 
 import { motion } from "framer-motion";
 import { BrainCircuit, MessageSquareQuote, Share2, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface Philosophy {
-  description: string;
+  descriptionKey: string;
   icon: React.ReactNode;
-  title: string;
+  titleKey: string;
 }
 
-const philosophies: Philosophy[] = [
+const philosophyItems: Philosophy[] = [
   {
-    description:
-      "我相信最好的程式碼本身就是最好的文件。我致力於撰寫清晰、結構化且易於理解的程式碼，不僅是為了讓機器執行，更是為了促進團隊成員之間以及與未來自己之間的高效溝通。",
+    descriptionKey: "philosophy.codeAsCommunication.description",
     icon: <MessageSquareQuote className="text-primary h-8 w-8" />,
-    title: "程式碼即溝通",
+    titleKey: "philosophy.codeAsCommunication.title",
   },
   {
-    description:
-      "技術的最終目的是服務於人。我堅持從使用者的角度出發，思考每一個互動細節，打造不僅功能強大，而且直觀、易用的產品。",
+    descriptionKey: "philosophy.userCentered.description",
     icon: <Users className="text-primary h-8 w-8" />,
-    title: "使用者中心的設計",
+    titleKey: "philosophy.userCentered.title",
   },
   {
-    description:
-      "我積極擁抱 AI 工具來提升開發效率，將重複性工作自動化，讓我能更專注於解決複雜的業務邏輯與創造性的挑戰。",
+    descriptionKey: "philosophy.aiCollaboration.description",
     icon: <BrainCircuit className="text-primary h-8 w-8" />,
-    title: "AI 協作新範式",
+    titleKey: "philosophy.aiCollaboration.title",
   },
   {
-    description: "我相信分享是最好的學習方式。我樂於將我的學習心得與實踐經驗發表在 Medium 上，與社群一同成長。",
+    descriptionKey: "philosophy.sharingGrowth.description",
     icon: <Share2 className="text-primary h-8 w-8" />,
-    title: "分享與成長",
+    titleKey: "philosophy.sharingGrowth.title",
   },
 ];
 
-const PhilosophyCard: React.FC<{ index: number; item: Philosophy }> = ({ index, item }) => (
+const PhilosophyCard: React.FC<{
+  description: string;
+  index: number;
+  item: Philosophy;
+  title: string;
+}> = ({ description, index, item, title }) => (
   <motion.div
     animate={{ opacity: 1, y: 0 }}
     className="card border-base-300 bg-base-100 h-full border shadow-sm transition-all duration-300"
@@ -52,13 +55,15 @@ const PhilosophyCard: React.FC<{ index: number; item: Philosophy }> = ({ index, 
       <motion.div className="mb-4" transition={{ duration: 0.3 }} whileHover={{ rotate: 5, scale: 1.1 }}>
         {item.icon}
       </motion.div>
-      <h4 className="card-title mb-2">{item.title}</h4>
-      <p className="text-base-content/80">{item.description}</p>
+      <h4 className="card-title mb-2">{title}</h4>
+      <p className="text-base-content/80">{description}</p>
     </div>
   </motion.div>
 );
 
 const PhilosophySection = () => {
+  const t = useTranslations("About");
+
   return (
     <section className="mb-12">
       <motion.h3
@@ -67,11 +72,17 @@ const PhilosophySection = () => {
         initial={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.6 }}
       >
-        我的開發理念
+        {t("philosophy.title")}
       </motion.h3>
       <div className="grid gap-6 sm:grid-cols-2">
-        {philosophies.map((item, index) => (
-          <PhilosophyCard index={index} item={item} key={item.title} />
+        {philosophyItems.map((item, index) => (
+          <PhilosophyCard
+            description={t(item.descriptionKey)}
+            index={index}
+            item={item}
+            key={item.titleKey}
+            title={t(item.titleKey)}
+          />
         ))}
       </div>
     </section>

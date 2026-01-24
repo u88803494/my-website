@@ -2,12 +2,15 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import ContactLinks from "@/components/shared/ContactLinks";
 import { cn } from "@/utils/cn";
 
 const AboutHero = () => {
+  const t = useTranslations("About");
+
   return (
     <header className="mb-12 flex flex-col-reverse items-center gap-8 text-center sm:flex-row sm:items-center sm:text-left">
       <div className="flex-1 space-y-6">
@@ -26,7 +29,7 @@ const AboutHero = () => {
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
-          前端工程師 | 技術愛好者 | 分享家
+          {t("hero.subtitle")}
         </motion.h2>
 
         <motion.p
@@ -36,8 +39,7 @@ const AboutHero = () => {
           transition={{ delay: 0.6, duration: 0.6 }}
           whileHover={{ x: 5 }}
         >
-          你好，我是 Henry。一位對軟體工藝充滿熱情的前端工程師，專注於運用最新的 Web
-          技術打造高效能、高可維護性且使用者體驗卓越的應用程式。
+          {t("hero.intro")}
         </motion.p>
 
         <motion.div
