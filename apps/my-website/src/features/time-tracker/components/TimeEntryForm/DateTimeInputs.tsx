@@ -2,6 +2,7 @@
 
 import "react-datepicker/dist/react-datepicker.css";
 
+import { useTranslations } from "next-intl";
 import React from "react";
 import DatePicker from "react-datepicker";
 
@@ -34,6 +35,8 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
   onStartTimeChange,
   startTimeObj,
 }) => {
+  const t = useTranslations("TimeTracker");
+
   return (
     <>
       {/* 日期 + 時間選擇器區塊：一整排靠左對齊 */}
@@ -41,10 +44,10 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 日期選擇器 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            日期<span className="text-error ml-1">*</span>
+            {t("form.date")}<span className="text-error ml-1">*</span>
           </label>
           <DatePicker
-            aria-label="日期"
+            aria-label={t("form.date")}
             className={`input input-bordered input-sm w-32 ${getFieldError(errors, "date") ? "input-error" : ""}`}
             dateFormat="yyyy-MM-dd"
             disabled={isDisabled}
@@ -56,10 +59,10 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 開始時間 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            開始時間<span className="text-error ml-1">*</span>
+            {t("form.startTime")}<span className="text-error ml-1">*</span>
           </label>
           <DatePicker
-            aria-label="開始時間"
+            aria-label={t("form.startTime")}
             className={`input input-bordered input-sm w-24 ${getFieldError(errors, "startTime") ? "input-error" : ""}`}
             dateFormat="HH:mm"
             disabled={isDisabled}
@@ -68,7 +71,7 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
             selected={startTimeObj}
             showTimeSelect
             showTimeSelectOnly
-            timeCaption="時間"
+            timeCaption={t("form.time")}
             timeFormat="HH:mm"
             timeIntervals={5}
           />
@@ -77,10 +80,10 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
         {/* 結束時間 */}
         <div className="flex items-center gap-2">
           <label className="text-base-content text-sm font-medium whitespace-nowrap">
-            結束時間<span className="text-error ml-1">*</span>
+            {t("form.endTime")}<span className="text-error ml-1">*</span>
           </label>
           <DatePicker
-            aria-label="結束時間"
+            aria-label={t("form.endTime")}
             className={`input input-bordered input-sm w-24 ${getFieldError(errors, "endTime") ? "input-error" : ""}`}
             dateFormat="HH:mm"
             disabled={isDisabled}
@@ -89,7 +92,7 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
             selected={endTimeObj}
             showTimeSelect
             showTimeSelectOnly
-            timeCaption="時間"
+            timeCaption={t("form.time")}
             timeFormat="HH:mm"
             timeIntervals={5}
           />
@@ -106,7 +109,7 @@ const DateTimeInputs: React.FC<DateTimeInputsProps> = ({
       )}
 
       {/* 時間輸入區域下方加註 24 小時制提示 */}
-      <div className="text-base-content/60 text-xs">※ 所有時間皆以 24 小時制（00:00~23:59）輸入與顯示</div>
+      <div className="text-base-content/60 text-xs">{t("form.timeFormat24Hour")}</div>
     </>
   );
 };

@@ -1,4 +1,7 @@
+"use client";
+
 import { Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import { formatMinutesToHours } from "../../utils/formatting";
@@ -15,6 +18,8 @@ interface DurationPreviewProps {
  * 持續時間預覽元件
  */
 const DurationPreview: React.FC<DurationPreviewProps> = ({ duration, endTime, error, isValid, startTime }) => {
+  const t = useTranslations("TimeTracker");
+
   if (!startTime || !endTime) {
     return null;
   }
@@ -24,7 +29,7 @@ const DurationPreview: React.FC<DurationPreviewProps> = ({ duration, endTime, er
       <div className="alert alert-info">
         <Clock aria-hidden="true" className="h-4 w-4" />
         <span>
-          預計持續時間：{formatMinutesToHours(duration)}
+          {t("form.estimatedDuration", { duration: formatMinutesToHours(duration) })}
           <span className="ml-2 text-sm opacity-75">({(duration / 60).toFixed(2)} hr)</span>
         </span>
       </div>

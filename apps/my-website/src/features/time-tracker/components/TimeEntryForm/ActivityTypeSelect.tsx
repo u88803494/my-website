@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
 import { ActivityType, type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
 
@@ -8,11 +12,24 @@ interface ActivityTypeSelectProps {
   value: "" | ActivityTypeType;
 }
 
+// Map ActivityType enum values to translation keys
+const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
+  [ActivityType.WORK]: "activityTypes.work",
+  [ActivityType.STUDY]: "activityTypes.study",
+  [ActivityType.CHARACTER]: "activityTypes.character",
+  [ActivityType.LISTENING]: "activityTypes.listening",
+  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
+  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
+  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
+};
+
 /**
  * 活動類型選擇元件
  * 使用 daisyUI 的 select 樣式
  */
 const ActivityTypeSelect = ({ disabled = false, error, onChange, value }: ActivityTypeSelectProps) => {
+  const t = useTranslations("TimeTracker");
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     // 運行時驗證，確保是有效的 ActivityType
@@ -24,24 +41,24 @@ const ActivityTypeSelect = ({ disabled = false, error, onChange, value }: Activi
   return (
     <div className="form-control w-full">
       <label className="label">
-        <span className="label-text font-medium">活動類型</span>
+        <span className="label-text font-medium">{t("form.activityType")}</span>
         <span className="label-text-alt text-error">*</span>
       </label>
 
       <select
         aria-describedby={error ? "activity-type-error" : undefined}
-        aria-label="選擇活動類型"
+        aria-label={t("form.activityType")}
         className={`select select-bordered w-full ${error ? "select-error" : ""} ${disabled ? "select-disabled" : ""}`}
         disabled={disabled}
         onChange={handleChange}
         value={value}
       >
         <option disabled value="">
-          請選擇活動類型
+          {t("form.selectActivityType")}
         </option>
         {ACTIVITY_TYPE_OPTIONS.map((option) => (
           <option key={option.value} value={option.value}>
-            {option.label}
+            {t(ACTIVITY_TYPE_TO_KEY[option.value])}
           </option>
         ))}
       </select>

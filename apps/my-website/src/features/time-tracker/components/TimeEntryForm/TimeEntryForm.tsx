@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import type { TimeRecord } from "@/features/time-tracker/types";
@@ -21,6 +22,7 @@ interface TimeEntryFormProps {
  * 處理時間記錄的輸入和驗證
  */
 const TimeEntryForm: React.FC<TimeEntryFormProps> = ({ isLoading = false, onSubmit }) => {
+  const t = useTranslations("TimeTracker");
   const {
     dateObj,
     endTimeObj,
@@ -77,19 +79,19 @@ const TimeEntryForm: React.FC<TimeEntryFormProps> = ({ isLoading = false, onSubm
       {/* 描述輸入 */}
       <div className="form-control">
         <label className="label">
-          <span className="label-text font-medium">描述</span>
-          <span className="label-text-alt">選填</span>
+          <span className="label-text font-medium">{t("form.description")}</span>
+          <span className="label-text-alt">{t("form.descriptionOptional")}</span>
         </label>
         <textarea
           aria-describedby={getFieldError(errors, "description") ? "description-error" : undefined}
-          aria-label="活動描述"
+          aria-label={t("form.activityDescription")}
           className={`textarea textarea-bordered w-full ${
             getFieldError(errors, "description") ? "textarea-error" : ""
           }`}
           disabled={isSubmitting || isLoading}
           maxLength={200}
           onChange={(e) => handleInputChange("description", e.target.value)}
-          placeholder="輸入活動描述..."
+          placeholder={t("form.descriptionPlaceholder")}
           rows={3}
           value={formData.description}
         />
