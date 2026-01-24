@@ -1,6 +1,7 @@
 "use client";
 
 import { Calendar } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useMemo } from "react";
 
 import type { TimeRecord } from "@/features/time-tracker/types";
@@ -23,6 +24,7 @@ interface WeeklyViewProps {
  * 顯示整週的時間記錄和統計
  */
 const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStart }) => {
+  const t = useTranslations("TimeTracker");
   const { settings } = useUserSettings();
 
   // 獲取週的所有日期（使用用戶設定的週起始日）
@@ -93,13 +95,13 @@ const WeeklyView: React.FC<WeeklyViewProps> = ({ onWeekChange, records, weekStar
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Calendar aria-hidden="true" className="text-primary h-5 w-5" />
-          <h3 className="text-base-content font-medium">週視圖</h3>
+          <h3 className="text-base-content font-medium">{t("weeklyView.title")}</h3>
         </div>
 
         <div className="flex items-center gap-2">
           {!isCurrentWeek && (
             <button className="btn btn-ghost btn-sm" onClick={goToCurrentWeek}>
-              回到本週
+              {t("weeklyView.backToThisWeek")}
             </button>
           )}
         </div>
