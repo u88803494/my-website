@@ -592,5 +592,31 @@
       "zhuyin": "Zhuyin:",
       "pinyin": "Pinyin:"
     }
+  },
+  "AIAnalyzer": {
+    "title": "AI Requirements Analyzer",
+    "subtitle": "Helping you think deeply, clarify needs, and learn how to give AI better prompts",
+    "inputSection": "Describe Your Ideas or Needs",
+    "tips": {
+      "title": "Analysis Guide",
+      "tip1": "💡 The more specific your description, the deeper the AI analysis",
+      "tip2": "🧠 This tool helps you think deeply about the essence of your needs",
+      "tip3": "🎯 Recommended to include: goals, background, constraints, expected outcomes",
+      "tip4": "📝 The generated template can be freely adjusted based on your ideas",
+      "tip5": "✨ Learn how to give AI better prompts"
+    },
+    "input": {
+      "placeholder": "e.g., I want to develop an e-commerce website, I want to write an article about AI, I want to plan a new product, I want to learn a skill... (Please keep it under 100 characters)",
+      "hint": "Press Enter to analyze quickly, or click the send button",
+      "minLengthError": "Please enter at least {minLength} characters (currently {currentLength} characters)"
+    },
+    "result": {
+      "title": "AI Analysis Result",
+      "copied": "Copied",
+      "copy": "Copy",
+      "placeholder": "AI will display analysis results here...",
+      "characterCount": "{count} characters",
+      "hint": "You can freely edit the analysis results above, then copy them to use in AI tools like ChatGPT, Claude, etc."
+    }
   }
 }

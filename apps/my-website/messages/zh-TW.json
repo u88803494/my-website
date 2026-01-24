@@ -592,5 +592,31 @@
       "zhuyin": "注音:",
       "pinyin": "拼音:"
     }
+  },
+  "AIAnalyzer": {
+    "title": "AI 需求分析器",
+    "subtitle": "協助深度思考，釐清需求，學會如何給 AI 更好的提示詞",
+    "inputSection": "描述您的想法或需求",
+    "tips": {
+      "title": "分析指南",
+      "tip1": "💡 描述越具體，AI 分析越深入",
+      "tip2": "🧠 這個工具幫助你深度思考需求的本質",
+      "tip3": "🎯 建議包含：目標、背景、限制、期望結果",
+      "tip4": "📝 生成的模板可以根據你的想法自由調整",
+      "tip5": "✨ 學會如何給 AI 更好的提示詞"
+    },
+    "input": {
+      "placeholder": "例如：我想要開發一個電商網站、我想要寫一篇關於 AI 的文章、我想要規劃一個新產品、我想要學習某個技能...（請控制在 100 字以內）",
+      "hint": "按 Enter 快速分析，或點擊發送按鈕",
+      "minLengthError": "請至少輸入 {minLength} 個字（目前 {currentLength} 個字）"
+    },
+    "result": {
+      "title": "AI 分析結果",
+      "copied": "已複製",
+      "copy": "複製",
+      "placeholder": "AI 將在這裡顯示分析結果...",
+      "characterCount": "{count} 字元",
+      "hint": "您可以自由編輯上面的分析結果，然後複製到 ChatGPT、Claude 等 AI 工具中使用"
+    }
   }
 }
