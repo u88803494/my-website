@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { useWordAnalysis } from "../hooks/useWordAnalysis";
@@ -10,6 +11,7 @@ import ResultsList from "./ResultsList";
 import WordSearchForm from "./WordSearchForm";
 
 const AIDictionaryContent: React.FC = () => {
+  const t = useTranslations("AIDictionary");
   const mutation = useWordAnalysis();
   const { addResult, handleClearResults, handleCompleteCard, handleUndo, testResults, updateResult } =
     useWordLearning();
@@ -67,7 +69,7 @@ const AIDictionaryContent: React.FC = () => {
             <div className="flex items-start gap-3">
               <span className="text-lg text-amber-600">📚</span>
               <div className="flex-1 text-sm">
-                <p className="text-amber-800">本字典內容由 AI 生成，建議搭配傳統字典使用以確保準確性。</p>
+                <p className="text-amber-800">{t("disclaimer.text")}</p>
               </div>
             </div>
           </div>

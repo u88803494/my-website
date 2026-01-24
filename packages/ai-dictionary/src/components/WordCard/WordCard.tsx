@@ -1,6 +1,9 @@
+"use client";
+
 import type { APIErrorResponse, WordAnalysisResponse } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
 import { ArrowUpCircle, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type { APICallResult } from "../../types";
 import CompleteBar from "./CompleteBar";
@@ -16,6 +19,8 @@ interface WordCardProps {
 }
 
 const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, result }) => {
+  const t = useTranslations("AIDictionary");
+
   const isError = (response: APIErrorResponse | WordAnalysisResponse): response is APIErrorResponse => {
     return "error" in response;
   };
@@ -83,7 +88,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, r
 
             {/* 重新生成按鈕 */}
             <button
-              aria-label="重新生成定義"
+              aria-label={t("wordCard.regenerateAria")}
               className={cn(
                 "flex items-center gap-1 rounded-md px-2 py-1",
                 "text-xs text-slate-500",
@@ -97,7 +102,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, r
               type="button"
             >
               <RefreshCw className="h-3 w-3" />
-              <span>重新生成</span>
+              <span>{t("wordCard.regenerate")}</span>
             </button>
           </div>
         </div>
@@ -119,12 +124,12 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, r
             disabled={result.isCompleting || result.isRemoving}
             onClick={() => onComplete(result.id)}
           >
-            {result.isCompleting ? "已完成 👍" : "學習完成"}
+            {result.isCompleting ? t("wordCard.completed") : t("wordCard.markComplete")}
           </button>
 
           {/* 捲動到頂部按鈕 */}
           <button
-            aria-label="捲動到最上方"
+            aria-label={t("wordCard.scrollToTopAria")}
             className={cn(
               "flex items-center gap-1 rounded px-2 py-1",
               "text-xs text-slate-500",
@@ -136,7 +141,7 @@ const WordCard: React.FC<WordCardProps> = ({ onComplete, onRegenerate, onUndo, r
             type="button"
           >
             <ArrowUpCircle className="h-3 w-3" />
-            <span>回到頂部</span>
+            <span>{t("wordCard.scrollToTop")}</span>
           </button>
 
           {/* 空元素 - 用於平衡佈局 */}

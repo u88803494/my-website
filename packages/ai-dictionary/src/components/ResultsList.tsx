@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { APICallResult } from "../types";
 import EmptyState from "./EmptyState";
 import WordCard from "./WordCard";
@@ -21,6 +25,8 @@ const ResultsList: React.FC<ResultsListProps> = ({
   onUndo,
   results,
 }) => {
+  const t = useTranslations("AIDictionary");
+
   if (results.length === 0 && !isLoading) {
     return <EmptyState onOpenDonateModal={onOpenDonateModal} />;
   }
@@ -34,10 +40,10 @@ const ResultsList: React.FC<ResultsListProps> = ({
       {/* Results Header */}
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-medium text-slate-800">
-          查詢結果 <span className="text-slate-500">({results.length})</span>
+          {t("results.title")} <span className="text-slate-500">({results.length})</span>
         </h2>
         <button className="text-sm text-slate-500 transition-colors hover:text-slate-700" onClick={onClearResults}>
-          清除所有結果
+          {t("results.clearAll")}
         </button>
       </div>
 

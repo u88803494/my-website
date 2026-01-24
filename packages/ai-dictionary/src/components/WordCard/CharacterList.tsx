@@ -1,5 +1,8 @@
+"use client";
+
 import type { EtymologyBlock } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
+import { useTranslations } from "next-intl";
 
 interface CharacterListProps {
   characters?: EtymologyBlock[];
@@ -7,6 +10,8 @@ interface CharacterListProps {
 }
 
 const CharacterList: React.FC<CharacterListProps> = ({ characters, className }) => {
+  const t = useTranslations("AIDictionary");
+
   if (!characters || characters.length === 0) return null;
   return (
     <div className={cn(className)}>
@@ -19,10 +24,10 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, className }) 
               <div className="flex-1">
                 <div className="mb-2 flex flex-wrap gap-2 sm:gap-3">
                   <span className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 sm:text-sm">
-                    注音: {block.zhuyin}
+                    {t("character.zhuyin")} {block.zhuyin}
                   </span>
                   <span className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-700 sm:text-sm">
-                    拼音: {block.pinyin}
+                    {t("character.pinyin")} {block.pinyin}
                   </span>
                 </div>
               </div>

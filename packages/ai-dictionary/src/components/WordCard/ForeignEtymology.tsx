@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@packages/shared/utils";
+import { useTranslations } from "next-intl";
 
 interface ForeignEtymologyProps {
   className?: string;
@@ -6,10 +9,12 @@ interface ForeignEtymologyProps {
 }
 
 const ForeignEtymology: React.FC<ForeignEtymologyProps> = ({ className, foreignEtymology }) => {
+  const t = useTranslations("AIDictionary");
+
   if (!foreignEtymology || typeof foreignEtymology !== "string" || !foreignEtymology.trim()) return null;
   return (
     <div className={cn("rounded-lg border border-slate-200 bg-white p-4", className)}>
-      <h5 className="mb-2 font-medium text-slate-800">外來語來源</h5>
+      <h5 className="mb-2 font-medium text-slate-800">{t("sections.foreignOrigin")}</h5>
       <div className="leading-relaxed whitespace-pre-line text-slate-700">{foreignEtymology}</div>
     </div>
   );

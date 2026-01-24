@@ -3,6 +3,7 @@
 import { MAX_WORD_LENGTH } from "@packages/shared/constants";
 import { cn } from "@packages/shared/utils";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface WordSearchFormProps {
@@ -13,6 +14,7 @@ interface WordSearchFormProps {
 const loadingDotClass = cn("block", "h-2 w-2", "animate-bounce", "rounded-full");
 
 const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) => {
+  const t = useTranslations("AIDictionary");
   const [inputWord, setInputWord] = useState("");
 
   const isInputTooLong = inputWord.length > MAX_WORD_LENGTH;
@@ -31,7 +33,7 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
         <form onSubmit={handleSubmit}>
           <div className={cn("flex flex-col gap-3", "sm:flex-row sm:gap-4")}>
             <input
-              aria-label="查詢詞彙"
+              aria-label={t("search.ariaLabel")}
               className={cn(
                 "flex-1",
                 "rounded-lg border px-3 py-2 text-lg",
@@ -42,12 +44,12 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
               disabled={isLoading}
               maxLength={40}
               onChange={(e) => setInputWord(e.target.value)}
-              placeholder="輸入中文詞彙進行查詢..."
+              placeholder={t("search.placeholder")}
               type="text"
               value={inputWord}
             />
             <button
-              aria-label="搜尋"
+              aria-label={t("search.searchButton")}
               className={cn(
                 "hidden sm:flex",
                 "items-center justify-center",
