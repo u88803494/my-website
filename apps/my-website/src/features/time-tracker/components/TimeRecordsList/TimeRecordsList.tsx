@@ -1,6 +1,7 @@
 "use client";
 
 import { List } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 import { type ActivityType } from "@/features/time-tracker/types";
@@ -29,6 +30,7 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
   records,
   showSearch = true,
 }) => {
+  const t = useTranslations("TimeTracker");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"" | ActivityType>("");
   const [deletingId, setDeletingId] = useState<null | string>(null);
@@ -93,16 +95,16 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
         <div className="flex items-center gap-2">
           <List aria-hidden="true" className="text-primary h-5 w-5" />
           <h3 className="text-base-content font-medium">
-            時間記錄
+            {t("records.title")}
             {filteredRecords.length > 0 && (
-              <span className="text-base-content/60 ml-2 text-sm">({filteredRecords.length} 筆)</span>
+              <span className="text-base-content/60 ml-2 text-sm">({t("records.count", { count: filteredRecords.length })})</span>
             )}
           </h3>
         </div>
 
         {hasFilters && (
           <button className="btn btn-ghost btn-sm" onClick={clearFilters}>
-            清除篩選
+            {t("records.clearFilters")}
           </button>
         )}
       </div>
@@ -146,7 +148,7 @@ const TimeRecordsList: React.FC<TimeRecordsListProps> = ({
       {maxItems && records.length > maxItems && !hasFilters && (
         <div className="py-2 text-center">
           <p className="text-base-content/60 text-sm">
-            顯示最近 {maxItems} 筆記錄，共 {records.length} 筆
+            {t("records.showingRecent", { shown: maxItems, total: records.length })}
           </p>
         </div>
       )}

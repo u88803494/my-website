@@ -1,4 +1,7 @@
+"use client";
+
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface DeleteButtonProps {
@@ -21,10 +24,12 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
   onDelete,
   showConfirm,
 }) => {
+  const t = useTranslations("TimeTracker");
+
   if (!showConfirm) {
     return (
       <button
-        aria-label={`刪除 ${itemName} 記錄`}
+        aria-label={t("delete.deleteRecord", { itemName })}
         className="btn btn-ghost btn-sm text-error hover:bg-error/10"
         disabled={isDeleting}
         onClick={onDelete}
@@ -37,7 +42,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
   return (
     <div className="flex gap-1">
       <button className="btn btn-ghost btn-xs" disabled={isDeleting} onClick={onCancel}>
-        取消
+        {t("delete.cancel")}
       </button>
       <button
         className={`btn btn-error btn-xs ${isDeleting ? "loading" : ""}`}
@@ -45,7 +50,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
         onClick={onConfirm}
       >
         {!isDeleting && <Trash2 aria-hidden="true" className="h-3 w-3" />}
-        {isDeleting ? "刪除中..." : "確認"}
+        {isDeleting ? t("delete.deleting") : t("delete.confirm")}
       </button>
     </div>
   );
