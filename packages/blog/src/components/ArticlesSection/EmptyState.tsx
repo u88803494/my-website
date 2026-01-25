@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const EmptyState = () => {
+  const t = useTranslations("Blog");
+
   return (
     <motion.div
       animate={{ opacity: 1, scale: 1 }}
@@ -21,12 +24,8 @@ const EmptyState = () => {
           >
             <FileText aria-hidden="true" className="text-base-content/30 mx-auto h-16 w-16" />
           </motion.div>
-          <h3 className="card-title mb-2 justify-center text-xl">目前沒有文章</h3>
-          <p className="text-base-content/70 leading-relaxed">
-            暫時沒有找到任何文章內容
-            <br />
-            請稍後再試，或者檢查網路連線
-          </p>
+          <h3 className="card-title mb-2 justify-center text-xl">{t("emptyState.title")}</h3>
+          <p className="text-base-content/70 whitespace-pre-line leading-relaxed">{t("emptyState.description")}</p>
         </div>
       </div>
     </motion.div>

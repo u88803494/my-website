@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import SkeletonCard from "./SkeletonCard";
 
@@ -10,6 +11,8 @@ interface LoadMoreButtonProps {
 }
 
 const LoadMoreButton = ({ isLoading, onLoadMore }: LoadMoreButtonProps) => {
+  const t = useTranslations("Blog");
+
   if (isLoading) {
     return (
       <div className="py-8">
@@ -25,14 +28,14 @@ const LoadMoreButton = ({ isLoading, onLoadMore }: LoadMoreButtonProps) => {
 
   return (
     <motion.button
-      aria-label="載入更多文章"
+      aria-label={t("loadMore.buttonAria")}
       className="btn btn-primary btn-lg shadow-lg transition-shadow hover:shadow-xl"
       onClick={onLoadMore}
       transition={{ duration: 0.2 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      載入更多文章
+      {t("loadMore.button")}
     </motion.button>
   );
 };

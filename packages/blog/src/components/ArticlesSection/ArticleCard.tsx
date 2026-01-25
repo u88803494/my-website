@@ -3,6 +3,7 @@
 import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import { Calendar, ExternalLink, Tag } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { SiMedium } from "react-icons/si";
 
@@ -13,21 +14,31 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article }: ArticleCardProps) => {
-  // 使用 useMemo 優化日期格式化
+  const t = useTranslations("Blog");
+  const locale = useLocale();
+
+  // Format date based on current locale
   const formattedDate = useMemo(() => {
-    return new Date(article.firstPublishedAt).toLocaleDateString("zh-TW", {
+    return new Date(article.firstPublishedAt).toLocaleDateString(locale, {
       day: "numeric",
       month: "long",
       year: "numeric",
     });
-  }, [article.firstPublishedAt]);
+  }, [article.firstPublishedAt, locale]);
 
-  // 生成文章摘要用於 SEO 和可訪問性
+  // Generate article summary for SEO and accessibility
   const articleSummary = useMemo(() => {
     const subtitle = article.extendedPreviewContent?.subtitle;
     const collection = article.collection?.name;
-    return `文章標題：${article.title}${subtitle ? `，摘要：${subtitle}` : ""}${collection ? `，分類：${collection}` : ""}，作者：${article.creator.name}，發布日期：${formattedDate}`;
+    return t("articleCard.articleSummary", {
+      title: article.title,
+      subtitle: subtitle ? `, ${subtitle}` : "",
+      collection: collection ? `, ${collection}` : "",
+      author: article.creator.name,
+      date: formattedDate,
+    });
   }, [
+    t,
     article.title,
     article.extendedPreviewContent?.subtitle,
     article.collection?.name,
@@ -57,7 +68,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <SiMedium aria-hidden="true" className="h-5 w-5 text-gray-600" />
-            <span className="text-sm text-gray-500">Medium Article</span>
+            <span className="text-sm text-gray-500">{t("articleCard.mediumLabel")}</span>
           </div>
           <div className="flex items-center gap-1 text-xs text-gray-500">
             <Calendar aria-hidden="true" className="h-3 w-3" />
@@ -96,13 +107,13 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
 
         {/* Author */}
         <div className="mb-4 flex items-center text-xs text-gray-500">
-          <span>作者：{article.creator.name}</span>
+          <span>{t("articleCard.authorLabel", { name: article.creator.name })}</span>
         </div>
 
         {/* Read Button */}
         <div className="mt-auto">
           <motion.a
-            aria-label={`在 Medium 上閱讀文章：${article.title}`}
+            aria-label={t("articleCard.readArticleAria", { title: article.title })}
             className="btn btn-outline btn-sm hover:btn-primary focus:btn-primary flex w-full items-center gap-2"
             href={article.mediumUrl}
             rel="noopener noreferrer"
@@ -112,7 +123,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
             whileTap={{ scale: 0.95 }}
           >
             <ExternalLink aria-hidden="true" className="h-4 w-4" />
-            閱讀文章
+            {t("articleCard.readArticle")}
           </motion.a>
         </div>
       </div>

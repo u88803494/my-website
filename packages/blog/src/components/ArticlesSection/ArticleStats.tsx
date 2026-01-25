@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface ArticleStatsProps {
   hasNextPage: boolean;
@@ -8,6 +9,8 @@ interface ArticleStatsProps {
 }
 
 const ArticleStats = ({ hasNextPage, totalCount }: ArticleStatsProps) => {
+  const t = useTranslations("Blog");
+
   return (
     <motion.div
       animate={{ opacity: 1 }}
@@ -17,11 +20,11 @@ const ArticleStats = ({ hasNextPage, totalCount }: ArticleStatsProps) => {
     >
       <div className="stats bg-base-100 shadow">
         <div className="stat">
-          <div className="stat-title">已載入文章</div>
+          <div className="stat-title">{t("stats.title")}</div>
           <div className="stat-value text-primary">{totalCount}</div>
           <div className="stat-desc">
-            {hasNextPage && "向下滾動載入更多"}
-            {!hasNextPage && totalCount > 0 && "已載入所有文章"}
+            {hasNextPage && t("stats.scrollForMore")}
+            {!hasNextPage && totalCount > 0 && t("stats.allLoaded")}
           </div>
         </div>
       </div>
