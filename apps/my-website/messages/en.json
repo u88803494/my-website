@@ -618,5 +618,40 @@
       "characterCount": "{count} characters",
       "hint": "You can freely edit the analysis results above, then copy them to use in AI tools like ChatGPT, Claude, etc."
     }
+  },
+  "Blog": {
+    "hero": {
+      "title": "Blog Articles",
+      "subtitle": "Sharing my insights and technical experiences on the software development journey"
+    },
+    "articleCard": {
+      "mediumLabel": "Medium Article",
+      "authorLabel": "By: {name}",
+      "readArticle": "Read Article",
+      "readArticleAria": "Read article on Medium: {title}",
+      "articleSummary": "Article title: {title}{subtitle}{collection}, Author: {author}, Published: {date}"
+    },
+    "emptyState": {
+      "title": "No Articles Yet",
+      "description": "No articles found at the moment.\nPlease try again later or check your internet connection."
+    },
+    "errorState": {
+      "title": "Failed to Load",
+      "retryAria": "Reload articles",
+      "retryButton": "Reload"
+    },
+    "completedState": {
+      "title": "All Articles Loaded",
+      "description": "Total {count} articles"
+    },
+    "loadMore": {
+      "button": "Load More Articles",
+      "buttonAria": "Load more articles"
+    },
+    "stats": {
+      "title": "Articles Loaded",
+      "scrollForMore": "Scroll down to load more",
+      "allLoaded": "All articles loaded"
+    }
   }
 }

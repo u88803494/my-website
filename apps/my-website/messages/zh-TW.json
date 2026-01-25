@@ -618,5 +618,40 @@
       "characterCount": "{count} 字元",
       "hint": "您可以自由編輯上面的分析結果，然後複製到 ChatGPT、Claude 等 AI 工具中使用"
     }
+  },
+  "Blog": {
+    "hero": {
+      "title": "部落格文章",
+      "subtitle": "分享我在軟體開發路上的心得與技術見解"
+    },
+    "articleCard": {
+      "mediumLabel": "Medium 文章",
+      "authorLabel": "作者：{name}",
+      "readArticle": "閱讀文章",
+      "readArticleAria": "在 Medium 上閱讀文章：{title}",
+      "articleSummary": "文章標題：{title}{subtitle}{collection}，作者：{author}，發布日期：{date}"
+    },
+    "emptyState": {
+      "title": "目前沒有文章",
+      "description": "暫時沒有找到任何文章內容\n請稍後再試，或者檢查網路連線"
+    },
+    "errorState": {
+      "title": "載入失敗",
+      "retryAria": "重新載入文章",
+      "retryButton": "重新載入"
+    },
+    "completedState": {
+      "title": "所有文章已載入完成",
+      "description": "總共 {count} 篇文章"
+    },
+    "loadMore": {
+      "button": "載入更多文章",
+      "buttonAria": "載入更多文章"
+    },
+    "stats": {
+      "title": "已載入文章",
+      "scrollForMore": "向下滾動載入更多",
+      "allLoaded": "已載入所有文章"
+    }
   }
 }
