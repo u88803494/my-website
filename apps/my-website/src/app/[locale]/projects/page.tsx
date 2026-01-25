@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 
@@ -12,10 +12,12 @@ const ProjectsPage = async ({ params }: ProjectsPageProps) => {
   // Enable static rendering
   setRequestLocale(locale);
 
+  const t = await getTranslations("ProjectsPage");
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-4 text-3xl font-bold">專案 Projects</h1>
-      <p className="text-lg">這裡會展示我的個人專案，敬請期待！</p>
+      <h1 className="mb-4 text-3xl font-bold">{t("title")}</h1>
+      <p className="text-lg">{t("description")}</p>
     </div>
   );
 };

@@ -653,5 +653,9 @@
       "scrollForMore": "Scroll down to load more",
       "allLoaded": "All articles loaded"
     }
+  },
+  "ProjectsPage": {
+    "title": "Projects",
+    "description": "Personal projects will be showcased here. Stay tuned!"
   }
 }

@@ -653,5 +653,9 @@
       "scrollForMore": "向下滾動載入更多",
       "allLoaded": "已載入所有文章"
     }
+  },
+  "ProjectsPage": {
+    "title": "專案",
+    "description": "這裡會展示我的個人專案，敬請期待！"
   }
 }
