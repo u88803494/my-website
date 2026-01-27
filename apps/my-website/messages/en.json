@@ -657,5 +657,27 @@
   "ProjectsPage": {
     "title": "Projects",
     "description": "Personal projects will be showcased here. Stay tuned!"
+  },
+  "MediumArticles": {
+    "sectionHeader": {
+      "title": "Technical Articles",
+      "titleMedium": "Medium Articles",
+      "subtitle": "Sharing my insights and technical experiences on the software development journey"
+    },
+    "featuredSection": {
+      "title": "📰 Latest Articles"
+    },
+    "carouselSection": {
+      "title": "⭐ Featured Articles",
+      "pause": "Pause",
+      "play": "Play",
+      "prevPage": "Previous page",
+      "nextPage": "Next page"
+    },
+    "articleCard": {
+      "mediumLabel": "Medium Article",
+      "readArticle": "Read Article"
+    },
+    "viewAllButton": "View All Articles on Medium"
   }
 }

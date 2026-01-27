@@ -657,5 +657,27 @@
   "ProjectsPage": {
     "title": "專案",
     "description": "這裡會展示我的個人專案，敬請期待！"
+  },
+  "MediumArticles": {
+    "sectionHeader": {
+      "title": "技術文章",
+      "titleMedium": "Medium Articles",
+      "subtitle": "分享我在軟體開發路上的學習心得與技術見解，記錄成長的每一步"
+    },
+    "featuredSection": {
+      "title": "📰 最新文章"
+    },
+    "carouselSection": {
+      "title": "⭐ 精選文章",
+      "pause": "暫停",
+      "play": "播放",
+      "prevPage": "上一頁",
+      "nextPage": "下一頁"
+    },
+    "articleCard": {
+      "mediumLabel": "Medium 文章",
+      "readArticle": "閱讀文章"
+    },
+    "viewAllButton": "前往我的 Medium 文章頁面"
   }
 }
