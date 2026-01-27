@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 export interface ErrorStateProps {
@@ -8,6 +11,8 @@ export interface ErrorStateProps {
 }
 
 export const ErrorState: React.FC<ErrorStateProps> = ({ className = "", error, onRetry, showRetryButton = true }) => {
+  const t = useTranslations("Common");
+
   const handleRetry = () => {
     if (onRetry) {
       onRetry();
@@ -20,11 +25,11 @@ export const ErrorState: React.FC<ErrorStateProps> = ({ className = "", error, o
     <div className={`error-state ${className}`}>
       <div className="error-content">
         <div className="error-icon">⚠️</div>
-        <h3 className="error-title">發生錯誤</h3>
+        <h3 className="error-title">{t("error")}</h3>
         <p className="error-message">{error}</p>
         {showRetryButton && (
           <button className="retry-button" onClick={handleRetry} type="button">
-            重試
+            {t("retry")}
           </button>
         )}
       </div>

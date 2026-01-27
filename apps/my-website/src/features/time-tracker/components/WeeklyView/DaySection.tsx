@@ -1,8 +1,7 @@
 "use client";
 
 import { Calendar, Clock } from "lucide-react";
-import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useMemo } from "react";
 
 import { ActivityType, type ActivityType as ActivityTypeType, type TimeRecord } from "@/features/time-tracker/types";
@@ -20,41 +19,29 @@ const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
   [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
 };
 
-// 動態載入客戶端日期組件
-const ClientSideWeekday = dynamic(
-  () =>
-    Promise.resolve(({ date }: { date: Date }) => {
-      return <>{new Date(date).toLocaleDateString("zh-TW", { weekday: "long" })}</>;
-    }),
-  {
-    loading: () => <span className="opacity-0">載入中...</span>,
-    ssr: false,
-  },
-);
-
-const ClientSideDateString = dynamic(
-  () =>
-    Promise.resolve(({ date }: { date: Date }) => {
-      return <>{date.toLocaleDateString("zh-TW", { day: "numeric", month: "numeric" })}</>;
-    }),
-  {
-    loading: () => <span className="opacity-0">...</span>,
-    ssr: false,
-  },
-);
-
 interface DaySectionProps {
   date: Date;
   records: TimeRecord[];
 }
 
 /**
- * 單日記錄區段元件
- * 顯示特定日期的所有時間記錄
+ * Day record section component
+ * Displays all time records for a specific date
  */
 const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
   const t = useTranslations("TimeTracker");
+  const locale = useLocale();
   const [isToday, setIsToday] = React.useState(false);
+
+  // Format weekday based on current locale
+  const formattedWeekday = useMemo(() => {
+    return new Date(date).toLocaleDateString(locale, { weekday: "long" });
+  }, [date, locale]);
+
+  // Format date string based on current locale
+  const formattedDateString = useMemo(() => {
+    return date.toLocaleDateString(locale, { day: "numeric", month: "numeric" });
+  }, [date, locale]);
 
   React.useEffect(() => {
     const today = new Date();
@@ -100,13 +87,11 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
           <div className="flex items-center gap-2">
             <Calendar aria-hidden="true" className={`h-4 w-4 ${isToday ? "text-primary" : "text-base-content/60"}`} />
             <h3 className={`font-medium ${isToday ? "text-primary" : "text-base-content"}`}>
-              <ClientSideWeekday date={date} />
+              {formattedWeekday}
               {isToday && <span className="badge badge-primary badge-sm ml-2">{t("weeklyView.today")}</span>}
             </h3>
           </div>
-          <span className="text-base-content/60 text-sm">
-            <ClientSideDateString date={date} />
-          </span>
+          <span className="text-base-content/60 text-sm">{formattedDateString}</span>
         </div>
 
         {/* 總時間顯示 */}
