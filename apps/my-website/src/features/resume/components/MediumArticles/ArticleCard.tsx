@@ -4,6 +4,7 @@ import { type Article } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 import { SiMedium } from "react-icons/si";
 
@@ -12,7 +13,10 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
-  const formattedDate = new Date(article.publishedDate).toLocaleDateString("zh-TW", {
+  const t = useTranslations("MediumArticles");
+  const locale = useLocale();
+
+  const formattedDate = new Date(article.publishedDate).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -39,7 +43,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         {/* Header with Medium icon */}
         <div className="mb-3 flex items-center gap-2">
           <SiMedium className="h-5 w-5 text-gray-600" />
-          <span className="text-sm text-gray-500">Medium Article</span>
+          <span className="text-sm text-gray-500">{t("articleCard.mediumLabel")}</span>
         </div>
 
         {/* Title and Subtitle */}
@@ -109,7 +113,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             whileTap={{ scale: 0.95 }}
           >
             <ExternalLink className="h-4 w-4" />
-            閱讀文章
+            {t("articleCard.readArticle")}
           </motion.a>
         </div>
       </div>

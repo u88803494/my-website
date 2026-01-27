@@ -3,6 +3,7 @@
 import { type Article } from "@packages/shared/types";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import ArticleCard from "./ArticleCard";
@@ -32,6 +33,8 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
   setIsPlaying,
   totalSlides,
 }) => {
+  const t = useTranslations("MediumArticles");
+
   if (articles.length === 0) return null;
 
   return (
@@ -42,28 +45,36 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       viewport={{ once: true }}
       whileInView={{ opacity: 1, y: 0 }}
     >
-      {/* 標題和控制 */}
+      {/* Title and controls */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h3 className="text-base-content text-xl font-semibold">⭐ 精選文章</h3>
+          <h3 className="text-base-content text-xl font-semibold">{t("carouselSection.title")}</h3>
         </div>
 
-        {/* 播放控制 */}
+        {/* Playback controls */}
         {totalSlides > 1 && (
           <div className="flex items-center gap-2">
             <button
               className="btn btn-circle btn-sm btn-ghost"
               onClick={() => setIsPlaying(!isPlaying)}
-              title={isPlaying ? "暫停" : "播放"}
+              title={isPlaying ? t("carouselSection.pause") : t("carouselSection.play")}
             >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </button>
 
-            <button className="btn btn-circle btn-sm btn-ghost" onClick={prevSlide} title="上一頁">
+            <button
+              className="btn btn-circle btn-sm btn-ghost"
+              onClick={prevSlide}
+              title={t("carouselSection.prevPage")}
+            >
               <ChevronLeft className="h-4 w-4" />
             </button>
 
-            <button className="btn btn-circle btn-sm btn-ghost" onClick={nextSlide} title="下一頁">
+            <button
+              className="btn btn-circle btn-sm btn-ghost"
+              onClick={nextSlide}
+              title={t("carouselSection.nextPage")}
+            >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>

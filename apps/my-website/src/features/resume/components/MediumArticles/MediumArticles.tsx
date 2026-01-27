@@ -5,6 +5,7 @@ import { articleList as articles } from "@packages/shared/data";
 import { latestArticles } from "@packages/shared/data";
 import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import React from "react";
 
 import CarouselSection from "./CarouselSection";
@@ -20,10 +21,12 @@ interface MediumArticlesProps {
 }
 
 const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectionId }) => {
-  // 使用輪播 hook 處理精選文章
+  const t = useTranslations("MediumArticles");
+
+  // Use carousel hook for featured articles
   const carousel = useCarousel({
     autoplayInterval: 4000,
-    items: articles, // 使用全部文章
+    items: articles, // Use all articles
   });
 
   return (
@@ -31,13 +34,13 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
       <div className="container mx-auto px-4">
         <SectionHeader />
 
-        {/* 最新文章區塊 */}
+        {/* Latest articles section */}
         <FeaturedSection articles={latestArticles} />
 
-        {/* 精選文章區塊 */}
+        {/* Featured articles section */}
         <CarouselSection articles={articles} {...carousel} />
 
-        {/* 前往 Medium 文章頁面 */}
+        {/* View all on Medium button */}
         <motion.div
           className="mt-12 text-center"
           initial={{ opacity: 0 }}
@@ -53,7 +56,7 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            前往我的 Medium 文章頁面
+            {t("viewAllButton")}
           </motion.a>
         </motion.div>
       </div>

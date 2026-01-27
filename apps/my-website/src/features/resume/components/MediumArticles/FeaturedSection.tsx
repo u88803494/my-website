@@ -2,6 +2,7 @@
 
 import { type Article } from "@packages/shared/types";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import ArticleCard from "./ArticleCard";
 
@@ -10,6 +11,8 @@ interface FeaturedSectionProps {
 }
 
 const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
+  const t = useTranslations("MediumArticles");
+
   if (articles.length === 0) return null;
 
   return (
@@ -21,7 +24,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
       whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="mb-6 flex items-center gap-2">
-        <h3 className="text-base-content text-xl font-semibold">📰 最新文章</h3>
+        <h3 className="text-base-content text-xl font-semibold">{t("featuredSection.title")}</h3>
       </div>
 
       <div className="grid w-full gap-6 md:grid-cols-2">
