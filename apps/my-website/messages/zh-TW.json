@@ -382,6 +382,9 @@
     "ariaLoadingMessage": "AI 正在回應中"
   },
   "Footer": {
+    "jobTitle": "前端工程師",
+    "bio": "專精於 Next.js、React、TypeScript 開發，致力於打造高效能、高可維護性的網頁應用",
+    "letsConnect": "讓我們保持聯繫",
     "copyright": "© {year} Henry Lee. 保留所有權利。",
     "builtWith": "使用 Next.js、TypeScript 和 Tailwind CSS 建構"
   },
@@ -393,7 +396,8 @@
     "save": "儲存",
     "cancel": "取消",
     "search": "搜尋",
-    "noResults": "找不到結果"
+    "noResults": "找不到結果",
+    "techStack": "技術棧"
   },
   "NotFound": {
     "pageNotFound": "頁面不見了",
@@ -444,6 +448,7 @@
     },
     "records": {
       "title": "時間記錄",
+      "recentRecords": "最近記錄",
       "count": "{count} 筆",
       "searchPlaceholder": "搜尋記錄...",
       "searchRecords": "搜尋時間記錄",
@@ -454,7 +459,10 @@
       "noRecordsDescription": "開始記錄你的時間，追蹤日常活動",
       "noMatchingRecords": "沒有符合條件的記錄",
       "noMatchingRecordsDescription": "嘗試調整搜尋條件或篩選設定",
-      "showingRecent": "顯示最近 {shown} 筆記錄，共 {total} 筆"
+      "showingRecent": "顯示最近 {shown} 筆記錄，共 {total} 筆",
+      "showLess": "顯示較少",
+      "showAll": "顯示全部",
+      "moreRecords": "還有 {count} 筆記錄"
     },
     "weeklyView": {
       "title": "週視圖",

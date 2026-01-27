@@ -382,6 +382,9 @@
     "ariaLoadingMessage": "AI is responding"
   },
   "Footer": {
+    "jobTitle": "Frontend Engineer",
+    "bio": "Specializing in Next.js, React, TypeScript development, dedicated to building high-performance, maintainable web applications",
+    "letsConnect": "Let's Stay Connected",
     "copyright": "© {year} Henry Lee. All rights reserved.",
     "builtWith": "Built with Next.js, TypeScript, and Tailwind CSS"
   },
@@ -393,7 +396,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "search": "Search",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "techStack": "Tech Stack"
   },
   "NotFound": {
     "pageNotFound": "Page Not Found",
@@ -444,6 +448,7 @@
     },
     "records": {
       "title": "Time Records",
+      "recentRecords": "Recent Records",
       "count": "{count} records",
       "searchPlaceholder": "Search records...",
       "searchRecords": "Search time records",
@@ -454,7 +459,10 @@
       "noRecordsDescription": "Start tracking your time to see daily activities",
       "noMatchingRecords": "No matching records",
       "noMatchingRecordsDescription": "Try adjusting search terms or filter settings",
-      "showingRecent": "Showing recent {shown} records, total {total}"
+      "showingRecent": "Showing recent {shown} records, total {total}",
+      "showLess": "Show Less",
+      "showAll": "Show All",
+      "moreRecords": "{count} more records"
     },
     "weeklyView": {
       "title": "Weekly View",

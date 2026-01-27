@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 interface TechStackProps {
@@ -15,11 +18,12 @@ const TechStack: React.FC<TechStackProps> = ({
   techStack,
   variant = "primary",
 }) => {
+  const t = useTranslations("Common");
   const badgeSize = size === "sm" ? "badge-sm" : size === "lg" ? "badge-lg" : "";
 
   return (
     <div className={className}>
-      {showLabel && <span className="mb-2 block text-sm font-semibold text-gray-600">技術棧</span>}
+      {showLabel && <span className="mb-2 block text-sm font-semibold text-gray-600">{t("techStack")}</span>}
       <div className="flex flex-wrap gap-2">
         {techStack.map((tech, idx) => (
           <div className={`badge badge-${variant} badge-outline ${badgeSize}`} key={idx}>
