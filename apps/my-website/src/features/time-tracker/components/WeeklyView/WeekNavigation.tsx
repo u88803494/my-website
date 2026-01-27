@@ -2,25 +2,21 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useMemo } from "react";
 
-// 使用 dynamic 載入組件，並關閉 SSR
+// Dynamic import to disable SSR and avoid hydration mismatch
 const ClientSideDate = dynamic(() => import("./ClientSideDate"), {
-  // 提供一個載入時的佔位符，避免佈局跳動
   loading: () => <span className="opacity-0">...</span>,
   ssr: false,
 });
 
-// 建立一個顯示年份的客戶端組件
+// Client-side year display component
 const ClientSideYear = dynamic(
   () =>
-    Promise.resolve(({ date, yearSuffix }: { date: Date; yearSuffix: string }) => {
-      return (
-        <>
-          {date.getFullYear()}
-          {yearSuffix}
-        </>
-      );
+    Promise.resolve(({ date, locale }: { date: Date; locale: string }) => {
+      const formattedYear = date.toLocaleDateString(locale, { year: "numeric" });
+      return <>{formattedYear}</>;
     }),
   {
     loading: () => <span className="opacity-0">...</span>,
@@ -38,7 +34,7 @@ interface WeekNavigationProps {
 }
 
 /**
- * 週導航元件
+ * Week navigation component
  */
 const WeekNavigation: React.FC<WeekNavigationProps> = ({
   currentWeekStart,
@@ -48,9 +44,10 @@ const WeekNavigation: React.FC<WeekNavigationProps> = ({
   weekEnd,
 }) => {
   const t = useTranslations("TimeTracker");
+  const locale = useLocale();
 
-  // Get the year suffix based on locale (e.g., " 年" for zh-TW, "" for en)
-  const yearSuffix = t("weeklyView.year", { year: "" }).replace("", "").trim() ? " 年" : "";
+  // Memoize date formatting options based on locale
+  const dateOptions = useMemo<Intl.DateTimeFormatOptions>(() => ({ day: "numeric", month: "long" }), []);
 
   return (
     <div className="bg-base-200 flex items-center justify-between rounded-lg p-3">
@@ -60,11 +57,11 @@ const WeekNavigation: React.FC<WeekNavigationProps> = ({
 
       <div className="text-center">
         <div className="text-base-content font-medium">
-          <ClientSideDate date={currentWeekStart} locale="zh-TW" options={{ day: "numeric", month: "long" }} /> -{" "}
-          <ClientSideDate date={weekEnd} locale="zh-TW" options={{ day: "numeric", month: "long" }} />
+          <ClientSideDate date={currentWeekStart} locale={locale} options={dateOptions} /> -{" "}
+          <ClientSideDate date={weekEnd} locale={locale} options={dateOptions} />
         </div>
         <div className="text-base-content/60 text-sm">
-          <ClientSideYear date={currentWeekStart} yearSuffix={yearSuffix} />
+          <ClientSideYear date={currentWeekStart} locale={locale} />
           {isCurrentWeek && <span className="badge badge-primary badge-sm ml-2">{t("weeklyView.thisWeek")}</span>}
         </div>
       </div>
