@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 const LocaleLayout = async ({ children, params }: LocaleLayoutProps) => {
