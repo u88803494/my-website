@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 
 const navigationItems = [
   { href: "/blog", labelKey: "blog" },

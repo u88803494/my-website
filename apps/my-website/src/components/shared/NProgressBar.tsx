@@ -2,10 +2,11 @@
 
 import "nprogress/nprogress.css";
 
-import { usePathname } from "next/navigation";
 // @ts-expect-error: nprogress 沒有型別定義
 import NProgress from "nprogress";
 import { useEffect } from "react";
+
+import { usePathname } from "@/i18n/navigation";
 
 // TODO: Consider upgrading to BProgress (@bprogress/core) in the future
 // BProgress is a modern upgrade of NProgress with better design and enhanced features

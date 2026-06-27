@@ -1,7 +1,9 @@
 import { type NavRoute } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
 import { Menu } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 
 interface MobileNavbarProps {
   closeDropdown: () => void;
@@ -10,6 +12,8 @@ interface MobileNavbarProps {
 }
 
 const MobileNavbar: React.FC<MobileNavbarProps> = ({ closeDropdown, isActivePage, routes }) => {
+  const t = useTranslations("Navigation");
+
   return (
     <div className="dropdown">
       <div className="btn btn-ghost btn-circle btn-md lg:hidden" role="button" tabIndex={0}>
@@ -28,7 +32,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({ closeDropdown, isActivePage
               href={route.href}
               onClick={closeDropdown}
             >
-              {route.label}
+              {t(route.labelKey)}
             </Link>
           </li>
         ))}

@@ -1,9 +1,9 @@
 "use client";
 
 import { routes } from "@packages/shared/constants";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+
+import { Link, usePathname } from "@/i18n/navigation";
 
 import DesktopNavbar from "./DesktopNavbar";
 import LanguageSwitcher from "./LanguageSwitcher";

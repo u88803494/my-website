@@ -1,5 +1,5 @@
-// 導航路由型別定義
+// Navigation route type definition
 export interface NavRoute {
   href: string;
-  label: string;
+  labelKey: string;
 }

@@ -1,6 +1,8 @@
 import { type NavRoute } from "@packages/shared/types";
 import { cn } from "@packages/shared/utils";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 
 interface DesktopNavbarProps {
   isActivePage: (href: string) => boolean;
@@ -8,6 +10,8 @@ interface DesktopNavbarProps {
 }
 
 const DesktopNavbar: React.FC<DesktopNavbarProps> = ({ isActivePage, routes }) => {
+  const t = useTranslations("Navigation");
+
   return (
     <div className="navbar-center hidden lg:flex">
       <ul className="menu menu-horizontal px-1 text-lg">
@@ -19,7 +23,7 @@ const DesktopNavbar: React.FC<DesktopNavbarProps> = ({ isActivePage, routes }) =
               })}
               href={route.href}
             >
-              {route.label}
+              {t(route.labelKey)}
             </Link>
           </li>
         ))}

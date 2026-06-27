@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ArrowLeft, Home } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 
 const NotFoundHero: React.FC = () => {
   const t = useTranslations("NotFound");
