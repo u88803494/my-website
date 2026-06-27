@@ -1,7 +1,21 @@
 {
   "Metadata": {
     "title": "Henry Lee | 資深 AI 前端工程師",
-    "description": "具備五年以上 Web 開發經驗的資深 AI 前端工程師，專注於 Next.js 15 與生成式 AI 應用整合開發。"
+    "description": "具備五年以上 Web 開發經驗的資深 AI 前端工程師，專注於 Next.js 15 與生成式 AI 應用整合開發。",
+    "pages": {
+      "blog": {
+        "title": "部落格 | Henry Lee",
+        "description": "Henry Lee 關於前端工程、AI 應用與現代 Web 開發的技術文章與實務觀點。"
+      },
+      "aiChat": {
+        "title": "AI 對話 | Henry Lee",
+        "description": "使用 Vercel AI SDK、Next.js 與現代對話式 UI 模式打造的串流 AI 對話體驗。"
+      },
+      "timeTracker": {
+        "title": "時間追蹤 | Henry Lee",
+        "description": "本機優先的時間追蹤工具，可記錄活動、檢視每週進度並分析生產力模式。"
+      }
+    }
   },
   "Navigation": {
     "home": "首頁",

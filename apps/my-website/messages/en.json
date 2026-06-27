@@ -1,7 +1,21 @@
 {
   "Metadata": {
     "title": "Henry Lee | Senior AI Frontend Engineer",
-    "description": "Senior AI Frontend Engineer with 5+ years of web development experience, specializing in Next.js 15 and generative AI application integration."
+    "description": "Senior AI Frontend Engineer with 5+ years of web development experience, specializing in Next.js 15 and generative AI application integration.",
+    "pages": {
+      "blog": {
+        "title": "Blog | Henry Lee",
+        "description": "Technical articles and insights from Henry Lee on frontend engineering, AI applications, and modern web development."
+      },
+      "aiChat": {
+        "title": "AI Chat | Henry Lee",
+        "description": "A streaming AI chat experience built with Vercel AI SDK, Next.js, and modern conversational UI patterns."
+      },
+      "timeTracker": {
+        "title": "Time Tracker | Henry Lee",
+        "description": "A local-first time tracking tool for recording activities, reviewing weekly progress, and analyzing productivity patterns."
+      }
+    }
   },
   "Navigation": {
     "home": "Home",

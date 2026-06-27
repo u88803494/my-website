@@ -24,6 +24,19 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const baseUrl = "https://henryleelab.com";
+
+const getLocalizedPath = (locale: Locale, path = "/") => {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const localizedPath = normalizedPath === "/" ? "" : normalizedPath;
+
+  if (locale === routing.defaultLocale && routing.localePrefix === "as-needed") {
+    return localizedPath;
+  }
+
+  return `/${locale}${localizedPath}`;
+};
+
 // Generate static params for all locales
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -33,12 +46,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
-
-  const baseUrl = "https://henryleelab.com";
+  const canonicalUrl = `${baseUrl}${getLocalizedPath(locale)}`;
 
   return {
     alternates: {
-      canonical: baseUrl,
+      canonical: canonicalUrl,
       languages: {
         en: baseUrl,
         "x-default": baseUrl,
@@ -62,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       locale: locale === "zh-TW" ? "zh_TW" : "en_US",
       title: t("title"),
       type: "website",
-      url: baseUrl,
+      url: canonicalUrl,
     },
     publisher: "Henry Lee",
     robots: "index, follow",

@@ -1,10 +1,52 @@
-import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AIChatFeature } from "@/features/ai-chat";
-import type { Locale } from "@/i18n/routing";
+import { type Locale, routing } from "@/i18n/routing";
 
 interface AIChatPageProps {
   params: Promise<{ locale: Locale }>;
+}
+
+const baseUrl = "https://henryleelab.com";
+const pagePath = "/ai-chat";
+
+const getLocalizedUrl = (locale: Locale) => {
+  const localizedPath =
+    locale === routing.defaultLocale && routing.localePrefix === "as-needed" ? pagePath : `/${locale}${pagePath}`;
+
+  return `${baseUrl}${localizedPath}`;
+};
+
+export async function generateMetadata({ params }: AIChatPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata.pages.aiChat" });
+  const canonicalUrl = getLocalizedUrl(locale);
+
+  return {
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        en: `${baseUrl}${pagePath}`,
+        "x-default": `${baseUrl}${pagePath}`,
+        "zh-TW": `${baseUrl}/zh-TW${pagePath}`,
+      },
+    },
+    description: t("description"),
+    openGraph: {
+      description: t("description"),
+      locale: locale === "zh-TW" ? "zh_TW" : "en_US",
+      title: t("title"),
+      type: "website",
+      url: canonicalUrl,
+    },
+    title: t("title"),
+    twitter: {
+      card: "summary",
+      description: t("description"),
+      title: t("title"),
+    },
+  };
 }
 
 /**
