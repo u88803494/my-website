@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
+import { ACTIVITY_TYPE_OPTIONS, ACTIVITY_TYPE_TO_KEY } from "@/features/time-tracker/constants";
 import { ActivityType, type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
 
 interface ActivityTypeSelectProps {
@@ -11,17 +11,6 @@ interface ActivityTypeSelectProps {
   onChange: (value: ActivityTypeType) => void;
   value: "" | ActivityTypeType;
 }
-
-// Map ActivityType enum values to translation keys
-const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
-  [ActivityType.WORK]: "activityTypes.work",
-  [ActivityType.STUDY]: "activityTypes.study",
-  [ActivityType.CHARACTER]: "activityTypes.character",
-  [ActivityType.LISTENING]: "activityTypes.listening",
-  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
-  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
-  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
-};
 
 /**
  * 活動類型選擇元件

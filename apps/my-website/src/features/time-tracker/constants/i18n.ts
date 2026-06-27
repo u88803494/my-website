@@ -1,3 +1,16 @@
+import { ActivityType, type ActivityType as ActivityTypeType } from "../types";
+
+// Map ActivityType enum values to translation keys (TimeTracker namespace)
+export const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
+  [ActivityType.WORK]: "activityTypes.work",
+  [ActivityType.STUDY]: "activityTypes.study",
+  [ActivityType.CHARACTER]: "activityTypes.character",
+  [ActivityType.LISTENING]: "activityTypes.listening",
+  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
+  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
+  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
+};
+
 /**
  * 時間追蹤器 i18n 常量
  * 集中管理所有繁體中文介面文字

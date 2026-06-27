@@ -4,19 +4,8 @@ import { Filter, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import React from "react";
 
-import { ACTIVITY_TYPE_OPTIONS } from "@/features/time-tracker/constants";
-import { ActivityType, type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
-
-// Map ActivityType enum values to translation keys
-const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
-  [ActivityType.WORK]: "activityTypes.work",
-  [ActivityType.STUDY]: "activityTypes.study",
-  [ActivityType.CHARACTER]: "activityTypes.character",
-  [ActivityType.LISTENING]: "activityTypes.listening",
-  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
-  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
-  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
-};
+import { ACTIVITY_TYPE_OPTIONS, ACTIVITY_TYPE_TO_KEY } from "@/features/time-tracker/constants";
+import { type ActivityType as ActivityTypeType } from "@/features/time-tracker/types";
 
 interface SearchFiltersProps {
   filterType: "" | ActivityTypeType;

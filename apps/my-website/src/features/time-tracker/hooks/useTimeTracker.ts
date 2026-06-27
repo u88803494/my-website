@@ -104,7 +104,7 @@ export const useTimeTracker = (): UseTimeTrackerReturn => {
     error,
     getWeeklyRecords,
     isLoading: loading,
-    records: records.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()), // 按建立時間倒序
+    records: [...records].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()), // 按建立時間倒序
     statistics,
   };
 };

@@ -4,20 +4,10 @@ import { Calendar, Clock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useMemo } from "react";
 
-import { ActivityType, type ActivityType as ActivityTypeType, type TimeRecord } from "@/features/time-tracker/types";
+import { ACTIVITY_TYPE_TO_KEY } from "@/features/time-tracker/constants";
+import { ActivityType, type TimeRecord } from "@/features/time-tracker/types";
 
 import { formatMinutesToHours, getActivityTypeColor } from "../../utils/formatting";
-
-// Map ActivityType enum values to translation keys
-const ACTIVITY_TYPE_TO_KEY: Record<ActivityTypeType, string> = {
-  [ActivityType.WORK]: "activityTypes.work",
-  [ActivityType.STUDY]: "activityTypes.study",
-  [ActivityType.CHARACTER]: "activityTypes.character",
-  [ActivityType.LISTENING]: "activityTypes.listening",
-  [ActivityType.EXTRA_STUDY]: "activityTypes.extraStudy",
-  [ActivityType.EXTRA_CHARACTER]: "activityTypes.extraCharacter",
-  [ActivityType.EXTRA_LISTENING]: "activityTypes.extraListening",
-};
 
 interface DaySectionProps {
   date: Date;
@@ -142,7 +132,7 @@ const DaySection: React.FC<DaySectionProps> = ({ date, records }) => {
               {t("weeklyView.detailedRecords", { count: records.length })}
             </h4>
             <div className="max-h-32 space-y-1 overflow-y-auto">
-              {records
+              {[...records]
                 .sort((a, b) => a.startTime.localeCompare(b.startTime))
                 .map((record) => (
                   <div className="flex items-center justify-between text-xs" key={record.id}>
