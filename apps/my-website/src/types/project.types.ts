@@ -13,6 +13,7 @@ export interface ProjectDescriptionKeys {
 }
 
 export interface ProjectLink {
+  isInternal?: boolean;
   labelKey: string; // Translation key for label
   url: string;
 }

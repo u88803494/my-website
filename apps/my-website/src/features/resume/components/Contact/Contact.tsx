@@ -112,11 +112,11 @@ const Contact: React.FC<ContactProps> = ({ backgroundClass, sectionId }) => {
         >
           <div className="bg-base-100 border-base-content/10 mx-auto max-w-2xl rounded-xl border p-6">
             <p className="text-base-content/70 text-sm leading-relaxed">
-              <span dangerouslySetInnerHTML={{ __html: t.raw("lookingFor.position") }} />
+              <span>{t.rich("lookingFor.position", { strong: (chunks) => <strong>{chunks}</strong> })}</span>
               <br />
-              <span dangerouslySetInnerHTML={{ __html: t.raw("lookingFor.skills") }} />
+              <span>{t.rich("lookingFor.skills", { strong: (chunks) => <strong>{chunks}</strong> })}</span>
               <br />
-              <span dangerouslySetInnerHTML={{ __html: t.raw("lookingFor.responseTime") }} />
+              <span>{t.rich("lookingFor.responseTime", { strong: (chunks) => <strong>{chunks}</strong> })}</span>
             </p>
           </div>
         </motion.div>

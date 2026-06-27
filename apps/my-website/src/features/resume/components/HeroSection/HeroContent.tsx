@@ -34,32 +34,36 @@ const HeroContent = () => {
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          dangerouslySetInnerHTML={{ __html: t.raw("intro1") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.7, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        />
+        >
+          {t.rich("intro1", { b: (chunks) => <b>{chunks}</b> })}
+        </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          dangerouslySetInnerHTML={{ __html: t.raw("intro2") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 0.9, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        />
+        >
+          {t.rich("intro2", { b: (chunks) => <b>{chunks}</b> })}
+        </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          dangerouslySetInnerHTML={{ __html: t.raw("intro3") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 1.1, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        />
+        >
+          {t.rich("intro3", { b: (chunks) => <b>{chunks}</b> })}
+        </motion.p>
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          dangerouslySetInnerHTML={{ __html: t.raw("intro4") }}
           initial={{ opacity: 0, y: 30 }}
           transition={{ delay: 1.3, duration: 0.6 }}
           whileHover={{ x: 5 }}
-        />
+        >
+          {t.rich("intro4", { b: (chunks) => <b>{chunks}</b> })}
+        </motion.p>
       </div>
 
       {/* CTA Buttons */}

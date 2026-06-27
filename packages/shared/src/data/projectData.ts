@@ -19,7 +19,7 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/screenshots/henry-lee-hero-section.png",
     links: [
-      { labelKey: "viewProject", url: "https://henryleelab.com" },
+      { isInternal: true, labelKey: "viewProject", url: "/" },
       {
         labelKey: "readArticle",
         url: "https://medium.com/@hugh-program-learning-diary-js/next-js-ai-一天搞定個人網站-0dddd23f4db3",
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/ai-analyzer.png",
     links: [
-      { labelKey: "viewProject", url: "https://henryleelab.com/ai-analyzer" },
+      { isInternal: true, labelKey: "viewProject", url: "/ai-analyzer" },
       {
         labelKey: "readArticle",
         url: "https://hugh-program-learning-diary-js.medium.com/ai-溝通老是失敗-我花不到三小時-做了一個-ai-的-ai-當解方-880cecf604c4",
@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
       introKey: "aiDictionary.intro",
     },
     imageUrl: "/images/projects/ai-dictionary.png",
-    links: [{ labelKey: "viewProject", url: "https://henryleelab.com/ai-dictionary" }],
+    links: [{ isInternal: true, labelKey: "viewProject", url: "/ai-dictionary" }],
     techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
     titleKey: "aiDictionary.title",
   },

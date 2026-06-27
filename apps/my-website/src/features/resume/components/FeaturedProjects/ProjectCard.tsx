@@ -9,6 +9,7 @@ import React from "react";
 import { SiGithub } from "react-icons/si";
 
 import { TechStack } from "@/components/shared";
+import { Link } from "@/i18n/navigation";
 
 interface ProjectCardProps {
   project: Project;
@@ -58,6 +59,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <div className="mt-auto flex flex-wrap gap-2">
           {project.links.map((link, idx: number) => {
             const label = t(link.labelKey);
+            const linkContent = (
+              <>
+                {link.labelKey === "viewProject" && <ExternalLink className="h-4 w-4" />}
+                {link.labelKey === "viewWebsite" && <ExternalLink className="h-4 w-4" />}
+                {link.labelKey === "viewCode" && <SiGithub className="h-4 w-4" />}
+                {(link.labelKey === "readArticle" || link.labelKey === "readArticle2") && (
+                  <FileText className="h-4 w-4" />
+                )}
+                {label}
+              </>
+            );
+
+            if (link.isInternal) {
+              return (
+                <Link className="btn btn-outline flex items-center gap-2 px-4 py-2" href={link.url} key={idx}>
+                  {linkContent}
+                </Link>
+              );
+            }
+
             return (
               <motion.a
                 className="btn btn-outline flex items-center gap-2 px-4 py-2"
@@ -68,13 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {link.labelKey === "viewProject" && <ExternalLink className="h-4 w-4" />}
-                {link.labelKey === "viewWebsite" && <ExternalLink className="h-4 w-4" />}
-                {link.labelKey === "viewCode" && <SiGithub className="h-4 w-4" />}
-                {(link.labelKey === "readArticle" || link.labelKey === "readArticle2") && (
-                  <FileText className="h-4 w-4" />
-                )}
-                {label}
+                {linkContent}
               </motion.a>
             );
           })}

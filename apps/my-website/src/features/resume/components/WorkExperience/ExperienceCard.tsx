@@ -52,7 +52,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
                 <CheckCircle2 className="text-secondary mt-0.5 h-5 w-5 shrink-0" />
                 <p>
                   <strong className="text-base-content font-bold">{t(achievement.titleKey)}：</strong>
-                  <span dangerouslySetInnerHTML={{ __html: t.raw(achievement.descriptionKey) }} />
+                  <span>{t.rich(achievement.descriptionKey, { strong: (chunks) => <strong>{chunks}</strong> })}</span>
                 </p>
               </li>
             ))}

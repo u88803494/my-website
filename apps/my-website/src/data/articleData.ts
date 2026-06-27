@@ -25,7 +25,7 @@ import type { Article } from "@/types/article.types";
 export const articleList: Article[] = [
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -34,7 +34,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -43,7 +43,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -52,7 +52,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -61,7 +61,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -70,7 +70,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -79,7 +79,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -88,7 +88,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -97,7 +97,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -106,7 +106,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -115,7 +115,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -124,7 +124,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -133,7 +133,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -142,7 +142,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -151,7 +151,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
@@ -160,7 +160,7 @@ export const articleList: Article[] = [
   },
   {
     description: "請手動更新文章描述",
-    publishedDate: "2025-12-30",
+    publishedDate: "2026-02-20",
     readTime: "5 min read",
     subtitle: "",
     tags: ["Medium"],
