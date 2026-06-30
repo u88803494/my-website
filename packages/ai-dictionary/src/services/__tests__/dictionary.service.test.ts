@@ -143,6 +143,32 @@ describe("analyzeWord", () => {
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
   });
 
+  it("falls back when the primary model has a model-specific access error", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": new Error(
+        "User location is not supported for this model or access is denied",
+      ),
+      "gemini-2.5-flash-lite": validDictionaryResponse,
+    });
+
+    const result = await analyzeWord("學習", "test-api-key");
+
+    expect(result).toEqual(validDictionaryResponse);
+    expect(getGenerativeModel).toHaveBeenCalledTimes(2);
+  });
+
+  it("fails fast when the API key is invalid", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": new Error("API key not valid"),
+      "gemini-2.5-flash-lite": validDictionaryResponse,
+    });
+
+    await expect(analyzeWord("學習", "test-api-key")).rejects.toThrow(
+      "AI 字典服務設定異常，請聯繫管理員。",
+    );
+    expect(getGenerativeModel).toHaveBeenCalledTimes(1);
+  });
+
   it("throws a user-friendly error when all models fail", async () => {
     setupModelResponses({
       "gemini-3.1-flash-lite": new Error("RESOURCE_EXHAUSTED: quota exceeded"),

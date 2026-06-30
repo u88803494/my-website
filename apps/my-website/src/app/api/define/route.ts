@@ -6,6 +6,10 @@ import { env } from "@/env";
 
 const logger = createLogger({ context: "api/define" });
 
+const isClientInputError = (message: string): boolean => {
+  return message === "請提供有效的中文詞彙" || message.startsWith("查詢詞彙過長");
+};
+
 // Handle unsupported HTTP methods
 export async function GET() {
   logger.warn({ method: "GET" }, "Unsupported HTTP method");
@@ -27,6 +31,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     logError("Word analysis failed", error, { route: "/api/define" });
     const errorMessage = error instanceof Error ? error.message : "未知錯誤";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    const status = isClientInputError(errorMessage) ? 400 : 500;
+
+    return NextResponse.json({ error: errorMessage }, { status });
   }
 }

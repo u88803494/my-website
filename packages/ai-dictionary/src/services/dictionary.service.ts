@@ -33,6 +33,17 @@ const getErrorMessage = (error: unknown): string => {
   return error instanceof Error ? error.message : String(error);
 };
 
+const isFatalAuthError = (message: string): boolean => {
+  const lowerMessage = message.toLowerCase();
+
+  return (
+    lowerMessage.includes("api key not valid") ||
+    lowerMessage.includes("invalid api key") ||
+    lowerMessage.includes("api_key_invalid") ||
+    lowerMessage.includes("authentication failed")
+  );
+};
+
 const toDictionaryAttemptError = (
   model: string,
   error: unknown,
@@ -48,10 +59,14 @@ const toDictionaryAttemptError = (
   }
 
   const parsedError = parseAIErrorMessage(message);
+  const type =
+    parsedError.type === "auth_error" && !isFatalAuthError(message)
+      ? "model_unavailable"
+      : parsedError.type;
 
   return {
     model,
-    type: parsedError.type,
+    type,
     message,
   };
 };
