@@ -1,7 +1,14 @@
 // Legacy constants (for backwards compatibility)
+export const GEMINI_3_1_FLASH_LITE = "gemini-3.1-flash-lite";
 export const GEMINI_2_5_FLASH_LITE = "gemini-2.5-flash-lite";
 export const GEMINI_2_5_PRO = "gemini-2.5-pro";
 export const GEMINI_2_5_FLASH = "gemini-2.5-flash";
+
+export const DICTIONARY_GEMINI_FALLBACK_MODELS = [
+  GEMINI_3_1_FLASH_LITE,
+  GEMINI_2_5_FLASH_LITE,
+  GEMINI_2_5_FLASH,
+] as const;
 
 // AI Chat Model Configuration
 // Last updated: 2025-01-05
