@@ -33,14 +33,21 @@ const getErrorMessage = (error: unknown): string => {
   return error instanceof Error ? error.message : String(error);
 };
 
-const isFatalAuthError = (message: string): boolean => {
+const isModelAccessError = (message: string, model: string): boolean => {
   const lowerMessage = message.toLowerCase();
+  const lowerModel = model.toLowerCase();
+  const mentionsModel =
+    lowerMessage.includes(lowerModel) || lowerMessage.includes("model");
 
   return (
-    lowerMessage.includes("api key not valid") ||
-    lowerMessage.includes("invalid api key") ||
-    lowerMessage.includes("api_key_invalid") ||
-    lowerMessage.includes("authentication failed")
+    mentionsModel &&
+    (lowerMessage.includes("access denied") ||
+      lowerMessage.includes("denied access") ||
+      lowerMessage.includes("permission denied") ||
+      lowerMessage.includes("not available") ||
+      lowerMessage.includes("not supported") ||
+      lowerMessage.includes("unsupported") ||
+      lowerMessage.includes("location"))
   );
 };
 
@@ -60,7 +67,7 @@ const toDictionaryAttemptError = (
 
   const parsedError = parseAIErrorMessage(message);
   const type =
-    parsedError.type === "auth_error" && !isFatalAuthError(message)
+    parsedError.type === "auth_error" && isModelAccessError(message, model)
       ? "model_unavailable"
       : parsedError.type;
 

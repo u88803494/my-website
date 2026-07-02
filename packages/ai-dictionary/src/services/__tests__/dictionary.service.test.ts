@@ -169,6 +169,18 @@ describe("analyzeWord", () => {
     expect(getGenerativeModel).toHaveBeenCalledTimes(1);
   });
 
+  it("fails fast for generic unauthorized errors", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": new Error("401 Unauthorized access"),
+      "gemini-2.5-flash-lite": validDictionaryResponse,
+    });
+
+    await expect(analyzeWord("學習", "test-api-key")).rejects.toThrow(
+      "AI 字典服務設定異常，請聯繫管理員。",
+    );
+    expect(getGenerativeModel).toHaveBeenCalledTimes(1);
+  });
+
   it("throws a user-friendly error when all models fail", async () => {
     setupModelResponses({
       "gemini-3.1-flash-lite": new Error("RESOURCE_EXHAUSTED: quota exceeded"),

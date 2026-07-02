@@ -18,7 +18,20 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { word } = await request.json();
+    let body: { word?: unknown };
+
+    try {
+      body = (await request.json()) as { word?: unknown };
+    } catch {
+      return NextResponse.json({ error: "請提供有效的 JSON 請求內容" }, { status: 400 });
+    }
+
+    const { word } = body;
+
+    if (typeof word !== "string") {
+      throw new Error("請提供有效的中文詞彙");
+    }
+
     logger.info({ word }, "Word analysis request received");
 
     // Get validated API key from env
