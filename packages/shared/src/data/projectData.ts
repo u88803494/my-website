@@ -18,9 +18,10 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/screenshots/henry-lee-hero-section.png",
     links: [
-      { label: "預覽網站", url: "https://henryleelab.com" },
+      { label: "預覽網站", type: "live", url: "https://henryleelab.com" },
       {
         label: "實作文章",
+        type: "article",
         url: "https://medium.com/@hugh-program-learning-diary-js/next-js-ai-一天搞定個人網站-0dddd23f4db3",
       },
     ],
@@ -42,9 +43,10 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/ai-analyzer.png",
     links: [
-      { label: "預覽網站", url: "https://henryleelab.com/ai-analyzer" },
+      { label: "預覽網站", type: "live", url: "https://henryleelab.com/ai-analyzer" },
       {
         label: "實作文章",
+        type: "article",
         url: "https://hugh-program-learning-diary-js.medium.com/ai-溝通老是失敗-我花不到三小時-做了一個-ai-的-ai-當解方-880cecf604c4",
       },
     ],
@@ -65,7 +67,7 @@ export const PROJECTS: Project[] = [
         "運用 Google Gemini AI 技術，讓中文詞彙的含義、字源、例句等多維度資訊一站式查詢，並結合學習卡片互動，提升學習效率。",
     },
     imageUrl: "/images/projects/ai-dictionary.png",
-    links: [{ label: "預覽網站", url: "https://henryleelab.com/ai-dictionary" }],
+    links: [{ label: "預覽網站", type: "live", url: "https://henryleelab.com/ai-dictionary" }],
     techStack: ["Next.js", "TypeScript", "Google Gemini API", "React Query", "Tailwind CSS"],
     title: "AI 智能中文字典",
   },
@@ -83,13 +85,15 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/new-dictionary.png",
     links: [
-      { label: "預覽網站", url: "https://dictionary-u88803494.vercel.app/" },
+      { label: "預覽網站", type: "live", url: "https://dictionary-u88803494.vercel.app/" },
       {
         label: "實作文章 1",
+        type: "article",
         url: "https://hugh-program-learning-diary-js.medium.com/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E5%AD%97%E5%85%B8%E7%B6%B2%E7%AB%99-%E5%A4%A7%E7%B6%B1-9ba7f20d5c68",
       },
       {
         label: "實作文章 2",
+        type: "article",
         url: "https://hugh-program-learning-diary-js.medium.com/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%80%8B%E5%AD%97%E5%85%B8%E7%B6%B2%E7%AB%99-%E9%96%8B%E5%A7%8B%E5%89%8D%E6%A7%8B%E6%80%9D-f58b4b8c12b2",
       },
     ],
@@ -110,8 +114,8 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/tzuchi-shop.png",
     links: [
-      { label: "預覽網站", url: "https://buddhist-shop.vercel.app/" },
-      { label: "GitHub", url: `${SOCIAL_LINKS.GITHUB}/buddhistShop` },
+      { label: "預覽網站", type: "live", url: "https://buddhist-shop.vercel.app/" },
+      { label: "GitHub", type: "source", url: `${SOCIAL_LINKS.GITHUB}/buddhistShop` },
     ],
     techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "AI 輔助開發"],
     title: "慈濟產品展示靜態網站",
@@ -131,8 +135,12 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/react-blog.png",
     links: [
-      { label: "預覽網站", url: "https://u88803494.github.io/react_blog/#/posts" },
-      { label: "GitHub 介紹", url: `${SOCIAL_LINKS.GITHUB}/react_blog?tab=readme-ov-file#react-spa-blog` },
+      { label: "預覽網站", type: "live", url: "https://u88803494.github.io/react_blog/#/posts" },
+      {
+        label: "GitHub 介紹",
+        type: "source",
+        url: `${SOCIAL_LINKS.GITHUB}/react_blog?tab=readme-ov-file#react-spa-blog`,
+      },
     ],
     techStack: ["React", "Redux", "Firebase Auth", "Bootstrap"],
     title: "React 部落格系統 (學習專案)",
@@ -151,9 +159,10 @@ export const PROJECTS: Project[] = [
     },
     imageUrl: "/images/projects/arisan-website.png",
     links: [
-      { label: "官網連結", url: "https://www.arisan.io/#/clio" },
+      { label: "官網連結", type: "live", url: "https://www.arisan.io/#/clio" },
       {
         label: "實作心得",
+        type: "article",
         url: "https://hugh-program-learning-diary-js.medium.com/%E8%BD%89%E8%81%B7%E5%85%A8%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%AB%E4%B8%89%E5%80%8B%E6%9C%88%E7%9A%84%E5%BF%83%E5%BE%97-%E6%8F%90%E6%97%A9%E8%84%AB%E9%9B%A2%E8%A8%93%E7%B7%B4%E6%9C%9F-1ce9213d0b26",
       },
     ],

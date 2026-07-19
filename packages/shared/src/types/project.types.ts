@@ -12,7 +12,10 @@ export interface ProjectDescription {
   intro: string;
 }
 
+export type ProjectLinkType = "article" | "live" | "source";
+
 export interface ProjectLink {
   label: string;
+  type: ProjectLinkType;
   url: string;
 }
