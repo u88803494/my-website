@@ -5,10 +5,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import React from "react";
 
+import type { MediumArticlesContent } from "../../types/resumeContent.types";
 import ArticleCard from "./ArticleCard";
 
 interface CarouselSectionProps {
   articles: Article[];
+  content: MediumArticlesContent;
   currentSlide: number;
   getCurrentSlideItems: () => Article[];
   goToSlide: (index: number) => void;
@@ -22,6 +24,7 @@ interface CarouselSectionProps {
 
 const CarouselSection: React.FC<CarouselSectionProps> = ({
   articles,
+  content,
   currentSlide,
   getCurrentSlideItems,
   goToSlide,
@@ -45,7 +48,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
       {/* 標題和控制 */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h3 className="text-base-content text-xl font-semibold">⭐ 精選文章</h3>
+          <h3 className="text-base-content text-xl font-semibold">{content.featuredHeading}</h3>
         </div>
 
         {/* 播放控制 */}
@@ -54,16 +57,27 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             <button
               className="btn btn-circle btn-sm btn-ghost"
               onClick={() => setIsPlaying(!isPlaying)}
-              title={isPlaying ? "暫停" : "播放"}
+              aria-label={isPlaying ? content.pauseLabel : content.playLabel}
+              title={isPlaying ? content.pauseLabel : content.playLabel}
             >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </button>
 
-            <button className="btn btn-circle btn-sm btn-ghost" onClick={prevSlide} title="上一頁">
+            <button
+              aria-label={content.previousLabel}
+              className="btn btn-circle btn-sm btn-ghost"
+              onClick={prevSlide}
+              title={content.previousLabel}
+            >
               <ChevronLeft className="h-4 w-4" />
             </button>
 
-            <button className="btn btn-circle btn-sm btn-ghost" onClick={nextSlide} title="下一頁">
+            <button
+              aria-label={content.nextLabel}
+              className="btn btn-circle btn-sm btn-ghost"
+              onClick={nextSlide}
+              title={content.nextLabel}
+            >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
@@ -94,7 +108,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                   duration: 0.4,
                 }}
               >
-                <ArticleCard article={article} />
+                <ArticleCard article={article} content={content} />
               </motion.div>
             ))}
           </motion.div>
@@ -106,6 +120,8 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         <div className="mt-8 flex justify-center gap-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <motion.button
+              aria-label={content.slideLabelTemplate.replace("{number}", String(index + 1))}
+              aria-pressed={index === currentSlide}
               className={`h-2 w-2 rounded-full transition-all duration-300 ${
                 index === currentSlide ? "bg-primary w-8" : "bg-base-300 hover:bg-base-content/30"
               }`}
