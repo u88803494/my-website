@@ -1,13 +1,18 @@
 "use client";
 
-import { routes } from "@packages/shared/constants";
+import type { NavRoute } from "@packages/shared/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  contactLabel: string;
+  routes: NavRoute[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ contactLabel, routes }) => {
   const pathname = usePathname();
 
   const scrollToContact = () => {
@@ -43,7 +48,7 @@ const Navbar: React.FC = () => {
 
       <div className="navbar-end">
         <button className="btn btn-primary btn-md" onClick={scrollToContact}>
-          聯絡我
+          {contactLabel}
         </button>
       </div>
     </nav>
