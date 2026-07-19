@@ -1,4 +1,4 @@
-import { type ComponentType, type ReactNode, type SVGProps } from "react";
+import React, { type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
   SiExpress,
   SiGithub,
@@ -27,6 +27,7 @@ export interface Skill {
 }
 
 export interface SkillCategory {
+  id: "ai-development" | "backend" | "frontend-architecture" | "ui-tools";
   level: "expert" | "familiar" | "proficient";
   skills: Skill[];
   title: string;
@@ -34,6 +35,7 @@ export interface SkillCategory {
 
 export const skillData: SkillCategory[] = [
   {
+    id: "ai-development",
     level: "expert",
     skills: [
       { icon: icon(SiVercel), name: "Vercel AI SDK" },
@@ -44,6 +46,7 @@ export const skillData: SkillCategory[] = [
     title: "AI 應用開發",
   },
   {
+    id: "frontend-architecture",
     level: "expert",
     skills: [
       { icon: icon(SiNextdotjs), name: "Next.js 15" },
@@ -55,6 +58,7 @@ export const skillData: SkillCategory[] = [
     title: "現代前端架構",
   },
   {
+    id: "ui-tools",
     level: "proficient",
     skills: [
       { icon: icon(SiTailwindcss), name: "Tailwind CSS / DaisyUI" },
@@ -66,6 +70,7 @@ export const skillData: SkillCategory[] = [
     title: "UI / 開發工具",
   },
   {
+    id: "backend",
     level: "familiar",
     skills: [
       { icon: icon(SiExpress), name: "Node.js / Express" },

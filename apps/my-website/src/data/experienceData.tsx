@@ -1,4 +1,5 @@
 import { type Experience } from "@packages/shared/types";
+import React from "react";
 
 const experiences: Experience[] = [
   {
