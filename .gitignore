@@ -47,3 +47,7 @@ next-env.d.ts
 
 # claude ai
 .claude/
+
+# local AI tooling and package-manager caches
+.codex/
+.pnpm-store/
