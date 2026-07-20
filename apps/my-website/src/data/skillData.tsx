@@ -1,4 +1,4 @@
-import React, { type ComponentType, type ReactNode, type SVGProps } from "react";
+import { type ComponentType, type ReactNode, type SVGProps } from "react";
 import {
   SiExpress,
   SiGithub,
