@@ -6,7 +6,7 @@ import { NotFoundFeature } from "@/features/not-found";
 
 const GlobalNotFoundPage = () => {
   return (
-    <RootDocument chrome={globalEnglishSiteChrome} documentLocale="zh-Hant">
+    <RootDocument chrome={globalEnglishSiteChrome} documentLocale="zh-Hant" navigationMode="document">
       <NotFoundFeature />
     </RootDocument>
   );

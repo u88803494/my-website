@@ -6,18 +6,20 @@ import ConditionalFooter from "@/components/shared/ConditionalFooter";
 import { Navbar } from "@/components/shared/Navbar";
 import NProgressBar from "@/components/shared/NProgressBar";
 import type { SiteChromeContent } from "@/components/shared/siteChromeContent";
+import type { NavigationMode } from "@/types/route.types";
 
 interface SiteShellProps {
   children: React.ReactNode;
   chrome: SiteChromeContent;
+  navigationMode?: NavigationMode;
 }
 
-const SiteShell: React.FC<SiteShellProps> = ({ children, chrome }) => {
+const SiteShell: React.FC<SiteShellProps> = ({ children, chrome, navigationMode = "client" }) => {
   return (
     <>
       <QueryProvider>
         <div lang={chrome.locale}>
-          <Navbar contactLabel={chrome.contactLabel} routes={chrome.routes} />
+          <Navbar contactLabel={chrome.contactLabel} navigationMode={navigationMode} routes={chrome.routes} />
         </div>
         <NProgressBar />
         <main className="flex-1 overflow-x-hidden pt-16">{children}</main>

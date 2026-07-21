@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 import { routes } from "@/constants/routes";
 
@@ -19,11 +18,15 @@ const QuickNavigation: React.FC = () => {
       <h3 className="text-base-content mb-4 text-lg font-semibold">快速導航</h3>
       <div className="flex flex-wrap justify-center gap-3">
         {navigationItems.map((item) => (
-          <Link href={item.href} key={item.href}>
-            <motion.button className="btn btn-ghost btn-sm" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              {item.label}
-            </motion.button>
-          </Link>
+          <motion.a
+            className="btn btn-ghost btn-sm"
+            href={item.href}
+            key={item.href}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {item.label}
+          </motion.a>
         ))}
       </div>
     </motion.div>
