@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { ArrowLeft, Home } from "lucide-react";
-import Link from "next/link";
 
 const NotFoundHero: React.FC = () => {
   return (
@@ -50,6 +49,7 @@ const NotFoundHero: React.FC = () => {
           <motion.button
             className="btn btn-primary btn-lg group relative overflow-hidden shadow-md transition-all hover:shadow-xl"
             onClick={() => window.history.back()}
+            type="button"
             whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)", scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -63,16 +63,15 @@ const NotFoundHero: React.FC = () => {
             />
           </motion.button>
 
-          <Link href="/">
-            <motion.button
-              className="btn btn-outline btn-lg shadow-md transition-all hover:shadow-xl"
-              whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)", scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Home className="mr-2 h-5 w-5" />
-              回到首頁
-            </motion.button>
-          </Link>
+          <motion.a
+            className="btn btn-outline btn-lg shadow-md transition-all hover:shadow-xl"
+            href="/"
+            whileHover={{ boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)", scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Home className="mr-2 h-5 w-5" />
+            回到首頁
+          </motion.a>
         </motion.div>
       </div>
     </div>

@@ -7,12 +7,15 @@ import { Calendar, Clock, ExternalLink, Eye, Heart } from "lucide-react";
 import React from "react";
 import { SiMedium } from "react-icons/si";
 
+import type { MediumArticlesContent } from "../../types/resumeContent.types";
+
 interface ArticleCardProps {
   article: Article;
+  content: MediumArticlesContent;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
-  const formattedDate = new Date(article.publishedDate).toLocaleDateString("zh-TW", {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, content }) => {
+  const formattedDate = new Date(article.publishedDate).toLocaleDateString(content.dateLocale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -39,7 +42,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         {/* Header with Medium icon */}
         <div className="mb-3 flex items-center gap-2">
           <SiMedium className="h-5 w-5 text-gray-600" />
-          <span className="text-sm text-gray-500">Medium Article</span>
+          <span className="text-sm text-gray-500">{content.articleTypeLabel}</span>
         </div>
 
         {/* Title and Subtitle */}
@@ -109,7 +112,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
             whileTap={{ scale: 0.95 }}
           >
             <ExternalLink className="h-4 w-4" />
-            閱讀文章
+            {content.readArticleLabel}
           </motion.a>
         </div>
       </div>

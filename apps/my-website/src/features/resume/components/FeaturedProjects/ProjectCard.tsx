@@ -11,9 +11,10 @@ import { TechStack } from "@/components/shared";
 
 interface ProjectCardProps {
   project: Project;
+  techStackLabel: string;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, techStackLabel }) => {
   return (
     <motion.div
       className="card bg-base-100 border-base-200/50 hover:border-base-200 group h-full border shadow-xl transition-colors duration-200"
@@ -51,9 +52,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             </li>
           ))}
         </ul>
-        <TechStack className="mt-4" techStack={project.techStack} />
+        <TechStack className="mt-4" label={techStackLabel} techStack={project.techStack} />
         <div className="mt-auto flex flex-wrap gap-2">
-          {project.links.map((link: { label: string; url: string }, idx: number) => (
+          {project.links.map((link, idx) => (
             <motion.a
               className="btn btn-outline flex items-center gap-2 px-4 py-2"
               href={link.url}
@@ -63,9 +64,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {link.label === "預覽網站" && <ExternalLink className="h-4 w-4" />}
-              {link.label.includes("GitHub") && <SiGithub className="h-4 w-4" />}
-              {(link.label.includes("文章") || link.label.includes("心得")) && <FileText className="h-4 w-4" />}
+              {link.type === "live" && <ExternalLink className="h-4 w-4" />}
+              {link.type === "source" && <SiGithub className="h-4 w-4" />}
+              {link.type === "article" && <FileText className="h-4 w-4" />}
               {link.label}
             </motion.a>
           ))}

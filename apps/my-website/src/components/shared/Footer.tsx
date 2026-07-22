@@ -1,6 +1,12 @@
 import ContactLinks from "@/components/shared/ContactLinks";
+import type { FooterContent } from "@/components/shared/siteChromeContent";
 
-const Footer = () => {
+interface FooterProps {
+  content: FooterContent;
+  locale: "en" | "zh-Hant";
+}
+
+const Footer: React.FC<FooterProps> = ({ content, locale }) => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -11,10 +17,8 @@ const Footer = () => {
           {/* 個人資訊區塊 */}
           <div className="text-center">
             <h3 className="mb-2 text-2xl font-bold">Henry Lee</h3>
-            <p className="text-base-content/70 text-lg">前端工程師</p>
-            <p className="text-base-content/60 mt-1 max-w-md text-sm">
-              專精於 Next.js、React、TypeScript 開發，致力於打造高效能、高可維護性的網頁應用
-            </p>
+            <p className="text-base-content/70 text-lg">{content.role}</p>
+            <p className="text-base-content/60 mt-1 max-w-md text-sm">{content.summary}</p>
           </div>
 
           {/* 分隔線 */}
@@ -22,9 +26,9 @@ const Footer = () => {
 
           {/* 社交連結 */}
           <div className="flex flex-col items-center space-y-4">
-            <p className="text-base-content/70 font-medium">讓我們保持聯繫</p>
+            <p className="text-base-content/70 font-medium">{content.connectLabel}</p>
             <div className="flex justify-center gap-6">
-              <ContactLinks variant="circle" />
+              <ContactLinks locale={locale} variant="circle" />
             </div>
           </div>
 

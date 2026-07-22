@@ -20,27 +20,47 @@ const contacts = CONTACT_LINKS.map((link: ContactLink) => ({
 
 interface ContactLinksProps {
   className?: string;
+  locale?: "en" | "zh-Hant";
   variant?: "circle" | "link";
 }
 
-const ContactLinks = ({ className = "", variant = "circle" }: ContactLinksProps) => {
+const englishEmailHref = `mailto:${
+  CONTACT_LINKS.find(({ key }) => key === "email")
+    ?.href.split("mailto:")[1]
+    ?.split("?")[0]
+}?subject=${encodeURIComponent("I'd like to discuss your work")}&body=${encodeURIComponent("Hi Henry,\n\nI came across your portfolio and would like to discuss your experience and potential opportunities.\n\nBest regards,")}`;
+
+const englishLabels = {
+  email: { href: englishEmailHref, label: "Email", tooltip: "Email me directly" },
+  github: { label: "GitHub", tooltip: "View my code on GitHub" },
+  linkedin: { label: "LinkedIn", tooltip: "View my professional profile" },
+  medium: { label: "Medium", tooltip: "Read my technical articles" },
+  resume: { label: "Resume", tooltip: "View my complete resume and experience" },
+} as const;
+
+const ContactLinks = ({ className = "", locale = "zh-Hant", variant = "circle" }: ContactLinksProps) => {
   const baseClass = variant === "circle" ? "btn btn-ghost btn-circle" : "link link-hover";
 
   return (
     <>
-      {contacts.map(({ href, icon, label, tooltip }) => (
-        <a
-          aria-label={label}
-          className={`${baseClass} ${className} tooltip tooltip-custom tooltip-top`.trim()}
-          data-tip={tooltip}
-          href={href}
-          key={label}
-          rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-          target={href.startsWith("http") ? "_blank" : undefined}
-        >
-          {icon}
-        </a>
-      ))}
+      {contacts.map(({ href, icon, key, label, tooltip }) => {
+        const localized = locale === "en" ? englishLabels[key as keyof typeof englishLabels] : { label, tooltip };
+        const localizedHref = "href" in localized ? localized.href : href;
+
+        return (
+          <a
+            aria-label={localized.label}
+            className={`${baseClass} ${className} tooltip tooltip-custom tooltip-top`.trim()}
+            data-tip={localized.tooltip}
+            href={localizedHref}
+            key={key}
+            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+            target={href.startsWith("http") ? "_blank" : undefined}
+          >
+            {icon}
+          </a>
+        );
+      })}
     </>
   );
 };

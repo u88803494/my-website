@@ -8,10 +8,12 @@ import Image from "next/image";
 import { getAchievementGridClass } from "../../utils/gridUtils";
 
 interface ExperienceCardProps {
+  achievementHeading: string;
+  achievementSeparator: string;
   experience: Experience;
 }
 
-const ExperienceCard = ({ experience }: ExperienceCardProps) => {
+const ExperienceCard = ({ achievementHeading, achievementSeparator, experience }: ExperienceCardProps) => {
   return (
     <motion.div
       className="card bg-base-100 shadow-xl transition-shadow duration-300 hover:shadow-2xl"
@@ -38,7 +40,7 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
           </div>
         </div>
         <div className="mb-6">
-          <h4 className="text-base-content mb-3 text-lg font-semibold">主要成就</h4>
+          <h4 className="text-base-content mb-3 text-lg font-semibold">{achievementHeading}</h4>
           <ul className={`grid gap-3 ${getAchievementGridClass(experience.achievements.length)}`}>
             {experience.achievements.map((achievement, achievementIndex) => (
               <li
@@ -47,7 +49,10 @@ const ExperienceCard = ({ experience }: ExperienceCardProps) => {
               >
                 <CheckCircle2 className="text-secondary mt-0.5 h-5 w-5 shrink-0" />
                 <p>
-                  <strong className="text-base-content font-bold">{achievement.title}：</strong>
+                  <strong className="text-base-content font-bold">
+                    {achievement.title}
+                    {achievementSeparator}
+                  </strong>
                   {achievement.description}
                 </p>
               </li>

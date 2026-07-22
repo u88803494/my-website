@@ -4,7 +4,11 @@ import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const HeroImage = () => {
+interface HeroImageProps {
+  alt: string;
+}
+
+const HeroImage: React.FC<HeroImageProps> = ({ alt }) => {
   return (
     <motion.div
       animate={{ opacity: 1, rotateY: 0, scale: 1 }}
@@ -27,7 +31,7 @@ const HeroImage = () => {
         }}
       >
         <Image
-          alt="Henry Lee's photo"
+          alt={alt}
           className="h-full w-full object-cover object-top"
           height={256}
           priority

@@ -7,19 +7,19 @@ import { cn } from "@packages/shared/utils";
 import { motion } from "framer-motion";
 import React from "react";
 
+import type { MediumArticlesContent } from "../../types/resumeContent.types";
 import CarouselSection from "./CarouselSection";
 import FeaturedSection from "./FeaturedSection";
 import SectionHeader from "./SectionHeader";
 import { useCarousel } from "./useCarousel";
 
 interface MediumArticlesProps {
-  /** 背景樣式，預設為 'bg-base-200' */
   backgroundClass: string;
-  /** section id，預設為 'medium-articles' */
+  content: MediumArticlesContent;
   sectionId: string;
 }
 
-const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectionId }) => {
+const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, content, sectionId }) => {
   // 使用輪播 hook 處理精選文章
   const carousel = useCarousel({
     autoplayInterval: 4000,
@@ -29,13 +29,13 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
   return (
     <section className={cn("py-20", backgroundClass)} id={sectionId}>
       <div className="container mx-auto px-4">
-        <SectionHeader />
+        <SectionHeader content={content} />
 
         {/* 最新文章區塊 */}
-        <FeaturedSection articles={latestArticles} />
+        <FeaturedSection articles={latestArticles} content={content} />
 
         {/* 精選文章區塊 */}
-        <CarouselSection articles={articles} {...carousel} />
+        <CarouselSection articles={articles} content={content} {...carousel} />
 
         {/* 前往 Medium 文章頁面 */}
         <motion.div
@@ -53,7 +53,7 @@ const MediumArticles: React.FC<MediumArticlesProps> = ({ backgroundClass, sectio
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            前往我的 Medium 文章頁面
+            {content.mediumCta}
           </motion.a>
         </motion.div>
       </div>

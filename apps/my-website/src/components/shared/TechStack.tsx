@@ -2,6 +2,7 @@ import React from "react";
 
 interface TechStackProps {
   className?: string;
+  label?: string;
   showLabel?: boolean;
   size?: "lg" | "md" | "sm";
   techStack: string[];
@@ -10,6 +11,7 @@ interface TechStackProps {
 
 const TechStack: React.FC<TechStackProps> = ({
   className = "",
+  label = "技術棧",
   showLabel = true,
   size = "md",
   techStack,
@@ -19,7 +21,7 @@ const TechStack: React.FC<TechStackProps> = ({
 
   return (
     <div className={className}>
-      {showLabel && <span className="mb-2 block text-sm font-semibold text-gray-600">技術棧</span>}
+      {showLabel && <span className="mb-2 block text-sm font-semibold text-gray-600">{label}</span>}
       <div className="flex flex-wrap gap-2">
         {techStack.map((tech, idx) => (
           <div className={`badge badge-${variant} badge-outline ${badgeSize}`} key={idx}>

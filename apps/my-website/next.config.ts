@@ -6,6 +6,10 @@ import type { NextConfig } from "next";
  * @see https://nextjs.org/docs/app/api-reference/next-config-js
  */
 const nextConfig: NextConfig = {
+  experimental: {
+    globalNotFound: true,
+  },
+
   /**
    * Transpile workspace packages for proper React Context sharing
    * Required for monorepo packages to work correctly with React Query

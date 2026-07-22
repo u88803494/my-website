@@ -3,13 +3,15 @@
 import { type Article } from "@packages/shared/types";
 import { motion } from "framer-motion";
 
+import type { MediumArticlesContent } from "../../types/resumeContent.types";
 import ArticleCard from "./ArticleCard";
 
 interface FeaturedSectionProps {
   articles: Article[];
+  content: MediumArticlesContent;
 }
 
-const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
+const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles, content }) => {
   if (articles.length === 0) return null;
 
   return (
@@ -21,7 +23,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
       whileInView={{ opacity: 1, y: 0 }}
     >
       <div className="mb-6 flex items-center gap-2">
-        <h3 className="text-base-content text-xl font-semibold">📰 最新文章</h3>
+        <h3 className="text-base-content text-xl font-semibold">{content.latestHeading}</h3>
       </div>
 
       <div className="grid w-full gap-6 md:grid-cols-2">
@@ -36,7 +38,7 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({ articles }) => {
             viewport={{ once: true }}
             whileInView={{ opacity: 1, y: 0 }}
           >
-            <ArticleCard article={article} />
+            <ArticleCard article={article} content={content} />
           </motion.div>
         ))}
       </div>
