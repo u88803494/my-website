@@ -16,6 +16,8 @@ describe("Definitions", () => {
 
     expect(markup).toContain("noun");
     expect(markup).toContain("verb");
+    expect(markup).toContain("1. 一種紀錄。");
+    expect(markup).toContain("2. 把內容記錄下來。");
     expect(markup).toContain("bg-blue-100");
   });
 
@@ -32,6 +34,8 @@ describe("Definitions", () => {
     expect(markup).not.toContain("bg-blue-100");
     expect(markup).not.toContain("mb-2 flex flex-wrap items-center gap-2");
     expect(markup).not.toContain("undefined");
-    expect(markup.indexOf("第一個中文意思。")).toBeLessThan(markup.indexOf("第二個中文意思。"));
+    expect(markup).toContain("1. 第一個中文意思。");
+    expect(markup).toContain("2. 第二個中文意思。");
+    expect(markup.indexOf("1. 第一個中文意思。")).toBeLessThan(markup.indexOf("2. 第二個中文意思。"));
   });
 });

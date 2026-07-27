@@ -23,7 +23,9 @@ const Definitions: React.FC<DefinitionsProps> = ({ definitions }) => (
               </span>
             </div>
           )}
-          <p className="mb-2 text-sm leading-relaxed break-words text-slate-700 sm:text-base">{def.meaning}</p>
+          <p className="mb-2 text-sm leading-relaxed break-words text-slate-700 sm:text-base">
+            {defIndex + 1}. {def.meaning}
+          </p>
         </div>
       ))}
     </div>
