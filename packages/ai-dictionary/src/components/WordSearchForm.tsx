@@ -42,7 +42,7 @@ const WordSearchForm: React.FC<WordSearchFormProps> = ({ isLoading, onSubmit }) 
               disabled={isLoading}
               maxLength={40}
               onChange={(e) => setInputWord(e.target.value)}
-              placeholder="輸入中文詞彙進行查詢..."
+              placeholder="輸入中文或英文詞彙..."
               type="text"
               value={inputWord}
             />
