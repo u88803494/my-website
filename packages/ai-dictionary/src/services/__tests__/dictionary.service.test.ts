@@ -20,11 +20,10 @@ vi.mock("@packages/shared/utils", async (importOriginal) => {
   };
 });
 
-const validDictionaryResponse = {
+const validChineseResponse = {
   queryWord: "學習",
   definitions: [
     {
-      partOfSpeech: "動詞",
       meaning: "透過閱讀、練習或經驗取得知識與技能。",
     },
   ],
@@ -37,6 +36,21 @@ const validDictionaryResponse = {
       etymology: "與求知、模仿相關。",
     },
   ],
+};
+
+const validEnglishResponse = {
+  queryWord: "record",
+  definitions: [
+    {
+      partOfSpeech: "noun",
+      meaning: "保存下來的資訊或事件資料。",
+    },
+    {
+      partOfSpeech: "verb",
+      meaning: "把聲音、影像或資訊保存下來。",
+    },
+  ],
+  etymologyBlocks: [{ type: "foreign", value: "源自拉丁語 recordari。" }],
 };
 
 const createGeminiResult = (response: unknown) => ({
@@ -85,27 +99,108 @@ describe("analyzeWord", () => {
 
   it("uses the primary Gemini model when it succeeds", async () => {
     const { getGenerativeModel } = setupModelResponses({
-      "gemini-3.1-flash-lite": validDictionaryResponse,
+      "gemini-3.1-flash-lite": validChineseResponse,
     });
 
     const result = await analyzeWord("學習", "test-api-key");
 
-    expect(result).toEqual(validDictionaryResponse);
+    expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(1);
     expect(getGenerativeModel).toHaveBeenCalledWith({
       model: "gemini-3.1-flash-lite",
     });
   });
 
-  it("falls back when the primary model fails", async () => {
-    const { getGenerativeModel } = setupModelResponses({
-      "gemini-3.1-flash-lite": new Error("RESOURCE_EXHAUSTED: quota exceeded"),
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+  it("removes partOfSpeech from Chinese responses without changing definitions or etymology", async () => {
+    const chineseResponseWithPartsOfSpeech = {
+      ...validChineseResponse,
+      definitions: [
+        { meaning: "取得知識或技能。", partOfSpeech: "動詞" },
+        { meaning: "學習的過程。", partOfSpeech: "名詞" },
+      ],
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": chineseResponseWithPartsOfSpeech,
     });
 
     const result = await analyzeWord("學習", "test-api-key");
 
-    expect(result).toEqual(validDictionaryResponse);
+    expect(result.definitions).toEqual([
+      { meaning: "取得知識或技能。" },
+      { meaning: "學習的過程。" },
+    ]);
+    expect(result.etymologyBlocks).toEqual(validChineseResponse.etymologyBlocks);
+  });
+
+  it("treats Chinese-form loanwords as Chinese", async () => {
+    const coffeeResponse = {
+      queryWord: "咖啡",
+      definitions: [{ meaning: "以咖啡豆製成的飲料。", partOfSpeech: "名詞" }],
+      etymologyBlocks: [{ type: "foreign", value: "由外語音譯而來。" }],
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": coffeeResponse,
+    });
+
+    const result = await analyzeWord("咖啡", "test-api-key");
+
+    expect(result.definitions).toEqual([{ meaning: "以咖啡豆製成的飲料。" }]);
+    expect(result.etymologyBlocks).toEqual(coffeeResponse.etymologyBlocks);
+  });
+
+  it("preserves partOfSpeech on every English definition", async () => {
+    setupModelResponses({
+      "gemini-3.1-flash-lite": validEnglishResponse,
+    });
+
+    const result = await analyzeWord("record", "test-api-key");
+
+    expect(result).toEqual(validEnglishResponse);
+  });
+
+  it("falls back when any English definition is missing partOfSpeech", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": {
+        ...validEnglishResponse,
+        definitions: [
+          validEnglishResponse.definitions[0],
+          { meaning: "把聲音、影像或資訊保存下來。" },
+        ],
+      },
+      "gemini-2.5-flash-lite": validEnglishResponse,
+    });
+
+    const result = await analyzeWord("record", "test-api-key");
+
+    expect(result).toEqual(validEnglishResponse);
+    expect(getGenerativeModel).toHaveBeenCalledTimes(2);
+  });
+
+  it("reports the existing response error when every model omits English partOfSpeech", async () => {
+    const incompleteEnglishResponse = {
+      ...validEnglishResponse,
+      definitions: [{ meaning: "缺少詞性的定義。" }],
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": incompleteEnglishResponse,
+      "gemini-2.5-flash-lite": incompleteEnglishResponse,
+      "gemini-2.5-flash": incompleteEnglishResponse,
+    });
+
+    await expect(analyzeWord("record", "test-api-key")).rejects.toThrow(
+      "AI 回應格式暫時異常，請稍後再試。",
+    );
+  });
+
+  it("falls back when the primary model fails", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": new Error("RESOURCE_EXHAUSTED: quota exceeded"),
+      "gemini-2.5-flash-lite": validChineseResponse,
+    });
+
+    const result = await analyzeWord("學習", "test-api-key");
+
+    expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
     expect(getGenerativeModel).toHaveBeenNthCalledWith(1, {
       model: "gemini-3.1-flash-lite",
@@ -118,12 +213,12 @@ describe("analyzeWord", () => {
   it("falls back when the primary model returns invalid JSON", async () => {
     const { getGenerativeModel } = setupModelResponses({
       "gemini-3.1-flash-lite": "not-json",
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+      "gemini-2.5-flash-lite": validChineseResponse,
     });
 
     const result = await analyzeWord("學習", "test-api-key");
 
-    expect(result).toEqual(validDictionaryResponse);
+    expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
   });
 
@@ -134,12 +229,12 @@ describe("analyzeWord", () => {
         definitions: [],
         etymologyBlocks: [],
       },
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+      "gemini-2.5-flash-lite": validChineseResponse,
     });
 
     const result = await analyzeWord("學習", "test-api-key");
 
-    expect(result).toEqual(validDictionaryResponse);
+    expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
   });
 
@@ -148,19 +243,19 @@ describe("analyzeWord", () => {
       "gemini-3.1-flash-lite": new Error(
         "User location is not supported for this model or access is denied",
       ),
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+      "gemini-2.5-flash-lite": validChineseResponse,
     });
 
     const result = await analyzeWord("學習", "test-api-key");
 
-    expect(result).toEqual(validDictionaryResponse);
+    expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
   });
 
   it("fails fast when the API key is invalid", async () => {
     const { getGenerativeModel } = setupModelResponses({
       "gemini-3.1-flash-lite": new Error("API key not valid"),
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+      "gemini-2.5-flash-lite": validChineseResponse,
     });
 
     await expect(analyzeWord("學習", "test-api-key")).rejects.toThrow(
@@ -172,7 +267,7 @@ describe("analyzeWord", () => {
   it("fails fast for generic unauthorized errors", async () => {
     const { getGenerativeModel } = setupModelResponses({
       "gemini-3.1-flash-lite": new Error("401 Unauthorized access"),
-      "gemini-2.5-flash-lite": validDictionaryResponse,
+      "gemini-2.5-flash-lite": validChineseResponse,
     });
 
     await expect(analyzeWord("學習", "test-api-key")).rejects.toThrow(
@@ -195,7 +290,7 @@ describe("analyzeWord", () => {
 
   it("does not call Gemini for invalid input", async () => {
     const { getGenerativeModel } = setupModelResponses({
-      "gemini-3.1-flash-lite": validDictionaryResponse,
+      "gemini-3.1-flash-lite": validChineseResponse,
     });
 
     await expect(analyzeWord("", "test-api-key")).rejects.toThrow(
