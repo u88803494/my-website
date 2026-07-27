@@ -8,7 +8,7 @@ import type { AIErrorType } from "@packages/shared/utils";
 import { createLogger, parseAIErrorMessage } from "@packages/shared/utils";
 
 import { buildDictionaryPrompt } from "../prompts";
-import { cleanAIResponse, validateResponse } from "../utils";
+import { cleanAIResponse, requiresPartOfSpeech, validateResponse } from "../utils";
 
 const logger = createLogger({ context: "ai-dictionary/service" });
 const AUTH_ERROR_MESSAGE = "AI 字典服務設定異常，請聯繫管理員。";
@@ -112,25 +112,33 @@ async function analyzeWordWithModel(
   genAI: GoogleGenerativeAI,
   modelName: string,
   prompt: string,
+  shouldIncludePartOfSpeech: boolean,
 ): Promise<WordAnalysisResponse> {
   const model = genAI.getGenerativeModel({ model: modelName });
   const result = await model.generateContent(prompt);
   const text = result.response.text().trim();
   const cleanedText = cleanAIResponse(text);
 
-  let parsedResponse: WordAnalysisResponse;
+  let parsedResponse: unknown;
 
   try {
-    parsedResponse = JSON.parse(cleanedText) as WordAnalysisResponse;
+    parsedResponse = JSON.parse(cleanedText) as unknown;
   } catch {
     throw new DictionaryResponseError("AI 回應格式錯誤");
   }
 
-  if (!validateResponse(parsedResponse)) {
+  if (!validateResponse(parsedResponse, shouldIncludePartOfSpeech)) {
     throw new DictionaryResponseError("AI 回應資料結構不完整");
   }
 
-  return parsedResponse;
+  if (shouldIncludePartOfSpeech) {
+    return parsedResponse;
+  }
+
+  return {
+    ...parsedResponse,
+    definitions: parsedResponse.definitions.map(({ partOfSpeech: _partOfSpeech, ...definition }) => definition),
+  };
 }
 
 export async function analyzeWord(
@@ -146,14 +154,20 @@ export async function analyzeWord(
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const prompt = buildDictionaryPrompt(word);
+  const shouldIncludePartOfSpeech = requiresPartOfSpeech(word);
+  const prompt = buildDictionaryPrompt(word, shouldIncludePartOfSpeech);
   const attemptErrors: DictionaryAttemptError[] = [];
 
   for (const [index, modelName] of DICTIONARY_GEMINI_FALLBACK_MODELS.entries()) {
     const attempt = index + 1;
 
     try {
-      const response = await analyzeWordWithModel(genAI, modelName, prompt);
+      const response = await analyzeWordWithModel(
+        genAI,
+        modelName,
+        prompt,
+        shouldIncludePartOfSpeech,
+      );
 
       logger.info(
         { word, model: modelName, attempt },

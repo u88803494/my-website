@@ -19,10 +19,7 @@ const compress = (prompt: string): string => {
 const ROLE_DEFINITION =
   "你是一位山達基清字專家，對中文詞彙和字源非常了解，熟悉多種語言的詞源，擅長用簡單、易懂的方式，幫助使用者徹底理解每個字詞的常見意思與來源，協助他們清除誤字，真正學會並能運用這個字詞。";
 
-/**
- * 重要提醒 - 靜態內容
- */
-const IMPORTANT_REMINDERS = `
+const buildImportantReminders = (requiresPartOfSpeech: boolean): string => `
 **⚠️ 嚴格要求 - 必須遵守:**
 *   你的回傳內容必須是100%純粹的JSON格式，絕對不可以有任何其他內容。
 *   第一個字元必須是 { ，最後一個字元必須是 }。
@@ -30,11 +27,15 @@ const IMPORTANT_REMINDERS = `
 *   絕對禁止任何形式的 markdown 區塊（包括所有以三個 backtick 開頭的區塊，例如「三個 backtick 加 json」、「三個 backtick 加 text」等），只允許純 JSON。
 *   不要說 "好的" 、"以下是分析結果" 或任何開場白。
 *   如果你添加了任何非JSON內容，系統會報錯並要求重新處理。
-*   確保所有欄位都已填寫，沒有遺漏。definitions 陣列只需列出常見意思（包含詞性）。`;
+*   確保所有必要欄位都已填寫，沒有遺漏。definitions 陣列只需列出常見意思${
+  requiresPartOfSpeech
+    ? "，且每個 definition 都必須包含非空的 partOfSpeech。"
+    : "，且每個 definition 都不得包含 partOfSpeech。"
+}`;
 
 /**
  * 建立任務說明部分
- * @param word - 要查詢的中文詞彙（原始字串）
+ * @param word - 要查詢的詞彙（原始字串）
  */
 const buildTaskDescription = (word: string): string => {
   const userQuery = JSON.stringify(word);
@@ -46,12 +47,17 @@ const buildTaskDescription = (word: string): string => {
 
 /**
  * 建立分析指南部分
- * @param word - 要查詢的中文詞彙（原始字串）
+ * @param word - 要查詢的詞彙（原始字串）
+ * @param requiresPartOfSpeech - 是否需要在每個定義中提供詞性
  */
-const buildAnalysisGuidelines = (word: string): string => {
+const buildAnalysisGuidelines = (word: string, requiresPartOfSpeech: boolean): string => {
+  const definitionsGuideline = requiresPartOfSpeech
+    ? `請列出「${word}」的常見定義，每一個意思都要用簡單、易懂的繁體中文解釋，並在每個 definition 中以非空的 partOfSpeech 標明英文詞性。`
+    : `請列出「${word}」在中文裡的常見定義，每一個意思都要用簡單、易懂的語言解釋。中文詞彙不需要標明詞性，每個 definition 都不得包含 partOfSpeech。`;
+
   return `
 **分析指南:**
-1.  **列出常見意思**：請列出「${word}」在中文裡的常見定義，每一個意思都要用簡單、易懂的語言解釋，並標明詞性。
+1.  **列出常見意思**：${definitionsGuideline}
 2.  **字源分析**：
     - 請將所有字源分析內容（包含外來語來源、每個中文字的字源）**依照查詢詞彙的語意結構順序**，全部放在 etymologyBlocks 陣列中，不可自行調整或合併。
     - 例如：「歇斯底里的卡拉ok」必須依序為：「歇斯底里」的外來語來源 →「的」的中文字源 →「卡拉ok」的外來語來源。
@@ -66,42 +72,28 @@ const buildAnalysisGuidelines = (word: string): string => {
 
 /**
  * 建立 JSON 結構範例部分
- * @param word - 要查詢的中文詞彙（原始字串）
+ * @param word - 要查詢的詞彙（原始字串）
+ * @param requiresPartOfSpeech - 是否需要在每個定義中提供詞性
  */
-const buildJSONStructure = (word: string): string => {
+const buildJSONStructure = (word: string, requiresPartOfSpeech: boolean): string => {
   const userQuery = JSON.stringify(word);
-  return `
-**JSON 物件結構:**
-{
-  "queryWord": ${userQuery},
-  "definitions": [
-    {
-      "partOfSpeech": "詞性 (例如：名詞, 動詞, 形容詞)",
+  const definitionStructure = requiresPartOfSpeech
+    ? `{
+      "partOfSpeech": "英文詞性 (例如：noun, verb, adjective)",
+      "meaning": "簡單、易懂的繁體中文定義"
+    }`
+    : `{
       "meaning": "簡單、易懂的定義"
-    }
-  ],
-  "etymologyBlocks": [
-    {
-      "type": "foreign",
-      "value": "外來語來源說明..."
-    },
-    {
-      "type": "character",
-      "char": "有實際中文字源的單一字元",
-      "zhuyin": "該字元的注音符號",
-      "pinyin": "該字元的漢語拼音",
-      "etymology": "該字元的字源學分析"
-    }
-    // ...依照語意結構順序排列，且每一個字或語素都必須有對應區塊，不能省略、不能多加
-  ]
-}
+    }`;
+  const chineseLoanwordExample = requiresPartOfSpeech
+    ? ""
+    : `
 
-// 外來語複合詞語意結構順序範例：
+**外來語複合詞語意結構順序範例:**
 {
   "queryWord": "歇斯底里的卡拉ok",
   "definitions": [
     {
-      "partOfSpeech": "形容詞",
       "meaning": "..."
     }
   ],
@@ -121,23 +113,47 @@ const buildJSONStructure = (word: string): string => {
       "type": "foreign",
       "value": "卡拉ok..."
     }
-    // 每一個字或語素都必須有對應區塊，不能省略、不能多加
   ]
 }`;
+
+  return `
+**JSON 物件結構:**
+{
+  "queryWord": ${userQuery},
+  "definitions": [
+    ${definitionStructure}
+  ],
+  "etymologyBlocks": [
+    {
+      "type": "foreign",
+      "value": "外來語來源說明..."
+    },
+    {
+      "type": "character",
+      "char": "有實際中文字源的單一字元",
+      "zhuyin": "該字元的注音符號",
+      "pinyin": "該字元的漢語拼音",
+      "etymology": "該字元的字源學分析"
+    }
+  ]
+}
+
+etymologyBlocks 必須依照語意結構順序排列，每一個字或語素都必須有對應區塊，不能省略、不能多加。${chineseLoanwordExample}`;
 };
 
 /**
  * 組合所有提示詞組件，建立完整的字典查詢 Prompt
- * @param word - 要查詢的中文詞彙
+ * @param word - 要查詢的詞彙
+ * @param requiresPartOfSpeech - 是否需要在每個定義中提供詞性
  * @returns 完整的格式化 Prompt 字串
  */
-export const buildDictionaryPrompt = (word: string): string => {
+export const buildDictionaryPrompt = (word: string, requiresPartOfSpeech: boolean): string => {
   const promptComponents = [
     compress(ROLE_DEFINITION),
     compress(buildTaskDescription(word)),
-    compress(buildAnalysisGuidelines(word)),
-    buildJSONStructure(word),
-    compress(IMPORTANT_REMINDERS),
+    compress(buildAnalysisGuidelines(word, requiresPartOfSpeech)),
+    buildJSONStructure(word, requiresPartOfSpeech),
+    compress(buildImportantReminders(requiresPartOfSpeech)),
   ];
 
   return promptComponents.join(" ");
