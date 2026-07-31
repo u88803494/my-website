@@ -13,7 +13,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ onOpenDonateModal }) => {
         <span className="text-2xl text-slate-400">📚</span>
       </div>
       <h3 className="mb-2 text-lg font-medium text-slate-700">開始您的詞彙探索之旅</h3>
-      <p className="text-slate-500">在上方搜索框輸入中文詞彙，開始深入了解其含義與字源</p>
+      <p className="text-slate-500">在上方搜尋框輸入中文或英文詞彙，深入了解它的常見意思與字源</p>
 
       {/* CTA 區塊 */}
       <div className="mt-12 flex flex-col items-center gap-4">

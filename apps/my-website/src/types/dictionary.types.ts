@@ -58,7 +58,7 @@ export interface WordAnalysisResponse {
  */
 export interface WordDefinition {
   meaning: string;
-  partOfSpeech: string;
+  partOfSpeech?: string;
 }
 
 /**
