@@ -1,5 +1,31 @@
 import type { WordAnalysisResponse } from "@packages/shared/types";
 
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === "string" && !!value.trim();
+
+const isValidEtymologyBlock = (block: unknown): boolean => {
+  if (typeof block !== "object" || block === null) {
+    return false;
+  }
+
+  const candidateBlock = block as Record<string, unknown>;
+
+  if (candidateBlock.type === "foreign") {
+    return isNonEmptyString(candidateBlock.value);
+  }
+
+  if (candidateBlock.type === "character") {
+    return (
+      isNonEmptyString(candidateBlock.char) &&
+      isNonEmptyString(candidateBlock.zhuyin) &&
+      isNonEmptyString(candidateBlock.pinyin) &&
+      isNonEmptyString(candidateBlock.etymology)
+    );
+  }
+
+  return false;
+};
+
 /**
  * 驗證 AI 回應的結構是否符合當次查詢的詞性契約
  */
@@ -23,20 +49,19 @@ export function validateResponse(
     return false;
   }
 
-  return candidate.definitions.every((definition) => {
+  const hasValidDefinitions = candidate.definitions.every((definition) => {
     if (typeof definition !== "object" || definition === null) {
       return false;
     }
 
     const candidateDefinition = definition as Record<string, unknown>;
 
-    if (typeof candidateDefinition.meaning !== "string" || !candidateDefinition.meaning.trim()) {
+    if (!isNonEmptyString(candidateDefinition.meaning)) {
       return false;
     }
 
-    return (
-      !requiresPartOfSpeech ||
-      (typeof candidateDefinition.partOfSpeech === "string" && !!candidateDefinition.partOfSpeech.trim())
-    );
+    return !requiresPartOfSpeech || isNonEmptyString(candidateDefinition.partOfSpeech);
   });
+
+  return hasValidDefinitions && candidate.etymologyBlocks.every(isValidEtymologyBlock);
 }

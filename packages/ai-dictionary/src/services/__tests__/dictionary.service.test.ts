@@ -148,6 +148,58 @@ describe("analyzeWord", () => {
     expect(result.etymologyBlocks).toEqual(coffeeResponse.etymologyBlocks);
   });
 
+  it("preserves mixed foreign and character blocks in query order", async () => {
+    const mixedResponse = {
+      queryWord: "AI工具",
+      definitions: [{ meaning: "使用人工智慧協助工作的工具。" }],
+      etymologyBlocks: [
+        { type: "foreign", value: "AI 是 artificial intelligence 的縮寫。" },
+        { type: "character", char: "工", zhuyin: "ㄍㄨㄥ", pinyin: "gōng", etymology: "本義與工具有關。" },
+        { type: "character", char: "具", zhuyin: "ㄐㄩˋ", pinyin: "jù", etymology: "本義為備辦。" },
+      ],
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": mixedResponse,
+    });
+
+    const result = await analyzeWord("AI工具", "test-api-key");
+
+    expect(result).toEqual(mixedResponse);
+  });
+
+  it.each([
+    {
+      queryWord: "貨幣主義者",
+      definitions: [{ meaning: "支持貨幣主義的人。" }],
+      characters: ["貨", "幣", "主", "義", "者"],
+    },
+    {
+      queryWord: "越軌產品",
+      definitions: [{ meaning: "偏離既定規範的產品。" }],
+      characters: ["越", "軌", "產", "品"],
+    },
+  ])("preserves character-only etymology for $queryWord", async ({ queryWord, definitions, characters }) => {
+    const characterResponse = {
+      queryWord,
+      definitions,
+      etymologyBlocks: characters.map((char) => ({
+        type: "character",
+        char,
+        zhuyin: "ㄗˋ",
+        pinyin: "zì",
+        etymology: `${char}的字源。`,
+      })),
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": characterResponse,
+    });
+
+    const result = await analyzeWord(queryWord, "test-api-key");
+
+    expect(result).toEqual(characterResponse);
+    expect(result.etymologyBlocks.every((block) => block.type === "character")).toBe(true);
+  });
+
   it("preserves partOfSpeech on every English definition", async () => {
     setupModelResponses({
       "gemini-3.1-flash-lite": validEnglishResponse,
@@ -236,6 +288,37 @@ describe("analyzeWord", () => {
 
     expect(result).toEqual(validChineseResponse);
     expect(getGenerativeModel).toHaveBeenCalledTimes(2);
+  });
+
+  it("falls back when the primary model returns a malformed etymology block", async () => {
+    const { getGenerativeModel } = setupModelResponses({
+      "gemini-3.1-flash-lite": {
+        ...validChineseResponse,
+        etymologyBlocks: [{ type: "foreign", value: "   " }],
+      },
+      "gemini-2.5-flash-lite": validChineseResponse,
+    });
+
+    const result = await analyzeWord("學習", "test-api-key");
+
+    expect(result).toEqual(validChineseResponse);
+    expect(getGenerativeModel).toHaveBeenCalledTimes(2);
+  });
+
+  it("reports the existing response error when every model returns malformed etymology", async () => {
+    const malformedResponse = {
+      ...validChineseResponse,
+      etymologyBlocks: [{ type: "character", char: "學" }],
+    };
+    setupModelResponses({
+      "gemini-3.1-flash-lite": malformedResponse,
+      "gemini-2.5-flash-lite": malformedResponse,
+      "gemini-2.5-flash": malformedResponse,
+    });
+
+    await expect(analyzeWord("學習", "test-api-key")).rejects.toThrow(
+      "AI 回應格式暫時異常，請稍後再試。",
+    );
   });
 
   it("falls back when the primary model has a model-specific access error", async () => {
