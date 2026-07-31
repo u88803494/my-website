@@ -71,8 +71,16 @@ const buildAnalysisGuidelines = (word: string, requiresPartOfSpeech: boolean): s
     - 「越軌產品」：只分析查詢詞本身的常見意思與實際中文字源。不得猜測為 Overts and Withholds，也不得加入任何未出現在查詢中的山達基或其他專業術語。
     - 「咖啡」：表面形式本身是可考證的音譯外來語，可使用一個 foreign block 說明「咖啡」整體的實際來源；不得因它全是漢字就機械拆成 character。
     - 「AI工具」：必須依序輸出 foreign（對應查詢中的 AI）→ character（工）→ character（具）。不得把整個詞合併成 foreign，不得遺漏中文字，也不得加入 query 中沒有的英文術語。
-4.  **無法考證時**：
-    - 若字源或外來來源無法可靠確認，請明確標註「來源不詳」或「無法考證」，不得自行翻譯、推測或編造原詞與傳入歷史。
+4.  **追溯最早根源**：
+    - 字源分析應優先追溯目前可知、普遍接受的最早根源，說明最早可知的文字形式、來源語言或早期字形、當時本義，以及演變成現代形式或詞義的主要過程。
+    - 中文漢字應追溯可知的早期字形或造字本義，並簡要說明假借、分化與主要語義演變；英文或外來語應追溯可知的最早來源語言、早期形式與主要傳遞鏈，包括重新切分等關鍵變化。
+    - 不需列舉細微的學術爭議或少數假說，採用最常見、普遍接受的說法即可；但不得為了補齊鏈條而推測、翻譯或編造未知的原詞、語根、年代與傳入歷史。
+    - 必須先交代已知的最早可靠節點與演變；只有該節點以前的來源確實無法可靠確認時，才簡短標註「更早來源不詳」或「更早來源無法考證」，不得因最終根源未知而省略已知歷史。
+5.  **追溯深度範例 - 只示範應追溯的深度與演變機制**：
+    - 中文：「來」追溯早期麥類象形與本義，再說明假借為「來」及「麥」的分化；「莫」追溯日落草莽的早期字形與暮晚本義，再說明否定假借及「暮」的分化；「北」追溯二人相背的早期字形與背離本義，再說明方位假借及「背」的分化。
+    - 英文：「orange」追溯 Sanskrit → Persian → Arabic → Italian／Medieval Latin → Old French → English，以及字首 n 的重新切分；「algorithm」追溯 al-Khwarizmi 的姓名 → Medieval Latin algorismus → Old French algorisme → 受 Greek arithmos 影響的 French algorithme → English。
+    - 英文重新切分：「apron」追溯 Middle French naperon → Middle English napron → a napron 被重新切分為 an apron；「nickname」追溯 Old English eaca／eke + name → an ekename 被重新切分為 a nickname。
+    - 英文語義與未知邊界：「nightmare」應說明 mare 早期指壓迫睡眠者的惡靈，並非母馬；「dog」應先追溯 Old English docga，再說明其更早來源不詳，不可只回答整體來源不詳。
 `;
 };
 
