@@ -34,6 +34,10 @@
 
 - **部署指南** - 部署到 Vercel 和管理環境 _(即將推出)_
 
+### 監測相關
+
+- **[監測 AI Dictionary 搜尋使用情況](./monitoring-ai-dictionary-search-usage.md)** - 在 Vercel Web Analytics 查看搜尋事件並正確解讀使用指標
+
 ---
 
 ## 🆕 建立新的操作指南

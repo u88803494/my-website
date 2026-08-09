@@ -97,6 +97,7 @@ ai-dictionary/ (獨立 monorepo)
 
 ### 相關文檔
 
+- [監測主站 Demo 搜尋使用情況](../../docs/guides/monitoring-ai-dictionary-search-usage.md)
 - [遷移說明](../../docs/explanation/ai-dictionary-migration.md)
 - [ADR 001: 拆分決策](https://github.com/u88803494/ai-dictionary/blob/main/docs/adr/001-separation-from-main-website.md)
 - [ADR 002: Monorepo 架構](https://github.com/u88803494/ai-dictionary/blob/main/docs/adr/002-monorepo-architecture.md)
@@ -104,6 +105,6 @@ ai-dictionary/ (獨立 monorepo)
 
 ---
 
-**最後更新**: 2025-11-12
+**最後更新**: 2026-08-09
 **主站版本**: Demo 展示
 **完整版本**: [dictionary.henryleelab.com](https://dictionary.henryleelab.com)

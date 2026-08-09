@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { useState } from "react";
 
 import { useWordAnalysis } from "../hooks/useWordAnalysis";
@@ -16,11 +17,13 @@ const AIDictionaryContent: React.FC = () => {
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
 
   const handleSubmit = (word: string) => {
+    track("dictionary_search_submitted");
     mutation.mutate(word, {
       onError: (error) => {
         addResult(word, { error: error.message });
       },
       onSuccess: (data) => {
+        track("dictionary_search_succeeded");
         addResult(word, data);
       },
     });

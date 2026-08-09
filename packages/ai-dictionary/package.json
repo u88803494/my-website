@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@packages/shared": "workspace:*"
+    "@packages/shared": "workspace:*",
+    "@vercel/analytics": "^1.5.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",
