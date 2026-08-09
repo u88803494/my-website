@@ -34,6 +34,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 
 - [Git Workflow](./guides/git-workflow.md) - 使用 git hooks 和自動化
 - [Development Setup](./guides/development-setup.md) - 設定本地開發環境
+- [AI Dictionary Search Usage Monitoring](./guides/monitoring-ai-dictionary-search-usage.md) - 查看並解讀搜尋事件
 - Deployment - 部署到正式環境 _(規劃中)_
 - Contributing - 如何貢獻此專案 _(規劃中)_
 
@@ -154,6 +155,7 @@ ai_context: |
 - **架構**: [Architecture Reference](./reference/architecture.md), [Feature-Based Explanation](./explanation/feature-based-architecture.md)
 - **API**: [API Reference](./reference/api/)
 - **React Query**: [React Query Patterns](./explanation/react-query-patterns.md), [ADR 001](./adr/001-react-query-ssg-pattern.md)
+- **AI Dictionary & Analytics**: [Search Usage Monitoring](./guides/monitoring-ai-dictionary-search-usage.md), [Migration Explanation](./explanation/ai-dictionary-migration.md), [Define API Reference](./reference/api/define-api.md)
 - **租屋自動化**: [Technical Strategy](./explanation/rental-finder-automation-strategy.md), [Facebook Groups](./reference/rental-finder/facebook-groups.md), [ADR 004](./adr/004-rental-finder-feature.md)
 
 ---
