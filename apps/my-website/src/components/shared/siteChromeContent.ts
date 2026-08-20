@@ -30,8 +30,8 @@ export const globalEnglishSiteChrome: SiteChromeContent = {
   contactLabel: "Contact",
   footer: {
     connectLabel: "Let's stay connected",
-    role: "Senior AI Frontend Engineer",
-    summary: "Specializing in Next.js, React, and TypeScript to build performant, maintainable web applications.",
+    role: "Senior Software Engineer",
+    summary: "Specializing in Frontend, AI, and Full-Stack Web Development with Next.js, React, and TypeScript.",
   },
   locale: "en",
   routes: englishRoutes,

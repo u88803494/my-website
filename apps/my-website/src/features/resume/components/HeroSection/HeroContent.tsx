@@ -34,6 +34,15 @@ const HeroContent: React.FC<HeroContentProps> = ({ contactLinkLocale, content })
         {content.title}
       </motion.h2>
 
+      <motion.p
+        animate={{ opacity: 1, y: 0 }}
+        className="text-base-content/70 mb-2 text-lg font-medium lg:text-xl"
+        initial={{ opacity: 0, y: 30 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+      >
+        {content.subtitle}
+      </motion.p>
+
       <div className="text-base-content/80 space-y-4 text-base leading-relaxed lg:text-lg">
         {content.paragraphs.map((paragraph, index) => (
           <motion.p

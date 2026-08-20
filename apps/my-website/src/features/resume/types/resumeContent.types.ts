@@ -15,6 +15,7 @@ export interface HeroContentData {
     label: string;
     tooltip: string;
   };
+  subtitle: string;
   title: string;
   workCta: {
     label: string;
