@@ -128,6 +128,11 @@ export const englishExperiences: Experience[] = [
     ],
     achievements: [
       {
+        title: "End-to-End Feature Development",
+        description:
+          "Independently built new features end-to-end within the team's existing DDD architecture — from MongoDB data querying and Express.js backend logic to frontend integration.",
+      },
+      {
         title: "Critical Performance Improvement",
         description:
           "Collaborated to improve multi-channel video loading from more than five seconds to under one second.",

@@ -15,4 +15,3 @@ export const englishSkills = skillData.map((category) => ({
   })),
   title: englishSkillTitles[category.id],
 }));
-
