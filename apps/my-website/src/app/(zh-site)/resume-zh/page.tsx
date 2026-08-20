@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import PersonJsonLd from "@/components/shared/PersonJsonLd";
 import ResumeFeature, { traditionalChineseResumeContent } from "@/features/resume";
 
-const description = "Henry Lee 的繁體中文履歷，展示 AI 前端開發、專案經驗、專業技能與技術文章。";
-const title = "Henry Lee - AI 前端工程師繁中履歷";
+const description = "Henry Lee 的繁體中文履歷，展示前端、AI 與全端 Web 開發經驗、專案作品、專業技能與技術文章。";
+const title = "Henry Lee - 資深軟體工程師繁中履歷";
 
 export const metadata: Metadata = {
   alternates: {
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 const TraditionalChineseResumePage: React.FC = () => {
   return (
     <>
-      <PersonJsonLd jobTitle="AI 前端工程師" url="https://henryleelab.com/resume-zh" />
+      <PersonJsonLd jobTitle="資深軟體工程師" url="https://henryleelab.com/resume-zh" />
       <ResumeFeature content={traditionalChineseResumeContent} />
     </>
   );
