@@ -38,7 +38,7 @@ const experiences: Experience[] = [
     company: "獨立開發 / 自由工作者",
     logoUrl: "/images/logos/freelance.svg",
     period: "Apr 2024 ~ Present",
-    role: "Senior AI Frontend Engineer",
+    role: "Senior Software Engineer",
     techStackGroups: [
       {
         items: ["Vercel AI SDK", "Google Gemini API", "Claude Code", "Streaming UI"],

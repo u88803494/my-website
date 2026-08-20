@@ -59,7 +59,8 @@ export const traditionalChineseResumeContent: ResumeContent = {
       label: "Download Resume",
       tooltip: "下載我的履歷 PDF 檔案",
     },
-    title: "Senior AI Frontend Engineer",
+    subtitle: "Frontend · AI · Full-Stack Web Development",
+    title: "Senior Software Engineer",
     workCta: { label: "View My Work", tooltip: "瀏覽我的精選專案作品" },
   },
   locale: "zh-Hant",
@@ -92,4 +93,3 @@ export const traditionalChineseResumeContent: ResumeContent = {
     heading: "Work Experience",
   },
 };
-
