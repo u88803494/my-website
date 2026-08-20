@@ -157,6 +157,15 @@ const experiences: Experience[] = [
       {
         description: (
           <>
+            於既有 DDD 架構下，獨立完成新功能的端對端開發，涵蓋 <strong>MongoDB</strong> 資料查詢設計、
+            <strong>Express.js</strong> 後端邏輯撰寫，到前端串接與呈現。
+          </>
+        ),
+        title: "全端功能開發",
+      },
+      {
+        description: (
+          <>
             與其他同事協同改善多頻道錄影畫面讀取效率，讀取秒數從 <strong>5 秒以上</strong>變成 <strong>1 秒內</strong>
             讀取完成。
           </>

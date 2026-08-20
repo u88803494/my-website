@@ -136,4 +136,3 @@ export const englishProjects = traditionalChineseProjects.map((project, index) =
     technology === "AI 輔助開發" ? "AI-Assisted Development" : technology,
   ),
 }));
-
