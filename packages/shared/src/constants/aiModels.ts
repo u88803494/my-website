@@ -89,7 +89,7 @@ export const AI_MODELS: AIModelInfo[] = [
   },
 ] as const;
 
-export const DEFAULT_MODEL_ID: AIModelId = "mistral-large";
+export const DEFAULT_MODEL_ID: AIModelId = "gpt-oss-20b";
 
 // Helper functions
 export const getModelById = (id: string): AIModelInfo | undefined => {
