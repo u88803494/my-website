@@ -11,17 +11,18 @@ export const DICTIONARY_GEMINI_FALLBACK_MODELS = [
 ] as const;
 
 // AI Chat Model Configuration
-// Last updated: 2025-01-05
+// Last updated: 2026-08-21
 // References:
 // - Groq: https://console.groq.com/docs/models
-// - Google: https://ai.google.dev/gemini-api/docs/models
-// - Mistral: https://docs.mistral.ai/getting-started/models
+// - Google: https://ai.google.dev/gemini-api/docs/pricing
+// - Mistral: https://docs.mistral.ai/models
 export const AI_MODEL_IDS = [
-  "gemini-2.5-flash",
-  "gemini-2.5-pro",
-  "llama-3.3-70b",
-  "llama-3.1-8b",
+  "gemini-3.7-flash",
+  "gemini-3.5-flash-lite",
+  "gpt-oss-120b",
+  "gpt-oss-20b",
   "mistral-large",
+  "mistral-medium",
   "codestral",
 ] as const;
 
@@ -38,39 +39,46 @@ export interface AIModelInfo {
 
 export const AI_MODELS: AIModelInfo[] = [
   {
-    id: "gemini-2.5-flash",
-    name: "Gemini 2.5 Flash",
+    id: "gemini-3.7-flash",
+    name: "Gemini 3.7 Flash",
     provider: "google",
-    description: "Google 最新穩定版，推理與程式碼能力強",
-    apiName: "gemini-2.5-flash",
+    description: "Google 最新旗艦 Flash 模型，速度與推理能力兼具",
+    apiName: "gemini-3.7-flash",
   },
   {
-    id: "gemini-2.5-pro",
-    name: "Gemini 2.5 Pro",
+    id: "gemini-3.5-flash-lite",
+    name: "Gemini 3.5 Flash-Lite",
     provider: "google",
-    description: "最強大模型，複雜推理與程式碼",
-    apiName: "gemini-2.5-pro",
+    description: "最新輕量模型，適合高頻率簡單任務",
+    apiName: "gemini-3.5-flash-lite",
   },
   {
-    id: "llama-3.3-70b",
-    name: "Llama 3.3 70B",
+    id: "gpt-oss-120b",
+    name: "GPT-OSS 120B",
     provider: "groq",
-    description: "Meta 70B 開源模型，131K context",
-    apiName: "llama-3.3-70b-versatile",
+    description: "OpenAI 開權重旗艦模型，具備推理能力",
+    apiName: "openai/gpt-oss-120b",
   },
   {
-    id: "llama-3.1-8b",
-    name: "Llama 3.1 8B",
+    id: "gpt-oss-20b",
+    name: "GPT-OSS 20B",
     provider: "groq",
-    description: "輕量快速，適合簡單任務",
-    apiName: "llama-3.1-8b-instant",
+    description: "OpenAI 開權重輕量模型，速度快",
+    apiName: "openai/gpt-oss-20b",
   },
   {
     id: "mistral-large",
     name: "Mistral Large",
     provider: "mistral",
-    description: "123B 旗艦模型，推理能力強",
+    description: "開源旗艦模型，推理能力強",
     apiName: "mistral-large-latest",
+  },
+  {
+    id: "mistral-medium",
+    name: "Mistral Medium 3.5",
+    provider: "mistral",
+    description: "新一代主力模型，針對 Agentic 與程式碼場景優化",
+    apiName: "mistral-medium-latest",
   },
   {
     id: "codestral",
