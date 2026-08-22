@@ -48,7 +48,7 @@ export const traditionalChineseResumeContent: ResumeContent = {
     imageAlt: "Henry Lee's photo",
     name: "Henry Lee",
     paragraphs: [
-      "具備六年以上 Web 開發經驗，專注於 Next.js 16 與生成式 AI 應用整合開發。",
+      "Senior Software Engineer，專注於 Next.js 16 與生成式 AI 應用整合開發，具備獨立打造完整產品的全端開發能力。",
       "建立基於 Claude Code 的文件驅動開發流程，達成每日交付 1-2 個生產就緒功能的目標。",
       "獨立開發多個 AI 應用，包括 AI Chat、AI Dictionary、AI Analyzer 等，展現完整的產品開發能力。",
       "持續探索 AI-Native 開發模式與最佳實踐，並提供技術顧問服務，協助團隊導入現代化開發工具。",
