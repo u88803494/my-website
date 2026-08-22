@@ -86,7 +86,7 @@ AI Dictionary 具有雙重定位：
 ```
 ai-dictionary/ (獨立 monorepo)
 ├── apps/
-│   └── dictionary/        # Next.js 15 完整版
+│   └── dictionary/        # Next.js 16 完整版
 ├── packages/
 │   ├── shared/
 │   ├── tailwind-config/

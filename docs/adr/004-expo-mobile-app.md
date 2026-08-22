@@ -6,7 +6,7 @@
 
 ## 背景
 
-當前的 henryleelab.com 網站使用 Next.js 15 構建，包含以下主要功能：
+當前的 henryleelab.com 網站使用 Next.js 16 構建，包含以下主要功能：
 
 - Resume/Portfolio 展示
 - Blog（Medium 整合）

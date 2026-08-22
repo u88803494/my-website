@@ -6,7 +6,7 @@
 
 ## 背景
 
-在 Next.js 15 App Router 環境中使用 React Query 時，需要正確處理 Static Site Generation (SSG)。不同的使用情境需要採用不同的 pattern：
+在 Next.js 16 App Router 環境中使用 React Query 時，需要正確處理 Static Site Generation (SSG)。不同的使用情境需要採用不同的 pattern：
 
 ### 問題
 

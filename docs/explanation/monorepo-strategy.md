@@ -81,7 +81,7 @@ my-website/
 ```
 root/
 ├── apps/                     # 應用程式（可部署）
-│   └── my-website/           # 主要 Next.js 15 應用程式
+│   └── my-website/           # 主要 Next.js 16 應用程式
 │       ├── src/
 │       ├── package.json      # App 特定的依賴
 │       └── tsconfig.json     # 擴展 @packages/tsconfig

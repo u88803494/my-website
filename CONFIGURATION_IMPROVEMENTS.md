@@ -140,7 +140,7 @@ ESLint 現在可以自動修復：
    - ✅ 增量編譯支援（Project References）
    - ✅ 緩存優化
 
-3. **React 19 & Next.js 15 標準**
+3. **React 19 & Next.js 16 標準**
    - ✅ 新的 JSX transform (`react-jsx`)
    - ✅ 不需要顯式導入 React
    - ✅ Next.js ESLint 規則整合

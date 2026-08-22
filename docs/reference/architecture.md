@@ -22,7 +22,7 @@ ai_context: |
 
 ## 概述
 
-**本文件內容**：Henry Lee 個人網站（henryleelab.com）的完整系統架構，這是一個使用 TypeScript、Turborepo 和現代 React 模式構建的生產級 Next.js 15 monorepo 專案。
+**本文件內容**：Henry Lee 個人網站（henryleelab.com）的完整系統架構，這是一個使用 TypeScript、Turborepo 和現代 React 模式構建的生產級 Next.js 16 monorepo 專案。
 
 **架構類型**：基於功能的 monorepo，具有明確邊界，使用 Next.js App Router、React Server Components 和靜態網站生成。
 
@@ -30,7 +30,7 @@ ai_context: |
 
 - 由 Turborepo 和 pnpm workspaces 管理的 Monorepo
 - 基於功能的架構，具有強制執行的邊界（ESLint）
-- Next.js 15 App Router 搭配 RSC（React Server Components）
+- Next.js 16 App Router 搭配 RSC（React Server Components）
 - 靜態網站生成（SSG）搭配選擇性資料預取
 - React Query 用於伺服器狀態管理
 - Vercel 部署，具有自動 CI/CD
@@ -58,7 +58,7 @@ ai_context: |
 ```
 my-website/
 ├── apps/
-│   └── my-website/          # 主要 Next.js 15 應用程式
+│   └── my-website/          # 主要 Next.js 16 應用程式
 │       ├── src/
 │       │   ├── app/         # Next.js App Router（路由）
 │       │   ├── features/    # 基於功能的模組（隔離）
@@ -90,7 +90,7 @@ my-website/
 
 - **Turborepo**：2.5.8（monorepo 建置編排）
 - **pnpm**：9.15.4（套件管理器、workspaces）
-- **Turbopack**：內建於 Next.js 15（開發模式打包器）
+- **Turbopack**：內建於 Next.js 16（開發模式打包器）
 - **ESBuild**：透過 Next.js（生產建置）
 
 **樣式與 UI：**
@@ -139,7 +139,7 @@ my-website/
 | ----------- | --------- | ------------------------------- |
 | React Query | >= 5.84.1 | 修復 SSG 相容性 bug（ADR-001）  |
 | Next.js     | 15.x      | App Router、RSC、Turbopack 支援 |
-| React       | 19.x      | Next.js 15 必需                 |
+| React       | 19.x      | Next.js 16 必需                 |
 | TypeScript  | 5.x       | Strict mode 功能                |
 | pnpm        | 9.15.4+   | Workspace protocol 支援         |
 
@@ -187,9 +187,9 @@ Root (my-website-monorepo)
 
 #### apps/my-website
 
-**用途**：主要的 Next.js 15 應用程式，服務 henryleelab.com
+**用途**：主要的 Next.js 16 應用程式，服務 henryleelab.com
 
-**技術**：Next.js 15（App Router）、React 19、TypeScript
+**技術**：Next.js 16（App Router）、React 19、TypeScript
 
 **結構**：
 
@@ -1160,7 +1160,7 @@ next build  # 建置 Next.js 應用程式
 
 **靜態頁面生成：**
 
-Next.js 15 會自動為所有沒有動態區段的路由生成靜態頁面：
+Next.js 16 會自動為所有沒有動態區段的路由生成靜態頁面：
 
 | 路由                   | 類型       | 原因                     |
 | ---------------------- | ---------- | ------------------------ |
@@ -1970,7 +1970,7 @@ graph LR
 - 增量編譯（基於 Rust）
 - 優化的模組解析
 - Fast Refresh（React Server Components）
-- 內建於 Next.js 15（`next dev --turbopack`）
+- 內建於 Next.js 16（`next dev --turbopack`）
 
 ### 執行時效能
 
@@ -2263,7 +2263,7 @@ const publicUrl = process.env.NEXT_PUBLIC_API_URL;
 
 **必要的 Node 版本**：>= 20.x
 
-**原因**：Next.js 15 需要 Node 20+
+**原因**：Next.js 16 需要 Node 20+
 
 **套件管理器**：pnpm 9.15.4（鎖定）
 
@@ -2309,7 +2309,7 @@ const publicUrl = process.env.NEXT_PUBLIC_API_URL;
 
 ### 外部文件
 
-- [Next.js 15 文件](https://nextjs.org/docs) - 官方 Next.js 文件
+- [Next.js 16 文件](https://nextjs.org/docs) - 官方 Next.js 文件
 - [Turborepo 文件](https://turbo.build/repo/docs) - Monorepo 建置系統
 - [React Query 文件](https://tanstack.com/query/latest) - 伺服器狀態管理
 - [Vercel 文件](https://vercel.com/docs) - 部署平台
