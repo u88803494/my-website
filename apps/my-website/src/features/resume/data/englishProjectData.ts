@@ -22,7 +22,7 @@ const projectTranslations: Array<Pick<Project, "category" | "description" | "tit
     category: "Personal Website · Resume Platform",
     description: {
       features: [
-        "Built with Next.js 15, TypeScript, Tailwind CSS, and the App Router",
+        "Built with Next.js 16, TypeScript, Tailwind CSS, and the App Router",
         "Integrates independently developed AI Dictionary and AI Analyzer tools",
         "Automatically synchronizes and presents Medium articles",
         "Responsive design with purposeful motion",

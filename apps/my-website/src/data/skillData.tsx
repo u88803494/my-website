@@ -49,7 +49,7 @@ export const skillData: SkillCategory[] = [
     id: "frontend-architecture",
     level: "expert",
     skills: [
-      { icon: icon(SiNextdotjs), name: "Next.js 15" },
+      { icon: icon(SiNextdotjs), name: "Next.js 16" },
       { icon: icon(SiReact), name: "React 19" },
       { icon: icon(SiTypescript), name: "TypeScript" },
       { icon: icon(SiReactquery), name: "TanStack Query" },

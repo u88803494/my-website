@@ -16,14 +16,14 @@ export const projects: Project[] = [
     },
     imageUrl: "/images/projects/ai-chat.png",
     links: [{ label: "預覽網站", type: "live", url: "https://henryleelab.com/ai-chat" }],
-    techStack: ["Next.js 15", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
+    techStack: ["Next.js 16", "TypeScript", "Vercel AI SDK", "Tailwind CSS", "Streaming UI"],
     title: "AI Chat - 多模型對話介面",
   },
   {
     category: "個人網站／履歷平台",
     description: {
       features: [
-        "採用 Next.js 15 + TypeScript + Tailwind CSS 打造，支援 App Router",
+        "採用 Next.js 16 + TypeScript + Tailwind CSS 打造，支援 App Router",
         "整合 AI 字典、AI 需求分析器等自研 AI 工具",
         "Medium 文章自動同步與輪播展示",
         "響應式設計、豐富動畫",
