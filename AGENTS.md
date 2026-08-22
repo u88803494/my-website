@@ -4,7 +4,7 @@ This project uses the [AGENTS.md](https://agents.md/) standard for AI coding ass
 
 ## Project Overview
 
-This is a **Turborepo monorepo** for Henry Lee's personal website (henryleelab.com), built with **Next.js 15** (App Router), **TypeScript**, **Tailwind CSS**, and **React Query**. The site features a resume/portfolio, blog integration with Medium, AI-powered dictionary, AI analyzer, and time tracking application.
+This is a **Turborepo monorepo** for Henry Lee's personal website (henryleelab.com), built with **Next.js 16** (App Router), **TypeScript**, **Tailwind CSS**, and **React Query**. The site features a resume/portfolio, blog integration with Medium, AI-powered dictionary, AI analyzer, and time tracking application.
 
 ## Communication Guidelines
 
@@ -16,7 +16,7 @@ This is a **Turborepo monorepo** for Henry Lee's personal website (henryleelab.c
 
 ## Monorepo Structure
 
-- **`apps/my-website`** - Main Next.js 15 application
+- **`apps/my-website`** - Main Next.js 16 application
 - **`packages/shared`** - Shared types, constants, data, utilities, and components
 - **`packages/tsconfig`** - Shared TypeScript configurations
 - **`packages/eslint-config`** - Shared ESLint configurations
@@ -213,7 +213,7 @@ NODE_ENV=development
 
 ## Technology Stack
 
-**Core**: Next.js 15, React 19, TypeScript, pnpm, Turborepo
+**Core**: Next.js 16, React 19, TypeScript, pnpm, Turborepo
 **Styling**: Tailwind CSS 4, DaisyUI, Framer Motion
 **Data & State**: React Query, date-fns
 **AI Integration**: Google Gemini API (Gemini 2.5 Flash Lite)

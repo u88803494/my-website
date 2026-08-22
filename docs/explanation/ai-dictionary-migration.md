@@ -103,7 +103,7 @@ AI Dictionary 同時需要是：
 ```
 ai-dictionary/ (新 repo)
 ├── apps/
-│   └── dictionary/              # Next.js 15 字典站
+│   └── dictionary/              # Next.js 16 字典站
 │       ├── src/
 │       │   ├── app/            # App Router
 │       │   ├── features/       # 功能模組（含 AI Dictionary 核心）

@@ -8,7 +8,7 @@ The monorepo is structured to allow for code sharing and centralized management 
 
 **Key Technologies:**
 
-- **Framework:** Next.js 15 (with App Router)
+- **Framework:** Next.js 16 (with App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **UI:** React

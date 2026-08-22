@@ -58,7 +58,7 @@ export const englishResumeContent: ResumeContent = {
     imageAlt: "Portrait of Henry Lee",
     name: "Henry Lee",
     paragraphs: [
-      "I have more than five years of web development experience, specializing in Next.js 15 and generative AI product integration.",
+      "Senior Software Engineer specializing in Next.js 16 and building generative AI-powered products, with the ability to independently ship complete products.",
       "I established a documentation-driven workflow with Claude Code that enables the delivery of one to two production-ready features per day.",
       "I independently built AI Chat, AI Dictionary, AI Analyzer, and other products, demonstrating end-to-end product development capabilities.",
       "I continue to explore AI-native development practices and advise teams on adopting modern engineering tools and workflows.",

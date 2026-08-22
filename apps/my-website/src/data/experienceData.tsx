@@ -45,7 +45,7 @@ const experiences: Experience[] = [
         label: "AI 開發",
       },
       {
-        items: ["Next.js 15", "TypeScript", "TanStack Query", "Tailwind CSS"],
+        items: ["Next.js 16", "TypeScript", "TanStack Query", "Tailwind CSS"],
         label: "前端技術",
       },
     ],

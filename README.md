@@ -72,7 +72,7 @@ _展示 Medium 文章自動化系統的完整佈局：「最新文章」固定�
 
 ### Frontend
 
-- **Next.js 15** - React 框架，支援 App Router
+- **Next.js 16** - React 框架，支援 App Router
 - **TypeScript** - 型別安全的 JavaScript
 - **Tailwind CSS** - 原子級 CSS 框架
 - **React Query** - 服務器狀態管理
@@ -208,7 +208,7 @@ cp .env.example .env.local
 ```
 /
 ├── apps/
-│   └── my-website/ (Next.js 15 個人官網)
+│   └── my-website/ (Next.js 16 個人官網)
 ├── package.json       # Turborepo 與 workspace 設定
 ├── turbo.json         # Turborepo 工作流程
 └── pnpm-workspace.yaml
@@ -295,7 +295,7 @@ pnpm sync:all-articles  # 完整同步流程
 
 ### ⚡ 效能優化
 
-- Next.js 15 App Router 架構
+- Next.js 16 App Router 架構
 - 自動程式碼分割
 - 圖片優化
 - 字體優化
