@@ -54,8 +54,8 @@ export const traditionalChineseResumeContent: ResumeContent = {
       "持續探索 AI-Native 開發模式與最佳實踐，並提供技術顧問服務，協助團隊導入現代化開發工具。",
     ],
     resumeDownload: {
-      fileName: "Henry-Lee-Resume-2025.pdf",
-      href: "/documents/henry-lee-resume-20250618.pdf",
+      fileName: "Henry-Lee-Resume-2026.pdf",
+      href: "/documents/henry-lee-resume-20260822.pdf",
       label: "Download Resume",
       tooltip: "下載我的履歷 PDF 檔案",
     },
