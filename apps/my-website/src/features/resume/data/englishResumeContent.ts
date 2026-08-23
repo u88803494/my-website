@@ -64,8 +64,8 @@ export const englishResumeContent: ResumeContent = {
       "I continue to explore AI-native development practices and advise teams on adopting modern engineering tools and workflows.",
     ],
     resumeDownload: {
-      fileName: "Henry-Lee-Resume-2025.pdf",
-      href: "/documents/henry-lee-resume-20250618.pdf",
+      fileName: "Henry-Lee-Resume-EN-2026.pdf",
+      href: "/documents/henry-lee-resume-en-20260823.pdf",
       label: "Download Resume",
       tooltip: "Download my resume as a PDF",
     },
