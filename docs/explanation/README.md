@@ -26,13 +26,20 @@
 
 ### 架構與設計
 
-- **Feature-Based Architecture** - 為何我們按功能組織程式碼 _(即將推出)_
-- **Monorepo Strategy** - 為何選擇 Turborepo 與 monorepo 方法 _(即將推出)_
-- **React Query Patterns** - SSG + React Query 整合策略 _(即將推出)_
+- **[Feature-Based Architecture](./feature-based-architecture.md)** - 為何我們按功能組織程式碼
+- **[Monorepo Strategy](./monorepo-strategy.md)** - 為何選擇 Turborepo 與 monorepo 方法
+- **[React Query Patterns](./react-query-patterns.md)** - SSG + React Query 整合策略
+- **[AI Chat Architecture](./ai-chat-architecture.md)** - AI Chat 的 streaming 與多模型架構
 
 ### 技術決策
 
 - **[Git Hooks Research](./git-hooks-research.md)** - 業界最佳實踐與研究發現
+- **[Blog Platform Research](./blog-platform-research.md)** - Blog 平台選型調研（Sanity vs Git-based CMS vs 純 MDX）
+- **[Rental Finder Automation Strategy](./rental-finder-automation-strategy.md)** - 租屋自動化技術選型
+
+### 遷移紀錄
+
+- **[AI Dictionary Migration](./ai-dictionary-migration.md)** - AI Dictionary 獨立 repository 的遷移脈絡
 
 ---
 
@@ -142,4 +149,4 @@ Tutorial → 「學習 X 的基礎」
 2. [ADR 001](../adr/001-react-query-ssg-pattern.md) - 記錄我們的特定決策
 3. [Reference](../reference/api/) - 記錄我們的 API 規格
 4. [Guide](../guides/) - 展示如何實作該模式（未來）
-5. [Tutorial](../tutorials/02-adding-new-feature.md) - 透過範例教學
+5. Tutorial - 透過範例教學（未來）

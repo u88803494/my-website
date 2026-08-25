@@ -78,6 +78,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [Monorepo Strategy](./explanation/monorepo-strategy.md) - 為什麼用 Turborepo
 - [Git Hooks Research](./explanation/git-hooks-research.md) - 業界最佳實踐
 - [Rental Finder Automation Strategy](./explanation/rental-finder-automation-strategy.md) - 租屋自動化技術選型
+- [Blog Platform Research](./explanation/blog-platform-research.md) - Blog 平台選型調研（Sanity vs Git-based CMS vs 純 MDX）
 
 **何時使用**：理解技術決策背後的「為什麼」
 
@@ -92,6 +93,9 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [002 - Agents.md Adoption](./adr/002-agents-md-adoption.md)
 - [003 - Git Hooks Optimization](./adr/003-git-hooks-optimization.md)
 - [004 - Rental Finder Feature](./adr/004-rental-finder-feature.md) - 台北租屋自動化整合決策
+- [005 - Vercel AI SDK](./adr/005-vercel-ai-sdk.md) - AI 整合方案選型
+- [006 - Expo Mobile App](./adr/006-expo-mobile-app.md) - 新增 Expo 應用到 monorepo _(提議中)_
+- [007 - 自建 Blog 內容系統](./adr/007-self-hosted-blog.md) - MDX in git + Velite _(提議中)_
 
 **何時使用**：做出或理解重大架構決策
 
@@ -155,6 +159,7 @@ ai_context: |
 - **API**: [API Reference](./reference/api/)
 - **React Query**: [React Query Patterns](./explanation/react-query-patterns.md), [ADR 001](./adr/001-react-query-ssg-pattern.md)
 - **租屋自動化**: [Technical Strategy](./explanation/rental-finder-automation-strategy.md), [Facebook Groups](./reference/rental-finder/facebook-groups.md), [ADR 004](./adr/004-rental-finder-feature.md)
+- **Blog & 內容策略**: [Blog Platform Research](./explanation/blog-platform-research.md), [ADR 007](./adr/007-self-hosted-blog.md), [Medium Articles API](./reference/api/medium-articles-api.md)
 
 ---
 
