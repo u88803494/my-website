@@ -1,7 +1,4 @@
-# Git Workflow Guide：實作 Pre-commit 與 Pre-push 檢查
-
 ---
-
 title: Git Workflow Guide - Pre-commit 與 Pre-push 檢查
 type: guide
 status: stable
@@ -12,15 +9,15 @@ updated: 2025-11-07
 difficulty: intermediate
 estimated_time: 30 minutes
 related:
-
-- reference/commitlint-rules.md
-- reference/git-hooks.md
-- explanation/git-hooks-research.md
-- adr/003-git-hooks-optimization.md
-  ai_context: |
+  - reference/commitlint-rules.md
+  - reference/git-hooks.md
+  - explanation/git-hooks-research.md
+  - adr/003-git-hooks-optimization.md
+ai_context: |
   實作 git 自動化檢查的逐步指南，包含 pre-commit hooks、pre-push 驗證、commitlint 與 commit 大小驗證。
-
 ---
+
+# Git Workflow Guide：實作 Pre-commit 與 Pre-push 檢查
 
 ## 概覽
 

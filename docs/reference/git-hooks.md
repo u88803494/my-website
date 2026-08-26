@@ -1,7 +1,4 @@
-# Git Hooks 配置參考手冊
-
 ---
-
 title: Git Hooks 配置與實作參考手冊
 type: reference
 status: stable
@@ -11,16 +8,16 @@ created: 2025-11-07
 updated: 2025-11-07
 version: 1.0.0
 related:
-
-- guides/git-workflow.md
-- reference/commitlint-rules.md
-- explanation/git-hooks-research.md
-- adr/003-git-hooks-optimization.md
-  ai_context: |
+  - guides/git-workflow.md
+  - reference/commitlint-rules.md
+  - explanation/git-hooks-research.md
+  - adr/003-git-hooks-optimization.md
+ai_context: |
   Complete reference for git hooks configuration including pre-commit, commit-msg,
   and pre-push hooks with Husky integration and commit size validation.
-
 ---
+
+# Git Hooks 配置參考手冊
 
 ## 概述
 

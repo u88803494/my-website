@@ -1,7 +1,4 @@
-# Commitlint 規則參考手冊
-
 ---
-
 title: Commitlint 配置規則參考手冊
 type: reference
 status: stable
@@ -11,14 +8,14 @@ created: 2025-11-07
 updated: 2025-11-07
 version: 1.0.0
 related:
-
-- guides/git-workflow.md
-- explanation/git-hooks-research.md
-- adr/003-git-hooks-optimization.md
-  ai_context: |
+  - guides/git-workflow.md
+  - explanation/git-hooks-research.md
+  - adr/003-git-hooks-optimization.md
+ai_context: |
   Complete reference documentation for all available commitlint rules and configuration options.
-
 ---
+
+# Commitlint 規則參考手冊
 
 ## 概述
 

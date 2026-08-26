@@ -1,7 +1,4 @@
-# ADR-003: Git Hooks 優化策略
-
 ---
-
 title: Git Hooks 優化 - Pre-commit 速度與 Pre-push 驗證
 type: adr
 status: accepted
@@ -13,16 +10,16 @@ supersedes: null
 superseded_by: null
 tags: [git, hooks, typescript, performance, developer-experience]
 related:
-
-- explanation/git-hooks-research.md
-- reference/git-hooks.md
-- reference/commitlint-rules.md
-- guides/git-workflow.md
-  ai_context: |
+  - explanation/git-hooks-research.md
+  - reference/git-hooks.md
+  - reference/commitlint-rules.md
+  - guides/git-workflow.md
+ai_context: |
   技術決策記錄：透過從 pre-commit 移除 TypeScript 檢查、實作全面的 pre-push 驗證、
   新增 commitlint，以及強制執行 commit 大小限制來優化 git hooks。
-
 ---
+
+# ADR-003: Git Hooks 優化策略
 
 ## 狀態
 

@@ -1,7 +1,4 @@
-# Git Hooks Research and Best Practices（Git Hooks 研究與最佳實踐）
-
 ---
-
 title: Git Hooks Research - Industry Best Practices and TypeScript Limitations（Git Hooks 研究 - 業界最佳實踐與 TypeScript 限制）
 type: explanation
 status: stable
@@ -10,16 +7,16 @@ tags: [git, hooks, research, best-practices, typescript, performance]
 created: 2025-11-07
 updated: 2025-11-07
 related:
-
-- adr/003-git-hooks-optimization.md
-- reference/git-hooks.md
-- reference/commitlint-rules.md
-- guides/git-workflow.md
-  ai_context: |
+  - adr/003-git-hooks-optimization.md
+  - reference/git-hooks.md
+  - reference/commitlint-rules.md
+  - guides/git-workflow.md
+ai_context: |
   全面的 git hooks 最佳實踐研究和解釋、TypeScript
   技術限制、業界標準，以及 pre-commit 與 pre-push 策略背後的理由。
-
 ---
+
+# Git Hooks Research and Best Practices（Git Hooks 研究與最佳實踐）
 
 ## 概述
 

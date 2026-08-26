@@ -1,7 +1,4 @@
-# Tutorial: [學習主題]
-
 ---
-
 title: [完整標題]
 type: tutorial
 status: draft|review|stable|deprecated
@@ -12,16 +9,16 @@ updated: YYYY-MM-DD
 estimated_time: X 分鐘
 tutorial_number: 01|02|03|etc
 prerequisites:
-
-- tutorial/00-previous-tutorial.md
-  next_tutorial: tutorial/02-next-tutorial.md
-  related:
-- guides/related-guide.md
-- explanation/related-concept.md
-  ai_context: |
+  - tutorial/00-previous-tutorial.md
+next_tutorial: tutorial/02-next-tutorial.md
+related:
+  - guides/related-guide.md
+  - explanation/related-concept.md
+ai_context: |
   關於本教學涵蓋哪些概念的簡要說明。
-
 ---
+
+# Tutorial: [學習主題]
 
 ## 你將學到什麼
 
