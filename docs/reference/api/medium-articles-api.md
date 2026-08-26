@@ -222,4 +222,4 @@ pnpm parse:all-articles
 - [API 概覽](./README.md)
 - [React Query Patterns](../../explanation/react-query-patterns.md)
 - [架構參考](../architecture.md)
-- [Medium Article Sync Guide](../../../MEDIUM-ARTICLES-GUIDE.md) _（已棄用）_
+- [Medium 文章同步指南](../../guides/medium-article-sync.md)

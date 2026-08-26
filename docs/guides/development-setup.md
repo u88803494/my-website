@@ -10,7 +10,6 @@ difficulty: beginner
 estimated_time: 30 minutes
 related:
   - reference/architecture.md
-  - reference/cli-commands.md
   - tutorials/01-project-setup.md
 ai_context: |
   針對 my-website monorepo 設定本地開發環境的逐步指南，包含先決條件、安裝步驟與驗證流程。
@@ -210,7 +209,7 @@ my-website/
 | `pnpm sync:all-articles`   | 同步 Medium 文章               |
 | `pnpm --filter my-website` | 在特定 workspace 執行指令      |
 
-完整指令參考請見 [CLI Commands](../reference/cli-commands.md)。
+完整指令參考請見 [Monorepo 配置參考手冊](../reference/configuration.md)。
 
 ---
 
@@ -382,7 +381,7 @@ formulahendry.auto-rename-tag
 ## 相關文件
 
 - [Architecture Reference](../reference/architecture.md) - 完整系統架構
-- [CLI Commands Reference](../reference/cli-commands.md) - 所有可用指令
+- CLI Commands Reference - 所有可用指令 _(規劃中)_
 - [Git Workflow Guide](./git-workflow.md) - Git 流程與自動化
 - [Tutorial 01: Project Setup](../tutorials/01-project-setup.md) - 實作學習路徑
 

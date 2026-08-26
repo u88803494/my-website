@@ -8,7 +8,7 @@ consulted: []
 informed: []
 tags: [ai, streaming, sdk, architecture]
 related:
-  - ../reference/api/ai-chat.md
+  - ../reference/api/chat-api.md
 ai_context: |
   為 AI Chat 功能選擇整合方案，需要支援 streaming response 和多模型切換。
   經評估後選擇 Vercel AI SDK，因其統一 API 和優秀的 React 整合。

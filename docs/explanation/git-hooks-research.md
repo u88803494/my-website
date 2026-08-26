@@ -539,5 +539,5 @@ makeRequest({ timeout: 1000 });
 
 ### 相關概念
 
-- [Turborepo Caching Strategy](../explanation/turborepo-caching.md) - 快取如何加速 pre-push
-- [Monorepo Architecture Patterns](../explanation/monorepo-patterns.md) - 專案組織影響
+- Turborepo Caching Strategy - 快取如何加速 pre-push _(規劃中)_
+- [Monorepo Strategy](./monorepo-strategy.md) - 專案組織影響

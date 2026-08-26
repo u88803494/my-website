@@ -2291,9 +2291,9 @@ const publicUrl = process.env.NEXT_PUBLIC_API_URL;
 
 ### 指南
 
-- [Git 工作流程設定指南](../guides/git-workflow-setup.md) - 設定 git hooks 和 commitlint
-- [開發工作流程指南](../guides/development-workflow.md) - 日常開發流程
-- [部署指南](../guides/deployment.md) - 部署到 Vercel
+- [Git 工作流程指南](../guides/git-workflow.md) - 設定 git hooks 和 commitlint
+- [開發環境設定指南](../guides/development-setup.md) - 本地開發環境
+- 部署指南 - 部署到 Vercel _(規劃中)_
 
 ### 說明
 

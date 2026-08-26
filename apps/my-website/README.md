@@ -176,7 +176,7 @@ cp .env.example .env.local
 
 ### 詳細說明文檔
 
-📖 **[Medium 文章自動化完整指南](./docs/MEDIUM-ARTICLES-GUIDE.md)**
+📖 **[Medium 文章自動化完整指南](../../docs/guides/medium-article-sync.md)**
 
 ## 📁 專案結構
 
@@ -237,7 +237,7 @@ my-website/
 │   ├── batch-parse-articles.ts    # Medium 文章解析腳本
 │   └── sync-latest-articles.ts    # 同步最新文章腳本
 ├── 📁 docs/                       # 文檔
-│   └── MEDIUM-ARTICLES-GUIDE.md   # Medium 功能說明
+│   └── guides/medium-article-sync.md  # Medium 功能說明
 ├── 📁 public/                     # 靜態資源
 ├── article-urls.json              # Medium 文章 URL 清單
 └── package.json                   # 專案配置
@@ -273,9 +273,9 @@ node scripts/batch-parse-articles.js
 
 ## 📖 相關文檔
 
-- 📝 **[Medium 文章自動化指南](./docs/MEDIUM-ARTICLES-GUIDE.md)** - 完整的自動化系統使用說明
+- 📝 **[Medium 文章自動化指南](../../docs/guides/medium-article-sync.md)** - 完整的自動化系統使用說明
 - 🗂️ **[article-urls.json](./article-urls.json)** - Medium 文章 URL 管理
-- 🤖 **[batch-parse-articles.js](./scripts/batch-parse-articles.js)** - 自動化解析腳本
+- 🤖 **[batch-parse-articles.ts](./scripts/batch-parse-articles.ts)** - 自動化解析腳本
 - 📊 **[articleData.ts](./src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
 
 ## 🌟 特色功能說明
@@ -336,7 +336,7 @@ vercel --prod
 
 ## 📄 授權
 
-MIT License - 詳見 [LICENSE](./LICENSE) 文件
+MIT License
 
 ---
 
