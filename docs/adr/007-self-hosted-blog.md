@@ -1,7 +1,7 @@
 ---
 title: 自建 Blog 內容系統（MDX in git + Velite）
 type: adr
-status: proposed
+status: accepted
 date: 2026-08-26
 deciders: [Henry Lee]
 consulted: []
@@ -20,10 +20,10 @@ ai_context: |
 
 ## 狀態
 
-**提議中**
+**已接受**
 
 - 提議日期：2026-08-26
-- 接受日期：（待定）
+- 接受日期：2026-08-26
 
 ## 背景
 
@@ -212,17 +212,17 @@ ai_context: |
 
 ## 實作
 
-實作細節與分階段範圍記錄於 [#110](https://github.com/u88803494/my-website/issues/110)，不在本 ADR 內展開。
+實作追蹤與分階段範圍記錄於 [#110](https://github.com/u88803494/my-website/issues/110)（總覽），細節拆分至三個 phase issue：
 
-**分階段概要**
+- Phase 1（基礎建設）：#111
+- Phase 2（內容遷移）：#112
+- Phase 3（收斂與驗收）：#113
 
-- **Phase 1（基礎建設）**：Velite 設定、移除 `force-dynamic`、新增 `/blog/[slug]` 內頁、`sitemap.ts`、`robots.ts`、`ArticleJsonLd.tsx`（照既有 `PersonJsonLd.tsx` 模式）、`ArticleCard` 的內外連結分支
-- **Phase 2（內容遷移）**：遷移 script（沿用既有 `cheerio` / `jsdom` / `axios`，模式參考 `scripts/sync-latest-articles.ts`）、下載圖片、遷移 3–5 篇、Medium 端設定 canonical
-- **Phase 3（收斂，暫不執行）**：清理 `/api/medium-articles` 與 `useMediumArticles`；評估是否加裝編輯後台
+**與原提案的調整**：Phase 2 的內容遷移改為使用 Medium 官方「Download your information」匯出功能取得所有文章的本地 HTML，而非透過 `cheerio`/`jsdom`/`axios` 對抗未公開 GraphQL endpoint 的爬蟲手法。既有的 `scripts/batch-parse-articles.ts` 改寫為讀取本地匯出檔案而非呼叫 API，其餘 schema／驗收標準不變。
 
 **相依性**
 
-- 本 ADR 需先轉為「已接受」狀態
+- 本 ADR 需先轉為「已接受」狀態（本次更新已完成）
 - Phase 1 需留意與 [ADR-001: React Query SSG Pattern](./001-react-query-ssg-pattern.md) 的互動：移除 `force-dynamic` 可能觸及 React Query 的 SSG 議題，但本方案將 blog 列表改為不依賴 React Query 的 Server Component，應可繞開
 
 ## 驗證
