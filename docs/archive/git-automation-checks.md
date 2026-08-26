@@ -4,10 +4,10 @@
 >
 > **New locations**:
 >
-> - **How-to Guide**: [Git Workflow Guide](./guides/git-workflow.md)
-> - **Reference**: [Commitlint Rules](./reference/commitlint-rules.md), [Git Hooks](./reference/git-hooks.md)
-> - **Explanation**: [Git Hooks Research](./explanation/git-hooks-research.md)
-> - **ADR**: [003 - Git Hooks Optimization](./adr/003-git-hooks-optimization.md)
+> - **How-to Guide**: [Git Workflow Guide](../guides/git-workflow.md)
+> - **Reference**: [Commitlint Rules](../reference/commitlint-rules.md), [Git Hooks](../reference/git-hooks.md)
+> - **Explanation**: [Git Hooks Research](../explanation/git-hooks-research.md)
+> - **ADR**: [003 - Git Hooks Optimization](../adr/003-git-hooks-optimization.md)
 >
 > This file will be archived in a future update.
 

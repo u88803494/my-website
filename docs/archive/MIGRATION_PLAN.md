@@ -4,7 +4,10 @@
 
 本文件追蹤舊有文件遷移至 Diataxis 框架結構的進度。
 
-**狀態**：✅ 階段 1-5 完成 | ⏳ 階段 6 清理進行中
+**狀態**：✅ 全部完成（2026-08-26）
+
+> 本文件已成為歷史記錄。Diataxis 遷移的所有階段皆已完成，`docs/` 根目錄不再有
+> 未分類的舊有文件。文件連結的持續驗證改由 `scripts/check-doc-links.ts` 在 pre-push 執行。
 
 ## 遷移狀態
 
@@ -19,21 +22,24 @@
 | -                               | `docs/explanation/git-hooks-research.md` | ✅ 已建立 |
 | -                               | `docs/adr/003-git-hooks-optimization.md` | ✅ 已建立 |
 
-### ⏳ 待遷移項目
+### ✅ 已完成遷移（2026-08-26）
 
-| 舊有檔案                   | 未來位置                                    | 優先級 | 備註               |
-| -------------------------- | ------------------------------------------- | ------ | ------------------ |
-| `LOGGER-GUIDE.md`          | `docs/guides/structured-logging.md`         | 中     | 結構化日誌指南     |
-| `ISSUE-MANAGEMENT.md`      | `docs/guides/issue-management.md`           | 中     | P0-P3 問題管理系統 |
-| `MEDIUM-ARTICLES-GUIDE.md` | `docs/guides/medium-article-sync.md`        | 低     | 文章同步流程       |
-| `time-tracker-timezone.md` | `docs/explanation/time-tracker-timezone.md` | 低     | 時區處理說明       |
-| `CONFIGURATION.md`         | `docs/reference/configuration.md`           | 低     | Monorepo 設定      |
+| 舊有檔案                   | 新位置                                      | 狀態      |
+| -------------------------- | ------------------------------------------- | --------- |
+| `LOGGER-GUIDE.md`          | `docs/guides/structured-logging.md`         | ✅ 已遷移 |
+| `ISSUE-MANAGEMENT.md`      | `docs/guides/issue-management.md`           | ✅ 已遷移 |
+| `MEDIUM-ARTICLES-GUIDE.md` | `docs/guides/medium-article-sync.md`        | ✅ 已遷移 |
+| `time-tracker-timezone.md` | `docs/explanation/time-tracker-timezone.md` | ✅ 已遷移 |
+| `CONFIGURATION.md`         | `docs/reference/configuration.md`           | ✅ 已遷移 |
+
+遷移時一併移除 DEPRECATED 橫幅、補上 YAML frontmatter，並更新所有外部引用。
 
 ### 📦 僅存檔（歷史記錄）
 
-| 舊有檔案               | 存檔狀態  | 備註                     |
-| ---------------------- | --------- | ------------------------ |
-| `MONOREPO_REFACTOR.md` | ✅ 已存檔 | 已完成重構（2025-10-20） |
+| 舊有檔案                   | 存檔狀態  | 備註                                      |
+| -------------------------- | --------- | ----------------------------------------- |
+| `MONOREPO_REFACTOR.md`     | ✅ 已存檔 | 已完成重構（2025-10-20）                  |
+| `git-automation-checks.md` | ✅ 已存檔 | 內容已拆分至 5 份文件，原檔保留為討論記錄 |
 
 ## 存檔策略
 
@@ -44,12 +50,18 @@
 3. ✅ 建立此遷移計畫
 4. ✅ 將已完成的重構文件移至存檔
 
-### 未來清理（階段 7+）
+### ✅ 階段 7 完成（2026-08-26）
 
-1. 遷移剩餘的舊有文件（按需進行）
-2. 將已存檔文件移至 `docs/archive/`
-3. 更新所有對已存檔文件的引用
-4. 移除或存檔已棄用的檔案
+1. ✅ 遷移剩餘的 5 份舊有文件
+2. ✅ 將 `git-automation-checks.md` 移至 `docs/archive/`
+3. ✅ 更新所有對已遷移文件的引用（含 repo 根目錄 README 與 `apps/my-website/README.md`）
+4. ✅ `docs/` 根目錄僅剩 `README.md`
+
+### 防止復發
+
+遷移過程發現大量死連結源自 2025-10 monorepo 重構後未更新的路徑，且無機制可察覺。
+因此建立 `scripts/check-doc-links.ts`，於 pre-push 全量驗證 markdown 相對連結與
+frontmatter `related` 路徑；亦可手動執行 `pnpm docs:check-links`。
 
 ## 已建立的新文件
 

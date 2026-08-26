@@ -1,4 +1,4 @@
-# ADR-004: 新增 Expo React Native 應用到 Monorepo
+# ADR-006: 新增 Expo React Native 應用到 Monorepo
 
 ## 狀態
 

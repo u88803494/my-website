@@ -1,7 +1,4 @@
-# ADR-005: 採用 Vercel AI SDK 作為 AI 整合方案
-
 ---
-
 title: 採用 Vercel AI SDK 作為 AI 整合方案
 type: adr
 status: accepted
@@ -11,13 +8,13 @@ consulted: []
 informed: []
 tags: [ai, streaming, sdk, architecture]
 related:
-
-- ../reference/api/ai-chat.md
-  ai_context: |
+  - ../reference/api/chat-api.md
+ai_context: |
   為 AI Chat 功能選擇整合方案，需要支援 streaming response 和多模型切換。
   經評估後選擇 Vercel AI SDK，因其統一 API 和優秀的 React 整合。
-
 ---
+
+# ADR-005: 採用 Vercel AI SDK 作為 AI 整合方案
 
 ## 狀態
 

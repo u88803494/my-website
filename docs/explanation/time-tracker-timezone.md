@@ -1,12 +1,18 @@
-# Time Tracker 時區管理說明
-
-> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
->
-> **Future location**: `docs/explanation/time-tracker-timezone.md` (Phase 3)
->
-> This file will be archived after migration.
-
 ---
+title: Time Tracker 時區管理說明（Time Tracker Timezone Handling）
+type: explanation
+status: stable
+audience: [developer, ai, architect]
+tags: [time-tracker, timezone, date-fns, localstorage]
+created: 2026-08-26
+updated: 2026-08-26
+related:
+  - reference/architecture.md
+ai_context: |
+  說明 Time Tracker 功能如何處理時區，以及為何選擇目前的日期儲存與顯示策略。
+---
+
+# Time Tracker 時區管理說明
 
 ## 概述
 

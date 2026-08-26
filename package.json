@@ -20,7 +20,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky",
-    "verify:deps": "bash scripts/verify-dependencies.sh"
+    "verify:deps": "bash scripts/verify-dependencies.sh",
+    "docs:check-links": "tsx scripts/check-doc-links.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",

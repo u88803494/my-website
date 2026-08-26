@@ -14,4 +14,8 @@ pnpm run check-types || { echo "\n❌ Type check failed. Please fix errors befor
 echo "\n🔍 Running ESLint..."
 pnpm run lint || { echo "\n❌ Linting failed. Please fix errors before pushing."; exit 1; }
 
+# Documentation link validation (full scan)
+echo "\n🔗 Checking documentation links..."
+pnpx tsx scripts/check-doc-links.ts || { echo "\n❌ Broken documentation links. Please fix before pushing."; exit 1; }
+
 echo "\n✅ All pre-push checks passed!"

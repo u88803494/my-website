@@ -15,7 +15,6 @@ prerequisites:
 related:
   - guides/development-setup.md
   - reference/architecture.md
-  - tutorials/02-adding-new-feature.md
 ai_context: |
   以學習為導向的教學，引導開發者從零開始建立可運作的開發環境，
   並完成第一次程式碼變更的提交。
@@ -440,8 +439,8 @@ docs/
 
 ### 繼續學習
 
-- **[教學 02：新增新功能](./02-adding-new-feature.md)** - 從頭建立完整的 feature
-- **[教學 03：Medium 整合](./03-medium-integration.md)** - 使用外部 APIs
+- **教學 02：新增新功能** - 從頭建立完整的 feature _(規劃中)_
+- **教學 03：Medium 整合** - 使用外部 APIs _(規劃中)_
 
 ### 深入理解
 
@@ -521,8 +520,8 @@ pnpm install
 - [Architecture Reference](../reference/architecture.md) - 系統架構
 - [Git Workflow Guide](../guides/git-workflow.md) - Git 流程
 - [Commitlint Rules](../reference/commitlint-rules.md) - Commit message 規則
-- [教學 02：新增新功能](./02-adding-new-feature.md) - 下一個教學
+- 教學 02：新增新功能 - 下一個教學 _(規劃中)_
 
 ---
 
-**準備好了嗎？** 繼續前往 [教學 02：新增新功能](./02-adding-new-feature.md) 學習如何從頭建立完整的 feature！
+**接下來**：教學 02（新增新功能）尚在規劃中。在此之前，可參考 [Feature-Based Architecture](../explanation/feature-based-architecture.md) 了解 feature 的組織方式。

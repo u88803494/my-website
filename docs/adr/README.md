@@ -34,6 +34,26 @@ ADRs 是不可變的歷史記錄。一旦撰寫完成，就不應該更改（除
   - 狀態：已接受
   - 日期：2025-01-07
 
+- **[004 - Rental Finder Feature](./004-rental-finder-feature.md)** ✅
+  - 決策：將台北租屋自動化整合進 my-website monorepo
+  - 狀態：已接受
+  - 日期：2025-11-14
+
+- **[005 - Vercel AI SDK](./005-vercel-ai-sdk.md)** ✅
+  - 決策：採用 Vercel AI SDK 作為 AI 整合方案，支援 streaming 與多模型切換
+  - 狀態：已接受
+  - 日期：2025-12-28
+
+- **[006 - Expo Mobile App](./006-expo-mobile-app.md)** 📋
+  - 決策：在既有 Turborepo monorepo 中新增 Expo 應用（`apps/mobile`）
+  - 狀態：提議中
+  - 日期：（待定）
+
+- **[007 - 自建 Blog 內容系統](./007-self-hosted-blog.md)** 📋
+  - 決策：採用 MDX in git + Velite 自建 blog，Medium 轉為 canonical 指回自家站的導流渠道
+  - 狀態：提議中
+  - 日期：2026-08-26
+
 ### 已取代決策
 
 _(尚無)_

@@ -1,7 +1,4 @@
-# [標題]：如何 [達成目標]
-
 ---
-
 title: [完整標題]
 type: guide
 status: draft|review|stable|deprecated
@@ -12,14 +9,14 @@ updated: YYYY-MM-DD
 difficulty: beginner|intermediate|advanced
 estimated_time: X 分鐘
 related:
-
-- reference/related-reference.md
-- explanation/related-concept.md
-- tutorials/related-tutorial.md
-  ai_context: |
+  - reference/related-reference.md
+  - explanation/related-concept.md
+  - tutorials/related-tutorial.md
+ai_context: |
   關於此指南協助完成什麼任務的簡要說明。
-
 ---
+
+# [標題]：如何 [達成目標]
 
 ## 概述
 

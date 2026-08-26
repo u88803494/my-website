@@ -34,6 +34,9 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 
 - [Git Workflow](./guides/git-workflow.md) - 使用 git hooks 和自動化
 - [Development Setup](./guides/development-setup.md) - 設定本地開發環境
+- [Structured Logging](./guides/structured-logging.md) - Logger 系統使用與最佳實踐
+- [Issue Management](./guides/issue-management.md) - P0-P3 優先級系統
+- [Medium Article Sync](./guides/medium-article-sync.md) - 文章自動解析與同步
 - Deployment - 部署到正式環境 _(規劃中)_
 - Contributing - 如何貢獻此專案 _(規劃中)_
 
@@ -58,6 +61,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 **資訊導向**：完整的技術細節、API 和設定。
 
 - [Architecture](./reference/architecture.md) - 系統架構總覽
+- [Monorepo Configuration](./reference/configuration.md) - TypeScript / ESLint / AI 工具配置
 - [API Reference](./reference/api/) - REST API 規格
 - [Commitlint Rules](./reference/commitlint-rules.md) - Commit 訊息規則
 - [Git Hooks](./reference/git-hooks.md) - Git hooks 設定
@@ -78,6 +82,8 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [Monorepo Strategy](./explanation/monorepo-strategy.md) - 為什麼用 Turborepo
 - [Git Hooks Research](./explanation/git-hooks-research.md) - 業界最佳實踐
 - [Rental Finder Automation Strategy](./explanation/rental-finder-automation-strategy.md) - 租屋自動化技術選型
+- [Blog Platform Research](./explanation/blog-platform-research.md) - Blog 平台選型調研（Sanity vs Git-based CMS vs 純 MDX）
+- [Time Tracker Timezone](./explanation/time-tracker-timezone.md) - 時區處理策略與取捨
 
 **何時使用**：理解技術決策背後的「為什麼」
 
@@ -92,6 +98,9 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [002 - Agents.md Adoption](./adr/002-agents-md-adoption.md)
 - [003 - Git Hooks Optimization](./adr/003-git-hooks-optimization.md)
 - [004 - Rental Finder Feature](./adr/004-rental-finder-feature.md) - 台北租屋自動化整合決策
+- [005 - Vercel AI SDK](./adr/005-vercel-ai-sdk.md) - AI 整合方案選型
+- [006 - Expo Mobile App](./adr/006-expo-mobile-app.md) - 新增 Expo 應用到 monorepo _(提議中)_
+- [007 - 自建 Blog 內容系統](./adr/007-self-hosted-blog.md) - MDX in git + Velite _(提議中)_
 
 **何時使用**：做出或理解重大架構決策
 
@@ -155,6 +164,7 @@ ai_context: |
 - **API**: [API Reference](./reference/api/)
 - **React Query**: [React Query Patterns](./explanation/react-query-patterns.md), [ADR 001](./adr/001-react-query-ssg-pattern.md)
 - **租屋自動化**: [Technical Strategy](./explanation/rental-finder-automation-strategy.md), [Facebook Groups](./reference/rental-finder/facebook-groups.md), [ADR 004](./adr/004-rental-finder-feature.md)
+- **Blog & 內容策略**: [Blog Platform Research](./explanation/blog-platform-research.md), [ADR 007](./adr/007-self-hosted-blog.md), [Medium Articles API](./reference/api/medium-articles-api.md)
 
 ---
 

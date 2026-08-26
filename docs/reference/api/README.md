@@ -164,7 +164,7 @@ curl http://localhost:3000/api/medium-articles
 
 ### 使用 Postman
 
-匯入集合：[API Collection](../../../scripts/postman-collection.json) _（未來提供）_
+匯入集合：API Collection _（未來提供）_
 
 ---
 

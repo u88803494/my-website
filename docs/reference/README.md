@@ -27,8 +27,9 @@
 ### 系統與架構
 
 - **[架構](./architecture.md)** - 系統架構與組件關係
-- **環境變數** - 所有環境變數 _(即將推出)_
-- **CLI 指令** - 可用的 pnpm scripts 和指令 _(即將推出)_
+- **[Monorepo 配置](./configuration.md)** - TypeScript、ESLint 與 AI 工具的配置架構
+- **環境變數** - 所有環境變數 _(規劃中)_
+- **CLI 指令** - 可用的 pnpm scripts 和指令 _(規劃中)_
 
 ### Git 與 CI/CD
 

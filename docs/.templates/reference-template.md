@@ -1,7 +1,4 @@
-# [技術/組件/API 名稱] 參考文件
-
 ---
-
 title: [完整標題]
 type: reference
 status: draft|review|stable|deprecated
@@ -11,14 +8,14 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 version: x.y.z (如適用)
 related:
-
-- guides/how-to-use.md
-- explanation/concept.md
-- api/related-api.md
-  ai_context: |
+  - guides/how-to-use.md
+  - explanation/concept.md
+  - api/related-api.md
+ai_context: |
   此參考文件的簡短說明。
-
 ---
+
+# [技術/組件/API 名稱] 參考文件
 
 ## 概述
 

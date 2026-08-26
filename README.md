@@ -14,13 +14,13 @@
 
 ### 🏠 Hero Section
 
-![Henry Lee Website Hero Section](./public/images/screenshots/henry-lee-hero-section.png)
+![Henry Lee Website Hero Section](./apps/my-website/public/images/screenshots/henry-lee-hero-section.png)
 
 _展示網站首頁的 Hero Section，包含個人介紹、技術背景描述、關鍵成就數據以及行動按鈕_
 
 ### 📝 Medium 文章展示區域
 
-![Medium Articles Section](./public/images/screenshots/resume-article-section.png)
+![Medium Articles Section](./apps/my-website/public/images/screenshots/resume-article-section.png)
 
 _展示 Medium 文章自動化系統的完整佈局：「最新文章」固定展示最新兩篇，「更多文章」輪播展示其餘文章，包含自動播放控制、指示器和優雅的動畫效果_
 
@@ -201,7 +201,7 @@ cp .env.example .env.local
 
 ### 詳細說明文檔
 
-📖 **[Medium 文章自動化完整指南](./docs/MEDIUM-ARTICLES-GUIDE.md)**
+📖 **[Medium 文章自動化完整指南](./docs/guides/medium-article-sync.md)**
 
 ## 📁 專案結構
 
@@ -255,16 +255,16 @@ pnpm sync:all-articles  # 完整同步流程
 
 ## 📖 相關文檔
 
-- 📝 **[Medium 文章自動化指南](./docs/MEDIUM-ARTICLES-GUIDE.md)** - 完整的自動化系統使用說明
-- 📋 **[結構化日誌指南](./docs/LOGGER-GUIDE.md)** - Logger 系統使用與最佳實踐
-- 🗂️ **[article-urls.json](./article-urls.json)** - Medium 文章 URL 管理
-- 🤖 **[batch-parse-articles.js](./scripts/batch-parse-articles.js)** - 自動化解析腳本
-- 📊 **[articleData.ts](./src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
-- 📋 **[Issue 管理指南](./docs/ISSUE-MANAGEMENT.md)** - P0-P3 優先級系統使用說明
+- 📝 **[Medium 文章自動化指南](./docs/guides/medium-article-sync.md)** - 完整的自動化系統使用說明
+- 📋 **[結構化日誌指南](./docs/guides/structured-logging.md)** - Logger 系統使用與最佳實踐
+- 🗂️ **[article-urls.json](./apps/my-website/article-urls.json)** - Medium 文章 URL 管理
+- 🤖 **[batch-parse-articles.ts](./apps/my-website/scripts/batch-parse-articles.ts)** - 自動化解析腳本
+- 📊 **[articleData.ts](./apps/my-website/src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
+- 📋 **[Issue 管理指南](./docs/guides/issue-management.md)** - P0-P3 優先級系統使用說明
 
 ## 📊 Issue 管理
 
-本專案使用 [P0-P3 優先級系統](./docs/ISSUE-MANAGEMENT.md) 管理 GitHub Issues。
+本專案使用 [P0-P3 優先級系統](./docs/guides/issue-management.md) 管理 GitHub Issues。
 
 [![Open Issues](https://img.shields.io/github/issues/u88803494/my-website)](https://github.com/u88803494/my-website/issues)
 [![P0 Critical](https://img.shields.io/github/issues/u88803494/my-website/p0-critical?color=B60205&label=P0%20Critical)](https://github.com/u88803494/my-website/labels/p0-critical)
@@ -285,7 +285,7 @@ pnpm sync:all-articles  # 完整同步流程
 - 🔍 [需要 Triage 的 Issues](https://github.com/u88803494/my-website/labels/status%3Aneeds-triage)
 - ✅ [準備開始的 Issues](https://github.com/u88803494/my-website/labels/status%3Aready)
 
-詳細說明請參閱 [Issue 管理指南](./docs/ISSUE-MANAGEMENT.md)。
+詳細說明請參閱 [Issue 管理指南](./docs/guides/issue-management.md)。
 
 ## 🌟 特色功能說明
 
@@ -345,7 +345,7 @@ vercel --prod
 
 ## 📄 授權
 
-MIT License - 詳見 [LICENSE](./LICENSE) 文件
+MIT License
 
 ---
 

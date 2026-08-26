@@ -1,12 +1,22 @@
-# 📋 Structured Logging Guide
-
-> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
->
-> **Future location**: `docs/guides/structured-logging.md` (Phase 3)
->
-> This file will be archived after migration.
-
 ---
+title: 結構化日誌指南（Structured Logging Guide）
+type: guide
+status: stable
+audience: [developer, ai]
+tags: [logging, pino, observability, debugging]
+created: 2026-08-26
+updated: 2026-08-26
+difficulty: intermediate
+estimated_time: 15 分鐘
+related:
+  - reference/configuration.md
+  - adr/003-git-hooks-optimization.md
+ai_context: |
+  使用專案結構化日誌系統（pino）的完整指南，涵蓋 logger 建立、log level、
+  錯誤記錄與正式環境的最佳實踐。
+---
+
+# 📋 Structured Logging Guide
 
 Complete guide for using the structured logging system in this project.
 

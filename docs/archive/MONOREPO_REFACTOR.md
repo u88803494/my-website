@@ -4,7 +4,7 @@
 >
 > **Status**: ✅ Completed (2025-10-20)
 >
-> **For current architecture**: See [docs/reference/architecture.md](./reference/architecture.md)
+> **For current architecture**: See [docs/reference/architecture.md](../reference/architecture.md)
 >
 > This file will be moved to `docs/archive/` in Phase 6.
 

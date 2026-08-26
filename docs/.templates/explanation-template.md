@@ -1,7 +1,4 @@
-# [概念/模式/決策名稱]
-
 ---
-
 title: [完整標題]
 type: explanation
 status: draft|review|stable|deprecated
@@ -10,14 +7,14 @@ tags: [tag1, tag2, tag3]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 related:
-
-- adr/related-decision.md
-- reference/related-tech.md
-- guides/related-guide.md
-  ai_context: |
+  - adr/related-decision.md
+  - reference/related-tech.md
+  - guides/related-guide.md
+ai_context: |
   關於此文件解釋的概念或模式的簡短說明。
-
 ---
+
+# [概念/模式/決策名稱]
 
 ## 概述
 

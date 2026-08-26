@@ -193,7 +193,7 @@ export default config;
 
 詳細配置說明請參考：
 
-- 📖 [docs/CONFIGURATION.md](./docs/CONFIGURATION.md) - 完整配置文檔
+- 📖 [docs/reference/configuration.md](./docs/reference/configuration.md) - 完整配置文檔
 - 📖 [.cursorrules](./.cursorrules) - 專案編碼規範
 - 📖 [turbo.json](./turbo.json) - Turborepo 配置
 

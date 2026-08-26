@@ -1,7 +1,4 @@
-# ADR-XXX: [決策簡短標題]
-
 ---
-
 title: [完整標題]
 type: adr
 status: proposed|accepted|rejected|superseded|deprecated
@@ -13,13 +10,13 @@ supersedes: [若適用則填入 ADR-XXX]
 superseded_by: [若適用則填入 ADR-XXX]
 tags: [tag1, tag2, tag3]
 related:
-
-- path/to/explanation.md
-- path/to/reference.md
-  ai_context: |
+  - path/to/explanation.md
+  - path/to/reference.md
+ai_context: |
   關於決策內容及原因的簡要背景說明。
-
 ---
+
+# ADR-XXX: [決策簡短標題]
 
 ## 狀態
 
