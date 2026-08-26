@@ -51,3 +51,6 @@ next-env.d.ts
 # local AI tooling and package-manager caches
 .codex/
 .pnpm-store/
+
+# browser automation artifacts (Playwright / Chrome DevTools MCP)
+.playwright-mcp/
