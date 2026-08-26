@@ -1,4 +1,11 @@
 import type { NextConfig } from "next";
+import { build } from "velite";
+
+/**
+ * Build Velite content at config-load time (before NextConfig construction)
+ * Ensures both `next dev` and `next build` have compiled content available
+ */
+await build({ watch: process.env.NODE_ENV === "development", clean: process.env.NODE_ENV !== "development" });
 
 /**
  * Next.js configuration
@@ -14,7 +21,7 @@ const nextConfig: NextConfig = {
    * Transpile workspace packages for proper React Context sharing
    * Required for monorepo packages to work correctly with React Query
    */
-  transpilePackages: ["@packages/blog", "@packages/shared", "@packages/ai-dictionary", "@packages/ai-analyzer"],
+  transpilePackages: ["@packages/medium-blog", "@packages/shared", "@packages/ai-dictionary", "@packages/ai-analyzer"],
 
   /**
    * Prevent bundling server-only packages in client code
