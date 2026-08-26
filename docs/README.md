@@ -34,6 +34,9 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 
 - [Git Workflow](./guides/git-workflow.md) - 使用 git hooks 和自動化
 - [Development Setup](./guides/development-setup.md) - 設定本地開發環境
+- [Structured Logging](./guides/structured-logging.md) - Logger 系統使用與最佳實踐
+- [Issue Management](./guides/issue-management.md) - P0-P3 優先級系統
+- [Medium Article Sync](./guides/medium-article-sync.md) - 文章自動解析與同步
 - Deployment - 部署到正式環境 _(規劃中)_
 - Contributing - 如何貢獻此專案 _(規劃中)_
 
@@ -58,6 +61,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 **資訊導向**：完整的技術細節、API 和設定。
 
 - [Architecture](./reference/architecture.md) - 系統架構總覽
+- [Monorepo Configuration](./reference/configuration.md) - TypeScript / ESLint / AI 工具配置
 - [API Reference](./reference/api/) - REST API 規格
 - [Commitlint Rules](./reference/commitlint-rules.md) - Commit 訊息規則
 - [Git Hooks](./reference/git-hooks.md) - Git hooks 設定
@@ -79,6 +83,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [Git Hooks Research](./explanation/git-hooks-research.md) - 業界最佳實踐
 - [Rental Finder Automation Strategy](./explanation/rental-finder-automation-strategy.md) - 租屋自動化技術選型
 - [Blog Platform Research](./explanation/blog-platform-research.md) - Blog 平台選型調研（Sanity vs Git-based CMS vs 純 MDX）
+- [Time Tracker Timezone](./explanation/time-tracker-timezone.md) - 時區處理策略與取捨
 
 **何時使用**：理解技術決策背後的「為什麼」
 

@@ -1,12 +1,21 @@
-# Monorepo 配置文檔
-
-> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
->
-> **Future location**: `docs/reference/configuration.md` (Phase 3)
->
-> This file will be archived after migration.
-
 ---
+title: Monorepo 配置參考手冊（Monorepo Configuration Reference）
+type: reference
+status: stable
+audience: [developer, ai]
+tags: [monorepo, typescript, eslint, turborepo, configuration]
+created: 2026-08-26
+updated: 2026-08-26
+version: 1.0.0
+related:
+  - reference/architecture.md
+  - explanation/monorepo-strategy.md
+ai_context: |
+  my-website monorepo 的 TypeScript、ESLint 與 AI 工具配置架構參考，
+  說明各 package 的設定繼承關係。
+---
+
+# Monorepo 配置文檔
 
 本文檔說明 my-website monorepo 的 TypeScript、ESLint 和 AI 工具配置架構。
 
@@ -52,7 +61,7 @@ my-website/
 
 ### 詳細說明
 
-參閱 [ADR 002: Adopt AGENTS.md Standard](./adr/002-agents-md-adoption.md) 瞭解完整的設計決策、實作細節和遷移指南。
+參閱 [ADR 002: Adopt AGENTS.md Standard](../adr/002-agents-md-adoption.md) 瞭解完整的設計決策、實作細節和遷移指南。
 
 ---
 

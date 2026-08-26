@@ -1,12 +1,21 @@
-# Issue 管理指南
-
-> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
->
-> **Future location**: `docs/guides/issue-management.md` (Phase 3)
->
-> This file will be archived after migration.
-
 ---
+title: GitHub Issue 管理指南（Issue Management Guide）
+type: guide
+status: stable
+audience: [developer, ai]
+tags: [github, issues, workflow, labels, priority]
+created: 2026-08-26
+updated: 2026-08-26
+difficulty: beginner
+estimated_time: 10 分鐘
+related:
+  - guides/git-workflow.md
+ai_context: |
+  本專案的 P0-P3 四級優先級系統與 label 慣例，涵蓋 issue 建立、triage、
+  狀態流轉與關閉的完整流程。
+---
+
+# Issue 管理指南
 
 本專案使用 P0-P3 四級優先級系統管理 GitHub Issues，確保開發工作有序進行。
 

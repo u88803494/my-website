@@ -1,12 +1,22 @@
-# 📝 Medium 文章自動解析系統
-
-> ⚠️ **DEPRECATED** - This document will be migrated to Diataxis framework.
->
-> **Future location**: `docs/guides/medium-article-sync.md` (Phase 3)
->
-> This file will be archived after migration.
-
 ---
+title: Medium 文章同步指南（Medium Article Sync Guide）
+type: guide
+status: stable
+audience: [developer, ai]
+tags: [medium, articles, automation, scripts, content]
+created: 2026-08-26
+updated: 2026-08-26
+difficulty: beginner
+estimated_time: 5 分鐘
+related:
+  - reference/api/medium-articles-api.md
+  - adr/007-self-hosted-blog.md
+ai_context: |
+  Medium 文章自動解析系統的使用方式：維護 article-urls.json、執行同步腳本、
+  以及產生 articleData.ts 的流程。注意 ADR-007 將改變此流程。
+---
+
+# 📝 Medium 文章自動解析系統
 
 ## 🚀 使用方式
 

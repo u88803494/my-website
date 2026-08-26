@@ -27,12 +27,21 @@
 ### 開發相關
 
 - **[Git 工作流程](./git-workflow.md)** - 使用 git hooks、commitlint 和自動化
-- **開發環境設定** - 設定本地開發環境 _(即將推出)_
-- **貢獻指南** - 如何貢獻此專案 _(即將推出)_
+- **[開發環境設定](./development-setup.md)** - 設定本地開發環境
+- **[結構化日誌](./structured-logging.md)** - Logger 系統使用與最佳實踐
+- **貢獻指南** - 如何貢獻此專案 _(規劃中)_
+
+### 專案管理
+
+- **[Issue 管理](./issue-management.md)** - P0-P3 優先級系統與 label 慣例
+
+### 內容
+
+- **[Medium 文章同步](./medium-article-sync.md)** - 文章自動解析與同步流程
 
 ### 部署相關
 
-- **部署指南** - 部署到 Vercel 和管理環境 _(即將推出)_
+- **部署指南** - 部署到 Vercel 和管理環境 _(規劃中)_
 
 ---
 

@@ -37,6 +37,10 @@
 - **[Blog Platform Research](./blog-platform-research.md)** - Blog 平台選型調研（Sanity vs Git-based CMS vs 純 MDX）
 - **[Rental Finder Automation Strategy](./rental-finder-automation-strategy.md)** - 租屋自動化技術選型
 
+### 功能設計
+
+- **[Time Tracker 時區管理](./time-tracker-timezone.md)** - 時區處理策略與取捨
+
 ### 遷移紀錄
 
 - **[AI Dictionary Migration](./ai-dictionary-migration.md)** - AI Dictionary 獨立 repository 的遷移脈絡
