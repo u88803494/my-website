@@ -3,9 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "skipLibCheck": true,
+    "declaration": false,
+    "declarationMap": false,
     "paths": {
       "@/*": ["src/*"],
-      "#site/content": ["./.velite/index.d.ts"]
+      "#site/content": ["./.velite/index.d.ts"],
+      "@velite/*": ["./.velite/*"]
     },
     "plugins": [
       {
@@ -14,5 +17,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/**/*.ts"],
-  "exclude": ["node_modules", "velite.config.ts"]
+  "exclude": ["node_modules"]
 }

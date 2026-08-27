@@ -1,11 +1,4 @@
 import type { NextConfig } from "next";
-import { build } from "velite";
-
-/**
- * Build Velite content at config-load time (before NextConfig construction)
- * Ensures both `next dev` and `next build` have compiled content available
- */
-await build({ watch: process.env.NODE_ENV === "development", clean: process.env.NODE_ENV !== "development" });
 
 /**
  * Next.js configuration

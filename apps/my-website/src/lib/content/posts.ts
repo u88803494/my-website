@@ -1,17 +1,14 @@
-import type { Post } from "#site/content";
-import { posts as allPostsData } from "#site/content";
+// Value import uses the "@velite/*" tsconfig path alias (not the
+// "#site/content" subpath import) because Turbopack (Next.js 16.1.1) fails
+// to resolve package.json "imports" field entries at runtime, silently
+// producing `undefined` for the module. "@velite/*" avoids the "#"-prefixed
+// specifier entirely, going through the same resolver-alias mechanism that
+// "@/*" already uses successfully elsewhere in this app. The type-only
+// import above is erased at compile time and unaffected either way.
+import { posts as allPostsData } from "@velite/index.js";
 
-export interface PostSummary {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  updatedDate?: string;
-  tags: string[];
-  readTime: string;
-  thumbnail?: string;
-  mediumUrl?: string;
-}
+import type { PostSummary } from "@/features/blog/types";
+import type { Post } from "#site/content";
 
 /**
  * 取得所有非草稿文章，按日期遞減排序
@@ -26,7 +23,9 @@ export function getAllPosts(): Post[] {
  * 根據 slug 取得單篇文章
  */
 export function getPostBySlug(slug: string): Post | undefined {
-  return (allPostsData as Post[]).find((post) => post.slug === slug);
+  return (allPostsData as Post[]).find(
+    (post) => post.slug === slug && (process.env.NODE_ENV === "development" || !post.draft),
+  );
 }
 
 /**
@@ -37,8 +36,8 @@ export function toPostSummary(post: Post): PostSummary {
     slug: post.slug,
     title: post.title,
     description: post.description,
-    date: new Date(post.date).toISOString().split("T")[0],
-    updatedDate: post.updatedDate ? new Date(post.updatedDate).toISOString().split("T")[0] : undefined,
+    date: new Date(post.date).toISOString().slice(0, 10),
+    updatedDate: post.updatedDate ? new Date(post.updatedDate).toISOString().slice(0, 10) : undefined,
     tags: post.tags,
     readTime: post.readTime,
     thumbnail: post.thumbnail,
