@@ -18,10 +18,11 @@ export default defineConfig({
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
           code: s.mdx(),
+          raw: s.raw(),
         })
-        .transform((data) => ({
+        .transform(({ raw, ...data }) => ({
           ...data,
-          readTime: computeReadTime(data.code),
+          readTime: computeReadTime(raw),
         })),
     },
   },
@@ -32,10 +33,23 @@ export default defineConfig({
   },
 });
 
-// 計算閱讀時間（約 200 字/分鐘）
-function computeReadTime(mdxCode: string): string {
-  const text = mdxCode.replace(/<[^>]*>/g, "");
-  const wordCount = text.split(/\s+/).length;
-  const minutes = Math.ceil(wordCount / 200);
-  return `${minutes} min read`;
+// 計算閱讀時間：從原始 MDX 文字（非編譯後的 code）估算，中英文分開計算
+// 中文約 300 字/分鐘、英文約 200 詞/分鐘（中文字之間沒有空白，不能用切詞方式計算）
+function computeReadTime(raw: string): string {
+  const plainText = raw
+    .replace(/```[\s\S]*?```/g, "") // code fence
+    .replace(/`[^`]*`/g, "") // inline code
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "") // image
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // link -> keep text
+    .replace(/^#{1,6}\s+/gm, "") // heading markers
+    .replace(/[*_]{1,3}/g, ""); // emphasis markers
+
+  const cjkMatches = plainText.match(/[一-鿿㐀-䶿]/g);
+  const cjkCount = cjkMatches?.length ?? 0;
+
+  const nonCjkText = plainText.replace(/[一-鿿㐀-䶿]/g, " ");
+  const latinWordCount = nonCjkText.split(/\s+/).filter(Boolean).length;
+
+  const minutes = Math.ceil(cjkCount / 300 + latinWordCount / 200);
+  return `${Math.max(minutes, 1)} min read`;
 }
