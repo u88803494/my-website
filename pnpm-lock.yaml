@@ -75,6 +75,9 @@ importers:
       "@packages/ai-dictionary":
         specifier: workspace:*
         version: link:../../packages/ai-dictionary
+      "@packages/blog":
+        specifier: workspace:*
+        version: link:../../packages/blog
       "@packages/medium-blog":
         specifier: workspace:*
         version: link:../../packages/medium-blog
@@ -297,6 +300,30 @@ importers:
       react-dom:
         specifier: ~19.2.3
         version: 19.2.3(react@19.2.3)
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+
+  packages/blog:
+    devDependencies:
+      "@packages/eslint-config":
+        specifier: workspace:*
+        version: link:../eslint-config
+      "@packages/tsconfig":
+        specifier: workspace:*
+        version: link:../tsconfig
+      "@types/react":
+        specifier: ~19.0.0
+        version: 19.0.0
+      "@types/react-dom":
+        specifier: ~19.0.0
+        version: 19.0.0
+      eslint:
+        specifier: ^9
+        version: 9.39.2(jiti@2.6.1)
+      next:
+        specifier: ^16
+        version: 16.1.1(@opentelemetry/api@1.9.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
