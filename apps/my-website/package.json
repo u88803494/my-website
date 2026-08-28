@@ -27,6 +27,7 @@
     "@google/generative-ai": "^0.24.1",
     "@packages/ai-analyzer": "workspace:*",
     "@packages/ai-dictionary": "workspace:*",
+    "@packages/blog": "workspace:*",
     "@packages/medium-blog": "workspace:*",
     "@packages/shared": "workspace:*",
     "@packages/tailwind-config": "workspace:*",

@@ -7,7 +7,7 @@
 // import above is erased at compile time and unaffected either way.
 import { posts as allPostsData } from "@velite/index.js";
 
-import type { PostSummary } from "@/features/blog/types";
+import type { PostSummary } from "@packages/blog/types";
 import type { Post } from "#site/content";
 
 /**

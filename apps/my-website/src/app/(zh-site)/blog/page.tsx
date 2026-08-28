@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
-import { BlogFeature } from "@/features/blog";
+import { BlogFeature } from "@packages/blog";
 import { getAllPosts, toPostSummary } from "@/lib/content/posts";
 
 export const metadata: Metadata = {
-  title: "Blog",
-  description: "技術筆記與想法分享",
+  title: "部落格 - Henry Lee",
+  description: "軟體工程、AI 應用與職涯成長的觀察與紀錄",
   openGraph: {
-    title: "Blog",
-    description: "技術筆記與想法分享",
+    title: "部落格 - Henry Lee",
+    description: "軟體工程、AI 應用與職涯成長的觀察與紀錄",
     type: "website",
     url: "https://henryleelab.com/blog",
   },
