@@ -1,6 +1,6 @@
-# @packages/blog
+# @packages/medium-blog
 
-部落格功能 package，整合 Medium 文章展示。
+Medium 文章展示 package，服務 `/medium-blog` 路由（無限捲動列表）。
 
 ## 功能
 
@@ -11,9 +11,9 @@
 ## 使用方式
 
 ```typescript
-import { BlogFeature } from "@packages/blog";
+import { BlogFeature } from "@packages/medium-blog";
 
-export default function BlogPage() {
+export default function MediumBlogPage() {
   return <BlogFeature />;
 }
 ```
