@@ -1,4 +1,9 @@
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
 import { defineConfig, s } from "velite";
+
+import { rehypeCopyButton } from "./src/lib/mdx/rehype-copy-button";
+import { rehypePrettyCodeOptions } from "./src/lib/mdx/rehype-pretty-code.config";
 
 export default defineConfig({
   collections: {
@@ -17,7 +22,9 @@ export default defineConfig({
           thumbnail: s.string().optional(),
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
-          code: s.mdx(),
+          code: s.mdx({
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton],
+          }),
           raw: s.raw(),
         })
         .transform(({ raw, ...data }) => ({
