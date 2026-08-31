@@ -5,13 +5,13 @@
 // specifier entirely, going through the same resolver-alias mechanism that
 // "@/*" already uses successfully elsewhere in this app. The type-only
 // import above is erased at compile time and unaffected either way.
+import type { PostSummary } from "@packages/blog/types";
 import { posts as allPostsData } from "@velite/index.js";
 
-import type { PostSummary } from "@packages/blog/types";
 import type { Post } from "#site/content";
 
 /**
- * 取得所有非草稿文章，按日期遞減排序
+ * Returns all non-draft posts, sorted by date descending.
  */
 export function getAllPosts(): Post[] {
   return (allPostsData as Post[])
@@ -20,7 +20,7 @@ export function getAllPosts(): Post[] {
 }
 
 /**
- * 根據 slug 取得單篇文章
+ * Returns a single post by slug.
  */
 export function getPostBySlug(slug: string): Post | undefined {
   return (allPostsData as Post[]).find(
@@ -29,7 +29,26 @@ export function getPostBySlug(slug: string): Post | undefined {
 }
 
 /**
- * 轉換為 UI 所需的精簡格式
+ * Returns the previous (earlier) and next (later) post relative to the given slug.
+ * getAllPosts() sorts newest-to-oldest, so "prev" has a larger array index and
+ * "next" has a smaller one.
+ */
+export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post | null } {
+  const posts = getAllPosts();
+  const index = posts.findIndex((post) => post.slug === slug);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: posts[index + 1] ?? null,
+    next: posts[index - 1] ?? null,
+  };
+}
+
+/**
+ * Converts a post into the trimmed-down shape the UI needs.
  */
 export function toPostSummary(post: Post): PostSummary {
   return {
