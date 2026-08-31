@@ -1,0 +1,56 @@
+---
+title: "淺談 Server Component 與 Client Component 的邊界設計"
+slug: "mock-server-client-component-boundary"
+description: "在實際專案裡，這條邊界該畫在哪裡才不會讓元件樹變得又亂又難維護？分享幾個實務上歸納出來的判斷原則，以及一些一開始畫錯邊界、後來重構的慘痛經驗。"
+date: 2026-05-10
+tags: ["react", "nextjs", "架構", "rsc"]
+draft: true
+---
+
+這是測試用的長文 mock 文章，內容是填充用的假文字，用來測試文章頁在長內容情境下的排版與目錄側欄效果，沒有實際技術意義。
+
+## 一開始畫錯的邊界
+
+專案剛導入 App Router 的時候，很直覺地把整個頁面標成 `"use client"`，因為裡面有互動邏輯。結果整個元件樹全部變成 client component，SSR 的優勢完全沒發揮到。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+## 判斷原則一：邊界盡量往葉節點推
+
+後來的原則是：`"use client"` 應該標在真正需要互動的最小單位上，而不是整個頁面容器。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+```tsx
+// ❌ 整個頁面都變成 client component
+"use client";
+export default function Page() {
+  return <div>...</div>;
+}
+
+// ✅ 只有真正需要互動的葉節點是 client component
+export default function Page() {
+  return (
+    <div>
+      <StaticHeader />
+      <InteractiveWidget />
+    </div>
+  );
+}
+```
+
+### Server Component 傳資料給 Client Component
+
+資料要怎麼從 server component 傳到 client component，也是一開始沒想清楚的地方，尤其是遇到不可序列化的物件（例如 function、Date 物件本身而非字串）就會出錯。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+### children 作為插槽
+
+一個實用的技巧是把 client component 當作容器，透過 `children` 插槽把 server component 塞進去，這樣 client component 本身不用知道 children 裡面渲染的是什麼，也能維持邊界清晰。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+## 判斷原則二：資料抓取盡量留在 server 端
+
+只要不涉及使用者互動的資料抓取，都應該留在 server component 完成，不要下放到 client component 用 `useEffect` 再抓一次。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+## 重構的代價
+
+把一個已經寫壞邊界的大型頁面重新拆分，花的時間比一開始設計對還要多好幾倍，這是這次經驗裡最深刻的教訓。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
+
+## 小結
+
+邊界設計沒有標準答案，但越早想清楚，後面付出的重構成本就越低。填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容、填充內容。
