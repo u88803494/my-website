@@ -1,5 +1,7 @@
 import type { Post } from "#site/content";
 
+import { DEFAULT_OG_IMAGE_URL } from "./rootMetadata";
+
 interface ArticleJsonLdProps {
   post: Post;
 }
@@ -10,7 +12,7 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.description,
-    image: post.thumbnail,
+    image: post.thumbnail ?? DEFAULT_OG_IMAGE_URL,
     datePublished: new Date(post.date).toISOString(),
     dateModified: new Date(post.updatedDate ?? post.date).toISOString(),
     author: {
