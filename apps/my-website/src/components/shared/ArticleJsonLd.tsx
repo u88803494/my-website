@@ -1,3 +1,4 @@
+import { formatDateISO8601 } from "@/lib/date-formatting";
 import type { Post } from "#site/content";
 
 import { DEFAULT_OG_IMAGE_URL } from "./rootMetadata";
@@ -13,8 +14,8 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     headline: post.title,
     description: post.description,
     image: post.thumbnail ?? DEFAULT_OG_IMAGE_URL,
-    datePublished: new Date(post.date).toISOString(),
-    dateModified: new Date(post.updatedDate ?? post.date).toISOString(),
+    datePublished: formatDateISO8601(post.date),
+    dateModified: formatDateISO8601(post.updatedDate ?? post.date),
     author: {
       "@type": "Person",
       name: "Henry Lee",
@@ -36,5 +37,11 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     },
   };
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      suppressHydrationWarning
+    />
+  );
 }

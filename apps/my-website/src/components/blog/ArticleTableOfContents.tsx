@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@packages/shared/utils";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 interface Heading {
@@ -20,7 +19,6 @@ const TRIGGER_LINE_PX = 100;
 export function ArticleTableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const pathname = usePathname();
   const tickingRef = useRef(false);
 
   useEffect(() => {
@@ -68,7 +66,7 @@ export function ArticleTableOfContents() {
       window.removeEventListener("resize", handleScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
-  }, [pathname]);
+  }, []);
 
   if (headings.length === 0) return null;
 

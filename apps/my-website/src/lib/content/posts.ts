@@ -8,6 +8,7 @@
 import type { PostSummary } from "@packages/blog/types";
 import { posts as allPostsData } from "@velite/index.js";
 
+import { formatDateISO8601, formatDateLocalized, formatDateSimple } from "@/lib/date-formatting";
 import type { Post } from "#site/content";
 
 /**
@@ -66,20 +67,12 @@ export interface PostForDisplay extends Post {
  * formatted dates for presentation, all in one place.
  */
 export function toPostForDisplay(post: Post): PostForDisplay {
-  const date = new Date(post.date);
-  const updatedDate = post.updatedDate ? new Date(post.updatedDate) : undefined;
-
   return {
     ...post,
     metadata: {
-      dateISO: date.toISOString(),
-      dateFormatted: date.toLocaleDateString("zh-TW", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        timeZone: "UTC",
-      }),
-      dateUpdatedISO: updatedDate?.toISOString(),
+      dateISO: formatDateISO8601(post.date),
+      dateFormatted: formatDateLocalized(post.date),
+      dateUpdatedISO: post.updatedDate ? formatDateISO8601(post.updatedDate) : undefined,
     },
   };
 }
@@ -92,8 +85,8 @@ export function toPostSummary(post: Post): PostSummary {
     slug: post.slug,
     title: post.title,
     description: post.description,
-    date: new Date(post.date).toISOString().slice(0, 10),
-    updatedDate: post.updatedDate ? new Date(post.updatedDate).toISOString().slice(0, 10) : undefined,
+    date: formatDateSimple(post.date),
+    updatedDate: post.updatedDate ? formatDateSimple(post.updatedDate) : undefined,
     tags: post.tags,
     readTime: post.readTime,
     thumbnail: post.thumbnail,
