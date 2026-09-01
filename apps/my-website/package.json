@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@9.15.4",
+  "imports": {
+    "#site/content": "./.velite/index.js"
+  },
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "pnpm run sync:all-articles && next build",
+    "dev": "pnpm run content:build && next dev --turbopack",
+    "build": "pnpm run sync:all-articles && pnpm run content:build && next build",
     "start": "next start",
     "lint": "eslint src --fix",
-    "check-types": "tsc --noEmit",
+    "check-types": "pnpm run content:build && tsc --noEmit",
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
+    "content:build": "velite build",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "pnpm run sync:latest && pnpm run parse:articles"
@@ -24,6 +28,7 @@
     "@packages/ai-analyzer": "workspace:*",
     "@packages/ai-dictionary": "workspace:*",
     "@packages/blog": "workspace:*",
+    "@packages/medium-blog": "workspace:*",
     "@packages/shared": "workspace:*",
     "@packages/tailwind-config": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
@@ -77,6 +82,7 @@
     "tsx": "^4.20.6",
     "turbo": "^2.6.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.2"
+    "typescript-eslint": "^8.46.2",
+    "velite": "0.4.0"
   }
 }
