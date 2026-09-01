@@ -48,6 +48,37 @@ export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post 
 }
 
 /**
+ * Converted post ready for article page display: all formatting (dates, etc.)
+ * done once, not repeated in render logic.
+ */
+export interface PostForDisplay extends Post {
+  dateISO: string;
+  dateFormatted: string;
+  dateUpdatedISO?: string;
+}
+
+/**
+ * Transforms a post into display-ready shape: ISO dates for <time dateTime>,
+ * formatted dates for presentation, all in one place.
+ */
+export function toPostForDisplay(post: Post): PostForDisplay {
+  const date = new Date(post.date);
+  const updatedDate = post.updatedDate ? new Date(post.updatedDate) : undefined;
+
+  return {
+    ...post,
+    dateISO: date.toISOString(),
+    dateFormatted: date.toLocaleDateString("zh-TW", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "UTC",
+    }),
+    dateUpdatedISO: updatedDate?.toISOString(),
+  };
+}
+
+/**
  * Converts a post into the trimmed-down shape the UI needs.
  */
 export function toPostSummary(post: Post): PostSummary {

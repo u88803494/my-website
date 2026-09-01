@@ -13,6 +13,9 @@ This is a **Turborepo monorepo** for Henry Lee's personal website (henryleelab.c
 - **Code Comments**:
   - Personal projects (path contains `/personal/`): Use English comments
   - Work projects (path contains `/work/`): Use Traditional Chinese comments
+- **Work-Life Balance & Bedtime Guard**:
+  - **21:00 - 23:00**: When answering requests, append a gentle reminder suggesting the user wrap up for the day (tools will be locked at 23:00).
+  - **23:00 - 06:00**: Advise the user to rest and prioritize sleep. Tool executions during this window will be intercepted by hooks.
 
 ## Monorepo Structure
 

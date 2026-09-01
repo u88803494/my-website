@@ -1,0 +1,23 @@
+{
+  "bedtime-guard": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "bash -c 'HOUR=$(date +%H); if [ \"$HOUR\" -ge 23 ] || [ \"$HOUR\" -lt 6 ]; then echo \"{\\\"injectSteps\\\": [{\\\"ephemeralMessage\\\": \\\"⏰ 夜間時間 (23:00-06:00)。請提醒使用者為了健康該休息了，並謝絕執行繁重或長時間的新功能開發。\\\"}]}\"; elif [ \"$HOUR\" -eq 21 ]; then echo \"{\\\"injectSteps\\\": [{\\\"ephemeralMessage\\\": \\\"🌙 晚上九點囉，差不多可以開始準備收尾了，23 點會鎖定工具執行，早點休息喔。\\\"}]}\"; else echo \"{}\"; fi'",
+        "timeout": 5
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'HOUR=$(date +%H); if [ \"$HOUR\" -ge 23 ] || [ \"$HOUR\" -lt 6 ]; then echo \"{\\\"decision\\\": \\\"deny\\\", \\\"reason\\\": \\\"⏰ 夜間時間 (23:00-06:00)。為了你的健康，工具執行已鎖定，請早點休息！🌅\\\"}\"; else echo \"{\\\"decision\\\": \\\"allow\\\"}\"; fi'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

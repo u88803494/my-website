@@ -2,7 +2,7 @@
 
 import { cn } from "@packages/shared/utils";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Heading {
   id: string;
@@ -21,6 +21,7 @@ export function ArticleTableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const pathname = usePathname();
+  const tickingRef = useRef(false);
 
   useEffect(() => {
     const article = document.querySelector(ARTICLE_SELECTOR);
@@ -37,9 +38,8 @@ export function ArticleTableOfContents() {
       })),
     );
 
-    let ticking = false;
     function updateActiveHeading() {
-      ticking = false;
+      tickingRef.current = false;
       let current: string | null = elements[0]?.id ?? null;
       for (const el of elements) {
         if (el.getBoundingClientRect().top <= TRIGGER_LINE_PX) {
@@ -52,8 +52,8 @@ export function ArticleTableOfContents() {
     }
 
     function handleScroll() {
-      if (ticking) return;
-      ticking = true;
+      if (tickingRef.current) return;
+      tickingRef.current = true;
       requestAnimationFrame(updateActiveHeading);
     }
 
