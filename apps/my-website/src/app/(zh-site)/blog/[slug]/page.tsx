@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description: post.description,
       type: "article",
       url,
-      publishedTime: displayPost.dateISO,
-      ...(displayPost.dateUpdatedISO && { modifiedTime: displayPost.dateUpdatedISO }),
+      publishedTime: displayPost.metadata.dateISO,
+      ...(displayPost.metadata.dateUpdatedISO && { modifiedTime: displayPost.metadata.dateUpdatedISO }),
       images: [{ url: ogImageUrl }],
     },
     twitter: {
@@ -96,7 +96,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* Metadata */}
             <div className="text-base-content/50 flex flex-wrap gap-4 text-sm">
-              <time dateTime={displayPost.dateISO}>{displayPost.dateFormatted}</time>
+              <time dateTime={displayPost.metadata.dateISO}>{displayPost.metadata.dateFormatted}</time>
               <span>•</span>
               <span>{post.readTime}</span>
             </div>

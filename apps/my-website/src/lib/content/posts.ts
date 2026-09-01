@@ -47,14 +47,18 @@ export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post 
   };
 }
 
+export interface PostMetadata {
+  dateISO: string;
+  dateFormatted: string;
+  dateUpdatedISO?: string;
+}
+
 /**
  * Converted post ready for article page display: all formatting (dates, etc.)
  * done once, not repeated in render logic.
  */
 export interface PostForDisplay extends Post {
-  dateISO: string;
-  dateFormatted: string;
-  dateUpdatedISO?: string;
+  metadata: PostMetadata;
 }
 
 /**
@@ -67,14 +71,16 @@ export function toPostForDisplay(post: Post): PostForDisplay {
 
   return {
     ...post,
-    dateISO: date.toISOString(),
-    dateFormatted: date.toLocaleDateString("zh-TW", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      timeZone: "UTC",
-    }),
-    dateUpdatedISO: updatedDate?.toISOString(),
+    metadata: {
+      dateISO: date.toISOString(),
+      dateFormatted: date.toLocaleDateString("zh-TW", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+      }),
+      dateUpdatedISO: updatedDate?.toISOString(),
+    },
   };
 }
 

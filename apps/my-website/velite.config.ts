@@ -23,7 +23,7 @@ export default defineConfig({
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
           code: s.mdx({
-            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton, validateMdxCode],
           }),
           raw: s.raw(),
         })
@@ -40,8 +40,27 @@ export default defineConfig({
   },
 });
 
-// 計算閱讀時間：從原始 MDX 文字（非編譯後的 code）估算，中英文分開計算
-// 中文約 300 字/分鐘、英文約 200 詞/分鐘（中文字之間沒有空白，不能用切詞方式計算）
+// Validate MDX compiled code: ensure no suspicious patterns that would indicate
+// external content source injection or build-time corruption
+function validateMdxCode(tree: any) {
+  const codeString = JSON.stringify(tree);
+  // Reject patterns that shouldn't appear in legitimate MDX output from local files
+  const suspiciousPatterns = [
+    /import\s+(?!React|jsx-runtime|Fragment)/,
+    /export\s+[^;]*(?<!default)/,
+    /new\s+Function/,
+    /eval\s*\(/,
+  ];
+
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(codeString)) {
+      throw new Error(`MDX code contains prohibited pattern: ${pattern}`);
+    }
+  }
+}
+
+// Compute reading time: estimate from raw MDX text (not compiled code)
+// Chinese: ~300 chars/min, English: ~200 words/min
 function computeReadTime(raw: string): string {
   const plainText = raw
     .replace(/```[\s\S]*?```/g, "") // code fence

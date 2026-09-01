@@ -38,7 +38,10 @@ export function ArticleTableOfContents() {
       })),
     );
 
+    let rafId: number | null = null;
+
     function updateActiveHeading() {
+      rafId = null;
       tickingRef.current = false;
       let current: string | null = elements[0]?.id ?? null;
       for (const el of elements) {
@@ -54,7 +57,7 @@ export function ArticleTableOfContents() {
     function handleScroll() {
       if (tickingRef.current) return;
       tickingRef.current = true;
-      requestAnimationFrame(updateActiveHeading);
+      rafId = requestAnimationFrame(updateActiveHeading);
     }
 
     updateActiveHeading();
@@ -63,6 +66,7 @@ export function ArticleTableOfContents() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, [pathname]);
 

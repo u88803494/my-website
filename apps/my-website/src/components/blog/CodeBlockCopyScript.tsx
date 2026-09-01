@@ -14,27 +14,37 @@ const COPIED_DURATION_MS = 2000;
  */
 export function CodeBlockCopyScript() {
   useEffect(() => {
+    const pendingButtons = new Set<HTMLButtonElement>();
+
     function handleClick(event: MouseEvent) {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-copy-button]");
       if (!button) return;
 
+      if (pendingButtons.has(button)) return;
+
       const code = button.closest("figure")?.querySelector("pre")?.textContent;
       if (!code) return;
 
+      pendingButtons.add(button);
       navigator.clipboard
         .writeText(code)
         .then(() => {
           button.classList.add(COPIED_CLASS);
-          window.setTimeout(() => button.classList.remove(COPIED_CLASS), COPIED_DURATION_MS);
+          window.setTimeout(() => {
+            button.classList.remove(COPIED_CLASS);
+            pendingButtons.delete(button);
+          }, COPIED_DURATION_MS);
         })
         .catch(() => {
-          // Clipboard permission denied or insecure context: fail silently, no
-          // unhandled rejection
+          pendingButtons.delete(button);
         });
     }
 
     document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+      pendingButtons.clear();
+    };
   }, []);
 
   return null;
