@@ -2,9 +2,15 @@
  * String helpers shared by the parsing and rendering stages.
  */
 
-/** Normalize non-breaking spaces (U+00A0) and collapse redundant whitespace. */
+/**
+ * Normalize non-breaking spaces (U+00A0) and collapse runs of whitespace.
+ *
+ * Newlines collapse too: inside HTML text they are insignificant whitespace,
+ * and a stray one in a title or summary would break the YAML frontmatter.
+ * Hard line breaks come from <br>, which is handled separately.
+ */
 export function normalizeText(text: string): string {
-  return text.replace(/\u00A0/g, " ").replace(/[ \t]+/g, " ");
+  return text.replace(/\u00A0/g, " ").replace(/\s+/g, " ");
 }
 
 /**
@@ -48,7 +54,17 @@ export function truncate(text: string, maxLength: number): string {
   return text.length > maxLength ? `${text.slice(0, maxLength).trim()}…` : text;
 }
 
-/** Escape a value for safe embedding in a double-quoted YAML scalar. */
+/**
+ * Escape a value for safe embedding in a double-quoted YAML scalar.
+ * A literal newline would terminate the scalar and corrupt the frontmatter, so
+ * it is folded to a space here as well as upstream in normalizeText.
+ */
 export function yamlString(value: string): string {
-  return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+  const escaped = value
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return `"${escaped}"`;
 }

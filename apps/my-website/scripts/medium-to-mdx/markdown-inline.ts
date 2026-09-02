@@ -22,7 +22,20 @@ export function convertInline($: CheerioAPI, nodes: AnyNode[]): string {
       switch (node.tagName) {
         case "a": {
           const href = node.attribs["href"];
-          return href ? `[${inner}](${href})` : inner;
+          if (!href) return inner;
+
+          // Medium sometimes auto-links text that is already inside a link.
+          // Recursing would emit [label]([inner](url)) — a malformed link that
+          // Velite then reads as a file path. Fall back to plain text.
+          const label = $(node).find("a").length > 0 ? escapeMdx(normalizeText($(node).text())) : inner;
+
+          // A link labelled with its own URL adds nothing, and wrapping it
+          // corrupts posts that show markdown syntax as prose: Medium auto-links
+          // the URL inside a literal "[text](url)" example, and re-wrapping it
+          // yields "[text]([url](url))".
+          if (label.trim() === href) return href;
+
+          return `[${label}](${href})`;
         }
         case "b":
         case "strong":

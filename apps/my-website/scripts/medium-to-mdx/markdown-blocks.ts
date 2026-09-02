@@ -22,9 +22,19 @@ export function convertPre($: CheerioAPI, element: Element): string {
     .text()
     .replace(/\u00A0/g, " ")
     .replace(/\n+$/, "");
+
+  // An empty <pre> would otherwise emit an empty fence, which swallows the
+  // following block into it.
+  if (!code.trim()) return "";
+
+  // Some posts contain literal ``` inside the code (markdown typed into
+  // Medium's code block). The fence must be longer than the longest run of
+  // backticks it contains, or it closes early and the rest leaks into prose.
+  const longestRun = Math.max(0, ...[...code.matchAll(/`+/g)].map((match) => match[0].length));
+  const fence = "`".repeat(Math.max(3, longestRun + 1));
   const lang = element.attribs["data-code-block-lang"] ?? "";
 
-  return `\`\`\`${lang}\n${code}\n\`\`\``;
+  return `${fence}${lang}\n${code}\n${fence}`;
 }
 
 /** Convert a <figure>: image, GitHub Gist embed, or iframe embed. */
@@ -91,6 +101,31 @@ export function convertBlockquote($: CheerioAPI, element: Element): string {
 }
 
 /**
+ * Neutralize a paragraph that starts with `import` or `export`.
+ *
+ * MDX parses those at the start of a line as ESM statements and fails on prose
+ * like "export function add(a, b)". Replacing the first character with its HTML
+ * entity renders identically while no longer matching the ESM grammar.
+ */
+function escapeEsmKeyword(text: string): string {
+  if (!/^(import|export)\b/.test(text)) return text;
+  return `&#${text.charCodeAt(0)};${text.slice(1)}`;
+}
+
+/**
+ * Escape a leading # or > so the paragraph stays a paragraph.
+ *
+ * Medium has real headings and blockquotes, so a paragraph *starting* with
+ * these characters is literal text — typically a post explaining Markdown
+ * syntax. List markers (- and 1.) are deliberately not escaped: authors often
+ * typed lists as plain paragraphs, and letting Markdown parse them restores the
+ * list semantics they meant.
+ */
+function escapeLeadingBlockMarker(text: string): string {
+  return text.replace(/^([#>])/, "\\$1");
+}
+
+/**
  * Medium's exporter brackets every section with a divider <hr>. It is layout,
  * not authored content.
  */
@@ -137,7 +172,8 @@ function convertBlockElement($: CheerioAPI, node: Element, context: BodyContext)
       return convertList($, node, 0) || null;
     case "p": {
       if ((node.attribs["class"] ?? "").includes("graf--empty")) return null;
-      return convertInline($, node.children ?? []).trim() || null;
+      const text = convertInline($, node.children ?? []).trim();
+      return text ? escapeLeadingBlockMarker(escapeEsmKeyword(text)) : null;
     }
     case "pre":
       return convertPre($, node);

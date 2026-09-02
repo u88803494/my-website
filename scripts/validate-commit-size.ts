@@ -19,6 +19,9 @@ const EXCLUDE_PATTERNS = [
   "yarn.lock",
   "bun.lockb",
   "**/*.md",
+  // 內容檔案，與 **/*.md 同性質：行數限制是為了讓程式碼變更可審查，
+  // 對整批遷移的文章內容沒有意義（endsWith(".md") 不會匹配 .mdx）
+  "**/*.mdx",
   "scripts/**/*.ts",
   "scripts/**/*.js",
   "**/*.sh",
