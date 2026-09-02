@@ -17,6 +17,7 @@ import { promises as fs } from "fs";
 import * as path from "path";
 
 import { APP_ROOT, CONFIG, REPO_ROOT } from "./config";
+import { EXCLUDED_FILES } from "./exclude";
 import { renderMdx, writeChecklist } from "./output";
 import { parsePost } from "./parse";
 import type { CliOptions, ConversionState, ConversionStats, ParsedPost, SlugContext, SlugResolution } from "./types";
@@ -130,8 +131,12 @@ async function convert(): Promise<void> {
   console.log(`📂 Source: ${inputDir}`);
   console.log(`📁 Output: ${options.out}`);
 
-  const allFiles = (await fs.readdir(inputDir)).filter((name) => name.endsWith(".html")).sort();
+  const allFiles = (await fs.readdir(inputDir))
+    .filter((name) => name.endsWith(".html") && !EXCLUDED_FILES.has(name))
+    .sort();
   const candidates = options.only ? allFiles.filter((name) => name.includes(options.only ?? "")) : allFiles;
+
+  console.log(`📄 ${allFiles.length} posts (${EXCLUDED_FILES.size} excluded as replies/tests)`);
 
   await fs.mkdir(options.out, { recursive: true });
 
