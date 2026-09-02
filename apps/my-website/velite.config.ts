@@ -8,7 +8,15 @@ export default defineConfig({
       schema: s
         .object({
           title: s.string(),
-          slug: s.slug("posts"),
+          // 自訂 slug 驗證取代 s.slug()：內建版本的 regex 是 /^[a-z0-9]+(?:-[a-z0-9]+)*$/i，
+          // 只接受 ASCII，會讓中文標題的文章全部噴 "Invalid slug"。
+          // \p{Letter} 涵蓋 CJK，同時仍排除標點與空白；s.unique 保留跨檔案唯一性檢查。
+          slug: s
+            .string()
+            .min(1)
+            .max(200)
+            .regex(/^[\p{Letter}\p{Number}]+(?:-[\p{Letter}\p{Number}]+)*$/u, "Invalid slug")
+            .and(s.unique("posts")),
           description: s.string(),
           subtitle: s.string().optional(),
           date: s.isodate(),
