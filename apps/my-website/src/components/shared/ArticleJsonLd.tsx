@@ -30,7 +30,10 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://henryleelab.com/blog/${post.slug}`,
+      // 必須與 generateMetadata 產生的 canonical 完全一致。
+      // slug 含中文時未編碼會與 canonical 的 percent-encoded 形式不符，
+      // 讓 Google 收到兩個看似不同的 URL 指向同一頁。
+      "@id": `https://henryleelab.com/blog/${encodeURIComponent(post.slug)}`,
     },
   };
 

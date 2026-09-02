@@ -21,10 +21,21 @@ export function getAllPosts(): Post[] {
 
 /**
  * 根據 slug 取得單篇文章
+ *
+ * slug 含中文時，Next.js 從路由傳進來的 params.slug 是 percent-encoded
+ * （例如 "%E7%AC%AC%E4%B8%80..."），但 Velite 存的是原始中文，直接比對會找不到。
+ * 這裡統一解碼，純 ASCII slug 解碼後不變，不受影響。
  */
 export function getPostBySlug(slug: string): Post | undefined {
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    // 格式錯誤的 percent-encoding（例如單獨的 "%"）：沿用原字串，讓它走 404
+  }
+
   return (allPostsData as Post[]).find(
-    (post) => post.slug === slug && (process.env.NODE_ENV === "development" || !post.draft),
+    (post) => post.slug === decoded && (process.env.NODE_ENV === "development" || !post.draft),
   );
 }
 

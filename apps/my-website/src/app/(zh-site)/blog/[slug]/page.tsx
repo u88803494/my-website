@@ -29,7 +29,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return {};
   }
 
-  const url = `https://henryleelab.com/blog/${slug}`;
+  // 用 Velite 的原始 slug 重新編碼，避免 params.slug 已編碼時產生 double-encoding
+  const url = `https://henryleelab.com/blog/${encodeURIComponent(post.slug)}`;
 
   return {
     title: post.title,
