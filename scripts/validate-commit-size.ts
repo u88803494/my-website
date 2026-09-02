@@ -138,9 +138,11 @@ function validateCommitSize(): void {
   let hasErrors = false;
   let hasWarnings = false;
 
-  if (stagedFiles.length > CONFIG.MAX_FILES) {
+  // 用過濾後的清單：被排除的檔案（lockfile、內容檔）不受行數限制，
+  // 檔案數限制自然也不該算它們，否則排除機制只做了一半
+  if (filesToValidate.length > CONFIG.MAX_FILES) {
     console.error(
-      `❌ Too many files in commit: ${stagedFiles.length} (max: ${CONFIG.MAX_FILES})`
+      `❌ Too many files in commit: ${filesToValidate.length} (max: ${CONFIG.MAX_FILES})`
     );
     console.error("   Please split your commit into smaller, focused changes.\n");
     hasErrors = true;
