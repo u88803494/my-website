@@ -15,7 +15,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...allPosts.map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
+      // slug 含中文時必須編碼，才會與 generateMetadata 產生的 canonical
+      // 及 JSON-LD 的 @id 一致；sitemap 規範也要求 URL 已跳脫
+      url: `${BASE_URL}/blog/${encodeURIComponent(post.slug)}`,
       lastModified: post.updatedDate ?? post.date,
       changeFrequency: "monthly" as const,
       priority: 0.7,
