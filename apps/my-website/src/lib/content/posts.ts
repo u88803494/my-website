@@ -5,9 +5,9 @@
 // specifier entirely, going through the same resolver-alias mechanism that
 // "@/*" already uses successfully elsewhere in this app. The type-only
 // import above is erased at compile time and unaffected either way.
+import type { PostSummary } from "@packages/blog/types";
 import { posts as allPostsData } from "@velite/index.js";
 
-import type { PostSummary } from "@packages/blog/types";
 import type { Post } from "#site/content";
 
 /**

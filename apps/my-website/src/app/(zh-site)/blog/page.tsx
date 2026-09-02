@@ -1,6 +1,6 @@
+import { BlogFeature } from "@packages/blog";
 import type { Metadata } from "next";
 
-import { BlogFeature } from "@packages/blog";
 import { getAllPosts, toPostSummary } from "@/lib/content/posts";
 
 export const metadata: Metadata = {
