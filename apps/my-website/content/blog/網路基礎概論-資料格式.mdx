@@ -1,0 +1,183 @@
+---
+title: "網路基礎概論：資料格式"
+slug: "網路基礎概論-資料格式"
+description: "資料格式的選擇"
+date: 2019-05-13T04:00:30.378Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%B6%B2%E8%B7%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E8%AB%96-%E8%B3%87%E6%96%99%E6%A0%BC%E5%BC%8F-cb559f695606"
+---
+
+## 資料格式的選擇
+
+這邊講的就資料結構。
+
+我們在收發資料的時候都有固定的格式。
+
+### 純文字與自定義格式
+
+```
+狀態：良好
+沒其他事情
+```
+
+純文字的好處就是可以定義任何想要的內容，壞處是要處理格式的 function 會比較困難些。一般來說都是會使用 XML . JSON。
+
+### XML
+
+Extensible Markup Language, XML .
+
+很類似 HTML ，因為他們都是 Markup language。
+
+> Markup Language裡面的Markup(標示)，指的是電腦所能理解的符號，標示符號定義出一份文件應該怎麼呈現在螢幕面前。 by [XML學習筆記](http://ericchiu-xml.blogspot.com/2010/08/markup-lanaguage.html)
+
+用標籤的形式來標出資料的屬性，然後裡面放資料。
+
+這個還是很常見，不過目前主流已經轉向 JSON 了。
+
+### JSON
+
+JavaScript Object Notation, JSON . [JSON官方網站](http://json.org/json-zh.html)
+
+熱門的原因在於是基於 JavaScript 而生的資料格式，所以與 JavaScript 相容性很好。 不過 JSON 還是有自己的規範，像是只能用雙引號包起 key 跟 value，也因為類似物件，所以會有很好的易讀性，而且 JSON 的佔用空間會比 XML 少。
+
+存取資料的方式，JSON 長得像物件，可是實際上不能使用物件的方式來取得資料。因為 JSON 本身是字串，所以必須要透過轉換才行。
+
+```
+const request = require('request');
+const process = require('process')
+```
+
+```
+request(
+ "https://reqres.in/api/users/2",
+ function (error, response, body) {
+  const json = JSON.parse(body) // 傳入 JSON 格式的字串
+  console.log(json.data.first_name);
+  // 印出來的就是 object，就可以使用 object 的形式去呼叫了
+ }
+);
+// Janet
+```
+
+MDN：[JSON.parse()](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
+
+還可以把物件變字串：
+
+```
+const obj = {
+ name: 'Supau',
+ job: 'drink'
+}
+```
+
+```
+console.log(JSON.stringify(obj));
+```
+
+## 透過網路交換資料的各種方式
+
+### 第一種：SOAP
+
+Simple Object Access Protocol, SOAP. Protocol 就是定義一個資料交換的格式，以方便交換資訊。
+
+SOAP 就是透過 XML 在做交換的。
+
+在使用的時候，常常都是借用 library 來寫。
+
+### 第二種：其他 SOAP 以外的 HTTP API
+
+**其他的 API？**
+
+其他大多數的 API 都是直接透過 request 去取得一個資料，所以這樣就是 SOAP 之外的方式。
+
+**什麼是 RESTful ？**
+
+REST 不是一個協定，只是一種「風格」，也就是一種建議要用的形式。而完全符合 REST 風格的就可以稱為 RESTful。
+
+在網頁上面，很多使用例如說刪除使用者，不一定要用 delete 指令，也可以使用 POST，而網頁也可以有許多種命名，主要是每個人的習慣都不太一樣，所以同一件事情，可能會有很多種命名，這時候 REST 的重要性就出現了。
+
+所以這種格式的出現目的就是希望我們可以好好的使用 HTTP 的給我們的那些指令。也是在增加易讀性跟方便操作使用。
+
+目前大多數網頁都是 REST 風格，也比較直覺。
+
+所以 REST 是一種設計 API 的方式。
+
+> RESTful API是一種設計風格，這種風格使API設計具有整體一致性，易於維護、擴展，並且充份利用HTTP協定的特點。
+
+> [參考資料](https://tw.twincl.com/programming/*641y)
+
+**API 串接實戰**
+
+[參考](https://github.com/request/request#requestmethod)
+
+```
+const request = require('request');
+```
+
+```
+request.delete(
+ "https://reqres.in/api/users/2",
+ function (error, response, body) {
+  console.log('body:', body)
+  const json = JSON.parse(body)
+  console.log(json);
+ }
+);
+// body:
+```
+
+得到 body 是一個空的，所以它就不能夠轉換。
+
+查看它的狀態碼
+
+```
+const request = require('request');
+```
+
+```
+request.delete(
+ "https://reqres.in/api/users/2",
+ function (error, response, body) {
+  console.log(response.statusCode);
+ }
+);
+// 204
+```
+
+[204 no content](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/204) 就是沒有內容，所以伺服器不知道要回甚麼，因為裡面已經沒有東西了，這代表有成功刪除，只是它沒有東西可以回應。
+
+Patch：新增一筆資料。
+
+```
+const request = require('request');
+```
+
+```
+request.patch(
+ {
+  url:"https://reqres.in/api/users/2",
+  form: {
+   name:'supau'
+  }
+ },
+ function (error, response, body) {
+  console.log(response.statusCode);
+  console.log(body);
+ }
+);
+// 200
+// {"name":"supau","updatedAt":"2019-05-13T03:51:48.247Z"}
+```
+
+成功新增。
+
+其實串接 API 也不難，就是按照固定的格式送個 request ，所以它的本質就是資料交換而已。
+
+### 自定義交換資料
+
+實際上，還有更多 API 是沒有建立在 HTTP 之上的。除了 HTTP 以外還有更多的 Protocol 也在進行資料交換。
+
+## 收穫：
+
+了解到這麼多種方式，就是為了方便資料交換而設置的，所以 API 實際上也沒有我想像中的那樣困難，我以前也做了很多串接 Facebook 的 API 的事情，不過那個時候只知道就是把那網址貼到我的軟體上面，就可以串接了，就可以讓程式替我做一些事情，直到了這邊我才真正明白，原來 API 就是這樣簡單的一件事情，就是發個 request，然後 response。唯一比較需要花時間的就是必須要去看串接網站的 API 是如何使用的，這可能就需要多花一些時間了。

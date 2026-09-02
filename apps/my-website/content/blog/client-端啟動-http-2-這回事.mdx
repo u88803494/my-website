@@ -1,0 +1,42 @@
+---
+title: "Client 端啟動 http/2 這回事"
+slug: "client-端啟動-http-2-這回事"
+description: "前沿"
+date: 2021-01-04T11:12:25.367Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*OnK1TC_fW5RB9pClAdawmA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/client-%E7%AB%AF%E5%95%9F%E5%8B%95-http-2-%E9%80%99%E5%9B%9E%E4%BA%8B-32d0795e80a2"
+---
+
+## 前沿
+
+我的公司是做監視器的，就是會有類似 youtube 那樣有很多影片，但其中不一樣的地方是這些監視器每一格都要可以播放，所以可能會有 3x3、4x4 會更多格需要同步播放。所以會有連線數的問題，因為在 http 中同時的連線數是有限制的。
+
+而會想寫這篇是因為在公司執行專案時，公司的伺服端已經改成使用 http/2，但網路上查詢到的資料是公司的前端使用的 Axios 不支援 http/2，於是公司就要求我找到可以使用 http/2 的方式。
+
+一開始主管是交代我改用 superagent 就可以了，所以我就試著研究，然後主管又說，應該會在收到的資訊可以看到是 http/2。
+
+所以我就試著去把其中一個 API 改成用 superagent 來呼叫，最後發現卻沒有該資訊?!
+
+然後就一直在 superagent 一直找 http/2 的使用，但直接 Ctrl+f5 也沒找到。
+
+## 解決(?)方式
+
+後來我花了一整天的時間 research，最後才看到這篇：
+
+瞬間解開我們的疑惑。雖然我公司是使用 REACT，不過似乎跟這些都沒關係。
+
+原來在前端世界中，因為底層是 XHR 的關係，所以伺服器有使用 http/2 XHR 就會自動切換成 http/2。
+
+那就很奇怪了，前面那個說不支援 http/2 的表格是怎麼回事？
+
+原來那個表格指的是後端，因為後端會用到的底層不一樣，所以在後端就變成不支援了。
+
+## 至於要怎麼確認 request 是否是 http/2 呢？
+
+如果是用 chrome 就打開 devTools，切到 network 頁面。
+
+然後對欄位名稱右鍵，然後把 Protocol 這個欄位打開，就可以看到 h2 那便是了。
+
+![](https://cdn-images-1.medium.com/max/800/1*OnK1TC_fW5RB9pClAdawmA.png)

@@ -1,0 +1,163 @@
+---
+title: "前端基礎：補充資料 Fetch & Promise"
+slug: "前端基礎-補充資料-fetch-promise"
+description: "Fetch"
+date: 2019-08-24T15:33:08.198Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*VlnVI0hRJ1e6YF_-3q4W6g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%A3%9C%E5%85%85%E8%B3%87%E6%96%99-fetch-promise-fe3fa71dfb9a"
+---
+
+## Fetch
+
+可以稱為 新時代的 XMLHttpRequest，也就是說可以協助我們做 AJAX 的工具。XMLHttpRequest 在現代已經不太被使用，現在大多使用 Fetch，這是比較更簡單得多的操作。
+
+這個網頁可以測試看看如何使用 fetch
+
+這網站已經準備好，需要的資料格式了。
+
+比如說要取得這筆資料
+
+https://jsonplaceholder.typicode.com/posts/1
+
+只要在指令輸入：
+
+```
+fetch('https://jsonplaceholder.typicode.com/posts/1') // 相當於發 get
+```
+
+然後再使用 `.then()` 去接收資料，這個 `.then()` 又可以接收前面 return 的資料。所以可寫這樣
+
+```
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+  .then(function(response) {
+    return response.json(); // .json 是 fetch 的函式 可以轉換資料
+  })
+  .then(function(Json) {
+    console.log(Json);
+  });
+```
+
+然後可以使用 `.catch()` 可以取得錯誤資料，這跟之前的 XMLHttpRequest 的 `.onerror()` 是一樣的功能
+
+```
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+  .then(function(response) {
+    return response.json(); // .json 是 fetch 的函式 可以轉換資料
+  })
+  .then(function(Json) {
+    console.log(Json);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+```
+
+然後試試看印出 fetch 看看是什麼東西
+
+```
+const api = fetch('https://jsonplaceholder.typicode.com/posts/1')
+console.log(api)
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*VlnVI0hRJ1e6YF_-3q4W6g.png)
+
+發現這是一個名稱叫做 Promise 的物件。
+
+## Promise
+
+這個稱為 Promise 的物件，其實跟 XMLhttpsrequest 是類似的概念：
+
+```
+const req = new XMLhttpsrequest()
+```
+
+Promise 出現的目的就是去標準化非同步操作有關的程式碼。
+
+這什麼意思呢？
+
+也就是說在原始的時後， callback function 之後，才可以在裡面在執行 callback function，然後當越來越多層之後，就會出現一個東西 Callback hell，就是由一層層的 callback function 堆疊起來。
+
+![](https://cdn-images-1.medium.com/max/800/1*i5sUEtuF_tiRIR457cSIUg.png)
+
+為了解決這個問題，就可以利用 Promise，用來接收 return 的結果之後，再傳給下一個 function 也就像像前面說明的那樣 `.then()` 之後，後面再接另外一個 `.then()`
+
+而在原始的寫法是使用 function，使用上約定成俗 function 的變數用法都應該是固定的。但實際上寫起來，它就是個 function 要怎麼用都是看個人。所以就需要更為標準化的 Promise。
+
+### Promise 的用法
+
+Promise 的後面的 function 第一個變數是執行的結果，第二個變數則是錯誤的結果。
+
+```
+const doFirst = new Promise(function (resolve, reject) {
+  resolve('sdoels')
+})
+```
+
+```
+doFirst.then(result => {
+  console.log(result)
+})
+// sdoels
+```
+
+這樣的話 result 就會接收 resolve() 括號內的值，所以就會印出括號內的內容。
+
+這時候把 function 內部的 resolve 改成 reject
+
+```
+const doFirst = new Promise(function (resolve, reject) {
+  reject('sdoels')
+})
+```
+
+```
+doFirst.then(result => {
+  console.log(result)
+}).catch(err => {
+  console.log('err', err)
+})
+```
+
+```
+// err sdoels
+```
+
+這邊就是沒有 resolve 就會直接寫出 reject 的內容當作錯誤訊息，所以就可以把一個非同步的事件包裝成 Promise，透過這個 Promise，就可以統一讓別人呼叫的時候使用，就有一個標準可以呼叫，就不用去猜 callback function 的回傳值是什麼意思等等。
+
+所以就可以利用在非同步。直接把 resolve 用 timeout 包起來延遲三秒後，就會發現可以在三秒後才執行 `.then` 然後印出資料。
+
+```
+const doFirst = new Promise(function (resolve, reject) {
+  setTimeout(()=> {
+    resolve('sdoels')
+  }, 3000)
+})
+```
+
+```
+doFirst.then(result => {
+  console.log(result)
+}).catch(err => {
+  console.log('err', err)
+})
+```
+
+```
+// 三秒後 sdoels
+```
+
+setTimeout 的效果就像是非同步的回應延遲那樣，這時候就可以用前面所說的那個 測試 fetch 的網站
+
+![這樣同樣也可以取到網站的值](https://cdn-images-1.medium.com/max/800/1*RfphShMDQz1v7tdp5404SQ.png)
+
+_這樣同樣也可以取到網站的值_
+
+所以就可以利用 Promise 包裝起來，之後就可以直接傳入網址使用。
+
+Promise 就是一個 class，可以照著它規定的方法使用。用在解決 callback function 可以隨人寫的問題。還可以讓使用的人很安心地知道，使用 `.then` 回傳的一定是接收到的資料，只要有錯誤的資料就會跑到 `.catch` 那邊。
+
+然後 Promise 有三種狀態。詳細可以參考 MDN
+
+實務上新東西都是 Promise 的形式。所以大部分非同步都可以改寫成 Promise

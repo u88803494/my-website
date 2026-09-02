@@ -1,0 +1,828 @@
+---
+title: "JavaScript 進階： ES6"
+slug: "javascript-進階-es6"
+description: "ES5 ES6 是什麼？"
+date: 2019-05-07T11:16:20.800Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E9%80%B2%E9%9A%8E-es6-3a65102157e6"
+---
+
+## ES5 . ES6 是什麼？
+
+ECMAScript：標準、規範，一種規範，規格書。
+
+所以 ES5 . ES6 就是 JavaScript 根據這個標準來實作的結果。
+
+ECMAScript 6 在 2015 年正式發布，所以簡寫就寫作 ES6 也有人稱為 ES2015。裡面多的一些新功能就稱作為 ES6 語法。有需要的話，也可以去看 ES6 的規格書，裡面可以看到一些比較基礎的東西，像是數字的最大最小值的範圍，各種符號代表的意思等，所以有需要的話，最好的方式是來看 ES6 的規格書，規格書也會把所有的情況給寫進來，這就是規格書的特性，因為 JavaScript 的規範就是根據 ES6 的規格書，這就像是說明書一樣，所以把所有細節都寫在裡面。
+
+## ES6 的語法：let 與 const
+
+### let 與 const 的差異
+
+```
+let a = 10
+const b = 15
+```
+
+const 就是 constant 常數的意思，就是數字不會變的意思，代表這個變數無法改變。但如果使用陣列與物件的話，值就可以改，因為變數底層的運作的方式，不可改的是變數儲存的記憶體位置，改陣列與物件的內容卻是可以的。
+
+```
+let a = 10
+const b = {
+  number: 15
+}
+b.number = 20
+console.log(b)
+// 20
+```
+
+作用域(Scope)：就是變數的生存範圍。
+
+一般我們的變數在搜尋結果的時候，會由內部網外部找，所以變數會為顯示為內部的值。但是變數的性質是，如果在 function 內部宣告了一個變數，在 function 的外部是沒辦法呼叫的。
+
+```
+function test() {
+  if(10 > 5) {
+    var a = 10
+  }
+  console.log(a)
+}
+```
+
+```
+test();
+// a 的作用域只在這個 function 內部而已。
+console.log(a)
+// 10
+// "ReferenceError: a is not defined
+```
+
+只是在 if 內部也可以讓 function 內部的其他地方都看到這個變數，這點是 JavaScript 的特性，JavaScript 是以 function 為分界，而在其他語言都是只有 if 的內部才能看到這個變數。
+
+所以出現了 let 跟 const，它就是只能在 if 內部作用了。
+
+```
+function test() {
+  if(10 > 5) {
+    let a = 10
+  }
+  console.log(a)
+}
+```
+
+```
+test();
+// "ReferenceError: a is not defined
+```
+
+## Template Literals
+
+不需要字串拼接，跟 string 有關的語法，以往都要用很麻煩的方式才能拼接字串
+
+```
+var str = '' + '\n' +
+    'wfjpe' + '\n' +
+    'sft4s' // 這樣才能變成多行字串
+```
+
+如果字串一多要拚的時候，就必須很容易發生錯誤。
+
+所以可以使用 `` 包起來，` 稱之為重音符。可以當一般字串，也可以直接換行了。
+
+```
+var str = `131
+我是誰
+成龍演的，不是眼的
+飾演的
+
+`
+```
+
+```
+console.log(str)
+// 131
+// 我是誰
+// 成龍演的，不是眼的
+// 飾演的
+//
+```
+
+另一種是，可以模板化的使用，$\{ \} 裡面就可以插入變數，變數也可以使用內建函式作改變。
+
+```
+function sayHi(name) {
+  console.log(`hello, ${name.toUpperCase()} now is ${new Date()}`);
+}
+
+sayHi('nick')
+// hello, NICK now is Sun May 05 2019 22:22:18 GMT+0800 (台北標準時間)
+```
+
+這樣也比較易懂。很多程式的 library 都會提供類似用法。
+
+## Destructuring 解構
+
+詳細解釋： https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+
+```
+const arr = [1, 2, 3, 4]
+```
+
+```
+var first = arr[0]
+var second = arr[1]
+var third = arr[2]
+var fourth = arr[3]
+```
+
+```
+console.log(second, third)
+```
+
+等同於
+
+```
+// by ES6:
+const arr = [1, 2, 3, 4]
+```
+
+```
+var [first, second, third, fourth] = arr
+```
+
+```
+console.log(second, third)
+// 2 3
+```
+
+也可以只存取部分
+
+```
+// by ES6:
+const arr = [1, 2, 3, 4]
+```
+
+```
+var [first, second] = arr
+```
+
+```
+console.log(second)
+// 2
+```
+
+物件：
+
+```
+原本：
+const obj = {
+ name: 'nick',
+ age: 30,
+ address: 'taiwan'
+}
+```
+
+```
+var name = obj.name
+var age = obj.age
+var address = obj.address
+```
+
+```
+console.log(address)
+// taiwan
+```
+
+ES6：
+
+```
+const obj = {
+ name: 'nick',
+ age: 30,
+ address: 'taiwan'
+}
+```
+
+```
+var {name, age, address} = obj
+```
+
+```
+console.log(address)
+// taiwan
+```
+
+解構的好處，如果要把陣列或物件的內容，可以用更簡單的方式拿出來，這樣也可以同時宣告好幾種變數，然後還可以設置初始值，也可以讀取物件中的物件。
+
+```
+const obj = {
+ name: 'nick',
+ age: 30,
+ address: 'taiwan',
+ family: {
+  father: 'hello',
+  mother: 'hi',
+ }
+}
+```
+
+```
+var {family} = obj // 在這裡變成可以直接把同名的變數拿出來使用
+var {family:{mother}} = obj // 也可以解構物件中的物件的一部分
+```
+
+```
+console.log(family)
+console.log(mother)
+// { father: 'hello', mother: 'hi' }
+// hi
+```
+
+在這裡變成可以直接把同名的變數拿出來使用，因為物件這邊可以直接對應到，結構其實是一樣的，所以就會直接取出該部分
+
+function：
+
+```
+原本：
+function test(obj) {
+ console.log(obj.a)
+}
+```
+
+```
+test({
+ a: 1,
+ b: 2
+})
+```
+
+ES6：
+
+```
+function test(a, b) {
+ console.log(a)
+}
+```
+
+```
+test({
+ a: 1,
+ b: 2
+})
+```
+
+## Spread Operator 展開運算子
+
+把東西展開
+
+[展開語法](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+
+```
+原先：
+var arr = [1, 2, 3]
+var arr2 = [4, 5, 6, arr]
+```
+
+```
+console.log(arr2)
+// [ 4, 5, 6, [ 1, 2, 3 ] ]
+```
+
+```
+ES6:
+var arr = [1, 2, 3]
+var arr2 = [4, 5, 6, …arr]
+```
+
+```
+console.log(arr2)
+// [ 4, 5, 6, 1, 2, 3 ]
+```
+
+多了 ... 就可以展開
+
+```
+原先：
+function add(a, b, c) {
+ return a + b + c
+}
+```
+
+```
+console.log(add(1, 2, 3))
+// 6
+```
+
+```
+ES6:
+function add(a, b, c) {
+ return a + b + c
+}
+```
+
+```
+var arr = [1, 2, 3]
+console.log(add(…arr)) // ...arr 等於展開 arr 就會變成如上述所示
+// 6
+```
+
+物件：
+
+```
+var obj1 = {
+ a: 1,
+ b: 2,
+}
+```
+
+```
+var obj2 = {
+ z: 1
+}
+```
+
+```
+var obj3 = {
+ …obj1,
+ c: 3
+}
+console.log(obj3)
+// { a: 1, b: 2, c: 3 }
+```
+
+有重複的情況：
+
+```
+var obj1 = {
+ a: 1,
+ b: 2,
+}
+```
+
+```
+var obj2 = {
+ z: 1
+}
+```
+
+```
+var obj3 = {
+ b: 3,
+ ...obj1, // 在這邊 b 被後面的蓋掉了。
+}
+console.log(obj3)
+// { b: 2, a: 1}
+```
+
+這個的用法呢？
+
+```
+var arr = [1, 2, 3]
+var arr2 = arr //這樣寫不是複製，只是同樣指向同一個記憶體位置
+```
+
+```
+console.log(arr === arr2)
+// ture
+```
+
+```
+原先：
+var arr = [1, 2, 3]
+var arr2 = [1, 2, 3] //指向不同的記憶體位置
+```
+
+```
+console.log(arr === arr2)
+// false
+```
+
+```
+ES6：
+var arr = [1, 2, 3]
+var arr2 = [...arr] //指向不同的記憶體位置
+```
+
+```
+console.log(arr === arr2)
+// false
+```
+
+物件：
+
+```
+var obj = {
+ a: 1,
+ b: 2
+}
+```
+
+```
+var obj2 = {
+ …obj
+}
+```
+
+```
+console.log(obj, obj2, obj === obj2)
+// { a: 1, b: 2 } { a: 1, b: 2 } false
+```
+
+內容一樣但是指向的記憶體位置不同。
+
+所以在這邊的應用方式就是用來複製。不然如果使用 var obj2 = obj 的話就只是指向同一個記憶體位置，所以如果更改了 obj2 的值，就會連帶變動到 obj 的值。所以利用這種方式複製的話就可以避免這種情形的發生。
+
+## 「反向」的展開：Rest Parameters
+
+Rest 剩餘部分意思，所以就是標示所有剩餘的東西
+
+通常跟 Destructuring 搭配使用
+
+```
+var arr = [1, 2, 3, 4]
+var [first, …rest] = arr //...rest 必須要是最後一個元素
+```
+
+```
+console.log(first)
+console.log(rest) // ...rest 會把剩餘的都集中。
+// 1
+// [ 2, 3, 4 ]
+```
+
+```
+var obj = {
+ a: 1,
+ b: 2,
+ c: 3,
+}
+```
+
+```
+var {a, …obj2} = obj
+```
+
+```
+console.log(obj2) // 因為 a 已經被配對了，所以剩下的會進去 obj2 裡面。
+// { b: 2, c: 3 }
+```
+
+所以這個... 要不是把東西展開，不然就是集中剩餘的部分。
+
+綜合應用：
+
+```
+var obj = {
+ a: 1,
+ b: 2,
+}
+```
+
+```
+var obj2 = {
+ ...obj, // 這邊會展開 obj
+ c: 3
+}
+```
+
+```
+var {a, ...rest} = obj2 // 這邊把除了 a 之外給集中。
+```
+
+```
+console.log(rest)
+// { b: 2, c: 3 }
+```
+
+function：
+
+```
+原先：
+function add(a, b) {
+ return a + b;
+}
+```
+
+```
+console.log(add(1, 2))
+```
+
+ES6：
+
+```
+function add(…args) { // 會把放進去的值變成一個陣列
+ console.log(args);
+ return args[0] + args[1];
+}
+```
+
+```
+console.log(add(1, 2));
+// [ 1, 2 ]
+// 3
+```
+
+```
+function add(a, ...args) {
+ console.log(args);
+ return a + args[0]; // 剩餘的變成陣列，所以本來的 b 就變成 args[0]
+}
+```
+
+```
+console.log(add(1, 2));
+// [ 2 ]
+// 3
+```
+
+## 加上預設值：Default Parameters
+
+使用函式的時候，可以幫那些參數加上一個預設值，避免因為忘記輸入而跳出錯誤。
+
+```
+function repeat(str, times = 5) {
+ console.log(times)
+ return str.repeat(times)
+}
+```
+
+```
+console.log(repeat(‘abc’, 5));
+// 5
+// abcabcabcabcabc
+```
+
+所以如果都不給值，且預設也都寫好。
+
+```
+function repeat(str = 'hello', times = 5) {
+ return str.repeat(times)
+}
+```
+
+```
+console.log(repeat());
+// hellohellohellohellohello
+```
+
+當然也可以在別的地方使用，通常都搭配解構使用。
+
+```
+const obj = {
+ b: 2,
+}
+```
+
+```
+const {a = 123, b} = obj; // 因為 obj 沒有寫 a 所以本來會顯示 undefined
+console.log (a, b)
+// 123 2
+// 因為有了預設值，所以 a 變成 123
+```
+
+可以利用等號加個內容就變成預設值，所以會很多地方都可以運用。
+
+個人想法是，可以用來 debug，直接預設值寫 'Wrong here' 。
+
+## Function 的更新：箭頭函式 Arrow Function
+
+```
+原先：
+```
+
+```
+function test(n) {
+ return n;
+}
+```
+
+```
+const test = function(n) {
+ return n;
+}
+```
+
+```
+ES6：
+const test = n => { // => 就是箭頭函式。如果只有一個參數的話，括弧也可以省略
+ return n;
+}
+```
+
+舉例：
+
+```
+原先：
+var arr = [1, 2, 3, 4, 5]
+console.log(
+ arr
+   .filter(function(value) {
+   return value > 1; // 先依照條件過濾
+   }).map(function(value) {
+   return value * 2; // 把剩下的值乘以2
+   })
+)
+// 以前都要這樣寫，看起來就是東西很多很雜
+```
+
+```
+ES6：
+var arr = [1, 2, 3, 4, 5]
+console.log(
+ arr
+  .filter(value => value > 1);
+  .map(value => value * 2);
+)
+```
+
+除了可以省略 function 跟 括號之外，還可以省略 return 跟那些大括號，所以就簡化如上，可以大幅增加可讀性。
+
+## Import 與 Export
+
+&#101;xport 、Import\{\} 取代 require 跟 exports
+
+```
+原先：
+utils.js:
+function add(a, b) {
+ return a + b;
+}
+```
+
+```
+module.exports = add;
+```
+
+```
+index.js:
+var add = require('./utils')
+```
+
+```
+console.log(add(3, 5))
+// 8
+```
+
+&#101;xport + 需要輸出的內容，只要接在該內容前面就可以。
+
+```
+ES6：
+utils.js:
+export function add(a, b) {
+ return a + b;
+}
+```
+
+```
+index.js:
+import {add, PI} from './utils'
+```
+
+```
+console.log(add(3, 5))
+// 8
+```
+
+node 並沒有原生支援 import，需要有 babel-node
+
+也可以打包
+
+```
+function add(a, b) {
+ return a + b;
+}
+```
+
+```
+const PI = 3.14
+```
+
+```
+export {
+ add,
+ PI
+}
+```
+
+還可以把原來的名字改掉。
+
+```
+function add(a, b) {
+ return a + b;
+}
+```
+
+```
+const PI = 3.14
+```
+
+```
+export {
+ add as addFunction, // 所以 import 內要寫 addFunction 才可以使用
+ PI
+}
+```
+
+as 語法都可以使用，所以也可以在導入的地方使用。
+
+如果想要一次 import 全部。
+
+```
+import * as utils from './utils' // 這個 * 在程式語言通常代表全部的意思
+```
+
+```
+console.log(utils.addFunction(3, 5))
+```
+
+&#101;xport default
+
+預設輸出的意思
+
+```
+utils.js:
+export default function add(a, b) {
+ return a + b;
+}
+```
+
+```
+export const PI = 3.14
+```
+
+```
+index.js:
+import add from './utils'
+// 等同於 import {default as add} from './utils'
+//不能直接使用 default，所以利用 ass 幫他額外取個別名
+```
+
+```
+console.log(add(3, 5)) // 因為預設輸出 add ，所以這邊可以直接使用
+// 8
+```
+
+**通常都使用 import \* as 使用上會比較方便。**
+
+> Export 有幾種方式：
+
+> 1. export function add()\{\}，使用 import \{add\}
+
+>    引
+
+> 入
+
+> 2. export \{ add \}，與上面那種
+
+>    一
+
+> 樣
+
+> 3. export default function add()，使用 import add 引入，不需要加大
+
+>    括
+
+> 號
+
+> 如果想要用其他名字，可以用 as 取別名，例如說 export \{ add as addFunction \}
+
+> 可以用 import \* as utils from ‘utils’ 把全部都 import 進來
+
+## Babel 簡介與基本使用方法
+
+安裝：
+
+Babel 的安裝說明：https://babeljs.io/docs/en/next/babel-node.html
+
+設定步驟：
+
+1. 安裝必要套件：npm install — save-dev @babel/core @babel/node @babel/preset-env
+2. 新增 .babelrc
+3. 填入內容，告訴 babel 要用這個 preset：
+
+\{
+
+“presets”: [“@babel/preset-env”]
+
+\}
+
+最後使用 npx babel-node index.js 即可
+
+Babel 簡介：[官方網站](https://babeljs.io/)
+
+如果要用一個新的語法，但支援度不夠，就開發一個編譯器，去把新的語法轉換成舊的語法，這樣就可以使用了，這在前端開發的時候十分常見，所以才會有這麼多的工具可以使用，因為前端更新的速度十分的快速，瀏覽器往往跟不上前端工具的更新速度。
+
+ES6/7/8 → Babel → ES5 或更舊的。
+
+官方網站也告知不要把這個用在產品開發，因為效能不太好，但要用也可以通常都是先透過 Babel 編譯後，再直接執行編譯後的內容即可。
+
+ES6 小結：[更多的 ES6 語法](https://github.com/DrkSephy/es6-cheatsheet)。有些太困難的東西沒有講解。新的語法就有必要才用。像是 let 跟 const 就很需要使用。
+
+JavaScrip 進階的結語：
+
+模組化、測試、ES6
+
+把共同的部份抽出來變成模組使用，這樣子就可以很方便的使用、修改以及很好的易讀性。使用 npm 引入開源的程式，就不用自己寫。測試方面也是，可以更容易地去測試程式是否完成。ES6 有碰到就可以用，沒想到的話也不一定要用，但至少要知道有 ES6 的那些語法。
+
+收穫：在 ES6 裡面，學習到了很多種各種語法，用起來非常的方便，程式就是一直不停的進步，使得大家越來越容易的使用，以及更容易學習，也使大家可以更容易得看懂。在這邊學習到很多的替代方案，讓我們可以很容易地使用，也了解了很多的概念。總而言之 ES6 就是個很好用的工具，很值得學習。

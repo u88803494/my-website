@@ -1,0 +1,52 @@
+---
+title: "localhost:3000 refused 在 WSL2 的解決方案"
+slug: "localhost-3000-refused-在-wsl2-的解決方案"
+description: "內含 WSL 重新啟動的方法"
+date: 2022-02-14T04:56:28.322Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*Phq7ihPCT1l1y1XV0b01kQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/localhost-3000-refused-%E5%9C%A8-wsl2-%E7%9A%84%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88-f9aaca9a8578"
+---
+
+這個畫面不知道為什麼在 WSL 的環境下，常常莫名出現
+
+![](https://cdn-images-1.medium.com/max/800/1*Phq7ihPCT1l1y1XV0b01kQ.png)
+
+時常都是有一些錯誤，像我今天早上可能是因為我更新了 Windows，所以就壞了。
+
+所以我來紀錄一下如何處理這些問題！
+
+通常都是因為 Wsl 那不知道出了什麼問題掛了，原理就跟 Window 有時候莫名出錯的解法一樣 — — 重開機。就好了，所以這邊就要重開 WSL，重開的方法有兩種：
+
+## 解決方案一：
+
+直接在 wsl 之外的界面輸入以下指令，像是 powerShell 或是 CMD 也可以。
+
+```
+wsl --shutdown
+```
+
+然後輸入
+
+```
+wsl
+```
+
+重新啟動 WSL
+
+如果還是沒解決問題就換下一個方法
+
+## 解決方案二：
+
+按下 Win + R 輸入：
+
+```
+services.msc
+```
+
+然後在列表找到 LXSSMANAGER，對它按下右鍵選重新啟動。跑他跑完之後，應該就可以了。
+
+但我在這邊碰到的是會談出黃色視窗，然後會看到狀態保持在 stopping。這時候重新啟動 window 就好了。
+
+## 來源：

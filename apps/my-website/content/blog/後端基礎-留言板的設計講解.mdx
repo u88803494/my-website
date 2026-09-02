@@ -1,0 +1,83 @@
+---
+title: "後端基礎：留言板的設計講解"
+slug: "後端基礎-留言板的設計講解"
+description: "設計留言板 DataBase 結構"
+date: 2019-07-09T10:12:35.057Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*_9gWz45uXezk8Z7oQyEY7g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E7%95%99%E8%A8%80%E6%9D%BF%E7%9A%84%E8%A8%AD%E8%A8%88%E8%AC%9B%E8%A7%A3-f901703e4940"
+---
+
+## 設計留言板 DataBase 結構
+
+1. 有哪些欄位是共同的？
+2. 差別在哪裡？
+
+這邊說的留言板是有子留言的功能。
+
+在實際上，子留言的結構跟主留言是一樣的，如果把子留言搬到父留言的區塊，一樣也可以成為一個獨立的留言。
+
+所以就可以得知
+
+1. 有哪些欄位是共同的？**id, nickname, content, created_at**
+2. 差別在哪裡？**分成父留言跟子留言**
+
+時間的名稱一般在慣例上都用 create_at，像 id 也是這樣的。
+
+所以可以從設計兩個 table 開始：
+
+![](https://cdn-images-1.medium.com/max/800/1*_9gWz45uXezk8Z7oQyEY7g.png)
+
+這兩個 table 差別在於多了一個欄位 parent_id，用來對應主留言。
+
+也因為重複性很高，實務上可以把兩個 table 合併。
+
+![](https://cdn-images-1.medium.com/max/800/1*SRjq5oUpZOuqqejIOXpS9A.png)
+
+所以就是利用 parent_id 來表示，這個值是 0 就代表主留言。也就不需要另外一個 table 了。就可以把資料合併在一起：
+
+![](https://cdn-images-1.medium.com/max/800/1*2qrXnKqfuweRy6ARytz0yg.png)
+
+## 講解留言板設計
+
+1. 顯示所有留言 index.php
+
+分頁：LIMIT 10 OFFSET 10  
+先撈主留言 select _ from … where parent_id = 0  
+再撈子留言 select _ from … where parent_id = $id
+
+2. 發布留言 add_comments.php
+
+利用表單 POST，讀取 content, nickname 跟 parent_id  
+可以利用 &lt;input type=’hidden’ /> 帶 parent_id  
+新增到資料庫，導回 index.php
+
+![](https://cdn-images-1.medium.com/max/800/1*Xz8T62v4OKJeoAPyFBhvCw.png)
+
+製作技巧：先切板，然後再把呈現資料的方式寫上去，接著再把資料呈現的方式包成 function，然後就可以做很多種分頁。
+
+小技巧：在 chrome dev tool 選取標籤之後按下 h 就可以隱藏標籤。
+
+-
+
+分頁功能：
+
+1. 先用 count 直接抓出所有資料到底有多少筆。
+2. 再來是使用 LIMIT 搭配 OFFSET 來選取範圍。
+
+分頁的時候需要第幾頁的資訊，可以透過自定義分頁的參數來判斷。
+
+## 實作會員系統
+
+1. 註冊頁面 register.php 可以重複利用，GET 就是表單，POST 就是註冊  
+   或你也可以有 register.php, handle_register.php
+
+寫資料進 DB，可以準備一個 message.php 顯示訊息（成功 or 失敗）  
+導回 index.php 或是 register.php（若註冊失敗）
+
+2. 登入頁面 login.php  
+   查詢會員是否存在，利用 cookie 記錄會員 id，記得要先判斷是不是已經登入狀態了
+
+3. 留言板 index.php  
+   透過 cookie 判斷是否已經是會員，決定是否顯示留言區塊

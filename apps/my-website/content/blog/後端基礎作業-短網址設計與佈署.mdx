@@ -1,0 +1,111 @@
+---
+title: "後端基礎作業：短網址設計與佈署"
+slug: "後端基礎作業-短網址設計與佈署"
+description: "hw1：短網址系統設計"
+date: 2019-08-31T12:07:46.814Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*0vV2_Ky20y9iMHQD"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-%E7%9F%AD%E7%B6%B2%E5%9D%80%E8%A8%AD%E8%A8%88%E8%88%87%E4%BD%88%E7%BD%B2-632bd1a4961"
+---
+
+## hw1：短網址系統設計
+
+請你畫出一張短網址服務的後端系統架構圖，越詳細越好，可以考慮到如何增進效能、scaling 以及備份資料。
+
+沒靈感的話可參考：[短網址(short URL)系統的原理及其實現](https://hufangyun.com/2017/short-url/)、[Design TinyURL](https://leetcode.com/problems/design-tinyurl/description/)
+
+圖片可參考下圖（這是一張 Mobile 與 Web 前端如何跟後端溝通的圖，這示意圖只是大概講一下應該要怎麼畫，但你實際畫出來一定跟這個長得不一樣）：
+
+![](https://cdn-images-1.medium.com/max/800/0*0vV2_Ky20y9iMHQD)
+
+—
+
+先思考一下整個短網址是怎麼運作的？
+
+假設使用者已經在網頁上了。使用者輸入網址 abc.com，送出。伺服器收到，轉換成短網址 shortrul.com/oooooo，然後把 oooooo 跟使用者輸入的 abc.com 做完關聯，接著回應使用者已經把 abc.com，縮網址成 shortrul.com/oooooo。以後任何使用者只要在網址輸入 shortrul.com/oooooo，伺服器收到之後，就會直接把連到這個網址的人導向到 abc.com。
+
+以題目要求的部份，只需要寫使用者索取短網址的時候，
+
+![](https://cdn-images-1.medium.com/max/800/1*qwbeZYOURt222K5StHTWpQ.png)
+
+## hw2：部署
+
+請把你之前寫的 PHP 程式部署到自己的機器上面，並且對應到自己購買的網域。
+
+可參考其他同學的心得（特別感謝 @yuchun33 跟 @futianshen ）：
+
+1. [部署 AWS EC2 遠端主機 + Ubuntu LAMP 環境 + phpmyadmin](https://github.com/Lidemy/mentor-program-2nd-yuchun33/issues/15)
+2. [一小時完成 VPS (Virtual Private Server) 部署](https://github.com/Lidemy/mentor-program-2nd-futianshen/issues/21)
+
+—
+
+寫在另外一篇。
+
+[部屬 AWS EC2 雲端主機 + LAMP Server + phpMyAdmin + CloudFlare](https://medium.com/@hugh_Program_learning_diary_Js/%E9%83%A8%E5%B1%AC-aws-ec2-%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F-lamp-server-phpmyadmin-cloudflare-43871cd5dd01?source=your_stories_page---------------------------)
+
+## hw3：簡答題
+
+1. 什麼是 DNS？Google 有提供的公開的 DNS，對 Google 的好處以及對一般大眾的好處是什麼？
+2. 什麼是資料庫的 lock？為什麼我們需要 lock？
+3. NoSQL 跟 SQL 的差別在哪裡？
+4. 資料庫的 ACID 是什麼？
+
+—
+
+## 什麼是 DNS？Google 有提供的公開的 DNS，對 Google 的好處以及對一般大眾的好處是什麼？
+
+DNS, Domain Name System。DNS 是一種記錄了很多網址對應網域的紀錄，它將人們可讀取的網域名稱 (例如，[www.google.com](http://www.google.com/)) 轉換為機器可讀取的 IP 地址。運作方式是當我們在瀏覽器輸入網址之後，瀏覽器會把網址拿去跟 DNS 伺服器請求之後返回對應的 IP 位置，這樣瀏覽器就可以連線到正確的伺服器位置了。
+
+Google 提供 DNS 伺服器，對於大家的好處是多了更多的 DNS 可以選擇，而 Google 到處都有伺服器，大眾也可以通過 Google 的 DNS 更快的取得需要的 IP 地址。而對於 Google 而言，他就可以通過統計這些連線的紀錄，變成統計數據資料，就可以讓 Google 通過這些數據賺錢。
+
+## 什麼是資料庫的 lock？為什麼我們需要 lock？
+
+Lock 是一個可以鎖定資料庫某個部分的指令。他的用意是當存取修改資料的時候，我們可以通過 Lock 鎖定要存取修改的資料，使資料可以順利新增或修改。而不會發生同時修改造成的遺失或是其他問題。
+
+## NoSQL 跟 SQL 的差別在哪裡？
+
+NoSQL 跟 SQL 的差異在於一個是沒有 schema 一個有 schema。NoSQL 是沒有 schema 的，它也是除了關聯式資料庫之外幾乎都可以稱為 NoSQL，主要原因是因為後來越發展越多種。
+
+其他的差異就是性能上的差異。像是 SQL 的擴展比較困難、讀寫比較慢、成本也高然後有限的支撐容量，也就是它資料沒辦法太大太多。它的好處是資料可以有較好的一致性，也比容易標準化，然後可以很容易進行複查詢(JOIN)
+
+NoSQL 因為沒有關聯性。也是有好有壞，好處是很簡單的就可以擴展、快速的讀寫、低廉的成本。缺點是不提供對 SQL 的支持，因為種類繁多也比較不容易學習
+
+## 資料庫的 ACID 是什麼？
+
+Transaction （交易）是一種可以讓 SQL 指令同時執行的動作，通常是用來保持同時修改數據之用，為了要保持修改數據的正確性，就需要通過 ACID。
+
+這 ACID 指的是資料庫在寫入或更新資料的過程中，必須保證 transaction 是正確且可靠的。
+
+為了要正確可靠。必須要有四個特性，這四個特性稱為 ACID：
+
+- Atomicity（原子性）：只能同時全部成功，其中一個失敗就全部都失敗。失敗之後就會回到還沒開始前的狀態。
+- Consistency（一致性）：開始跟結束之後，資料庫必須保持一致性。也就是說像是錢的數量，A 跟 B 共有 100 元，無論兩者之間如何交易，最終兩者加起來就只有 100 元。
+- Isolation（隔離性）：多個不同的交易進行的時候，彼此之間並不會互相影響。
+- Durability（持久性）：對於已提交的交易，因為有修改到資料庫，就必須要把這個動作處存在資料庫裡面最為紀錄。也要保持資料不會因為系統重啟或錯誤而改變。
+
+## 收穫：
+
+佈署這作業對於我來說真是梯度滿高的，主要原因是因為一大堆的名詞不懂意思，而我也只能按照說明的一步一步來。所以可以看到我的筆記跟參考資料的部份，有很大部份的類似。
+
+不過這也是一種學習，在這邊把 AWS 設置成功之後，是一個里程碑。然後後面在成功安裝之後可以進入 MyPHPAdmin 之後，又是一個里程碑。最後是成功的把資料上傳之後，又在一次一個里程碑。
+
+最後一個本來很簡單的，但也是被我弄成一個里程碑，因為我成功串連網址之後，突然有個想法，於是又把 DNS 改成 CloudFlare 的一起發揮完成。但可能前面的成功讓我覺得好想在多做一些的關係。
+
+中間遇到比較大的問題是我因為 cmder 的關係，居然一直無法通過認證。換了另外一個 command line 就好多了。但也因為這樣我也得到幫助了吧？
+
+因為有兩個 command line，所以我可以一個專注於我的本機，另外個 command line 專注於伺服端的指令。不過後來想一想好像沒差喔？因為本來 command line 就可以多重啟動XD。
+
+不管怎麼說整體而言，完成了這個課題。中間遇到一些困難，也都逐步解決。像是有輸入檔案的部份需要提高權限，不知道為什麼參考資料裡面的指令沒有作用，索性另外又找了資料來解決這個問題，從這裡可以看到自己的 Google 功力真的變好了。
+
+因為跟之前我在使用 XAMPP 的時候，碰到一個問題，就是 mac 的資料庫怎麼樣都不能登入，我那個時候也是瘋狂 Google，找了一堆資料，試了很久都完全不行，還好的是我使用 mac 的時間比較少，所以影響不大。
+
+而這個疑問到了這個課題才解開。原來是需要通過指令去讓資料庫新增密碼，才可以使用 MyPHPAdmin 登入。
+
+在這裡也把 Git 跟 GitHub 之間的指令弄的更清楚了。因為是通過 GitHub 把資料移轉到 Server。之前因為剛入門，所以是看說明文怎麼寫就怎麼用，處於一種，「恩！這樣會動，但為什麼？不太知道。」在這裡就弄的更明白了一些。
+
+我在想也是因為之前有寫了一篇[同步 huli 的三期 repository](http://git%20同步非榜定%20repository%20的方法) 有關係。因為在寫那篇的時候認知到原來 Git 指令是怎麼回事，Git 指令也是有結構的，用起來像資料夾的那種感覺。git 底下的 xxx 指令底下的 ooo，啟動 ooo 之後，需要輸入參數這樣。輸入參數之後按下 enter 就可以啟動那部份的程式。
+
+這樣也比較好。我除了操作指令之外，又另外把 repository 跟 Git 之間的關聯弄的更明白。這樣的話就可以減少我用 usb 帶來帶去的麻煩了，因為我之前就想弄清楚這部份了。
+
+最後是玩上癮，連 CloudFlare 都參一腳XD。這是我之前在弄 WordPress 架站的時候的玩具。最主要當時瀏覽器強制規定非 https 連線，就會跳出警告。為了要讓我的網站可以有 SSL，當時指導我的老師，特地帶著我使用 CloudFlare。不過後來就沒弄下去，所以我應該也忘了才對。但不知道是不是有記憶，還是經過這麼多年 CloudFlare 變簡單，我居然很順利的就設置完成了。真是可惜可賀。

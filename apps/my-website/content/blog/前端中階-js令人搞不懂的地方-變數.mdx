@@ -1,0 +1,309 @@
+---
+title: "前端中階：JS令人搞不懂的地方-變數"
+slug: "前端中階-js令人搞不懂的地方-變數"
+description: "這邊是比較基礎的部份，就當作複習基礎。才可以進入後面的正題。"
+date: 2019-09-21T11:47:22.362Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*wEX8EeyePnfsKl_4K4YneA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8-a864ede72f1d"
+---
+
+這邊是比較基礎的部份，就當作複習基礎。才可以進入後面的正題。
+
+## 變數的資料型態
+
+JavaScript 中資料有兩種型態：primitive type（原始型態）、object（物件），其中又有各自的分類。如下圖：
+
+![](https://cdn-images-1.medium.com/max/800/1*wEX8EeyePnfsKl_4K4YneA.png)
+
+在 JavaScript 要測試是哪種型態，就可以使用指令 `typeof` ，不過這中間會讓人覺得有點奇怪。像是使用 `typeof []` 就會回應 `object` 這是因為上圖所寫， array 也算是 object，
+
+```
+console.log(typeof []) // object
+console.log(typeof function(){} ) // Function
+console.log(typeof null) // object
+```
+
+這些都會讓人很疑惑，最主要是 `typeof`底層實作的關係，可以參考 MDN
+
+![緣由：主要是怕修了這個問題會出現更多的問題](https://cdn-images-1.medium.com/max/800/1*lgKzpyT3A0I36tT91RqgxQ.png)
+
+_緣由：主要是怕修了這個問題會出現更多的問題_
+
+所以可以使用另外一種方法檢測：
+
+```
+console.log(Object.prototype.toString.call( 1 ))
+// [object Number]
+```
+
+```
+console.log(Object.prototype.toString.call( '1' ))
+// [object String]
+```
+
+```
+console.log(Object.prototype.toString.call( [] ))
+// [object Array]
+```
+
+```
+console.log(Object.prototype.toString.call( {} ))
+// [object Object]
+```
+
+```
+console.log(Object.prototype.toString.call( function(){} ))
+// [object Function]
+```
+
+```
+console.log(Object.prototype.toString.call(null))
+// [object Null]
+```
+
+這邊只要看第二個即可
+
+有一些框架就會利用這種方式來判斷資料。
+
+其他關於 `typeof` 的特別之處：
+
+```
+var a
+console.log(typeof a) // undefined
+```
+
+```
+console.log(typeof a) // undefined
+console.log(a) // a is not defined
+```
+
+可以用來檢查有沒有這個變數的存在。
+
+### primitive type（原始型態）、object（物件） 的差異之一
+
+primitive type（原始型態）：immutable 不可改變
+
+```
+var str = 'hello';
+str.toUpperCase();
+console.log(str) // hello
+```
+
+這邊可以看到是不可改變的。意思就是說經過運算之後，值還是跟原來的一樣的意思。所以以上面的範例來說就必須要宣告另外一個變數來接收資料，因為經過運算之後它會回傳。
+
+```
+var str = 'hello';
+var newStr = str.toUpperCase();
+console.log(str, newStr); // hello HELLO
+```
+
+object（物件）
+
+array 就不太一樣了。
+
+```
+var arr = [1];
+arr.push(2);
+console.log(arr); // [1, 2]
+```
+
+## 賦值
+
+針對重新給值得部份，primitive type（原始型態）、object（物件）也會有所差異。
+
+```
+var a = 10;
+console.log(a); // 10
+```
+
+```
+a = 20;
+console.log(a); // 20
+```
+
+一般改值就跟著動，但物件的狀態就不太一樣
+
+```
+var obj = {
+  number: 10,
+}
+```
+
+```
+var obj2 = obj;
+```
+
+```
+console.log(obj, obj2); // { number: 10 } { number: 10 }
+```
+
+```
+obj.number = 20;
+```
+
+```
+console.log(obj, obj2); // { number: 20 } { number: 20 }
+```
+
+發現 obj 物件一改，兩邊都改值了。
+
+會這樣的原因跟底層有關係，以 a 為例子，他是把值直接儲存起來。物件則不太一樣，以 obj . obj2 為例子：
+
+```
+0x01 : {
+  number: 10,
+}
+```
+
+```
+obj: 0x01;
+obj2: 0x01;
+```
+
+因為物件是儲存在記憶體位置，然後再把變數指向這個記憶體位置。因為兩個儲存的記憶體位置是一樣的，所以一改之後就會其他的部份也改了。  
+而 array 在底層也是 object，所以也會發生一樣的情形。
+
+![](https://cdn-images-1.medium.com/max/800/1*gIFP-Zl7k7cJ4jxYt6mMXA.png)
+
+這邊重新賦值過的 arr2 就會指向另外一個記憶體位置，並且把值放進去。所以就會兩邊就會印初步一樣的值。
+
+賦值再做的工作是在新的記憶體寫入值之後，並把 arr2 指向該記憶體位置
+
+## == 與 === 的差別
+
+```
+console.log(2 == '2');
+```
+
+```
+console.log(2 === '2');
+```
+
+`==` 會轉換型態之後再做比較，而 `===` 就只會直接做比較，所以兩者的差異在於型態上的差異。至於其他的比較還有很多種，各有各自的差異。  
+所以最好都固定使用 `===` 。
+
+```
+var obj = {
+  number: 1,
+}
+```
+
+```
+var obj2 = obj;
+obj2.number = 2
+```
+
+```
+console.log(obj === obj2); // true
+console.log(obj == obj2); // true
+```
+
+會有這樣的反應是因為，物件不需要轉換型態，另外一點是因為物件儲存的是記憶體位置，所以因為記憶體位置是一樣的，所以就不會有所改變。  
+所以比較的是記憶體位置而不是實際上的值。
+
+```
+var arr = [1];
+var arr2 = [1];
+```
+
+```
+console.log(arr === arr2); // false
+```
+
+理由是因為：
+
+```
+arr: 0x10
+arr2: 0x20
+```
+
+儲存指向的記憶體不一樣。
+
+### NaN
+
+這是比較特殊的案例。NaN 意思是 not a number，不是一個數字，但他本身是規範於數字，而且自己不跟自己相等。
+
+```
+var a = Number('hello'); // 因為沒有數字，所以無法轉換
+console.log(a === a); // false
+console.log(NaN === NaN); // false
+console.log('hello'-1) // NaN
+console.log('hello'*1) // NaN
+console.log('hello'/1) // NaN
+```
+
+**NaN 不跟任何東西相等**
+
+要如何知道是 NaN
+
+```
+console.log(isNaN('hello'*1)) // true
+```
+
+所以為了因應這種情況有人就寫了一個 JavaScript table 來因應這種情況。
+
+![== 的部份](https://cdn-images-1.medium.com/max/800/1*_Vxr2OMSdK2mhtwjuZo6QA.png)
+
+_== 的部份_
+
+## let 與 const
+
+ES6 的新語法 — let、const。跟 var 差異最大的地方在於作用域，其他部份基本上沒什麼差異。
+
+### const
+
+const 常數的縮寫，所以 const 賦值，就是不能重新賦值的部份。而這個部份也不能單純命名變數不賦值
+
+```
+const a // SyntaxError: Missing initializer in const declaration
+```
+
+不能單純命名
+
+```
+const a = 10
+a = 20
+// TypeError: Assignment to constant variable.
+```
+
+不能重新賦值
+
+```
+const obj = {
+  number: 1
+}
+```
+
+```
+obj.number = 2;
+```
+
+```
+console.log(obj); // { number: 2 }
+```
+
+```
+obj = {
+  number: 2
+} // TypeError: Assignment to constant variable.
+```
+
+理由很簡單，因為 const 是針對儲存的內容。在物件這邊，是儲存指向的記憶體位置，所以可以變更物件內的資料，但不能夠重新賦值新的物件，因為這樣會改變記憶體指向的位置。
+
+let 則沒有此限制。
+
+## 總結：
+
+這部份就是複習了。整體把一些以前有些遺忘的部份再次做了複習，所以我想要把這邊也寫了筆記。
+
+但也因為如此，所以筆記看起來就不太像 JavaScript 中階XD
+
+不過沒關係，也因為有這些筆記，我把我之前不熟悉的東西再次複習了。像是 `.push` 之後為什麼不必重新賦值的部份，也因為我有了前面的基礎，所以在這邊就可以把之前有疑問的部份很快想到原因。
+
+理由是因為 `.push` 本身就會變動記憶體內的資料了。所以不需要回傳，所以內建函式才另外寫 `.push` 會 return arr 長度。
+
+至於其他的部份，就是總複習了，就沒有太多的新的收穫了。
+
+下一篇：[前端中階：JS令人搞不懂的地方-變數的生存範圍（scope）](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8%E7%9A%84%E7%94%9F%E5%AD%98%E7%AF%84%E5%9C%8D-scope-b548fa067687?source=your_stories_page---------------------------)

@@ -1,0 +1,91 @@
+---
+title: "前端框架 React hw3：BLOG"
+slug: "前端框架-react-hw3-blog"
+description: "hw3：Blog SPA"
+date: 2019-11-21T15:14:45.802Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*PjvvBh_s9WiI_fys.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-hw3-blog-6bb1388c5b0"
+---
+
+## hw3：Blog SPA
+
+請做出一個簡單的 Blog SPA，一共有三個頁面：
+
+1. About：隨意顯示一些話
+2. 文章列表：可以看到所有文章
+3. 單篇文章：可以看到單篇文章內容
+
+API 的話可以用這個：https://jsonplaceholder.typicode.com/posts
+
+圖片可參考：
+
+![](https://cdn-images-1.medium.com/max/800/0*PjvvBh_s9WiI_fys.png)
+
+—
+
+這邊思考的方式就是直接用 React 切版了，所以就是把版塊分開，這邊的做法是分為導覽列 `Nav` 、文章本體 `Blog` 、關於我 `About` 。
+
+另外這邊是已經寫完了才來補的筆記，所以截圖的都是完成的結果。
+
+通過這樣的方式來慢慢的把這些元件都寫好，
+
+先開始寫 `Nav` 的部分，簡單的寫幾個元素之後，就可以開始排版，因為是要讓導覽列一直在上面，很簡單的就是使用 `position: fixed;` 才可以。
+
+```
+.nav {
+  display: flex;
+  padding: 0 10px;
+  background: aqua;
+  height: 65px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+```
+
+然後加上一個背景色跟高度，然後使用 top、left、right 來讓導覽列佈滿整個頁面以及加上 `display: flex;` 來讓整個長得像導覽列。
+
+然後另外使用 `active` 來判斷哪個是選中的頁面。這邊就可以使用 React 的 state 來做紀錄，額外建立一個 page 用來記錄狀態。
+
+![](https://cdn-images-1.medium.com/max/800/1*6KO0EyK2dOohr_6wtcq4oQ.png)
+
+所以就可以利用傳入的值來判斷當前是哪個頁面，因而作出對應的 render。
+
+然後另外寫一個 `handleChangePage` 並傳入 `page` 來判斷
+
+![這邊傳入的就變成 onClick，然後就可以在 Nav 裡面使用匿名函式的方式呼叫](https://cdn-images-1.medium.com/max/800/1*wvGTsj5WueuHHSQUFrtbzA.png)
+
+_這邊傳入的就變成 onClick，然後就可以在 Nav 裡面使用匿名函式的方式呼叫_
+
+這樣就可以當點擊之後，就可以使用上一層的 function，來變更整個狀態。
+
+接著就是把比較簡單的 `About` 寫好，
+
+![這文字是用廢文產生器產生的](https://cdn-images-1.medium.com/max/800/1*qJk7IFi9nmO1LVM68zg9kw.png)
+
+_這文字是用廢文產生器產生的_
+
+然後也可以開始寫簡單的 `Blog` 的部分，
+
+![先只看 render 的部分就好](https://cdn-images-1.medium.com/max/800/1*rUjjN22tHlVBCJrYmjRNAA.png)
+
+_先只看 render 的部分就好_
+
+這邊只是要先實作連頁面一起切換的部分，這邊簡單的就是用 page 的值來一起判斷，而且後來也發現到字串跟數字之間可以互相轉換，所以還可以順便用來判斷是哪一個單一文章。
+
+![](https://cdn-images-1.medium.com/max/800/1*M_0hIArqT4bEvyuYdnfdxw.png)
+
+所以最後就寫成，除了 `page` 的值是 `'about'` 之外就是 `Blog` 。
+
+這樣就完成判斷了，
+
+![](https://cdn-images-1.medium.com/max/800/1*rUjjN22tHlVBCJrYmjRNAA.png)
+
+然後再來就是 Blog 的內的頁面判斷，而這邊就簡單的 render 的單一文章或是全部文章，這樣就可以得知到是那一個文章。
+
+這樣整體就完成了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/031c2273bc4db562c323d6d0acf15440)

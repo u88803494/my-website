@@ -1,0 +1,61 @@
+---
+title: "網路基礎概論：好用的工具與指令"
+slug: "網路基礎概論-好用的工具與指令"
+description: "必學指令：curl"
+date: 2019-05-13T05:11:56.029Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%B6%B2%E8%B7%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E8%AB%96-%E5%A5%BD%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7%E8%88%87%E6%8C%87%E4%BB%A4-2f2358ee816f"
+---
+
+## 必學指令：curl
+
+[官方網站](https://curl.haxx.se/)
+
+curl + 目標網址：就是發一個 request get 給目標網址。
+
+所以要下載那邊的資料，就可以
+
+```
+curl http://www.google.com > google.html
+```
+
+就可以把 google 的網站給下載下來。
+
+只想取得 header 時：
+
+```
+curl -I http://www.google.com // 只要目標網站的 header // I 一定要大寫
+```
+
+網路上也可以找到很多使用方式，只要稍微套用一下就可以用了。
+
+任何網路上的操作都可以用 curl 來操作，或是自己寫一個程式碼來跑。
+
+## ping, telnet 與 nslookup
+
+這邊是 Command line 的指令。
+
+nslookup：可以解析出 domain 的 IP 位置
+
+ping：就是去測試看看能不能連到而已。
+
+telent：去 ping 一個網站的 port 有沒有開。
+
+windows 還需要先安裝才行 [參考](https://blog.dreambreakerx.com/2016/03/enable-the-telnet-client-on-windows-10/)
+
+telent 主要用途是，當我使用指令的時候，還可以打一些字，所以其實是可以傳一些資料給它的。
+
+telent 最廣為人知的就是 ptt，ptt 這套系統就是基於 telnet 這個協定。
+
+這些工具可以讓我們簡單的偵測哪邊有問題。
+
+## 看穿網路的本質，才能不被迷惑。
+
+結語：
+
+網路的本質就是拿來溝通的。協定就是拿來溝通的一個標準，就是為了要方便溝通，所以要標準化。所以我們要學的就是理解這些規範以及理解如何去使用。實務上可能會需要更多的資料驗證等。
+
+## 收穫：
+
+關於網路就是溝通這件事情，個人有些想法，這就有點想人類的語言，一開始也是為了溝通，但是大家各自為政有各地的講法用法，所以到最後，為了大家都可以交流就出現了官方語言，所以也可以說協定就是網路溝通的語言。用這樣想我會覺得有一種更清楚地感覺。在這裡也學到一些工具的應用，這些都值得花時間去學習如何使用。

@@ -1,0 +1,142 @@
+---
+title: "React + Redux 補充資料 part1"
+slug: "react-redux-補充資料-part1"
+description: "接續前篇：學習如何 React 搭配 Redux"
+date: 2020-01-07T15:21:36.606Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*mpVwPKBN8k_hZYKWGas1Ww.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-redux-%E8%A3%9C%E5%85%85%E8%B3%87%E6%96%99-part1-652784b43bc1"
+---
+
+接續前篇：[學習如何 React 搭配 Redux](https://medium.com/@hugh_Program_learning_diary_Js/%E5%AD%B8%E7%BF%92%E5%A6%82%E4%BD%95-react-%E6%90%AD%E9%85%8D-redux-97a23c231920?source=your_stories_page---------------------------)
+
+一般在使用 Container 的時候，都會分別把資料放在不同的資料夾底下。
+
+container 就放在 Container 的資料夾底下，而 Component 則是放在 Component 的資料夾底下。
+
+所以引入的方式也要改變
+
+![](https://cdn-images-1.medium.com/max/800/1*abU-LKP6jviRnPkez2iifQ.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*d10UhrbhRfqcdLq9YysNRw.png)
+
+這樣做好的處就是可以更好的管理。
+
+改完之後整體看起來會更美觀
+
+![](https://cdn-images-1.medium.com/max/800/1*rPubq-0Z6Pt-h54wpnqxPg.png)
+
+而且這樣寫的好處就是可以把 redux 跟一般 component 分開，這樣的話之後也比較好管理，假設哪天需要把 redux 拿掉也不會因為都混在一起，變成要修改的地方非常多。
+
+## Router + Redux
+
+再有用到兩者的地方，Router 會需要包住 Redux 的 connect 如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*3V4i-_oxU1Etcn4udyBI2A.png)
+
+這樣才不會出現 bug，主要是因為最後輸出是依賴 connect 才可以。
+
+## 打包 API
+
+像在這個案例中，在 `componentDidMount` 寫了一個 call API，那假設今天有很多地方都會用到這個 API，那我們不就寫了一堆差不多的內容，所以這部份也可以另外打包出來。
+
+這種情況就可以另外開一個 webAPI.js 來寫，
+
+把呼叫的部份另外打包即可。
+
+```
+import axios from 'axios';
+```
+
+```
+export const getPosts = () =>
+  axios.get('https://jsonplaceholder.typicode.com/posts');
+```
+
+同理可證，單一文章的部份也可以另外寫過。
+
+```
+import axios from 'axios';
+```
+
+```
+export const getPosts = () =>
+  axios.get('https://jsonplaceholder.typicode.com/posts');
+```
+
+```
+export const getPost = postId =>
+  axios.get('https://jsonplaceholder.typicode.com/posts/' + postId);
+```
+
+而且這樣的話，就只需要在 WebAPI.js 引入 axios 就好了。
+
+## redux 管理 response
+
+在目前規模中，我們是把 response 的內容直接放在 state 裡面的，但是在規模大了一些之後，這樣做可能就不是很好的方式，因為我們這樣做可能會額外多出很多不必要的請求。
+
+像是如果有很多地方都會用到這樣的 response 的內容，就可以把它放在 global 的 store 裡面。
+
+這樣的話就會需要新的 action
+
+```
+actionTypes.js:
+```
+
+```
+...
+```
+
+```
+export const GET_POSTS = "GET_POSTS";
+export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
+```
+
+然後寫 action
+
+![](https://cdn-images-1.medium.com/max/800/1*5GqhKSlWapa2DWia9a-Q6Q.png)
+
+在這底因為一個一個 import 太麻煩了，所以改成直接 import 全部，這樣的方式就會讓所有的資料變成處於一個 actionType 的 object 裡面，所以就可以利用 object 的方式呼叫。
+
+然後就可以寫 reducer 了
+
+reducer 也要加上一些預設值，才可以開始寫，所以 state 就要加上去。
+
+![](https://cdn-images-1.medium.com/max/800/1*NK6VSScF8lHp6fvvY3_3UA.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*k5AN-WXXyt86IanPvxxvoA.png)
+
+就可以根據對應的值變更內容，而 data 則是從 actions.js 發送過來的資料。
+
+接著需要開一個 container
+
+把 Posts 傳過來，然後加上資料並且把 Router 給改成這邊，才可以正常運作。
+
+![](https://cdn-images-1.medium.com/max/800/1*LtLKcCLZxALFhv1Z4ENhVA.png)
+
+所以 Post_List 的 API 就可以拿掉了，也不需要 state 了，posts 就可以直接跟 props 拿了，而 Router 就要改給 container 用了。
+
+然後就可以回來寫 `mapDispatchToProps` 了。
+
+![](https://cdn-images-1.medium.com/max/800/1*mpVwPKBN8k_hZYKWGas1Ww.png)
+
+在 `mapDispatchToProps` 中，主要是返回一個叫 getPostList 的物件。這個執行的時候，呼叫 `dispatch` ，並傳入 action 的 `getPosts` 。
+
+然後繼續執行下一行的 webAPI，取得 `getPosts()` 內部的呼叫 API，當得到回應之後，呼叫 `dispatch` ，並傳入 action 的 `getPostsSuccess()` ，然後夾帶著 res.data。這樣就可以把資料寫入 store 裡面。
+
+最後只要在 Post List 的 `componentDidMount` 呼叫這個傳下去的 function，就可以得到全部的資料了。
+
+```
+componentDidMount() {
+  this.props.getPostList();
+}
+```
+
+## 後續
+
+後續還有持續改進的部分，但這篇章先到此為止，後續會再另外寫一篇。
+
+## code
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/3769d179f413cd998b3601f870402687)

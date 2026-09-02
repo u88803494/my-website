@@ -1,0 +1,45 @@
+---
+title: "Command Line 學習"
+slug: "command-line-學習"
+description: "我是使用 Cmder 。在這邊學到了一些指令的用法"
+date: 2019-04-16T04:59:34.227Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/command-line-%E5%AD%B8%E7%BF%92-157e0e7c6c47"
+---
+
+我是使用 Cmder 。在這邊學到了一些指令的用法
+
+指令如下
+
+pwd = print working directory 印出目前所在資料夾
+
+ls = list 印出所有的檔案與資料夾
+
+cd = **ch**ange **dir**ectory 可以變更目錄，後面加入資料夾名稱進入資料夾 cd .. 則是回上一層
+
+touch 就是摸一下檔案，是一個被用於更改文件訪問和修改時間的標準UNIX程序，它也被用於創建新文件。
+
+MKDIR = Make directory 建立資料夾
+
+mv = move 可以用來移動檔案或是更改黨名 格式： mv 移動的檔案 移動的資料夾或輸入檔名就可以改名 資料夾有分絕對路徑跟相對路徑
+
+cp = copy 複製檔案或資料夾 格式是 cp 檔案 新檔名
+
+vim 的使用 因為與教學的有點不太一樣，不知道是否是因為是 windows 版本還是有更新版本了，發現要用 ":save 檔名" 儲存檔案才可以退出
+
+cat 是用來檢視檔案連續內容用的指令，字面上的含意是「concatenate」(連續)的縮寫。
+
+grep 抓取關鍵字
+
+wget 下載檔案 wget 網址 就可以下載網頁的東西
+
+curl 送出 request curl [options] [URL…] curl -i 網址 可以取得該網站的資訊 curl --help 可以取得內建的說明 其他請參閱：[詳細說明](https://blog.techbridge.cc/2019/02/01/linux-curl-command-tutorial/)
+
+“>” redirection 重新導向 input ontput。 ls -al > result.txt 就可以把 la -al 的結果存在 result.txt 裡面或是 echo 12346 > text.txt 可以把12346輸入到 text.txt 裡面。如果想要添加內容的話 就改">>"，像是 echo 321 >> text.txt 它就會把321添加在原始資料後面
+
+“|” pipe 指令的組合技 cat text | grep w 這等於他從 cat text 的輸出，當成是grep w 的輸入，所以就會從 cat text 裡面抓到 w有關的並列出。
+
+### 至於為什麼要學習 CLI 呢?
+
+最主要是有些伺服器會沒有編輯器可以使用，所以就需要使用 CLI 來操作。因為很多東西沒人寫 GUI，而且一但用了 GUI 表示很難自動化（因為你很難寫程式去「點擊畫面」，但寫程式去跑指令很簡單）。

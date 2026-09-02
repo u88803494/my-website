@@ -1,0 +1,85 @@
+---
+title: "前端基礎：從假資料到真資料：Ajax 與 API 串接"
+slug: "前端基礎-從假資料到真資料-ajax-與-api-串接"
+description: "說明"
+date: 2019-06-23T14:34:36.655Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E5%BE%9E%E5%81%87%E8%B3%87%E6%96%99%E5%88%B0%E7%9C%9F%E8%B3%87%E6%96%99-ajax-%E8%88%87-api-%E4%B8%B2%E6%8E%A5-ec4f0dfc4d7d"
+---
+
+## 說明
+
+在此之前寫網頁都是直接把要的資料寫進 HTML 裡面，但對於一個實況網站來說，這樣子一點用都沒有。所以就必須要去抓資料來，然後放在 html 裡面。
+
+## 實作流程：
+
+1. 取得實際的資料
+2. 把資料轉換成 HTML
+3. 放到畫面上
+
+## 資料怎麼拿呢？
+
+1. 跟誰拿
+2. 怎麼拿資料 → API
+3. 要拿什麼資料？
+
+twitch 是透過 client--id 去取得資料的，所以只要按照格式使用網址，或是放在 header 就可以通過驗證進而取得資料。
+
+## 怎麼從瀏覽器呼叫 API？
+
+1. Ajax
+2. Asynchronous JavaScript and XML
+3. callback function
+
+### 透過兩種方式
+
+1. XMLhttpRequest
+2. $.ajax （底層還是 XMLhttpRequest）
+
+-
+
+### XMLhttpRequest：
+
+```
+const xhr = new XMLHttpRequest();
+xhr.open('GET', apiUrl, true);
+xhr.setRequestHeader('client_id', ClientId);
+xhr.send();
+```
+
+```
+xhr.onreadystatechange = function() {
+  if (this.readyState === 4 && this.status === 200) {
+    let data = JSON.parse(this.responseText);
+    console.log(data)
+  }
+}
+```
+
+readyState 是 XMLhttpRequest 的狀態代碼。
+
+-
+
+### JQuery：
+
+```
+$.ajax({
+  url: apiUrl,
+  success: (response) => {
+    console.log(response)
+  }
+})
+```
+
+可以透過 JSONP 的方式去存取。不過比麻煩，且有安全性疑慮，因為要引用別人的 JS。
+
+另外一種則是 CORS 的方式，就必須要有 header 來判斷可否存取。
+
+### 總結：
+
+1. API
+2. Ajax(xhr, $.ajax)
+3. CORS
+4. Preflight Request
+5. JSONP

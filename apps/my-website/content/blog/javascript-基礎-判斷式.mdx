@@ -1,0 +1,434 @@
+---
+title: "JavaScript 基礎：判斷式"
+slug: "javascript-基礎-判斷式"
+description: "if ... else"
+date: 2019-04-20T10:56:27.050Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E5%88%A4%E6%96%B7%E5%BC%8F-1f3c51e9c5cd"
+---
+
+## if ... else
+
+```
+if (true) {
+   console.log(123)
+}
+// 123
+```
+
+在這邊因為結果為真，所以就得到 123
+
+大括號就是一個區塊的意思
+
+```
+var score = 70
+```
+
+```
+if (score >= 60) {
+ console.log(‘pass’)
+}
+// pass
+```
+
+想要判斷區間
+
+```
+var score = 65
+```
+
+```
+if (70 => score >= 60) {
+ console.log(‘pass’)
+}
+// 無結果
+```
+
+如果想要這樣寫，它會由左往右判斷，70 => 65 就等同於 true，如下方：
+
+```
+var score = 65
+```
+
+```
+if (true >= 60) {
+ console.log(‘pass’)
+}
+// 無結果，因為 true >= 60 不會得到 true
+```
+
+所以如果要這樣寫，就要用邏輯判斷：
+
+```
+var score = 70
+```
+
+```
+if (score >= 60 && score <= 70 ) {
+ console.log(‘pass 但是太低分了啦’)
+}
+// pass 但是太低分了啦
+```
+
+### else
+
+達成條件之後執行 if 的區塊 ，沒有的話就是執行 else 的區塊，else 後面不需要()，也就是不需要條件。
+
+```
+var score = 50
+```
+
+```
+if (score >= 60 ) {
+ console.log(‘pass’)
+} else {
+ console.log(‘fail’)
+}
+// fail
+```
+
+判斷 5 的倍數
+
+```
+var number = 10
+```
+
+```
+if (number % 5 === 0 ) {
+ console.log(‘5 的倍數’)
+} else {
+ console.log(‘不是 5 的倍數’)
+}
+// 5 的倍數
+```
+
+也可以這樣寫
+
+```
+var number = 11
+```
+
+```
+if (!(number % 5)) {
+// 加個 not，0 就被轉成 1 為 ture，或反過來 1 變 0, false
+ console.log(‘5 的倍數’)
+} else {
+ console.log(‘不是 5 的倍數’)
+}
+// 不是 5 的倍數 // 一般不會這樣寫，因為可讀性很差。
+```
+
+## if ... else if ... else
+
+常常在使用判斷的時候會不只需要判斷一次，所以就需要 else if 來協助處理。
+
+想要知道一個人的年紀是屬於哪一種範圍：
+
+### 單純 if
+
+```
+var age = 70
+```
+
+```
+/*
+ age >= 65 ,old man
+ 65 > age >= 20, young
+ age < 20 , children
+*/
+```
+
+```
+if (age >=65) {
+ console.log(‘old man’)
+}
+
+if (65 > age && age >= 20) {
+ cpnsole.log(‘young’)
+}
+```
+
+```
+if (age<20) {
+ console.log(‘children’)
+}
+// old man
+```
+
+寫得漂亮一點，區塊中的區塊：
+
+```
+if (age >=65) {
+ console.log(‘old man’)
+} else {
+ if (age< 20) {
+ console.log(‘children’)
+ } else {
+ console.log(‘young’)
+ }
+}
+```
+
+### if else 的用法：
+
+```
+var age = 50
+```
+
+```
+/*
+ age >= 65 ,old man
+ 65 > age >= 20, young
+ age < 20 , children
+*/
+```
+
+```
+if (age > 65) {
+ console.log(‘old man’)
+} else if (age >= 20) {
+ console.log(“young”)
+} else {
+ console.log(‘children’)
+}
+// young
+```
+
+也可以更細
+
+```
+var age = 50
+/*
+ age >= 65 ,old man
+ 65 > age >= 20, young
+ age < 20 , children
+*/
+```
+
+```
+if (age > 65) {
+ console.log(‘old man’)
+} else if (age >= 40) {
+ console.log(“壯年”)
+} else if (age >= 20) {
+ console.log(“young”)
+} else if (age >= 5) {
+ console.log(“childer”)
+} else {
+ console.log(‘baby’)
+}
+// 壯年
+```
+
+一般常見錯誤：如果不用 if else
+
+```
+var age = 65
+/*
+ age >= 65 ,old man
+ 65 > age >= 20, young
+ age < 20 , children
+*/
+if (age >=65) {
+ console.log('old man')
+}
+
+if (age >= 40) {
+ console.log('壯年')
+}
+if (age >= 20) {
+ console.log('young')
+}
+//old man
+//壯年
+//young
+```
+
+變成全部印出來
+
+## Switch case
+
+判斷很好用，但是像下面這種情況。
+
+```
+var mouth = 1491
+```
+
+```
+if (mouth === 1) {
+ console.log(‘一月’)
+} else if (mouth === 2) {
+ console.log(‘二月’)
+} else if (mouth === 3) {
+ console.log(‘三月’)
+} else if (mouth === 4) {
+ console.log(‘四月’)
+} else if (mouth === 5) {
+ console.log(‘五月’)
+} else if (mouth === 6) {
+ console.log(‘六月’)
+} else if (mouth <= 12 ) {
+ console.log(‘太多了好懶的打’)
+} else {
+ console.log(‘哪來的’,mouth,’月’)
+}
+//哪來的 1491 月
+```
+
+變成條件太多，就有另外一種做法。
+
+```
+var mouth = 1
+```
+
+```
+switch (mouth) {
+ case 1:
+  console.log('一月')
+ case 2:
+  console.log('二月')
+ case 3:
+  console.log('三月')
+ default: // 如果前面都不符合的話，就會執行到這邊。
+  console.log('hey')
+}
+//一月
+//二月
+//三月
+//hey
+```
+
+可是它這樣會變成每一個都判斷一次，所以要在修改 增加 break 才會判斷成功後跳出。
+
+```
+var mouth = 6
+```
+
+```
+switch (mouth) {
+ case 1:
+ console.log(‘一月’)
+ break
+ case 2:
+ console.log(‘二月’)
+ break
+ case 3:
+ console.log(‘三月’)
+ break
+ default:
+ console.log(‘hey’)
+}
+```
+
+可以用到的地方其實不多。
+
+這個解法還可以用陣列：
+
+```
+var mouth = 1
+```
+
+```
+var mouth_to_chinese = [‘一月’, ‘二月’, ‘三月’]
+console.log(mouth_to_chinese[mouth — 1])
+```
+
+PS. [Swift 是全等模式 (===) ](https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/283746/)，需要注意變數的型態。
+
+補充 if 的一些資訊
+
+### 題目：
+
+```
+var score = 60
+var isPass — false
+if (score >= 60) {
+ isPass = true
+} else {
+ isPass = false
+}
+```
+
+快很多的作法
+
+```
+var score = 60
+```
+
+```
+var isPass = score >= 60 // 會先判斷 score => 60 ，然後再把值存入 isPass
+console.log(isPass)
+//ture
+```
+
+## 三元運算子（Ternary）
+
+判斷 :a > b
+
+```
+condition ? A : B　//固定語法，如果是 ture 回傳 A ，false 回傳 B
+```
+
+判斷分數：
+
+```
+var score = 60
+var Message = score >= 60 ? 'pass' : 'fail'
+console.log(Message)
+//pass
+```
+
+還可以巢狀
+
+```
+var score = 100
+var Message = score >= 60 ? (score === 100 ? 'no1' : 'pass') : 'fail'
+// 先判斷score >= 60 ，是的話，再判斷 score === 100
+console.log(Message)
+// no1
+```
+
+兩層的話就有點難讀，所以只放一層最好讀。
+
+以後只要看到有 問號 搭配 冒號，就可以知道是三元運算子。它是有三個元件組成的運算子，所以稱為三元運算子（？），如果有人知道為什麼這樣命名可以留言告訴我，謝謝。
+
+練習題：
+
+```
+BMI 值的計算公式為：體重 / 身高^2。
+假設體重是 70，身高是 180(1.8m)，BMI 就是 70/(1.8*1.8) = 21。
+現在請你寫出一個簡單的 BMI 計算器，用兩個變數代表體重跟身高，算出 BMI 之後判斷 BMI 是落在哪個範圍內並輸出相對應的字串。
+體重過輕：BMI < 18.5
+正常範圍：18.5 <= BMI < 24
+過重：24 <= BMI < 27
+輕度肥胖：27 <= BMI < 30
+中度肥胖：30 <= BMI < 35
+重度肥胖：35 <= BMI
+```
+
+寫法：
+
+```
+var weight = 75
+var height = 172
+var BMI = (weight/((height/100)*(height/100)))
+console.log('你的BMI值：', BMI)
+if (BMI< 18.5) {
+ console.log('體重過輕')
+} else if (BMI <24) {
+ console.log('正常範圍')
+} else if (BMI <27) {
+ console.log('過重')
+} else if (BMI <30) {
+ console.log('輕度肥胖')
+} else if (BMI <35) {
+ console.log('中度肥胖')
+} else {
+ console.log('重度肥胖')
+}
+//你的BMI值： 20.902385858042937
+//正常範圍
+```
+
+心得：我更加清楚的明白，If 的各種用法，更清楚 else if 的原理，這樣的話我在編輯的時候，可以更得心應手，本來最後題目在解答的時候，想要使用 swift case 試試看，不過經查詢之後發現這是沒辦法執行的，原因是它是嚴格相等（===），所以才會看到網路上的範例大多是指定一個數字，然後再導到結果。

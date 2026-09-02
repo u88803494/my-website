@@ -1,0 +1,792 @@
+---
+title: "後端基礎概念"
+slug: "後端基礎概念"
+description: "什麼是後端？"
+date: 2019-06-28T08:27:20.432Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*LXCNsoJCIy7n0wXBqcjX6w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E5%BF%B5-8643ca1f5315"
+---
+
+## 什麼是後端？
+
+後端就是伺服器端，有個 Serve，以及 Data center 的範圍皆是。在網路上傳輸資料的時候，要發一個 request 給伺服器之後取得 response，之後才可以在瀏覽器上面呈現我們要的樣子。所以說前端跟後端兩者某種程度來說是融合在一起的。
+
+## 後端「實際上」到底是什麼？
+
+1. 需要有一個**伺服器**來處理 request 跟 response
+2. 需要**寫程式**來處理
+3. 需要有**資料庫**可以儲存資料
+
+很多語言都可以處理伺服器的邏輯 PHP、python、Node.js 都可以處理
+
+也會需要一個資料庫來儲存資料
+
+在這邊就會學到
+
+伺服器 Apache：很常見的，只是我們不會有感覺到它的存在。
+
+寫程式 PHP ：學習的理由很簡單，因為工作機會最多最容易遇到。
+
+資料庫 MySQL
+
+**另外一提：伺服器、資料庫其實也都只是一隻程式，只是專門處理不同的東西。就跟作業系統市一個程式一樣，你的作業也是一個程式，只是在解決不同的問題。**
+
+### Apache
+
+通常不會注意到它的存在。
+
+![](https://cdn-images-1.medium.com/max/800/1*lB_TWjpMpn8yO_qsVOlF0Q.png)
+
+### PHP
+
+後端程式語言，Apache 呼叫 php 處理 Request 並且回傳 reponse。
+
+Apache 跟 PHP 是互相交換資料的存在。
+
+![](https://cdn-images-1.medium.com/max/800/1*vx6NiLMmVMv2jahLWxgCMA.png)
+
+### MySQL
+
+資料庫，專門設計用來快速處理資料的程式。
+
+![](https://cdn-images-1.medium.com/max/800/1*LXCNsoJCIy7n0wXBqcjX6w.png)
+
+-
+
+我們可以採用程式碼來模擬：
+
+```
+Apache
+```
+
+```
+function handle(request) {
+  const response = executePHP(request)
+  return response
+}
+handle(request)
+```
+
+```
+function executePHP() {
+  return call(php, request)
+}
+```
+
+```
+var db = open_database('...')
+db.read()......
+return db.furst().id
+```
+
+-
+
+window 使用 https://www.uwamp.com/en/ 這是較為簡化的版本
+
+mac 使用 https://www.apachefriends.org/zh_tw/index.html
+
+其實在後端的部份是環境的建立比較困難。所以先用了最簡單的版本來練習。
+
+以uwamp 為例，安裝後只要打開，就可以看到一些按鈕
+
+server 處於 start 且 Apache 改為 online mode，接著就可以在 folder www 放進想要的檔案，然後使用 browser www 來設置相對路徑取得網頁。
+
+每次檔案要更新都要 Apache 改為 offline mode 在改回來才行
+
+PHP 基礎
+
+```
+<h1>Welcome:</h1>
+<?php /* 可加可不加 */
+  echo "hello world";
+?>
+```
+
+```
+<h1>footer</h1>
+```
+
+要寫 php 就要把程式碼包在 &lt;?php ?> 內部，就像上面的那種樣子。
+
+php 最簡單的語法就是 each 類似於 console.log
+
+![](https://cdn-images-1.medium.com/max/800/1*iLtdCepVc4uU-rhI-Z95AA.png)
+
+就會呈現如圖所示的那樣
+
+然後記得每一句的句尾都要加分號，當然也可以把 php 包在標籤內部。
+
+這跟 index.html 的差異在那呢？
+
+就是說 index.php 用文字編輯器打開的時候，看起來像一串程式碼。而當網頁開啟的時候，就會變成執行過後的樣子了。所以直接存取的內容，就是經過 PHP 處理的樣子了。這個就是 server 處理過後的樣子
+
+### PHP 基礎語法
+
+### 迴圈
+
+php 裡面迴圈不用宣告變數，然後要用 $來標示。
+
+> PHP中，[變數](https://www.wikiwand.com/zh-tw/%E8%AE%8A%E6%95%B8)以「$」後接變數名稱來表示。 變數名稱區分大小寫。wiki
+
+```
+<?php
+for($i=0; $i<10; $i++) {
+  echo $i
+}
+?>
+```
+
+### 字串相加
+
+PHP 中 字串相加要用 . 來相加，而不是使用 + 號，加號是數字才可以使用。當用錯了就會出現錯誤訊息，會直接顯示在網頁上面。
+
+```
+<?php
+  echo '<ul>';
+  for($i=0; $i<10; $i++) {
+    echo '<li>' . $i . '</li>';
+  };
+  echo '</ul>';
+?>
+```
+
+所以就可以透過這樣，把之前寫的作業都改成 PHP 的版本。
+
+### GET, POST
+
+```
+<?php
+  $username = '';
+  if (isset($_GET['username'])) {
+    $username = $_GET['username'];
+  }
+  echo 'username:' . $username . '<br>';
+  if  ($username === 'admin') {
+    echo 'hello admin!' ;
+  } else {
+    echo 'fail';
+  }
+?>
+```
+
+這樣會抓取使用者資料接著就會進行判斷，還會顯示使用者的名稱
+
+所以就可以在網址後面傳入一個 username
+
+…./index.php?username=admin
+
+![](https://cdn-images-1.medium.com/max/800/1*Z-T2Bier-POAQXDNkSgbBw.png)
+
+就可以看到偵測到的內容。
+
+所以就可以製作一個表單來傳入值
+
+```
+<form action='/index.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' />
+  <input type='submit' />
+</form>
+```
+
+甚至可以寫一個登入界面。
+
+```
+<?php
+  $username = '';
+  if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    if ($username === 'admin' && $password === 'admin') {}
+      echo '登入成功';
+  }
+?>
+```
+
+```
+<form action='/index.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' />
+  <input type='submit' />
+</form>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Tv3qt6PzFcgjrhnPIYGfmQ.gif)
+
+這是非常簡單的前後端溝通的範例。
+
+-
+
+程式碼也可以變成另外一種形式，可以分塊執行
+
+```
+<?php
+  $username = '';
+  if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    if ($username === 'admin' && $password === 'admin') {
+?>
+    <h1>登入成功</h1>
+<?php
+    } else {
+?>
+    <h1>登入失敗</h1>
+<?php
+    }
+  }
+?>
+```
+
+```
+<form action='/index.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' />
+  <input type='submit' />
+</form>
+```
+
+這整段可以執行。這方法會比之前整段寫在一起的都還常使用。
+
+而還有另外一種方式。可以直接在引入額外的 PHP，不過就變成網頁也會切過去。
+
+就是另外成立一個 login.php 然後把執行的部份放進去。在原本的 index.php 修改一下引用 login.php
+
+```
+<form action='/login.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' />
+  <input type='submit' />
+</form>
+```
+
+-
+
+另外一種形式，則是登入頁面常常會導回登入頁面。
+
+```
+login.php:
+```
+
+```
+<?php
+  $username = '';
+  if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    if ($username === 'admin' && $password === 'admin') {
+?>
+    <h1>登入成功</h1>
+<?php
+    } else {
+  header('Location: index.php'); // 導回登入頁面
+    }
+  }
+?>
+```
+
+當然如果把後面改成 Google 的網址也可以導向 Google。
+
+所以利用 PHP 就可以得到前端所傳的值，然後在利用這個值之後，還可以在傳給前端。
+
+前端與後端的結合
+
+index.php → 簡單表單 → POST form.php → 顯示資料
+
+## 資料庫
+
+資料庫系統有很多種，但都大同小異。
+
+會使用特殊的語法來調查資料。
+
+### 首先要了解為什麼要有資料庫？
+
+因為要有地方存資料。為什麼要存在資料庫？因為存在一般的檔案，有很多功能（像是刪除、新增、修改資料等）都需要自己做。
+
+excel 其實也是一種資料庫。
+
+檔案 → Database
+
+Tab → table 就是一般的 excel 那種表格
+
+欄位 → Column
+
+所以其實資料庫跟 excel 差不多。每一列都是一個筆資料，看起來就很像 excel。
+
+但跟 excel 最大的差異就是可以用指令去操作。
+
+SQL 的全名是 Structural Query Language。
+
+-
+
+### 查詢
+
+下列粗體標示就是語法，什麼是語法？就是類似 JavaScript 的 if else for 那些
+
+```
+select phone from users
+  where name=peter
+```
+
+從 users 裡面找到 name 是 peter 的那列並且把 phone 這個欄位的值取出來
+
+-
+
+那當想要查詢所有的欄位值，就可以使用 \* 來替代。
+
+```
+select * from users
+  where name=peter
+```
+
+從 users 裡面找到所有列並且把所有欄位的值取出來
+
+-
+
+### 刪除
+
+```
+delete from users
+  where name=peter
+```
+
+刪除 users 裡面 name 是 peter 的那列
+
+where 後面接條件。
+
+如果沒接 where 就會把所有的都刪除
+
+-
+
+### 更新
+
+```
+update users set phone=123
+  where name=peter
+```
+
+這邊跟刪除一樣，如果沒有接 where 它就會把所有的資料名字為 phone 通通改完 123通通改完 123
+
+-
+
+### 新增
+
+```
+insert into users(name, phone)
+  value (peter, 1234)
+```
+
+新增一筆紀錄 name 是 peter，phone 是 123。
+
+-
+
+### 資料庫的登入
+
+在 UwAmp 上面會有 phpAdmin 可以直接進度登入的畫面，就可以新建資料庫，輸入名稱之後編碼要選 utf8_unicode_ci，否則使用中文的話可能會變成亂碼。
+
+進去之後就看到一個建立資料表，這個就是 table 的意思，欄位就是要有幾個 column。
+
+建立之後可以看到有個型態欄位，這邊就要選擇型態，這樣資料庫才可以知道怎樣有效的去存取，其中有一個 VARCHAR 這就可以指定要用幾個字元，會比較省空間。 如果選 TEXT 的話就要分配六萬多的字元的空間，一般可能用不到這麼多。
+
+接著是編碼，一般是不選，不選就會使用系統預設的編碼。
+
+空值則是打勾才可以是空的
+
+AI 就是打勾之後每新增一個紀錄的時候，如果 ID 沒設置它就會自動補上。
+
+剩下就是操作了。都有中文應該不難，要說明會滿麻煩的，所以就不寫出來了。
+
+用選單方式做了動作之後還可以看到它替我們執行了什麼命令。
+
+![](https://cdn-images-1.medium.com/max/800/1*WYxk-jXU-h7a6z1ubqCx9A.png)
+
+如果要練習語法就可以直接按下 SQL 的按鈕，就會看到許多語法可以使用，就可以直接利用這邊做練習。
+
+在使用的時候 where 可以加 or 來判斷，這邊就是直接使用英文 or 了。就不是 JS 的 ||。
+
+所以資料庫就是可以管理資料的軟體，只是有個界面可以很方便的去管理界面
+
+熟悉使用資料庫的指令之後，就可以看看 PHP 與資料庫的連接。
+
+-
+
+### PHP 與資料庫：連接
+
+[參考 w3school 的指令](https://www.w3schools.com/php/php_mysql_select.asp)
+
+```
+<?php
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "myDB";
+```
+
+```
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+```
+
+分別說明每一段
+
+```
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+```
+
+這段就是創造一個 mysql，帶入上面的資料：
+
+```
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mentor";
+```
+
+現在 phpmyadmin 似乎有所變，已經不再是預設 pw 為空。但這邊為了資料安全還是寫為空。
+
+```
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+```
+
+die 就是死掉了。也就是 PHP 死了，後面就是印出那一段
+
+接著就可以寫一些指令來跑
+
+```
+$sql = "SELECT id, firstname, lastname FROM MyGuests";
+```
+
+設置一個變數 sql 去接收這些資料。
+
+這段的關鍵字習慣都是要要大寫才可以，小寫也可以執行，但是會影響可讀性，所以字串符號內的全部大寫都代表示是指令。
+
+```
+$result = $conn->query($sql);
+```
+
+設置一個變數 result 接收 conn 選中 sql 的資料庫
+
+```
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
+    }
+} else {
+    echo "0 results";
+}
+```
+
+這段的意思 $result->num_rows > 0 偵測 rows 是不是大於 0 如果是才走後面那段，如果不是就印出沒有結果。
+
+```
+// output data of each row
+while($row = $result->fetch_assoc()) {
+  echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
+```
+
+fetch_assoc() 把讀到的這個 row 讀取下來。$result 指向 fetch_assoc() ，把 $result 的結果賦給 $row ，直到 $row 為空值，就會 false 跳出迴圈。
+
+也等同於
+
+```
+while(true) {
+  $row = $result -> fetch_assoc()
+  if ($row === NULL) {
+    break;
+  }
+}
+```
+
+下一段就是執行內容。比較沒什麼好說明。
+
+```
+echo "id: " . $row["id"]. " - Name: " . $row["firstname"]. " " . $row["lastname"]. "<br>";
+```
+
+整段就變成：
+
+```
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mentor";
+```
+
+```
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+```
+
+```
+$sql = "SELECT * FROM users";
+$result = $conn->query($sql);
+```
+
+```
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"]. "username: " . $row["username"] . "<br>";
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+```
+
+```
+<form action='/index.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' />
+  <input type='submit' />
+</form>
+```
+
+就會印出所有的資料。這樣代表可以成功存取到資料庫的資料了。
+
+以整段來說，就是創見一個新的 sql 伺服器，然後去接收資料庫的資料，接著是選取資料，然後在用迴圈去抓資料，執行想要執行的內容，這邊是印出資料。
+
+除了抓東西之外還有可能執行一些插入資料的動作。
+
+[一樣的參考資料 PHP Insert Data Into MySQL](https://www.w3schools.com/php/php_mysql_insert.asp)
+
+```
+$sql = "INSERT INTO users (username) VALUES ('hugh')";
+
+if ($conn->query($sql) === TRUE) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+```
+
+這樣就可以上傳資料。
+
+-
+
+### 導出與導入
+
+以上述例子來說，將所有功能寫在一起會很難以使用。但是分開寫又會有很多重複的地方。
+
+所以可以把上面變數的定義分開來。可以另外定義一個 conn.php 然後把那些東西放在一起
+
+```
+conn.php:
+```
+
+```
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mentor";
+```
+
+```
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+?>
+```
+
+### require
+
+跟 node.js 的作用基本上差不多。但這個可以想像程式把檔案複製貼上。所以還是有差異的。這樣子在引入之後，就可以在另外一個檔案使用 conn.php 所定義的變數。
+
+而一般除了使用 require 之外，會使用 require_once 來引用，這樣當檔案一多的時候，如果有重複的變數，那就不會在多引用一次了。
+
+```
+require_once('conn.php');
+```
+
+-
+
+### 簡單示範會員系統
+
+只包含登入跟註冊功能。所以先在資料庫設定 password 加上原本的 username 就可以。
+
+```
+index.php:
+<?php
+require_once('conn.php');
+```
+
+```
+?>
+```
+
+```
+<h1>登入</h1>
+<form action='login.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' type='password'  />
+  <input type='submit' />
+</form>
+```
+
+```
+<h1>註冊</h1>
+<form action='register.php' method='POST'>
+  username: <input name='username' />
+  password: <input name='password' type='password'  />
+  <input type='submit' />
+</form>
+```
+
+-
+
+```
+login.php:
+<?php
+require_once('conn.php'); // 引入這些資料
+```
+
+```
+$username = $_POST['username'];
+$password = $_POST['password'];
+```
+
+```
+// 查詢資料庫到底有沒有這些登入的資料
+$sql = "SELECT * FROM users WHERE username='" . $username . "'and password='". $password ."'
+ ";
+```
+
+```
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+  echo '登入成功';
+  } else {
+  header('Location: index.php');
+}
+```
+
+```
+?>
+```
+
+-
+
+```
+conn.php
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mentor";
+```
+
+```
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+?>
+```
+
+剩下的註冊就要自己思考。
+
+一樣要引入 conn.php 然後再去思考註冊流程，其實就是新增一個 data 的指令。
+
+參考前面的方法，直接設立變數去接收。結果卻發現直接把資料庫帳密傳上去。所以可以理解到只要跑到那段就會直接執行。所以註冊就不需要另外設置一個參數去接。只需要寫好判斷兩格是不是為空即可。
+
+```
+<?php
+```
+
+```
+require_once('conn.php');
+```
+
+```
+$username = $_POST['username']; // 填入帳號密碼
+$password = $_POST['password'];
+```
+
+```
+if ($username === '' or $password === '') {
+  echo '帳號或密碼沒有填入';
+} else {
+  $sql ="INSERT INTO `users`(`username`, `password`) VALUES ('$username' ,'$password')";
+  $conn->query($sql); // 這樣寫才會把資料推上去
+  echo '你的帳號以成功新增。username：'. $username;
+}
+```
+
+```
+?>
+```
+
+其實不難。就只是新增指令而已。不過這邊沒有做 username 是否重複的功能。應該也不難。就是新增一個 $sql 接收選擇，然後在拿去跟伺服器做比較。
+
+最後發現使用登入的方式就可以驗證出來了。就沒必要重新寫過。原先的方法應該是可以做的。但是會比通過 login 還麻煩，而且還要了解到 $result 收到的資料的形式才行，在前面的錯誤測試到 $result 接收到的是一個物件，而且印不出來。所以就也不知道如何調查。留待以後在處理。
+
+```
+$sql = "SELECT `username` FROM `users` WHERE `username`='$username'";
+```
+
+```
+$result = $conn->query($sql);
+ // 把 $sql 傳上資料庫 $conn，然後 $result 得到結果
+if ($result->num_rows > 0) { // 大於零代表有這個資料，
+  echo '這個 username:' . $username . ' 已經註冊過';
+}
+```
+
+通過這樣確實可以判斷。所以就是把這筆資料寫入前面的判斷式。
+
+```
+register.php：
+<?php
+```
+
+```
+require_once('conn.php');
+```
+
+```
+$username = $_POST['username']; // 填入帳號密碼
+$password = $_POST['password'];
+```
+
+```
+$sql = "SELECT `username` FROM `users` WHERE `username`='$username'";
+```
+
+```
+$result = $conn->query($sql);
+if ($username === '' or $password === '') {
+  echo '帳號或密碼沒有填入';
+  } else if ($result->num_rows > 0) { // 大於零代表有這個資料。
+  echo '這個 username:' . $username . ' 已經註冊過';
+  } else {
+  $sql ="INSERT INTO `users`(`username`, `password`) VALUES ('$username' ,'$password')";
+  $conn->query($sql);
+  echo '你的帳號以成功新增。username：'. $username;
+}
+```
+
+```
+?>
+```
+
+這樣就完成了可登入且可以註冊的界面了。
+
+## 收穫：
+
+在這堂課程中我理解到 php 是怎麼一回事。原來就是個很簡單的 HTML 加強板，通過 PHP 我們可以很好的利用網頁做一些程式化的動作。感覺有點像是 AJAX 那樣。我在思考，也許就是通過熟悉後端的模式，我們才可以到時候上 AJAX 的時候更容易上手。後面是資料庫的部份，真的是比較困難的一部分，這部份我好幾年前也有接觸過，但是就是那種只會按照指令做動作的，其他的一概不懂，所以在這裡有了更好的認識之後，就開始跟著一起做題目，也的確有些地方不好理解。所以要一拆在拆，把細部都了解之後，才可以做出東西來，這也是為什麼我花這麼多時間的原因吧？最後真的有自己把註冊的部份寫出來了，那個興奮感真的是無可比擬的爽。也明白到自己對於 PHP 跟資料庫有了更深入的認識，所以實作果然是最有意思的部份，很難也很辛苦，可是完成之後真的很棒。

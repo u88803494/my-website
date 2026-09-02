@@ -1,0 +1,60 @@
+---
+title: "React 中的事件(event)如何在呼叫 function 中取得資料"
+slug: "react-中的事件-event-如何在呼叫-function-中取得資料"
+description: "會想要了解這個是因為有時候在 Render 大量按鈕的時候，不希望一個按鈕自己有一個 function，因為這樣會造成成立太多可以呼叫的 function。"
+date: 2020-03-02T06:57:24.662Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6-event-%E5%A6%82%E4%BD%95%E5%9C%A8%E5%91%BC%E5%8F%AB-function-%E4%B8%AD%E5%8F%96%E5%BE%97%E8%B3%87%E6%96%99-7e3b2bf88de2"
+---
+
+會想要了解這個是因為有時候在 Render 大量按鈕的時候，不希望一個按鈕自己有一個 function，因為這樣會造成成立太多可以呼叫的 function。
+
+所以一直在思考有沒有辦法在 React 取得自定義的資料，而今天在寫的時候又發現有這樣的問題。所以稍微 Google 了一下最後終於找到比較好的解答了。
+
+原本的按鈕事項這樣：
+
+```
+<Button
+  variant="outline-danger"
+  onClick={(e) => handleDelete(e, post.id)}
+>
+  刪除
+</Button>
+```
+
+如果只有一個還好，但當需要有大量的按鈕就會變成多了太多的事件監聽，跟成立太多的 function，有影響效能的疑慮。
+
+所以之前一直在享有沒有辦法把需要給 function 使用的資料直接自定義在標籤上面使用。像是： `data-id` 、 `data-type` 之類的。而透過了 stackoverflow 終於給我找到解答了。
+
+只要使用以下的方式即可，以 `data-id` 為例：
+
+```
+event.target.dataset.id
+event.target.getAttribute('data-id')
+```
+
+這樣都分別可以取得資料。
+
+所以根據這樣就可以寫 function
+
+```
+handleDelete = (e) =>
+  console.log(e.target.dataset.id, e.target.getAttribute('data-id'))
+```
+
+```
+-------
+<Button
+  variant="outline-success"
+  data-id={post.id}
+  name="delete"
+  onClick={handleDelete}
+>
+  刪除
+</Button>
+```
+
+這樣就可以印出 id 的資料了。
+
+參考資料：

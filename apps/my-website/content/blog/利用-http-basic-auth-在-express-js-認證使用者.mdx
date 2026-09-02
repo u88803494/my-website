@@ -1,0 +1,114 @@
+---
+title: "利用 HTTP basic Auth 在 Express.js 認證使用者"
+slug: "利用-http-basic-auth-在-express-js-認證使用者"
+description: "HTTP basic Auth"
+date: 2020-07-07T09:31:44.101Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%88%A9%E7%94%A8-http-basic-auth-%E5%9C%A8-express-js-%E8%AA%8D%E8%AD%89%E4%BD%BF%E7%94%A8%E8%80%85-538c843f29dd"
+---
+
+## HTTP basic Auth
+
+[HTTP basic auth](https://zh.wikipedia.org/zh-tw/HTTP%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%81) 是一種簡易的伺服器認證使用者的方式。可以讓使用者提供他的帳號密碼來傳輸。
+
+傳輸格式如下：
+
+```
+username:password
+```
+
+假設你的帳號密碼是：
+
+```
+hugh12345678:mypassword
+```
+
+透過 base 64 編碼，把這串格式變成如下：
+
+```
+aHVnaDEyMzQ1Njc4Om15cGFzc3dvcmQ=
+```
+
+可以試試看：[線上編碼器](https://www.convertstring.com/zh_TW/EncodeDecode/Base64Encode)
+
+登入時會在 HTTP Header 加入一個 Authorization 字段如下：
+
+```
+Authorization: Basic aHVnaDEyMzQ1Njc4Om15cGFzc3dvcmQ=
+```
+
+也就是會透過發 Requset 的時候的 Header 傳輸資料並把這些資料加密成 base 64 ，並且有標註轉碼的格式。
+
+## Express
+
+在 Express.js 中，接收 request 之後，就可以取得 header 了。
+
+```
+import express from 'express';
+```
+
+```
+const router = express.Router();
+```
+
+```
+router.get('/', (req, res) => {
+  console.log(req.headers.authorization);
+}
+```
+
+得到
+
+```
+Basic aHVnaDEyMzQ1Njc4Om15cGFzc3dvcmQ=
+```
+
+所以就可以針對這段來解碼
+
+首先，因為不需要前面的 Basic，所以我們可以只取得後面的字串
+
+```
+const base64Auth = req.headers.authorization.split(' ')[1];
+// aHVnaDEyMzQ1Njc4Om15cGFzc3dvcmQ=
+```
+
+然後因為 node.js 有內建一個 Buffer 可以用來解密，所以就利用這個來解密。
+
+```
+Buffer.from(string[, encoding])
+```
+
+```
+string <string> A string to encode.
+```
+
+```
+encoding <string> The encoding of string. Default: 'utf8'.
+```
+
+就可以利用這個來解密：
+
+```
+Buffer.from(base64Auth, 'base64');
+// <Buffer 59 57 46 68 4f 6d 46 68 59 51 3d 3d>
+```
+
+直接按照網站內的指令來轉碼
+
+```
+Buffer.from(base64Auth, 'base64').toString();
+// hugh12345678:mypassword
+```
+
+這樣就可以得到帳號跟密碼，就可以拿來跟資料庫做比對。
+
+## 缺點
+
+使用的是 base64 編碼，而不是加密，所以在安全性上會有疑慮。
+
+因為任何人，只要拿到編碼過後的字串，就可以解密
+
+尤其是直接用在 http 上，因為資料是公開的，所以任意人都可以取得資料，並且解密。
+
+所以推薦使用上要用在私人網域或是 https 的網域上。

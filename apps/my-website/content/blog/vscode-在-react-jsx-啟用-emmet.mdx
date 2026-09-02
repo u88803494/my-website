@@ -1,0 +1,33 @@
+---
+title: "VScode 在 React(JSX) 啟用 emmet"
+slug: "vscode-在-react-jsx-啟用-emmet"
+description: "按下 F2 輸入 emmet 就會顯示如下方頁面："
+date: 2019-10-18T10:40:27.099Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*gkuCxOM_R7m20wKcU3BMcA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/vscode-%E5%9C%A8-react-jsx-%E5%95%9F%E7%94%A8-emmet-f9a9bcf40e4f"
+---
+
+打開設定之後，在輸入區輸入 emmet 就會顯示如下方頁面：
+
+![點開紅色處。](https://cdn-images-1.medium.com/max/800/1*gkuCxOM_R7m20wKcU3BMcA.png)
+
+_點開紅色處。_
+
+直接在這個 `.json` 檔案裡面新增設定
+
+```
+"emmet.includeLanguages": {
+  "javascript": "javascriptreact"
+},
+"files.associations": {
+  "*.js": "javascriptreact"
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*UJyEHCQ1rRlV3WC63V4syA.png)
+
+大功告成。不過 CSS 的部份就還是沒辦法啟用，這要另外在找過了。
+
+[參考資料](https://blog.camel2243.com/2018/01/29/vscode-emmet-%E5%9C%A8-reactjsx-%E7%84%A1%E6%B3%95%E8%87%AA%E5%8B%95%E7%94%A2%E7%94%9F/)

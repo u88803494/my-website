@@ -1,0 +1,1814 @@
+---
+title: "前端中階作業：event loop、Scope、hoisting、closure"
+slug: "前端中階作業-event-loop-scope-hoisting-closure"
+description: "hw1：Event Loop"
+date: 2019-09-29T13:25:22.350Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%BD%9C%E6%A5%AD-event-loop-scope-hoisting-closure-ffa02ed722fb"
+---
+
+## hw1：Event Loop
+
+在 JavaScript 裡面，一個很重要的概念就是 Event Loop，是 JavaScript 底層在執行程式碼時的運作方式。請你說明以下程式碼會輸出什麼，以及儘可能詳細地解釋原因。
+
+```
+console.log(1)
+setTimeout(() => {
+  console.log(2)
+}, 0)
+console.log(3)
+setTimeout(() => {
+  console.log(4)
+}, 0)
+console.log(5)
+```
+
+—
+
+因為直式的寫，很難排版，所以我用橫的方式來寫，按照先左邊後右邊的順序。
+
+1. 首先進入程式時，先把主要區域的 `main()` 放入 stack  
+   stack： `main()`
+2. `console.log(1)` 放入 stack  
+   stack： `main()`、`console.log(1)`
+3. 執行 `console.log(1)` 印出 1 ，然後從 stack 拿掉  
+   stack： `main()`  
+   印出的資料：1
+4. `setTimeout(cb1)` 放入 stack  
+   stack： `main()`、`setTimeout(cb1)`  
+   印出的資料：1
+5. 執行 `setTimeout(cb1)`，呼叫 web APIs ，0 秒後執行 cd1，並從 stack 拿掉 `setTimeout(cb1)`。0 秒到了，web APIs 把 cb1 放入 callback queue。  
+   stack： `main()`  
+   印出的資料：1  
+   callback queue：cb1
+6. `console.log(3)` 放入 stack。  
+   stack： `main()`、`console.log(3)`  
+   印出的資料：1  
+   callback queue：cb1
+7. `console.log(3)` 執行，印出 3，然後從 stack 拿掉 `console.log(3)`  
+   stack： `main()`  
+   印出的資料：1 3  
+   callback queue：cb1
+8. `setTimeout(cb2)` 放入 stack  
+   stack： `main()`、`setTimeout(cb2)`  
+   印出的資料：1 3  
+   callback queue：cb1
+9. 執行 `setTimeout(cb2)`，呼叫 web APIs ，0 秒後執行 cd1，並從 stack 拿掉 `setTimeout(cb2)`。0 秒到了，web APIs 把 cb2 放入 callback queue。  
+   stack： `main()`  
+   印出的資料：1 3  
+   callback queue：cb1、cb2
+10. `console.log(5)` 放入 stack。  
+    stack： `main()`、`console.log(5)`  
+    印出的資料：1 3  
+    callback queue：cb1、cb2
+11. `console.log(5)` 執行，印出 5，然後從 stack 拿掉 `console.log(5)`  
+    stack： `main()`  
+    印出的資料：1 3 5  
+    callback queue：cb1、cb2
+12. `main()` 全部執行完畢。stack 移出 `main()`。  
+    stack：  
+    印出的資料：1 3 5  
+    callback queue：cb1、cb2
+13. stack 沒資料了，所以 event loop 去 callback queue 找尋資料。找到有 cb1，所以把 cb1 放進 stack，並進入 cb1。  
+    stack： cb1  
+    印出的資料：1 3 5  
+    callback queue：cb2
+14. cb1 裡面有內容 `console.log(2)` ，把 `console.log(2)` 放入 stack。  
+    stack： cb1、`console.log(2)`  
+    印出的資料：1 3 5  
+    callback queue：cb2
+15. 執行 `console.log(2)` 印出 2，把 `console.log(2)` 移出 stack。  
+    stack： cb1  
+    印出的資料：1 3 5 2  
+    callback queue：cb2
+16. cd1 執行結束，退出 cb1，把 cb1 移出 stack。  
+    stack：  
+    印出的資料：1 3 5 2  
+    callback queue：cb2
+17. stack 以清空，所以 event loop 去找尋 callback queue，發現有 cb2。於是把 cb2 放入 stack 並進入 cb2  
+    stack： cb2  
+    印出的資料：1 3 5 2  
+    callback queue：
+18. cb2 裡面有內容 `console.log(4)` ，把 `console.log(4)` 放入 stack。  
+    stack： cb2、`console.log(4)`  
+    印出的資料：1 3 5 2  
+    callback queue：
+19. 執行 `console.log(4)` 印出 4，把 `console.log(4)` 移出 stack。  
+    stack： cb2  
+    印出的資料：1 3 5 2 4  
+    callback queue：
+20. cd2 執行結束，退出 cb2，把 cb2 移出 stack。  
+    stack：  
+    印出的資料：1 3 5 2 4  
+    callback queue：
+
+全部執行結束，結果是印出了
+
+```
+1
+3
+5
+2
+4
+```
+
+## hw2：Event Loop + Scope
+
+請說明以下程式碼會輸出什麼，以及儘可能詳細地解釋原因。
+
+```
+for(var i=0; i<5; i++) {
+  console.log('i: ' + i)
+  setTimeout(() => {
+    console.log(i)
+  }, i * 1000)
+}
+```
+
+—
+
+因為直式的寫，很難排版，所以我用橫的方式來寫，按照先左邊後右邊的順序。
+
+### 1. 首先進入程式時，進入了 global EC， `global()` 放入 stack，產生 VO 並初始化變數，有`var i` ，所以 i 的值為 undefined
+
+stack： `global()`
+
+```
+globalEC: {
+  VO {
+    i: undefined,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 2. 進入執行階段，i = 0
+
+stack： `global()`
+
+```
+globalEC: {
+  VO {
+    i: 0,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 3. for 迴圈 判斷 i &lt; 5 是 true。所以進入迴圈，`console.log('i: ' + i)`，所以把 `console.log('i: ' + i)` 放入 stack。
+
+stack： `global()`、 `console.log('i: ' + i)`
+
+```
+globalEC: {
+  VO {
+    i: 0,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 4. 執行 `console.log('i: ' + i)`，找尋 globalEC.VO 找 i ，找到 i 值為 0，所以印出 `i: 0`，並把 `console.log('i: ' + i)` 移出 stack
+
+stack： `global()` 印出的資料：`i: 0`
+
+```
+globalEC: {
+  VO {
+    i: 0,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 5. `setTimeout(cb, i * 1000)`，找尋 globalEC.VO 找 i ，找到 i 值為 0，所以把設置 i 整體變成 `setTimeout(cb, 0)`（用 cb 來標示 setTimeout 的 callback），並把 `setTimeout(cb, 0)` 放入 stack。
+
+stack： `global()`、`setTimeout(cb, 0)` 印出的資料：`i: 0`
+
+```
+globalEC: {
+  VO {
+    i: 0,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 6. 執行 `setTimeout(cb, 0)`，呼叫 web APIs，`setTimeout(cb, 0)` 放到 web APIs 零秒後呼叫 cb 並把 `setTimeout(cb, 0)` 移出 stack
+
+stack： `global()` 印出的資料：`i: 0` web APIs：cb_timer(0秒)
+
+```
+globalEC: {
+  VO {
+    i: 0,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 7. 第 0 圈迴圈到底，執行 `i++`，找到 globalEC.VO 內的 i ，並將值改為 1。
+
+stack： `global()` 印出的資料：`i: 0` web APIs：cb_timer(0秒)
+
+```
+globalEC: {
+  VO {
+    i: 1,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 8. 回到迴圈開始處繼續執行。for 迴圈 判斷 i &lt; 5 是 true。所以繼續迴圈，`console.log('i: ' + i)`，所以把 `console.log('i: ' + i)` 放入 stack。
+
+stack： `global()`、`console.log('i: ' + i)` 印出的資料：`i: 0`web APIs：cb_timer(0秒)
+
+```
+globalEC: {
+  VO {
+    i: 1,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 9. 執行 `console.log('i: ' + i)`，找尋 globalEC.VO 找 i ，找到 i 值為 1，所以印出 `i: 1`，並把 `console.log('i: ' + i)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` web APIs：cb_timer(0秒)
+
+```
+globalEC: {
+  VO {
+    i: 1,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 10. `setTimeout(cb, i * 1000)`，找尋 globalEC.VO 找 i ，找到 i 值為 1，所以設置 i 把整體變成 `setTimeout(cb, 1000)`，並把 `setTimeout(cb, 1000)` 放入 stack。
+
+stack： `global()`、`setTimeout(cb, 1000)` 印出的資料：`i: 0` `i: 1` web APIs：cb_timer(0秒)
+
+```
+globalEC: {
+  VO {
+    i: 1,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 11. 執行 `setTimeout(cb, 1000)`，呼叫 web APIs，`setTimeout(cb, 1000)` 放到 web APIs 一秒後呼叫 cb 並把`setTimeout(cb, 1000)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` web APIs：cb_timer(0秒)、cb_timer(1秒)
+
+```
+globalEC: {
+  VO {
+    i: 1,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 12. 第 1 圈迴圈到底，執行 `i++`，找到 globalEC.VO 內的 i ，並將值改為 2。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` web APIs：cb_timer(0秒)、cb_timer(1秒)
+
+```
+globalEC: {
+  VO {
+    i: 2,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 13. 回到迴圈開始處繼續執行。for 迴圈 判斷 i &lt; 5 是 true。所以繼續迴圈，`console.log('i: ' + i)`，所以把 `console.log('i: ' + i)` 放入 stack。
+
+stack： `global()`、`console.log('i: ' + i)` 印出的資料：`i: 0i: 1` web APIs：cb_timer(0秒)、cb_timer(1秒)
+
+```
+globalEC: {
+  VO {
+    i: 2,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 14. 執行 `console.log('i: ' + i)`，找尋 globalEC.VO 找 i ，找到 i 值為 2，所以印出 `i: 2`，並把 `console.log('i: ' + i)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` web APIs：cb_timer(0秒)、cb_timer(1秒)
+
+```
+globalEC: {
+  VO {
+    i: 2,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 15. `setTimeout(cb, i * 1000)`，找尋 globalEC.VO 找 i ，找到 i 值為 2，所以設置 i 把整體變成 `setTimeout(cb, 2000)`，並把 `setTimeout(cb, 2000)` 放入 stack。
+
+stack： `global()`、`setTimeout(cb, 2000)` 印出的資料：`i: 0` `i: 1` `i: 2` web APIs：cb_timer(0秒)、cb_timer(1秒)
+
+```
+globalEC: {
+  VO {
+    i: 2,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 16. 執行 `setTimeout(cb, 2000)`，呼叫 web APIs，`setTimeout(cb, 2000)` 放到 web APIs 兩秒後呼叫 cb 並把`setTimeout(cb, 2000)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)
+
+```
+globalEC: {
+  VO {
+    i: 2,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 17. 第 2 圈迴圈到底，執行 `i++`，找到 globalEC.VO 內的 i ，並將值改為 3。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)
+
+```
+globalEC: {
+  VO {
+    i: 3,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 18. 回到迴圈開始處繼續執行。for 迴圈 判斷 i &lt; 5 是 true。所以繼續迴圈，`console.log('i: ' + i)`，所以把 `console.log('i: ' + i)` 放入 stack。
+
+stack： `global()`、`console.log('i: ' + i)` 印出的資料：`i: 0i: 1` `i: 2` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)
+
+```
+globalEC: {
+  VO {
+    i: 3,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 19. 執行 `console.log('i: ' + i)`，找尋 globalEC.VO 找 i ，找到 i 值為 2，所以印出 `i: 3`，並把 `console.log('i: ' + i)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)
+
+```
+globalEC: {
+  VO {
+    i: 3,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 20. `setTimeout(cb, i * 1000)`，找尋 globalEC.VO 找 i ，找到 i 值為 3，所以設置 i 把整體變成 `setTimeout(cb, 3000)`，並把 `setTimeout(cb, 3000)` 放入 stack。
+
+stack： `global()`、`setTimeout(cb, 3000)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)
+
+```
+globalEC: {
+  VO {
+    i: 3,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 21. 執行 `setTimeout(cb, 3000)`，呼叫 web APIs，`setTimeout(cb, 3000)` 放到 web APIs 三秒後呼叫 cb 並把`setTimeout(cb, 3000)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)
+
+```
+globalEC: {
+  VO {
+    i: 3,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 22. 第 3 圈迴圈到底，執行 `i++`，找到 globalEC.VO 內的 i ，並將值改為 4。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)
+
+```
+globalEC: {
+  VO {
+    i: 4,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 23. 回到迴圈開始處繼續執行。for 迴圈 判斷 i &lt; 5 是 true。所以繼續迴圈，`console.log('i: ' + i)`，所以把 `console.log('i: ' + i)` 放入 stack。
+
+stack： `global()`、`console.log('i: ' + i)` 印出的資料：`i: 0i: 1` `i: 2` `i: 3` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)
+
+```
+globalEC: {
+  VO {
+    i: 4,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 24. 執行 `console.log('i: ' + i)`，找尋 globalEC.VO 找 i ，找到 i 值為 2，所以印出 `i: 3`，並把 `console.log('i: ' + i)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)
+
+```
+globalEC: {
+  VO {
+    i: 4,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 25. `setTimeout(cb, i * 1000)`，找尋 globalEC.VO 找 i ，找到 i 值為 4，所以設置 i 把整體變成 `setTimeout(cb, 4000)`，並把 `setTimeout(cb, 4000)` 放入 stack。
+
+stack： `global()`、`setTimeout(cb, 4000)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)
+
+```
+globalEC: {
+  VO {
+    i: 4,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 26. 執行 `setTimeout(cb, 4000)`，呼叫 web APIs，`setTimeout(cb, 4000)` 放到 web APIs 四秒後呼叫 cb 並把`setTimeout(cb, 4000)` 移出 stack。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒)
+
+```
+globalEC: {
+  VO {
+    i: 4,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 27. 第 4 圈迴圈到底，執行 `i++`，找到 globalEC.VO 內的 i ，並將值改為 5。
+
+stack： `global()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒)
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 28. 回到迴圈開始處繼續執行。for 迴圈 需要判斷 i &lt; 5，所以通過 `globalEC.VO.i` 取得 i = 5， 結果是 false。所以結束迴圈。所以整個主程式流程都走完了，就把 `global()` 移出 stack。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(0秒)、cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒)
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 29. stack 清空。同時 webAPIs 也在處理那些 Timer 需求。所以 0 秒後返回 cb_timer(0秒) 到 call queue。cb_timer(0秒) 在 webAPIs 結束。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue：cb
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 30. 因為 stack 已清空，所以 event loop 繼續查找待執行。找到 call queue 有待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call queue
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 31. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 32. cb 裡面，有 `console.log(i)`，把 `console.log(i)` 放入 stack。
+
+stack：`cb()`、`console.log(i)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3i: 4` web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 33. 執行 `console.log(i)`，於是開始找尋變數 i 的值，通過 cbEC.scopeChain 開始找，`[cbEC.AO, globalEC.VO]` 先找尋 [cbEC.AO](http://cbec.ao/)，裡面沒有。所以找往後找，找尋 globalEC.VO，裡面有 i 值，於是取出 i 值為 5。`console.log(5)`，印出 5 並把 `console.log(5)` 移出 stack。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 34. 因為 `cb()` 已經執行完畢，所以 `cb()` 移出 stack，同時清除 cbEC。stack 已清空。同時 webAPIs 也在處理那些 Timer 需求。所以 1 秒後返回 cb_timer(1秒) 到 call queue。cb_timer(1秒) 在 webAPIs 結束。call queue 多了一個 cb 待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 35. stack 已清空。所以 event loop 繼續查找待執行。找到 call queue 有待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call queue
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 36. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 37. cb 裡面，有 `console.log(i)`，把 `console.log(i)` 放入 stack。
+
+stack：`cb()`、`console.log(i)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3i: 4` 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 38. 執行 `console.log(i)`，於是開始找尋變數 i 的值，通過 cbEC.scopeChain 開始找，`[cbEC.AO, globalEC.VO]` 先找尋 [cbEC.AO](http://cbec.ao/)，裡面沒有。所以找往後找，找尋 globalEC.VO，裡面有 i 值，於是取出 i 值為 5。`console.log(5)`，印出 5 並把 `console.log(5)` 移出 stack。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 39. 因為 `cb()` 已經執行完畢，所以 `cb()` 移出 stack，同時清除 cbEC。stack 已清空。同時 webAPIs 也在處理那些 Timer 需求。所以 2 秒後返回 cb_timer(2秒) 到 call queue。cb_timer(2秒) 在 webAPIs 結束。call queue 多了一個 cb 待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 40. stack 已清空。所以 event loop 繼續查找待執行。找到 call queue 有待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call queue
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 41. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 42. cb 裡面，有 `console.log(i)`，把 `console.log(i)` 放入 stack。
+
+stack：`cb()`、`console.log(i)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3i: 4` 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 43. 執行 `console.log(i)`，於是開始找尋變數 i 的值，通過 cbEC.scopeChain 開始找，`[cbEC.AO, globalEC.VO]` 先找尋 [cbEC.AO](http://cbec.ao/)，裡面沒有。所以找往後找，找尋 globalEC.VO，裡面有 i 值，於是取出 i 值為 5。`console.log(5)`，印出 5 並把 `console.log(5)` 移出 stack。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 44. 因為 `cb()` 已經執行完畢，所以 `cb()` 移出 stack，同時清除 cbEC。stack 已清空。同時 webAPIs 也在處理那些 Timer 需求。所以 3 秒後返回 cb_timer(3秒) 到 call queue。cb_timer(3秒) 在 webAPIs 結束。call queue 多了一個 cb 待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 45. stack 已清空。所以 event loop 繼續查找待執行。找到 call queue 有待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call queue
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 46. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 47. cb 裡面，有 `console.log(i)`，把 `console.log(i)` 放入 stack。
+
+stack：`cb()`、`console.log(i)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3i: 4` 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 48. 執行 `console.log(i)`，於是開始找尋變數 i 的值，通過 cbEC.scopeChain 開始找，`[cbEC.AO, globalEC.VO]` 先找尋 [cbEC.AO](http://cbec.ao/)，裡面沒有。所以找往後找，找尋 globalEC.VO，裡面有 i 值，於是取出 i 值為 5。`console.log(5)`，印出 5 並把 `console.log(5)` 移出 stack。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 49. 因為 `cb()` 已經執行完畢，所以 `cb()` 移出 stack，同時清除 cbEC。stack 已清空。同時 webAPIs 也在處理那些 Timer 需求。所以 4 秒後返回 cb_timer(4秒) 到 call queue。cb_timer(4秒) 在 webAPIs 結束。call queue 多了一個 cb 待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 web APIs： call queue：cb event loop → call stack
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 50. stack 已清空。所以 event loop 繼續查找待執行。找到 call queue 有待執行。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 web APIs： call queue：cb event loop → call queue
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 51. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 web APIs： call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 52. cb 裡面，有 `console.log(i)`，把 `console.log(i)` 放入 stack。
+
+stack：`cb()`、`console.log(i)` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3i: 4` 5 5 5 5 web APIs： call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 53. 執行 `console.log(i)`，於是開始找尋變數 i 的值，通過 cbEC.scopeChain 開始找，`[cbEC.AO, globalEC.VO]` 先找尋 [cbEC.AO](http://cbec.ao/)，裡面沒有。所以找往後找，找尋 globalEC.VO，裡面有 i 值，於是取出 i 值為 5。`console.log(5)`，印出 5 並把 `console.log(5)` 移出 stack。
+
+stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 5 web APIs： call queue： event loop → call stack
+
+```
+cbEC: {
+  AO {
+
+  }
+  scopeChain: [cbEC.AO, globalEC.VO]
+}
+```
+
+```
+cb.[[Scope]] = globalEC.scopeChain => [globalEC.VO]
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 54. 因為 `cb()` 已經執行完畢，所以 `cb()` 移出 stack，同時清除 cbEC。stack 已清空。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 5 web APIs： call queue： event loop → call stack
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+### 55. stack 已清空。所以 event loop 繼續查找待執行。發現都沒有要執行的，所以程式結束。但 event loop 持續查找中。
+
+stack： 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 5 web APIs： call queue： event loop：checking
+
+```
+globalEC: {
+  VO {
+    i: 5,
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+最後結果
+
+```
+i: 0
+i: 1
+i: 2
+i: 3
+i: 4
+5
+（間隔一秒）
+5
+（間隔一秒）
+5
+（間隔一秒）
+5
+（間隔一秒）
+5
+```
+
+## hw3：Hoisting
+
+請說明以下程式碼會輸出什麼，以及儘可能詳細地解釋原因。
+
+```
+var a = 1
+function fn(){
+  console.log(a)
+  var a = 5
+  console.log(a)
+  a++
+  var a
+  fn2()
+  console.log(a)
+  function fn2(){
+    console.log(a)
+    a = 20
+    b = 100
+  }
+}
+fn()
+console.log(a)
+a = 10
+console.log(a)
+console.log(b)
+```
+
+—
+
+因為直式的寫，很難排版，所以我用橫的方式來寫，按照先左邊後右邊的順序。
+
+1. 首先進入程式時，進入了 globalEC，產生 VO 並初始化變數，有`var a = 1`、`function fn` ，所以 a 的值為 undefined，fn 是 function，產生隱藏屬性 Scope，以及 scopeChain。
+
+```
+globalEC: {
+  VO {
+    a: undefined,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+2. 執行階段，把 globalEC.VO 的 a 賦值成 1，進入 `fn()`。
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+3. 建立一個 fnEC，產生 AO 並初始化。`var a = 5`，因為是在編譯階段，所以在 [fnEC.AO](http://fnec.ao/) 定義 a 為 undefined，後面又碰到一次 `var a` 但已經定義過，所以忽略。再後面碰到 function fn2，也定義成 function。產生隱藏屬性 Scope，以及 scopeChain。 scopeChain 的內容等於 `[fnEC.AO , fn.[[Scope]]]`，也等同於 `[fnEC.AO ,globalEC.scopeChain]`，就是 `[fnEC.AO, globalEC.VO]`
+
+```
+fnEC: {
+  AO {
+    a: undefined,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, fn.[[Scope]]] => [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+4. 執行階段。先碰到 `console.log(a)`，所以從 scopeChain index 0 開始找起，[找到fnEC.AO](http://xn--fnec-pm9fq77f.ao/) 裡面有 a 值 undefined，所以印出 undefined。 印出的資料：undefined
+
+```
+fnEC: {
+  AO {
+    a: undefined,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+5. 執行階段中。繼續往下執行。碰到 賦值 `var a = 5` 但執行階段 var 已經編譯過，所以只看 `a = 5`，所以從 scopeChain index 0 開始找起，[找到fnEC.AO](http://xn--fnec-pm9fq77f.ao/) 裡面有 a 值，所以把 a 值改成 5 印出的資料：undefined
+
+```
+fnEC: {
+  AO {
+    a: 5,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+6. 又碰到 `console.log(a)`，所以從 scopeChain index 0 開始找起，[找到fnEC.AO](http://xn--fnec-pm9fq77f.ao/) 裡面有 a 值 5，所以印出 5。 印出的資料：undefined 5
+
+```
+fnEC: {
+  AO {
+    a: 5,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+7. 執行階段中。碰到 `a++`，所以從 scopeChain index 0 開始找起，[找到fnEC.AO](http://xn--fnec-pm9fq77f.ao/) 裡面有 a 值 5，故 +1， a 的值改為 6。 印出的資料：undefined 5
+
+```
+fnEC: {
+  AO {
+    a: 6,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+8. 執行階段中。繼續往下碰到 `fn2()`，進入 `fn2()`。建立 fn2EC，產生 AO 並初始化。編譯階段，因為沒資料要編譯，所以 [fn2EC.AO](http://fn2ec.ao/) 為空。產生 ScopeChain。 scopeChain 的內容是 `[fn2EC.AO, fn2.[[Scope]]]`，等同於 `[fn2EC.AO, fnEC.scopeChain]`，也等同於 `[fn2EC.AO, fnEC.AO, globalEC.VO]`。 印出的資料：undefined 5
+
+```
+fn2EC: {
+  AO {
+
+  }
+  scopeChain: [fn2EC.AO, fn2.[[Scope]]] => [fn2EC.AO, fnEC.scopeChain]
+}
+```
+
+```
+======
+```
+
+```
+fnEC: {
+  AO {
+    a: 6,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+3. 編譯階段結束，進入執行階段。先碰到 `console.log(a)` ，所以從 scopeChain index 0 開始找起，找 [fn2EC.AO](http://fn2ec.ao/) 發現沒有 a 的值，所以找 index 1，[fnEC.AO](http://fnec.ao/) 找到 a 的值為 6，所以印出 6。 印出的資料：undefined 5 6
+
+```
+fn2EC: {
+  AO {
+
+  }
+  scopeChain: [fn2EC.AO, fnEC.AO, globalEC.VO]
+}
+```
+
+```
+======
+```
+
+```
+fnEC: {
+  AO {
+    a: 6,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+10. 執行階段中。碰到 `a = 20` ，從 scopeChain index 0 開始找起，找 [fn2EC.AO](http://fn2ec.ao/) 發現沒有 a 的值，所以找 index 1，[fnEC.AO](http://fnec.ao/)找到 a ，所以把 fnEC.AO.a 的值改成 20。 印出的資料：undefined 5 6
+
+```
+fn2EC: {
+  AO {
+
+  }
+  scopeChain: [fn2EC.AO, fnEC.AO, globalEC.VO]
+}
+```
+
+```
+======
+```
+
+```
+fnEC: {
+  AO {
+    a: 6, => 20
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+11. 執行階段中。碰到 `b = 100`，從 scopeChain index 0 開始找起，找 [fn2EC.AO](http://fn2ec.ao/) 發現沒有 b 的值，所以找 index 1，[fnEC.AO](http://fnec.ao/)一樣沒有找到 b，所以繼續找 index 2 的 globalEC.VO，依然沒看到 b。由於已經最上層了，所以就在 globalEC.VO 定義 `b = 100`，等於直接定義 b 然後賦值 100。 印出的資料：undefined 5 6
+
+```
+fn2EC: {
+  AO {
+
+  }
+  scopeChain: [fn2EC.AO, fnEC.AO, globalEC.VO]
+}
+```
+
+```
+======
+```
+
+```
+fnEC: {
+  AO {
+    a: 20,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+12. function fn2 結束，退出 fn2EC，並抹除 fn2EC 的資料。回到 fnEC 繼續執行。 印出的資料：undefined 5 6
+
+```
+fnEC: {
+  AO {
+    a: 20,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+13. fnEC 執行階段中。`fn2()` 結束後，繼續執行下方的 `console.log(a)`，從 fnEC.scopeChain index 0 開始找起，[找到fnEC.AO](http://xn--fnec-pm9fq77f.ao/) 的 a 值為 20，所以印出 20。 印出的資料：undefined 5 6 20
+
+```
+fnEC: {
+  AO {
+    a: 20,
+    fn2: func,
+  }
+  scopeChain: [fnEC.AO, globalEC.VO]
+}
+```
+
+```
+fn2.[[Scope]] = fnEC.scopeChain
+```
+
+```
+======
+```
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+14. function fn 結束，退出 fnEC，並抹除 fnEC 的資料。回到 globalEC 繼續執行。 印出的資料：undefined 5 6 20
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+15. globalEC 執行階段中。`fn()` 結束後，繼續執行下方的 `console.log(a)`，從 globalEC.scopeChain index 0 開始找起，找到globalEC.VO 的 a 值為 1，所以印出 1。 印出的資料：undefined 5 6 20 1
+
+```
+globalEC: {
+  VO {
+    a: 1,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+16. globalEC 執行階段中。繼續往下，碰到賦值 `a = 10`，從 globalEC.scopeChain index 0 開始找起，找到globalEC.VO 有 a ，所以把 globalEC.VO.a 改成 10。 印出的資料：undefined 5 6 20 1
+
+```
+globalEC: {
+  VO {
+    a: 10,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+17. globalEC 執行階段中。繼續往下執行下方的 `console.log(a)`，從 globalEC.scopeChain index 0 開始找起，找到globalEC.VO 的 a 值為 10，所以印出 10。 印出的資料：undefined 5 6 20 1 10
+
+```
+globalEC: {
+  VO {
+    a: 10,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+18. globalEC 執行階段中。繼續往下執行下方的 `console.log(b)`，從 globalEC.scopeChain index 0 開始找起，找到globalEC.VO 的 b 值為 100，所以印出 100。 印出的資料：undefined 5 6 20 1 10 100
+
+```
+globalEC: {
+  VO {
+    a: 10,
+    fn: func,
+    b: 100,
+  }
+  scopeChain: [globalEC.VO]
+}
+fn.[[Scope]] = globalEC.scopeChain
+```
+
+19. 全部執行結束。
+
+最後結果：
+
+```
+undefined
+5
+6
+20
+1
+10
+100
+```
+
+## hw4：What is this?
+
+請說明以下程式碼會輸出什麼，以及儘可能詳細地解釋原因。
+
+```
+const obj = {
+  value: 1,
+  hello: function() {
+    console.log(this.value)
+  },
+  inner: {
+    value: 2,
+    hello: function() {
+      console.log(this.value)
+    }
+  }
+}
+
+const obj2 = obj.inner
+const hello = obj.inner.hello
+obj.inner.hello() // ??
+obj2.hello() // ??
+hello() // ??
+```
+
+—
+
+因為 this 是看啟動的時候怎麼呼叫，所以直接進入呼叫的部份。
+
+1. `obj.inner.hello()` `obj.inner.hello()` => `obj.inner.hello.call(obj.inner)`。 所以 this 的就是指 `obj.inner`。所以執行 `console.log(this.value)` 就會去找 `inner` 這個物件的 value。所以會印出 2 印出的資料 2
+2. `obj2.hello()` `obj2.hello()` => `obj2.hello.call(obj2)`。 this 就是 obj2，從 obj2 等同於 `obj.inner`。就可以找到位於 `obj.inner` 內的 function hello，所以執行之後，會執行其內部的 `console.log(this.value)`就會去找 `inner` 這個物件的 value。所以會印出 2 印出的資料 2 2
+3. `hello()` 因為題目沒要求嚴格模式，所以先寫出一般模式下的情況。嚴格模式寫在後面。
+
+一般模式： 瀏覽器下 `hello()` => `window.hello()` => `window.hello.call(window)` node.js下： `hello()` => `global.hello()` => `global.hello.call(global)`
+
+this 的值在這邊要看情況，瀏覽器下是 window，node.js 下是 global。
+
+hello 執行之後，因為已經定義 `const hello = obj.inner.hello`所以會執行，這邊的 hello，就會執行其內部的 `console.log(this.value)` 印出 this.value 的值。 而 this 已經是在最上層了，所以會在 globalEC(node.js)/windowEC(瀏覽器) 定義 value 的值是 undefined，然後 console.log() 印出 undefined
+
+嚴格模式下： 嚴格模式下，因為 this 本身是 undefined，所以底下不可能有附屬的值，所以在嚴格模式下，無論是瀏覽器還是 node.js 都會處理前面兩個之後，在處理 `hello()` 的時候會報錯顯示 `TypeError: Cannot read property 'value' of undefined`
+
+### 最後結果：
+
+一般模式下：
+
+```
+2
+2
+undefined
+```
+
+嚴格模式：
+
+```
+2
+2
+報錯：TypeError: Cannot read property 'value' of undefined
+```
+
+## hw5：簡答題
+
+1. 這週學了一大堆以前搞不懂的東西，你有變得更懂了嗎？請寫下你的心得。
+
+—
+
+在學習這門課程的時候是滿滿的期待，因為終於到達了 JavaScript 中階的部份了。我個人是很喜歡深入探討原理的，因為懂原理比任何只懂流程都好非常非常多。
+
+懂原理的話，實際上在理解事情上面，可以做更好的學習，將來也比較不容易忘記。這就讓我回想到以前還是學生的時候，我對於理科可以有非常深入的理解，所以理科的成績一直都不錯。而我文科真的不行到一種很誇張的地步，主要是傳統教育上面往往都是死背硬記。
+
+尤其是歷史、國文，這兩個部份，我在就學時期要說有多討厭，就有多討厭。結果畢業之後到了大學，反而因為一些遊戲引起我的興趣。我反而變成有一些歷史狂，因為不再是讀書考試要用的，整體之間在查資料的時候，就可以看到一些脈絡，很多事情是有起因，有結果，是什麼樣的原因，才導致歷史走向這樣走。
+
+甚至也會思考一下，到底如果當時產生的問題有什麼更好的解決方法嗎？都會做諸如此類的思考。
+
+國文則是現在進行式，我每週都會去的課程，因為是讀資料，雖然說都是中文，實際上字詞我們在使用的時候都誤解了，或是濫用。這是很嚴重的一件事，因為會導致人學習不下去。所以就會需要查清楚字詞的意思，甚至也要去理解來由，學習到最後，有時候讓人覺得簡直就是在讀國文一樣。
+
+這樣是有很大的好處，因為這樣子做可以提升智慧，在思考很多事情的時候，可以讓我們更加清楚的知道什麼是什麼，這也是為什麼西方可以很進步的原因，仔細去看看他們的字典，像是劍橋辭典會發現，跟中文的字典相比較之下，中文很多字詞的定義其實都很模糊，甚至是 A 詞的定義就用 B 詞來解釋，結果去找 B 詞，B 詞的定義用 A 詞來解釋，整體就是跟沒解釋一樣。為此我還要常常去找多本字典才可以看到比較好的解釋。
+
+### 主軸
+
+離題了，把主題拉回來。所以我真的滿喜歡深入理解原理，在這裡的部份，我把 JavaScript 的底層做了很完整的理解。
+
+從 execution context 到作用域這兩個大重點，從這邊才可以知道 closure、hoisting 等的原理，以及產生的原因。所以我就可以只用一套 execution 跟 context 去打天下了，就不用特別去硬記那些規則到底是什麼了。
+
+因為這種硬記只會很容易就忘掉了，說實在的，當我在 [Week17] 重新學習到 hoisting 的部份，我早就把規則都忘光了。甚至想不太起來 hoisting 到底是什麼意思。
+
+### hoisting
+
+在 hoisting 的部份我記得，剛開始學習的時候，我是很認為自己是知道的、理解的，因為前面在看直播影片的時候，我都是答對的，結果 [Week17] 提供的文章，老師的例子稍微不一樣一點我就答錯了。
+
+這就再次印證，硬記真的不行的。而通過 execution context 的理解之後，就可以更好的明白為什麼 hoisting 的規則會是如此，所以實際上不是直接產生 hositing 的機制，而是有底層的 Execution context 產生 hoisting 的機制。
+
+也因為如此的機制，所以 JavaScript 才可以在當時被設計為一個新手導向的程式語言吧？而這點在後面學習的 prototype 的時候，又逐步的透露出更多針對新手的設計方式。
+
+### closure
+
+closure 的部份，我可以大致理解到是為什麼產生這樣子原理。在這裡又再次的理解 execution context 跟 Scope chain 的問題，要產生一個不會被回收的變數，又不會被 global 修改，是要怎麼實現的。也就是使用 function 中的 function 才可以讓 VO 不會被回收。
+
+而在 closure 的部份，也講到 IIFE 原來就是這簡單哦！馬上可以執行的 Function 這部份在 [JS102] 還是 [JS101] 的時候，就有看到老師利用了，所以知道有這種方法，只是在這邊才清楚原來整體是這樣子的。
+
+### 物件導向
+
+物件導向的部份，則是要明白當初作者為什麼會這樣子設計 JavaScript 的物件導向。目的就是要讓 JavaScript 成為一個新手易學的程式語言。
+
+所以 JavaScript 的 new 是直接連結到建構子（建構函式）的，然後在通過其他的方法共用資訊。而這個方法就是 prototype chain。
+
+通過 prototype chain 就可以把很多的資料串在一起。而 prototype chain 的理解，我認為是一大進步。所以這部份我也花了最多的時間去理解，也看了不少的資訊。
+
+也因為前面已經理解的 scope chain，所以在理解 prototype chain 到底是什麼樣的東西，就會比較清晰。就是一個可以讓程式查詢資料的方式，而 prototype chain 就是讓物件導向可以共用資訊的方法。
+
+相比之下 prototype chain 還可以添加一些變數或 function 進去，這是與 scope chain 比較不一樣的地方。
+
+### this
+
+最後是 this 的部份，這部份因為有前面的基礎，所以就簡單的多了。
+
+雖然說之前看到很多人的文章都把 this 講的好像非常複雜的那種感覺。所以進到這部份說實在我還有點怕怕的XD。
+
+結果實際上跟我們想的真的不一樣，這不也只是 JavaScript 這個程式語言的一部分而已嗎？再複雜也沒有人類的行為複雜。
+
+放下這種成見之後來看，才發現實際上也不難。只是分類比較分歧，必須要看的面向比較多。
+
+但也只是幾個重點而已。
+
+1. 跟物件無關的部份，就是看環境，看是 window / global 或是嚴格模式的 undefined
+2. 在物件導向就是指 instance 本身。
+3. 物件底下就是看 `.call` 的參數，主要跟 function 怎麼呼叫有關係。
+
+記住這幾個重點， this 就會比較簡單一些。
+
+### event loop
+
+從 Philip Roberts 的影片中可以清楚的看到 event loop 是怎麼運作的。event loop 本身就是解決 JavaScript 的 single thread 運行效率的方法。
+
+通過這個機制可以很有效的運用 JavaScript 的效能。而我們也需要他去找尋代辦事項，然後把代辦事項給 call stack 處理。
+
+event loop 平常主要執行 call stack 裡面的內容。當 call stack 的內容清空之後，才會去 call queue 去找有無 webAPIs 返回的指令，或是 render queue 的指令，雖然我沒看到有說還有其他的 queue，不過我想應該還是會有其他種類的 queue 吧？
+
+而 queue 的部份則是直接會把東西放到 call stack，然後等 call stack 處理完畢之後，才又再去找尋其他的 queue 有無需要處理的部份。
+
+這部份跟我一開始學習 Event loop 的時候想的不太一樣。
+
+所以真的很多東西都要自己實際下去運作、練習才可以發現到底是什麼地方有問題。
+
+### 作業部份
+
+通過這些作業，我覺得例子都很好。可以讓我們深入的去理解到底是怎麼運作的。就像是通過這樣的例子，我們可以把這些 JavaScript 比較底層的部份，做一個更好的學習。
+
+在作業實作的部份，可能因為前面的學習，所以解答的時候，都還滿順利的，這讓我感覺還滿好的。
+
+我只是比較擔心自己不夠好，所以就是有點邊寫邊直接執行看看這樣子。
+
+也要慶幸自己有這樣子的習慣，所以在 This 那題就發現到一些問題。該題的 `hello()` 疑似不算是物件，所以他的 this 是 window 或 global ，這樣看環境。嚴格模式就是 undefined
+
+也的確還多時候 this 還是跟我們想得不一樣。
+
+作業的其他部份，讓人有一種興奮感。每發現自己答對一次，就可以明白自己真的有把東西學進去。

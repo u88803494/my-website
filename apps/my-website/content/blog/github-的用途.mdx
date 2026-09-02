@@ -1,0 +1,125 @@
+---
+title: "GitHub 的用途"
+slug: "github-的用途"
+description: "如何多人合作？"
+date: 2019-04-16T13:46:56.490Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/github-%E7%9A%84%E7%94%A8%E9%80%94-34cdbfd6e67b"
+---
+
+## 如何多人合作？
+
+repository **倉庫；貯藏室；存放處**
+
+用來表示專案的儲存所，可以是自己的電腦資料夾，也可以是伺服器上面的，例如：GitHub。
+
+## Git vs GitHub
+
+Git 版本控制的程式
+
+GitHub 放 Git repository 的地方 &更多功能
+
+## 上傳 GitHub
+
+在 GitHub 登入狀態點擊右上角的加號就可以建立新的 repository。創建之後接著就會有教學。比如說我想要把我現有的 code 給推上去。
+
+git remote add origin https://github.com/******/****.git
+
+這段意思是我要遠端添加 一個 代號叫 origin 的 repository 到 網址
+
+git push -u origin master
+
+要推某個檔案到 -u: --set-upsteam 意思是要推到哪邊，整體意思是我要把我的東西 push 上去，push 到 origin ，我要把我本地的 master push 到 origin 的 master 上去
+
+git push 有變動之後 必須 push 才可以更新 GitHub 的檔案，輸入方式為：
+
+git push origin master
+
+假如我新增一個 branch 的話
+
+就輸入 git push origin New_Branch_Name 就可以把這個分支推上去
+
+## 從 GitHub 下載
+
+git pull origin master 這樣就可以把檔案從 GitHub 下載下來
+
+pull就是拉的意思，上傳是 push，下載是pull。
+
+這邊需要注意的是，有時候如果有檔案衝突，那就是照修改衝突檔案的作法來處理即可。
+
+## 抓取別人的 repository
+
+在GitHub上面看到別人的東西，如果覺得不錯，可以從右邊的綠色按鈕，clone or downloads ，可以直接下載或是利用指令抓取
+
+利用 git clone 目標網址 就可以把別人的東西抓下來
+
+還可以利用 Fork 把別人的東西分支成自己的，然後就可以進而修改。
+
+## GitHub 整合實戰
+
+把修改之後把檔案上傳，可以在 GitHub 上面執行合併的動作，就像在本機 merge 一般，通常實務上都是這樣做的，這樣才可以在 GitHub 上面看到是修改的歷史紀錄。
+
+然後可以在 pull 別人修改好的檔案 到自己的本地，就可以修改他。
+
+## GitHub Pages
+
+有簡易的網頁功能，可以直接呈現作品的效果，從 setting 裡面可以設定。
+
+## GitHub Flow
+
+當遠端的東西比較新的時候，就會不能 push。所以必須要先 pull 下來。GitHub Flow 就是一個 work flow 幫我們建議好如何管理。通常都是要修改時，創立分支，下載下來，然後修改之後，上傳，接著在 GitHub 裡面操作 merge，接著刪掉 branch。接著回到自己的電腦，pull 新檔案，然後刪除branch。
+
+重新整理一下，有任何更動的時候：先開個 branch 然後 commit 且上傳 GitHub，接著開個 Pull request，接著在上面跟大家做討論跟預覽(review)，之後確定好跟測試完成之後，就可以 merge。
+
+## Git 狀況處理
+
+### 更改 commit message
+
+git commit --amend [詳解](https://gitbook.tw/chapters/using-git/amend-commit1.html)
+
+備註：如果你已經 commit 而且又 push 了，那就乖乖認命吧，這種情形下你在 local 端改的話可能會造成其他人的困擾。
+
+最好的方法還是 push 之前先檢查一下，避免錯的東西被放到遠端。
+
+### 我 commit 了可是我又不想 commit 了
+
+[參閱](https://ithelp.ithome.com.tw/articles/10187303)
+
+git reset head^ --hard 或 git reset "想要回到的編號" --hard 可以回到之前的 commit
+
+git reset head^ --soft 可以把上次的 commit 消除，但是修改的狀態還是存在
+
+git reset head^ --soft index 移除 staged 標記，變成 Modifiedor Untracked，內容是新版的。
+
+### 我還沒 commit，但我改的東西我不想要了
+
+git checkout --檔案名稱 可以捨棄還沒修改的內容。
+
+也可以 git checkout -- . 就是把當前目錄所有的檔案都捨棄修改。
+
+### 修改 branch 的名稱
+
+先切換到想要修改名稱的 branch 。接著輸入 git branch -m "預改名稱"
+
+就可以把當前名稱更改了。
+
+### 抓取遠端的 branch
+
+當 GitHub 有自己所沒有的 branch 時，想要把抓下來，就直接在自己的終端輸入 git branch "該 branch 的名稱"。系統就會自動從上面抓下該 branch。除非使用舊版本，不然現在都是新版本，都可以無論是不是遠端的，皆可以直接抓取。
+
+## GitHub Hook
+
+hook 指的是像有個鉤子掛在上面，所以被勾的動了，就會跟著動，指的是**發生某事的時候通知我**。
+
+位於 .git/hooks 內部，只要把 .simple 給刪掉就可以啟用，內部也有說明文，告訴我們是什麼功能。
+
+這邊就需要自行撰寫該功能要有什麼樣的表現了。這功能可以用來提醒我們那些內容不能放上去，不能做怎麼樣的修改等等的。
+
+## 總結
+
+Git 易學難精，有很多功能可以探索，但是沒有這麼的必要，唯獨有需要的時候在去學習就可以。
+
+## 心得
+
+在 Git 與 GitHub 使得我更加了解到，branch 的重要性，通常專案都是使用 branch 的方式來使的工作不會這麼的混亂，像我在練習的途中，就發生忽略，忘記從 master 切換到另外的 branch 就直接按照順序實作下去，結果就是一場災難，因為我完全不知道該如何改回去，就連直接把 cmder 給關掉重開也是一樣不行。後來一邊回想剛剛上課的內容，一邊慢慢地思考怎麼修改，才把狀態回到該回到的樣子，真是有一種好險我前面都很認份的仔細思考以及實作的感想，然後就可以順利的實作了。最後，我有找到另外一篇更難的工作流程，我先把網頁存起來，也許將來要工作的話，在拿來作參考。

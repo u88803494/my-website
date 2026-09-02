@@ -1,0 +1,161 @@
+---
+title: "前端中階：CSS 預處理器"
+slug: "前端中階-css-預處理器"
+description: "CSS preprocesser"
+date: 2019-09-08T13:47:27.616Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*URSGkwP08F04GVWfGdfXTw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-css-%E9%A0%90%E8%99%95%E7%90%86%E5%99%A8-a7f43125c3c4"
+---
+
+## CSS preprocessor
+
+CSS 預處理器。就是運用程式化的方式寫 CSS，最後 compile 成真的 CSS。
+
+會產生的原因是 CSS 在撰寫的過程中，同樣也會有很多重復性的 CSS 樣式設定，這時候就可以通過預處理器把寫好的 CSS 設定儲存成變數，然後就只要在需要的位置放上這個變數即可。另外一個好處是這樣以後要改變資料的時候，就只要改變變數即可。這樣就會全部套用了。也就是說可以使用寫程式的方法來寫 CSS 了。
+
+有三套可以用，三套都差不多，語法也都差不多。
+
+1. Scss/Sass 這一套最為廣泛使用
+2. Less
+3. Stylus
+
+所以學一套就可以通用三套。
+
+## 安裝方式
+
+通過 npm 使用指令安裝，官網有說明
+
+```
+npm install -g sass
+```
+
+安裝後就可以用指令檢查版本
+
+```
+sass -v
+```
+
+scss 就要另外安裝了  
+目前查到是要利用傳統一點的方式安裝，先安裝 ruby 之後再利用 ruby 去安裝即可。
+
+用 ruby 的好處根據官網是說運行會比較快。用 node.js 安裝的話運行速度會比較差。
+
+接下來就介紹幾個特性
+
+## 變數
+
+在 sass/scss 上是使用 `$` 作為變數的符號。先撰寫一個簡單的 SCSS
+
+```
+$brand-color : red;
+```
+
+```
+.box {
+    background: $brand-color;
+}
+```
+
+```
+.list {
+    background: $brand-color;
+}
+```
+
+然後使用 command line 的指令就可以轉換`scss 檔案路徑` 就可以轉換成功。
+
+![](https://cdn-images-1.medium.com/max/800/1*oPV-I9ZVA4H8PtWGabGk7A.png)
+
+就發現可以轉換成功。
+
+然後要輸出檔案就是同樣的指令後面加上輸出的路徑
+
+```
+scss 檔案路徑 輸出路徑
+// scss ./huli/index.sass index.css
+```
+
+## Nesting 巢狀
+
+這是很直覺的方式。
+
+原本在寫 CSS 的時候，一個元素底下的元素，我們就需要另外指定，或者是使用多個選擇器。像是 `div div {}` 這樣表示 div 底下的 div。  
+現在有巢狀之後就不一樣了。可以寫成。
+
+```
+div {
+  div {
+     xxx:xxxx
+  }
+}
+```
+
+實際舉例，原本的巢狀寫法經過轉換之後：
+
+![](https://cdn-images-1.medium.com/max/800/1*URSGkwP08F04GVWfGdfXTw.png)
+
+如果要巢狀就需要一直重複寫，這在 BEM 的時候，就可寫的更簡單，因為 BEM 命名法通常都還蠻長的。
+
+## Parent
+
+這是真正可以解除 BEM 根源問題的方法。通過使用 & 符號來代表接續前面的命名法。
+
+![](https://cdn-images-1.medium.com/max/800/1*xaUglPzuhHHGYSEGqp4WvA.png)
+
+這樣還可以很快地改變命名法的字，所以現在的前端幾乎都會使用這個。
+
+## Mixin（就像 function）
+
+可以帶入變數，還可以運算。
+
+![](https://cdn-images-1.medium.com/max/800/1*NAEzqyJEThkhb4oGhljkwA.png)
+
+所以通過這樣子就可以利用寫程式的方法來寫 CSS。
+
+## 其他
+
+除此之外還可以引入其他的 CSS 利用 `@import xxx.scss` 。這類似於 PHP 等於是直接複製貼上那樣子。
+
+## PostCSS
+
+CSS preprocessor 是把本來類 CSS 的語法轉換成 CSS，而 PostCSS 則是再把它轉成別方式，舉例來說，只需要寫上需要的 CSS，就會把針對個瀏覽器去新增各種語法。
+
+例如，原本寫
+
+```
+border-radius: $radius;
+```
+
+經過 PostCSS 就會被轉換成下面這樣。
+
+```
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+```
+
+這樣就只需要專注於寫 CSS 就好。
+
+> 預處理器是讓開發者撰寫一些類似 CSS 語法的指令，再轉為瀏覽器能懂的 CSS；相較之下，後處理器就是讓開發者依然撰寫 CSS，再經過擴充功能（plugin）的後製處理，將特定功能轉成瀏覽器能懂的指令。過去常用的 LESS、SASS、SCSS 是屬於預處理器，而 PostCSS 是屬於後處理器
+
+> [參考資料](https://cythilya.github.io/2018/08/10/postcss/)
+
+PostCSS 就稱之為後處理器（ Postprocessors）
+
+[GitHub](https://github.com/postcss/postcss) [官方網站](https://postcss.org/)
+
+—
+
+除此之外，另外一個優點是，他可以針對瀏覽器不支援新版本的 CSS3 的部份，去做轉換。通過 PostCSS 的處理就可以轉換成舊的語法。
+
+[CSSnext 官方網站](https://cssnext.github.io)
+
+原生 CSS3 本身就有支援變數功能，只是瀏覽器可能還不支援，所以就可以利用這種方式來轉換。
+
+## 總結
+
+PostCSS 就是著重在跨瀏覽器的部份。  
+CSS preprocessor 就是注重在用程式化的方式寫 CSS。

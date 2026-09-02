@@ -1,0 +1,347 @@
+---
+title: "後端基礎：PHP 與資料庫作業 心得想法思考"
+slug: "後端基礎-php-與資料庫作業-心得想法思考"
+description: "注意"
+date: 2019-07-08T14:21:35.431Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*bMNiwLF-Ke1LOBcQxYnWjQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-php-%E8%88%87%E8%B3%87%E6%96%99%E5%BA%AB%E4%BD%9C%E6%A5%AD-%E5%BF%83%E5%BE%97%E6%83%B3%E6%B3%95%E6%80%9D%E8%80%83-eb32a1c80645"
+---
+
+## 注意
+
+hw2 與 hw3 寫在一起就好，不用分開。然後記得把你連線到資料庫的檔案（conn.php），加入`.gitignore`，否則這檔案會被放到 GitHub 上，大家就知道資料庫的帳號密碼了。
+
+另外，請你在留言板的最上方加註一行警語：「**本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼**」，加警語的目的是因為這週要做的網站極度不安全，很有可能被駭客拿到整個資料庫的資料，因此請切記在這網頁上不要輸入任何敏感資訊。
+
+## hw1：設計留言板 Database 結構
+
+在開始動手做之前，需要先花點時間想好怎麼樣規劃你的資料庫結構，確定沒問題以後再下去動手實作。
+
+我們接下來要做的作業是：留言板。
+
+可以參考以下需求來想要怎麼設計資料庫結構：
+
+1. 身為使用者，在新增留言時應該可以輸入暱稱跟留言內容
+2. 身為系統，應該顯示出留言者的暱稱跟留言內容以及留言時間
+3. 身為系統，顯示留言時應該按照時間排序，最後留的顯示在最上面
+4. 身為系統，應該只顯示最新的前五十筆留言
+
+-
+
+根據題意，也根據之前筆記。需要先構思一下架構如何。題目要求的是 database 的結構。不過可能還是要依照整體的結構構思才比較容易想到。
+
+所以先按照題目所表達的。
+
+1. 身為使用者，新增留言的時候可以輸入暱稱跟留言內容。且可以送出。
+2. 身為系統，應該顯示出留言者的暱稱跟留言內容以及留言時間
+3. 身為系統，顯示留言時應該按照時間排序，最後的留言顯示在最上方。
+4. 身為系統，應該只顯示最新的前五十筆留言
+
+根據這樣，就必須要有 id、nickname、content、create time。
+
+![](https://cdn-images-1.medium.com/max/800/1*bMNiwLF-Ke1LOBcQxYnWjQ.png)
+
+## hw2：留言板
+
+請實作出一個簡易的留言版頁面，需要以下元素：
+
+1. 有一個留言的區塊可以新增留言
+2. 能夠顯示留言
+
+可參考以下示意圖（擷取自[iT 邦幫忙](https://ithelp.ithome.com.tw/articles/10185630)）
+
+![](https://cdn-images-1.medium.com/max/800/0*cOA3eAxU-h494INU.png)
+
+![](https://cdn-images-1.medium.com/max/800/0*k36kK0QQJ5-vjqvF.png)
+
+或是這個：
+
+![](https://cdn-images-1.medium.com/max/800/0*ax36LVY4XxTIC-3O.png)
+
+不用做得像上面那麼精緻，只要基本功能有達成就好。例如說留言的區塊只要能輸入純文字就夠了，留言區左邊的那個按讚數也可以不用實作，子留言也不必實作。
+
+可以參考下面附的需求來實作：
+
+1. 身為使用者，在新增留言時應該可以輸入暱稱跟留言內容
+2. 身為系統，應該顯示出留言者的暱稱跟留言內容以及留言時間
+3. 身為系統，顯示留言時應該按照時間排序，最後留的顯示在最上面
+4. 身為系統，應該只顯示最新的前五十筆留言
+
+-
+
+根據題意，要有一個界面 index.php 可以直接留言之後送出資料。
+
+先研究如何上傳伺服器
+
+發現要連線的檔案連線要使用字串才行，可以成功連線之後。也隨意做了一點切板。發現使用我之前所用的：
+
+```
+border: 1px solid black;
+box-sizing: border-box;
+padding: 3px;
+```
+
+並把這個設置在 div 跟 form 就可以得到一個陽春到不行，但卻不醜的界面。
+
+![](https://cdn-images-1.medium.com/max/800/1*ELp679Zav3Y-yCLfCARiLA.png)
+
+這樣看來不差，資料呈現也滿清楚的，所以以後就覺得切板用類似這樣的形式吧！
+
+按照提議要求，有了警示、留言區、歷史留言之後，就可以開始嘗試上傳留言看看。
+
+上傳的部份也不難，就是把數據抓出來之後，接著在傳上去。不過這邊犯了一個錯誤，我在送出的地方式使用 button 而不是 submit，這導致我的資料無法送出，不過在修正之後，就可以讓正確抓到資料。
+
+```
+handle_index.php：
+<?php
+require_once('./conn.php');
+```
+
+```
+$nickname = $_POST['nickname'];
+$comment = $_POST['comment'];
+```
+
+```
+if (empty($nickname) || empty($comment)) {
+  die('請檢查資料');
+}
+```
+
+```
+$sql = "INSERT INTO hugh_comments(nickname, comment) VALUES ('$nickname', '$comment')";
+
+$result =$conn->query($sql);
+```
+
+```
+if ($result) {
+  header('Location: ./index.php');
+} else {
+  echo 'failed, ' . $conn->error;
+}
+```
+
+```
+?>
+```
+
+而想要做出只限制 20 筆留言的部份，只需要在指令上面加上 LIMIT 20 即可。
+
+```
+SELECT * FROM hugh_comments ORDER BY created_at DESC LIMIT 20
+```
+
+所以整題而言：
+
+```
+<?php require_once('./conn.php') ?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> [week9] hw2 留言板 </title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="board">
+    <div class="notice">本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼</div>
+    <form action="./handle_index.php" method="post" class="new">
+        <div class="new__username">暱稱：<input type="text" name="nickname" /></div>
+        <div class="new__comment"><textarea name="comment" id="" cols="30" rows="10"></textarea></div>
+        <div class="new__btn"><input type="submit" value="送出留言" /></div>
+    </form>
+```
+
+```
+<?php
+        $sql = "SELECT * FROM hugh_comments ORDER BY created_at DESC LIMIT 20"; // 直接在伺服器選取前 20 筆
+        $result = $conn->query($sql);
+  if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+   while($row = $result->fetch_assoc()) {
+                echo '<div class="original＿＿board">';
+                echo   '<div class="original＿＿nickname">' . $row['nickname'] . '</div>';
+                echo   '<div class="original＿＿createdAt">留言時間：' . $row['created_at'] . '</div>';
+                echo   '<div class="original＿＿comment">' . $row['comment'] . '</div>';
+                echo '</div>';
+   }
+  }
+        ?>
+</div>
+</body>
+</html>
+```
+
+透過這樣的格式就可以確實的資料動態產生。還可以選取要抓多少筆資料。接著是稍微思考一下換頁的部份。如果要換頁只要改成 limit 動態產生即可吧！當然換頁的 php 可能就要另外寫出來了。
+
+## hw3：會員系統
+
+上面的留言板系統完成之後，要來多加一個功能，那就是會員系統。現在的系統是開放每個訪客可以自己取暱稱，但有了會員系統以後，必須要是會員才能夠留言。
+
+這個時候問題就來了，應該要怎麼實作會員系統呢？
+
+最大的問題是：
+
+> _每個 Request 之間都是獨立的，在會員登入之後，你要怎麼知道上一個 Request 跟現在的是同一個人呢？_
+
+意思就是，你要怎麼知道使用者已經登入了？你要怎麼記錄這個狀態？
+
+在瀏覽器這邊，我們有個東西可以使用，叫做 Cookie，其實它就是可以讓瀏覽器儲存資料的地方。而且呢，Server 端可以主動把資料存到 Cookie 去。
+
+在 PHP 裡面，你可以使用`setcookie`函式達成這件事。
+
+```
+// 設定一個 24 小時之後會過期的 Cookie
+setcookie("member_id", "001", time()+3600*24);
+```
+
+如此一來，在會員登入之後，我們就能夠利用 setcookie，把會員的資料存到使用者瀏覽器的 cookie 裡面。而瀏覽器在送出 request 的時候，也會把 cookie 的內容一起帶上來，你可以用 `$_COOKIE[$cookie_name]` 來取得。
+
+```
+if(!isset($_COOKIE["member_id"])) {
+    echo "not login";
+} else {
+    echo "member id: " . $_COOKIE["member_id"];
+}
+```
+
+有了 Cookie 之後，我們就能夠知道使用者是不是登入狀態了。那如果要登出的話呢？也很簡單，只要把 cookie 的內容清掉就好了（換句話說，就是設定一個內容為空的 Cookie），這樣子使用者下次再拜訪頁面時，就會跳出需要登入的提示了。
+
+會員系統的資料庫設計可參考以下的結構：
+
+![](https://cdn-images-1.medium.com/max/800/1*phfuryNrXs12nV01YCtbdg.png)
+
+接著，你需要實作的就是以下幾個頁面：
+
+1. 註冊頁面
+2. 登入頁面
+3. 登出頁面
+
+-
+
+以及把原本的留言板改成需要登入才能夠留言，並且自動帶入使用者的暱稱。
+
+-
+
+根據題意，必須要設置 cookie 以及創造一個登入系統。
+
+cookie 的設置應該就是在登入成功之後設置埋 cookie 的碼，然後變成在首頁也要 echo 整個留言頁面，所以用老師的寫的判斷式來說就是如果沒設置 cookie 就 echo 一個提醒要登入才可以留言，甚至在那邊顯示註冊或登入的連結。如果有那個 cookie 就顯示留言的界面。以這樣來說，可能又要出動 function 了，否則看起來會較為混亂。
+
+所以要先實作登入界面。然後當登入之後，就自動埋 cookie，接著轉跳首頁。首頁偵測到 cookie 了，就會顯示留言界面。其他部份就跟之前一樣。
+
+會員資料庫的部份。雖然是不同 table，題目要求的功能沒有到可以需要在資料庫上面分辨是誰的留言的功能。所以就暫時不做這個功能，不過要做的話，大概就是透過暱稱去分辨了。雖說細細去思考還有很多功能可以做，像是改暱稱，只看自己文章…不過只是作業，不要想太多。目前需要的就是自動填入暱稱而已。
+
+自動填入暱稱的部份，應該會寫在判斷式裡面，判斷後，自動帶入暱稱。
+
+註冊的帳號要設置成唯一值，否則會與其他帳號重複。
+
+實作部份就不多說了。因為很多地方是重複性較高的。只寫出發現的問題以及怎麼解決：
+
+發現到留言的時間伺服器跟台灣時間不同。所以要找方法來解決這個問題。查找知道發現都是改伺服器的方式，應該是有透過 php 直接修改的方法，但感覺治標不治本。
+
+-
+
+在設置 cookie 的部份，因為需要把會員的資料（ID 或使用者名稱）設置進 cookie，所以就需要研究一下套用 ID 的部份。
+
+直接把埋 cookie 的部份寫在跳轉面前，然後是設置 ID 的部份，要研究一下怎麼樣抓 ID 下來。
+
+```
+$id = $result->fetch_assoc()['id'];
+```
+
+主要因為上傳的時候已經得到了 result 的資料，所以就可以利用這個屬性指向資料庫的 id 資料，然後取得。接著只要把這個值帶進去即可。
+
+```
+if ($result) {
+    setcookie("member_id", $id, time()+3600/**24*/); // 埋 cookie
+    header('Location: ./index.php');
+  } else {
+    echo 'failed, ' . $conn->error;
+  }
+```
+
+利用這樣就可以埋 cookie。然後也可以在 index.php 確認到有此筆 cookie 的存在，這表示成功了。接下來就是改寫 index.php 的呈現方式。讓資料確認到有這個 cookie 才顯示留言的界面。否則只顯示登入的界面。
+
+-
+
+整體：
+
+style.css:
+
+這是直接共用，所以對於整體排版有很重要的作用。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/ee37653e963c7de2cc07a90414f5ee49)
+
+index.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/218fca19d6a1bc05417ba1f279f76b77)
+
+handle_index.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/99dfe1af8d8dd89ed5ab77ed1f25fbf3)
+
+login.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/70e3e383555a0fda94c1e33263189c32)
+
+login_handle.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/e307308561c49e283df14e10ea6125fe)
+
+register.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/57ad54da80b593f3ac9435a2ec1140de)
+
+register_handle.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/d0429cdf9030ba59715d928c6d4f6817)
+
+signout.php(登出並消除 cookie):
+
+https://gist.github.com/u88803494/33af796af3f2a410b8ba33279abd3992
+
+## hw4：簡答題
+
+1. 資料庫欄位型態 VARCHAR 跟 TEXT 的差別是什麼
+2. Cookie 是什麼？在 HTTP 這一層要怎麼設定 Cookie，瀏覽器又會以什麼形式帶去 Server？
+3. 我們本週實作的會員系統，你能夠想到什麼潛在的問題嗎？
+
+-
+
+### 1. 資料庫欄位型態 VARCHAR 跟 TEXT 的差別是什麼
+
+關於這題，我認為我沒這麼懂這題。所以先用自己的想法寫出來之後，再去查資料，了解一下實際的差異。  
+我覺得兩個應該是差在一個是字串，一個純文字，另外一個點是從 PHPMyAdmin 中可以看到兩者的儲存方式有所不同。VARCHAR 是直接儲存在一起，而 TEXT 根據意思是用標頭來標示下一段儲存的位置，所以兩者的差異可能還差在儲存方式不同。
+
+實際查詢下來跟我所想的差異滿大的，大概只有儲存方式是我說中的地方。
+
+查詢之後，最明顯的就是差異在查詢速度：根據簡書中的 [MySQL中char、varchar和text的区别](https://www.jianshu.com/p/cc2d99559532) 可以得知數據的查詢效率是 char > varchar > text。  
+從另外一篇 # [MySQL之char、varchar和text的设计](https://www.cnblogs.com/billyxp/p/3548540.html) 可以得知 char 在儲存的時候，是可以設定長度的，而資料的長度不足，則是補空白。VARCHAR 跟 TEXT 則不會，可以動態調整長度。  
+另外一點是，CHAR 跟 VARCHAR 的儲存需要儲存資料的長度，而 TEXT 則不會。這造成的差異就是 VARCHAR 沒辦法用到 65535 因為需要一些些資源來儲存長度，而 TEXT 就可以使用到全部的 65535。  
+文章也說到，當 VARCHAR 大到一定程度的時候，就會根據大小自動調整成 TEXT，所以對於過大的資料，其實不會有儲存上的差異。  
+TEXT 不能設置預設值，而 VARCHAR 就可以設置。另一個差異是 VARCHAR 可以設置長度限制，所以太大的資料就不會收了。而 TEXT 的則不會有此限制。
+
+-
+
+### 2. Cookie 是什麼？在 HTTP 這一層要怎麼設定 Cookie，瀏覽器又會以什麼形式帶去 Server？
+
+Cookie 就是一個可以儲存在瀏覽器上的一些資料，當造訪一些網站的時候，網站會發送一些 cookie 給瀏覽器，瀏覽器通過 cookie 就可以在使用者上面儲存一些資料，像是瀏覽紀錄，使用者愛好等等的資料。在這週的學習內容中，最重要的是可以透過 cookie 來保持登入。在使用上 cookie 就像是通行證，當瀏覽器發送的  
+request 的 header 帶著這筆資料，瀏覽器就可以得知，就是這個人，所以就保持著登入的狀態。在 http 上面，可以透過 PHP 的程式碼，設置 cookie 給 client，只要 cookie 沒有過期，就瀏覽器就會在瀏覽同一個網站的時候，一併的在 request 的 header 帶著之前設置的 cookie，這時候，伺服器就可以拿到這些 cookie。
+
+-
+
+### 3. 我們本週實作的會員系統，你能夠想到什麼潛在的問題嗎？
+
+關於 [Week9] 的課程，其實我有看一下後面的課程。所以後面會碰到要解決問題有些許的認知：
+
+1. 有想到的問題像是 cookie 是可以造假的。
+2. 發送到伺服器的密碼是明碼，很容易被人攔截，甚至可以說中間經過的路由都可以得知這個密碼。
+3. 另外網站很簡易，感覺會很容易受到一直不停的發 request 的攻擊，這應該是 DoS 或 DDoS 的樣子。
+
+終於把這部分完成了，沒想到花了這麼久的時間。在 hw2 會覺得很像就是之前 [BE101] 學習的部分的重複版，感覺是設計要讓我們熟悉 PHP 指令，也確實是在作業中逐漸的熟悉 PHP 指令，這讓我感覺很好。因為寫到後面我可以很快的就想到 PHP 的指令怎麼樣寫出來。雖然寫出來之後，有一些部分需要去做小變動，才可以確實地拿到所需要的資料。
+
+自己有在思考這次為什麼會花這麼多時間。我覺得理由是因為我有很多不太懂的地方，在上課的時候沒有去查詢，也可以說沒有留意到要查詢。因為有了那些不懂的地方，所以我在後面理解上就出了一些問題，最後才需要一編實做一邊查資料，結果卻也發現網路上有的會有實作範例，但實際上他們寫的又不太一樣了。最後我是針對我需要的東西，去 Google 大神找資料，就像拼拼圖一樣，逐漸地把我要的東西拼上去，而且最後也發現，有的時候我要找的東西，可能會劃分太細了，導致我直接變成自己造輪子。所以以後我在搜尋的時候，也許可以考慮先從更大的範圍搜尋起，找不到或是相關資料很少，再去細部的找細節，讓自己可以順利地拼好拼圖。

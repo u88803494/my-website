@@ -1,0 +1,814 @@
+---
+title: "前端基礎作業 JavaScript 解題想法思路筆記"
+slug: "前端基礎作業-javascript-解題想法思路筆記"
+description: "hw1：反應力小遊戲"
+date: 2019-06-16T14:21:25.089Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*mS1Yehunuu-AMYJP.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-javascript-%E8%A7%A3%E9%A1%8C%E6%83%B3%E6%B3%95%E6%80%9D%E8%B7%AF%E7%AD%86%E8%A8%98-5b79c5e5661d"
+---
+
+## hw1：反應力小遊戲
+
+不知道大家有沒有玩過一種小遊戲，那就是畫面會在隨機的時間變色，你看到變色的那瞬間就要點擊螢幕，直接先讓大家看範例：
+
+![](https://cdn-images-1.medium.com/max/800/0*zQbk13CVV-lJUSWl.gif)
+
+點擊完之後會彈出一個視窗跟你說從變色到你按下按鈕總共多少秒，若是點的時候畫面還沒變色，會彈出視窗跟你說你失敗了。無論成功或失敗都可以再玩一次。
+
+這個作業就是要讓大家實作這個小遊戲，做出來以後也可以來跟朋友比賽，看誰的反應力快！
+
+### 作業規範
+
+1. 變色的隨機時間請設在 1~3 秒，否則會太長跟太短
+2. 再玩一次的按鈕要在遊戲結束時才會出現
+3. 若是失敗，畫面就不會再變色了，除非你點選再玩一次
+4. 成功以後如果再點一次畫面，不會有任何反應
+
+### 作業提示
+
+1. 可以先不考慮再玩一次的功能，先實作一次性的會比較簡單
+2. 這題看似不難，但有滿多細節要注意，詳情請參考上面的作業規範
+
+--
+
+根據規範跟提示，先想如何做出單玩一次的，然後開始切版，切版應該很簡單就是讓文字在中間顯示而已。然後設定兩種顏色
+
+先弄出簡單的文字跟按鈕
+
+```
+<!DOCTYPE HTML>
+<html>
+```
+
+```
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./style.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> [Week7]hw1_變色小遊戲_hugh </title>
+</head>
+```
+
+```
+<body>
+    <div>畫面變色時點擊</div>
+    <button>再玩一次</button>
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+```
+
+```
+</html>
+```
+
+然後是設定 CSS 樣式，所以決定先把背面設定顏色，然後設定 button 隱藏，先實作出只能玩一次
+
+-
+
+思考題目實作的部分，點太快的時候要跳出提示，"還沒變色"。變色之後點擊要跳出提示點擊時跟變色差了多少時間
+
+根據作業規範
+
+1. 變色的隨機時間請設在 1~3 秒，否則會太長跟太短。 **所以要使用 math.random，然後是自動變色，所以要再看看需不需要監聽**
+2. 再玩一次的按鈕要在遊戲結束時才會出現。**所以點太快跟遊戲成功都要跳出再玩一次的按鈕**
+3. 若是失敗，畫面就不會再變色了，除非你點選再玩一次
+4. 成功以後如果再點一次畫面，不會有任何反應根據。**這邊可能要看看是不是遊戲結束之後就不再監聽**
+
+自己觀察到都是 alert 之後才顯示再來一次，所以再來一次的顯示應該是要寫再 alert 後面
+
+-
+
+先寫出 1 ~ 3 秒做出反應的 fucntion，要通過 [setTimeout](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout) 以及 [math.random ](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/random)來實作，且實作出變色
+
+```
+window.setTimeout(() => {
+  document.querySelector('body').classList.add('body__change');
+}, 1000);
+```
+
+通過這樣可以確定 1 秒後變色
+
+點擊之後的判斷要寫在一起做判斷
+
+後面思考要先記錄時間，然後下行變色下行再記錄點擊的時間，並且執行一個監控，function 紀錄點擊的時間。然後把點擊的時間減掉前面紀錄的時間。利用[時間戳記](https://blog.csdn.net/qq_35087256/article/details/79934016)來計算時間。
+
+還要另外弄一個監控點擊，當監測到點擊就執行停止計時，然後跳出視窗顯示點太快。
+
+寫到最後的結果是寫出來了，但是要停止偵測事件的話，就必須要把 function 另外寫出來。所以只能拉出來寫了，但卻發現變成會一片混亂，因為 ESlint 的關係，很多 function 不能未定義就先使用，否則會無法 commit 於是就花了很多時間在改造 function，後來終於是成功。但還是有點小缺失，所以要在花一些時間去看看怎麼處理比較好。
+
+```
+let onChangeTime = ''; // 先在上層定義，這樣才可以跨 function 使用
+```
+
+```
+function clickWhenColorChange() {
+  const onClickedTime = new Date().getTime();
+  const result = (onClickedTime - onChangeTime) / 1000;
+  alert(`你的時間是：${result}秒`);
+  window.removeEventListener('click', clickWhenColorChange); // 取消自己的事件
+}
+```
+
+```
+function randomTime() {
+```
+
+```
+} // 隨機時間 1 ~ 3 秒
+```
+
+```
+const oneRound = setTimeout(colorChange, 1000); // 成功的在特定時間變色
+```
+
+```
+function tooEarly() {
+  clearTimeout(oneRound);
+  alert('太早了啦');
+  window.removeEventListener('click', tooEarly); // 取消自己的事件
+} // 太早點擊的反應
+```
+
+```
+function colorChange() {
+  window.removeEventListener('click', tooEarly); // 移除事件
+  onChangeTime = new Date().getTime();
+  document.querySelector('body').classList.add('body__change');
+  window.addEventListener('click', clickWhenColorChange);
+} // 變色之後的反應
+```
+
+```
+window.addEventListener('click', tooEarly); // 取消事件延遲反應的時間
+```
+
+我突然想到如果在 removeEventListener 寫一樣的 function 算不算呢？經試驗是不行
+
+-
+
+接下來就寫隨機時間的 function
+
+```
+function randomTime() {
+  return (Math.random() * 2 + 1) * 1000;
+} // 隨機時間 1 ~ 3 秒
+```
+
+接著想要把遊戲的部分打包，卻忘了 clearTimeout 不能使用 function。看了一下範例，直接在上層圈告一個變數去接收即可解決。
+
+最後結果如下：
+
+```
+/* eslint-disable no-use-before-define */
+let onChangeTime = ''; // 先在上層定義，這樣才可以跨 function 使用
+let onClickedTime = '';
+let round = '';
+```
+
+```
+function clickWhenColorChange() {
+  onClickedTime = new Date().getTime();
+  const result = (onClickedTime - onChangeTime) / 1000;
+  alert(`你的時間是：${result}秒`);
+  window.removeEventListener('click', clickWhenColorChange); // 取消自己的事件
+} // 當顏色變了之後點擊，就會記錄點下的時間，然後減掉變色的時間，接著呈現結果
+```
+
+```
+function colorChange() {
+  window.removeEventListener('click', tooEarly); // 移除 tooEarly 事件
+  onChangeTime = new Date().getTime();
+  document.querySelector('body').classList.add('body__change'); // 背景變色
+  window.addEventListener('click', clickWhenColorChange); // 監測使用者的點擊
+} // 變色之後的反應
+```
+
+```
+function tooEarly() {
+  clearTimeout(round);
+  alert('太早了啦');
+  window.removeEventListener('click', tooEarly); // 執行後取消自己的事件
+} // 太早點擊的反應
+```
+
+```
+function randomTime() {
+  return (Math.random() * 2 + 1) * 1000;
+} // 隨機時間 1 ~ 3 秒
+```
+
+```
+function oneRound() {
+  round = setTimeout(colorChange, randomTime());
+  window.addEventListener('click', tooEarly); // 太早點下去的反應
+} // 執行遊戲的 function
+```
+
+```
+oneRound(); // 執行遊戲的關鍵
+```
+
+待解決問題：ESlint 的先定義在使用，有部分 function 是因為要取消監聽才 callback 的結果卻變成一直跳錯誤。
+
+-
+
+接下來是要寫再來一次的部分，所以就先把可能會需要的 function 名稱先寫出來。
+
+-
+
+當新增重新開始的按鍵之後，卻發現有很多錯誤需要修正，像是不知道為何按下去之後就會很快地顯示案太早的按紐，發現是直接執行遊戲的話，疑似會把太早的直接註冊，但是又很奇怪的是應該是在點擊之後註冊的 但是為什麼又會當作是已經點擊了
+
+弄了半天發現有直接重新整理頁面的語法。用了就正常，但總感覺像是作弊XD
+
+所以就先把 JS 的部分貼上來好了。
+
+```
+let onChangeTime = ''; // 先在上層定義，這樣才可以跨 function 使用
+let onClickedTime = '';
+let round = ''; // 當太早按下按鈕的時候，清除計時使用
+```
+
+```
+function clickWhenColorChange() {
+  onClickedTime = new Date().getTime(); // 記錄使用者點擊毫秒數
+  const result = (onClickedTime - onChangeTime) / 1000; // 得到使用者變色到點擊的時間差
+  alert(`你的成績是：${result}秒`);
+  window.removeEventListener('click', clickWhenColorChange); // 取消自己的事件
+  gameEnd();
+} // 當顏色變了之後點擊，就會記錄點下的時間，然後減掉變色的時間，接著呈現結果
+```
+
+```
+function colorChange() {
+  window.removeEventListener('click', tooEarly); // 移除 tooEarly 事件
+  onChangeTime = new Date().getTime(); // 記錄當前毫秒數
+  document.querySelector('body').classList.add('body__change'); // 背景變色
+  window.addEventListener('click', clickWhenColorChange); // 監測使用者的點擊
+} // 變色之後的反應
+```
+
+```
+function tooEarly() {
+  clearTimeout(round);
+  alert('太早了啦');
+  window.removeEventListener('click', tooEarly); // 執行後取消自己的事件
+  gameEnd();
+} // 太早點擊的反應
+```
+
+```
+function randomTime() {
+  return (Math.random() * 2 + 1) * 1000;
+} // 隨機時間 1 ~ 3 秒
+```
+
+```
+function oneRound() {
+  round = setTimeout(colorChange, randomTime());
+  window.addEventListener('click', tooEarly); // 太早點下去的反應
+} // 執行遊戲的 function
+```
+
+```
+function gameEnd() {
+  document.querySelector('button').classList.remove('btn');
+  restart();
+} // 遊戲結束， 取消隱藏再來一次按鈕
+```
+
+```
+function restart() {
+  document.querySelector('button').addEventListener('click', restartButton);
+} // 註冊監聽再來一次的按鈕監聽
+```
+
+```
+function restartButton() {
+  parent.location.reload();
+} // 重新開始遊戲的按鍵，直接重新整理頁面。
+```
+
+```
+oneRound(); // 執行遊戲的關鍵
+```
+
+研究到最後發現是跟捕獲冒泡有關係的緣故，所以只要加上 e.stopPropagation 就好了
+
+-
+
+## hw2：仿 Google 表單
+
+[連結](https://github.com/Lidemy/mentor-program-3rd/tree/master/homeworks/week7#hw2%E4%BB%BF-google-%E8%A1%A8%E5%96%AE)
+
+請實作出你們當初報名時所填寫的表單：https://docs.google.com/forms/d/e/1FAIpQLSf_VezMf-V20hMDYTNEM0LEkuztIg-ZIsSI9Zy9xLAwGYzxGA/viewform?usp=sf_link
+
+![](https://cdn-images-1.medium.com/max/800/0*nahpU87jVITM5jDk.png)
+
+可參考範例：https://lidemy.github.io/mentor-program-pychiang/homeworks/week4/hw2/（第一期學生 pychiang 的作品）
+
+背景隨便用一個顏色就好了，重點是實做出表單內容以及驗證。UI 可以不用完全一樣，只要功能有做出來就好，UI 只是讓你參考的。
+
+## 作業規範
+
+1. 文字輸入框可以選擇必填或是非必填
+2. 送出表單時，必填的地方如果空白，要能夠把背景變紅色並且提示使用者
+3. 成功提交之後，把表單的資料輸出在 console，並且用 `alert` 跳出提示即可
+
+## 作業提示
+
+1. 先切好版，然後驗證一個一個來做，不要一次想把所有驗證做完
+
+-
+
+### 切版
+
+根據這個圖樣，切區一塊區域涵蓋整個背景，然後區域背景要做出上部分有圖片，最後背景色是淡粉紅色。
+
+然後要切一塊區域，讓所有的元素都擺在上面，而且高度自動成長。
+
+在這塊區域上面切出標題區域，擺標題、介紹、\*必填字樣
+
+接著往下切出電子郵件、暱稱、報名類型、現在職業等等的元素，這些元素套用的 Class 都相同。
+
+切到星號那邊發現應該要用 after 來製作這部分比較好。
+
+利用 placeholder="" 可以在方框添加預設提示文字
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/99d016de6f21409215c865469ad321df)
+
+在想輸入的內容需不需要也用 div 標籤包起來。不過想了想還是等需要的時候在做好了。
+
+剩下就是開始切版了。
+
+先做了一些修正，使版型有邊框顯示出來，方便辨識。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/1bd71dc36d693e73b101242e13788bf7)
+
+發現使用 boder 加上 padding 可以更清楚的顯示。
+
+```
+border: 1px solid black;
+box-sizing: border-box;
+padding: 3px;
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*ZKAgldF-8CW1utxrQv4xMQ.png)
+
+因為背景已經放好了。所以剩下的就是把這個表單設定定位到正確的位置。然後設置寬度在調整即可。
+
+接著使用 position: absolute; 把表單調整位置。然後逐步修改表單，使樣子呈現我們要的樣子。最後發現自己忘了製作提交的按鈕，所以趕緊加工修改。接著是修改按鈕的樣式。
+
+後來也發現不必使用額外的位置來控制背景。直接把 body 設置顏色就好了。最後就成功了。
+
+不過仔細思索之後，發現要寫入 JavaScript 的話這些設置很可能會有所變動。所以就先把當前的樣子呈現出來。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/683450845859db0b7830c0766749d5ef)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/fe7628d54b6d3f23c4c870f78a2db578)
+
+-
+
+接著就是 JavaScript 的部分了
+
+根據題目。必須要在必填空白的位置，把背景變成紅色並且提示使用者。雖然說去 google 實測，是在點選了空之後又沒填就會跳紅色。但看老師給的範例並沒有這個功能。所以就先放著這部分，去實作提交之後偵測沒有輸入的框。
+
+目前想到是使用 if 來判斷，而且需要把每個格子的判斷是分別改成 function 以方便呼叫使用。判斷的方式就是：
+
+1. 先判斷呼叫第一個，然後判斷 true，之後再去呼叫第二個判斷，以此類推。
+2. 然後所有的判斷失敗之後都會指向判斷失敗的那個部分，接著也會在呼叫下一個來判斷。
+3. 只要有一個判斷失敗，就會停止提交的動作。但其他部分的判斷要持續下去。直到最後一個判斷出爐。
+
+然後之前還需要看一下如何把需要判斷的區域的資料呼叫出來，這樣才可以用作判斷
+
+所以先監視按鈕之後再來研究如何得到呼叫的資料。
+
+大致上都研究出可以取得資料，只是 radio 的則是還在看如何使用
+
+透過[這種方式](https://blog.csdn.net/magi1201/article/details/44465557)終於可以取得了
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/bdd00e5e96f133fc312c649c710f311b)
+
+接著就可以分別寫判斷式的 function 了
+
+分別寫出之後，發現判斷內變色的部分重複性太高了，於是就另外提出一個 function 來呼叫使用。整體看起來簡潔許多
+
+```
+const formContentRequired = document.querySelectorAll('.form__content--required');
+const formContent = document.querySelectorAll('.form__content');
+// 選取必用的 class，預先寫出來使 function 不用每次都重複宣告
+// 儲存資料 預計使用 array 或 object，所以在結束的地方還要清空(array)，object 則不用。
+```
+
+```
+function remind(i) { // 提醒的 function
+  formContentRequired[i].classList.remove('form__content--none'); // 無值則消去隱藏的 css
+  formContent[i].classList.add('form__content--background'); // 然後背景添加顏色
+}
+```
+
+```
+/* 偵測部分 */
+function learnedVerification(e) { // 偵測是否有相關背景
+  const learnedValue = document.querySelector('#learned').value;
+  if (learnedValue === '') {
+    remind(5);
+    e.preventDefault();
+  }
+}
+```
+
+偵測部份很多都是重複的部分，但是還沒想到如何改寫，之後再來做改寫的動作。
+
+-
+
+儲存資料預計使用 array 或 object，所以在結束的地方還要清空(array)，object 則不用。
+
+接著就需要思考怎樣儲存資料，一開始是想到使用 array 但是想一想發現使用 array 的話是必要使用 .push 來添加資料，但是這樣的話使用者在輸入錯誤的時後重新輸入 array 很容易就跑掉，於是就想到了使用 object 的方式，用 object 的話就可以指定要把資料輸入哪個名稱，也比較容易讀懂。不過 object 的方式我比較不熟悉，所以花了一些時間來看看如何使用才好。
+
+在測試過程中發現，如果不能使用陣列的方式來取得資料，或添加資料，不然直接在物件裡面添加 key 跟值。所以通通都要使用 obj.key 來修改資料。
+
+```
+let data = { // 存放表單資料用
+  email: '',
+  nickname: '',
+  type: '',
+  job: '',
+  how: '',
+  learned: '',
+  else: '',
+};
+```
+
+```
+let a = '123@123';
+a = 'abc@a.com';
+data.email = a;
+data.abc = 3;
+console.log(`你的 email 是 ${data.email}`);
+console.log(`你的 email 是 ${data.abc}`);
+if (data.type === '') {
+  console.log(data);
+}
+```
+
+所以就可以使用 obj 來判斷有哪些資料需要在填寫並跳出提示。
+
+並且在判斷中的 else 添加把輸入的資料新增的功能。接著就可以成功的印出資料了。
+
+```
+function success() { // 成功之後在 console 印出資料
+  const finalData = `email是 ${data.email}
+暱稱是 ${data.nickname}
+報名類型 ${data.type}
+現在職業是 ${data.job}
+怎麼知道這個計畫的？ ${data.how}
+是否有程式相關經驗？ ${data.learned}
+其他要說的是: ${data.else}`;
+  console.log(finalData);
+  alert(finalData);
+} // 發現可以確實印出資料，但是瞬間就消失了。這是 from 的特性嗎？
+```
+
+接著就是細節的部份需要修改。還要寫一下判斷是選哪一個，要針對這部分寫一個 function
+
+-
+
+最後寫完之後發現，我可以先把所有的資料儲存進去 array，接著就可以用迴圈判斷是否為空字串了。當然資料的部分就需要自己來填寫。但以這樣的方式來說，需要 function 的部分可以大為減少，大致上就是一個放資料、一個判斷選項、一個迴圈(含驗證失敗變色的部分)，但迴圈的部分要控制到少一圈，因為其他的部分不需要判斷。不過這邊只是大致構想而已。
+
+## hw3：計算機
+
+![](https://cdn-images-1.medium.com/max/800/0*j_8vBU-cQTKNFQKb.png)
+
+可參考範例：https://lidemy.github.io/mentor-program-kristxeng/homeworks/week4/hw1/（第一期學生 Kris 的作品）
+
+請用你在之前學會的網頁技術（HTML, CSS, JavaScript）打造出一個簡單的計算機，功能如下：
+
+1. 要有 0 到 9
+2. 要有加減乘除
+3. 要能夠清空
+
+計算機這一題其實要難可以到很難，這個作業的目的只是想讓你熟悉基本操作而已，只要以下的範例能夠通過就好：
+
+## 測試1
+
+1. 按下 123
+2. 按下 +
+3. 按下 456
+4. 按下 =
+5. 出現 579
+
+## 測試2
+
+1. 按下 20
+2. 按下 -
+3. 按下 25
+4. 按下 =
+5. 出現 -5
+
+## 作業提示
+
+1. 不要想得太難，只要加減能夠成功就行了
+2. 先想怎麼通過上面附的兩個測試就好
+
+-
+
+因為人在公司只能針對 hw3 的計算機的每個部份做出大致上的構想。
+
+html 感覺不難寫，剩下就是 CSS 要想辦法排到正確的地方，就需要用到 flexbox 來試試看。目前是打算一排排設置排版。因為使用 flexbox 的話可以很簡單的分開兩邊排，甚至是設定寬度的比。但是這部分就需要再去研究了。
+
+HTML + CSS 的部分目前是考量，要有一個 board 來乘載計算機介面，然後分為顯示螢幕、跟按鍵區，按鍵區要有第一排按鍵、第二排按鍵、第三排按鍵、第四排按鍵、第五排按鍵，這樣才可以方便排版
+
+可能每顆按鈕都要設置資料，當按了之後才可以使用 JavaScript 把資料顯示跟儲存在變數，以方便計算使用。
+
+JavaScript 的部分。事件監聽要嘗試用事件代理來監聽。前面兩個作業都沒有嘗試看看，這邊可以試著嘗試，畢竟按鈕變多了。接著還有監聽到之後還要去做出反應。按鈕的部分，有想過大致的分類，不過是不是必要就不知道了。分類是數字鍵、運算鍵、其他功能，也許可以另外寫成 function
+
+也因為題目要求只要做出 0123456 + - = 就好，所以可能就其他都當成擺設只設置要求的部分就好，最多就是設置按了之後會在螢幕上面顯示，但光這部分也要花不少心思去考慮吧
+
+-
+
+實作部分
+
+大致上按照上方所寫的，但發現還是一邊寫 Html 一邊呈現 CSS 比較容易想像，特別是利用 border 1px 來呈現的話，會比較容易想像。所以一邊寫一邊測試。就把 HTML 寫完了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c855dcf6dc12ea0751d5845b36bfd662)
+
+-
+
+接下來就是看 CSS 要怎麼樣下才可以把版型變成我要的樣子。
+
+就是按照我的需求去把位置調整，果然利用 jusfity-content 就可以很好的調整我要的版型。本來還發想多的調整方式，最後發現是可行，不過也要細細調整。所以就先做罷了，也有用選擇器練習看看，最後發現會覆蓋，所以還是一樣又算了XD 而且會讓命名不統一，感覺也比較不好。所以 HTML 也做了些改動。也是為了 JavaScript 可以較容易抓到資料。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/2738dd9d025adbef1900f32953805225)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/92e88f35e41a7f33ce8b2d8ff51299c1)
+
+-
+
+JavaScript
+
+先從簡單的做起，先想想要怎麼樣按下去之後，在螢幕顯示數字
+
+因為需要做運算，所以在思考要用兩個變數來測。不過想了想之後，可能用 array 會比較好。當按下數字鍵之後就在 array[0] 添加內容，而按下運算符之後就切換到 array[1] ，然後按下數字鍵也添加進 array[1]，當按下等號之後
+
+思考一下可能會需要哪些程式碼或 function
+
+監聽程式碼、輸入區 function、運算符 function、 AC function、等於 function
+
+```
+numClicked.addEventListener('click', (e) => {
+  if (e.target.classList.contains('calculator__input--num')) {
+    const num = e.target.innerText;
+  console.log(typeof num);
+  }
+});
+```
+
+通過這樣就可以發現可以直接存取到所需要的資料，但是測試一下是什麼資料就會發現是字串，由於字串相加跟數字不太一樣，所以還是把他們轉型會比較好一些
+
+```
+if (e.target.classList.contains('calculator__input--num')) {
+    const num = parseInt(e.target.innerText, 10);
+    console.log(typeof num, num);
+  }
+```
+
+-
+
+然後是顯示數字的部分。
+
+```
+const screenOutput = document.querySelector('.calculator__screen--output');
+let result = parseInt(screenOutput.innerText, 10);
+// 把 result 的值轉成數字
+result += num; // 在與 num 相加，這樣才可以原本的零去掉
+screenOutput.innerText = result;
+```
+
+只先寫簡單的怎麼樣顯示，後續在思考如何打包成 function。
+
+然後是需要想辦法讓按的按鍵可以儲存起來。這邊先把所有按鍵的輸出做出來，並且另外打包成 function
+
+```
+let num = 1; // 按了甚麼數字的變數，可能不用擺在這層
+let numberOperation = 0; // 儲存螢幕的數字
+let operator = ''; // 儲存運算符號
+function inputClick(e) {
+  if (e.target.classList.contains('calculator__input--num')) {
+    num = parseInt(e.target.innerText, 10);
+    // 抓取到是哪個數字，並且轉換型態成數字
+    console.log(num);
+  } else if (e.target.classList.contains('calculator__input--operator')) {
+    operator = e.target.innerText;
+    console.log(operator);
+  } else if (e.target.classList.contains('calculator__input--equal')) {
+    const equal = e.target.innerText;
+    console.log(equal);
+    // 但因為還沒寫出來，先用印出替代
+    // 這邊應該不用儲存，直接使用 function 就好
+  } else if (e.target.classList.contains('calculator__input--AC')) {
+    const AC = e.target.innerText;
+    console.log(AC); // 一樣先用印出替代
+  }
+} // 應該先想辦法讓數字可以累加
+```
+
+```
+document.querySelector('.calculator__input').addEventListener('click', inputClick); // 監控的按鈕
+```
+
+發現點號按鍵會有 bug，但是因為題目的要求沒有用到點號，所以就先不處理。之後有空再來補這個問題。
+
+在來是要想辦法讓數字相加，所以就另外用一個 function 來寫相加的部分，並且顯示在螢幕上
+
+```
+function screenNumber(num) { // 螢幕的數字
+  let innerNumberOperation = numberOperation
+  // 要分開寫，免得汙染螢幕的數字
+  innerNumberOperation += num;
+  numberOperation = parseInt(innerNumberOperation, 10); // 轉換成數字
+  document.querySelector('.calculator__screen--output').innerText = numberOperation; // 把得到的數字覆蓋螢幕
+}
+```
+
+這邊先把內部的數字跟外部的分開寫，理由是怕污染到螢幕的數字，但有可能不需要分開， 之後再來評估看看。另外有個問題是，案太多下之後會突破螢幕寬度，這就留待以後再來處理。
+
+-
+
+成功在螢幕顯示之後，就是處理運算符的問題了。
+
+這邊比較難想像，因為不能在直接按下之後取消變數。按下符號之後，再按下數字鍵，才會清空輸入的值並添加輸入的值到螢幕上
+
+所以這邊要監視有沒有在符號存在的時候，按下數字鍵，按了就清空螢幕，並把按下的數字天加上去。
+
+預想等於，是把 螢幕的數字 +-\*/ 輸入的數字
+
+然後本來寫了個判斷式去判斷加減乘除，卻發現要按下等於的時候再去判斷跟運算就好了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/68a16a44afb595246d8626d00c7f48e5)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/2baa3932746471f59b1e7ff77c622a12)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/090d3d6ec3340d259b73e6f9df9fffd8)
+
+最後是該有的效果都完成了，當然有發現一些細節沒有完成。除此之外一切都還可以，就是留待以後有空再來把它寫得更完整一些。
+
+## hw4：簡答題
+
+1. 什麼是 DOM？
+2. 事件傳遞機制的順序是什麼；什麼是冒泡，什麼又是捕獲？
+3. 什麼是 event delegation，為什麼我們需要它？
+4. `event.preventDefault()` 跟 `event.stopPropagation()` 差在哪裡，可以舉個範例嗎？
+
+-
+
+## 什麼是 DOM？
+
+DOM 就是 Document Object Mothed。是一種把 HTML 結構轉換成物件的方法。有提供一些 API，用於跟 JavaScript 或是其他的程式溝通。透過這樣的方法，我們可以輕易的選取到我們要選取的標籤。進而去修改那些標籤。DOM 有很多種物件屬性跟方法可以使用。可以透過物件的方式去使用那些屬性跟方法，就可以得到資料進而去控制。而更上層還有一層式瀏覽器的模式，名字是 Browser Object Mothed, BOM，它是瀏覽器的 API，而 DOM 是這裏面的其中一個分支。最上層是 window 再來才是 document，所以 BOM 又被稱為 level 0 DOM。
+
+## DOM 方法與屬性
+
+方法是我們可以在節點（HTML 元素）上執行的動作。屬性是節點（HTML 元素）的值，能夠獲取或設置。可通過 JavaScript （以及其他程式語言）對 HTML DOM 進行訪問。  
+所有 HTML 元素被定義為物件，而程式介面則是物件方法和物件屬性。
+
+方法是能夠執行的動作（比如添加或修改元素）。  
+屬性是能夠獲取或設置的值（比如節點的名稱或內容）。
+
+舉個例子來說：某個人是一個物件。  
+人的方法可能是 eat (), sleep (), work (), play () 等等。  
+所有人都有這些方法，但會在不同時間執行。  
+一個人的屬性包括姓名、身高、體重、年齡、性別等等。  
+所有人都有這些屬性，但它們的值因人而異。  
+參考資料：[W3School HTML DOM 方法](http://www.w3school.com.cn/htmldom/dom_methods.asp)
+
+## DOM 的樹狀結構
+
+根據 DOM 的機制。我們得到個物件，會看起來像是一個樹狀圖。以 DOM 的部分來說，最上層是 document，document 的底下是 &lt;html>，&lt;html> 的底下分別是 &lt;head>、&lt;body>，然後在來是我們寫網頁的時候設置的那些標籤跟內容。這些標籤跟內容形成一個樹狀圖。如同下圖所示。
+
+![](https://cdn-images-1.medium.com/max/800/0*mS1Yehunuu-AMYJP.png)
+
+[圖源](https://ithelp.ithome.com.tw/articles/10191666)
+
+-
+
+## 事件傳遞機制的順序是什麼；什麼是冒泡，什麼又是捕獲？
+
+根據上一題所寫的，事件傳遞的機制就是根據 DOM 的樹狀圖來傳遞。以下圖來說明。
+
+![](https://cdn-images-1.medium.com/max/800/1*wINo5blPb3Tc4A9s5JrjQg.png)
+
+[圖源](https://www.w3.org/TR/DOM-Level-3-Events/#event-flow)
+
+當點擊一個元素之後，由最上面開始經過 document、&lt;html> 一路往下，最後到達指定的元素，這部分就是捕獲階段 (Capture phase)，也就是圖片紅色 (1) 的路徑。接著就會進入目標階段 (target phase)，也就是圖片藍色的 (2) 的階段，也就是點擊的元素的執行階段。接著就會進入冒泡階段 (Bubbling phase)，就是圖片中綠色的 (3) 的路徑，把事件依照原路徑一層層的傳上去。**一個重點就是先捕獲在冒泡。**
+
+-
+
+## 什麼是 event delegation，為什麼我們需要它？
+
+event delegation 就是事件代理的意思。  
+delegation 意思是（工作、職務或權力等）分配；委派；授權 [劍橋](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/delegation)  
+所以在這邊用作為事件委派。它是一種受惠於 Event Bubbling 而能減少監聽器數目的方法，利用的是事件會冒泡到它的上層元素。可以把很多個需要執行的事情，委派給一個事件監聽集中管理就好。這樣做的好處使可以減少監聽器的數目，當然撰寫也就比較難一些了，因為監聽的可能不再只是一個按鈕，而是很多的按鈕集中在一起。那就必須要透過判斷來確定是按了甚麼按鈕。
+
+### 為什麼會需要它呢？
+
+因為它可以有效的減少撰寫監聽器，而且還可以更有效的管理，可以使用一個監聽器就可以監聽很多的事件。
+
+1. 減少了新增很多的監聽函式
+2. 可以很方便的新增或修改元素
+3. 不會因為一些改動就導致需要修改監聽事件或函式。
+
+-
+
+## event.preventDefault () 跟 event.stopPropagation () 差在哪裡，可以舉個範例嗎？
+
+event.preventDefault () 是用來阻止預設的行為。而 event.stopPropagation () 則是會阻止事件的傳遞。
+
+event.prevnetDefault () 的用意是在阻止事件的預設行為。假設今天有設置一個連結連到 Google，連結的預設行為是點了就會打開網址，所以我們另外設置監聽這個連結的點擊行為，接著在 function 裡面使用 event.preventDefault () 。那麼點擊之後就不會連結去 Google 了。為了方便呈現效果，另外在多加一個把背景變成紅色的指令，是直接把 style 添加進標籤內。
+
+```
+<body>
+  <a id="test" href="http://google.com" target="_blank">Google</a>
+  <script>
+    const test = document.querySelector("#test")
+    test.addEventListener('click', (e) => {
+      e.preventDefault();
+      test.setAttribute('style','background:red')
+    });
+  </script>
+</body>
+```
+
+![](https://cdn-images-1.medium.com/max/800/0*kjNvo6gihVwSOjyw.gif)
+
+這樣在點了那個連結的時候，就不會連結出去。因為只會阻止預設行為，所以背景顏色還是一樣會變成紅色。
+
+-
+
+-
+
+-
+
+event.stopPropagation () 則是會阻止事件往上傳遞。也就是說，如果只有單一事件的話，其實不會有影響，但是當如果有兩種事件在同一個位置，依照捕獲與冒泡的原理來說，就會把事件傳遞給別層，所以當一個位置有兩個事件的時候，就會一起執行。但是我不希望兩個事件一起執行怎麼辦呢？就是使用 event.stopPropagation () 就可以了。  
+用上面的例子，另外用 div 包起來，然後設置高度跟顏色以方便觀看結果。然後設置監聽這個 div，當點擊之後就把背景給消除。先試試看不使用 event.stopPropagation () 的結果。
+
+```
+<body>
+  <div id="test2" style="height:100px; background: gray;">
+    <a id="test" href="http://google.com" target="_blank">Google</a>
+  </div>
+
+  <script>
+    const changeTest = document.querySelector("#test")
+    changeTest.addEventListener('click', (e) => {
+      e.preventDefault();
+      changeTest.setAttribute('style', 'background:red');
+    });
+
+    const changeTest2 = document.querySelector("#test2")
+    changeTest2.addEventListener('click', (e) => {
+      changeTest2.removeAttribute('style', 'background: gray');
+    })
+  </script>
+</body>
+```
+
+-
+
+![](https://cdn-images-1.medium.com/max/800/0*BfadxYBSjEWhdE2c.gif)
+
+可以看到灰色背景被刪除，連結的背景顏色也變了。這就是點擊的事件冒泡了，所以兩邊都有了反應。  
+如果不希望點了連結之後，連背景都有反應。就只要在 `<a id="test">` 的 callback function 使用 event.stopPropagation () 即可。
+
+```
+<body>
+  <div id="test2" style="height:100px; background: gray;">
+    <a id="test" href="http://google.com" target="_blank">Google</a>
+  </div>
+```
+
+```
+  <script>
+    const changeTest = document.querySelector("#test")
+    changeTest.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      changeTest.setAttribute('style', 'background:red');
+    });
+```
+
+```
+    const changeTest2 = document.querySelector("#test2")
+    changeTest2.addEventListener('click', (e) => {
+      changeTest2.removeAttribute('style', 'background: gray');
+    })
+  </script>
+</body>
+```
+
+![](https://cdn-images-1.medium.com/max/800/0*vVTWVyarNUbFtF-X.gif)
+
+可以發現，點了連結只有連結的背景變色，而不會上一層的 `<div id="test2">` 也一起對事件產生反應。也就是說被阻止往上冒泡了。然後再去點了旁邊的灰色區域，才會發現觸發了另外一個事件，所以 `<div id="test2">` 的背景顏色就被去掉了。
+
+所以當不希望標籤產生預設行為的時候，我們就可以使用 event.preventDefault ()，去阻止它發生預設的行為。而如果有好幾個事件在同個位置，又不希望所有的事件都被觸發了，就可以使用 event.stopPropagation (); 去阻止事件的傳遞。

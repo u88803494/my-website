@@ -1,0 +1,80 @@
+---
+title: "pnpm install/add/remove 卡住怎麼辦"
+slug: "pnpm-install-add-remove-卡住怎麼辦"
+description: "在寫 code 的時候，尤其是需要裝新的 package 的時候，不知道為什麼會突然卡住"
+date: 2023-02-16T12:02:39.039Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*YmkiQoiqgVEPEvptnC2qtA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/pnpm-install-add-remove-%E5%8D%A1%E4%BD%8F%E6%80%8E%E9%BA%BC%E8%BE%A6-db711a5c691c"
+---
+
+在寫 code 的時候，尤其是需要裝新的 package 的時候，不知道為什麼會突然卡住
+
+![](https://cdn-images-1.medium.com/max/800/1*YmkiQoiqgVEPEvptnC2qtA.png)
+
+之前我碰過一次，意外亂弄解決了，但這次又發生一次，我大概整理出了為什麼。
+
+後來才想到應該是 cache 的問題，所以我就去找了一下
+
+結果．．．
+
+首先先清除 cache ，但 pnpm 的方式跟 npm 、 yarn 不太一樣。
+
+最容易搜尋到的指令是
+
+```typescript
+pnpm store prune
+```
+
+但這個只是會去清除一些沒有對應到的 package。
+
+而我們要做的是因為 package 的檔案裡面有衝突，所以才會卡住，而因為 pnpm 所有的 package 都是利用 reference 的方式，所以除非你刪除了 reference，不然用了上述指令就依然不會正常。
+
+所以要做的就是要先找出 package 的所在位置，然後再手動刪除之。
+
+```lua
+pnpm store path
+```
+
+就會顯示路徑
+
+/Users/[username]/Library/pnpm/store/v3
+
+接著我們就是直接移除他們
+
+```bash
+rm -rf /Users/[username]/Library/pnpm/store/v3
+```
+
+這樣我們就清除了。
+
+接著就可以刪除 node node_modules
+
+```bash
+rm -rf node_modules
+```
+
+然後重新安裝
+
+```bash
+pnpm install
+```
+
+我這邊會順便重新更新 pnpm-lock，也可以先試試不更新，如果還是行不通再來更新這部分，所以我會一起刪除 pnpm-lock.yaml
+
+但裝到後面就會出現錯誤
+
+![](https://cdn-images-1.medium.com/max/800/1*xioTyL5NXi09vPk_MOnGTA.png)
+
+這是因為我的專案有用到 husky，原因是因為我重新安裝了，所以就變成沒有權限。
+
+這時候把權限還給它即可。
+
+```bash
+chmod +x /Users/[username]/[project_name]/node_modules/.bin/husky
+```
+
+這樣就可以成功跑起來了
+
+![](https://cdn-images-1.medium.com/max/800/1*i_Jcm5AiMLVB5QDWp-0r5A.png)

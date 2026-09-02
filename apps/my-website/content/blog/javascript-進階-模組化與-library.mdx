@@ -1,0 +1,166 @@
+---
+title: "JavaScript 進階：模組化與 Library"
+slug: "javascript-進階-模組化與-library"
+description: "模組化與 Library"
+date: 2019-05-05T04:09:38.209Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E9%80%B2%E9%9A%8E-%E6%A8%A1%E7%B5%84%E5%8C%96%E8%88%87-library-cd5309c1ee15"
+---
+
+## 模組化與 Library
+
+## require (借用別人的東西)
+
+Module 模組/模塊：如果沒有這個的話，我們會把所有的功能都放在一起，所以可能改了一個地方就其他地方也壞了，所以最好的方法是每一個都拆開來變成不同的模組，然後再用主程式給串起來。
+
+呼叫方式：
+
+```
+var ewos = require('os') // require() 括號內擺放要引入的 module 的名稱 // 變數可以任意命名
+```
+
+```
+console.log(ewos.platform())//呼叫他們的內建函式，這個函式會得到當前OS平台
+//win32
+```
+
+用字串符號 '' 包起來是在表示我要引入的模組名稱
+
+所以我們可以利用 require 的功能把需要的模組給引入變數，之後可以呼叫該模組的內建函式。
+
+[更詳細的解釋](https://www.cnblogs.com/libin-1/p/7127481.html)
+
+> 2009年，美國程序員 Ryan Dahl 創造了 node.js 項目，將 javascript 語言用於伺服器使用。
+
+> 這標誌“的 Javascript 模塊化編程”正式誕生。前端的複雜程度有限，沒有模組也是可以的，但是在伺服器端，一定要有模組，與操作系統和其他應用程序互動，否則根本沒法編程。
+
+> node編程中最重要的思想之一就是模組，而正是這個思想，讓JavaScript的大規模工程成為可能。
+
+## export (讓自己的東西可以借用給別人)
+
+如何自己作出一個自己的 Module
+
+先額外建檔，myModule.js 或任意命名，用來存放自己的 Module。就可以在裡面寫 function。如果需要引用的話，必須要打個輸出指令。 module.exports = function
+
+```
+myModule.js:
+```
+
+```
+function double(n) {
+  return n * 2;
+} // 寫好的函式
+```
+
+```
+module.exports = double //輸出該函式，才可以讓別人存取
+```
+
+module.exports = 後面接的內容，就是別人 require 的時候，會回應的內容。所以如果後面接 hello world，當別人 require 這個 module 時，就會直接顯示 hello world
+
+### 如何使用已經建好的 module
+
+```
+var myModule = require(‘./myModule.js’) // .js 也可以省略，一般來說是不會打上 .js
+```
+
+```
+console.log(myModule)
+```
+
+如同前面所用的用法，但因為這是自建的也放在同個目錄之下，所以需要使用 ./myModule.js 來導入 Module，如果 module 在不同的地方就需要更改 path 了喔，當然使用的是內建的，就不需要路徑了。
+
+### 在 module 放多種函式時，如何呼叫呢？
+
+1. 利用物件的方式
+
+```
+myModule.js:
+```
+
+```
+function double(n) {
+  return n * 2;
+}
+```
+
+```
+var obj = {
+ double: double,
+ triple: function(n) {
+  return n * 3;
+ },
+}
+```
+
+```
+module.exports = obj
+// ================================
+```
+
+```
+index.js:
+var myModule = require('./myModule')
+```
+
+```
+console.log(myModule)
+// { double: [Function: double], triple: [Function: triple] }
+// 可以看到這樣就是物件
+```
+
+所以就可以利用物件的方式呼叫了
+
+```
+var myModule = require('./myModule')
+```
+
+```
+console.log(myModule.double(2), myModule.triple(10))
+// 4 30
+```
+
+2. node.js 提供的另外一個功能
+
+```
+exports.'呼叫名稱' = '呼叫內容'
+```
+
+```
+myModlue.js:
+function double(n) {
+  return n * 2;
+}
+```
+
+```
+exports.double = double;
+exports.triple = function(n) {
+  return n * 3;
+ }
+// ===============================
+```
+
+```
+index.js:
+var myModule = require('./myModule')
+```
+
+```
+console.log(myModule.double)
+// { double: [Function: double], triple: [Function] }
+// 可以看到還是物件
+```
+
+這種寫法的好處是，輸出的都絕對是物件，而第一種則是可以輸出各種東西，字串、數字、陣列等。
+
+第一種較常用，不過第二種也是很常看到。
+
+結論：所以會把一些常見的函式放到 module 裡面，以免必須要一直不停的寫重複的 function。當檔案一多起來的時候，要改也很費力，因為必須要一個一個地去修正。最終就是把需要的放在一個 module 內部，有需要的時候就可以直接呼叫了，就不需要再次宣告，因為已經在 module 的檔案內部宣告過了
+
+收穫：
+
+在這裡可以理解到，為什麼基礎課程的測驗要求我們要一直不停地把大問題拆成小問題。模組化的做法，我認為也是一種大問題拆成小問題的方式，當然還有各種不同的原因。這些做法的來由都是一個目的就是降低開發的各種成本，還有更多良好的閱讀性，所以之後我也會試著用用看這樣的做法。
+
+我會在這裡有很多體會，因為我自己在寫按鍵精靈的時候，也很常因為一些因素，必須要去改某個參數，但是我都是直覺的一行一行寫，所以變成我要一行一行的改，那個時候我都會想有沒有可以讓我一次變更所有該設定值的功能就好了。在這種想法之下，我會使用搜尋與取代的功能，但是參數有時候可能有 100 與 1000，那我在用搜尋與取代的時候，假設我要把 100 改成 500，結果就順便把1000 改成 5000，然後再執行的時後又很容易忽略到原來那邊有改，就會想說程式怎麼怪怪的，最後我還是必須要一行一行看，這樣還好，如果程式寫得很長的話，那真的會崩潰，甚至我曾經有過因為這樣導致我乾脆重寫還比較省時間，所以可以體認到這種做法的重要性。

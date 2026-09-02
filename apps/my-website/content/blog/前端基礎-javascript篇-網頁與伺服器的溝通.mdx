@@ -1,0 +1,674 @@
+---
+title: "前端基礎 JavaScript篇：網頁與伺服器的溝通"
+slug: "前端基礎-javascript篇-網頁與伺服器的溝通"
+description: "API 與網頁伺服器"
+date: 2019-06-18T05:38:38.855Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*2xn3fZe0Vbj0oBr3Qpwfrg.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript%E7%AF%87-%E7%B6%B2%E9%A0%81%E8%88%87%E4%BC%BA%E6%9C%8D%E5%99%A8%E7%9A%84%E6%BA%9D%E9%80%9A-eb921b02e836"
+---
+
+## API 與網頁伺服器
+
+複習：
+
+只要記住一個概念即可
+
+Client 會發 request 給 server，
+
+server 會 response 給 Client 。
+
+範例：以 server reponse HTML 為例子
+
+首先 Client 會發一個 request https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_Resources 給 server
+
+然後這個網址回應的 response 就是上述網頁的 HTML
+
+用圖片來舉例 header 的反白部分就是 request 的部分
+
+另外一邊的 response 則是回應的部分
+
+![](https://cdn-images-1.medium.com/max/800/1*2xn3fZe0Vbj0oBr3Qpwfrg.gif)
+
+另一個例子是：JSON 格式
+
+同樣的發一個 request 到網址，然後取得 JSON 格式的 response
+
+![](https://cdn-images-1.medium.com/max/800/1*1iuy3qvvEutYuSrxsP7M-A.gif)
+
+## 用 node.js 呼叫 API 與在網頁上呼叫的根本差異是什麼？
+
+之前都是使用 request 的 library 。
+
+所以 node.js 的部分是這樣：
+
+Node.js 程式直接發 request 給 server 然後可以直接拿到 server 的 response，中間的東西都是不會被改過的，也沒有任何的限制。
+
+瀏覽器上的 JS 會先透過瀏覽器，然後瀏覽器發 request 給 server，接著 server 在發 response 給瀏覽器，瀏覽器在把資料給 JS。
+
+差別在於有沒有人限制，瀏覽器的話會做一些事情，可能會阻擋一些不良訊息，或是會加一些資料，像是瀏覽器版本等等的額外資訊，瀏覽器會有一些限制。
+
+也是因為這一點所以會有其他規則需要學習。
+
+## 傳送資料的第一種方式：表單 form
+
+先寫一個 form 小程式
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta name="description" content="[local storage]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    body {
+      font-size:38px;
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <form method='GET' action='/test'>
+      username: <input name='username' />
+      <input type="submit" />
+    </form>
+ </div>
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+然後直接測試
+
+![因為找不到 ./text 所以不會有資料](https://cdn-images-1.medium.com/max/800/1*MJB3c3tIH-McUkotvhlhtw.gif)
+
+_因為找不到 ./text 所以不會有資料_
+
+這時候再測試，把 Preserve log 點起來之後在提交
+
+![](https://cdn-images-1.medium.com/max/800/1*FZdc2jRGCR4SqkF1ZCcL-A.gif)
+
+可以發現到有提交資料成功，但是結果是失敗的。會這樣的原因是因為沒有一個檔案來處理這些資料。
+
+可以試著發送到不同的地方，
+
+```
+    <form method='GET' action='https://google.com'>
+      username: <input name='username' />
+      <input type="submit" />
+    </form>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*wkK1RjQboPW7cAEpPbbkqQ.gif)
+
+發現送出之後會出現?username=123 這就是剛剛送出的資料。
+
+實際的 request 是會發送一個 get 的 request 到 https://google.com/?username=123 所以使用 get 的方法的話，參數就會出現在網址上面。所以登入的話會用 post 因為他的帳號密碼會在 body 上面，就不會顯示在網址上面了。
+
+![](https://cdn-images-1.medium.com/max/800/1*1Yq_pulRxz86kMrJ-9jLAw.png)
+
+所以就是利用表單傳 request 到 action 的網址，而這個部分的話會換頁
+
+意思就是透過瀏覽器發一個 request 到 server ，就是發送一個 username: 123 的 request 方法是 get 到網頁 https://google.com/?username=123。當 server 把 response 拿回來之後，瀏覽器就直接渲染 response 出來了，也就是 Dev tools 看到的 response 內容，瀏覽器就直接渲染這個 response，然後就會直接到那個網址。
+
+改用 post 也是一樣的
+
+所以，利用這種方式的話，會產生的結果都只看 action 那邊的網址，這個網頁回傳什麼結果就是什麼結果。
+
+這種方式跟 JavaScript 比較沒什麼關係
+
+這種方式比較像是要到那個頁面，然後帶上什麼資料。
+
+## 傳送資料的第二種方式：AJAX
+
+以第一種方式來說，每次傳送資料之後都要換頁面。但很多時候，只是需要從 server 拿資料而已，就只需要畫面部分有改變而已，不需要整個畫面都變動。這個時候我們可以利用 JavaScript 發一個 request 到 server，然後得到我們要的資料，就只要改變部分畫面就好了。這種方式就叫做 Asynchronous JavaScript And XML, AJAX。AJAX 不是一個技術的名字，是一類型的技術的統稱，任何有非同步跟伺服器交換資料的 JavaScript 都可以叫做 AJAX。那為什麼要用 XML，其實是因為早期交換資料都是用 XML 格式，但現在比較多都用 JSON，所以現在就還是習慣就叫做 AJAX 而已，也就是說不限於 XML 了。
+
+### 跟原本的表單差在哪裡呢？
+
+一樣是瀏覽器上的 JS 請求瀏覽器發一個 request 給 srever ，然後 server 回覆 response 給瀏覽器，瀏覽器再把 response 轉傳給 JavaScript，差異在於換頁，表單的方式是瀏覽器得到一個 response 之後就 render 出來，於是就需要換頁，而 AJAX 的方式，則是 response 會直接 交給 JS。
+
+### 範例：
+
+AJAX 就要用瀏覽器內建的方式。
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="[AJAX test]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>AJAX test</title>
+</head>
+<body>
+  <div class="app">
+
+  </div>
+</body>
+<script>
+  const request = new XMLHttpRequest()
+  // 產生出一個 XMLHttpRequest 賦值給 request
+  request.onload = function() {
+
+  }// 這邊的意思是要放一個 function 到 onload，當 request 拿到這個結果的時候，就是觸發 onload 這個事件，進而執行這個 function
+```
+
+```
+</script>
+</html>
+```
+
+> XMLHttpRequest
+
+> XMLHTTP是一組API函式集，通過 HTTP在瀏覽器和web伺服器之間收發XML或其它資料。
+
+> 補充資料 by[ wiki](https://zh.wikipedia.org/wiki/XMLHttpRequest)
+
+我們把 &lt;script> 標籤內部拿出來寫
+
+```
+<script>
+  const request = new XMLHttpRequest();
+  request.onload = function() {
+
+  }
+  // 這邊的意思是要放一個 function 到 onload
+  // 當 request 拿到這個結果的時候，就會觸發 onload 這個事件
+```
+
+```
+</script>
+```
+
+這寫法就類似於 btn.addEventListener(‘click’, function()…)
+
+所以可以看成是 btn.onClick = function()… 當然這種寫法沒辦法用
+
+然後就可以在 function 裡面寫判斷
+
+```
+<script>
+  const request = new XMLHttpRequest();
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+      // 這邊表示是有成功讀取網頁
+      console.log(request.responseText);
+    } else {
+      console.log('err');// 如果不是就印出錯誤
+    }
+  }
+```
+
+```
+request.onerror = function () {
+    console.log('error')
+  } // 接下來也可以寫個新的 listener 叫做 onerror
+```
+
+```
+request.open('GET', 'https://reqres.in/api/users', true)
+  // open 就是發一個 request
+  // 括號內部就是發一個 GET 到 Google。
+  // 第三個參數則是要不要非同步。非同步是 true
+  request.send() // 要用這個才會真的把資料送出去
+```
+
+```
+</script>
+```
+
+在 JavaScript 上面發 request 一定是要非同步，否則就必須要在那邊等，等到 response，才可以做其他事情，以這樣來說，網頁就會一直處於空白，必須等到得到 response 之後才可以得到其他資料。
+
+結果實際運行的時候，發生錯誤，也就是說有限制不能直接在這個頁面針對 Google 發這樣的 request
+
+所以就來試試看別的網站 [https://reqres.in/api/users](http://reqres.in/api/users)。
+
+結果就可以得到資料了。
+
+![](https://cdn-images-1.medium.com/max/800/1*MWelqxx8uqZiOoOqwkLqSQ.gif)
+
+可以看到原本連 Google 是不能成功的，而換成 [https://reqres.in/api/users](http://reqres.in/api/users) 之後再重整就可以成功取得資料。
+
+## 詳細解析 XMLHttpRequest
+
+繼續詳細解說上一段的例子
+
+```
+<script>
+  const request = new XMLHttpRequest();
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+
+      console.log(request.responseText);
+    } else {
+      console.log('err')
+    }
+  }
+```
+
+```
+request.onerror = function () {
+    console.log('error')
+  }
+```
+
+```
+request.open('GET', 'https://reqres.in/api/users', true)
+  request.send();
+```
+
+```
+</script>
+```
+
+-
+
+```
+const request = new XMLHttpRequest();
+```
+
+這邊的意思是一個新的 XMLHttpRequest()，然後賦值給這個變數
+
+```
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+
+      console.log(request.responseText);
+    } else {
+      console.log('err')
+    }
+  }
+```
+
+這面這段，就是新增監聽器。就等同於新增 addEventListener
+
+```
+request.addEventListener('load', function(){
+  if (request.status >= 200 && request.status < 400) {
+
+      console.log(request.responseText);
+    } else {
+      console.log('err')
+    }
+})
+```
+
+寫這樣也是可以的
+
+-
+
+```
+if (request.status >= 200 && request.status < 400) {
+  console.log(request.responseText);
+} else {
+  console.log('err');
+}
+```
+
+這一段在說的，把 status code 符合這些條件，就把 response 印出來。但是如果不符合就印出 err。
+
+-
+
+```
+request.onerror = function () {
+  console.log('error')
+}
+```
+
+這段是當 request 發生 onerror 的時候，就是印出 error
+
+-
+
+```
+request.open('GET', 'https://reqres.in/api/users', true)
+request.send()
+```
+
+這邊就是指定使用 GET 送出 request 給該網址。下一段就是真的把他送出去
+
+這些方法跟屬性的說明都可以 [由此](https://developer.mozilla.org/zh-TW/docs/Web/API/XMLHttpRequest) 了解
+
+除了可以印出 err 之外。我們也可以印出錯誤的時候會有的 status 甚至印出錯誤的時候的 responseText
+
+```
+  const request = new XMLHttpRequest();
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 400) {
+        console.log(request.responseText);
+      } else {
+        console.log(request.status, request.responseText);
+      }
+    }
+```
+
+以這邊的網址來說會印出 404 空字串。這是因為每個網站的設定不同，有的網站如果 404 了。甚至可能甚麼都沒有。這就要看每個網站是怎麼樣時做這個結果的。
+
+## Same origin policy 與跨網域問題
+
+引用前述的例子。發送 request 送到 google.com
+
+```
+<script>
+const request = new XMLHttpRequest();
+request.onload = function () {
+  if (request.status >= 200 && request.status < 400) {
+ console.log(request.responseText);
+  } else {
+ console.log(request.status, request.responseText);
+  }
+}
+```
+
+```
+request.onerror = function () {
+  console.log('error')
+}
+```
+
+```
+request.open('GET', 'https://google.com', true)
+request.send()
+</script>
+```
+
+這時候會發生錯誤。
+
+![](https://cdn-images-1.medium.com/max/800/1*G4wR_HtadqwJxIAKISmy8A.png)
+
+這段紅色字的意思是，不能從 origin 'null' 因為被 CORS 給綁住了。因為沒有Access-Control-Allow-Origin 這個 header 。
+
+這段話的意思是因為
+
+瀏覽器有一些設定存在
+
+### Same origin policy 同源政策
+
+這意思就使指相同 domain 、相同網域，就是同源。Http 跟 Https 是分開的。
+
+> 所謂同源是指兩份網頁具備相同協定、埠號 (如果有指定) 以及主機位置
+
+> [MDN 同源政策](https://developer.mozilla.org/zh-TW/docs/Web/Security/Same-origin_policy)
+
+也就是說，瀏覽器預設不同源的話，就會被擋掉。
+
+但如果還是有這個需求怎麼辦呢？這時候就有另外一個解決方案。
+
+### [跨來源資源共用CORS](https://developer.mozilla.org/zh-TW/docs/Web/HTTP/CORS)
+
+有時候就會需要去跟別人的網址拿資源。應用這種方式就有一些協定。
+
+就是在發出跨來源 request 的時候，對方的 response headers 會有個 Access-Control-Allow-Origin。會去對應使用者發出的 request header。而我們發給 Google 是沒有任何的這個資訊。所以就會被拒絕存取。
+
+但為什麼另外一個網址 [https://reqres.in/api/users](https://reqres.in/api/users%27) 卻可以呢？因為是寫 \* 也就是所有的 origin 都可以存取。
+
+```
+access-control-allow-origin: *
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*9E7arSvlmqlWWlJ16FWZsw.png)
+
+所以，如果 sever 沒有加入這個 header : Access-Control-Allow-Origin 的話，那麼就絕對沒有辦法拿到 response。因為這是瀏覽器加上的限制。所以如果要繞過這個限制的話，就是變成同來源，或是 sever 端加入這個 header。
+
+-
+
+參考資料：[輕鬆理解 Ajax 與跨來源請求](https://blog.techbridge.cc/2017/05/20/api-ajax-cors-and-jsonp/)
+
+透過網路上來執行的時候，因為伺服器回傳資料不一定會這麼的快速。所以就要使用非同步的方式來執行。非同步的 function。不能透過 return 回傳結果，因為已經執行到下一行了，沒東西可以回傳。所以就需要透過別的方式，也就是 callback function。所以我們可以透過一個 function 去呼叫那個 function 來取得我們要的資料。
+
+也就是說當發一個 request 之後，等動作完成之後，讓他自動呼叫另外一個 function 來執行要執行的內容。
+
+要發送 Request 的話，就要透過瀏覽器幫我們準備好的一個物件，叫做 `XMLHttpRequest`，透過這個物件，就可以執行很多的方法跟屬性。就可以透過這種方式來串接 API。
+
+但因為同源政策，所以不同來源的要取得資料，會被瀏覽器檔下 response，不把資料交給 JavaScript。所以就要使用 CORS 來協助傳輸資料，也就是說伺服器要跨來源傳輸資料，Server 必須在 Response 的 Header 裡面加上 `Access-Control-Allow-Origin`。
+
+當瀏覽器收到 Response 之後，會先檢查 `Access-Control-Allow-Origin` 裡面的內容，如果裡面有包含現在這個發起 Request 的 Origin 的話，就會允許通過，讓程式順利接收到 Response。
+
+在透過這種方式發送 request 的時候，有分為兩種一種是簡單請求，另一種就是比較複雜的請求。兩者的差異在於複雜的一方帶有自訂義的 header，所以就會產生 Preflight Request，中文翻作「預檢請求」，也就是說會發送兩個 request 一個是預檢用的，另一個才是正式的 request ，為什麼要這樣用，因為通常非簡單請求可能會帶有一些使用者的資料，就會需要先 Preflight Request 去確認後續的請求能否送出。
+
+有另外一種 跨來源請求方式叫做 JSON with Padding, JSONP。就是利用 `<script>` 這個 tag，使用 `<script scr="">` 來引入內容，可以引入要執行的內容，就可以一樣拿到資料。[script 標籤的 scr 是怎麼運作的](https://www.wibibi.com/info.php?tid=395)
+
+實務上在操作 JSONP 的時候，Server 通常會提供一個 `callback` 的參數讓 client 端帶過去。
+
+利用 JSONP，也可以存取跨來源的資料。但 JSONP 的缺點就是你要帶的那些參數永遠都只能用附加在網址上的方式（GET）帶過去，沒辦法用 POST。
+
+**如果能用 CORS 的話，還是應該優先考慮 CORS**
+
+## 瀏覽器住海邊嗎，為什麼管這麼寬？
+
+為什麼要有這麼多種限制？主要就是為了安全性。不希望隨便發個 request 就可以取得資料，所以為了安全性有很多事情都不讓我們可以執行。比如說我們不能隨意讀取任何一個電腦上的檔案。
+
+另外一點是 CORS 就是瀏覽器加上的限制，所以利用 node.js 就不是瀏覽器了，所以利用 node.js 發 request 就不會有 CORS 的限制了。所以才會說客戶端的資料都不可信任。
+
+## 不知道卻存在的第三種方式
+
+JSON with padding, JSONP。現在少用，就是知道有這種方式即可。有一些標籤不受同源政策的管束。
+
+scr 取得外部資源的方式
+
+```
+<img scr=<"" />
+```
+
+因為圖片沒有安全性的問題，所以就不受管制。另外一個就是
+
+```
+<script scr=""></script>
+```
+
+這樣可以引用別的網站的 JavaScript。像 AJAX 就一定會受到同源政策的管理。現在有一個假設的網站 有個 user.js
+
+```
+<script src="https://test.com/user.js"></script>
+```
+
+假設 user.js 回傳的內容如下：
+
+```
+setData({
+  id: 1
+  name: 'hello'
+})
+```
+
+所以就可以在取得之前的資料設置一個 function 叫做 setData
+
+```
+<script>
+  function setData(users) {
+    console.log(users)
+  };
+</script>
+<script src="https://test.com/user.js"></script>
+```
+
+因為伺服器回傳的名字就是 setData 所以這個 function 在執行到後面那段之後，就會自動把數值帶進去，然後就可以呼叫了，就像是先定義在賦值那種感覺。當然這種方式也可以變形，使用 JavaScript 來創建標籤。
+
+```
+const element = document.createElement('script')
+element.scr ='https://test.com/user.js?id=1'
+```
+
+這樣也可以取得資料。當然一樣要先設置好 function 去接收伺服器的資料
+
+## 單向傳送資料的延伸應用（email 與追蹤）
+
+有時候只是需要傳一些資料，並不想要拿到資料。像是發 email 的網站，可以看到使用者有沒有打開，應用方式很妙，該網站就是在 email 裡面放了一個圖片，可能是很小甚至是透明的圖片，完全看不出來。src 可能就是一個網址。網址裡面有用途跟使用者 ID
+
+```
+<img width='1' height='1' src="https://example.com/users_open/16573"
+```
+
+一定讀者打開這封信，開 email 的軟體就會去讀取 load 這個圖片，就會發一個 request 給這個網址，所以就可以知道這個 email 被讀取了。就是一些網站在使用追蹤的時候就是這樣子做的。ex. Facebook 的埋像素。
+
+## 綜合示範：抓取資料並顯示
+
+來示範專取資料之後可以怎麼做。用之前的例子來呈現。
+
+```
+<script>
+  const request = new XMLHttpRequest();
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+      console.log(request.responseText);
+    } else {
+      console.log('err');
+    }
+  }
+```
+
+```
+request.onerror = function () {
+    console.log('error')
+  }
+```
+
+```
+request.open('GET', 'https://reqres.in/api/users', true)
+  request.send()
+</script>
+```
+
+接下來切個板，使之有辦法呈現。切幾個標籤之後，然後取他裡面的資料來呈現。
+
+```
+<div class="app">
+<div class="profitle">
+  <div class="profile__name">George Bluth<img class="profile__img"
+   scr="https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg"></div>
+</div>
+<div class="profitle">
+  <div class="profile__name">George Bluth<img class="profile__img"
+   scr="https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg"></div>
+</div>
+</div>
+```
+
+然後再來做一些 CSS 來美化。整體如下，
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/650a2a8b9fe27f3d9eddef513acfccbd)
+
+整件事情就是當取得了這些資料之後，要試圖把這些資料變成 HTML 標籤可以呈現出來的樣子，在用 CSS 做些適當的修改。
+
+所以還可以做一些修改，讓我們可以更容易拿到要拿的資料。以方便呈現上去。
+
+```
+const request = new XMLHttpRequest();
+request.onload = function () {
+  if (request.status >= 200 && request.status < 400) {
+ const response = request.responseText;
+ const data = JSON.parse(response);
+ console.log(data);
+  } else {
+ console.log('err');
+  }
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*GjpvafrzypvC2pDHXbYg7g.png)
+
+然在把寫好的版面資料，利用 ajax 的方式新增上去。這樣就是當 server 資料有變動的時候，頁面就會跟著改變。
+
+先利用一個變數去接收伺服器的 JSON 資料。然後透過該變數取得想要的資料像是名字，並且賦值給一個變數。接下來就是讓這個變數透過陣列的方式去迴圈取得，並做出想做的事情。
+
+```
+if (request.status >= 200 && request.status < 400) {
+  const response = request.responseText;
+  const json = JSON.parse(response);
+  const users = json.data
+  for (let i = 0; i < users.length; i += 1) {
+
+  }
+}
+```
+
+然後利用迴圈在 .app 下面創造一個 div 然後新增一個 class 接著在內部命名變數去接收想要新增資料的部分，接著名字跟圖片在用迴圈去取得資料。
+
+```
+for (let i = 0; i < users.length; i += 1) {
+  const div = document.createElement('div')
+  div.classList.add('profile')
+  div.innerHTML = `
+<div class="profile__name">${users[i].first_name} ${users[i].last_name}</div>
+<img class="profile__img" src="${users[i].avatar}" />
+`
+}
+```
+
+最後再利用 appendChild 的方式把資料按照迴圈次數添加即可。
+
+```
+container.appendChild(div)
+```
+
+下面就是完整的 code
+
+```
+const request = new XMLHttpRequest();
+const container = document.querySelector('.app');
+request.onload = function () {
+  if (request.status >= 200 && request.status < 400) {
+    const response = request.responseText;
+    const json = JSON.parse(response);
+    const users = json.data
+    for (let i = 0; i < users.length; i += 1) {
+      const div = document.createElement('div')
+      div.classList.add('profile')
+      div.innerHTML = `
+  <div class="profile__name">${users[i].first_name} ${users[i].last_name}</div>
+  <img class="profile__img" src="${users[i].avatar}" />
+  `
+  container.appendChild(div)
+    }
+  } else {
+    console.log('err');
+  }
+}
+```
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/2c9338cf015c077f77a2a900b32c3447)
+
+然後利用 dev tool 的中斷點可以看到確實是新增上去的。
+
+![](https://cdn-images-1.medium.com/max/800/1*rM0etjPncQxHEbEDPsTKBw.gif)
+
+### 結論：
+
+1. 先刻出一個介面
+2. 拿取資料
+3. 把寫死的資料換成動態新增的方式，然後 append 到版面上
+
+## 小地方大學問：內容產生的地方在 client 還是 server
+
+之前完成的範例是利用 JavaScript 來動態新增這個網頁內容的。這意思是，假如是直接檢視原始碼，body 是看不到任何東西的，因為原始碼是這個 html 檔案的內容。所以因為是因為這些網頁內容是 JavaScript 創造的，所以透過檢查才看得到動態新增後的資料。
+
+而這種方式就叫做 client side rendering 就是用 JavaScript 去動態新增的。這樣做的壞處是，如果是搜尋引擎，看到原始碼長的是那樣，就會認為這個頁面沒有任何內容的，因為搜尋引擎是不會去執行 JavaScript 的。
+
+所以結論是如果網頁資料是動態產生的，那 body 沒有資料是很正常的一件事情。
+
+## 課程總結
+
+只要學會三個點
+
+1. 改變 UI
+2. 監聽事件並做出反應
+3. 資料的處理，會跟伺服器做出交換資料
+
+就可以做出任何想要的頁面。剩下來就是要去了解如何寫出來，因為有些東西很可能寫出來比較複雜一些。
+
+## 收穫：
+
+在這段課程當中更加的了解是如何跟伺服器溝通並取得資料，也知道說原來瀏覽器的限制真的不少，而且是從滿早就有了。大概兩三年前瀏覽器紛紛開始會主動阻擋惡意網站的時候，那時候還滿訝異說瀏覽器居然還可以做到這樣的事情。而我在這堂課中才知道，原來瀏覽器早早就開始有這些安全性管理的做法了，只是那時候我只是一個單純的使用者，所以並不會這麼明顯的感受到瀏覽器的管理行為。
+
+另外是在這堂課我才明白，我以前學網路行銷的時候，email 的追蹤行為到底是怎麼回事以及 Facebook 的埋像素到底是怎麼一回事。原來會叫像素就是因為真的是一個像素XDD 1px，當然是知道說原來背後的原理就是那樣子，所以才可以追蹤使用者的行為，很聰明的作法。而且也很省資源。

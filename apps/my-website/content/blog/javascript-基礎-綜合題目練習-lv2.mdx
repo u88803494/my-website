@@ -1,0 +1,808 @@
+---
+title: "JavaScript 基礎： 綜合題目練習 Lv2"
+slug: "javascript-基礎-綜合題目練習-lv2"
+description: "請寫出一個 function stars，接收一個參數 n，並且按照規律印出相對應的圖案。"
+date: 2019-05-04T03:38:55.131Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E7%B6%9C%E5%90%88%E9%A1%8C%E7%9B%AE%E7%B7%B4%E7%BF%92-lv2-11373e2c686b"
+---
+
+## 練習一：好多星星
+
+請寫出一個 function stars，接收一個參數 n，並且按照規律印出相對應的圖案。
+
+```
+function stars(n) {
+ let result =’’
+ for (let i = 1; i <= n; i += 1) {
+  result += ‘*’
+ console.log(result)
+ }
+}
+```
+
+```
+stars(7)
+```
+
+內建函式版本
+
+```
+function stars(n) {
+ for (let i = 1; i <= n; i += 1) {
+ console.log(‘*’.repeat(i))
+ }
+}
+```
+
+```
+stars(7)
+```
+
+題目檢討：檢討的是把裡面的內容另外在包個函式出去，我想這邊大概是會讓 eslint 比較不會判斷不行的寫法吧
+
+```
+function printStar(n) {
+ let result =’’
+ for (let i = 1; i <= n; i += 1) {
+   result += ‘*’
+ }
+ console.log(result)
+}
+```
+
+```
+function stars(n) {
+ for (let i = 1; i <= n; i += 1) {
+   printStar(i)
+ }
+}
+```
+
+```
+stars(7)
+```
+
+## 練習二：好多星星 回傳版
+
+請寫出一個 function makeStars，接收一個參數 n，並且根據規律「回傳」字串。
+
+> makeStars(1) 正確回傳值：\*
+
+> makeStars(2) 正確回傳值：\*\\n\*\*
+
+> makeStars(5) 正確回傳值：\*\\n**\\n\***\\n\***\*\\n\*\*\***
+
+看不太懂 /n 的意思，所以查詢之後知道這是換行的意思。
+
+想要添加 /n 有點難度，思維上一直卡住
+
+第一個 只有回傳 _ 不需要 /n 意味迴圈只要 1 個 _ 不要 /n
+
+但是第二個 要變成 \*\\n
+
+利用上提修改之後可以得到答案
+
+```
+function star(n) {
+ let result =''
+ for (let i = 1; i <= n; i += 1) {
+  result += '*'
+ }
+ return result
+}
+```
+
+```
+function markStars(n) {
+ let result =''
+ for (let i = 1; i <= n; i += 1) {
+  result += star(i)
+  if (i !== n){
+   result += '\n'
+  }
+ }
+ return result
+}
+```
+
+```
+console.log(markStars(7));
+//*/n**/n***/n****/n*****/n******/n*******
+```
+
+試著做雙重迴圈的版本
+
+```
+function markStars(n) {
+ let result =’’
+  for (let i = 1; i <= n; i += 1) {
+    for (let j = 1; j <= i; j += 1) {
+      result += ‘*’
+   }
+  if (i < n){
+    result += ‘\n’
+  }
+ }
+ return result
+}
+```
+
+```
+console.log(markStars(5));
+// */n**/n***/n****/n*****
+```
+
+解題：
+
+判斷式可以用 i !== n 來做判斷
+
+除了上述之外寫法之外，還可以使用陣列的寫法
+
+```
+function star(n) {
+ let result =''
+ for (let i = 1; i <= n; i += 1) {
+  result += '*'
+ }
+ return result
+}
+```
+
+```
+function markStars(n) {
+ let arr = []
+ for (let i = 1; i <= n; i += 1) {
+  arr.push(star(i))
+ }
+ return arr.join('\n')
+}
+```
+
+```
+console.log(markStars(5));
+```
+
+試著自己寫寫看，習慣使用 arr[i] = star[i] 結果卻有個致命錯誤，因為這樣 arr[0] 就沒東西，在 .join 的時候會被判斷為需要多加一個 \\n 導致多了一個空行，必須使用 .push 才可以添加，當然他會從 index 0 開始添加，不過並不重要，我們只是需要答案而已。後面就成功了
+
+另一個方法是：
+
+Array(10) 這樣會出現 10 個空陣列，所以可以利用這個方法來製造，但他有個特性就是空陣列必須有資料才可以變更。
+
+所以要利用 Array(n).fill(0) 才可以做改變，fill(0) 0也可以改變成隨便甚麼東西，因為我們只是需要一個可以變動的陣列
+
+然後再添加 Array(n).fill(0).map(function(value, index) \{\}) 使用 .map 來做改變
+
+```
+function star(n) {
+ let result =''
+ for (let i = 1; i <= n; i += 1) {
+  result += '*'
+ }
+ return result
+}
+```
+
+```
+function markStars(n) {
+ return Array(n).fill(0).map(function(value, index) {
+  return star(index +1) //這樣才會在各自的 index 填入正確的星星數
+ }).join('\n') // 使用 .join 來合併成一個字串
+}
+```
+
+```
+console.log(markStars(5));
+```
+
+## 練習三：好多星星 加強版
+
+請寫出一個函式 stars2，接收一個參數 n，並依照規律印出圖形。
+
+stars2(1) 預期輸出：
+
+-
+
+stars2(3) 預期輸出：
+
+- \*\*
+
+---
+
+\*\*
+
+-
+
+stars2(5) 預期輸出：
+
+- \*\*
+
+---
+
+---
+
+---
+
+---
+
+---
+
+\*\*
+
+-
+
+試著使用 i -= ‘\*’ 但是想當然的不可以這樣使用，於是就思考使用陣列的方法
+
+先讓陣列依序儲存 1 ~ n 個星星，接著再從陣列 0 開始印到陣列 n - 1 之後在倒著印出陣列 n - 2 到陣列 0 的星星。
+
+```
+function stars2(n) {
+ arr = [];
+ let result = '';
+ for (let i = 1; i <= n; i += 1) {
+  result += '*';
+  arr.push(result);
+ }
+ for (let i = 1; i <= n; i += 1) {
+  console.log(arr[i - 1]);
+ }
+ for (let i = (n - 2); i >= 0; i -= 1 ) {
+  console.log(arr[i])
+ }
+}
+```
+
+```
+stars2(3);
+```
+
+解答：解法差不多，只是把印星星的方式給用另外的 function 來實作，
+
+```
+function star(n) {
+ let result =’’
+ for (let i = 1; i <= n; i += 1) {
+ result += ‘*’
+ }
+ return result
+}
+```
+
+```
+function stars2 (n) {
+ for (let i = 1; i <= n; i += 1) {
+ console.log(star(i))
+ // 印 i 顆星星
+ }
+ for (let i = (n — 1); i > 0; i -= 1) {
+ console.log(star(i))
+ // 印 i 顆星星
+ }
+}
+stars2(5);
+```
+
+## 練習四：乘法表
+
+請寫一個函式 table，接收一個數字 n，印出 n*1 ~ n*9 的結果。
+
+table(1) 預期輸出：  
+1*1 = 1  
+1*2 = 2  
+1*3 = 3  
+1*4 = 4  
+1*5 = 5  
+1*6 = 6  
+1*7 = 7  
+1*8 = 8  
+1\*9 = 9
+
+table(7) 預期輸出：  
+7*1 = 1  
+7*2 = 14  
+7*3 = 21  
+7*4 = 28  
+7*5 = 35  
+7*6 = 42  
+7*7 = 49  
+7*8 = 56  
+7\*9 = 63
+
+這邊想試著兩個函式來解這題，所以決定把運算的額外給拉出來。
+
+所以必須有一個函式是運算乘法的結果
+
+先針對這題的想法做解：有一個 n 去乘以 1 ~ 9 然後印出，所有的算式與結果。
+
+n \* 1
+
+n \* 2
+
+n \* 3
+
+…
+
+n \* 9
+
+先試試看 陣列可以導出我要的方式嗎？
+
+```
+var arr = []
+arr[0] = 7 + ‘*’ + 1 + ‘=’ + 1*7
+console.log(arr[0])
+// 7*1=7
+```
+
+確認可以。
+
+然後就根據這樣直接用一個 function 解決了。
+
+```
+function table(n) {
+ let arr = []
+ let result = ‘’;
+ for (let i = 1; i <= 9; i += 1) {
+ result = n * i;
+ arr.push(n + ‘*’ + i + ‘=’ + result)
+ console.log(arr[i-1]);
+ }
+}
+```
+
+```
+table(9);
+```
+
+檢討：這邊說，可以用 console.log(n + ‘_’ + i + ‘=’ + n _ i); 但我之前試用的時候卻不行，但現在試試看卻可以，可能是之前寫的語法問題吧！
+
+```
+function table(n) {
+ for (let i = 1; i <= 9; i += 1) {
+  console.log(n + '*' + i + '=' + n * i);
+ }
+}
+```
+
+```
+table(6);
+```
+
+## 練習五：九九乘法表
+
+請寫出一個 function table9to9，並列出 1*1 ~ 9*9。
+
+table9to9() 預期輸出：
+
+1*1 = 1  
+1*2 = 2  
+1*3 = 3  
+…..  
+5*1 = 5  
+5*2 = 10  
+5*3 = 15  
+….  
+9*7 = 63  
+9*8 = 72  
+9\*9 = 81
+
+這邊就真的需要兩個函式了，不過也超簡單。
+
+```
+function table(n) {
+ for (let i = 1; i <= 9; i += 1) {
+ console.log(n + ‘*’ + i + ‘=’ + n * i);
+ }
+}
+```
+
+```
+function table9to9() {
+ for (let i = 1; i <= 9; i += 1) {
+ table(i)
+ }
+}
+```
+
+```
+table9to9();
+```
+
+雙重迴圈：
+
+```
+function table9to9() {
+ for (let i = 1; i <= 9; i += 1) {
+   for (let j = 1; j <= 9; j += 1) {
+      console.log(i + ‘*’ + j + ‘=’ + i * j);
+   }
+  }
+}
+```
+
+```
+table9to9();
+```
+
+檢討：所以遇到一個大問題的時候，可以先解一小部分，例如先解印出 i _ 1 ~ i _ 9，所以接下來就可以在解決其他問題。
+
+可以寫的 n \* n 乘法表：
+
+```
+function tablenton(n) {
+ for (let i = 1; i <= n; i += 1) {
+   for (let j = 1; j <= n; j += 1) {
+     console.log(i + ‘*’ + j + ‘=’ + i * j);
+   }
+  }
+}
+```
+
+```
+tablenton(4);
+```
+
+## 練習六：費式數列
+
+費式數列的定義為：第 n 個數等於前兩個數的總和，因此這個數列會長的像這樣：1 1 2 3 5 8 13 21 ….
+
+用比較數學一點的講法，就是：
+
+fib(0) = 0  
+fib(1) = 1  
+for n >=2, fib(n) = fib(n-1) + fib(n-2)
+
+現在，請你寫出一個 fib 的函式，回傳位在第 n 個位置的數字
+
+fib(1) 預期回傳值：1
+
+fib(2) 預期回傳值：1
+
+fib(8) 預期回傳值：21
+
+1
+
+1 = 1+0
+
+2 = 1 + 1 = 1 + (0 +1)
+
+3 = 2 + 1 = 2 + (1 + 1)
+
+5 = 3 + 2 = 2 + (2 + 1)
+
+8 = 5 + 3 = 5 + (3 + 1)
+
+...
+
+初步想法也是陣列，但想想其實可以直接用迴圈呼出，所以需要一個初始值來添加
+
+在迴圈內就是 第 n 個等於 第 n - 1 個 + 第 n - 2 個
+
+```
+function fib(n) {
+ let arr = [0, 1];
+ for (let i = 2; i <= n; i += 1) {
+  arr.push(arr[i - 1] + arr[i - 2]);
+ }
+ return arr[n];
+}
+console.log(fib(8));
+```
+
+檢討：
+
+recursion 遞迴：自己呼叫自己
+
+```
+function fib(n) {
+ if (n === 0) return 0;
+ if (n === 1) return 1;
+ return fib(n-2) + fib(n-1)
+}
+```
+
+```
+console.log(fib(8));
+```
+
+這個做法會在輸入之後 一直不停的跑 fib 函式 直到 跑到 n = 0 跟 n = 1 的時候，在一層層的回傳。這個一定要有回傳，才會終止，不然會無限下去。
+
+這樣的方式也似乎太浪費記憶體空間，親自嘗試只能算出 30 幾的數列，在上去就卡住只能強制跳出而已。而迴圈的方法可以到滿大的數字。
+
+## 練習七：字串反轉
+
+請寫出一個函式 reverse，接收一個字串，並且回傳反轉過後的字串。（禁止使用內建函式 reverse）
+
+reverse(“abcd”) 預期回傳值：dcba
+
+reverse(“12345aa”) 預期回傳值：aa54321
+
+```
+function reverse(str) {
+ let result = '';
+ for (let i = (str.length-1); i >=0 ; i -= 1) {
+  result += str[i];
+ }
+ return result;
+}
+```
+
+```
+console.log(reverse('abcd'));
+```
+
+再次忘記不用拆，字串本身也是陣列。
+
+## 練習八：大小寫互換
+
+請寫一個函式 swap，接收一個字串，並且回傳大小寫互換後的字串。
+
+swap(“Peter”) 預期回傳值：pETER
+
+swap(“AbCdE”) 預期回傳值：aBcDe
+
+思路就是判斷是大小寫後在直接變換後儲存到新的陣列接著在把全部加起來後回傳
+
+```
+function swap(str) {
+ let newStr = []
+ for (let i = 0; i < str.length; i += 1) {
+  if (str[i] >= 'a' && str[i] <= 'z') {
+   newStr[i] = str[i].toUpperCase();
+  } else if (str[i] >= 'A' && str[i] <= 'Z') {
+   newStr[i] = str[i].toLowerCase();
+  } else {
+   newStr[i] = str[i]
+  }
+ }
+ return newStr.join('');
+}
+```
+
+```
+console.log(swap('aBcDe'));
+```
+
+檢討：
+
+假設先改小寫為大寫，那麼剩下的也可以使用大寫改小寫了，因為符號不會被影響，所以沒甚麼差異。
+
+```
+function swap(str) {
+ let result = ''
+ for (let i = 0; i < str.length; i += 1) {
+  if (str[i] >= 'a' && str[i] <= 'z') {
+   result += str[i].toUpperCase();
+  } else {
+   result += str[i].toLowerCase();
+  }
+ }
+ return result;
+}
+```
+
+```
+console.log(swap('aBcDe'));
+```
+
+利用 .map() ：可以另外利用 function 運算的內建函式。
+
+```
+function swap(str) {
+ return str.split('').map(function(char) {
+  if (char >= 'a' && char <= 'z') {
+   return char.toUpperCase();
+  } //這裡不用加 else 因為 return 就不會在往下執行了
+  return char.toLowerCase();
+ }).join('')
+}
+```
+
+```
+console.log(swap('aBcDe'));
+```
+
+三元運算子：
+
+```
+function swap(str) {
+ return str.split('').map(function(char) {
+  return (char >= 'a' && char <= 'z') ? char.toUpperCase() : char.toLowerCase()
+ }).join('')
+}
+```
+
+```
+console.log(swap('aBcDe'));
+```
+
+簡化 char，參考用少見
+
+```
+function swap(str) {
+ return str.split('').map(function(char) {
+  return char[(char >= 'a' && char <= 'z') ? 'toUpperCase' : 'toLowerCase']()//有最後面的括號才可以執行
+ }).join('')
+}
+```
+
+```
+console.log(swap('aBcDe'));
+```
+
+## 練習九：找出最小值
+
+請寫出一個函式 findMin，接收一個陣列並回傳陣列中的最小值。（禁止使用內建函式 sort）
+
+findMin([1, 2, 5, 6, 99, 4, 5]) 預期回傳值：1
+
+findMin([1, 6, 0, 33, 44, 88, -10]) 預期回傳值：-10
+
+想法也是取陣列，然後先試著用一個個比較的方式排序比較簡單
+
+或是可以取從第一個比較第二個誰比較小就儲存進最小值變數裡面，然後依序比到最後一個。
+
+```
+function findMin (arr) {
+ for (let i = 0;i < arr.length; i += 1) { //最小值直接存到 arr[0]
+   if (arr[0] > arr[i + 1]) {
+     arr[0] = arr[i + 1];
+   }
+ }
+ return arr[0]
+}
+```
+
+```
+console.log(findMin([1, 6, 0, 33, 44, 88, -10]))
+```
+
+想了很久，最後解出直接把我要的值存到 index 0 去，最後得到答案。
+
+檢討：檢討也是寫兩個 function 而且第一個解法還有用到 .filter()，因為了解的不完全，所以就用 debugger 把它跑了一遍才明白為何要這樣設置
+
+```
+function isSmallest(arr, number) {
+ return arr.filter(function(item) {
+   return item < number;
+ }).length === 0
+}// 這裡的目的是要取得 true，而在這邊會把代入的 number 比較所有的陣列，最後回傳一個新的陣列，回傳之後它會比較這個陣列的長度是不是沒有長度，如果是的話，它就回傳 ture。
+```
+
+```
+function findMin (arr) {
+ for (let i = 0;i < arr.length; i += 1) {
+ if (isSmallest(arr, arr[i])) { // 這個數字是不是陣列中最小的
+// 經過 isSmallest 函式之後，如得到 false 的話，就代表目前迴圈中的這個 index 不是最小數，得到 ture 才是最小數，這時後就回傳這個陣列的值。
+   return arr[i]
+  }
+ }
+}
+```
+
+```
+console.log(findMin([100, 99, 80, 1223, 43, 32, -10]))
+// -10
+```
+
+另一個解法跟我的解答一樣。
+
+## 練習十：找出第 n 小的值
+
+這題是上一題的加強版，上一題只要你找出最小值，而這一題請你寫一個 function findNthMin，接收一個陣列以及一個數字 n，找出第 n 小的數字。**（禁止使用內建函式 sort）**
+
+提示：假設我要找出第 2 小的值，我只要先找出最小的值然後再把它刪掉，再重新找一次最小的值，就會是第 2 小的值了。
+
+findNthMin([1, 2, 3, 4, 5], 1) 預期回傳值：1
+
+findNthMin([1, 3, 5, 7, 9], 3) 預期回傳值：5
+
+findNthMin([1, 1, 1, 1, 1], 2) 預期回傳值：1
+
+.splice() 可刪除陣列中的某個元素
+
+arr.splice(i, 1);
+
+參考上面的寫法來把陣列一個個刪除後求出的第 n 個最小值就是所求，所以要分開寫 function
+
+無論使用 splice 還是 delete 都發現刪除了第一個之後第二個無法刪除，使用 splice 發現迴圈遞增的過程因為有刪除陣列，所以變成會直接跳過原先的 index 1 ，所以不能這樣解。
+
+試著改用 delete 但經過測試發現，只要陣列有空就會無法找出最小數。
+
+我每次呼叫找最小值陣列的時候，都會給予一個新的刪減過的陣列
+
+然後試著研究一下怎麼知道要刪哪一個才對
+
+想半天不知道該怎麼解，於是就先去睡了。
+
+### 隔了了一天後
+
+試著找出最小值，然後添加進新陣列
+
+findNthMin([1, 2, 3, 4, 5], 1)
+
+進行方式：
+
+1. 先找出最小值，找到了是 min (函式)
+2. 刪除 min，陣列變短(成 [2, 3, 4, 5]) (函式)
+3. 回到步驟一，重複 n 次找出第 n 個最小值 (函式)
+
+或是另一種想法，找到最小值後添加進，新陣列，然後刪除就陣列的最小值，但這樣好像有點多此一舉
+
+以上想法很亂
+
+最後是按照進行方式解出答案的：
+
+```
+function findMin (arr) {
+ let min = arr[0];
+ for (let i = 0;i < arr.length; i += 1) {
+   if (min > arr[i]) {
+     min = arr[i];
+   }
+ }
+ return min;
+} //可以找出最小值的陣列
+```
+
+```
+function deleteMin (arr, del) { // 實作出刪除陣列的 function
+  for (let i = 0;i < arr.length; i += 1) {
+    if (arr[i] === del) {
+      return arr.splice(i, 1);
+      // return 不可以直接寫在這裡，這邊只會得到刪除的值
+    }
+  }
+}
+```
+
+```
+function findNthMin(arr, n) {
+ let min
+ for (let i = 1;i <= (n - 1); i += 1) {
+   min = findMin(arr);
+   arr = deleteMin(arr ,min);
+   }
+ return findMin(arr); // 直接把刪過的陣列找出最小值
+}
+console.log(findNthMin([1, 2, 3, 4, 5], 5))
+```
+
+在這邊可以感受到老師說的，把問題切割之後再解，因為前面的題目我幾乎都沒再分割解的，所以我這題才會卡這麼久吧？我從昨天晚上八點寫到十點寫不出來，然後睡覺也在思考，怎麼解。還去利用 Google 的 debugger 試了好多次，早上又花了一個小時多才解出來，一度差點想放棄去看解答，卻又覺得怎麼可以這樣呢！！好在多想了一陣子之後，最終還是解出來了，解出的瞬間整個超開心的。
+
+老師的解答：
+
+老師的方法是回傳，最小值的 index，寫出後可以先驗證一下是否是對的，特別寫出是因為我剛剛解題時有這樣子做，才把我的分開寫的函式一一給拼湊起來，就像在拼拼圖一樣。
+
+找出最小的 index 這個方式，在我解題的時候也有這個想法，但是沒有寫下來，所以把有想到的想法寫下來真的會比較好，雖然本來就有在寫了，但是卻沒有真的全部寫下來，實為可惜。
+
+```
+function findMin (arr) {
+ let min = arr[0];
+ let minIndex = 0;
+ for (let i = 0;i < arr.length; i += 1) {
+   if (min > arr[i]) {
+     min = arr[i];
+     minIndex = i
+   }
+ }
+ return minIndex
+} //可以找出最小值的 index
+```
+
+```
+function findNthMin(arr, nth) {
+ for (let i = 1;i <= (nth — 1); i += 1) {
+   let minIndex = findMin(arr);
+   arr.splice(minIndex, 1);
+ }
+ const realMinIndex = findMin(arr);
+ return arr[realMinIndex];
+}
+console.log(findNthMin([1, 1, 1, 1, 1], 2))
+console.log(findNthMin([100, 99, 80, 1223, 43, 32, -10], 3))
+```
+
+收穫：
+
+真不愧被稱為 Lv2 難度明顯比 Lv1 高個幾層，導致我一直有卡住的狀況發生。也在這其中慢慢地熟悉了 JavaScript 的用法，以及各種內建函式。這次實作了 99 乘法表，讓我對自己的信心大增，而且我還能夠做出 19\*19 的乘法表等等，也體認到了，把函式分開寫的方便性，尤其最後一題，一個功能我就寫一個函式。雖然結果最後寫得比老師的解答複雜了一些，因為我寫了三個函式，但也是一種可以成功解答的方式，就好像拼圖一樣，一塊一塊地把他拚上去。最後一題我也卡的最久，一直不停地變換思維，最後才終於做出結果，作出來後的感覺非常舒暢。

@@ -1,0 +1,74 @@
+---
+title: "網路基礎概論：補充資料"
+slug: "網路基礎概論-補充資料"
+description: "session 與 cookie"
+date: 2019-05-13T06:29:20.364Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%B6%B2%E8%B7%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E8%AB%96-%E8%A3%9C%E5%85%85%E8%B3%87%E6%96%99-b33ac4a05cbb"
+---
+
+## session 與 cookie
+
+登入功能
+
+1. 瀏覽登入網頁，發送 request
+2. server 收到回應，回傳 response
+3. 瀏覽器解析 response，出現登入頁面
+4. 填入帳號密碼，送出
+5. 瀏覽器送出 request，並且帶有帳號密碼
+6. Server 收到請求，去資料庫查詢是否有紀錄
+7. 資料返回結果
+8. Server 回傳 response，登入成功
+9. 瀏覽器解析 response，出現登入成功頁面。
+
+登入完成以後，Server 怎麼知道剛剛是同一個人
+
+背後的原理其實就是「識別證」
+
+就是利用 Session，Session ID 裡面會放一串數字+英文，對應到一些內容，像是帳號等資訊，這些 Session ID 是如何對應的只有 Server 知道。
+
+Cookie 讓瀏覽器儲存資訊的地方 Server 可以要求瀏覽器設置 Cookie 每個 request ，瀏覽器都會把 Cookie 帶上來
+
+1. 登入完成之後， Server 設置 SessionId = fge9ew1d, (user=nick)
+2. Server 回傳 response 並且要求瀏覽器在 cookie 內放入 fge9ew1d 這個 id
+3. 瀏覽下一個頁面，發送 request 給 Server
+4. 瀏覽器自動代上 cookie 裡的值：fge9ew1d
+5. Server 利用帶上來的值去查，發現有資料
+6. Server 確認這個人就是 nick
+
+總而言之，就是登入之後會給你一張識別證，下次再來的時候，出示識別證就知道你是誰了。
+
+**重點：只認識別證，不認人。**
+
+## 網頁為什麼會跑版－－了解瀏覽器
+
+HTML 是框架、身體，CSS 是外觀、衣服，JavaScript 則是程式與互動。
+
+一個網頁分成三個部分 HTML、CSS、JavaScript
+
+### HTML
+
+網頁的內容、骨架、身體是一個網頁最重要的一部分。
+
+HTML 就是用標籤去撰寫的，可以用任何的文字編輯器撰寫。瀏覽器會解析這些標籤，然後幫我們轉換成特定的格式
+
+### CSS
+
+網頁的衣服，負責把網頁打扮的漂漂亮亮。
+
+網頁的美觀，讓網頁看起來更好看。
+
+http://www.csszengarden.com/tr/zh-tw/
+
+這個網頁 它的HTML 其實都一樣，但是因為 CSS 所以每個網頁看起來差非常多。
+
+### JavaScrip
+
+網頁的互動。程式碼，讓網頁可以跟使用者互動
+
+彈出視窗或是滑鼠移動的時候會變換圖片。
+
+可以從開發者工具看得到，很多的相關資訊。
+
+收到 response 以後，會由瀏覽器負責顯示，大家收到的都是一樣的東西，卻會出現不一樣的結果，為什麼？就有點像是翻譯文字，每個人翻譯的都不太一樣。所以瀏覽器的翻譯也有一個標準，如果大家都遵守那個標準，那結果就會差不多。

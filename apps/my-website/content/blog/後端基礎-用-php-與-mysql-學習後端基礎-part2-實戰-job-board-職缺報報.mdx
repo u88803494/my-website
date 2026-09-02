@@ -1,0 +1,718 @@
+---
+title: "後端基礎：用 PHP 與 MySQL 學習後端基礎 part2 實戰 Job board 職缺報報"
+slug: "後端基礎-用-php-與-mysql-學習後端基礎-part2-實戰-job-board-職缺報報"
+description: "永遠的第一步，思考這個產品的全貌"
+date: 2019-07-03T12:11:35.128Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*scDujGdniovV9y7yyUoleA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E7%94%A8-php-%E8%88%87-mysql-%E5%AD%B8%E7%BF%92%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-part2-%E5%AF%A6%E6%88%B0-job-board-%E8%81%B7%E7%BC%BA%E5%A0%B1%E5%A0%B1-4edf3e0d27ab"
+---
+
+## 永遠的第一步，思考這個產品的全貌
+
+要寫出一個管理後台，可以管理職缺，有基本的 CRUD。還要實作簡單的前台讓大家看到有哪些職缺。
+
+得到這個需求之後，第一步，必須要有大致上的輪廓。通常都是 PM 會處理好。
+
+通常會使用 user story 使用者故事來描述所需要作到的事情以及功能。
+
+1. 身為一個使用者，我可以看到職缺
+2. 身為一個使用者，我可以看到薪水範圍
+3. …
+
+一個重點是，必須要有：管理後台以及前台
+
+-
+
+前台，可能需要一個 list，展現出所有職缺的頁面，順便取名頁面的檔名。
+
+```
+index.php // 展現所有職缺
+**
+***
+*
+****
+```
+
+我們可能會需要一個功能，就是查看單一職缺的詳細訊息。所以要有一個頁面來呈現，那可能需要檔案，後面接那個職缺的 ID。（題目沒要求，但還是可以實作）
+
+```
+job.php?id=1
+```
+
+-
+
+管理後台：
+
+admin.php 顯示所有職缺
+
+add.php 新增職缺
+
+update.php 更改職缺
+
+刪除職缺，因為比較簡單，也許可以直接做在 admin.php 上面，只要有個叉叉，按下去就可以刪除。
+
+在第一階段，就必須要想出來，可能會有哪些頁面，這些頁面需要做些什麼事情。像是新增職缺的部份，可能只是一個可以放入資料的頁面，而實際送上伺服器，可能又需要另外一個 php 來處理，協助真的把資料上傳，handle_add.php 這其實只是一個功能性的 php 也許根本沒有頁面。這就只是協助真的上傳資料，上傳之後會在返回顯示所有職缺的頁面。
+
+然後產品也不可能一開始就全部定調完成。所以有可能隨著實作的部份，就發現需要新增頁面，那就留待碰到的時候再來思考了。
+
+總而言之，前台需要：
+
+index.php 展現所有職缺
+
+job.php?id=1 展現單個職缺
+
+管理後台：
+
+admin.php 顯示所有職缺
+
+add.php 新增職缺
+
+handle_add.php 下 SQL 指令新增職缺，不需要畫面
+
+update.php 更改職缺
+
+這部份就只是思考一下，大概有整畫面，可能的話，可以以之前看過得東西為藍圖。
+
+## 規劃出需要的資料結構
+
+什麼是資料結構呢？就是對於一個主題，要去思考會需要哪些資料。這一般來說是 PM 的職責，不過工程師如果懂這個也很好。
+
+以這個職缺來說，就是要思考會需要儲存哪些資料。大概可以知道會有什麼樣的流程。這可以度練思考的流程。
+
+職缺：
+
+1. 職缺名稱
+2. 職缺說明
+3. 薪資範圍
+4. 職缺連結
+
+這邊可以弄出更多東西，但因為只是一個練習，所以只需要把基本中的基本做出來即可。
+
+只要決定需要呈現哪些資料即可。
+
+接下來就是決定如何設定 datebase 的 schema
+
+## 設定 Database
+
+接下來就是要在資料庫開一個 table 儲存這些資料
+
+table name: jobs
+
+id, AI
+
+title, VARCHAR(64)
+
+description, TEXT
+
+salary_ranger_down 30000
+
+salary_ranger_down 50000
+
+薪資範圍就必較有趣了，因為他是一個範圍的話，有的人會用面議或是別的形式表達。所以最後還是改完字串讓人自己填就好。所以改用：
+
+salary, VARCHAR(64)
+
+link, VARCHAR(512)
+
+所以是預計資料庫長這樣，這樣就可以先創立 table 了
+
+通常會想要知道什麼時間創造的，所以就會創造一個 create at
+
+接下來就是刻頁面了。
+
+## 實作前端頁面
+
+接下來我們就需要一個畫面來讓我們可以預想怎麼樣把東西串起來。實際上，先不用真的串起資料來，我們只要先做出一個靜態的頁面即可。
+
+先完成頁面的好處是只要之後再把資料串起來即可。因為如果想要一起做的話，相對上來說會比較麻煩。而一般有規模一點公司都會有個設計師來先設計好版面，我們只需要按照設計稿把畫面做出來就好。就是把設計稿作成 HTML 跟 CSS。
+
+index.php:
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c49719b4a2e84bd1cd7cf0544715da5e)
+
+在這邊的時候，居然有一種熟悉感油然而生，好像找到老朋友那種感覺。也因為這邊是之前的學過的東西，所以筆記就不寫得這麼詳細了。
+
+寫出來的就如同這樣了。接下來是做後台，是直接複製原來的 index.php 之後再做修改。
+
+-
+
+admin.php：
+
+後台因為管理的關係。所以先把更多資訊改成編輯職缺、刪除職缺。然後在上面新增一個新增職缺。接著就是要寫 add.php 新增的部分。
+
+```
+<a href="./add.php">新增職缺</a>
+```
+
+add.php：
+
+因為東西都長差不多，所以直接複製之後修改。刪除職業的部分，然後把add.php 的連結改成連到 admin.php 並且把名稱改為回到管理頁。
+
+```
+<a href=”./admin.php”>回到管理頁</a>
+```
+
+也因為需要上傳資料。所以需要一個表單，並把需要的資料切出來，有個樣子。加個按鈕就完成了。
+
+```
+<form action="./handle_add.php" method="post">
+  <div>職缺名稱：<input type="text" name="title" /></div>
+  <div>職缺名稱：<textarea name="description" id="" cols="" rows="10"></textarea></div>
+  <div>職缺名稱：<input type="text" name="salary" /></div>
+  <div>職缺名稱：<input type="text" name="link" /></div>
+  <input type="submit" value="送出" />
+</form>
+```
+
+## 實作後台功能並與資料庫串接
+
+前台跟後台的界面都已經設置好了。接下來就是實際串上資料庫，實作一些功能。
+
+-
+
+在這裡，需要把資料利用一個 handle.php 上傳上去。也就是說，前面製作的填入資料頁面，在送出之後，必須要用另外一個 php 程式去做一些事情，才可以把資料上傳給伺服器。
+
+因為必須要拿到資料之後才可以上傳資料庫。所以就必須要確保有拿到資料。
+
+```
+<?php
+```
+
+```
+$title = $_POST['title'];
+$desc = $_POST['description'];
+$salary = $_POST['salary'];
+$link = $_POST['link'];
+```
+
+```
+echo $title . ' ' . $desc . ' ' . $salary . ' ' . $link;
+```
+
+```
+?>
+```
+
+這邊打錯之後，就可以修改一下，之後直接重新整理。會彈出一個視窗，直接按繼續，就會重新傳送資料了。可以這樣說，因為原本我們是 post 一些資訊出去，這時候重新整理之後就會重新 post。所以等於是用剛剛的內容重新提交一次。
+
+![](https://cdn-images-1.medium.com/max/800/1*fvQxio3d7m224JGptSTNXg.png)
+
+然後就可以透過 echo 有無叫出資料來確認有拿到資料。
+
+所以就可以做一個簡單的判斷。資料是否為空。
+
+```
+if (empty($title) || empty($desc) || empty($salary) || empty($link)) {
+  die（'資料不能為空');
+}
+```
+
+接下來就是寫資料庫的部份。要寫出資料庫的資料，像是位置、使用者名稱、密碼、資料庫名稱。接著 new 一個 sqli 並把資料放進去賦值給 conn。
+
+然後要檢查有沒有成功連上去，就要利用 connect_error 屬性來判斷，使用
+
+```
+$conn->connect_error
+```
+
+這邊是用箭頭去存取資料。就類似於 JavaScript 的物件使用
+
+```
+var obj = {a: 1}
+```
+
+JavaScript 存取使用 obj.a 而 PHP 則是使用 -> 來存取，兩者只差在符號。
+
+-
+
+就可以寫出判斷來判斷有沒有錯誤訊息產生。如果有，就把錯誤訊息印出。
+
+```
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) { // 檢查有沒有錯誤
+  die('connection failed:'. $conn->connect_error); // 有的話，停止執行並印出錯誤
+```
+
+補充資料：[PHP 的 isset & empty 差異](https://newaurora.pixnet.net/blog/post/171735396-php-isset%28%29%E5%92%8Cempty%28%29%E7%9A%84%E5%8D%80%E5%88%A5)
+
+發現可以通過之後，就來寫 sql 的指令。這邊需要把指令傳入一個變數
+
+```
+$sql = "INSERT INTO jobs(title, description, salary, link)
+  VALUES('$title', '$desc', '$salary', '$link')";
+```
+
+因為 php 結尾一定要用分號，所以太長就可以自己斷行來寫。**然後在這邊使用雙引號就可以存取變數，所以就把變數直接帶進去**。在這邊也可以直接印出來看看有沒有成功。
+
+接著就可以把這個指令上傳
+
+```
+$result =$conn->query($sql);
+// 會回傳 true or false，就可以用來判斷有無成功。
+if ($result) {
+  echo 'success';
+} else {
+  echo 'failed, ' . $conn->error ; // 顯示錯誤並印出錯誤訊息。
+}
+```
+
+這樣就大致完成了。
+
+而我們會發現到資料庫連接的部份，不只是這邊會用到，所以可以另外用一個檔案包裝起來。要用的地方在另外引入即可。
+
+conn.php:
+
+```
+<?php
+$servername = 'localhost';
+$username = '';
+$password = '';
+$dbname = '';
+```
+
+```
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) { // 檢查有沒有錯誤
+  die('connection failed:'. $conn->connect_error); // 有的話，停止執行並印出錯誤
+}
+?>
+```
+
+另外一點是成功上傳之後應該要導到其他地方去。所以就修改一下：
+
+```
+$result =$conn->query($sql);
+// 會回傳 true or false，就可以用來判斷有無成功。
+```
+
+```
+if ($result) {
+  header('Location: ./admin.php');
+  // 這裡的用意是給一個 header，告訴瀏覽去要去的位置，就會轉跳過去。
+} else {
+  echo 'failed, ' . $conn->error ; // 顯示錯誤並印出錯誤訊息。
+}
+```
+
+接著試著用中文上傳，確定可以上傳之後，會發現資料庫都是亂碼。原因是資料庫在連線的時候，必須要把編碼設定好，不然就會出現亂碼。
+
+也就是說連線完之後，要設定編碼。就必須要在 conn.php 上面設置一行編碼的指令。粗體部份。
+
+```
+conn.php：
+```
+
+```
+<?php
+$servername = 'localhost';
+$username = '';
+$password = '';
+$dbname = '';
+```
+
+```
+$conn = new mysqli($servername, $username, $password, $dbname);
+$conn->query('SET NAMES UTF8'); // 改變編碼
+if ($conn->connect_error) { // 檢查有沒有錯誤
+  die('connection failed:'. $conn->connect_error);
+  // 有的話，停止執行並印出錯誤
+}
+?>
+```
+
+後台的部份就大致完成了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/9272ebf279d4e84a0c3bab67c9f037ae)
+
+這樣子，就可以成功的把職缺新增到資料庫了。接下來就是要寫出如何把資料撈出來。
+
+## 撈取資料庫資料
+
+打開 index.php 然後在第一行新增 php 語法。然後引入資料庫資料。
+
+接著在需要變動資料的部份新增 php 標籤。一樣要先新增 $sql 去接收選資料指令。
+
+```
+$sql = "SELECT * FROM jobs ORDER BY created_at DESC";
+```
+
+然後把上傳資料的指令賦給 $result ，這樣之後才可以呼叫
+
+```
+$result = $conn->query($sql);
+```
+
+接著就可以利用 $result 的屬性去撈資料。透過 num_rows 來得知總共有幾筆資料，如果大於 0 筆（也就是有 1 筆以上），就透過 fetch_assoc() 來取得資料。
+
+> fetch_assoc() 的作用是可以拿到一筆資料，而當拿不到資料之後，就會回傳 false
+
+```
+if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+ $result->fetch_assoc();
+}
+```
+
+為了要可以取得所有資料，就可以利用 while 迴圈包起來。
+
+```
+if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+ while($result->fetch_assoc()) {
+
+ }
+}
+```
+
+當有資料的時候，就是 true，就會執行 while 迴圈裡面的資料，而當回傳是 false 沒有資料之後，就會跳出 while 迴圈。
+
+while 迴圈裡面就可以放需要顯示的資料。裡面有兩種寫法。一個是使用 echo，直接印出需要的標籤跟資料。另外一種是使用中斷 php 放一些 html 標籤，然後在用 php 去執行。第二種會長得像下面那樣：
+
+```
+if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+ while($result->fetch_assoc()) {
+  ?>
+    <div> hello world </div> // 可以寫 html
+  <?php // 繼續 php 的部份。
+ }
+}
+```
+
+這邊先使用 echo 的方式。利用 echo 的方式還有一點要小心，因為在寫標籤的時候，class name 必須要用引號包住，所以這時候 echo 包住的部份就要改用另外一種引號， class name 才可以可以保持原來的，否則字串的判斷就會失準。在這邊測試之後發現，只需要引號不同就可以正常顯示。
+
+```
+if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+ while($row = $result->fetch_assoc()) {
+  echo $row['title'];
+  echo '<div class="job">';
+  echo   '<h2 class="job__title">' . $row['title'] . '</h2>';
+  echo   '<p class="job__desc">' . $row['description'] . '</p>';
+  echo   '<p class="job__salary">薪水範圍' . $row['salary'] . '</p>';
+  echo   '<a class="job__link" href="' . $row['link'] .
+   '">更多資訊</a>';
+  echo "</div>";
+ }
+}
+```
+
+利用這段就可以正確呈現網頁。
+
+![](https://cdn-images-1.medium.com/max/800/1*scDujGdniovV9y7yyUoleA.png)
+
+接著因為後台也需要呈現，也可以把這段套用到後台並做小修改 admin.php：
+
+```
+<?php
+ $sql = "SELECT * FROM jobs ORDER BY created_at DESC";
+ $result = $conn->query($sql);
+ if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+  while($row = $result->fetch_assoc()) {
+   echo $row['title'];
+   echo '<div class="job">';
+   echo   '<h2 class="job__title">' . $row['title'] . '</h2>';
+   echo   '<p class="job__desc">' . $row['description'] . '</p>';
+   echo   '<p class="job__salary">薪水範圍：' .
+     $row['salary'] . '</p>';
+   echo   '<a class="job__link" href="./update.php?id=' .
+     $row['id'] . '">編輯職缺</a>';
+   echo   ' <a class="job__link" href="./delete.php?id=' .
+     $row['id'] . '">刪除職缺</a>';
+   echo "</div>";
+  }
+ }
+?>
+```
+
+這裡比較需要思考的是 link 的設置，因為有很多屬性要設置，中間還要使用伺服器的資料。所以需要思考一下之後在編寫，才不會亂掉。
+
+![](https://cdn-images-1.medium.com/max/800/1*AIUNSHz9KokjjaZJ7VJS_Q.png)
+
+index.php：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/03ba68358a5de154858b20976a1a5102)
+
+admin.php：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/5c76cd29982ec1f896bf5be7247a0fe8)
+
+所以接下來就可以開始實作刪除跟編輯的功能了。
+
+## 實作編輯與刪除功能
+
+在刪除功能這邊當我們點下去之後，是使用 get 的形式傳上去的。什麼是 get 的形式呢？ 就是 /admin.php?key=value&a=b，所以就可以新增一個 delete.php 來寫入 php 的程式碼。
+
+在寫之前，可以先確定一下網址能不能讓我們拿到要的都東西。
+
+所以先寫個
+
+```
+<?php
+  $id = $_GET['id'];
+  echo $id;
+?>
+```
+
+發現按下去之後會印出相對應的 id，所以是 ok 的。剩下來要做的就是把 id 的資料刪掉而已。
+
+```
+<?php
+  require_once('./conn.php');
+  $id = $_GET['id'];
+  $sql = "DELETE FROM jobs WHERE id = " . $id;
+  echo $sql;
+  if ($conn->query($sql)) { // 直接把資料送上去，之後判斷回傳值。
+    header('Location: ./admin.php');
+  } else {
+    echo "failed:" . $conn->error;
+  }
+?>
+```
+
+按了之後確認到可以刪除。
+
+接著測試一下，試著直接使用網址給它一個不存在的 id：
+
+```
+/admin.php?id=999999999999
+```
+
+結果還是會成功。因為在這邊成功的判斷是指令有沒有執行成功。
+
+-
+
+接著是編輯的部份。先利用同類型的 add.php，直接複製改檔名之後修改。
+
+在這邊因為需要編輯資料，所以必須要抓取伺服器上的資料之後填入，這樣才可以做修改。
+
+跟新增頁面一樣，需要有一個 php 程式來處理資料，所以 form 的 action 需要連到另外一個處理的 php 檔案
+
+```
+<form action="./handle_update.php" method="post"></form>
+```
+
+一樣寫好指令之後上傳資料
+
+```
+<?php
+ require_once('./conn.php');
+ $id = $_GET['id'];
+```
+
+```
+$sql = "SELECT * FROM jobs WHERE id = ". $id;
+ $result = $conn->query($sql);
+ $row = $result->fetch_assoc();
+?>
+```
+
+先寫到這邊 row 應該就會抓到資料。
+
+所以先試試看能不能抓到資料。就先更改 html 的部份。
+
+有的是透過 value=”” 的方式，把資料自動填入。有的則可以直接放在標籤內。
+
+```
+<form action="./handle_update.php" method="post">
+ <div>職缺名稱：<input type="text" name="title" value=
+   "<?php echo $row['title']?>"/></div>
+ <div>職缺描述：<textarea name="description" id="" cols="" rows=
+   "10"><?php echo $row['description']?></textarea></div>
+ <div>薪水範圍：<input type="text" name="salary" value="<?php
+   echo $row['salary']?>"/></div>
+ <div>職缺連結：<input type="text" name="link" value="<?php
+   echo $row['link']?>"/></div>
+ <input type="submit" value="送出" />
+</form>
+```
+
+當點擊進去之後，發現確實可以自動填入內容了。
+
+![](https://cdn-images-1.medium.com/max/800/1*WnCH_uJnpBetZ0pgDqVHKg.gif)
+
+所以就完成一半的功能了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/15834b2a9885428d3d236938e1348071)
+
+而 handle_update.php 的工作其實跟 handle_add.php 十分類似，所以一樣可以複製 handle_add.php 之後修改。
+
+修改 sql 命令：
+
+```
+$sql = 'UPDATE jobs SET title="$title", description="$desc",
+salary="$salary", title="$title"';
+```
+
+改了之後，發現可以變動資料了，卻發現，全部的資料都被改了。因為沒有加上 where 去選擇要變動的資料，所以就全改了。
+
+所以為了要變動資料，必須要讓頁面可以判斷要更改的是哪個資料。所以要用一個 input 然後隱藏起來。讓它帶著 id 的資料。
+
+```
+<input type="hidden" name="id" value="<?php echo $row['id']?>">
+```
+
+這樣就可以傳 id 給 handle_update.php
+
+就可以修改資料去接收。
+
+```
+$id = $_POST['id'];
+```
+
+```
+$sql = 'UPDATE jobs SET title="$title", description="$desc"
+, salary="$salary", title="$title" WHERE id = ' . $id;
+```
+
+## 小總結
+
+在這邊學習的目的：
+
+1. 如何使用資料庫的指令。update、add、insert、delete。
+2. 表單的資料如何傳遞以及怎麼傳給另外一個頁面。
+
+最基本的功能大致就是這樣。
+
+剩下就是自主練習，只有基本的講解，所以下面的內容會是我自己對於怎麼解題的思考。
+
+## 進階練習：加上職缺到期日
+
+在新增的時候，應該要可以新增一個欄位是可以選擇時間，什麼時候到期。這個時間可以在前台看見或只限後台看見。總而言之，就是時間到了，在前台就看不到資料了。不是被刪掉，只是還在資料庫裡面。
+
+-
+
+目前想法。用時間做判斷，判斷超過時間就隱藏資料。
+
+直接開始寫，想試著上傳卻傳不上去，於是我測試看看可否下載，就修改伺服器的時間，之後用 update.php 去下載，發現是可以下載的格式是 2019–07–03。然後根據這樣要去測試一下，我輸入的值 echo 出來是什麼樣子。實際也是 2019–07–03，所以最後發現是語法錯誤，才導致一直失敗。接著就是在前端寫判斷時間，所以要研究一下如何判斷時間。
+
+```
+$due = '2019-07-02';
+```
+
+```
+$datetime = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y')));
+```
+
+```
+echo $datetime;
+if($datetime === $due) {
+  echo '成功得知時間';
+}
+```
+
+利用這樣就可以判斷，後續在用伺服器測試看看能不能直接用。發現不行，必須要加上一個函式轉換之後才可以做比較。
+
+[PHP strtotime() 函数](http://www.w3school.com.cn/php/func_date_strtotime.asp)
+
+所以就判斷一下，讓截止日期大於等於現在時間的資料印出即可。也就是說只讓截止日期還沒到的印出資料就好。這樣前台的部份就完成了。
+
+```
+if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+ while($row = $result->fetch_assoc()) {
+  // 判斷寫這邊。
+  $due_date = $row['due_date'];
+  $datetime = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y')));
+  if (strtotime($due_date) >= strtotime($datetime)) {
+   echo '<div class="job">';
+   echo   '<h2 class="job__title">' . $row['title'] . '</h2>';
+   echo   '<p class="job__desc">' . $row['description'] . '</p>';
+   echo   '<p class="job__salary">薪水範圍：' . $row['salary']
+    . '</p>';
+   echo   '<a class="job__link" href="' . $row['link'] .
+    '">更多資訊</a>';
+   echo "</div>";
+  }
+ }
+}
+```
+
+剩下後台的部份也不難，就是新增一個 echo 然後印出到期日即可。
+
+剩下就是送出資料修改跟送出的部份修改一下即可。
+
+### 總結：
+
+1. add.php 預設顯示 http:// 以方便輸入。
+
+2. 試著加上職缺到期日欄位
+
+3. 修改 handle_add.php、handle_update.php 使之可以送出資料給伺服器。
+
+4. index.php 新增判斷式。還沒到期的才印出資料。
+
+5. update.php 新增到期欄位。預想之後可以改成到期的出現提示。
+
+## 進階練習：新增排序功能
+
+跟我想的排序不太一樣。就是要自行決定順序。簡單來說，就是多一個可以選擇強制的排序的位置較高。
+
+以題目來說，因為一定不可能每個都選擇排序。所以這邊就必須要分開兩段去寫。一段是強制排序的部份，有撈到強制排序有資料，就以那邊為準先行排序。所以必須要多一個欄位是強制排序的資料。還必須要設置預設值，看能不能設成 false 或是其他的。
+
+排完之後，在交給原始的排序，但不能重複資料。這邊有想到廣告應該也是這樣子做的，所以要不要重複，也是一個思考的點。不過我想我會試著做出排除強制排序的部份，因為已經排序過了。
+
+從 index.php 下手難度比較高，所以先從 MySQL 建立一個 priority 來決定優先權，當然是數字越大優先度越高。
+
+本來想用判斷式來判斷資料之後在決定印出，後來想到可以直接使用 SQL 抓資料的時候，按照優先度即可。就不用另外判斷了。
+
+```
+SELECT * FROM `jobs` WHERE priority > 0 ORDER BY priority DESC
+```
+
+這樣就可以抓取到有優先度的資料了。然後數字大的在上面。所以就可以在 index.php 嘗試印出來。
+
+發現確實可以印出來之後，就只要在 admin 等等去添加優先度的欄位即可。
+
+也發現說這樣分開寫的話，會有很大部份的重複，所以就決定試著用 function 包起來處理。但卻發現 php 的 function 好像不會往外面抓取變數？所以就一直報錯。後來測試之後，確實是這樣。只要不寫變數傳入，就不行。所以就要直接連請求 ./conn.php 的部份也直接一起寫入 function 即可。
+
+結果卻發現不第二段出不來，找了一陣子，發現是 require_once 改成 require 就成功了。大概是因為那樣所以不能重複請求吧？接下來試試看能不能維持 require_once 的狀態啟用 function。發現可以了，原來是我忘記在呼叫的時候傳入。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/a594b09a1167870a5b8ec91cd4faee83)
+
+-
+
+實作 admin.php 顯示優先度，這裡就照通常排序。只有添加一個優先度的欄位。
+
+剩下的都不難，就只是新增欄位，然後改值。這邊就不弄出來了。
+
+### 總結：
+
+1. 資料庫新增 priority，以數字越大優先度越高。
+
+2. index.php 的部份因為要先印出高優先度。所以把印出的部份另外用 function 包起來。使用時呼叫。
+
+3. admin.php 按照創造時間排序。並多一列顯示優先度。
+
+4. add.php 添加上傳欄位，並變動 handle_add.php 使可以上傳資料。
+
+5. update.php 及 handle_update.php 可以修改優先度。
+
+## 魔王練習：開放會員註冊並且管理職缺
+
+因為管理的頁面通常是只有管理者知道位置。而這邊就是要讓人有管理權限。要在 index.php 上面新增一個頁面可以註冊或登入。然後就可以進入後台，然後只能夠新增、編輯、刪除自己的職缺，每個人有不同的管理後台。當然自己有一個 super admin，可以一次管理所有人的職缺。這就牽扯到權限上的設置。所以是很有難度的。可以從讓人獨立帳號可以新增職缺開始試試看。
+
+-
+
+因為我進度有點落後，所以這個部份就先不做了。但我認為我還是要好好思考一下可以怎麼做，這樣之後哪天要做的時候，就可以回來實作。
+
+權限也可以用一個欄位來表明，但是分辨大家的資料就需要思考一下。也許可以利用新增 table 的方式來讓每個人的資料都不同。但這意味著要讓大家可以擴充資料庫，這好像有點難度。所以我認為這邊應該也是透過資料庫的資料分類來讓我們可以達到這樣的事情。
+
+在註冊方面，註冊了之後應該會進入一個 admin，然後帶著帳號的資訊。所以一切的一切都是透過網頁上面的帳號去處理。這個帳號可以管理的職缺，應該也是透過這樣來分辨。所以在管理頁面的時候。需要資料來判斷，只有符合這個人的才會呈現出來。否則就隱藏，這樣也因為 php 的特性，其他人的資料並不會被撈到，所以就是檢視原始碼也找不到。
+
+然後這樣子之後，index.php 的呈現也有難點度了。因為需要讓大家的資料都可以直接呈現。如果用分開 table 的方式的話，要呈現就有困難。但如果單用一個 table 來讓大家的職缺都新增上去。然後在透過帳號欄位來確認這個是誰的資料。所以比對的時候，只要符合這個帳號就呈現上去。並且可以管理職缺。然後 super admin，就是無論怎麼樣都可以通過這個條件，也就是所有的資料都看得到，那當然也就可以管理了。
+
+登入系統應該就需要另外使用一個單獨的 table。
+
+目前就先寫到這樣子就好了。
+
+## 魔王練習：管理員可以審核職缺
+
+這題接續上題。提供一個功能就是管理員可以去審核職缺，意思就是會員發怖職缺之後，職缺會變成審核中。然後管理員可以去審核職缺，當然也可以把職缺下架。這樣其實會要實現很多功能，才可以讓管理員跟會員有互動。在這邊最主要就是讓管理員可以審核職缺，審核過得才會出現，沒過得就不會出現了。
+
+-
+
+審核職缺的部份。比較難以思考，因為是跟上一題有關連。不過在這邊也做了一點想法，根據前面的作法是在文章的資料中帶著 username 的資料去跟帳號做 match 來判斷是誰的文章。這邊可以利用用同樣的方法，可以在 post 的時候，利用一個資料作為狀態的管理。而預設值就是上傳之後會加上一個 資料讓狀態是審核中，然後在前台跟後台呈現的時候，在資料的呈現上，會先經過判斷式去判斷是不是審核中。是的話，前台就不顯示，而後台還是會顯示，但是另外加上一個審核中的 mark 來標示。這樣想一想發現還真的會有很多情要做。因為管理者界面也還要新增一個選項，讓管理者可以審核資料等等的。當然這樣子坐下來之後，會產生更多的細節要實作，所以的確也是個滿有難度的題目。
+
+## 總結：
+
+總結這段，學到了產品如何從最開始的制定到最後規劃，接著是實作的部份。從這段中間，可以了解到原來一個產品是從這樣子的流程到最後做出可以實際運行的樣子。當然這些內容中，產品的外觀那些都還是可以再去優化，然後整體的使用設計也可以在更好等等的都可以再去做更精緻的處理。不過這些都不是主題，所以我也就沒有去做太多的處理。因為我只是需要有做出功能就好，我只想想要理解這些功能是怎麼做出來的就好。也因為這樣的關係，所以自己在後面做的界面越來越醜XD。因為都沒排版，就只是稍微切一切就上架了。
+
+這裡也讓我更清楚的知道前台跟後台之間的資料交換是怎麼樣寫才可以運作，也明白到原來網頁的呈現真的沒有很難做，尤其以 php 這套來說，還真的可以很方便的把需要的資料呈現出來就好了。這部份我去查資料之後，就可以得知，這樣的網頁就是一個動態的網頁。主要是透過 PHP 去呈現一些頁面，才會有這樣子的動態功能。

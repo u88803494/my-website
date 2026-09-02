@@ -1,0 +1,183 @@
+---
+title: "前端中階：JS令人搞不懂的地方-變數的生存範圍（scope）"
+slug: "前端中階-js令人搞不懂的地方-變數的生存範圍-scope"
+description: "變數的生存範圍"
+date: 2019-09-21T13:51:07.611Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8%E7%9A%84%E7%94%9F%E5%AD%98%E7%AF%84%E5%9C%8D-scope-b548fa067687"
+---
+
+## 變數的生存範圍
+
+什麼是作用域，也就是變數的生存範圍，這邊以 ES6 以前的為準，因為在 ES6 出現之後有了一些改變。
+
+```
+function test() {
+  var a = 10;
+  console.log(a);
+}
+```
+
+```
+test();
+```
+
+```
+console.log(a); // a is not defined
+```
+
+因為在 ES5 之前是以 function 作為作用域，所以上面的例子，因為在 function 之外，所以外部就找不到 a 這個變數。
+
+在外面的變數也可以稱為 global variable，因為是全域通用。區域變數，就是 function 內部的變數，而全域變數也就是可以當成是以檔案跟檔案為主的變數。
+
+```
+var a = 20
+function test() {
+  a = 10
+  console.log(a) // 10
+}
+```
+
+```
+console.log(a) // 20
+test()
+console.log(a) // 10
+```
+
+這個例子來說，雖然全域有命名，但當碰到 test() 之後已經被重新賦值了，所以後面就會印出新的值，而沒有變更之前的就不會。
+
+```
+function test() {
+  a = 10
+  console.log(a) // 10
+}
+```
+
+```
+test()
+console.log(a) // 10
+```
+
+這上面這個例子來說，因為下面沒宣告，就會往上找，找到上層之後也沒有，就會自行宣告。  
+所以一般而言盡量都要宣告變數，否則一堆變數都變成全域變數，程式一多就有衝突的可能性。
+
+```
+var a = 'global'; // global scope
+function test() { // scope
+  // var a = 'test scope a'
+  var b = 'test scope a'
+  console.log(a, b);
+  function inner() {
+    console.log(a, b);
+  }
+  inner();
+}
+```
+
+```
+test();
+console.log(a);
+```
+
+```
+// global test scope a
+// global test scope a
+// global
+```
+
+這邊會有一個 scope chain
+
+```
+inner scope -> test scope -> global scope
+```
+
+所以會沿著這個 scope 一路往上找
+
+```
+var a = 'global'; // global scope
+```
+
+```
+function change() { // change scope
+  var a = 10
+  test();
+}
+```
+
+```
+function test() { // test scope
+  console.log(a) // global
+}
+```
+
+```
+change();
+```
+
+```
+// 這邊的 scope chain
+(O) test scope -> global scope
+(X) test scope -> change scope -> global scope
+```
+
+以這個例子來說，change 跟 test 是平行的，所以這個 `console.log(a);` 會找到全域變數。
+
+關於作用域，在那邊呼叫是沒有影響的，差異是在在哪邊被宣告。整體是：
+
+```
+test scope -> global scope
+change scope -> global scope
+```
+
+**宣告的時候，就已經定義好 scope chain 了。**主要是因為編譯的關係
+
+## let 與 const 的生存範圍
+
+作用域在 ES5 跟 ES6 的差異就是 let 與 const。
+
+let 與 const 最大的差異就是只要有 block `{ }` 就會產生一個作用域。
+
+```
+function() {
+  var a = 60
+  if (a === 60) {
+    var b = 10;
+  }
+  console.log(b) // 10
+}
+```
+
+以這例子來說，作用域是以 function 為主。所以可以印出 b 的值。
+
+但改用 `let` 就不一樣了，
+
+```
+function() {
+  var a = 60
+  if (a === 60) {
+    var b = 10;
+  }
+  console.log(b) // b is not defined
+}
+```
+
+因為使用 let 的話，變數的作用域就只存在於 block `{ }` ，因為 function 裡面也是 block 裡面，所以是一樣的意思。
+
+## 結語：
+
+作用域最重要的就是知道 scope chain 是如何運作的，在這邊理解到原來是在寫入的時候就定義好了。
+
+這基本上就跟編譯有關吧？因為先編譯才執行，所以才會這樣子。只是運用這樣子去記憶，會比較好直覺一些。
+
+這部份是看二期影片以及文章看來的。所以沒有留下筆記。這課程之後也會談到，所以筆記我就先沒寫，只是看一下理解一下。
+
+才方便我以後的學習，在這課程中，我想就可以直接把 JavaScript 比較底層的機制整個做完整的理解。
+
+這樣也有很多好處，主要是聽說之後的框架會很需要這些概念，後續要學習 react.js，這也是我很期待的一部分。只要學習完成了，就代表畢業了。
+
+一方面學這個也是興趣，有很多的事情都希望可以通過程式來達成，我想之後也要多多努力才可以好好的寫網頁。
+
+上一篇：[前端中階：JS令人搞不懂的地方-變數](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8-a864ede72f1d?source=your_stories_page---------------------------)
+
+下一篇：[前端中階：JS令人搞不懂的地方-hoisting](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-hoisting-beb1fc451c2?source=your_stories_page---------------------------)

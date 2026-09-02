@@ -1,0 +1,361 @@
+---
+title: "前端框架 React：建置、Axios、Router"
+slug: "前端框架-react-建置-axios-router"
+description: "學習目標："
+date: 2019-11-29T15:18:12.483Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*8hQ1Gq7du7b8-M9fu_LKiQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E5%BB%BA%E7%BD%AE-axios-router-b4d0409d4250"
+---
+
+## 學習目標：
+
+1. Build 建置
+2. functional component
+3. Axios
+4. React Router
+
+## Build 建置
+
+之前在寫 JavaScript 的時候，都是只要直接可以把檔案用瀏覽器開啟，而在這邊使用 react app 則是必需要有一個伺服器來跑。
+
+兩者的差異就是在檔案的載入，假設有一個絕對路徑需要載入。
+
+```
+<script src="/a.js" />
+```
+
+在網頁會去找網址的根目錄，
+
+```
+aabb.com.tw/index.js => aabb.com.tw/a.js
+```
+
+而如果是開啟檔案的方式則是找尋硬碟的根目錄：
+
+```
+file:///Users/apple/Documents/JS/React/w22learning/public/index.html
+=> file:///a.js
+```
+
+所以才會有相對路徑的用法。
+
+而除了我們在寫的時候用的 `yarn start` 之外，還有建置的時候用的 build ：
+
+`yarn build`
+
+在 build 的時候，會幫我們做一些優化，也會把檔案分切開來，分割開來的意思就是，很多時候修改可能只動到某個檔案中的某個部分，所以到時候部署之後，使用者就只要重新下載該檔案即可，就不會整個檔案重新下載過。
+
+然後是檔案的部分，因為主要載入使用 index.html，但打開之後引入的部分會發現是使用 /static/js/xxxxxx，這樣的方式是在 server 的時候會使用的，所以直接開啟檔案才會呈現一片空白
+
+![](https://cdn-images-1.medium.com/max/800/1*zow3MsHlFp3LwlJEMhyVIA.png)
+
+所以想要開啟這個 build 出來的東西，也可以使用 build 完成之後告訴我們的指令。
+
+```
+yarn global add serve
+serve -s build
+```
+
+這樣一樣也可以開啟成功。
+
+這邊就牽扯到一個重點，到底什麼是伺服器
+
+### 到底什麼是 Server
+
+sever 就只是一個軟體而已。如果用 php 就是 apache，而 node.js 就是 node 自己的軟體，也因為用的 server 是不一樣的，所以對於檔案管理的模式可能就有點不太相同
+
+假設我要發 request 給伺服器 aaa.com/bbb/ccc，就等於是發 GET 給 aaa.com + 路徑 /bbb/ccc
+
+所以是發了兩個部分，以 apache 來說就是，發 request 給伺服器，然後 apache 再去透過該路徑找出資料。
+
+```
+aaa.com/bbb/ccc
+=> aaa.com + /bbb/ccc
+```
+
+```
+aaa.com => php -> apache -> /bbb/ccc
+```
+
+node.js 則不一樣，是用指令來回覆，所以可以設定當接收到什麼的路徑的時候，就回復什麼。
+
+```
+aaa.com => node.js -> server(express) -> /bbb/ccc
+```
+
+```
+app.get('/bbb/ccc' , function() {
+  res.send('123');
+} )
+```
+
+以上面來說，就是接收到路徑 /bbb/ccc 的時候，就回復字串 123，
+
+這根 php 是直接回覆對應路徑裡面的東西是不太一樣的。
+
+所以使用 node.js 的時候，就不能希望可以直接抓到對應路徑內的東西。
+
+而如果我們不想 build 出來的東西一定要使用 server 才跑得起來要怎麼辦呢？
+
+就是利用 build 的時候的說明，去 package.json 裡面 變動 homepage 的值就好。
+
+這邊本來是可以設置成 GitHub 的，但只要改成一個 . 就可以讓檔案可以直接開啟。當然就需要重新 build 過。
+
+![](https://cdn-images-1.medium.com/max/800/1*ytaMd7TOqqxhZTuADYvtuQ.png)
+
+所以把檔案打包成這樣，就可以直接在 GitHub page 上面使用，因為是使用相對路徑建置檔案的。
+
+![檢視原始碼](https://cdn-images-1.medium.com/max/800/1*Gka6TKrZQ1wyt44FWXLUpw.png)
+
+_檢視原始碼_
+
+這樣就可以發現到不一樣的地方，變成相對路徑。這樣就可以直接使用檔案來開，所以在 GitHub page 就可以利用這種路徑的檔案來開啟檔案。
+
+```
+lidemy.github.io/mentor-program-3rd-u88803494/homeworks/week7/hw1/
+```
+
+## functional component
+
+functional component 就是可以用來純粹 render 的時候。
+
+實際上就是用不到 state 跟 lifecycle 的時候，就可以用這個。
+
+## Axios
+
+這是一個 library 他的 [GitHub](https://github.com/axios/axios) 。這是一個類似 Fetch 的 library，優點是指令更容易使用。
+
+可以看 [GitHub](https://github.com/axios/axios) 的介紹，裡面有很多種的安裝方式或是引用也可以。
+
+```
+yarn add axios
+```
+
+然後記得在檔案內引入，然後就可以開始寫了，把之前的 fetch 改掉。
+
+![先把原來的註解掉，然後改寫先印出](https://cdn-images-1.medium.com/max/800/1*f0OGuzqLabbey4W9Zmh4vQ.png)
+
+_先把原來的註解掉，然後改寫先印出_
+
+印出之後就會發現是一個物件。
+
+![](https://cdn-images-1.medium.com/max/800/1*Jq-RXbzKDqskCvNclJUTjA.png)
+
+所以這邊得到的東西就跟使用 fetch 是不一樣的，因為已經轉換好了，所以就可以直接使用，在這裡就可以直接使用 setState 改變值。
+
+![](https://cdn-images-1.medium.com/max/800/1*3bDB6FWyBQywvjo7d6gtkA.png)
+
+像這種開源的也可以去看一下他的原始碼，
+
+像這裡可以發現，最終底層一樣是使用 XMLHttpRequest 的。
+
+## React Router
+
+### 安裝
+
+Router 也是一種 library，用法就是類似前一篇介紹透過 hash tag 方式來實作。
+
+也是需要安裝才可以使用，所以要用指令
+
+```
+yarn add react-router-dom
+```
+
+### 引用
+
+官方網站的範例。
+
+可以看到這個範例有個
+
+```
+from "react-router-dom";
+```
+
+這個 dom 其實是要用在 native 上面的，因為設置目的不只是要使用在 web 上面，所以有很多種不同的版本。
+
+```
+BrowserRouter as Router, Route,
+```
+
+### 導覽列
+
+然後也可以看到 Route 有兩種，這各自有差異的。
+
+這邊先使用 Router
+
+這邊的用法就跟之前介紹的一樣，就是使用 component 標籤的方式來寫。
+
+```
+<Route exact path="/">
+  <Home />
+</Route>
+<Route path="/about">
+  <About />
+</Route>
+```
+
+一定要加上 exact 才可以，因為這樣才可以只認識 `/` 路徑的，否則的話 `/abc/123` 照樣會認。因為這是只要有 `/` 就會被認為是的部分，除非加上 exact。加上 exact 才會是變成要求要一模一樣。
+
+但後來發現因為這個認路徑的方式，跟我們之前寫的檔案不一樣，所以就可以改用 hashRouter
+
+![](https://cdn-images-1.medium.com/max/800/1*pJTPvIJa4JF33NVtyIMyxA.png)
+
+這樣子功能就正常了。
+
+HashRouter 的用法就跟之前使用的比較接近，因為一樣都是 hashtag 後面加上需要的路徑，通過這個就可以更簡單的寫 route，因為都是 load 一樣的 index.html 這個檔案。
+
+所以就可以用在直接開啟的部分。
+
+而 BrowserRouter 只能用在伺服器上面，因為是使用路徑的方式。所以如果要用一般網頁開啟，就只能使用相對路徑就必須要使用 hashRouter。
+
+所以在 BrowserRouter 的部分，路徑就需要另外寫過，跟使用 hashtag 是不太一樣的。
+
+原本使用 a 標籤的部分，因為這裡提供了另外一個類似的功能， `Link`
+
+```
+<Link to={to}>{label}</Link>
+```
+
+所以一樣要引入使用，
+
+```
+import { Link } from "react-router-dom";
+```
+
+原本的也要改寫。
+
+![](https://cdn-images-1.medium.com/max/800/1*49i55HwAiBrrX8iEf29wNw.png)
+
+a 標籤改用 Link 取代
+
+![](https://cdn-images-1.medium.com/max/800/1*aCr-pFE8wJAIrqFAWkYadA.png)
+
+這樣就可以正常運作了。
+
+這邊會可以運作是因為使用 server，而這個 server 就是不管是什麼路徑，都是 load 同一個檔案，所以就可以運作。
+
+所以在用 BrowserRouter 就要很確定是跑在伺服器上面才行。而 HashBouter 則是相對路徑在用，所以像 GitHub page 就必須要用 HashBouter 才可以。
+
+接下來就是處理 highlight 的部分，在這邊就不需要 active 這個用來標示 highlight 的部分了，
+
+而這邊也不需要 state 了，因為可以根據網址來改變畫面了，所以大部分跟 active 有關的都可以刪除了。
+
+像在這邊就可以看到他的應用是包在 router 裡面。而最上方的，CustomLinkExample() 是一個 `<Link />` 如何實作原理的例子。
+
+以這個例子來說，是只要路徑符合就 render 這個 route
+
+```
+<Route exact path="/" component={Home} />
+```
+
+開始針對這部份變動，像是 Item 的 name 就可以改成 to，直接使用 to 的資料。
+
+然後是變動 Item 這邊的 render，要先引用 Route，然後這邊可以嘗試使用單一標籤的寫法（`<Route />`）
+
+```
+<Route
+  path={to}
+  exact={}
+  children={ooxxx} // 寫這邊就等於是把東西夾在中間那樣子。
+/>
+```
+
+等同於下方：
+
+```
+<Route path={to} exact={}>
+  ooxxx
+</Route>
+```
+
+所以可以用這種方法來改 Item
+
+![](https://cdn-images-1.medium.com/max/800/1*8UjwahoG1DfXWrSM3GkiZw.png)
+
+children 的方法，等同於是在裡面寫一個 function component 的方式。
+
+match 是 Route 傳來的資料，就可以利用這個資料來進行判斷，只有當路由對應到的時候，才會回傳資料。
+
+所以在這邊，如果 exact 不是 true 的話，就變成無論選到的是哪一個都會跟 home 的 `/` match 到，就變成 home 一直處於 highlight 的狀態。
+
+為了不要發生這種事情，就必須要針對 home 添加 `exact={true}` 才可以，讓他完全符合才 match。
+
+所以就要引入這個值，讓他去判斷，當然如果沒有這個值，就會是 undefined，這也會被辨識成 false。
+
+這樣就可以切換的時候正常顯示了。
+
+### 單一文章
+
+在這邊要讓 Blog 單一一篇文章也加上路由。
+
+所以先把原本的 post 的更名為 PostList，用來表示這是文章列表的意思。
+
+然後需要另外開一個 post 用來當作單一頁面的 component，這邊自然就可以複製原來的 PostList 來做修改。
+
+當然這個部分，就不太一樣了。
+
+所以等於是把原來的 component 分割開來寫過，所以就是把原本屬於全部文章的部分寫在 PostList，把單一頁面的寫在 Post 作為內即可。
+
+另外是因為單一頁面的路徑是 /post/id，所以就必須要幫 /post 的 component 加上一個 exact 才可以，否則全部都會被判斷為 /post。
+
+```
+<Route exact path="/post" component={PostList} />
+```
+
+然後就需要新增一個 component 才可以作為單一文章的 component
+
+![](https://cdn-images-1.medium.com/max/800/1*OSf41ZnsYGvneiOhAbFsbg.png)
+
+`/Post/:PostId` 是 express 的寫法，
+
+然後 Post 的地方就需要增加傳入的 ID，這部分就可以利用印出 props 來看看傳入的資料而判斷要怎麼寫。
+
+![](https://cdn-images-1.medium.com/max/800/1*3AAeKmA4BghPPu0rhktaOw.png)
+
+然後就可以試著在網址列輸入 [http://localhost:39473/post/1](http://localhost:3000/post/1) 就符合單一頁面，就可以看到印出了什麼。
+
+![](https://cdn-images-1.medium.com/max/800/1*pNi0siRyzMl-BB0v8feyhg.png)
+
+就可以研究一下發現，這邊有 PostId 的值
+
+![](https://cdn-images-1.medium.com/max/800/1*tas56HTgfHZlhlBI2084mA.png)
+
+就可以利用這個來拿到值。就可以傳入網址來撈資料。
+
+![](https://cdn-images-1.medium.com/max/800/1*aCM-isf1lVjD0_yHnp458w.png)
+
+接著就可以改寫上一頁的功能。這邊也非常簡單，直接使用 Link 即可。
+
+```
+<Link to="/Post"><button> back</button> </Link>
+```
+
+直接用 Link 包住 button 就可以做出按鈕的樣子，也不會跑出 a 的樣式
+
+然後就到了切換到單一文章的辦法，原本的方法是使用 state 切換，在這邊當然就沒辦法了，於是就需要更簡單的方法。
+
+有個方法是比較難，但只要知道概念就好，react router 有提供一個功能叫做 `withRouter` ，這部分只要知道概念就好。因為這個是比較進階的部分。
+
+這個是 higher order component
+
+這個就是在 export 的時候，用 `withRouter` 包起來，他在被使用的時候，就會有一些資料可以使用，這個資料就是 history
+
+```
+export default withRouter(PostList);
+```
+
+所以就可以引入使用，
+
+![](https://cdn-images-1.medium.com/max/800/1*8hQ1Gq7du7b8-M9fu_LKiQ.png)
+
+這個 history 就是網址歷史紀錄的意思。就可以利用 `.push()` 來新增一筆歷史紀錄，就可以不需要 Link 換頁。
+
+也就是說當點下之後，就會根據這個部分操作新增一個歷史紀錄，然後並把頁面導到開網址。
+
+所以原本的 onClick 就只要新增這個歷史紀錄的值，就會把網頁切換成最新的網址，這部分可以透過多新增幾行來發現。
+
+## 完成版：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/e754a45c0a88354b7f86ac85168d6e8d)

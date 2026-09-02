@@ -1,0 +1,184 @@
+---
+title: "前端基礎：CSS 盒模型（box model）"
+slug: "前端基礎-css-盒模型-box-model"
+description: "什麼是 box model？"
+date: 2019-05-23T09:29:22.147Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*2xqQHacKFnkX6lntf4suYA.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-css-%E7%9B%92%E6%A8%A1%E5%9E%8B-box-model-1b977df8d3d0"
+---
+
+## 什麼是 box model？
+
+[mdn 參考資料](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS/Box_model)，devTool 也會有這個圖示。
+
+意思是在 CSS 裡面，html 的每個元素都可被視作為一個盒子，然後可以針對這個盒子去做調整。
+
+因為 padding 跟 border 都是往外面長，所以如果要加個外框之類的，都會影響 box 的整體高度寬度
+
+![](https://cdn-images-1.medium.com/max/800/1*3rDZ1iQSQi82v2xdRsVScg.gif)
+
+假設今天想要一個 box 是 200\*100，但又想要加個外框等等的，卻不想要這個 box 因此而變大，就可以使用另外一個屬性：box-sizing
+
+box-sizing，有很多種模式可以使用
+
+box-sizing: content-box; 這個是預設屬性，就是我們一般作用得模式。
+
+box-sizing: border-box; 用這個屬性的話，就會把 padding 等地考慮進來，而自動做內縮調整。
+
+![](https://cdn-images-1.medium.com/max/800/1*2xqQHacKFnkX6lntf4suYA.gif)
+
+用了這種方式之後，會更加的直觀設計，所以就有很多的好處，可以在不變動原本的寬度去嘗試出需要的外框寬度。
+
+## display 的三種形式：block、inline 與 inline-block
+
+block 預設是 div, h1, p… 什麼設定值都可以調 會佔據整行
+
+所以我們可以從 devTool 看到
+
+![紅框處所示](https://cdn-images-1.medium.com/max/800/1*tmXKHXshHGU-b3ex1tnPgg.png)
+
+_紅框處所示_
+
+inline 預設的代表示 span, a 不能條寬高、上下邊距也不能調
+
+![可以發現到只有 margin 的左右有變動](https://cdn-images-1.medium.com/max/800/1*kGa1mvQ-_pi52sTmt_v-JA.gif)
+
+_可以發現到只有 margin 的左右有變動_
+
+會這樣的主要原因是，以 span 屬性來說，我們也不需要去變動寬高度，跟上下的邊距，所以不會很難記憶這樣的特性。
+
+padding 在這邊就比較特別了，雖然不會影響其他的元素，但是會有不一樣的反應。
+
+![](https://cdn-images-1.medium.com/max/800/1*OfHjI-B_jFG5gVBpLextaw.gif)
+
+在這種 inline 的條件下，一般也很少會設置 padding ，除非有特別的用意。
+
+inline-black
+
+預設的代表示 buttom, input, select…
+
+對外像 inline 可以併排
+
+對內像 block 可以調整各種屬性
+
+測試直接使用 CSS 屬性調整
+
+```
+/* style.css: */
+#box {
+ width: 100px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: inline-block;
+}
+```
+
+![inline-block vs block](https://cdn-images-1.medium.com/max/800/1*2eIo5V0Bm9yM-M_vZUlTUQ.gif)
+
+_inline-block vs block_
+
+**所以 inline-block 跟 block 最大的差異就在於 inline-block 可以併排。**
+
+這個部分的內容很重要，所以一定要弄清楚。
+
+## 補充資料：
+
+### inline-block 的常見錯誤。
+
+```
+/* style.css: */
+body {
+ margin:0px;
+}
+```
+
+```
+.box {
+ width: 100px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: inline-block;
+ position: relative;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box">box1</div>
+    <div class="box">box2</div>
+    <div class="box">box3</div>
+    <div class="box">box4</div>
+    <div class="box">box5</div>
+    <div class="box">box6</div>
+    <div class="box">box7</div>
+    <div class="box">box8</div>
+    <div class="box">box9</div>
+    <div class="box">box10</div>
+    <div class="box">box11</div>
+    <div class="box">box12</div>
+  </body>
+</html>
+```
+
+以這樣來說，刪除了 margin 之後，理應元素要通通沒有距離。
+
+![但中間居然還是有空白!](https://cdn-images-1.medium.com/max/800/1*_w-v73vahVSJaJ5ZSjNtnA.gif)
+
+_但中間居然還是有空白!_
+
+這原因是在 html 中，因為元素與元素中間的空格的關係，所以只要移除就可以了。
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box">box1</div><div class="box">box2</div><div class="box">box3</div>
+    <div class="box">box4</div>
+    <div class="box">box5</div>
+    <div class="box">box6</div>
+    <div class="box">box7</div>
+    <div class="box">box8</div>
+    <div class="box">box9</div>
+    <div class="box">box10</div>
+    <div class="box">box11</div>
+    <div class="box">box12</div>
+  </body>
+</html>
+```
+
+![可以看到中間無空格的部分就沒有空白的間距，而沒有刪除空白的依然有間距。](https://cdn-images-1.medium.com/max/800/1*jDeZ-epFkJEbtS26sYRhgg.gif)
+
+_可以看到中間無空格的部分就沒有空白的間距，而沒有刪除空白的依然有間距。_
+
+或是參考：[去除inline-block元素间间距的N种方法](https://www.zhangxinxu.com/wordpress/2012/04/inline-block-space-remove-去除间距/)
+
+-
+
+### CSS Naming （CSS 命名方法）
+
+1. BEM(block Element Modifier)
+2. block\_\_element--modifier (注意是兩底線)
+
+當元素越來越多的時候就會需要這種命名
+
+## 收穫：
+
+在學到這些內容之前，我一直滿疑惑的因為 padding 那些的用法跟我以前 WordPress 所使用套件，總感覺有些許的不一樣。看到 border-box 這邊我才恍然大悟，原來是這樣是那套件把 border-box 作為預設值的緣故，所以才會都用內縮的方式，不過也有可能是我記錯吧！
+
+後段是學習 inline-block 的部分，這邊可以了解到為什麼可以使網站的元素可以跟著網頁的寬度做排版了，原來是有這個功能的協助。

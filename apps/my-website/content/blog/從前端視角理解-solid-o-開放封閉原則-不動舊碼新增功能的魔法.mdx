@@ -1,0 +1,170 @@
+---
+title: "從前端視角理解 SOLID：O — 開放封閉原則，不動舊碼新增功能的魔法"
+slug: "從前端視角理解-solid-o-開放封閉原則-不動舊碼新增功能的魔法"
+description: "本文為 從前端視角理解 SOLID 系列的第三篇。"
+date: 2025-07-29T03:45:05.918Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-o-%E9%96%8B%E6%94%BE%E5%B0%81%E9%96%89%E5%8E%9F%E5%89%87-%E4%B8%8D%E5%8B%95%E8%88%8A%E7%A2%BC%E6%96%B0%E5%A2%9E%E5%8A%9F%E8%83%BD%E7%9A%84%E9%AD%94%E6%B3%95-c5e14f9400f0"
+---
+
+> _本文為_[**_從前端視角理解 SOLID_**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)_系列的第三篇。_
+
+> [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)
+
+> [**第二篇：S — 單一職責原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-s-單一職責原則-你的函式管太多了嗎-05a71a450216)
+
+> **第三篇：O — 開放封閉原則 (本文)**
+
+> [**第四篇：L — 里氏替換原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-l-里氏替換原則-你的-延伸款-別背叛了-基本款-b983acaa3bc7)
+
+在上一篇文章中，我們學會了如何運用「單一職責原則 (SRP)」，將程式碼拆解成一個個職責清晰的「專業工具」。現在，我們的工具箱看起來乾淨又整潔。
+
+但新的挑戰來了：如果客戶提出新需求，要我們為工具箱增加一把「新工具」，我們該怎麼辦？是把整個工具箱拆開，修改內部的結構嗎？這正是我們今天要探討的主題：**O — 開放封閉原則 (Open/Closed Principle, OCP)。**
+
+## 釐清詞彙：什麼是「開放」？什麼是「封閉」？
+
+開放封閉原則的官方定義是：
+
+> **_軟體實體（類別、模組、函式）應該對於擴展開放，但對於修改封閉 (Software entities should be open for extension, but closed for modification)。_**
+
+這句話是 SOLID 原則中最著名、也可能最常被誤解的一句。讓我們把它翻譯成前端開發者更熟悉的語言：
+
+- **對擴展開放 (Open for extension)**：意味著當業務需求變化時，我們可以輕易地為系統**增加新功能**或新行為。
+- **對修改封閉 (Closed for modification)**：意味著我們在增加新功能時，應該盡量**避免去修改**那些已經寫好、且穩定運作的舊程式碼。
+
+簡單來說，OCP 的核心精神就是：**用增加新程式碼的方式，來取代修改舊程式碼。** 這樣做的最大好處是，能顯著降低在現有功能中引入新錯誤 (bug) 的風險，讓我們的系統更穩定。
+
+## 具象化理解：你的 VSCode vs. 遠古時代的記事本
+
+身為工程師，我們每天都在使用的 VSCode 就是 OCP 的最佳範例。
+
+- **對擴展開放**：你需要新的主題配色？去市集安裝一個主題就好。你需要新的程式碼檢查工具？安裝一個 ESLint 擴充套件。你需要遠端開發？安裝一個 Remote SSH。你可以透過無數的「擴充套件」來為 VSCode 增加新功能。
+- **對修改封閉**：在安裝這些擴充套件時，你需不需要去修改 VSCode 的原始碼？完全不用。VSCode 的核心程式是穩定且封閉的，它透過一個定義良好的擴充機制，讓全世界的開發者都能安全地為它添加新功能。
+
+這與遠古時代的記事本（Notepad）形成了鮮明對比。如果你想讓記事本支援語法高亮，你唯一的選擇就是去修改它的原始碼，這充滿了風險。
+
+我們的目標，就是讓自己寫的元件和模組，更像 VSCode，而不是記事本。
+
+## 前端實戰：告別 `if/else` 地獄
+
+在前端開發中，最常違反 OCP 的場景，莫過於無盡的 `if/else` 或 `switch` 判斷。讓我們來看一個顯示不同狀態標籤的 `StatusBadge` 元件。
+
+### 反面教材：一個對修改「開放」的元件
+
+假設我們一開始有三種狀態：`success`, `error`, `pending`。
+
+```typescript
+// StatusBadge.tsx (違反 OCP 的版本)
+import React from 'react';
+
+type Status = 'success' | 'error' | 'pending';
+interface BadgeProps {
+  status: Status;
+}
+const StatusBadge = ({ status }: BadgeProps) => {
+  let backgroundColor = '';
+  let textColor = '';
+  let text = '';
+  // 每增加一種新狀態，就必須回來修改這裡的程式碼
+  switch (status) {
+    case 'success':
+      backgroundColor = '#D4EDDA';
+      textColor = '#155724';
+      text = '成功';
+      break;
+    case 'error':
+      backgroundColor = '#F8D7DA';
+      textColor = '#721C24';
+      text = '失敗';
+      break;
+    case 'pending':
+      backgroundColor = '#FFF3CD';
+      textColor = '#856404';
+      text = '處理中';
+      break;
+    default:
+      backgroundColor = '#E2E3E5';
+      textColor = '#383D41';
+      text = '未知';
+  }
+  return (
+    <span style={{ backgroundColor, color: textColor, padding: '4px 8px', borderRadius: '4px' }}>
+      {text}
+    </span>
+  );
+};
+export default StatusBadge;
+```
+
+這個元件現在運作得很好。但下週，產品經理說：「我們需要增加一個『警告 (warning)』的狀態」。你該怎麼辦？唯一的辦法就是**打開這個檔案，修改**`switch`**區塊**，增加一個 `case 'warning'`。
+
+這就違反了 OCP，因為你「修改」了現有的程式碼。這樣做不僅麻煩，而且每次修改都有可能不小心改錯，影響到舊有的狀態顯示。
+
+### 遵循 OCP 的重構：使用「策略模式」
+
+現在，我們用 OCP 的精神來重構它。我們將「策略」（也就是每個狀態對應的樣式和文字）從元件中抽離出來，讓元件本身變得穩定。
+
+```typescript
+// StatusBadge.tsx (遵循 OCP 的版本)
+
+import React from 'react';
+// 1. 將策略定義抽離出來
+const BADGE_CONFIG = {
+  success: {
+    backgroundColor: '#D4EDDA',
+    textColor: '#155724',
+    text: '成功',
+  },
+  error: {
+    backgroundColor: '#F8D7DA',
+    textColor: '#721C24',
+    text: '失敗',
+  },
+  pending: {
+    backgroundColor: '#FFF3CD',
+    textColor: '#856404',
+    text: '處理中',
+  },
+  // ✨ 新增狀態時，只需要在這裡增加新策略 ✨
+  warning: {
+    backgroundColor: '#FFEEBA',
+    textColor: '#856404',
+    text: '警告',
+  },
+  default: {
+    backgroundColor: '#E2E3E5',
+    textColor: '#383D41',
+    text: '未知',
+  },
+};
+// 讓 TypeScript 自動推斷出所有可能的 status
+type Status = keyof typeof BADGE_CONFIG;
+interface BadgeProps {
+  status: Status;
+}
+// 2. 元件本身變得極其穩定且封閉
+const StatusBadge = ({ status }: BadgeProps) => {
+  const config = BADGE_CONFIG[status] || BADGE_CONFIG.default;
+  return (
+    <span style={{ backgroundColor: config.backgroundColor, color: config.textColor, padding: '4px 8px', borderRadius: '4px' }}>
+      {config.text}
+    </span>
+  );
+};
+export default StatusBadge;
+```
+
+重構之後，`StatusBadge` 元件本身變得**對修改封閉**了。未來無論要增加多少種新狀態，我們都**不需要再碰這個元件的程式碼**。我們只需要在 `BADGE_CONFIG` 這個設定檔中**增加新的程式碼**（對擴展開放），就能完成需求的變更。
+
+這就是 OCP 的魔法：它讓我們的核心元件變得像磐石一樣穩定，同時又保有極高的擴充彈性。
+
+## 背景資料
+
+開放封閉原則 (OCP) 最早由電腦科學家伯特蘭·梅耶 (Bertrand Meyer) 在 1988 年提出。它被認為是物件導向設計中最核心的原則之一，其目標是建立一個能夠在需求變更時，依然保持穩定與可靠的系統。
+
+## 結論
+
+如果說 SRP 教我們如何「正確地拆解」，那麼 OCP 就是教我們如何「優雅地組合與擴展」。
+
+在開發中，我們無法預測所有未來的需求，但我們可以透過遵循 OCP，建立一個能夠從容應對變化的架構。當下次產品經理帶著新需求來時，你不再需要提心吊膽地修改舊程式碼，而是可以自信地說：「沒問題，我只要增加一個新模組就好。」這份自信，正是源自於開放封閉原則帶給我們的穩定性與彈性。

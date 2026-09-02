@@ -1,0 +1,223 @@
+---
+title: "前端基礎 JavaScript 篇：網頁的資料儲存"
+slug: "前端基礎-javascript-篇-網頁的資料儲存"
+description: "網頁的資料都存在哪裡？"
+date: 2019-06-03T14:19:02.177Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*2inTRypasMxK3hbNBpnoaQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript-%E7%AF%87-%E7%B6%B2%E9%A0%81%E7%9A%84%E8%B3%87%E6%96%99%E5%84%B2%E5%AD%98-e8c2ebaccdc6"
+---
+
+## 網頁的資料都存在哪裡？
+
+我們可以利用 JavaScript 把一些資料儲存在瀏覽器裡面。其實可以存的地方不只一個，瀏覽器一定有一個地方可以儲存資料，也就是說瀏覽器不知道我們上一個 request 跟這一個 request 是不是同一個人，所以就會需要一些方法把資料自動帶到 srever 端去。
+
+常常會看到購物網站，當我們換個電腦的時候，購物車就清空了，也就是說資料是儲存在瀏覽器上面，而不是 server 端的。
+
+接下來就會說明是如何儲存的。
+
+## Cookie
+
+最古老的方式。其實就是個小型文字檔，會自動帶到 server。
+
+server 端也可以透過 http 的 response 把資料庫寫到 cookie。
+
+伺服器端的 response 可以透過指令，例如：
+
+```
+response
+```
+
+```
+set-Cookie: ...... // 這是一種 header
+```
+
+以上只是超簡單的範例，不代表實際是這樣。
+
+所以只要到該網站，瀏覽器有這個 cookie 就會自動把這個 cookie 帶上把這個 cookie 寫入 request，為了這個網站可以辨識這個身分，常常會用在廣告追蹤。
+
+以[這個網站](https://www.w3schools.com/js/js_cookies.asp)為例子，按下 F12 去找 application 然後看一下左邊的 storage 可以找到 cookies
+
+![](https://cdn-images-1.medium.com/max/800/1*2inTRypasMxK3hbNBpnoaQ.png)
+
+裡面會有些 ID 資訊就可能是用來追蹤使用者用的，所以在辦訪這個網站的時候，Google 會提供一些小程式碼 Google 就會知道你來這個網站，Google 又可以透過這個 cookie 就可以知道這是同一個人。
+
+-
+
+像 Cookie 也可以用來身分辨識使用
+
+```
+response
+```
+
+```
+A →  登入　→ Server // 第一次
+A → Server  // 第二次，伺服器怎麼會知道是同一個人呢？
+```
+
+所以第一次登入的時候 Server 端會傳送一個類似通行證的東西給 A
+
+```
+response
+```
+
+```
+A →  登入　→ Server // 第一次
+A with 通行證　→ Server  // 第二次，伺服器就知道是同一人
+cookie: 通行證
+```
+
+所以每次發 request 的時候，瀏覽器就會自動把 cookie 帶上，伺服器就會知道是同一個人。
+
+> **Cookie**（複數形態 Cookies），又稱為「小甜餅」。類型為「**小型文字檔案**」[[1]](https://zh.wikipedia.org/wiki/Cookie#cite_note-1)，指某些 [網站](https://zh.wikipedia.org/wiki/%E7%BD%91%E7%AB%99)為了辨別用戶身分而儲存在用戶端（Client Side）上的資料（通常經過[加密](https://zh.wikipedia.org/wiki/%E5%8A%A0%E5%AF%86)）。
+
+> [cookie by wiki](https://zh.wikipedia.org/wiki/Cookie)
+
+可以透過 Chrome Dev tool 看到，在 chrome 瀏覽器下按下 F12 選擇 network 重新整理之後，就可以從找到。
+
+## local storage
+
+前面講到 Cookie 比較像 server 跟 client 溝通的時候使用的。所以一般我們在儲存資料跟 server 沒什麼關係的，就會用到 local storage
+
+所以就可以示範一個 app
+
+我們希望在一個框框內輸入一些東西，而當重新整理的時候，希望瀏覽器可以幫我們自動帶出來。
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta name="description" content="[local storage]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+```
+
+```
+</style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <div>
+      <input class='text' /><button class='btn'>儲存</button>
+    </div>
+  <script>
+    document.querySelector('.btn').addEventListener('click',
+      function () {
+        const value = document.querySelector('.text').value
+        alert(value)
+      }
+    )
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+先測試看看寫出來的東西能不能儲存。就是利用 alert 測測看會不會顯示輸入的東西即可。
+
+發現成功之後，我們在另外寫指令
+
+```
+window.localStorage.setItem('')
+```
+
+這是一個瀏覽器視窗提供的 api，這邊不加 window 其實也可以使用。然後這個指令其實是個 key- value，所以用法跟物件很類似。這邊的 value 只能夠用字串。[參考資料](http://techaride.blogspot.com/2012/07/javascript-localstorage.html) [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+
+```
+  <script>
+    document.querySelector('.btn').addEventListener('click',
+      function () {
+        const value = document.querySelector('.text').value
+        localStorage.setItem('text', value)
+      }
+    )
+  </script>
+```
+
+接著使用看看。
+
+![](https://cdn-images-1.medium.com/max/800/1*vwKIYN2NoRQCO77b0Bw-0Q.gif)
+
+透過 dev tools 可以發現有儲存成功
+
+然後在想辦法拿出這個值
+
+```
+const oldValue = window.localStorage.getItem('text')
+document.querySelector('text').value = oldValue;
+```
+
+定義一個變數去取得值，然後再把這個值加上去。
+
+```
+  <script>
+    const oldValue = window.localStorage.getItem('text')
+    document.querySelector('text').value = oldValue;
+
+    document.querySelector('.btn').addEventListener('click',
+      function () {
+        const value = document.querySelector('.text').value;
+        localStorage.setItem('text', value);
+      }
+    )
+  </script>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*8_Iq1_vgj4p2HCJ6_M99Jg.gif)
+
+試試看把它重新整理可以取得儲存的值
+
+-
+
+可以看到有這種功能性，所以常常可以看到一些貼心的網站，在輸入資料的時候，不小心重新整理了，等重新整理完之後，那些資料一樣會留存，就是基於這種方法去儲存的。
+
+另外雖然只能儲存字串，不過可以把像是 JSON 的資料，可以把它變成字串之後，儲存進 local storage，等需要的時候，取出來再轉換即可。這是一個非常常存資料的地方。
+
+## session storage
+
+類似 local storage，
+
+session 代表的是一段期間內的意思，像是在 Google 裡面瀏覽一段時間，這段期間不管瀏覽了幾次，都算是一個 session。
+
+> Session直接翻譯成中文比較困難。在計算機專業術語中，Session是指一個終端用戶與交互系統進行通信的時間間隔，通常指從註冊進入系統到註銷退出系統之間所經過的時間。以及如果需要的話，可能還有一定的操作空間。
+
+> 需要注意的是，一個Session的概念需要包括特定的客戶端，特定的[服務器](https://baike.baidu.com/item/%E6%9C%8D%E5%8A%A1%E5%99%A8)端以及不中斷的操作時間。A 用戶和 C 服務器建立連接時所處的 Session 與 B 用戶和 C 服務器建立連接時所處的 Session 是兩個不同的 Session。
+
+> [session 的定義補充](https://baike.baidu.com/item/Session/479100)
+
+session storage 跟 local storage 用法一樣，只是指令名稱要改為 sessionStorage，其實指令的用法一樣。那麼兩者的差異在哪呢？就是存在的方式。以前面的範例來修改成 sessionStorage 直接做測試看看。
+
+可以看到，原來的分頁還是可以儲存資訊，換到另外一個分頁資料就不見了。所以當然新增一個分頁也看不到。資料就只存在原來使用的那個分頁。
+
+通常是拿來存一些更短暫的資訊，根本不用長期保留的資訊。像是把值拿出來這個功能用 session storage 也可以。
+
+## 中場總結
+
+來了解一下學這些可以做什麼用？
+
+這些東西只要發揮自己的想像，幾乎可以寫出任何想要的東西，只要是跟網路有關係的，幾乎都可以寫出來。因為有監聽、有改變 CSS ，所以可以做出像是 app 的東西、甚至是遊戲也可以，就只缺的是網路如何交換資料。只要發揮想像力都可以寫出來，很多大型的遊戲，都是透過很基礎的程式碼寫出來的。可以試試看去做一些作品出來，在做作品的過程中，會學到更多更好的進階技巧以及方法。
+
+## 三大要素最後一塊拼圖：資料交換
+
+重新說明三大要素：
+
+1. 怎麼使用 JavaScript 改變 UI
+2. 要怎麼使用 JavaScript 去監聽事件，做出改變
+3. 怎麼跟 server 做資料交換，就是送資料給 server，然後 server 回應資料
+
+接下來就是要學習如何交換資料了。
+
+## 收穫：
+
+了解到原來網路儲存資料有這麼多種方式，我之前一直以為只有 cookie 而已，所以在上這段課程的第一堂的開頭一直有很多的問題，看到後面才知道原來還真的有好幾種，也明白到原來我之前 key 資料的時候為什麼有的網站可以還原那些資料有個不行，原來是因為資料儲存的機制的關係，當然還有跟網站有沒有貼心有關係啦XD

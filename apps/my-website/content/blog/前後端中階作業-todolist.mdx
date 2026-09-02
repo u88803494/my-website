@@ -1,0 +1,522 @@
+---
+title: "前後端中階作業： todolist"
+slug: "前後端中階作業-todolist"
+description: "hw1：Todo list"
+date: 2019-10-12T13:22:49.034Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*9_Wnhl0S-hNj_k6u-rQpOg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E5%BE%8C%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%BD%9C%E6%A5%AD-todolist-eeaf6b93cfcc"
+---
+
+hw1：Todo list
+
+還記得你的好朋友 h0w 哥嗎？
+
+他最近實在是太忙太忙了，接了一大堆案子跟業配，完全忙不過來。而現在最困擾他的事情是有時候會忘記廠商交代的事情，最後被罵個臭頭。這時候他想到了之前樂於助人的你，於是跑來找你，希望你能幫他做一個 Todo list 的 API 就好，只有 API 而已，可以不用有前端沒關係，前端他會再找其他朋友來做。
+
+因此，你的任務就是幫 h0w 哥做一個 Todo list 的 API，需要有以下功能：
+
+1. 獲取所有 todo
+2. 讀取單一 todo
+3. 刪除 todo
+4. 新增 todo
+5. 修改 todo
+6. 一個 todo 會有內容跟狀態，狀態可分為兩種：已完成跟未完成。
+
+—
+
+這次的作業是偏向於前後端都要有部份。等於是時做了一個 SPA 的網站了。
+
+hw1 是後端的部分，要自己寫一個簡單的 API。
+
+這邊會嘗試看看寫 RESTful API。不過 form 只支援 GET 跟 POST，所以就要利用另外一種方式來實作。
+
+利用的方式就是表單夾帶方法的方式，也稱之為方法欺騙。實作的方法就是在 POST 或是 GET 表單上面夾帶一筆資料，這資料上面有方法 DEL 還是 PATCH 這樣子。
+
+接收的頁面在利用這組資料來判斷是要幹麻，因而套用對應的 SQL 指令。這樣寫感覺還不錯耶，因為好像可以把 SQL 指令集中在一個頁面管理。
+
+然後也有思考要直接試著寫 API 文件，會這樣想主要是因為覺得既然這也算個總複習，那就把之前學到的可以應用的就用上吧！
+
+當然因為時間問題，我還是不打算用太複雜的東西就是了，不然一個 todolist 要寫個一兩個禮拜我可受不了XD
+
+後來查了一下 RESTful API 是要寫成網址如下：
+
+獲取使用者資料 /GET /users  
+獲取使用者資料 /GET /user/1  
+新增使用者資料 /POST /user  
+更新使用者資料 /PUT /user/1  
+刪除使用者資料 /DELETE /user/1
+
+這部分有困難點，主要是直接使用 POST 表單就可以發送是第幾筆的資料了。另一點是之前寫的模式是把資料發送到特定網址，例如更新， `update.php` → `handle_update.php`。要做成 RESTful，就要使用單一頁面，這部分有些難度，所以我大概只能做到接近 RESTful API 而已。
+
+大致上就是接收資料的部分，需要用一個單一的頁面來呈現。這邊也想到另外一個問題，就是 GET 的部分，取得全部資料就是使用 GET。
+
+render 的部分本身就要使用 AJAX 的功能跟伺服器取得資料，而如果我要做成單一頁面的話，就必須要判斷指令是 GET or POST，但是這時候的 GET 卻不會帶上任何資料啊？
+
+權宜之計，應該是在 `render()` 中的 ajax 夾帶一筆資料 — all 之類的，當然這部分還可以再研究。
+
+現在主要是要實作出一個堪用的 API，然後等到後面串資料的時候再想辦法修正到我要的樣子即可。
+
+接下來就要思考，可能會接收到哪些資料。
+
+todolist 的部分資料有 todolist 的 id、content、done（完成了嗎？）
+
+所以要分析一下個功能的狀況
+
+1. 獲取所有 todo  
+   使用 GET method。這部分因為是獲取所有的資料，所以就不會有 id 的問題，也是有待測試的部分，看能不能什麼都不要的情況下直接判斷為取得，還是說判斷請求方法是不是 GET，然後看看有沒有夾帶 ID 資訊，沒有就全取得，有的話就取得 ID 的即可。
+2. 讀取單一 todo  
+   使用 GET method。夾帶 ID 資訊，應該很好判斷。
+3. 刪除 todo  
+   使用 DELETE method。POST form 中夾帶著 DELETE 的指令，需要的資料只有 id，所以 POST 中間要夾帶 delete、id。
+4. 新增 todo  
+   使用 POST method。POST form 中，只會夾帶 content，另外突然想到這時候應該要添加 POST 的隱藏值，方便後端判斷。
+5. 修改 todo  
+   使用 PATCH method。POST form 中，夾帶 content，並且夾帶 id，這樣才能知道修改的是哪一條，隱藏值要有 PATCH，這邊是修改，所以需要 content 、id、PATCH
+6. 一個 todo 會有內容跟狀態，狀態可分為兩種：已完成跟未完成。  
+   使用 PATCH method。POST form 中，夾帶 done 資訊，並且夾帶 id，這樣才能知道是哪一條，隱藏值要有 PATCH，這邊是完成了嗎，所以需要 done、id、PATCH。
+
+而因為有兩種部分會遇到 PATCH，所以應該就是判斷 form 是夾帶 content 還是夾帶 done 資訊，藉此來辨別出是要完成還是修改內容。
+
+整體而言，就是要先判斷接收到的命令是 GET/POST，接著在各自判斷，最後就會有結果產生，流程圖如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*9_Wnhl0S-hNj_k6u-rQpOg.png)
+
+先嘗試使用網址
+
+```
+/index.php
+```
+
+index.php:
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+  $method1 = $_GET;
+  $method2 = $_POST;
+```
+
+```
+  print_r($method1);
+  echo '<br>';
+  print_r($method2);
+?>
+// Array ( )
+// Array ( )
+```
+
+由此可知，get/post 都等於空陣列
+
+接著嘗試使用網址
+
+```
+/index.php?id=100
+```
+
+index.php:
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+  $method1 = $_GET;
+  $method2 = $_POST;
+```
+
+```
+print_r($method1);
+  echo '<br>';
+  print_r($method2);
+?>
+// Array ( [id] => 100 )
+// Array ( )
+```
+
+發現這樣取得值。
+
+通過這樣子，發現需求的第一點，獲取所有 todo，就可以直接判斷 GET 有沒有傳值，沒有就直接返回全部。
+
+另一個困難點是 GET/POST 要怎麼判斷呢？這時候就要依賴 Google 了。
+
+```
+$_SERVER['REQUEST_METHOD']
+```
+
+通過使用上述方法就可以得到當前的方法是什麼了。
+
+於是就可以開始寫了，先完成大致上的模型，所以先完成 get/post 的判斷式：
+
+```
+$request_method = $_SERVER["REQUEST_METHOD"]; // 取得 request method
+```
+
+```
+if($request_method === 'GET') {
+  ...
+}
+```
+
+```
+if($request_method === 'POST') {
+  ...
+}
+```
+
+然後開始寫 GET 內部的判斷：
+
+```
+if($request_method === 'GET') {
+  if (empty($_GET['id'])) {
+    echo '抓全部';
+    // 抓取全部資料
+  } else if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    echo '抓一筆';
+    // 抓取一筆資料
+  }
+}
+```
+
+GET 的部分，可以使用網址來確認有無抓到東西。
+
+但這種時候會跳出錯誤訊息，後來發現不另外紀錄直接寫入即可。
+
+```
+if($_SERVER["REQUEST_METHOD"] === 'GET') {
+  if (empty($_GET['id'])) {
+    echo '抓全部';
+    // 抓取全部資料
+  } else if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    echo '抓一筆';
+    // 抓取一筆資料
+  }
+}
+```
+
+接著是 POST 的部分，這部分就不能夠用網址來測試，另外寫一個 form 來送資料也不行，猜測是要用 AjAX 才可以吧？這部分要晚點確認，所以先使用 `$_GET` 的方法來測試看看：
+
+```
+if($_SERVER['REQUEST_METHOD'] === 'GET') {
+ // 先改成 GET 測試用 之後改回 POST
+ $method = $_GET['_method'];
+```
+
+```
+ if ($method === "POST") {
+  // 新增
+  echo "這是新增：$method<br>";
+  $content = $_GET['content'];
+  echo $content;
+  // 就可以指出 SQL 了
+ }
+```
+
+```
+ if ($method === "PATCH") {
+  $id = $_GET['id']; // 取得要修改的 id 之後再判斷要修改什麼
+  // 修改
+  // 判斷修改的位置
+  if (isset($_GET['content']) || !empty($_GET['content'])) {
+   $content = $_GET['content'];
+   echo "修改 ID: $id 的內容為：$content";
+   // 修改內容
+  }
+
+ if (isset($_GET['done']) || !empty($_GET['done'])) {
+   $done = $_GET['done'];
+   echo "ID：$id 已完成？完成";
+   // 是否完成 內容
+  }
+ }
+```
+
+```
+ if ($method === "DELETE") {
+  $id = $_GET['id'];
+  // 刪除
+  echo "這是刪除：$method<br>刪除的ID：$id";
+ }
+}
+```
+
+這樣就可以通過使用 GET 的方式測試。像是使用下方的網址：
+
+```
+/index.php?_method=POST&content=我是誰
+// 這次新增：POST
+// 我是誰
+```
+
+```
+/index.php?_method=PATCH&content=你是誰&id=888
+// 修改 ID: 888 的內容為：你是誰
+```
+
+```
+/index.php?_method=PATCH&done=完成&id=952
+// ID：952已完成？完成
+```
+
+```
+/index.php?_method=DELETE&id=999
+// 這是刪除：DELETE
+// 刪除的ID：999
+```
+
+後來使用 PC 發現可以使用 form，就是需要另外創個資料夾，所以把前面的都改成 POST，並使用 form 來測試。
+
+```
+<form action="./index.php" method="post">
+  <h1>新增功能</h1>
+  <input type="hidden" name="_method" value="POST" />
+  <input type="text" name="content" /><br>
+  <input type="submit" value="提交" />
+</form>
+```
+
+```
+<form action="./index.php" method="post">
+  <h1>編輯內容功能</h1>
+  <input type="hidden" name="_method" value="PATCH" />
+  <input type="text" name="content" /><br>
+  id: <input type="text" name="id" value="777" /><br>
+  <input type="submit" value="提交" />
+</form>
+```
+
+```
+<form action="./index.php" method="post">
+  <h1>打勾功能</h1>
+  <input type="hidden" name="_method" value="PATCH" />
+  <input type="checkbox" name="done"><br>
+  id: <input type="text" name="id" value="888" /><br>
+  <input type="submit" value="提交" />
+</form>
+```
+
+```
+<form action="./index.php" method="post">
+  <h1>刪除功能</h1>
+  <input type="hidden" name="_method" value="DELETE" /><br>
+  <input type="text" name="id" placeholder="請輸入預刪除 ID"/><br>
+  <input type="submit" value="提交" />
+</form>
+```
+
+在這裡發現 checkbox 的打勾就會傳輸 on，就可以利用這點來寫入資料庫。而後發現 checkbox 的特性就是打勾的時候，才會傳輸資料。所以針對這點解決方法就是另外添加一個標籤 `undone`：
+
+```
+<form action="./index.php" method="post">
+  <h1>打勾功能</h1>
+  <input type="hidden" name="_method" value="PATCH" />
+  <input type="checkbox" name="done" value="1"><br>
+  <input type="checkbox" name="undone" value="1"><br>
+  id: <input type="text" name="id" value="888" /><br>
+  <input type="submit" value="提交" />
+</form>
+```
+
+由此就可以傳輸資料了。
+
+接著就是串接資料庫的部份了。
+
+先設立資料庫的欄位，分別有  
+ id：就是 todolist 的編號  
+content：內容  
+done：是否完成，這邊用 0 跟 1 標示完成與否，預設值 0  
+created_at：實際上沒什麼意義，就是只覺得應該添加，不一定會用到。
+
+這部分就更簡單了，就直接統一使用 prepare statement 就好，大部分差異也只在 SQL 指令，所以只有 SQL 需要開分寫，最後完成如下：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/11b38f63b4162186019bbac1e0756d92)
+
+不過思考過後，發現我是利用 AJAX 傳輸資料，form 表單是不能夠傳送 GET/POST 以外沒錯，但是 AJAX 並沒有看到不行，所以也許等 hw2 的時候也許可以試試看 AJAX 傳輸 PATCH 等 http method 試試看。
+
+另外是打勾的部分，因為 AJAX 的時候可以選擇怎麼傳輸，所以也許可以傳輸的時候發現沒打勾就傳輸 done 的 value 為 0，這要等到 hw2 再來試試看。
+
+## hw2：邊緣人
+
+當你完成了 todo list API 兩天以後，h0w 哥又跑過來找你：「欸欸，可以幫我把前端也做一做嗎？」
+
+『靠北喔，阿你之前不是說要找其他朋友幫你做』
+
+「可是我…沒朋友」
+
+『嗚嗚…這真是太可憐了，那我就幫你做吧！』
+
+於是乎，你就接下了這個燙手山芋，決定好人做到底，把前端的部分也做一做，但這次 h0w 哥提出了一個前所未見的需求：為了使用者體驗著想，我希望前端永遠不會換頁，都在同一個頁面上操作。
+
+翻成技術白話文，意思就是：所有跟後端的溝通都透過 ajax，這樣就不會換頁了。
+
+因此，這就是你的任務！請實作出一個不會換頁的 todo list，並跟上一個作業自己寫出來的 api 串接。
+
+—
+
+在前面的 form 表單只是自己測試使用而已。跟實際上的 AJAX 應該是不太一樣的。
+
+而前端就是只是發資料給後端 API，然後等成功之後 render 整個畫面，所以這部份要做成 callback 才可以，否則就會前後端不同步。
+
+而因為這部分很多功能要使用，所以也變得比較麻煩了。像是打勾的部分，要怎麼樣才可以偵測打勾的部分，就發出 AJAX 這我想是比較困難的部分。
+
+本來是打算順著題目，先把有送出資料功能的部分先改，但我想了想還是應該先把可能的架構整個想清楚再來實作會比較好一些。
+
+所以接下來就把每個功能一一拆分開來思考。
+
+1. 獲取所有 todo  
+   最簡單的功能，寫在 render 裡面吧，因為每次做了動作就要全部重新取得資料，實作方面就是發個 GET 過去，然後 render。
+2. 讀取單一 todo  
+   這部分不在之前的 todolist 作業的規劃裡面，所以必須要額外想過。也考慮過是不是不錯。總之要做的話要先把 todolist 改成超過一行就變成 … 這樣子。然後才可以設置點了之後，發一個 GET 過去取得單一一筆資料，之後彈出視窗，但是彈出小框又需要研究一下如何實作。
+3. 刪除 todo  
+   本來就有功能，只需要串 API 即可。
+4. 新增 todo  
+   一樣是本來就有的功能，只需要串 API 即可。
+5. 修改 todo  
+   這邊簡單的方法就是直接新增一個編輯按鈕。麻煩一點就是很正式的寫出點兩下文字就把變成可編輯狀態，不過這部分沒實作過，覺得可能會遇到一些困難。主要是因為希望是到 react 才好好的練習一些真的一般網站的做法，所以可能會考慮一下實作花費的時間來決定要用哪種做法。但一樣的是都要把文字變成可編輯狀態，也許實際上沒這麼困難？然後是就變得跟新增的時候一樣，當按下 enter 的時候，就送出資料之後就直接整個重新 render 了。
+6. 一個 todo 會有內容跟狀態，狀態可分為兩種：已完成跟未完成。  
+   這邊功就要更細了吧。因為要偵測點下去就變動資料，就送出 AJAX，我會覺得這樣送出會不會太頻繁了呢？  
+   就如同 hw1 的結尾說得一樣，打勾可能是比較難的部分，因為不知道該怎麼偵測，可能有很多種方法，又或是根本不行，這部分還要再研究一下才是。
+
+先把之前的 todolist 拿來改，原始檔案參考：  
+[前端基礎：JQuery & Bootstrap 作業](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-jquery-bootstrap-%E4%BD%9C%E6%A5%AD-801acadd3b61?source=your_stories_page---------------------------) — hw2 超基礎 todolist
+
+想好了之後，就先從最簡單的也最必要的 render 開始處理，但這時候發現資料似乎處理的不好，所以難以撈出。
+
+所以要變更 API 一下，最後是把結果跟資料的部分分開，這樣才會好應用一些。另外一點因為 PHP 的資料會把每筆都用數字 index 標示，所以就不能使用 JavaScript 的點記法來使用，只能使用括號記法即可。如下：
+
+```
+原始資料：[{"result":"success","todos":[{"id":29,"content":"去買菜","done":0,"created_at":"2019-10-12 19:15:19"}]}]
+```
+
+```
+呼叫方式：res[0].todos['0']['content']
+```
+
+通過這樣子就可以把資料帶入 render 的部分。
+
+然後直接在 function render 內實作 AJAX 得到全部的資料，這樣就可以方便在需要的地方使用了。
+
+而接下來就是實作大量的 AJAX 的部分，也先從可以實作的地方開始實作。像是送出新的 todo 的部分以及刪除的部分。
+
+送出新 todolist 的輸入框改成把資料打包並把方法欺騙用到的資料一併包進去，然後 callback 自然就是放上 `render();`，這樣才不會看起來很亂。刪除的部分也是同理。
+
+```
+if (e.target.classList.contains('todolist__delete')) {
+  const id = e.target.getAttribute('data-id');
+  let todolist = { "_method": "DELETE" };
+  todolist.id = id; // 添加資料
+  $.ajax({
+    type: "POST",
+    url: "./index.php",
+    data: todolist,
+    dataType: "json",
+    success: (res) => {
+      if (res.result === 'success') {
+         render();
+      }
+    }
+  });
+}
+```
+
+接下來就是比較困難的部分了，編輯要如何做呢？
+
+在編輯功能上，有很多需要研究的地方。像是要在哪邊編輯？像是 facebook 那樣子把文字變成輸入框？還是彈出一個輸入區域？
+
+有很多種方法可以做，最後我是選擇背景變黑，然後顯示一個修改區域的方式，因為感覺這樣子比較簡單。也是我之前在使用各大論壇的時候常見的方法。
+
+這部分我就是拿網路上的範例直接改，不過對方是用原生的 JavaScript 來寫，我改用 JQuery 而已。改起來效果也滿好的。所以就覺得滿開心的。
+
+這種方式是屬於東西先準備好，然後需要的時候在顯示出來ＸＤ，所以就可以不需要依賴事件代理，就可以修改 todolist 的內容，也可以沿用我原本寫好的輸入框，所以我覺得這個方法真的不錯用。
+
+在這邊的實作也發現到這個黑背景確實有妙用。後來思考之後，AJAX 在等回應的時候都會花一些時間，所以我在考慮要不要好好的利用黑背景呢？因為真的不錯用的感覺。
+
+我也可以省去很多寫動畫的時間吧。反正就是送出 AJAX 前把畫面鎖著，然後等 CB 執行完成的時候在還原就好。
+
+這邊實作就有很多地方需要修改，像是在 html 新增語法跟 CSS 用來蓋板，平時屬性是 `display: none;` 有需要的時候再改成 `display: block;` ，這樣就可以做出顯示一個視窗的效果了。全部的語法都提供在最後。
+
+也因為如此，所以就必須要針對編輯的部分寫兩個操作，一個是顯示編輯，另外一個是送出編輯。然後再實作的過程中，有嘗試使用按鈕，後來覺得寫好的按鈕改掉可惜，所以就改成取消的按鈕，專門用在取消。
+
+所以要針對編輯寫一個按鈕並針對它寫一個事件代理監聽之。
+
+```
+<input class="todolist__done form-check-input" type="checkbox" name="done" data-id=${res[0].todos[i]['id']} ${checked}>
+```
+
+```
+監聽部分：
+if (e.target.classList.contains('todolist__edit')) { }
+```
+
+而送出的部分，就跟新增一樣，直接針對隱藏的輸入框，選擇 id `#editing` 這個用來表示是編輯的 input。
+
+```
+$('#edit').keypress((e) => { }
+```
+
+因為原理差不多就可以套用相同的內容來取得資料，只是這次不一樣了，就是要通過 AJAX 發給 API 去修改資料而已。
+
+最後是打勾的部分：
+
+在這邊因為不再只是裝飾了，必須有作用，所以就要研究一下 checkbox 的效能，印象中之前 checkbox 可以在屬性內使用 checked 來標明是打勾的。所以可以通過這點去找指令可否偵測這部分，找了很久，各種的方式的都有，最後有找到一個 `.checked` ，抱著試試看的輸入 `e.target.checked` 。
+
+並試著印出，結果顯示 true/false 這太讚了，表示我的 API 可以不需要 undone 就可以傳送資料了。所以這部分也需要修改一下 API 改成偵測 done 就好。
+
+而因為 database 的紀錄方式跟 JavaScript 的結果不一樣，所以就要通過判斷的方式來更改呈現的資料：
+
+```
+API:
+$done = $_POST['done'] === 'true' ? 1 : 0;
+```
+
+思考過後本來以為可以寫在 JavaScript 的，但是思考後，如果傳送的資料是 0，API 的部分可能會有 bug，所以就改成 API 這邊運算就好，比較不會造成麻煩。
+
+而這邊比較特別的是，打勾本身就有動作了，所以 AJAX 的部分就改一下，本來其他的都是確認到結果成功就重新 render。這邊就改成成確認到成功以外的結果才 render，以保證頁面一樣。
+
+接著是為了使用性，調整一下黑背景的呈現位置，讓整體的使用性上升。程式碼如下：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/dab9acdf407974467005c489e451364c)
+
+然後是可以改進的地方：  
+另一點是思考說，我是否要第一次畫面 render 的時候就把資料儲存起來好呢？之後送出資料就只要修改已經儲存在 global 的資料就好，然後再依據這個資料去 render，否則每次送出資料之後，送出修改之後，又要再跟伺服器撈資料。
+
+另外是方法欺騙的問題，因為時間問題，所以還沒辦法實作，我覺得應該是可行的，只是要花一點時間去改，等之後有時間再來研究好了。
+
+## hw3：簡答題
+
+1. 請簡單解釋什麼是 Single Page Application
+2. SPA 的優缺點為何
+
+—
+
+## 1. 請簡單解釋什麼是 Single Page Application
+
+single page application，就是單一頁面的應用，通過 AJAX 去請求資料的方式，來達成不換頁的功能。
+
+達成的方式就是通過 JavaScript 是針對資料的變動的部分去更動畫面，藉由這種方法來達成不換頁。
+
+## 2. SPA 的優缺點為何
+
+### 優點
+
+1. SPA 的優點就是不換頁，可以讓使用者有著良好的體驗。  
+   因為每次換頁的話，有一些東西就會跑位，像是一篇長文，但是在最下面留言後，畫面就會整個重新整理，倒置又回到最上方，要看完成的留言就又要往下拉才看得到。
+
+利用 SPA 就可以當使用者輸入完留言之後，直接顯示在頁面上面，使用者就不用再去找資料。通過這種方式就可以增進使用者的良好體驗。
+
+1. 因為是前後端分離，分工的關係，後端只需負責把 API 寫好就好。
+2. 由於前後端分離的優點，只要後端 API 寫好之後，就可以通用很多地方，除了 web 之外，像是手機、平板等都可以。
+3. SPA 還可以降低伺服器的負擔，因為後端只需要顯示資料就好，剩下的前端都會處理好。
+
+### 缺點
+
+1. SPA 的缺點是不利於 SEO，因為 SPA 的東西都由 JavaScript 去 render 而成。當爬蟲進來的時候，並不會去執行 JavaScript。
+2. 前進、後退管理。由於是在單一頁面中解決所有問題，所以就不能夠使用瀏覽器的前進後退功能。
+3. 初次載入耗時多。因為 JavaScript 需要負責 render 以及做資料處理等，所以 JavaScript 的檔案就會變大，那就需要花一些時間載入，尤其是初期的時候。

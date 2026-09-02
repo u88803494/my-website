@@ -1,0 +1,1135 @@
+---
+title: "前端框架 React：React 基礎"
+slug: "前端框架-react-react-基礎"
+description: "Component 與 render function"
+date: 2019-10-19T11:56:07.394Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*vwJpraIGBZULoiuEKMKs9w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-react-%E5%9F%BA%E7%A4%8E-39af71f84886"
+---
+
+## Component 與 render function
+
+在 React 裡面每一個東西都是一個 Component，一個元件。所以一整個畫面就是由不同的 Component 所組成的。
+
+在開始之前先把之前的檔案修改一下，先把東西都拿掉只留下 root 的 div
+
+```
+<!DOCTYPE html>
+<html lang="en">
+```
+
+```
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> React start </title>
+</head>
+```
+
+```
+<body>
+  <div id="root"></div>
+</body>
+```
+
+```
+</html>
+```
+
+才可以確保所有東西都是從 React 產生的。接著就可以直接跑起來了。
+
+這邊是用[這篇](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE-333f5ecfb611?source=your_stories_page---------------------------)自己建造的環境，程式碼也一樣。
+
+```
+index.js:
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+```
+
+```
+ReactDOM.render(<App />, document.getElementById('root'))
+// 這邊意思是說把 <App /> 這個 component 給放到 root 這個 DOM 上面
+```
+
+可以看到 `./App` 的原始檔案 app.js
+
+```
+app.js:
+import React, { Component } from 'react';
+```
+
+```
+class App extends Component {
+  render() {
+    return (
+      <h1> hello React </h1>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+因為 App 是繼承 component 。
+
+如果這時候把 render 拿掉，就可以在網頁的 devTools 看到錯誤：
+
+![](https://cdn-images-1.medium.com/max/800/1*vwJpraIGBZULoiuEKMKs9w.png)
+
+沒有 render 的錯誤，所以每個 component 都一定要用 render
+
+當然也可以定義其他的 component，比如說在 app.js 新增一個 title
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Title {
+  render() {
+    return <h1>title</h1>
+  }
+}
+```
+
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Title />
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+這邊先測試不繼承的話會如何
+
+![title 沒有 render method，也告訴我們沒有繼承 react.component](https://cdn-images-1.medium.com/max/800/1*CJNTGF_Ama96ng7qrImesw.png)
+
+_title 沒有 render method，也告訴我們沒有繼承 react.component_
+
+所以就必須要繼承 react.component 才行。
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Title extends Component {
+  render() {
+    return <h1>title</h1>
+  }
+}
+```
+
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Title />
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+除此之外，還可以創造更多的 component，然後還可以在 Component 裡面創造 Component。
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Text extends Component { // 新增
+  render() {
+    return <p>text</p>
+  }
+}
+```
+
+```
+class Title extends Component {
+  render() {
+    return <h1>title</h1>
+  }
+}
+```
+
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Title />
+        <Text /> // 這樣子引用
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+![左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的](https://cdn-images-1.medium.com/max/800/1*k2lck7XsuoZu0Nw7pILtaw.png)
+
+_左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的_
+
+整個流程就是：
+
+1. 呼叫 App
+2. 碰到 `<Title />` 就呼叫 Title
+3. 碰到 `<Text />` 就呼叫 Text
+4. 最後看回傳的完整是什麼，就把這部份 render 上去
+
+所以在 component 上面，就有很多作法，可以整個畫面都是同一個 Component，也可以把一個畫面切成各個不同的 Component
+
+## JSX 語法
+
+在前面的例子可以看到 return 的部份是一個長得很像 HTML 又不全然是 HTML 的語法。
+
+這個語法叫做 JSX，有點像 JavaScript 跟 HTML 的混合體。這是一種新的語法，但是跟之前學習過得很像，所以應該很好適應。
+
+第一個是像之前那樣要 render component 就可以像前面的例子那樣子寫
+
+第二個部份像是 render class，本來我們都是寫
+
+```
+<div class="title"> </div>
+```
+
+但這樣就會產生錯誤
+
+![](https://cdn-images-1.medium.com/max/800/1*mkvhMv5V-gJSQHpAhyBdqQ.png)
+
+主要是因為 class 已經被 react 拿去做別的事情，所以要使用 className
+
+在 CSS 方面也不一樣了，要改成用物件的方式寫，寫法也不一樣，需要兩個大括號，因為最外面的大括號是可以放 JavaScipt 語法的，中間才是放 CSS 的物件。如下方所示：
+
+```
+<div class="title" style={JS語法}>
+</div>
+```
+
+```
+<div class="title" style={{CSS物件}}>
+</div>
+```
+
+要這樣寫的理由就像是之前在使用的 ES6 語法那樣，這語法類似於 [Template literals（template strings）](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Template_literals)，就是在$+大括號`${xxxx}`內可以用 JavaScript 語法。
+
+![](https://cdn-images-1.medium.com/max/800/1*fNVYibktpKNCpYwcPnoEUQ.png)
+
+當然一樣也可以做 JavaScript 語法的操作
+
+![class 變成 yoyoyo123](https://cdn-images-1.medium.com/max/800/1*5euyHhxY2GfTtMGo80rP1A.png)
+
+_class 變成 yoyoyo123_
+
+那種寫法就像是分開寫的這樣子
+
+![](https://cdn-images-1.medium.com/max/800/1*mjHkgvIBW91B6xfrIEEkiw.png)
+
+這是 JSX 很重要的一個部份
+
+然後是 CSS 的語法在這邊就會變成駝峰式命名，這點需要注意。
+
+![fontSize 這樣子](https://cdn-images-1.medium.com/max/800/1*WReMBAfGMUb_skvSQgmNyg.png)
+
+_fontSize 這樣子_
+
+第三點是 return 的方式，除非讓第一行接在 return 後面，否則都要加括號才行，不然的話 JavaScript 會解析成 `return undefined`
+
+```
+return (
+  <div className={name + '123'} style={style}>
+    <Title />
+    <Text />
+  </div>
+)
+```
+
+或是
+
+```
+return <div className={name + '123'} style={style}>
+    <Title />
+    <Text />
+  </div>
+```
+
+## React 的事件機制
+
+在傳統上我們家 event listener 都是使用 `document.xxxxxx` 來去添加，這樣要寫很常，而在 JSX 裡面就是直接在標籤上面使用
+
+```
+<h1 onClick={() => {
+  alert('hi');
+}}> hello </h1>
+```
+
+在 JSX 就可以直接在上面加上監聽器，這是一個比較特別的部份。
+
+而現在 html 本身也有類似的語法，但還是有些差異，可以參考[官網](https://zh-hant.reactjs.org/docs/handling-events.html)
+
+JSX 的 onClick 是大寫，html 的則是小寫 onclick
+
+## state 與改變 state
+
+在 React 裡面之前說 state 對應到 UI，所以接下來是要如何幫 component 加上 state。
+
+直接在 Component 裡面使用 state
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class App extends Component {
+  render() {
+    state = {
+      counter: 1,
+    }
+    return (
+      <div>
+        <h1>hello</h1>
+        <div>{this.state.counter}</div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+結果發生錯誤，這是因為這是比較新的語法，還在實驗階段，必須要另外加裝一些東西才可以使用。
+
+![](https://cdn-images-1.medium.com/max/800/1*pDjVHnIWo6RlS1vfapHTAg.png)
+
+這時候改用原本的語法，利用 constructor
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class App extends Component {
+  constructor() {
+    super() // 因為有繼承要用這個語法
+    this.state = {
+      counter: 1,
+    }
+```
+
+```
+}
+  render() {
+    return (
+      <div>
+        <h1>hello</h1>
+        <div>{this.state.counter}</div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+這樣就可以看到畫面呈現 1，也就是成功了。接下來就是切換 state 的部份了。
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class App extends Component {
+  constructor() {
+    super() // 因為有繼承要用這個語法
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+}
+  render() {
+    return (
+      <div>
+        <h1 onClick={() => {
+          this.setState({
+            counter: this.state.counter + 1
+          })
+        }}>{this.state.title}</h1>
+        <div>{this.state.counter}</div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+這邊一定要使用 this.setState() 這個方法來改變，然後傳入想要把 state 改變成什麼樣子。這邊只要傳想要改的 state 即可。
+
+![](https://cdn-images-1.medium.com/max/800/1*GTMKWnAyBWDN3EbU_pbnXw.gif)
+
+不過這樣子看起來有點混亂，所以就會另外拉出來寫過，
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class App extends Component {
+  constructor() {
+    super() // 因為有繼承要用這個語法
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+
+  }
+  render() {
+    return (
+      <div>
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <div>{this.state.counter}</div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+實際上這樣子卻是不能使用，因為 this 的值得問題，所以就要有解決方案。方案一是在 constructor 就先把 this 的值做好。
+
+```
+  constructor() {
+    super() // 因為有繼承要用這個語法
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+方案二是在 onClick 呼叫的時候設定：
+
+```
+<h1 onClick={this.handleClick.bind(this)}>{this.state.title}</h1>
+```
+
+第三種是利用類似箭頭函式的方法：
+
+```
+  handleClick = () => {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+  }
+```
+
+不過這個方法跟最開始講的一樣，屬於實驗性質的功能，必須要另外安裝 plugin 才可以使用。所以不用這種解法，最推薦的就是第一種解法，直接寫在constructor 裡面。
+
+回這樣子的原因主要跟 this 的值有關聯，因為 this 的值是跟呼叫的方式有關係的。可以參考這篇 — [前端中階：JS令人搞不懂的地方-this](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-this-b9b9c6960c03?source=your_stories_page---------------------------)
+
+所以在 onClick 這邊，如果不使用設定的話，就如同直接呼叫
+
+```
+onClick()
+// => onClick().call(undefined) // 嚴格模式
+// 官方文件有說在 react 都是嚴格模式
+```
+
+第四種就是直接在標籤上面寫箭頭函式，可以這樣寫是因為箭頭函式的 this 是跟怎麼定義有關係
+
+![](https://cdn-images-1.medium.com/max/800/1*tEW7OZ34XqT6VtJ4M2vFHA.png)
+
+## props 與 state
+
+假設前面例子的 `this.state.counter` 會變得更複雜，我想要另外寫一個 component
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Counter extends Component {
+  render() {
+    return (
+      <div></div> // 要如何把 App 裡面的 this 放入？
+    )
+  }
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+  render() {
+    return (
+      <div>
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <Counter /> // 記得也要大寫
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+因為是不同的 class 那這邊就會碰到一個問題，就是要如何把 App 裡面的 this 放入 Counter？
+
+這的方法就有點類似`<h1 onClick=` 這樣子的方式，也就是類似於  
+`<a href= >` 的形式。
+
+直接把 `<counter />` 加上一個名字，然後指向該值：  
+`<counter number={this.state.counter}/>` 就可以把這個值傳入
+
+那自然的，主要需要操作這個值得就是 class Counter 了，所以就要有辦法拿到這個值。
+
+```
+class Counter extends Component {
+  render() {
+    return (
+      <div>{this.props.number}</div> // 利用 .props 指向那個設定值
+    )
+  }
+}
+```
+
+利用 .props 指向那個設定值就可以取得值 props 就是別人傳進來的值，state 就是自己原本的值
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Counter extends Component {
+  render() {
+    return (
+      <div>{this.props.number}</div>
+    )
+  }
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super() // 因為有繼承要用這個語法
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+```
+
+```
+render() {
+    return (
+      <div>
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <Counter number={this.state.counter}/>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+然後還有另外一種用法，也就是說使用 `<Counter>{ }</Counter>` 中夾入一些資料的形式。
+
+這種時候，就要在 class Counter 使用 `this.props.children`
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Counter extends Component {
+  render() {
+    return (
+      <div>{this.props.children}</div>
+    )
+  }
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+```
+
+```
+render() {
+    return (
+      <div>
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <Counter>
+          {this.state.counter}
+        </Counter>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+關於這個方法還有更好的應用方式，新增一個 class Title 然後在 App 裡面添加資料，除了使用 Title 裡面的資料外，還可以應用 html 標籤
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Title extends Component {
+  render() {
+    return (
+      <h2>{this.props.children}</h2>
+    )
+  }
+}
+```
+
+```
+class Counter extends Component {
+  render() {
+    return (
+      <div>{this.props.children}</div>
+    )
+  }
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+```
+
+```
+render() {
+    return (
+      <div>
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <Title>
+          <a href="http://google.com">
+            {'hello I am title'}
+          </a>
+        </Title>
+        <Counter>
+          {this.state.counter}
+        </Counter>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+![可以看到兩個 class 疊加的效果](https://cdn-images-1.medium.com/max/800/1*D4ZXkJdOaHW1GiFzF_2tJw.png)
+
+_可以看到兩個 class 疊加的效果_
+
+不過大致上都是以第一種為主，第二種比較少用到。
+
+所以在這邊的部份，就是每當執行一次結果，就去 render 一次，這部份就可以直接在 render 的部份添加一個 `console.log('render')` 就可以得知。
+
+![點了 hello 之後，就顯示一次 render](https://cdn-images-1.medium.com/max/800/1*Mc7QILNw5xdMY1BsCKVUrg.gif)
+
+_點了 hello 之後，就顯示一次 render_
+
+—
+
+在 React 裡面每一個東西都是一個 Component，除了這種 class Component 之外，還有一種就做 functional component
+
+```
+function Counter(props) {
+  return (
+    <div>{props.children}</div>
+  )
+}
+```
+
+```
+class App:
+<Counter>
+  {this.state.counter}
+</Counter>
+```
+
+其實也跟 class 的差不多，只是這邊就直接 return 要 render 的部份而已，所以可以看成，在 App 裡面呼叫 `<Counter />` 的時候，就把 return 的東西 render 上去。
+
+另外是需要傳入的時候，就可以直接增加引數 `props` ，同樣也可以使用 `.children` 呼叫數據，當然也可以使用 自定意名稱
+
+```
+function Counter(props) {
+  return (
+    <div>{props.number}</div>
+  )
+}
+```
+
+```
+class App:
+<Counter number={this.state.counter} />
+```
+
+而在這樣的 function 裡面也可以使用解構的語法：
+
+```
+function Counter(props) {
+  const {number} = props;
+  return (
+    <div>{number}</div>
+  )
+}
+```
+
+這樣的話就只要使用 number 就可以呼叫了。當然，也可以直接把解構寫在引數裡面：
+
+```
+function Counter({ number }) { // { number } 等同於 props.number
+  return (
+    <div>{number}</div>
+  )
+}
+```
+
+另外一種寫法也可以寫成匿名函式：
+
+```
+const Counter = ({ number }) => {
+  return (
+    <div>{number}</div>
+  )
+}
+```
+
+所以 functional 非常簡易，適合的場合就跟 class 不一樣了。
+
+functional 比較適合只需要 return 一些比較單純的元素的時候，像 component 不需要 state 的部份。
+
+### 小結：
+
+functional component 比較簡潔，也比較簡單，但就是沒了 state 可用。  
+class-based component 則是比較完整，寫起來就比較麻煩，因為還要繼承之類的。
+
+## Component 間的溝通
+
+前述例子有一個是 `onClick` 事件，假如今天要把這個事件拆成一個 componenet 的話要怎麼做呢？
+
+```
+const Title = (props) => {
+  return (
+    <h1 onClick={}>{[props.text]}</h1>
+  )
+}
+```
+
+在這裡，因為並沒有不太會有方法可以改變 parent 的 state。
+
+比較好的方法是當 call handleClick 的時候，就去改變 App 的 state，所以就把這個 function 給傳入。
+
+```
+import React, { Component } from 'react';
+```
+
+```
+const Title = (props) => {
+  return (
+    <h1 onClick={props.handleClick}>{[props.text]}</h1>
+  )
+}
+```
+
+```
+const Counter = ({ number }) => {
+  return (
+    <div>{number}</div>
+  )
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+```
+
+```
+render() {
+    return (
+      <div>
+        <Title handleClick={this.handleClick}
+           text={this.state.title}/>
+        <Counter number={this.state.counter}/>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+接下來試著把 Title 的值也跟著變動吧
+
+```
+import React, { Component } from 'react';
+```
+
+```
+const Title = (props) => {
+  return (
+    <h1 onClick={props.handleClick}>{[props.text]}</h1>
+  )
+}
+```
+
+```
+const Counter = ({ number }) => {
+  return (
+    <div>{number}</div>
+  )
+}
+```
+
+```
+class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      title: 'hello',
+      counter: 1,
+    }
+    this.handleClick = this.handleClick.bind(this)
+  }
+```
+
+```
+handleClick() {
+    this.setState({
+      counter: this.state.counter + 1
+    })
+```
+
+```
+}
+```
+
+```
+render() {
+    return (
+      <div>
+        <Title handleClick={this.handleClick}
+           text={this.state.counter}/>
+        <Counter number={this.state.counter}/>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+流程如下：
+
+1. render Title  
+   text = 1, handleClick = func
+2. trigger Title > h1 > onClick => props.handleClick func
+3. App.handleClick => setState => counter: 2
+4. re-render
+5. render Title text=2 handleClick=func
+
+所以如果在 parent 的 state 要改變，就必須要利用 parent 提供的 function 才行，不能自行改變
+
+所以只有 component 可以改變自己的 state，其他的 component 要改變該 component 的 state，就必須要有該 component 提供的 function 才行。
+
+## 如何加上 CSS？
+
+在寫 CSS 的時候，不一定想要用 inline CSS，這時候就寫在 html 檔案上面或是利用 Webpack
+
+利用 webpack 的部份，就是照慣例的要安裝一些工具了。
+
+```
+yarn add style-loader css-loader
+```
+
+安裝後就更改 webpack.config.js 的設定，在 module.rule 底下新增下列粗體部份：
+
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+```
+
+```
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.[hash].js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.css$/,
+        loader:['style-loader', 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    })
+  ]
+}
+```
+
+這邊的 loader 順序不能有錯
+
+接著是 app.js 要引入 css，新增
+
+```
+import "./style.css";
+```
+
+接著就可以執行看看
+
+```
+yarn start
+```
+
+就可以看到成果，我們把 h1 變成紅色
+
+![](https://cdn-images-1.medium.com/max/800/1*2tW8w7rmM-ZAnJBI9pp6Mg.png)
+
+所以有了這些工具的好處，就是在寫程式的時候可以即時更新，而且這樣用的好處就是可以一個 component 一個 CSS，而且再多個 CSS 檔案也沒關係。
+
+其他的部份，像是 sass scss 都可以，就只是要安裝相對應的 loader 而已
+
+—
+
+除此之外還有一種，就是[ styled-component](https://www.styled-components.com/) 是一個 library，算是最近比較主流的部份。
+
+首先也是一樣要先安裝
+
+```
+npm install --save styled-components
+```
+
+然後就可以在檔案裡面使用，首先要在 app.js 內引用
+
+```
+import styled from 'styled-components';
+```
+
+當使用元件的時候，就可以使用：
+
+```
+const Button = styled.button``
+```
+
+這是官方介紹，就按照同的寫法來，因為需要的是 h1 所以就照改，命名也可以自己命名，然後 重音符內就可以自己寫 CSS
+
+```
+const Header = styled.h1`
+  color: red;
+  font-size: 50px;
+`;
+```
+
+因為這樣子的寫法等於是把標籤跟 CSS 都寫上去了，所以自然就是原本的部份就要替換掉了。
+
+```
+import React, { Component } from 'react';
+import styled from 'styled-components';
+```
+
+```
+const Header = styled.h1`
+  color: red;
+  font-size: 50px;
+`;
+```
+
+```
+const Title = (props) => {
+  return (
+    <Header onClick={props.handleClick}>{[props.text]}</Header>
+  )
+}
+```
+
+這種方式的原理，就是透過幫忙編譯好一個看起來像亂碼的 CSS 才可以達成這種效果。
+
+![](https://cdn-images-1.medium.com/max/800/1*BAgtFpmj5xl0VsB6DVtBog.png)
+
+### 小結 CSS 的處理方式：
+
+1. inline CSS
+2. 寫在 html 檔裡
+3. import CSS（透過 webpack
+
+   ）
+
+4. styled-components
+
+目前比較常用的方式大概就是後兩者為主，每種方式都可以，各有各自的好處。
+
+## 總結：
+
+Component 是整個畫面中重要的一個組成部分，由 Component 組成全部的畫面，而通過 Component 可以像 photoshop 的塗層一樣，一層一層的疊上去，通過這種方式，可以構成我們的整個畫面。
+
+Component 裡面則是回傳一個 render 的 function，這樣的用意是當資料改變的時候，就可以呼叫這個部分重新 render 整個畫面，這就是 React 的一個重要成分。
+
+而 Component，除了渲染畫面之外，也是需要有數值的部分。所以還有一個 state 來搭配，來達成改變 state 即改變畫面。
+
+render 的部分，則可以依賴 JSX 來達成，這是一個像是 JavaScript 的語法糖，可以協助我們撰寫 React Component，主要是 JSX 是類似 JavaScript 的語法糖。
+
+所以使用 JSX 的時候，整體可讀性就非常的高，只是要這樣子做就需要很多的前置作業而已。這也是 webpack 的重要性，很多功能都透過 webpack 來輕鬆達成。
+
+> 其實 JSX 也不是什麼新的程式語言，他更像是Javascript的語法糖（Syntactic sugar），他可以幫助我們在撰寫 React Component 來的更加簡便，在 React讀取到 JSX 語法時，會自動幫我們使用 React.createElement 方法來建立虛擬的 DOM 元素，也就是說 JSX 語法實際上就是使用 React.createElement 方法的簡寫語法。[_參考資料_](https://ithelp.ithome.com.tw/articles/10200353)
+
+這之中也有監聽器植入的方式，這還真的是非常的方便，因為這樣子我們就不用去處理那些很麻煩的選取 dom 的方法了。
+
+畢竟 state 改變畫面就跟著改變了。

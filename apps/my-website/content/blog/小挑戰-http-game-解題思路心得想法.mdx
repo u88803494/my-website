@@ -1,0 +1,113 @@
+---
+title: "小挑戰 http game 解題思路心得想法"
+slug: "小挑戰-http-game-解題思路心得想法"
+description: "LV1"
+date: 2019-05-17T06:31:03.125Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%B0%8F%E6%8C%91%E6%88%B0-http-game-%E8%A7%A3%E9%A1%8C%E6%80%9D%E8%B7%AF%E5%BF%83%E5%BE%97%E6%83%B3%E6%B3%95-8007cb7d2e81"
+---
+
+LV1
+
+這邊又卡住了，原來就只是網址不能直接從 /start 後面開始接而已...
+
+後面很順的解決了，大多數都只是指令的修改而已，這邊就不多講了。
+
+到了某關卡之後，需要通過驗證，於是就找了關鍵字，最終找到驗證的方式，原來是需要先自行轉碼，然後使用那個轉碼成功的資料來通過驗證。
+
+一路到第八關我就卡住了，真的卡住，理由是 node.js 不能使用中文的網址…，所以必須找到可以轉換的方法。
+
+[方法](https://segmentfault.com/q/1010000005173173)
+
+直接照般，然後把對應的給取代就得到結果了。
+
+```
+const request = require('request');
+const URL = require('url')
+
+const options = {
+  url: URL.format({
+          protocol: 'https',
+          host: 'lidemy-http-challenge.herokuapp.com',
+          pathname: '/api/v2/books',
+          query: {
+              q: '我',
+          }
+      }),
+  headers: {
+    Authorization: "Basic YWR**6******4xM**",
+  },
+}; // url:"https://lidemy-http-challenge.herokuapp.com/api/v2/books?q=我",
+```
+
+```
+function callback(error, response, body) {
+ console.log(body)
+}
+```
+
+```
+request(options, callback);
+```
+
+第九題要直接添加 header
+
+X-Library-Number
+
+但是 node.js 必須要加上 '' 變成字串
+
+```
+const request = require('request');
+const URL = require('url')
+
+// url: "https://lidemy-http-challenge.herokuapp.com/api/v2/books?q=我",
+const options = {
+  url: 'https://lidemy-http-challenge.herokuapp.com/api/v2/sys_info',
+  headers: {
+    'Authorization': "Basic YWRt******aW4****",
+ 'X-Library-Number': "20",
+ 'User-Agent': "IE"
+  },
+};
+```
+
+```
+function callback(error, response, body) {
+ console.log(body)
+}
+```
+
+```
+request(options, callback);
+```
+
+在這邊卡關，因為題目說必須要 用 IE6 但是無論我直接打 IE6 還是打全名也無法通過一直得到 Invalid Browser 的訊息
+
+所以我就直接開 edge 瀏覽器 跟 IE 瀏覽器，結果一比對 User-Agent 通通顯示 Mozilla 開頭，於是我就思考是不是這邊的問題，於是直接搜尋 IE6 跟 User-Agent 就找到答案如下：https://developers.whatismybrowser.com/useragents/parse/2045-internet-explorer-windows-trident
+
+直接代入就通過驗證了，終於。
+
+下一關是猜數字，簡單玩過之後，還有更多關卡
+
+LV 11
+
+直接按照意思在 header 添加一個 origin: ‘lidemy.com’, 就可以過關了
+
+LV 12
+
+透過 連上去之後發現就只是 告訴我們有 token，然後我就去到處翻來找去，甚至把 response 訊息給印出來找… 但是有兩千多行耶… 於是找了一下就放棄了，開始使用 chrome 的 devTool 去找原來就藏在 header 裡面…
+
+LV 13
+
+透過題目去找 logs 發現只有語言，而 general 那邊應該是不能修改。查到原來可以假裝自己的 IP 來源就可以了，不一定要透過代理伺服器，網路上找到 node.js 的使用代理伺服器的方法都是 require('http') 的方式，但在我實際上使用的時候，卻發現還是不行，所以就留待之後再解決了吧。總之就是利用
+
+```
+headers: {
+ 'X-Forwarded-For':'202.57.55.10',
+  },
+```
+
+來騙過伺服器就好了，這個 IP 位置可以去找代理伺服器上面提供的來使用。
+
+剩下的之後再來玩好了。之後有玩會再來這篇新增

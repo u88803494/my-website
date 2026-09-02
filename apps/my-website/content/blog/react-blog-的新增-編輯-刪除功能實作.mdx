@@ -1,0 +1,492 @@
+---
+title: "React Blog 的新增/編輯/刪除功能實作"
+slug: "react-blog-的新增-編輯-刪除功能實作"
+description: "緣由"
+date: 2020-02-20T14:51:18.378Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*UM39fTGOOkYLv21vQZwWdA.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-blog-%E7%9A%84%E6%96%B0%E5%A2%9E-%E7%B7%A8%E8%BC%AF-%E5%88%AA%E9%99%A4%E5%8A%9F%E8%83%BD%E5%AF%A6%E4%BD%9C-cefdfc5f8a11"
+---
+
+## 緣由
+
+接續前篇：[React Blog 的新增/編輯/刪除介面實作](https://medium.com/@hugh_Program_learning_diary_Js/react-blog-%E7%9A%84%E6%96%B0%E5%A2%9E-%E7%B7%A8%E8%BC%AF-%E5%88%AA%E9%99%A4%E4%BB%8B%E9%9D%A2%E5%AF%A6%E4%BD%9C-860272b9da97?source=your_stories_page---------------------------)
+
+這次要來實作功能了，主要都是在實作按鈕的功能了，主要是當按下送出之後，要把畫面上的資料做更新。
+
+還有串 API 的部分，這邊會先實作畫面上面的部分，然後才是實際送出 API 的部分，但可能篇幅較大也許會拆開來寫。
+
+## 想法
+
+目前想法是打算把 API 拆開來寫，另外用一個檔案放 call API 的部分，然後在需要的地方呼叫就好。
+
+### 按鈕的功能
+
+按鈕的部分，新增編輯的功能需要在按下去之後，把資料回傳給上一層的 component，所以上一層的 component 會需要給一個 function 來接資料，以便更新資料。
+
+所以也要實作上層的更新方式，然後把視窗關閉。
+
+而這邊的話，還要寫根據 API 去把按鈕變成執行中的模樣，當成功送出資料之後，才執行後續的動作。
+
+然後是這邊要另外實作一個偵測值不能為空的功能，這應該更簡單，就是直接使用 state 來偵測就好，當在輸入的時候，就直接偵測直是否為空，空就顯示紅色警告小字，類似 google 表單那樣。
+
+## 實作
+
+### 畫面部份
+
+畫面部份，因為是需要把資料回傳給上一層，所以上一層都要額外添加一個 function，給彈出視窗的 component 使用。
+
+在 post_list.js 新增一個 `handleChangePosts` 的 function，把所有的新增、編輯、刪除都放進來。
+
+```
+handleChangePosts = (method, changeData) => {
+  /** 第一個變數是方式，第二個變更的資料 */
+  const { data } = this.state;
+  switch (method) {
+    case 'create':
+      this.setState({
+        data: [...data, {
+          ...changeData,
+          createdAt: new Date().getTime(),
+          // 取得當前的 timestamp，雖然應該會跟伺服器上的不同
+          id: this.id,
+        }],
+      })
+      this.id += 1;
+      break;
+    case 'editing':
+      this.setState({
+        data: data.map((post) => {
+          if (post.id !== changeData.id) return post;
+          return {
+            ...post,
+            ...changeData,
+          };
+        })
+      });
+      break;
+    case 'delete':
+      this.setState({
+        data: data.filter(post => post.id !== changeData.id)
+      })
+      break;
+    default:
+      console.log('一定是搞錯了什麼');
+  }
+}
+```
+
+因為剛好前面有實作傳入 status，作為分辨彈出視窗要怎麼顯示，這裡就剛好可以直接用來當成 method 傳入，用作分辨要怎麼處理資料，接下來就只要把各個處理方式寫出來即可。
+
+接下來就只要把這個 `handleChangePosts` 的 function，傳給彈出視窗的 component 去應用即可。
+
+像新增的部份就直接傳入即可：
+
+```
+{
+  isCreate &&
+  <EditingWindow /* 新增共用編輯視窗 */
+    show={isCreate}
+    onHide={() => this.handleCreate(false)}
+    status="create"
+    handleChangePosts={this.handleChangePosts}
+  />
+}
+```
+
+接下來就是彈出視窗的部份了，這部份也是就簡單的把按鈕的 onClick 改呼叫這個即可，把 status 跟 thisPost 傳入就好，就可以改變上層的了。
+
+```
+<Button
+  variant="outline-primary"
+  onClick={()=> handleChangePosts(status, thisPost)}
+>
+  {status === 'editing' ? '儲存文章' : '新增文章'}
+</Button>
+```
+
+其他的也都是這種模式即可。
+
+接下來就是 API 的部份。
+
+### API 部份
+
+參考 Axios 的文件
+
+會發現用起來跟 JQuery 的 `$ajax` 挺類似的。
+
+而這次想要把 API 集中起來管理，所以就另外開一個 WebAPi.js 的檔案，然後把各種 API 寫好。
+
+```
+import axios from 'axios';
+```
+
+```
+export const getPosts = () =>
+  axios.get('https://qootest.com/posts');
+```
+
+```
+export const getPost = postId =>
+  axios.get('https://qootest.com/posts/' + postId);
+```
+
+```
+export const deletePost = postId =>
+  axios.delete('https://qootest.com/posts/' + postId)
+```
+
+```
+export const createPost = post =>
+  axios.post('https://qootest.com/posts/', post)
+```
+
+```
+export const updatePost = post =>
+  axios.put('https://qootest.com/posts/' + post.id, post)
+```
+
+這邊命名索性就用 CRUD 的名字來命名了， `getPosts` 也許改成 `readPosts` 會更符合這個命名法。
+
+不過現在先不這樣做了。接下來就是在彈出視窗的檔案引入 `WebAPI`
+
+因為這個檔案有新增編輯刪除，所以直接全部引入，然後用物件的形式呼叫會更好。
+
+```
+import * as webAPI from '../WebAPI';
+```
+
+然後接下來也就不困難了，就是把之前的送出 btn 改造一下就好了，在這邊變成除了改變畫面上的資料之外，另外還要再 Call API，所以就不能只是單純直接寫在內部，因為複雜化了，就需要另外提出來寫過：
+
+```
+const handlePost = () => {
+  (status === 'create' ?
+    webAPI.createPost(thisPost) : webAPI.updatePost(thisPost))
+      .then(res => res.status <= 300 && onHide())
+      .catch(err => console.log(err))
+```
+
+```
+    handleChangePosts(status, thisPost); // 改變畫面上的資料
+}
+```
+
+在這裡用三元運算子，是因為有兩種要呼叫的 API，所以就利用這樣來判斷，所以當點下送出的時候，只需要呼叫這個 function。
+
+不過這樣子，雖然可以運作，但是還有很多地方不夠完善，像是發生錯誤的時候？或是送出失敗的時候呢？而且以上面的寫法，當按下之後，網路速度不夠快則會造成畫面上已經改變資料了，而實際上無法確定資料到底有沒有改變。
+
+### 同步畫面跟伺服器
+
+因為會需要思考很多部份，所以先從簡單的刪除開始修改。
+
+這次就先實作在按鈕之上，所以會需要一個狀態來表示當前的狀態。
+
+```
+const [loadingState, setLoadingState] = useState('是的，我要刪除');
+```
+
+然後把這個值直接放在按鈕內：
+
+```
+<Button
+  variant="outline-danger"
+  onClick={handleDelete}
+  disabled={loadingState !== '是的，我要刪除'}
+>
+  {loadingState}
+</Button>
+```
+
+`disabled` 是控制按鈕可否按下的功能，所以直接判斷即可。
+
+然後是實作成功送出的回饋：
+
+在這裡可以先嘗試當按下按鈕之後，把 `loadingState` 改成刪除中
+
+```
+const handleDelete = () => {
+  setLoadingState('刪除中........')
+}
+```
+
+而這時候，變成刪除中，就代表著資料送出，原本是直接把 webAPI 放在這裡，然後把改變 `post_list` 的部份放在一起，但是缺點就變成沒有真正意義的同步。
+
+所以這裡又要學習新東西，就是 `useEffect()` 用來取代 classical component 的 lifecycle method。
+
+參考這裡：[React hook: useEffect 的用法](https://medium.com/@hugh_Program_learning_diary_Js/react-hook-useeffect-%E7%9A%84%E7%94%A8%E6%B3%95-325ef5f0924f?source=your_stories_page---------------------------)
+
+為了要執行有順暢度，就必須要用到 lifecycle 來達成效果這邊需要的是 componentDidUpdate 的效果，所以就要把發送 API 跟 回傳值得內容放這裡。
+
+```
+useEffect(() => {
+  const finalExecution = (success) => { // 根據成功與否改變按鈕的內容
+    success ?
+      setLoadingState('刪除成功！') : setLoadingState('刪除失敗！')
+    setTimeout(() => {
+      success ? handleChangePosts(status, post) :
+        setLoadingState('是的，我要刪除')
+    }, 1000)
+  }
+```
+
+```
+if (loadingState === '刪除中........') {
+    webAPI.deletePost(post.id) // 改變伺服器
+      .then(res => res.status < 300 && finalExecution(true))
+      .catch(() => finalExecution(false))
+  }
+}, [loadingState, handleChangePosts, post, status]);
+```
+
+這邊是已經完成的結果，失敗跟成功的功能都有實現，還順便實現傳送失敗之後，過幾秒就把按鈕給還原，所以用了 `setTimeout()` 來實作。
+
+所以整體會變成傳送成功之後，就顯示成功，然後一秒之後就把 post_list 的資料改變。
+
+如果失敗則是顯示刪除失敗，過了一秒之後，再次把狀態變回可刪除的狀態。
+
+![](https://cdn-images-1.medium.com/max/800/1*UM39fTGOOkYLv21vQZwWdA.gif)
+
+然後就是實作新增/編輯的部份了，因為這邊使用的是同一個 component，所以就直接一起寫就好了。
+
+不過這邊作法跟刪除的部份不太一樣，不是用 `useEffect` 來發送 API，因為是按下送出按鈕才發送資料的。
+
+所以就先來改造原本的畫面跟 API 發送後部同步的問題。
+
+```
+const handleSubmit = () => {
+  const whichAPI = (thisPost, status) => status === 'create' ?
+    webAPI.createPost(thisPost) : webAPI.updatePost(thisPost)
+```
+
+```
+  const submitPost = (status, thisPost) => {
+    handleChangePosts(status, thisPost); // 改變畫面上的資料
+    onHide();
+  }
+```
+
+```
+  whichAPI(thisPost, status)
+    .then(res => res.status <= 300 && submitPost(status, thisPost))
+    .catch(err => console.log(err))
+}
+```
+
+這樣的話，就會變成按下之後送出 handleSubmit，然後先把資料送出，當得到資料之後，把修改或新增的內容同步到 post_list 到畫面上跟關閉彈出視窗。
+
+而這裡也順便實作偵測內容不能為空的功能，除此之外還有送出的時候也要偵測。
+
+而為了要設置這個功能，就不能直接使用原本的 `thisPost` 來偵測，否則就變成一開新帖就直接顯示警告，這樣看起來會很怪。所以要另外實作另外兩個 state 來使用，一個是偵測單一項是否為空，另外一個則是偵測，送出的時候。
+
+所以先設置兩個 state：
+
+```
+const defaultEmpty = { title: false, author: false, body: false, };
+const defaultSubmitType = { canSubmit: true, status: '', };
+```
+
+```
+const [isEmpty, setEmpty] = useState(defaultEmpty); // 為了一開始不偵測
+const [submitType, setSubmitType] = useState(defaultSubmitType);
+// 一開始先不偵測，因為本身載入的都是有內容的。
+```
+
+因為太長所以分開寫，submitType 則是除了是否可以提交之外，還要設置提交的狀態，像是無法傳送，或是成功傳送，所以採用物件的形式作為預設值。
+
+所以接下來就是修正 render 的畫面了。必須要多一個欄位來顯示錯誤提示，為此就必須要增加標籤跟修改 CSS 排版了。
+
+單一輸入內容來說，因為都差不多，所以就只舉一個內容就好。
+
+```
+<Form.Group>
+  <div className="form__datatype">
+    <Form.Label>標題</Form.Label>
+    <Form.Text className="form__empty">
+      {isEmpty.title && '標題不能為空'}
+    </Form.Text>
+  </div>
+  <Form.Control
+    name="title"
+    type="text"
+    placeholder="Enter title"
+    value={thisPost && thisPost.title}
+    onChange={changePost}
+  />
+</Form.Group>
+```
+
+為了把標題跟錯誤資訊放在同一排，所以就加上一個 div 包起來，分別都還寫個新的 class name
+
+然後是 CSS 排版
+
+```
+.form__datatype {
+  display: flex;
+  justify-content: space-between;
+}
+```
+
+```
+.form__empty {
+  color: red;
+}
+```
+
+這樣就可以達成同一排的效果。
+
+![](https://cdn-images-1.medium.com/max/800/1*ck254aLmeEOgGLyAm6TJmw.png)
+
+然後是按鈕的區域，原本的應該要添加在按鈕附近，但是怎麼排怎麼怪，所以就沒有直接添加在一起了。
+
+```
+...
+...
+...
+  <Form.Text className="form__empty form__empty--submit">
+    {submitType.status}
+  </Form.Text>
+</Modal.Body>
+<Modal.Footer>
+...
+...
+...
+  <Button
+    variant="outline-primary"
+    onClick={handleSubmit}
+    disabled={!submitType.canSubmit}
+  >
+    {status === 'editing' ? '儲存文章' : '新增文章'}
+  </Button>
+</Modal.Footer>
+```
+
+主要是新增一個顯示資訊的位置，調整為按鈕的上方，所以需要另外設置一個 class 來調整，然後是按鈕的部份，當然如果無法送出就讓按鈕變成不能按下，所以就去偵測是否可以送出即可。
+
+然後是排版的部份，針對這部份新增一個 class 用來排版到右邊。
+
+```
+.form__empty--submit {
+  display: flex;
+  justify-content: flex-end;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*22iqPdmC7gO0vObm5pWTvw.png)
+
+畫面就完成了。
+
+接下來就是寫偵測的部份了。
+
+新增輸入項的 changePost 的行為，
+
+```
+const changePost = (e) => {
+  if (!e.target.value) { // 輸入時確認是否為空
+    setEmpty({ ...isEmpty, [e.target.name]: true, })
+  } else {
+    setEmpty({ ...isEmpty, [e.target.name]: false, })
+  }
+```
+
+```
+  setThisPost({ ...thisPost, [e.target.name]: e.target.value, })
+}
+```
+
+這樣在輸入的時候，就會去偵測，只要是空值就把該項的設定為 true，這樣就可以讓前面設定好的錯誤內容顯示出來。
+
+接下來就是偵測送出的按鈕了。首先要偵測是否值為空，就要寫一個判斷式來判斷，一旦其中一個欄位是空值，就把設置成不能提交，並且設置錯誤訊息，並且強制跳出這個執行。
+
+```
+const handleSubmit = () => {
+  if (!thisPost.title || !thisPost.author || !thisPost.body) {
+    setSubmitType({
+      canSubmit: false,
+      status: '資料不全，無法送出，繼續完成資料才可送出',
+   });
+    return;
+  }
+```
+
+```
+  const whichAPI = (thisPost, status) => status === 'create' ?
+    webAPI.createPost(thisPost) : webAPI.updatePost(thisPost)
+```
+
+```
+  const submitPost = (status, thisPost) => {
+    handleChangePosts(status, thisPost); // 改變畫面上的資料
+    onHide();
+  }
+```
+
+```
+  whichAPI(thisPost, status)
+    .then(res => res.status <= 300 && submitPost(status, thisPost))
+    .catch(err => console.log(err))
+}
+```
+
+但這樣會產生一個問題，當繼續輸入資料之後，狀態就不能改變了。因為 state 是 callback，所以並不一定會在輸入之後馬上就改好值了，所以不能把還原的部份直接放在後續。
+
+這時候就需要寫在 render 後，這樣就可以確保是 state 的正確性。也就是寫在 componentDidUpdate 這裡，就要用到 useEffect，這樣就可以短短的幾行完成。
+
+```
+useEffect(() => {
+  if (thisPost.title && thisPost.author && thisPost.body) {
+    setSubmitType({ canSubmit: true, status: '', });
+  } // render 檢測值是否為空
+}, [thisPost])
+```
+
+這邊就是只有當全部不為空，才把提交按鈕變成可提交狀態。
+
+而這邊，因為已經把資訊另外拉出來了，所以就可以顯示錯誤訊息。
+
+```
+const handleSubmit = () => {
+  if (!thisPost.title || !thisPost.author || !thisPost.body) {
+    setSubmitType({
+      canSubmit: false,
+      status: '資料不全，無法送出，繼續完成資料才可送出',
+   });
+    return;
+  }
+```
+
+```
+  const whichAPI = (thisPost, status) => status === 'create' ?
+    webAPI.createPost(thisPost) : webAPI.updatePost(thisPost)
+```
+
+```
+  const submitPost = (status, thisPost) => {
+    handleChangePosts(status, thisPost); // 改變畫面上的資料
+    onHide();
+  }
+```
+
+```
+  const onError = (err) => {
+    setSubmitType({
+      canSubmit: false,
+      status: `發生問題無法送出 ${err}`,
+    });
+  }
+```
+
+```
+  whichAPI(thisPost, status)
+    .then(res => res.status <= 300 && submitPost(status, thisPost))
+    .catch(err => onError(err))
+}
+```
+
+這樣就完成除了可以提交成功之外，還可以顯示錯誤訊息的功能了。
+
+![](https://cdn-images-1.medium.com/max/800/1*1J3WX8zm0ezUYJL6GCuB4A.gif)
+
+## CODE
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c15b611b0d76c3f46ae43181acc7ef74)

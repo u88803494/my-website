@@ -1,0 +1,157 @@
+---
+title: "在同一 linux 中使用多個 Git 帳號"
+slug: "在同一-linux-中使用多個-git-帳號"
+description: "前言"
+date: 2021-10-07T12:02:39.397Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*kAUq6x3io3uvspoIu6ePuw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%9C%A8%E5%90%8C%E4%B8%80-linux-%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%A4%9A%E5%80%8B-git-%E5%B8%B3%E8%99%9F-bed95dbfe1a9"
+---
+
+## 前言
+
+會寫這篇是因為，網路上資料很多，但對於像我這種對 SSH 沒概念的人來說，資料跟資料彼此的關係，變成要另外找資料才稍微比較懂，所以會造成很多的誤解，所以我特別另外紀錄下來，以方便自己將來更換設備的時候，可以快速的再次設定。
+
+## 開始說明
+
+這邊是假定已經有一組帳號在使用中，而想要另外添加新 GitHub。
+
+## 設置 SSH key
+
+設置方式請參考 [GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) 或按照以下方式：
+
+先切到目錄下
+
+```
+# 切到 ssh 的目錄下
+cd ~/.ssh
+```
+
+```
+# 生成 ssh key
+ssh-keygen -t rsa -C "<你的 email>"
+```
+
+生成時，第一個要輸入的欄位輸入自己想要的名稱。
+
+然後把 ssh key 貼到 GitHub 上，方法請參考 [GitHub 文件](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+## 設定 ssh
+
+```
+# 創立新檔案 config（~/.ssh 目錄下）
+touch config
+```
+
+```
+# 設定 config
+vim config
+```
+
+利用 Vim 或習慣的編輯器設定 config 以下內容：
+
+```
+# Default github user(primary@mail.com)
+Host primary
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_primary
+```
+
+```
+# Secondary user(secondary@mail.com)
+Host secondary
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_secondary
+```
+
+Host 是自取的名稱  
+HostName 是你的 Git remote 的 hostname  
+User 在 GitHub 中的 ssh url 是 git，所以要填為 git  
+IdentityFile 要可以直接取得對應的 ssh key 的路徑。
+
+設定好之後可以用以下指令測試
+
+```
+ssh -T [Host]
+# [Host] 為前面取的 Host
+```
+
+```
+ex:
+ssh -T primary
+```
+
+成功就會看到下面的訊息：
+
+![](https://cdn-images-1.medium.com/max/800/1*kAUq6x3io3uvspoIu6ePuw.png)
+
+這樣就完成基本設置。
+
+不過新帳號的還是不能使用，所以需要繼續設定專案。
+
+## 設定專案
+
+如果原先有 global 設定，就會需要取消。使用指令：
+
+```
+git config --global --unset user.name
+git config --global --unset user.email
+```
+
+接下來是兩種方式進行
+
+### 本地不存在的 repository
+
+意思就是專案已經在 GitHub 上，而我們需要複製到本地的狀態。
+
+原本我們 git clone 的時候，使用的指令都是 GitHub 提供的 SSH 路徑，長得像下方所示：
+
+```
+git clone git@github.com:[username]/[repository name]
+```
+
+而在這邊因為有在 `.ssh/config` 內設定過的關係，就可以使用那邊設定的 Host 取代，例如前面設定第二組的 Host 叫做 secondary，就可以把指令改成
+
+```
+git clone git@secondary:[GitHub username]/[repository name]
+```
+
+而我們因為有設定過 `User git` 的關係，所以更可以改成
+
+```
+git clone secondary:[GitHub username]/[repository name]
+```
+
+這樣就可以，也都可以操作了。
+
+### 原有的專案
+
+通常 clone 下來的專案都被預設為 origin，所以我們就需要更新這個 origin。
+
+切到該專案後，輸入指令：
+
+```
+git remote set-url origin secondary:[GitHub username]/[repository name]
+```
+
+這樣就小功告成了，因為還有其他設定要做。
+
+### 設置 repository 的資料
+
+而這樣拆分，因為沒有一個 global 的設定了，所以要分別每個 repo 去設定 email 跟 user，否則 commit 的時候會出問題如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*xlJRmDa_f5TFKw53W92L8Q.png)
+
+但這邊不要按照指令說的直接設定，設定方式如下：
+
+```
+git config user.email "you@example.com"
+git config user.name "Your Name"
+```
+
+這樣就真的大功告成了！
+
+## 參考文章

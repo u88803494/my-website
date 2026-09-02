@@ -1,0 +1,212 @@
+---
+title: "後端基礎：資料庫基礎概念與語法"
+slug: "後端基礎-資料庫基礎概念與語法"
+description: "有些公司的資料庫很複雜，查詢語法也會跟著很複雜。目前只學習比較簡單的部份。"
+date: 2019-07-09T08:04:25.427Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*M9HyQ0Wup8GMQm63_diwDA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%B3%87%E6%96%99%E5%BA%AB%E5%9F%BA%E7%A4%8E%E6%A6%82%E5%BF%B5%E8%88%87%E8%AA%9E%E6%B3%95-a8b398c8b315"
+---
+
+有些公司的資料庫很複雜，查詢語法也會跟著很複雜。目前只學習比較簡單的部份。
+
+## 正規劃 Normalization
+
+像留言板的時候，可以利用一個 user_id 來標明是誰的留言。
+
+如果有一天使用者改暱稱。
+
+![](https://cdn-images-1.medium.com/max/800/1*M9HyQ0Wup8GMQm63_diwDA.png)
+
+就必須要透過 user_id 去查詢 users 的 table 的最新暱稱來顯示。
+
+利用這樣來存資料才比較有彈性。就會分開來如下方：
+
+![](https://cdn-images-1.medium.com/max/800/1*uYBql5M3ICY5AVt2C14Ukg.png)
+
+-
+
+### 資料庫命名規則：
+
+命名都是小寫+s ： users. orders 等。如果有很多名稱就會用底線分開 create_at。
+
+以購物網站為例子。產品有產品 id、訂單 id、訂購者 id。彼此之間就必須要有一定的方式去存取資料。才可以得到誰訂了什麼貨品。然後彼此之間又有層與層的關係。
+
+所以訂單 table 就會有很多 id 的資料，像是 order_product_id、user_id，像是訂單，就可通過 id 去查詢購買產品的 id 或其他資料，然後在透過產品 id 去查詢買的東西是什麼。
+
+![](https://cdn-images-1.medium.com/max/800/1*Z14UznXc0D_7KGKtAex4pw.png)
+
+這樣也有一個問題，因為分成兩個表格，所以就要想辦法把他合起來。這之後在講。
+
+這邊還有一些別的問題，第一個是索引
+
+Index：Index 是可以直接建立索引，這個就是建立之後，可以比較快搜尋到要的資料。另一個是可以對兩個不同欄位的資料建立索引，這樣在搜尋的時候就會比較快。建立索引是需要時間跟空間，所以不會幫所有欄位建立索引。
+
+Unique Index：這是可以讓欄位的資料不重複的值
+
+Primary Index：就是主鍵，通常都加在 id 這樣可以自動生成。一個 table 只能有一個。
+
+第二個是內建函式：
+
+大多數是跟數學有關係，就類似 EXCEL 的功能。
+
+COUNT 計次：用法是
+
+```
+SELECT COUNT(id) FROM `users`
+```
+
+這樣就可以知道 id 這個欄位有多少筆資料。
+
+![](https://cdn-images-1.medium.com/max/800/1*g4rWIjVmQTJdjvU3X8LeRQ.png)
+
+SUM：把資料的值合計有多少。
+
+AVG：平均
+
+CONCAT ：把一些欄位合起來。用在加一些想要的東西。
+
+![](https://cdn-images-1.medium.com/max/800/1*yqdnxs_Ajn3pwTybSu2pRA.png)
+
+其他非函式查詢： between, in, like。用到 where
+
+between:
+
+```
+WHERE id=3 BETWEEN id=10
+```
+
+in 有點像陣列
+
+```
+WHERE id IN (1, 2, 3)
+```
+
+就像是要指定 id =1 , id = 2 , id = 3 這邊要用 AND 來寫會寫得很長。用 IN 可以看起來比較簡潔一些。
+
+like 用在字串，可以用在找字串有什麼內容的。like 是比對，所以不能直接打想要比對的字串。所以就要旁邊加上 % ，意思是加上的那邊可以有不同的字元的意思。
+
+```
+WHERE content like '%o%' // 找中間有 o 的資料
+```
+
+或是
+
+```
+WHERE content like 'h%' // 找 h 開頭的資料
+```
+
+## Join
+
+面試必考題
+
+[參考資料](https://www.w3schools.com/sql/sql_join.asp)
+
+就像是以前教的集合
+
+![不同種類的 join](https://cdn-images-1.medium.com/max/800/1*puYx7icms5f66by8fjSWnA.png)
+
+_不同種類的 join_
+
+再取資料的時候要用 xxx.xx 的形式來取得 table_name.column_name
+
+-
+
+### Inner Join （取交集）：
+
+![](https://cdn-images-1.medium.com/max/800/1*RtDgPf4L-hLSWVbvvRmpow.png)
+
+另外一種語法（推薦，因為易讀）
+
+![](https://cdn-images-1.medium.com/max/800/1*RAxis6lhZxHtpbwD_af2kw.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*Kw7YUzthrspq1AXrKcWqsQ.png)
+
+```
+SELECT users.id, jobs.id, jobs.title FROM `users` JOIN jobs ON users.id = jobs.id
+```
+
+這樣就是選取了 users.id, jobs.id, jobs.title， users 跟 jobs 做集合，然後條件是 users.id = jobs.id ，所以就只顯示兩邊 id 相同的 jobs.title 資料。
+
+-
+
+### Left Join
+
+取 table 1 的資料，然後交集的部份如果 table2 有資料就放進來
+
+![](https://cdn-images-1.medium.com/max/800/1*V4kYjXndXpbLKTTOyu1csQ.png)
+
+所以左邊的資料一定會出現。
+
+![](https://cdn-images-1.medium.com/max/800/1*0QoOIHsKg2NWVVC-1Qi9Kg.png)
+
+可以看到有很多地方都是兩個 null ，理由是 user 的 id 有資料，但 jobs 沒資料，就會這樣呈現。
+
+小提醒：join 有分兩種，一個是 inner join，另一個是 outer join。交集的就是 inner join，而有把中間以外的資料加進來的就是 outer join，所以 left join 的全名是 left outer join。
+
+-
+
+### Right Join
+
+![](https://cdn-images-1.medium.com/max/800/1*-KAuSVC6qBYjQxSkDEk0ag.png)
+
+就只保留右邊的資料，然後左邊有符合條件就顯示。
+
+-
+
+### Full Outer Join
+
+就是把全部的東西加進來。可惜 MySQL 不支援。
+
+就是全部的資料都出現出來。
+
+## 排序
+
+ASC 升序排序
+
+DESC 逆序排序
+
+```
+SELECT * FROM users ORDER BY 排序的欄位名稱 ASC
+SELECT * FROM users ORDER BY 排序的欄位名稱 ASC
+```
+
+## 分頁
+
+```
+// 顯示前三十筆資料
+SELECT * FROM users LIMIT 30
+```
+
+```
+// 回傳 61 ～ 90 筆資料
+SELECT * FROM users LIMIT 30 OFFSET 60
+SELECT * FROM users LIMIT 60, 30 // 簡寫
+```
+
+### 改名（alias）
+
+顯示資料的時候把欄位名稱改掉。運用 AS
+
+下面舉的例子，可以利用這點，讓整個指令串寫的少一些。
+
+![](https://cdn-images-1.medium.com/max/800/1*GwYaBoDNYa1dmHKsZP9SnQ.png)
+
+## 疑難雜症：
+
+1. 中文變成 ???
+
+mysqli_set_charset($conn, “utf8”)
+
+這個的用意是在 PHP 跟資料庫連線的時候，要使用那一種編碼。
+
+2. 字串拼接很麻煩
+
+利用雙引號，PHP 雙引號跟單引號是有差異的，雙引號在裡面放變數。
+
+```
+$sql = "SELECT * FROM users WHERE name='$name'";
+```
+
+或是使用 sprintf

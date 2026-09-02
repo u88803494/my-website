@@ -1,0 +1,100 @@
+---
+title: "人生重構 Day29：再戰新產品 — 串接視訊功能(Twilio)"
+slug: "人生重構-day29-再戰新產品-串接視訊功能-twilio"
+description: "一道難題就是給你一次機會，全力以赴 — Duke Ellington"
+date: 2023-10-14T14:02:09.120Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*0rmbe3twWO4J1XbJ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E4%BA%BA%E7%94%9F%E9%87%8D%E6%A7%8B-day29-%E5%86%8D%E6%88%B0%E6%96%B0%E7%94%A2%E5%93%81-%E4%B8%B2%E6%8E%A5%E8%A6%96%E8%A8%8A%E5%8A%9F%E8%83%BD-twilio-0b668701e571"
+---
+
+> _一道難題就是給你一次機會，_
+
+> _全力以赴_
+
+> _— Duke Ellington_
+
+遇到難題就是一個挑戰的機會，總之全力挑戰過去吧，無論成功與否都可以學到東西。
+
+## 回顧 [Day28](https://ithelp.ithome.com.tw/articles/10338110)
+
+在 [Day28](https://ithelp.ithome.com.tw/articles/10338110) 中，我分享了新專案的狀況以及我提出新的實作方式，然後接下來就要介紹 Twilio，以及我當時是如何研究 Twilio 的狀況。
+
+## 串接視訊平台
+
+### Twilio 是什麼樣的平台
+
+在我們開始改善視訊流程之前，讓我們先介紹一下 Twilio。
+
+Twilio 是一個知名的通訊平台，提供了各種功能強大的通訊 API，包括短信、語音和視訊等。透過 Twilio，我們能夠在我們的應用程序中輕鬆地實現通訊功能，並提供無縫的通訊體驗給我們的使用者。
+
+> _更多報導：_[_市値每月增加10億美元 獨角獸Twilio紅什麼？_](https://www.cw.com.tw/article/5102577?template=transformers)[_雲端通訊平台Twilio創辦人勞森－－創業是為了改變世界_](https://management.ntu.edu.tw/EMBA/read-shared180328)
+
+### 原來產品的串接情況
+
+公司的舊平台已經採用 Twilio 作為視訊通訊解決方案，但其前端實作方式存在一些不足。這引發了我對如何優化這一部分的思考。
+
+1. **不規範的API串接：** 原先的實作方式並未完全遵循 Twilio 的設計規範，這可能對整體效能和穩定性產生負面影響。
+2. **資料同步問題：** 舊平台應用在 Twilio 提供的資料基礎上，另外進行了一層視訊相關資料的管理。這樣的設計經常導致資料不一致，例如一名參與者加入視訊會議後，介面上卻展示為兩個視窗。
+3. **程式碼複雜性：** 由於加入了額外的資料管理層，使得程式碼變得更為複雜，不僅難以維護，也增加了後續開發的困難度。
+
+由於原始程式碼在早期「趕工」的情況下完成，因此它的結構和邏輯相當混亂，所以我們能不碰就不碰。即使資深工程師也認為，若需要對該部分進行修改，不如直接重新撰寫。
+
+基於這些原因，我認為在新平台的開發過程中，有必要採用更合理和可維護的方式來串接 Twilio。
+
+值得一提的是，這些混亂的程式碼都是在我入職之前就已經存在的。當時由於各種原因，如時間壓力等，導致這部分的程式碼品質不佳。因此，這也成為我入職後，希望能夠改善和優化的一個重要項目。
+
+### 我的研究順序
+
+在這部分，我將簡要介紹我的研究方法和步驟。
+
+**初探：Twilio 官方網站**  
+我最初的資料來源是 [Twilio 官網](https://www.twilio.com/en-us)。對於入門者來說，這是一個自然而然的起點。我特別關注了 [Twilio Video 的專門文件](https://www.twilio.com/docs/video)，但發現其內容相對複雜和繁瑣，並沒有提供 React 專用的版本提供串接，唯一找得到的是 JavaScript ：[twilio javascript-getting-started](https://www.twilio.com/docs/video/javascript-getting-started)
+
+由此可見 Twilio 作為一個多功能、大型的通訊平台，提供的資料非常廣泛，這對入門者來說反而會感到不知所措。
+
+**查看原始碼：**  
+由於官方文檔的信息過於龐大，我轉而尋求其他方式來獲取所需知識。我開始研究 Twilio 在 node_module 中的原始碼，特別是其 TypeScript 型別檔案。這樣不僅讓我能更直觀地理解 Twilio 的運作機制，而且過程中發現了許多 `.on` 的訂閱方法，也就會注意到他是使用訂閱的設計模式，這相較於官方網站或許是一個簡潔的研究方向。
+
+![Room 物件，整個 Twilio 的視訊資訊都在裡面](https://cdn-images-1.medium.com/max/800/0*0rmbe3twWO4J1XbJ.png)
+
+_Room 物件，整個 Twilio 的視訊資訊都在裡面_
+
+![LocalParticipant 物件，本地參與者資訊，位於 Room 物件底下，包含了各種 Track 跟 function(功能)](https://cdn-images-1.medium.com/max/800/0*U24E0wZsoak05wZD.png)
+
+_LocalParticipant 物件，本地參與者資訊，位於 Room 物件底下，包含了各種 Track 跟 function(功能)_
+
+但這樣還是不太了解怎麼辦？
+
+**研究官方範例：**  
+其實官方網站自己本身有提供一個串好的 React 範例，但可惜的是我當時並不知道怎麼跑起來，所以我就秉著先假設這個是正確的方式來研究。  
+[twilio-video-app-react](https://github.com/twilio/twilio-video-app-react)
+
+但實際上我在想或許當初寫這個的人對於 React 並不是這麼熟悉，所以其實裡面的程式碼是不容易閱讀的。
+
+但經過很努力閱讀後，大致可以看出整個脈絡，要從 `Room` 物件取得，到底下逐漸地把參與者 `Participant` 物件放到對應位置，然後 `Participant` 物件底下還有會參與者各自的 `Track`，這樣就構成完整的 Twilio 視訊。
+
+最後我就是用 Try and error 的方式，才逐步找出要應用哪個 function 或是 `.on` 才逐漸把這次的需求完成。
+
+**研究其他人的 side project：**  
+最後來點補充資料，我後來在實作虛擬背景時，意外注意到有人的 side project 是串接 Twilio 的，看照片感覺是個印度裔的女生。他寫的就很符合 React 的風格，學習起來就輕鬆多了，多一個推薦讓大家參考一下，他是模仿 Microsoft Teams：[teams](https://github.com/ananyalohani/teams/tree/main)
+
+關於這篇就到這裡了，今天只是先大致分享一下我是如何學習 Twilio 的，或許哪天有機會再來分享實作的細節。
+
+目前大致上第三份工作就寫到這裡了，因為我目前也還在職，更多的細節就不方便透露了。
+
+## 結語
+
+挑戰這樣一個比較大型的 SDK 確實是一件非常不容易的事情，光是看到它包含的功能可能就先嚇一跳。不過在第一次實作出比較符合 Twilio 的模式的程式碼後，我就注意到跟公司原本寫的比起來看起來好得多，運作起來也順利許多，在我逐漸實踐的過程中，我也對 Twilio 更加上手，甚至發現了更好實作的方式，再後來我也逐漸的優化寫法並且重構，使得它更像一回事。
+
+這也證明了我自己的研發能力越來越好，甚至也可以自行研究而串接好 SDK，這又進一步證明自己的能力。在這之後或許會找個時間寫一系列 Twilio 的相關文章或是親自實作一個串接的 side project？這不一定，但也不失為一些挑戰的方向。
+
+下一篇我將介紹我工作之餘的生活，希望你會喜歡這篇！
+
+文章就說到這，有什麼想法或問題，歡迎隨時找我聊聊！
+
+這篇文章也會同步發在 medium 上，如果有興趣歡迎追蹤我。
+
+medium: https://medium.com/@hugh-program-learning-diary-js  
+email: u88803494@gmail.com

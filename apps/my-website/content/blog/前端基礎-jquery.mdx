@@ -1,0 +1,228 @@
+---
+title: "前端基礎：JQuery"
+slug: "前端基礎-jquery"
+description: "什麼是 JQuery？"
+date: 2019-08-09T13:43:58.865Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*E1IaNdBPGnctxdXRXHC9kw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-jquery-3df1a2b21815"
+---
+
+## 什麼是 JQuery？
+
+JQuery 就是幫我們把一長串需要自己手動輸入的常用程式碼的段落，另外打包起來。例如說常常會用到固定的部份
+
+```
+document.querySelector('.calculator__input').addEventListener('click', inputClick);
+```
+
+這樣看起來非常的長，假設我們前面那段常常會需要用到，這時候就可以另外打包起來。
+
+```
+const q = document.querySelector('.calculator__input');
+```
+
+```
+q.addEventListener('click', inputClick);
+```
+
+這樣就可以達到相同的效果。在往後需要使用的時候，就可以直接打 q 就代表前面那一段。
+
+當然實際的運行上不跟例子相符。這邊講的主要是把概念帶進來而已。
+
+簡單說 JQuery 就是幫助我們去做 DOM 操作或 JavaScript 操作的工具，主要是可以協助我們簡化語法。
+
+[JQuery 官方網站](https://jquery.com/)
+
+官方網站本身就舉了一些範例。
+
+![](https://cdn-images-1.medium.com/max/800/1*rq3wrqiHTCU2sVoqT5-p3g.png)
+
+可以看到 $ 這就是 document.querySelector 的意思
+
+.html 就是之前的 innerHTML [參考資料](https://www.w3school.com.cn/jquery/manipulation_html.asp)
+
+## 如何安裝/引用 JQuery
+
+使用方式有兩種一種是下載下來之後載入，另外一種是透過外部網路引用
+
+https://jquery.com/download/
+
+### 1. 下載 jQuery 庫
+
+jQuery 庫是一個 JavaScript 文件。我們可以下載之後安裝。然後在使用 HTML 的 &lt;script> 標籤引用它：
+
+```
+<head>
+<script src="jquery.js"></script>
+</head>
+```
+
+### 2. 替代方案
+
+通過官方網站的 CDN 引用
+
+另外還有 Google 跟微軟的 CDN 可以引用
+
+詳細可以看 [W3C 介紹](https://www.w3school.com.cn/jquery/jquery_install.asp)
+
+推薦是使用官方網站或微軟，因為 Google 會被大陸阻擋，所以用了大陸人就看不到網頁了。
+
+Google 跟微軟的好處是大多數人已經看過他們的網頁了，也就是說已經載入過他們的 JQuery
+
+官方網站還有分兩種版本，一種是 http 的版本，另外一種是 https 的版本。
+
+http
+
+```
+<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+```
+
+https
+
+```
+<script src='//code.jquery.com/jquery-2.1.4.min.js'></script>
+```
+
+https 的比較簡短可以直接不加上 https 即可引用。
+
+## JQuery 怎麼使用
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+  <script>
+    $(document).ready(function () {
+      $('.btn').click(function () {
+        alert('yo');
+      })
+    })
+  </script>
+</head>
+<body>
+  <div class="btn">click me</div>
+</body>
+</html>
+```
+
+> .ready，表示文檔結構已經加載完成（不包含圖片等非文字媒體文件）
+
+> [參考資料](https://blog.csdn.net/dreamzml/article/details/8859026)
+
+這邊的意思是加載完成之後在設置監聽 click(點擊) .btn 的行為
+
+所以來比較一下 JQuery 跟 vanilla JS 的差異
+
+![長度差很多](https://cdn-images-1.medium.com/max/800/1*E1IaNdBPGnctxdXRXHC9kw.png)
+
+_長度差很多_
+
+這時候可以試著印出
+
+```
+console.log($('.btn'));
+```
+
+會發現下面有很多的函式可以使用
+
+![這些都是 JQuery 提供的內建 function](https://cdn-images-1.medium.com/max/800/1*8GFLC5WWCiNBGr6zFmukbQ.png)
+
+_這些都是 JQuery 提供的內建 function_
+
+簡單說，有了 JQuery 之後，就比較不會使用原生的 API 了，因為語法簡潔很多。但實際上還是用得到原生的 JS，因為 library 並不能完全取代原生 JS。
+
+JQuery 方便使用的原因除了，他還支持跨瀏覽器，尤其古早時期是還要支援 IE6、IE7 的時候，這點就顯得很重要。雖然現在IE6、IE7 已經很少人在用 JQuery 的重要性降低了一些，但還是一個很重要的 library。因為語法真的很簡單。
+
+### JQuery 的缺點
+
+有一個網站可以參考
+
+有講到 JQuery 的優缺點，這個網站也可以用來比對程式碼，所以也可以當成學習 JQuery 的工具。
+
+優點前面已經說過了
+
+缺點：
+
+1. 會依賴這個 library 之後不用了要改就很困難
+2. 必須要載入 JQuery，這是有檔案大小的問題了，所以加載的資源也是一個問題點
+
+這個網站在有對照的寫法，告訴我們有時候寫簡單的程式碼，可以不需要讓使用下載那 3 . 4 kb 的檔案，以免浪費流量。
+
+### 簡易實作例子
+
+先準備一個 div 跟 兩個按鈕
+
+```
+<body>
+  <div class="main">
+  </div>
+```
+
+```
+  <button class="show">show</button>
+  <button class="hide">hide</button>
+</body>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*v1nf4YemaFdwKcw_4tmPzA.png)
+
+然後寫程式碼，因為要利用 JQuery 製造效果。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/4ecf3c1b092fce884738eb3df037e86e)
+
+整體而言就是這樣，這邊寫了一個監聽當讀取完成的時候，就監聽那兩個按鈕，按下去之好會按照寫好的顯示。
+
+另外一個重點，測試之後發現 JQuery 一定要用 .ready 否則會無法啟用。後來找到理由如下：
+
+> 您也许已经注意到在我们的实例中的所有 jQuery 函数位于一个 document ready 函数中：
+
+```
+$(document).ready(function(){
+```
+
+```
+  --- jQuery functions go here ----
+```
+
+```
+});
+```
+
+> 这是为了防止文档在完全加载（就绪）之前运行 jQuery 代码。
+
+> 如果在文档没有完全加载之前就运行函数，操作可能失败。下面是两个具体的例子：
+
+> 试图隐藏一个不存在的元素
+
+> 获得未完全加载的图像的大小
+
+> [資料來源](https://www.w3school.com.cn/jquery/jquery_syntax.asp)
+
+由此得知 .ready 是必須的，否則有機會發生錯誤。
+
+—
+
+另外看到一個新名詞 Xpath。
+
+原來這就是我之前搞不太懂的選擇器的方法的名稱。 [參考資料](https://www.w3school.com.cn/jquery/jquery_selectors.asp)
+
+![JQuery 的常用函式](https://cdn-images-1.medium.com/max/800/1*bjX4XAvqx5laz2nno5279A.png)
+
+_JQuery 的常用函式_
+
+## 其餘部分
+
+可以參考 W3Cschool 裡面有很詳細的教程
+
+## 收穫：
+
+因為前面有 JavaScript 的基礎，所以看這個不會很困難，但光是看老師介紹，其實還是有很多的疑惑點。主要來源是因為對於 JQuery 的不熟悉。
+
+後來把 W3Cschool 的資源看一看，就對於 JQuery 怎麼使用有了比較好一些的概念了。用起來跟 JavaScript 的內建函式很像，大致上也是要看說明才知道如何使用。我是還沒全部看完，因為方法真的滿多種可用，目前是感覺真的是有針對網頁應用重新弄過的函式庫，整體而言設計的還滿方便使用。要熟悉的話應該是多多使用就可以了。

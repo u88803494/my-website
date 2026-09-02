@@ -1,0 +1,50 @@
+---
+title: "React 中如何實作的彈出視窗"
+slug: "react-中如何實作的彈出視窗"
+description: "緣由"
+date: 2020-02-03T10:24:32.276Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*T3g6ipuk81hLZInZYA8Vmw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%E7%9A%84%E5%BD%88%E5%87%BA%E8%A6%96%E7%AA%97-48935aee5183"
+---
+
+## 緣由
+
+本來之前的寫法是自己另外寫過，純的…（JS）
+
+在這裡是要實作一個可以彈出編輯視窗，所以就直接開一篇來紀錄。
+
+而這邊就要嘗試使用 React-Bootstrap 內的方式，理由是發現原來 bootstrap 內部有建立類似的了，所以就想來試試看 bootstrap 的。
+
+## 實作
+
+這邊是使用 React Hook 的方式，不過也可以啦，因為之前有稍微學過怎麼用，而且 `uesState` 並沒有很困難學習。
+
+基本上就是原本在 class 裡面的 state ，本來是通通寫在一起，變成一個 useState 一個狀態這樣並且附帶一個控制用的 function。
+
+編輯的部分：
+
+![](https://cdn-images-1.medium.com/max/800/1*T3g6ipuk81hLZInZYA8Vmw.png)
+
+當然這邊之後命名會再修改，畢竟這是原始命名
+
+新增的部分：
+
+![](https://cdn-images-1.medium.com/max/800/1*o5DBhiHNGO5QGxrLhn--ag.png)
+
+另外都加上短路判斷，以省略不必要的 render。
+
+接下來就可以實作編輯/新增的頁面了。
+
+而傳入的 `show` 跟 `onHide` 分別是 React-Bootstrap 內的判斷顯示跟控制顯示的 function。
+
+所以就要把這兩個的內容傳入 `.Modal` 的 component 內部。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c411fd52487c2b13857a9042bcced62d)
+
+![](https://cdn-images-1.medium.com/max/800/1*FRywqbdXXTal1F2jruECAQ.gif)
+
+在這邊簡單說就是要利用兩個 component，一個就是專門放黑背景跟彈出視窗的部份，在這裡的例子是一個 blog，所以新增、編輯、刪除之類的可能都可以放在一起，就只是需要構思要怎麼寫這樣。
+
+而 `EditingWindow` 本身就是我命名彈出視窗的 component，所以只需要在要彈出視窗的地方，加上一個狀態跟按鈕，就可以彈出一個視窗，至於內容要如何處置，就看自己要怎麼做了。

@@ -1,0 +1,771 @@
+---
+title: "前端中階：JS令人搞不懂的地方-Closure(閉包)"
+slug: "前端中階-js令人搞不懂的地方-closure-閉包"
+description: "Closure 是什麼？"
+date: 2019-09-24T12:49:28.490Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*zsGU6xGR78N1-lYB36E7uQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-closure-%E9%96%89%E5%8C%85-cbb9c6a4185c"
+---
+
+## Closure 是什麼？
+
+```
+function test() {
+  var a = 10;
+  function inner() {
+    a++;
+    console.log(a)
+  }
+  return inner // 不加括號，只 return 這個 function
+}
+```
+
+```
+var func = test()
+func() // 11 => 等同於 inner()
+func() // 12 => 等同於 inner()
+func() // 13 => 等同於 inner()
+```
+
+要這樣寫的原因是因為，這樣就可以把 a 這個變數鎖在這個 function 裡面。
+
+一般而言 function 被執行完之後，資源就被釋放掉了，所以要通過這種方式，來讓變數的值可以保存下來。
+
+另外一個例子：
+
+```
+function complex(num) {
+  // 複雜計算
+  return num * num * num;
+}
+```
+
+```
+console.log(comlex(20))
+console.log(comlex(20))
+console.log(comlex(20))
+```
+
+假設有需要，所以執行多次。但這樣執行多次都算一樣的東西，太浪費資源。這時候就可以利用一個 function cacha()，然後先預想好，需要他輸出一個結果，然後後面不用再次重新計算。
+
+我們希望傳一個 function 進去，然後回傳一個版本，會幫我把輸入的值紀錄起來，後面在呼叫的時候，因為已經計算過了，所以就直接輸出了。
+
+```
+function complex(num) {
+  // 複雜計算
+  console.log('calculate'); // 通過這行就可以知道有沒有經過計算
+  return num * num * num;
+}
+```
+
+```
+function cache(func) {
+  var ans = {};
+  return function(num) {
+  // 因為簡化語法，所以可以直接 return 這個 function
+    if (ans[num]) {
+      return ans[num];
+    }
+
+    ans[num] = func(num); // 在這裡等同於 ans[20] = complex(20)
+    return ans[num];
+  }
+}
+const cachedComplex = cache(complex)
+console.log(cachedComplex(20)) // 計算
+console.log(cachedComplex(20)) // 純輸出，就會判斷 ans[20] 存在否？
+console.log(cachedComplex(20)) // 純輸出
+```
+
+```
+// calculate
+// 8000
+// 8000
+// 8000
+```
+
+由此可以得知，真的沒有重新計算。  
+主要是 `function cache(func)` 可以傳入任意 function，這邊是傳入 `complex` ，所以當執行 cachedComplex 的時候，就是在執行 `cache(complex)` 的內容。
+
+## 從 ECMAScript 看作用域
+
+closure 跟 作用域深深的綁在一起，要理解 closure 就必須要了解 scope chain 的機制，夠了解就可以理解 closure 產生的原因。
+
+![](https://cdn-images-1.medium.com/max/800/1*zsGU6xGR78N1-lYB36E7uQ.png)
+
+每一個 execution context 都有一個 scope chain。當進入一個 execution context 的時候， scope chain 就會被建立。  
+所以每個 execution context 都有一個 scope chain。
+
+![](https://cdn-images-1.medium.com/max/800/1*VgGEXjScehL60b1kUMvM4g.png)
+
+當進入到一個 execution context 的時候，一個 scope chain 被建立並初始化，變數也被初始化
+
+![](https://cdn-images-1.medium.com/max/800/1*rqrs08uhIwl17gP2C73_KQ.png)
+
+這個 scope chain 被初始化成 activation object
+
+進入一個新的 function EC 的時候，會在其 scope 加上 activation object(AO) 以及儲存在 [[Scope]] 裡面的 scope chain
+
+```
+Enter function EC =>
+scope chain: [AO , [[Scope]] ]
+```
+
+![往上找來理解 AO](https://cdn-images-1.medium.com/max/800/1*FVj7-BstOLW2em7xcGJ-Ew.png)
+
+_往上找來理解 AO_
+
+當進入一個 execution context 裡面的時候，同時會創見一個物件叫做 activation objection。activation objection 初始化，並且命名一些 arguments。  
+然後 activation objection 在這裡的作用，就如同 variable object
+
+```
+global EC: {
+  VO: { // 在 global 裡面才有  variable object
+
+  }
+}
+```
+
+```
+function EC: {
+  AO: {
+    a: undefined,
+    func: func,
+```
+
+```
+},
+  scopeChain: [function EC.AO, ]
+}
+```
+
+```
+Enter function EC =>
+scope chain: [AO , [[Scope]] ] // function 被宣告的時候，決定的(隱藏屬性)
+```
+
+舉個例子：
+
+```
+var a = 1
+function test() {
+  var b = 2
+  function inner() {
+    var c = 3
+    console.log(b)
+    console.log(a)
+  }
+  inner()
+}
+```
+
+```
+test()
+```
+
+在進入程式的時候，處於 global 會產生一個 global EC，並且產生 VO，同時也會出現隱藏屬性 Scope，並產生一個 Scope chain。
+
+```
+global EC: { // 進入 global，產生 VO 並定義 function
+  VO {
+    a: undefined,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain // = globalEC.VO
+// 產生一個隱藏屬性
+```
+
+然後執行的時候會把 a 的值改成 1
+
+接著就進入 test 這個 function，就產生一個 testEC，scope chain 會等於自己本身+上 test.[[Scope]] 內部的值，並且一樣要產生一個 inner 的隱藏屬性，inner.[[Scope]] 內容是 testEC.scopeChain 的值。
+
+```
+testEC: {
+  AO: { // 在 function 內是 AO
+    b: undefined,
+    inner: func,
+  }
+  scopeChain: [testEC.AO, test.[[Scope]]]
+  // => [testEC.AO, globalEC.VO]
+  // 加上自己的 AO，並且加上 test.[[Scope]] 內部的值
+}
+```
+
+```
+inner.[[Scope]] = testEC.scopeChain => [testEC.AO, globalEC.VO]
+```
+
+```
+glbobal EC: { // 進入 global，產生 VO 並定義 function
+  VO {
+    a: 1,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain
+```
+
+然後執行階段 b 等於 2。
+
+接著進入 inner，產生一個 innerEC，進入之後初始化 c，然後 Scope chain 等於 innerEC.VO, inner.[[Scope]] 的值，然後經過轉換，就可以得到一串 Scope chain 找資料的鏈鎖 — [innerEC.AO, testEC.AO, globalEC.VO]
+
+```
+innerEC: {
+  AO: {
+    c: undefined
+  }
+  scopeChain: [innerEC.AO, inner.[[Scope]]]
+  // => [innerEC.AO, testEC.scopeChain]
+  // => [innerEC.AO, testEC.AO, globalEC.VO]
+}
+```
+
+```
+testEC: {
+  AO: {
+    b: undefined,
+    inner: func,
+  }
+  scopeChain: [testEC.AO, globalEC.VO]
+}
+```
+
+```
+inner.[[Scope]] = testEC.scopeChain
+```
+
+```
+glbobal EC: {
+  VO {
+    a: 1,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+test.[[Scope]] = globalEC.scopeChain
+```
+
+然後執行把 c 改值為 3，然後執行`console.log(b)` ，從 scopeChain 的順序找，先找 innerEC.AO，結果找不到 `b` ，於是就會沿著 scope chain 找到下一個 testEC.AO 裡面有 b 於是就印出 b 的值 2。  
+同樣的執行 `console.log(a)`從 scopeChain 的順序找，先找 innerEC.AO， 結果找不到 a ，於是就沿著 scope chian 往上找 testEC.AO 一樣沒有 a，所以再往上找 globalEC.VO 終於有了，於是就印出 a 的值 1
+
+```
+var a = 1
+function test() {
+  var b = 2
+  function inner() {
+    var c = 3
+    console.log(b) // 2
+    console.log(a) // 1
+  }
+  inner()
+}
+```
+
+```
+test()
+```
+
+## Closure 實例
+
+解析下列範例的 JavaScript 執行情況
+
+```
+var v1 = 10;
+function test() {
+  var vTest = 20;
+  function inner() {
+    console.log(v1, vTest); // 10 20
+  }
+  return inner = test();
+}
+```
+
+```
+var inner = test();
+```
+
+```
+inner();
+```
+
+首先進入 global 之後先初始化
+
+```
+glbobal EC: {
+  VO: {
+    v1: undefined,
+    inner: undefined,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain // => [globalEC.VO]
+```
+
+執行之後 v1 = 10 然後進入 test 的 function，初始化
+
+```
+testEC: {
+  AO: {
+    vTest: underfined,
+    inner: func
+ },
+  scopeChain: [testEC.AO, test.[[Scope]]]
+  // => [testEC.AO, globalEC.VO]
+}
+```
+
+```
+inner.[[Scope]] = [testEC.AO, globalEC.VO]
+```
+
+```
+glbobal EC: {
+  VO: {
+    v1: 10,
+    inner: undefined,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain // => [globalEC.VO]
+```
+
+然後執行，vTest 被變更為 20，接著`return inner;` ，照理來說應該就要清空 testEC 了，不過因為有變數要接收這些資料，因為有需要用到，所以這些資料就不能被清空。這些資料就會繼續存在。只有 `inner.[[Scope]]` 的資料還會繼續保留，也就是 `testEC.AO` 就會繼續保留著。其他一樣清空  
+這就是閉包的原理。
+
+回傳之後 globalEC 的 `var inner = test();` 就會把 inner 變數賦值成一個 func
+
+```
+inner.[[Scope]] = [testEC.AO, globalEC.VO]
+```
+
+```
+glbobal EC: {
+  VO: {
+    v1: 10,
+    inner: func,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain // => [globalEC.VO]
+```
+
+```
+===假定保留區===
+testEC.AO: {
+  vTest: 20,
+  inner: func
+}
+```
+
+接著是 globalEC 的 `inner();` 編譯，就會進入 innerEC，初始化中，scopeChain 就會放上自己的 AO 並且把 innerEC.[[Scope]] 的資料放入，呈現如下方的樣子：
+
+```
+inner.[[Scope]] = [testEC.AO, globalEC.VO]
+```
+
+```
+innerEC: {
+  AO: {
+```
+
+```
+},
+  scopeChain: [innerEC.AO, inner.[[Scope]]]
+  // => [innerEC.AO, testEC.AO, globalEC.VO]
+```
+
+```
+}
+```
+
+```
+glbobal EC: {
+  VO: {
+    v1: 10,
+    inner: func,
+    test: func
+  }
+  scopeChain: [globalEC.VO]
+}
+```
+
+```
+test.[[Scope]] = globalEC.scopeChain // => [globalEC.VO]
+```
+
+```
+===假定保留區===
+testEC.AO: {
+  vTest: 20,
+  inner: func
+}
+```
+
+然後執行的時候，到了 `console.log(v1, vTest)`，就會先從自己的 innerEC.AO 開始找，找尋 v1 發現沒資料，就在找 testEC.AO，v1 找不到，再次往上找，找到 globalEC.VO 有 v1 。  
+接著在找 vTest，innerEC.AO 開始找，找尋 vTest 發現沒資料，就在找 testEC.AO，找到 vTest: 20  
+然後就印出 10 20
+
+### 小結：
+
+閉包其實就是把 scopeChain 保留，因為其他的部份可能要用到，所以 JavaScript 的回收機制就不能回收這些資料。因為還是有其他東西連接到這份資料，就會一直存在那裡。
+
+—
+
+所以如果有很龐大的資料，因為把需要這些資料的 function 給 return 出去，系統就必須要保留這些資料。
+
+```
+var v1 = 10;
+function test() {
+  var vTest = 20;
+  var obj= { hugh object }
+  function inner() {
+    console.log(v1, vTest); // 10 20
+  }
+  return inner = test();
+}
+```
+
+```
+var inner = test();
+```
+
+```
+inner();
+```
+
+因為 scopeChain 裡面有牽扯到這個超大物件，所以會因為這樣子，就無法回收資料，所以在使用 closure 時，需要小心這種情況的產生。
+
+## 日常生活中的作用域陷阱
+
+在使用的時候，沒想到他是閉包會產生的錯誤
+
+```
+var arr = [];
+for (var i = 0; i < 5; i += 1) {
+  arr[i] = function() {
+    console.log(i);
+  }
+}
+```
+
+```
+arr[0]()
+// 5
+```
+
+或是在寫瀏覽器的 JavaScript 也常常可能會發生
+
+```
+for(var i = 0 ; i<5 ; i +=1) {
+  $('.num'+i).click(function() {
+    console.log(i);
+  })
+}
+```
+
+會發生這種問題的原因是因為，在 JavaScript 中這樣寫等於把變數命名在 global 是一樣的
+
+```
+var arr = [];
+var i
+for (i = 0; i < 5; i += 1) {
+  arr[i] = function() {
+    console.log(i);
+  }
+}
+```
+
+```
+arr[0]()
+// 5
+```
+
+這樣的話，等於下方
+
+```
+arr[0] = function() {
+  console.log(i);
+}
+arr[1] = function() {
+  console.log(i);
+}
+arr[2] = function() {
+  console.log(i);
+}
+arr[3] = function() {
+  console.log(i);
+}
+arr[4] = function() {
+  console.log(i);
+}
+```
+
+所以當呼叫的時候，就會找到 global 的 i 值，也就是 5，接著印出 5。
+
+### 解決方法：
+
+用一個 function 來替代
+
+```
+function logN(n) { // 寫完之後就可以把，帶回原來的式子
+  return function() {
+    console.log(n)
+  }
+}
+```
+
+```
+const log1 = logN(1)
+log1() // 1
+```
+
+然後改寫原來的：
+
+```
+var arr = [];
+for (var i = 0; i < 5; i += 1) {
+  arr[i] = logN(i)
+}
+```
+
+```
+function logN(n) { // 寫完之後就可以把，帶回原來的式子
+  return function() {
+    console.log(n)
+  }
+}
+```
+
+```
+arr[0]() // 0
+```
+
+所以這樣子就等於
+
+```
+arr[0] = logN(0)
+arr[1] = logN(1)
+arr[2] = logN(2)
+arr[3] = logN(3)
+arr[4] = logN(4)
+```
+
+這樣子，就可以呼叫了，呼叫 `arr[0]()` 輸出 0
+
+就有了一個作用域去紀錄這個 i 值。
+
+—
+
+### IIFE:
+
+(Immediately Invoked Function Expression) 是一個定義完馬上就執行的 JavaScript function。又稱立即呼叫函式。
+
+先說明
+
+```
+function test() {
+  console.log('123')
+}
+test()
+```
+
+這是一般呼叫，但今天要呼叫匿名函式，就可以使用這個方法。
+
+```
+(function () {
+  console.log('123')
+})()
+// 123 // 立刻輸出 123
+```
+
+直接把一個匿名函式用括號包起來，然後後面加上括號，就可以立刻執行這個 function，使用這個方法就可以修改一下，把他函式直接放進 for 內部，變成立即執行。
+
+```
+var arr = [];
+for (var i = 0; i < 5; i += 1) {
+  arr[i] = (function(number) {
+    return function() {
+      console.log(number)
+    }
+  })(i)
+}
+```
+
+```
+arr[0]() // 0
+arr[3]() // 3
+```
+
+主要是簡化很多東西，所以不容易懂。實際上就等於是把 function name 直接用 function 的全部內容取代，但因為這樣子可能會讓系統辨識錯誤，所以要另外用一個括號包起來即可，只要後面加上括號就可以直接執行了。
+
+—
+
+### 最簡單的方法：
+
+直接用 let 取代 var，理由是 let 跟 const 的作用域是用 block( `{}` ) 計算的。
+
+```
+var arr = [];
+for (let i = 0; i < 5; i += 1) {
+  arr[i] = function() {
+    console.log(i);
+  }
+}
+```
+
+```
+arr[0]()
+```
+
+執行起來就如同下方
+
+```
+{
+  let i = 0
+  arr[0] = function() {
+    console.log(i)
+  }
+}
+```
+
+```
+{
+  let i = 1
+  arr[1] = function() {
+    console.log(i)
+  }
+}
+```
+
+```
+{
+  let i = 2
+  arr[2] = function() {
+    console.log(i)
+  }
+}
+```
+
+```
+{
+  let i = 3
+  arr[3] = function() {
+    console.log(i)
+  }
+}
+```
+
+```
+{
+  let i = 4
+  arr[4] = function() {
+    console.log(i)
+  }
+}
+```
+
+這樣子實際上也是可以執行的。
+
+## Closure 可以應用在哪裡？
+
+這個在計算量很大的時候是很實用的，不過多數都是因為要隱藏一些變量。
+
+像是跟錢有關係的。
+
+```
+var money = 99
+```
+
+```
+function add(num) {
+  money += num
+}
+```
+
+```
+function deduct(num) {
+  if (num >= 10) {
+    money -= 10;
+  }
+}
+```
+
+```
+add(1)
+deduct(100)
+console.log(money)
+```
+
+在這種情況之下，任何人只要在 global 都可以變動到這個 money 的變數的數字，例如新增一個 `money = -1`
+
+這種情況就可以使用閉包
+
+```
+function createWallet(initMoney) {
+  var money = initMoney;
+  return {
+    add: function(num) {
+      money += num;
+    },
+    deduct: function(num) {
+      if (num >= 10) {
+        money -= 10;
+      } else {
+        money -= num
+      }
+    },
+    getMoney() {
+      return money;
+    }
+  }
+}
+```
+
+```
+var myWallet = createWallet(99);
+myWallet.add(1);
+myWallet.deduct(100);
+console.log(myWallet.getMoney());
+// 90
+```
+
+通過這樣子就可以把變數隱藏起來，這樣就不能在外部更動它的內部資料
+
+## 總結：
+
+在這閉包當中，果然最重要的還是作用域的部份。通過理解作用域的差異，就可以理解到為什麼可以把變數包起來，主要這樣的用途是讓外部不能夠隨意的修改到內部的變數。
+
+我剛好也有找到框架相關資料，原來閉包在框架裡面會很常用到，稍微研讀了一下，發現到是不希望框架的資料去污染全域的部份，或是改到其他地方的變數。
+
+單純讓框架內有框架自己內部的變數即可。思考一下也發現沒錯，這點很重要，不然要用一個框架還要小心，是否有什麼變數不能使用，會重複到？這樣好會增加使用上的難度。
+
+這邊最主要的是我們要知道 [[Scope]] 到底是怎麼儲存資料的，因為通過這個的模式，才可以理解到整個 scope chain 到底是長什麼樣子。
+
+也只有通過 [[Scope]] 處理好 scope chain 到底是怎麼運作的。
+
+上一篇：[前端中階：JS令人搞不懂的地方-hoisting](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-hoisting-beb1fc451c2?source=your_stories_page---------------------------)
+
+下一篇：[前端中階：JS令人搞不懂的地方-物件導向](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-cdea0e3266ee?source=your_stories_page---------------------------)

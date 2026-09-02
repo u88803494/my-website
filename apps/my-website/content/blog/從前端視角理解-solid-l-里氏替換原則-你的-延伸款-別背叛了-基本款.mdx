@@ -1,0 +1,165 @@
+---
+title: "從前端視角理解 SOLID：L — 里氏替換原則，你的「延伸款」別背叛了「基本款」"
+slug: "從前端視角理解-solid-l-里氏替換原則-你的-延伸款-別背叛了-基本款"
+description: "本文為 從前端視角理解 SOLID 系列的第四篇。"
+date: 2025-07-30T09:54:11.385Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-l-%E9%87%8C%E6%B0%8F%E6%9B%BF%E6%8F%9B%E5%8E%9F%E5%89%87-%E4%BD%A0%E7%9A%84-%E5%BB%B6%E4%BC%B8%E6%AC%BE-%E5%88%A5%E8%83%8C%E5%8F%9B%E4%BA%86-%E5%9F%BA%E6%9C%AC%E6%AC%BE-b983acaa3bc7"
+---
+
+> _本文為_[**_從前端視角理解 SOLID_**](https://hugh-program-learning-diary-js.medium.com/從前端視角理解-solid-一切的開端-b10abdc2490b)_系列的第四篇。_
+
+> [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)
+
+> [**第二篇：S — 單一職責原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-s-單一職責原則-你的函式管太多了嗎-05a71a450216)
+
+> [**第三篇：O — 開放封閉原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-o-開放封閉原則-不動舊碼新增功能的魔法-c5e14f9400f0)
+
+> **第四篇：L — 里氏替換原則 (本文)**
+
+> **第五篇：I — 介面隔離原則 _(敬請期待)_**
+
+在前面的文章中，我們學會了用 SRP 來「拆解」職責，用 OCP 來「擴展」功能。現在，我們的程式碼已經有了一定的彈性。
+
+但一個新問題浮現了：當我們基於一個「基本款」元件，去擴展出一個「延伸款」時，要如何確保這個延伸款不會失控，甚至破壞掉原有的系統？這就是我們今天要深入探討的，SOLID 中最具哲學思辨的原則：**L — 里氏替換原則 (Liskov Substitution Principle, LSP)。**
+
+## 釐清詞彙：到底什麼是「里氏替換」？
+
+里氏替換原則的官方定義聽起來非常學術：
+
+> **_如果 S 是 T 的子類型，那麼所有 T 類型的物件，都可以在不改變程式任何所需屬性的情況下，被 S 類型的物件替換 (If S is a subtype of T, then objects of type T may be replaced with objects of type S without altering any of the desirable properties of that program)。_**
+
+別怕，讓我們把它翻譯成前端工程師都懂的白話文：
+
+**一個「延伸款」元件，必須能夠完美地替換掉它的「基本款」元件，而不會讓使用它的地方產生任何錯誤或非預期的「驚喜」。**
+
+LSP 的核心，其實是在談一個「**承諾**」或「**契約**」。當一個基本款元件向外做出某種行為承諾時（例如：傳入 `onClick` 就一定會被點擊觸發），所有基於它擴展出來的延伸款，都必須**無條件地遵守**這個承諾。
+
+## 具象化理解：通用遙控器 vs. 特異功能電視
+
+想像一下，你買了一支「通用電視遙控器」。這支遙控器（程式）是基於一個「電視機」（基本款）的通用規格設計的，上面有電源、音量＋、音量－等標準按鈕。
+
+- 你家裡有一台 **Sony 電視**（延伸款 A）。你用通用遙控器對著它，按音量＋，音量就變大；按音量－，音量就變小。一切正常，這台 Sony 電視**遵循了 LSP**。
+- 後來你又買了一台**新潮設計師款電視**（延伸款 B）。你用同一支遙控器對著它，按音量＋，電視卻變成了靜音；按音量－，電視卻關機了。這台電視的行為完全違背了你對「電視機」的預期，它給了你一個巨大的「驚喜」。這台電視就**違反了 LSP**。
+
+在這種情況下，你不能說「是遙控器壞了」，問題出在這台電視沒有遵守作為一台「電視」應有的基本行為契約。它雖然看起來像電視，卻不能被安全地「替換」一台標準電視。
+
+### 前端實戰：元件的「行為承諾」
+
+在現代 React 開發中，我們很少使用 `class` 繼承，但 LSP 的精神，完美地體現在**元件的 API 契約（Props）**上。當我們建立一個基礎元件，並基於它去擴充時，就必須遵守 LSP。
+
+讓我們來看一個 `<BaseButton>` 的例子。
+
+**基本款元件：**`<BaseButton>`**的承諾**
+
+```typescript
+// components/BaseButton.tsx
+import React from 'react';
+
+interface BaseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+// 它的承諾很簡單：
+// 1. 渲染一個標準的 <button>
+// 2. 顯示傳入的 children
+// 3. 接受所有標準按鈕屬性，包括一個 onClick 處理函式
+const BaseButton = ({ children, ...props }: BaseButtonProps) => {
+  return (
+    <button style={{ padding: '10px 15px', border: '1px solid gray', cursor: 'pointer' }} {...props}>
+      {children}
+    </button>
+  );
+};
+export default BaseButton;
+```
+
+**遵循 LSP 的延伸：**`<PrimaryButton>`
+
+```javascript
+// components/PrimaryButton.tsx
+import React from 'react';
+import BaseButton from './BaseButton';
+
+// PrimaryButton 只是改變了外觀，完全遵守了 BaseButton 的所有行為承諾。
+// 它可以安全地替換任何使用 BaseButton 的地方。
+const PrimaryButton = (props: React.ComponentProps<typeof BaseButton>) => {
+  return (
+    <BaseButton
+      style={{ backgroundColor: 'blue', color: 'white', border: 'none' }}
+      {...props}
+    />
+  );
+};
+```
+
+**違反 LSP 的延伸：**`<ConfirmButton>`
+
+現在，讓我們來看一個**背叛了承諾**的延伸款。
+
+```javascript
+// components/ConfirmButton.tsx (違反 LSP 的版本)
+import React from 'react';
+import BaseButton from './BaseButton';
+
+const ConfirmButton = (props: React.ComponentProps<typeof BaseButton>) => {
+  const originalOnClick = props.onClick;
+  // 驚喜來了：它改變了 onClick 的核心行為！
+  const handleConfirmClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (window.confirm('您確定要執行此操作嗎？')) {
+      // 只有在使用者點擊「確定」時，才會執行原本的 onClick
+      originalOnClick?.(event);
+    }
+    // 如果使用者點擊「取消」，原本的 onClick 將永遠不會被觸發
+  };
+  return <BaseButton {...props} onClick={handleConfirmClick} />;
+};
+```
+
+**為什麼**`<ConfirmButton>`**違反了 LSP？**
+
+想像一個開發者，在一個表單中使用 `<BaseButton>` 來提交資料：
+
+`<BaseButton onClick={submitForm}>提交</BaseButton>`
+
+他預期點擊按鈕，`submitForm` 就會被執行。一切正常。
+
+後來，為了美觀，他決定換成 `<ConfirmButton>`：
+
+`<ConfirmButton onClick={submitForm}>提交</ConfirmButton>`
+
+他認為這只是一個樣式上的替換，但現在，他的 `submitForm` 函式**不一定會被執行了**！`<ConfirmButton>` 單方面地改變了 `onClick` 的行為契約，給使用者帶來了非預期的「驚喜」，這就可能導致 bug。它不能安全地替換 `<BaseButton>`。
+
+### 那要如何正確地實作「確認」功能？
+
+這個問題的答案，正好體現了 SRP (單一職責) 與 LSP 的相輔相成。關鍵在於**將「確認邏輯」與「點擊行為」分離**。按鈕的職責就是被點擊；而「確認」是屬於更高層次的業務邏輯。
+
+最直接且完全遵循 LSP 的方式，就是讓 `BaseButton` 保持單純，確認邏輯由使用它的地方來提供。
+
+```javascript
+// 在你的表單元件中
+const handleSubmit = () => {
+  // ... 提交表單的邏輯 ...
+};
+
+const handleSubmitWithConfirm = () => {
+  if (window.confirm("您確定要提交嗎？")) {
+    handleSubmit();
+  }
+};
+return <BaseButton onClick={handleSubmitWithConfirm}>提交</BaseButton>;
+```
+
+在這裡，`<BaseButton>` 的 `onClick` 承諾被完美遵守了。它不在乎傳入的函式是什麼，只負責在被點擊時忠實地執行它。我們透過**組合**的方式，在外部為它增加了新功能，這完美地遵守了里氏替換原則。
+
+## 背景資料
+
+里氏替換原則 (LSP) 由電腦科學家**芭芭拉·利斯科夫 (Barbara Liskov)** 在 1987 年提出。她在電腦科學領域有著卓越貢獻，是**美國第一位獲得電腦科學博士學位的女性**，並因其在程式語言和系統設計方面的成就，於 2008 年獲頒**圖靈獎**（電腦科學界的最高榮譽）。
+
+這個原則最初是為了給物件導向語言中的「繼承」提供一個嚴謹的行為準則，確保子類別不會破壞父類別的行為，從而建立可靠的軟體系統。
+
+## 結論
+
+在前端的世界裡，LSP 提醒我們，當我們在建立元件庫或設計系統時，**可預測性**和**信賴感**至關重要。
+
+每一次的元件擴充，都是一次「承諾的延伸」。我們必須確保延伸款元件會**尊重**並**遵守**基本款所定下的契約。一個遵循 LSP 的元件庫，能讓團隊中的所有開發者都能充滿信心地使用這些元件，因為他們知道，這些元件的行為會跟他們預期的一樣，不會有任何意外的「驚喜」。這正是打造一個穩健、可信賴前端系統的基礎。

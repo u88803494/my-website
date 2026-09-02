@@ -1,0 +1,668 @@
+---
+title: "JavaScript 基礎：函式的基本介紹"
+slug: "javascript-基礎-函式的基本介紹"
+description: "基本函式結構"
+date: 2019-04-23T07:28:26.023Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E5%87%BD%E5%BC%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9-e647b4e45af1"
+---
+
+## 基本函式結構
+
+y = f(x) 就是函式，無論是數學跟程式都是同個意思
+
+```
+y = f(x)
+```
+
+```
+y > 回傳值
+f(x) > 函式
+x > 參數
+```
+
+以前在學數學的時候是這樣子的：
+
+```
+ex:
+y =f(x) =3x
+f(1) = 3 * 1 = 3
+f(10)= 3 * 10 = 30
+```
+
+```
+也可以多項
+y =f(ａ, b, c) =a+2b+3c
+f(1, 2, 3) = 14
+f(1, 1, 1) = 6
+```
+
+JavaScript 的結構
+
+```
+function 函數名稱(參數) {
+   return(回傳)  要回傳的內容
+}
+```
+
+```
+function abc(a, b, c) {
+   return a + 2*b + 3*c
+}
+```
+
+在國中數學都用 f(x) 但在 JavaScript 為了方便就會用名稱(參數)，以方便辨識。也要記得用 return 值就好
+
+return 內部也可以放物件：
+
+```
+function xxyyzza(x) {
+ return {
+  answer: x*2
+ }
+}
+console.log(xxyyzza(10))
+// { answer: 20 }
+```
+
+切記不能把 return 後面物件的大括號換行，這樣會被判斷為沒有東西。
+
+```
+function xxyyzza(x) {
+ return // 這樣寫等於 return 後面接 undefined
+ {
+  answer: x*2
+ }
+}
+console.log(xxyyzza(10))
+// undefined
+```
+
+回傳陣列
+
+```
+function generateArray(n) {
+ var result = []
+  for(var i = 1; i <= n; i++) {
+   result.push(i)
+  }
+ return  result
+}
+```
+
+```
+// generateArray(3) => [1, 2, 3]
+// generateArray(10) => [1, 2, 3, ...,10]
+```
+
+```
+console.log(generateArray(4))
+// [1, 2, 3, 4]
+```
+
+列出部分陣列
+
+```
+function generateArray(from, to) {
+ var result = []
+  for(var i = from; i <= to; i++) {
+   result.push(i)
+  }
+ return  result
+}
+```
+
+```
+//generateArray(3) => [1, 2, 3]
+//generateArray(10) => [1, 2, 3, ...,10]
+```
+
+```
+var a = 3
+var b = 10
+console.log(generateArray(a, b))
+// [ 3, 4, 5, 6, 7, 8, 9, 10 ]
+```
+
+不 return 的話
+
+```
+function log(n) {
+  for(var i = 1; i <= n; i++) {
+   console.log(i)
+  }
+ }
+log(10)
+```
+
+不知如何解題，如印出 1~ 100的偶數：
+
+可以先寫最簡單的
+
+```
+function print1to100() {
+
+ }
+print1to100()
+```
+
+可能需要一個迴圈：
+
+```
+function print1to100() {
+  for(var i = 1; i <=100; i++)
+   logEven(i)
+ }
+print1to100()
+```
+
+然後需要怎麼判斷
+
+```
+function logEven(number) {
+ if (number%2) {
+  console.log(number)
+ }
+}
+```
+
+```
+function print1to100() {
+  for(var i = 1; i <=100; i++)
+   logEven(i)
+ }
+print1to100()
+```
+
+這樣子的好處是可以先把會的寫出來，在把不會的另外寫出來，接著放在一起。
+
+## 函式 function - 宣告函式的不同方法
+
+常見的：
+
+```
+function hello() {
+ console.log('hello')
+}
+```
+
+函式也是一種資料型態
+
+```
+var hello = function() {
+ console.log('hello')
+}
+```
+
+這兩種有一點差異，但差異不大
+
+```
+function print(anything) {
+ console.log(anything)
+}
+```
+
+```
+function hello() {
+
+}
+```
+
+```
+print(hello) // 把 hello function 傳去 print function
+// [Function: hello]
+```
+
+因為 hello 是個 function 它就會告訴你 [Function: hello]，但不會執行 hello function。
+
+```
+function print(anything) {
+ anything()
+}
+```
+
+```
+function hello() {
+ console.log(‘hello’)
+}
+```
+
+```
+print(hello)
+```
+
+在這邊 print(hello) 等於執行 print 函數，變數是 hello ，但是 hello 也是函式，所以 print(hello) 就會變成 先執行
+
+```
+print(anything) { //把 hello 帶進去 anything = hello
+```
+
+```
+ anything() // 等同於 hello()
+```
+
+```
+}
+```
+
+它就會執行
+
+```
+function hello() {
+ console.log(‘hello’)
+}
+```
+
+但如果
+
+```
+function print(anything) {
+ anything() // 沒有這個函式 123()
+}
+```
+
+```
+function hello() {
+ console.log(‘hello’)
+}
+```
+
+```
+print(123) //就會失敗了，因為沒有 anything 的 function
+// TypeError: anything is not a function
+```
+
+這種可以應用在，
+
+```
+function transform(x, transformFunction) {
+ return transformFunction(x)
+}
+```
+
+```
+function test(x) {
+ return x*2
+}
+```
+
+```
+console.log (
+ transform(10 ,test)
+)
+```
+
+告訴我們 console.log 的括號是可以放 function 的。
+
+這題希望得到 數字乘以兩倍的陣列
+
+```
+function transform(arr, transformFunction) {
+// 這邊放入 console.log(arr) 可以得知 arr = [1, 2, 3]
+ var result = []
+ for(var i=0; i<arr.length; i++) {
+ result.push(transformFunction(arr[i]))
+ }
+ return result
+}
+```
+
+```
+function double(x) {
+ return x*2
+}
+```
+
+```
+// transform([1, 2, 3], double) => [2, 4, 6]
+```
+
+```
+console.log (
+ transform([1, 2, 3] ,double)
+)
+```
+
+看不懂為什麼 arr 可以直接這樣使用，經查詢之後原來 function 括號內的參數可以不用宣告直接使用，因為沒宣告的話會直接當成全域變數，這樣子會較消耗資源。
+
+> [參考 2.1](http://emn178.pixnet.net/blog/post/94806770-javascript%E6%95%99%E5%AD%B8---%E8%AE%8A%E6%95%B8%28variables%29)
+
+> [CodeDate](http://www.codedata.com.tw/javascript/essential-javascript-9-function-abc/)
+
+```
+transform([1, 2, 3], double) => var arr = [1, 2, 3]
+```
+
+所以在這個裡面，double 函式取代 transformFunction 變數所以在 transform 函式內部只要使用到 transformFunction 變數的部分就會變成 double 函式，然後就會去執行 double 函式內部的運算。
+
+### 匿名函式 anonymous function
+
+```
+var triple = function{
+ return x*3
+} //直接命名 一個變數等於 function 就不需要給function 一個名字，因為這個 function 只在變數 triple 裡面使用，所以就不需要特別給他一個名字
+```
+
+function 也可以整組直接放在 console.log 的括號裡面，如下：
+
+```
+function transform(arr, transformFunction) {
+ var result = []
+ for(var i=0; i<arr.length; i++) {
+ result.push(transformFunction(arr[i]))
+ }
+ return result
+}
+```
+
+```
+console.log (
+ transform([1, 2, 3] ,function(x) {
+ return x*3
+ })
+)
+```
+
+也就是只把 function 放在要執行的地方，就可以不用額外命名。
+
+## 參數(Parameter)與引數(Argumemt)
+
+function 括號內部的都是參數
+
+引數就是我們在使用 function 的時候傳進去的，就叫做引數。
+
+在 call function 的時候，call 的東西就是引數
+
+> [參閱：](https://ithelp.ithome.com.tw/articles/10204008)
+
+> `arguments` 儲存了所有傳遞參數的值。 而且還可以用`lenght`屬性，但這邊要注意到，它並不是一個陣列，是一個叫做類陣列的東西，也就是說無法使用 JS 提供給 array 的函式庫。
+
+JavaScript 有給看引數的功能
+
+```
+function add(a, b) {
+ console.log(arguments)
+ return a+b
+}
+```
+
+```
+console.log(add(2, 5))
+//[Arguments] { '0': 2, '1': 5 } //顯示所有參數
+//7
+```
+
+類陣列功能：
+
+```
+function add(a, b) {
+ console.log(arguments[0]) // 看第一個引數
+ return a+b
+}
+```
+
+```
+console.log(add(2, 5))
+```
+
+還可以寫這樣：
+
+```
+function add() {
+ console.log()
+ return arguments[0] + arguments[1]
+}
+```
+
+```
+console.log(add(2, 5))
+```
+
+因為類陣列的關係，所以 餐數會直接當成 arguments 的陣列的數字：`arguments[0] = 2 , arguments[1] = 5`_。_
+
+不過這樣的用法很少。JavaScript 裡面特有的功能。
+
+## Arguments 的特殊點
+
+Arguments 看起來像是陣列，其實是物件
+
+```
+function add(a, b) {
+ console.log(arguments)
+ console.log(Array.isArray(arguments))
+ console.log(typeof arguments)
+ return a+b
+}
+```
+
+```
+console.log(add(2, 5))
+[Arguments] { '0': 2, '1': 5 } // 外圍是大括號，這是物件才會這樣顯示
+//false  // 表示 arguments 不是陣列
+//object  // arguments 是個物件
+//7
+```
+
+所以其實物件也可以使用陣列的方式：
+
+```
+var a = {
+ 0:”123"
+
+}
+```
+
+```
+console.log(a[0])
+//123
+```
+
+所以還可以使用 .length
+
+```
+function add(a, b) {
+ console.log(arguments.length)
+ return a+b
+}
+```
+
+```
+add(2, 5)
+// 2
+```
+
+猜測： arguments 帶有一些其他得資訊，所以只能用物件的方式來儲存。
+
+## 使用 function 時的注意事項
+
+function 傳參數的運作機制
+
+```
+function swap(a, b) {
+ /*  在函式當傳入值時就會這樣跑
+  var a = number1
+  var b = number2
+  所以只是把 number1 跟 number2 給複製了一份
+  number1 number2 a b 是各自獨立的變數
+ */
+ var temp = a
+ a = b
+ b = temp
+ console.log("a: b:", a, b)
+}
+```
+
+```
+var number1 = 10
+var number2 = 20
+console.log(number1, number2)
+```
+
+```
+swap(number1, number2)
+```
+
+```
+console.log(number1, number2)
+```
+
+number1 . number2 . a . b 是各自獨立的變數
+
+```
+function addValue(obj) {
+ /*  這裡的操作如下：
+  var obj = a {}
+  這是 Obj 的特性，如同前篇介紹的，物件是存取記憶體位置
+  在這邊的操作等於是命名另外一個物件 obj = a，
+  所以現在有 obj 跟 a 都指向同個記憶體位置
+ */
+  obj.number++ // 在這邊等於把該記憶體位置儲存的內容+1
+ return 1
+}
+```
+
+```
+var a = {
+ number: 10
+}
+addValue(a)
+console.log(a)
+//{ number: 11 }
+```
+
+例外情況是數字.字串.布林，這三者較簡單，所以在操作的時候會變成直接複製。而較複雜的部份因為使用指向的方式，所以只要有一個地方修改，就等修改其他指向該記憶體位置的操作。
+
+```
+function addValue(obj) {
+ obj = {
+ number: 100
+ }
+ return 1
+}
+```
+
+```
+var a = {
+ number: 10
+}
+addValue(a)
+console.log(a)
+//{ number: 10 }
+```
+
+在這邊的操作是把 obj 指向了另外一個新的記憶體，等於 obj 指向了另外一個記憶體位置
+
+這樣的情況有專有名詞叫做：
+
+pass by value
+
+pass by reference. JavaScript 是沒有這個
+
+pass by sharing
+
+> 參考資料：
+
+> [深入探討 JavaScript 中的參數傳遞：call by value 還是 reference？](https://blog.techbridge.cc/2018/06/23/javascript-call-by-value-or-reference/)
+
+> [[筆記] 談談 JavaScript 中 by reference 和 by value 的重要觀念](https://pjchender.blogspot.com/2016/03/javascriptby-referenceby-value.html)
+
+> **By Value vs By Reference**
+
+> **By Value**
+
+> 當我們在建立 primitive type 的變數時（數字、字串、布林），假設我把 a 指定成一個 primitive type 的時候，a 會在記憶體中存在一個自己的位置（假設叫做0x001）。這時候，當我指定另一個變數 b，它的值等同於 a 的時候，b 實際上會建立另一個獨立的記憶體位置（假設叫做0x002），接著再把 a 的值存在這個獨立的記憶體位置。也就是說， **a 和 b 其實是存在於兩個不同的記憶體位置，因此彼此並不會乎相干擾影響，這種情況，我們就稱為 ++By Value++** ，而這種情形會發生在 primitive type 的變數。
+
+> **By Reference**
+
+> 在來看一下 By Reference。
+
+> 當我將變數 a 設立成一個 Object（或 function）時，這時候，一樣會在記憶體中給它一個位置（假設叫做0x001）；但是當我建立一個變數 b，並且把變數 b 的值等同於 a 時，這時候並不會再給它一個新的位置，而是一樣指定到物件 a 的位置（即0x001），實際上是不會有新的東西被建立，變數 a 和 b 都會被指稱到相同的位置（即0x001），因此，**當 a 的值改變的時候 b 的值也會改變，因為它們實際上是指稱到相同的位置，這種情形我們就稱為 ++By Reference++，這樣情況會發生在 Object 和 Function 這種變數**。
+
+> **JavaScript 不是 by value 也不是 by reference！？**
+
+> 這是最近在 fb 有很多人在討論的，最後大家的結論認為 JavaScript 實際上是另一種稱做 “by sharing” 的模式，只是對於原生值來說，看起來會很像 by value，對於物件來說則會很像 by reference。因此，如果對於這一部分有興趣的朋友們，或者在看完這篇文章後還是不很清楚 by value 和 by reference 的話，建議也可以閱讀下方的延伸閱讀。
+
+> [重新認識 JavaScript: Day 05 JavaScript 是「傳值」或「傳址」？](https://ithelp.ithome.com.tw/articles/10191057)
+
+## return 的重要性
+
+function 可以分成兩類：
+
+第一種：不需要知道結果，只是需要呼叫 function 而已，簡單說不需要知道結果。
+
+第二種：需要函式幫我運算，然後回傳結果，簡單說需要知道結果。
+
+### 第一種：只是純粹要做一件事情而已
+
+```
+// 不需要知道結果
+function sayhello() {
+ console.log(‘hello’) // 不回傳的話，他回傳會預設 return undefined
+}
+```
+
+```
+sayhello()
+//hello
+```
+
+```
+// 也可以傳參數進去
+function sayhello(name) {
+ console.log(‘hello’, name)
+}
+```
+
+```
+sayhello("nick")
+//hello nick
+```
+
+當然也可以回傳些甚麼，只是不影響結果，不加 return 就會回傳 underfined
+
+```
+function sayhello(name) {
+   //=> return undefined
+}
+```
+
+```
+var a = sayhello("nick") // 宣告一個 a 去接收 sayhello 的結果
+console.log(a)
+// undefined
+```
+
+a 也只會等於 return 了甚麼而已
+
+```
+function sayhello(name) {
+ return “i am b”
+}
+```
+
+```
+var a = sayhello(‘nick’)
+console.log(a)
+// i am b
+```
+
+這邊 a 就會等於 sayhello function 的回傳值，所以 sayhello 回傳了甚麼 a 就等於甚麼。
+
+### 第二種是需要回傳值，例如需要運算：
+
+```
+function double(x) {
+ return x * 2
+}
+```
+
+```
+var result =double(3)
+console.log(result)
+//6
+```
+
+還有一個重點是 return 之後就會跳出了，下面的任何東西都不會再執行了。
+
+收穫：這邊花了比較多的時間在學習上面，因為這是個我比較沒有接觸的區塊了。在這邊更了解到 primitive type 跟其他類型的不同，更知道說為什麼會有兩種方式的不同，差異在哪。函式有很多種利用的方式，其實也不一定要回傳，可以直接在函式內部印出結果來，也知道引數跟參數的差異了，至少我了解兩者的差異，但是還不夠了解它們的差異會有甚麼影響，有待後續解釋吧！

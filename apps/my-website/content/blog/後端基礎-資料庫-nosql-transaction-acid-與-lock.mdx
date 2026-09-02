@@ -1,0 +1,141 @@
+---
+title: "後端基礎：資料庫 NoSQL、transaction、ACID 與 Lock"
+slug: "後端基礎-資料庫-nosql-transaction-acid-與-lock"
+description: "NoSQL(Not Only SQL)"
+date: 2019-08-25T10:06:22.060Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*wodaKbi9XWBEYUPIVUrgAA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%B3%87%E6%96%99%E5%BA%AB-nosql-transaction-acid-%E8%88%87-lock-882f3079fd3d"
+---
+
+## NoSQL(Not Only SQL)
+
+1. 沒有 Schema，可以想像成存 JSON 資料進 DB
+2. 用 key-value 來存
+3. 不支援 JOIN
+4. 通常用來存一些結構不固定的資料（log 之類的）
+
+Schema 就是結構，也就是 table 看起來的模樣，有 id 名稱 型態等資訊
+
+![](https://cdn-images-1.medium.com/max/800/1*D4ZGeQu-jS34kxNtcd8XtQ.png)
+
+而 NoSQL 就是沒有這個結構。
+
+知名的 NoSQL 就叫做 [mongoDB](https://www.mongodb.com/)，以 [mongoDB](https://www.mongodb.com/) 為例子。就是把 JSON 儲存進資料庫。
+
+也就是通過 key-value 來存取。也就不支援 JOIN，通常用來儲存一些不固定的資料。因為可以很方便的任意添加。
+
+## Transaction 交易
+
+就想像成是一筆交易就對了，例如說轉帳  
+A 轉帳 20 塊給 B，你要保證 A 少 20 塊的同時 B 多了 20 塊
+
+實際應用：
+
+1. 轉帳
+2. 購物（一次買多個品項）
+3. 其他一次牽扯到多個 query 的操作
+
+以交易來說，必須要同時完成，但在下 SQL 指令的時候，變成要下兩次。但這樣就不是同時了。就會產生一種情況，A 少了 20 塊，結果 B 的階段執行失敗，變成 A 少 20，B 沒有多 20。或是 A 的階段失敗了，B 卻成功了，變成 A 沒變動，B 卻多了 20 塊。這樣子就非常不 ok 。
+
+### 為了保證 Transaction 的正確性，要符合以下四個特性
+
+1. 原子性 atomicity：要嘛全部失敗，要嘛全部成功
+2. 一致性 consistency：維持資料的一致性（錢的總數相同）
+3. 隔離性 isolation：多筆交易不會互相影響（不能同時改同一個值）
+4. 持久性 durability：交易成功之後，寫入的資料不會不見
+
+一致性，意思就是假設 A 跟 B 兩個人總共有 100 元，那不管他們怎麼交易，兩個人家起來一定是 100 塊。
+
+隔離性，就是假設本來 A 有 100 塊錢，而 A 轉出 20 塊之後，很快就在轉 10 元出去，那這個時候，第二筆轉 10 元的操作讀取到的資料，必須是 轉 20 塊那筆操作之後的結果。也就是說 轉出 20 塊的操作還沒執行完成前，不能因為又操作了 轉出 10 塊，變成第二筆資料讀到的還是原始的 A 有 100 塊的狀態，因為這樣的話，假如第二筆轉的是 90 塊，那整體最後結果就變成 -10 塊了，這樣子的話擺明就會有問題產生。
+
+參考資料：
+
+### Transaction 交易 指令
+
+```
+$conn->autocommit(FALSE);
+$conn->begin_transaction();
+$conn->query(“update from money set amount = 20”);
+$conn->query(“update from money set sum = 10”);
+$conn->commit();
+```
+
+以下講解
+
+```
+$conn->autocommit(FALSE);
+```
+
+必須要把自動提交的功能關閉，不然只要一呼叫 `.$conn->query()` 那就會直接把資料提交給伺服器。
+
+```
+$conn->begin_transaction(); // 開始交易
+```
+
+```
+$conn->query(“update from money set amount = 20”);
+$conn->query(“update from money set sum = 10”);
+```
+
+然後後面兩個 `->query` 就只是輸入指令而已。
+
+```
+$conn->commit(); // 這個指令才會真正的提交出去
+```
+
+所以說只要不使用這個指令，就不會真正的提交出去，所以就可以使用多個指令。也就是說成功的話就是一起成功，失敗的話就會通通都失敗。所以就不用考慮會不會有一個成功一個失敗的機率。
+
+補充：
+
+使用交易的功能的時候，必須要另外寫程式判斷有無成功。成功就提交，失敗就 rollback
+
+![](https://cdn-images-1.medium.com/max/800/1*Ti7bvsAkyOcknEKKaPKj4A.png)
+
+### 支援性
+
+不同的 DB 型態也有分支不支援這樣子使用。像是 MyISAM 不支援，支援的是 InnoDB。假設本來是 MyISAM 想要使用這個指令也不難，就是去變動型態就好了。
+
+![](https://cdn-images-1.medium.com/max/800/1*wodaKbi9XWBEYUPIVUrgAA.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*2YTxVQxU84UyVLoJoq8ARg.gif)
+
+## LOCK 鎖
+
+除了 transaction 之外，其實還會碰到另外一個問題，因為 transaction 只是保證指令可以同時執行而已。
+
+先說說是什麼問題，假設今天有一個搶購頁面，table 裡面有 數量 `amount` 。以下指令，每執行一次就少一個數量。
+
+![](https://cdn-images-1.medium.com/max/800/1*woiaNuPGTCiiS29UdDkGyA.png)
+
+所以當值令執行到最後 amount 沒東西了，就不會購買成功。
+
+這樣就是在模擬一個搶購的情況。如果是照順序執行的話，還沒什麼問題。但今天如果有很多人一起去搶購，同時執行怎麼辦？
+
+這種情況就叫做 race condition，這是電腦術語，意思就是有兩個或以上同時在存取資個資料的時候會發生的問題。假設今天有兩個 request 同時抵達這個 server，那就會一起處理，不會去分先後順序，如果只是讀取的話，沒什麼差異。但像這種情況，同時處理，就變成東西超賣。
+
+所以也可以來模擬一下這種情況
+
+利用 JMETER 這工具可以同時發很多個 request，是一種伺服器壓力測試的工具。所以利用這工具試試看一次發十個 request，不過要注意的是這種 race condition 不一定會發生，只是有機會發生，所以可以多測幾次。就可以看到有重複到的購買成功。
+
+![可以看到東西最後變成 -3 代表超賣三個](https://cdn-images-1.medium.com/max/800/1*lyejfc5kOtaMQahtRO4mNA.gif)
+
+_可以看到東西最後變成 -3 代表超賣三個_
+
+這種時候，就是需要加上一個 lock，而這個 lock 只有 transaction 可以使用。
+
+![](https://cdn-images-1.medium.com/max/800/1*1uV-6WbPP8UmWKbXzJreWg.png)
+
+只需要在指令後面加上 `for update` 。就可以鎖定資料，讓資料後續接收資料之後，才可以繼續接收其他資料。這時候只能接收一筆資料。所以如果 `for update` 之後，並沒有後續的動作，整個程式就會當掉。因為沒辦法處理其他的指令，因為被鎖起來了。只要 `$conn->commit();` 之後，就會把資料解鎖。
+
+但這樣做會有效能上面的耗損。
+
+```
+$conn->autocommit(FALSE);
+$conn->begin_transaction();
+$conn->query("SELECT amount from products where id = 1 for update");
+$conn->commit();
+```
+
+假如有指定 where id = 1 就會只把那個 row 給鎖定起來。但如果沒有的話，就會把整個 table 被鎖定。

@@ -1,0 +1,126 @@
+---
+title: "利用 Window 10 配置 next.js 環境建置"
+slug: "利用-window-10-配置-next-js-環境建置"
+description: "發文後記"
+date: 2022-02-03T08:26:19.828Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%88%A9%E7%94%A8-window-10-%E9%85%8D%E7%BD%AE-next-js-%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE-7ec95f76b32d"
+---
+
+## 發文後記
+
+這篇是我大概在 2021/09~2021/10 左右寫好的，但因為想更完整所以一直卡著沒發，但後來覺得這篇也寫了不少也算完整的一篇了，所以就些微修改直接發了。
+
+算是利用另外一種方式配置 next.js。
+
+## 前因
+
+因為這次開發的環境是在 Windows 10 上，最主要是因為我已經離開前公司，環境就只剩下自己的家用主機(Windows 10)
+
+沒有了 MacBook 的加持，而我還挺還念之前用 MacBook 開發所使用的 Zsh，所以這次的主題就變成建制整體的開發環境(包含 Terminal)
+
+而在 Windows 上要像 Unix like 系統那樣可以有很好的開發環境卻沒這麼容易。
+
+幸好的是因為微軟建立了很多更方便的工具，可見微軟是很有企圖心的，而這次也會用到不少微軟開發的新工具。
+
+而整體的篇幅應該會是比較長的，所以在這邊會把細節都另外開一篇來寫。
+
+## 打造 Terminal 環境
+
+按照順序如下：
+
+## 設立專案
+
+原先是決定佈署在 GitHub page，結果之前在先稍微研究一下 next 的時候，意外發現 next 的預設畫面有個叫做 Vercel 的新玩兒，所以我就看了看決定要嘗試，意外發現還不錯呢！
+
+Vercel 是 next.js 的開發公司 Vercel Inc. 建制的快速佈署服務，可以肯定的是對 next.js 的支援性應該不差，查詢之後發現也有支援 SSR 跟 serverless，對於我未來要實作的功能有幫助，所以就決定改用 Vercel 來佈署了。
+
+也因為如此，所以也決定要用 Next.js 來實作我要的網站。
+
+而 Next.js 有提供一些建好的模板可以使用，所以這次就決定使用這些模板來快速建立環境。
+
+### 套用模板
+
+```
+npx create-next-app --example with-typescript-eslint-jest dictionary
+```
+
+建立 dictionary 資料夾並且安裝 `with-typescript-eslint-jest` 這個模板。
+
+### 安裝 yarn
+
+接著發現這個模板有的指令是使用 yarn，所以來安裝 yarn，但後來發現不能單純安裝，所以後來又移除重新安裝，直接安裝的值令應該要改成，指令如下([來源](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install))：
+
+```
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+```
+
+```
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+```
+
+```
+sudo apt-get update
+```
+
+```
+sudo apt-get install yarn -y
+```
+
+這樣就可以順利使用指令
+
+而這個模板其實是建立在 yarn 上的，所以在這邊就不用 npm 的指令了。
+
+### 更新 package
+
+```
+# 檢查是否可更新
+yarn outdated
+```
+
+可以發現有一堆 package 都可以更新了，這邊因為是自己在處理的專案，所以我就決定要全面更新到最新版。
+
+```
+# 升級版本
+yarn upgrade
+```
+
+```
+# 在檢查是否通通更新成功
+yarn outdated
+```
+
+可以發現還有不少的 package 沒有更新，而且是紅字，意思就是版本升級之後，有一些破壞性的改變，所以預設不能使用 `yarn upgrade` 。
+
+所以就需要手動去更新 package.json 內的版本號，可以根據 `yarn outdated` 的版本做更改，然後輸入：
+
+```
+yarn install 或 yarn upgrade
+```
+
+安裝這些版本。
+
+### 啟用功能
+
+因為這個模板本身已經建立好許多的指令了，所以要做的只要設定一下就可以了。
+
+我的目標是希望可以在 per-commit 的時候，去自動調整格式跟 eslint 檢查，有通過才可以 commit，而這邊要初始化的部份，而因為版本更新的關係吧。現在 husky 有自動化指令可以初始化，根據[官網](https://typicode.github.io/husky/#/?id=automatic-recommended)，我在這邊版本是 yarn 1，所以就運用以下指令：
+
+```
+npx husky-init && yarn
+```
+
+然後就會發現資料夾內多了一個 .husky，這就用來設定 husky 要做什麼的。而預設值不是我們要的，所以這邊要再下一個指令，改成我們要的：
+
+```
+yarn husky add .husky/pre-commit "yarn type-check && yarn lint"
+```
+
+然後手動把 .husky 資料夾底下的 pre-commit 內的 test 指令拿掉。
+
+> 參考網站；
+> [prettier official](https://prettier.io/docs/en/install.html)
+> [husky official](https://typicode.github.io/husky/#/?id=automatic-recommended)
+> [Start a clean Next.js project with TypeScript, ESLint and Prettier from scratch](https://paulintrognon.fr/blog/typescript-prettier-eslint-next-js)
+> [Install Tailwind CSS with Next.js](https://tailwindcss.com/docs/guides/nextjs) with Tailwind official

@@ -1,0 +1,78 @@
+---
+title: "React 中使用 onKeyDown"
+slug: "react-中使用-onkeydown"
+description: "出於好玩自己製作了一個按按鍵就可以讓進度條往前跑的小 function。"
+date: 2020-05-23T15:20:01.142Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-%E4%B8%AD%E4%BD%BF%E7%94%A8-onkeydown-b5cbea9548e2"
+---
+
+出於好玩自己製作了一個按按鍵就可以讓進度條往前跑的小 function。
+
+這依賴 React-Bootstrap
+
+```
+const Percentage = () => {
+  const [percent, setPercent] = useState(0);
+```
+
+```
+  const handleAdd = (e) => {
+    if (percent !== 100) setPercent(percent + 10);
+  };
+```
+
+```
+  return (
+    <ProgressBar
+      animated
+      now={percent}
+      onClick={handleAdd}
+    />
+  );
+};
+```
+
+測試中用了 onClick 都可以正常運行，結果換成 `onKeyDown` 就出了問題，一直想說是不是打錯，最後搜尋在 stackoverflow 找到了答案，原來是需要一個 `tabIndex` 的屬性。
+
+改成如下就行了：
+
+```
+const Percentage = () => {
+  const [percent, setPercent] = useState(0);
+```
+
+```
+  const handleAdd = () => {
+    if (percent !== 100) setPercent(percent + 10);
+  };
+```
+
+```
+return (
+    <ProgressBar
+      animated
+      now={percent}
+      onKeyDown={handleAdd}
+      tabIndex="-1"
+    />
+  );
+};
+```
+
+但這樣有個缺點，就是我必須點擊進度條，才可以使用任意按鍵增加進度條，所以這樣的方法並不完整。
+
+看了 stackoverflow 之後，我這個問題的最正確的作法應該還是要透過生命週期，或是 `useEffect` 新增原生 JavaScript 的監聽器了吧？這方面我就不實作了，因為我只是想了解一下而已。
+
+也因為這樣，所以就開始好奇為什麼要點擊進度條之後，才可以使用按鍵去變動進度條的值？
+
+## 關於 tabIndex 這個 html 屬性
+
+在這裡理解到，原來 tabIndex 就是跟我之前理解到的使用 tab 去選擇元素的功能啊！
+
+有時候滑鼠壞掉，就可以利用 tab 來 focus 一個元素，而這個屬性則是讓我們可以調整 focus 到的優先順序，只要在 w3school 的範例中使用就可以了解。
+
+所以在這裡他就是透過 focus 元素，才可以偵測到 onKeyDown。
+
+也因此理解到這個跟無障礙使用者也有關聯。參考下篇文章：

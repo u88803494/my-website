@@ -1,0 +1,228 @@
+---
+title: "TypeScript 型別筆記"
+slug: "typescript-型別筆記"
+description: "這篇是我自己記錄一下 TypeScript 的筆記，所以是以已經有了 ES6 基礎為原則而撰寫的，所以不會提太多比較是 JS 基礎的部份。"
+date: 2021-10-11T04:57:36.751Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*P1ENtAsY_Ydb7ZrvRww7lg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/typescript-%E5%9E%8B%E5%88%A5%E7%AD%86%E8%A8%98-d63216d096cf"
+---
+
+這篇是我自己記錄一下 TypeScript 的筆記，所以是以已經有了 ES6 基礎為原則而撰寫的，所以不會提太多比較是 JS 基礎的部份。
+
+## Tupple 類型
+
+這個其實很類似 array，只是可以限定長度。
+
+```
+let tupple: [number, string] = [123, 'apple'];
+```
+
+當這樣寫下後，就被限定這個是只能接受 `tupple[0]` 是 number，而 `tupple[1]` 是 string。做了修改就會不行，也不能增加長度。
+
+但只有一種情況除外，就是當使用 `array.push` 的時候。
+
+## Union 類型
+
+從英文字面上的意思，union 就是聯合的意思，所以這邊是指，可以指定多個類型的意思。
+
+```
+let union: string | number
+// 這樣就是 union 是字串或是數字的意思。
+```
+
+而在 array 中：
+
+```
+let unionArray: (string | number) = [1, 'js'];
+// 這樣就沒問題
+```
+
+```
+let unionArray2: (string | number) = [999, 'apple', true];
+// 這樣第三個就會報錯，因為 true 的類型不符合
+```
+
+```
+unionArray2.push(false);
+// 這樣也會報錯
+```
+
+## literal 類型
+
+這個就比較特別了，在 TS 中，除了可以指定型別外，還可以指定值的內容，就是這個 literal 的特點了。
+
+```
+let literal: 1 | 2 | 3 | 'APPLE';
+literal = 1 // 可以
+literal = 4 // 報錯
+literal = 2 // 可以
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*fsHlhKdG_gypZdreZG59QQ.png)
+
+更特別的是，可以指定不同類型的內容。
+
+![](https://cdn-images-1.medium.com/max/800/1*l5WAmeB_cuxnoukEraf7NA.png)
+
+還發現，是可以區分大小寫的。
+
+## Enum 型別
+
+這型別比較特殊，在這個型別中，是可以讓你越來列出所有的可用值，像是：一週中有七天，那我們可以把這七天用 Enum 列出來，一方面是限制只能有這些內容，另外一方面是增加可讀性。
+
+```
+enum Weekdays {
+  sun, mon, tue, wed, thu, fir, sat
+}
+```
+
+這樣就定義出了一週有七天，但有個問題是這樣的話，我們還需要用定義好的變量對吧？
+
+這點 TS 也做好了，在這樣定義的時候。TS 本身就會自動從零開始按照順序填入值。
+
+![console.log 出來的值也會是 0 1 2 3 4 5 6](https://cdn-images-1.medium.com/max/800/1*P1ENtAsY_Ydb7ZrvRww7lg.png)
+
+_console.log 出來的值也會是 0 1 2 3 4 5 6_
+
+從例圖中可以看出，不只印的時候能看出，還可以利用 IDE （這邊使用的是VS Code） 去看到，值的內容。
+
+這邊就讓我思考到，這樣就可以取代 const 的作用了，我們常常會利用 const 來做常數應用像是：
+
+```
+const FIRDAY = 5
+```
+
+這樣根據大寫我們就知道這個是常數，可是 object 卻無法這樣使用，因為 JS 的物件跟陣列的特性的關係，我們都知道在 `const` 之下依然可以更改值。
+
+```
+const weekday = {
+  sun: 0,
+}
+```
+
+```
+weekday.sun = 10;
+```
+
+```
+console.log(weekday.sun) // 10
+```
+
+在以往要這樣應用我們可能只能像下列方式：
+
+```
+const WEEKDAY_SUN = 0
+const WEEKDAY_MON = 1
+const WEEKDAY_TUE = 2
+...
+```
+
+這時候就可以利用 enum 型別來達成效果，也增加可讀性，因為 enum 定義好的值不可更改，否則會出現下圖的提示：
+
+![](https://cdn-images-1.medium.com/max/800/1*nJJOpafLo0apdfzt9_BCtA.png)
+
+更棒的是，我們可以直接指定，所需要的內容，以前面的例子來舉例，今天不想用數字來標示了，那我們也可以更改為：
+
+```
+enum Weekday {
+  sun = '星期天',
+  mon = '星期一',
+  tue = '星期二',
+  wed = '星期三',
+  thu = '星期四',
+  fir = '星期五',
+  sat = '星期六',
+}
+```
+
+```
+console.log(Weekday.thu);
+// 星期四
+```
+
+另外一點是 enum 可以混合數字跟字串：
+
+![// 星期一 11](https://cdn-images-1.medium.com/max/800/1*OikEUmdfXvKtuyXNGSu8Kw.png)
+
+_// 星期一 11_
+
+## any 類型
+
+就是一個支持任何類型的類型，但不能在 TS 裡面濫用。
+
+![](https://cdn-images-1.medium.com/max/800/1*k5uATbXdsFuTVnshNpMIPw.png)
+
+可以發現使用 any 型別並不會產生錯誤提示，可實際運行就知道…
+
+![](https://cdn-images-1.medium.com/max/800/1*HZWVp8UTukAgJrbGv3l6vQ.png)
+
+所以除非特殊情況，像是這個值真的是會變動（但實際面是可以用 Union 處理），或是今天有情況是需要快速開發，那可以先用 any，之後再補上型別。
+
+在使用的時候要小心他的類型，不要產生型別錯誤。
+
+## unknow 類型
+
+這個很類似 any，只是他是不保證類型，但依然會偵錯，像以上的代碼把 any 改成 unknow 後：
+
+![](https://cdn-images-1.medium.com/max/800/1*Uu79VTZYAgkMrxci_1HKpA.png)
+
+就會發現報錯，因為 `unknown` 不能被執行，也不能 `.toString()` ，但要保持正常也只要加上一個判斷式就好。
+
+![](https://cdn-images-1.medium.com/max/800/1*3WJmpTPJ4CEa_-rSg9t4EA.png)
+
+function 類型
+
+## void 類型
+
+![](https://cdn-images-1.medium.com/max/800/1*r_CcqjlP--I8gI_6yc_8Ag.png)
+
+從圖中可以看到 TS 中 function 的型別被設置為 void，這是因為當一個 funcion 沒有任何返回值，就會被當作是 void，當然也可以指定他囉
+
+![](https://cdn-images-1.medium.com/max/800/1*7ShziYG8FPlGtZZybF6bAg.png)
+
+```
+function justAFunction(): void {
+```
+
+```
+}
+```
+
+```
+console.log(justAFunction());
+// undefined
+```
+
+印出來則會發現依然是 undefined
+
+## undefined 類型
+
+同前面的例子
+
+![](https://cdn-images-1.medium.com/max/800/1*Zlmndgc5KmPVyKYwIPgQ2g.png)
+
+因為在 JS 中 undefined 依然是一個值，只是他指的是，沒有定義的值，但是這個值是存在的，而在這邊，因為整個 function 並沒有返回任何東西，所以就不能定義為 undefined，必須要定義為 void，因為 void 指的是不存在的意思，所以在這邊就是指定義為 `justAFunction` 的返回值不存在。
+
+只是在 JS 中，沒有給予返回值的 function，會自動回傳 undefined 罷了。
+
+這邊改一下範例：
+
+![](https://cdn-images-1.medium.com/max/800/1*nbckVt3cJCXXxguF70QWVg.png)
+
+這樣就不會報錯了，因為 return 沒寫任何的話，回傳值就是 undefined
+
+## never 類型
+
+![](https://cdn-images-1.medium.com/max/800/1*wLmvXMfmu7YS2FtmhGtRZA.png)
+
+在這個例子中可以發現，返回值被 TS 自動定義為 void，但仔細看內容，會發現因為有個 throw，所以會發現這個 function 實際上是無法被執行完成的，所以整個程式，就會因為這邊丟出的錯誤而停下來。所以實際上是無法執行到 76 行的印出 123。
+
+所以這邊的類型應該是 never
+
+![](https://cdn-images-1.medium.com/max/800/1*dzNYGNTQ9xs0dyBOPgvXdA.png)
+
+這樣就會發現下面的印出 123 顏色變淡了，因為可以明確知道無法執行到該行了。
+
+### 參考資料：

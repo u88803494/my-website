@@ -1,0 +1,631 @@
+---
+title: "後端基礎作業：安全性加強防止常見作業"
+slug: "後端基礎作業-安全性加強防止常見作業"
+description: "hw1：修補漏洞"
+date: 2019-08-06T13:37:42.801Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*6DLr5_GtXTR-xUJM.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-%E5%AE%89%E5%85%A8%E6%80%A7%E5%8A%A0%E5%BC%B7%E9%98%B2%E6%AD%A2%E5%B8%B8%E8%A6%8B%E4%BD%9C%E6%A5%AD-4a09afa53fdc"
+---
+
+## hw1：修補漏洞
+
+如同我在課程中提過的，上週做出來的網頁裡面，會有兩個網頁最知名的漏洞：
+
+1. SQL Injection
+2. XSS
+
+現在請你試試看對你上週做出來的網頁做這兩種攻擊，看看是否能成功，並且修補這兩個漏洞。
+
+—
+
+### XSS
+
+看了看，決定先從最簡單的開始，XSS 的處理，測試之後暱稱也需要加上，因為暱稱也可以影響成功。
+
+然後測試之後，因為我都改為雙引號包單引號，所以就不能直接 echo
+
+```
+htmlspecialchars($row['nickname'], ENT_QUOTES, 'utf-8');
+```
+
+所以有兩種作法一種先處理過在儲存變數之後 放入 echo 另外一種就是用字串拼接的方式。
+
+兩種都可以，但是用字串拼接會太長，所以就改為使用變數的方式。
+
+### SQL Injection
+
+這部份比較麻煩些，因為需要更改指令，還有請求資料的方式也有改變。
+
+不過在測試中我好像早就已經阻擋了這個問題XD。本來只是在寫的時候想實現常見功能而已。意外擋住 SQL Injection
+
+輸入 ‘ or 1=1-- 就發現被 !ctype_alnum() 擋住了XD
+
+![](https://cdn-images-1.medium.com/max/800/1*y0ZCEVN5I8oa6xGNyuzBWA.gif)
+
+但是為了要完成作業還是按照指示把該寫的寫上去
+
+大致需要處理的就是登入還有註冊的部份吧。
+
+參考之前找到的網站： https://websitebeaver.com/prepared-statements-in-php-mysqli-to-prevent-sql-injection
+
+把 handle_log.php 跟 handle_register.php 改掉
+
+```
+handle_log.php：
+```
+
+```
+<?php
+  require_once('./conn.php');
+  include_once('./utils.php');
+```
+
+```
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+```
+
+```
+  // 判斷輸入的資料正確性
+  if (!ctype_alnum($username)) { // 判斷是否為英文數字
+      die("只能是英文數字<br><a href='./login.php'>
+        回到上層重新登入</a>");
+  } else if (empty($username) || empty($password)) {
+      die("請輸入正確帳號密碼<br><a href='./login.php'>
+        回到上層重新登入</a>");
+  }
+```
+
+```
+  // SQL Injection 處理
+  $stmt = $conn->prepare("SELECT * FROM `hugh_member`
+    WHERE `username` = ?");
+  $stmt->bind_param("s", $username);
+  $stmt->execute();
+```
+
+```
+  $result = $stmt->get_result(); // 其實這段有撈到資料就等於確認到有帳號
+  $account_data = $result->fetch_assoc(); // 取得伺服器上的資料
+```
+
+```
+  if (password_verify($password, $account_data['password'])) {
+    // 比對密碼
+    $cookie_id = generatorId(); // 先生成後儲存，方便後續應用
+    deleteOldCertificate($conn, $username); // 刪除其他的 cookie
+    setcookie("certificate", $cookie_id, time()+3600*24);
+     // 埋 cookie
+    cookieUpdate($conn, $cookie_id, $username);
+    // 把 cookie 上傳伺服器
+    header('Location: ./index.php');
+  } else {
+    echo '帳號或密碼錯誤，請重新確認';
+  }
+```
+
+```
+  $stmt->close();
+  $conn->close();
+?>
+```
+
+—
+
+```
+handle_register.php：
+```
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+  $username = $_POST['username'];
+  $nickname = $_POST['nickname'];
+  $password = $_POST['password'];
+  $assertpassword = $_POST['assertpassword'];
+```
+
+```
+  // 判斷帳號
+  if (!ctype_alnum($username)) { // 判斷是否為英文數字
+      die("帳號只能是英文數字<p><a href='./register.php'>
+        回到上層繼續註冊</a>");
+  } else if ($password !== $assertpassword) { // 驗證兩次密碼
+      die("兩次輸入的密碼不同<p><a href='./register.php'>
+        回到上層繼續註冊</a>");
+  } else if (empty($username) || empty($nickname)
+    || empty($password)) {
+      die('請檢查資料');
+  }
+```
+
+```
+  // 把密碼轉為 hash
+  $hash_pw = password_hash($password, PASSWORD_DEFAULT);
+```
+
+```
+  // SQL Injection 處理
+  $stmt = $conn->prepare("INSERT INTO `hugh_member`(`username`,
+    `password`, `nickname`) VALUES (?, ?, ?)");
+  $stmt->bind_param("sss", $username, $hash_pw, $nickname);
+  $result = $stmt->execute();
+
+  if ($result) {
+   header('Location: ./login.php');
+  } else {
+    echo 'failed, ' . $conn->error;
+  }
+```
+
+```
+  $stmt->close();
+  $conn->close();
+?>
+```
+
+改成這樣。用 $result 去接執行，就可以得到 1 也就是成功了。由此來判斷。因為 $stmt 的撈資料方式在這種情況下不能得到了，故使用 execute() 得到的值。
+
+完成這兩個之後就可以了。
+
+## hw2：加強留言板
+
+這一週要再次增強留言板的功能：
+
+1. 身為使用者，可以在別人的留言底下新增留言，一樣可以輸入暱稱跟留言內容
+2. 身為系統，在顯示留言時應該一併列出底下所有的子留言
+3. 會員在自己的留言底下回覆的話，背景會顯示不同的顏色
+
+簡單來說就是新增一個「子留言」的功能，只要有一層即可，不需要實作多層的子留言。然後也加一個小功能，如果原 po 自己回覆自己的留言，那篇子留言的背景要用不同顏色，這樣大家很容易辨別他是原 po。
+
+—
+
+### 構思部份：
+
+database 文章的列表要新增一個欄位 parent_id 來透過標示的 id 來表示是誰的子留言。0 的話就是主留言。
+
+在這部份要完成，可以在別人的留言下面發表留言
+
+index.php：
+
+1. 切板，要讓子留言的呈現跟父留言相比有些微的內縮。
+2. 還要針對父留言得作者的子留言呈現不同的 CSS 語法。
+3. 讓登入的人，可以在留言下方新增留言。
+4. 新增的留言，直接出現在對應的留言下方，成為子留言。
+5. 新增留言後才是子留言，不然的話新增的功能會太下面。
+
+admin.php：
+
+這邊的呼叫方式可能就便得比較複雜了。想要嘗試看看子留言的部份能否把父留言也一併呈現，但是就是不能對父留言做編輯。另一種方式就是單純呈現留言而已。頂多透過 parent_id 來得知是針對誰的留言。
+
+1. 呈現所有自己發表的留言
+2. 可以的話，一併顯示父留言。但不能編輯跟刪除。
+3. 父留言刪除的時候要一併刪除子留言
+
+### 實作部份：
+
+接著就是按照順序實作。先製作出可以執行的 echo function，本來想試著 return 整個輸出之後在 echo function 但如果要執行多次的話就很難，所以就先放棄這麼做。試著把 function 另外切出來，發現依然可以執行。
+
+```
+function subComments() {
+  echo   "<div class= original__sub-comment style='margin: 10px 1px 0px 40px;'>";
+  echo    "<div class='original＿＿nickname'>子留言</div>";
+  echo    "<div class='original＿＿createdAt'>留言時間：2019-09-09</div>";
+  echo    "<div class='original＿＿comment'>子留言內容</div>";
+  echo   "</div>";
+}
+```
+
+```
+function comments($conn, $page, $per){
+  $start = ($page-1)*$per;
+
+  $sql = "SELECT C.comment, C.created_at, M.nickname FROM hugh_comments AS C LEFT JOIN
+      hugh_member AS M on C.user_id = M.id ORDER BY created_at DESC LIMIT $start, $per";
+  $result = $conn->query($sql);
+  if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+    while($row = $result->fetch_assoc()) {
+      $nickname = htmlspecialchars($row['nickname'], ENT_QUOTES, 'utf-8');
+      $comment = htmlspecialchars($row['comment'], ENT_QUOTES, 'utf-8');
+      echo "<div class='original＿＿board'>";
+      echo   "<div class='original＿＿nickname'>$nickname</div>";
+      echo   "<div class='original＿＿createdAt'>留言時間：$row[created_at]</div>";
+      echo   "<div class='original＿＿comment'>$comment</div>";
+      subcomments();
+      subcomments();
+      subcomments();
+      subcomments();
+      echo "</div>";
+    }
+  }
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*nIpVXaq9SBNT_NFUJUx5fg.png)
+
+然後就是嘗試看看能不能上傳留言的功能。
+
+命名為 subCommentAdd
+
+直接複製本來的上傳功能 function 但這邊需要另外多撈出一些資料並且要新增條件，不能把子留言都撈出來了，所以要做些微的修改。
+
+```
+function  subCommentAdd():
+```
+
+```
+$sql = "
+  SELECT C.comment, C.created_at, M.nickname, C.user_id AS main_id
+  FROM hugh_comments AS C
+  LEFT JOIN hugh_member AS M
+  ON C.user_id = M.id
+  WHERE C.parent_id = 0
+  ORDER BY created_at DESC
+  LIMIT $start, $per";
+```
+
+需要傳入 parent_id 是多少，所以變成在留言的部份，需要多呼叫出文章的 id 然後直接使用 AS 更名為 main_id 才可以減少誤導的產生。接著就是傳入寫好的：
+
+```
+subCommentAdd($conn, $user, $row['main_id']);
+// 從伺服器上抓取下來的主留言 id(main_id) 直接傳入
+```
+
+然後是子留言的發文功能。不困難就是新增一個欄位把傳入的 main_id(parent_id) 帶上。
+
+```
+function subCommentAdd($conn, $user, $parent_id) {
+  // 需要多傳入一個父留言 id
+  $sql = "SELECT M.id, M.nickname FROM `hugh_member` AS M where id = '$user'";
+  $result = $conn->query($sql);
+  $row = $result->fetch_assoc();
+  $nickname = htmlspecialchars($row['nickname'], ENT_QUOTES, 'utf-8');
+  echo "<form action='./handle_add.php' method='post' class='original__sub-comment' style='margin: 10px 1px 0px 40px;'>";
+  echo    "<div class='new__username'>暱稱：$nickname<input type='hidden' name='user_id' value=$user/></div>";
+  echo    "<div class='new__comment'><textarea name='comment' id='' cols='60' rows='3'></textarea></div>";
+  echo   "<input type='hidden' name='parent_id' value = '$parent_id'>"; // 新增父留言屬性
+  echo    "<div class='new__btn'><input type='submit' value='送出留言' /></div>";
+  echo "</form>";
+}
+```
+
+然後是 handle_add.php 要另外修改，新增接收 parent_id 因為主留言跟子留言都分別設置成功了。
+
+這邊因為還沒完成子留言呈現的部份（因為比較難想像XD），要測試就可以使用 echo 的方式，分別在 handle_add.php 的地方呼叫 $parent_id 跟 $sql 來看看指令有沒有正確即可。
+
+![這樣代表成功了一半，當然也可以實際上傳然後去資料庫看看](https://cdn-images-1.medium.com/max/800/1*wvxsQQ1bGleZCdlTKE2mgA.png)
+
+_這樣代表成功了一半，當然也可以實際上傳然後去資料庫看看_
+
+然後是呈現子留言的部份。這邊就必須要呼叫資料。然後可以參考前面的經驗思考一下需要帶入哪些值。像是 parent_id 因為要相對應主留言去撈資料。然後就可以成功帶入了：
+
+```
+function subComments($conn, $parent_id) {
+// 通過 $parent_id 就可以抓到是屬於哪篇文章的子留言
+  $sql = "SELECT C.comment, C.created_at, M.nickname
+           FROM hugh_comments AS C LEFT JOIN hugh_member AS M
+           ON C.user_id = M.id WHERE C.parent_id = $parent_id
+           ORDER BY created_at DESC ";
+  $result = $conn->query($sql);
+  if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+    while($row = $result->fetch_assoc()) {
+      $nickname = htmlspecialchars($row['nickname'], ENT_QUOTES, 'utf-8');
+      $comment = htmlspecialchars($row['comment'], ENT_QUOTES, 'utf-8');
+      echo   "<div class='original__sub-comment'>";
+      echo     "<div class='original＿＿nickname'>$nickname</div>";
+      echo     "<div class='original＿＿createdAt'>留言時間：$row[created_at]</div>";
+      echo     "<div class='original＿＿comment'>$comment</div>";
+      echo   "</div>";
+    }
+  }
+}
+```
+
+然後就可以發現測試成功了！可以成功新增留言。
+
+接著是實作作者回覆自己的文章顏色呈現不同這件事情。目前構思要另外寫一個 function 來呈現。是就 return 變色，不是不 return 或 return 空字串。後來使用三元運算子之後，就可以呈現，但整個 function 只有一行，所以就變更成 用變數去接收資料之後直接呈現的方式。
+
+```
+$is_main = $main_user_id === $row['user_id'] ? "style='background:aliceblue;'" : "";
+// 跟主留言同作者就變色
+```
+
+```
+echo   "<div class='original__sub-comment' $is_main>";
+```
+
+這樣就可以正確變色。
+
+另外注意到一點是，分頁功能的 bug。本來撈資料分頁的部份是直接撈全部，但因為子留言的關係。會讓分頁多出好幾頁的 bug。所以就需要用 WHERE 只選中 parent_id = 0 的資料即可。另外把分頁選擇的功能改成 SELECT count(\*) 的形式，但發現程式碼差不多。
+
+```
+function numPages($conn, $page, $per){
+  $sql = "SELECT count(*) FROM `hugh_comments` WHERE parent_id = 0";
+  $result = $conn->query($sql);
+
+  $total = $result->fetch_assoc()['count(*)']; // 得知總共有幾筆資料
+  $pages = ceil($total/$per); // 總頁數
+```
+
+```
+  echo "<div class='pages'>頁數："; // 印出頁數
+  for($i = 1; $i <= $pages ;$i++) {
+      if ( $page-5 < $i && $i < $page+5 ) { // 只顯示鄰近的頁面。
+          echo "<a class='page' href='./index.php?page=$i'>$i</a>";
+      }
+  }
+  echo "</div>";
+}
+```
+
+在這邊順便把每頁呈現得資料數量降低，不然整個已經開始卡了。也因為這樣我實作的只顯示鄰近幾頁的功能得以實現XD。
+
+![](https://cdn-images-1.medium.com/max/800/1*bGNWfaO7QGXRA0lD1Zez-g.png)
+
+發現到 index.php 沒登入的時候，不應該要呈現子留言可留言，所以著手修改。
+
+```
+if($user) subCommentAdd($conn, $user, $row['main_id']);
+```
+
+這樣便可達到效果。
+
+—
+
+### 構思 admin.php：
+
+因為需要看到自己的文章，但又需要針對自己的文章呈現編輯或刪除的功能。另外一點是之後要做 ajax 的功能的話，首頁也能夠編輯刪除文章才是主流的樣子。
+
+所以要考慮把首頁跟管理頁面的功能做的差不多才是。也就是說要試試看能不能共用同一個 function 只是撈資料的 SQL 指令不同而已。
+
+在首頁是全撈，而在 admin.php 是只撈自己的資料，也因為這樣子。指令可能要寫的複雜一點，像是 SQL 的部份就要根據頁面來判斷。目前構想是要帶一個變數標明是首頁還是 admin，然後把這個值傳入 function。透過這個變數來選擇使用首頁還是 admin 的 SQL 指令。也因為這樣就可以把分頁 numPages 的部份一併做給 admin.php。在這種情況下，也許另外開一個專用頁面直接複製 index.php 來做修改會比較好。名字可以取 admin_v2.php 之類的？
+
+另一點是編輯跟刪除的功能，應該要另外弄成一個 function，function 裡面傳入當前使用者登入者的 id 跟 文章的作者 id，然後做比較。可以這麼做的原因是因為現在的 index.php 在用的 function comments 已經把作者的 id 都抓出來了，理所當然就可以做比較使用。編輯刪除功能的 function 另外還要傳入文章 id，這也不難，就是 SQL 指令添加一下就好了。
+
+而原本的主留言本身就有抓文章 id 這部份要思考一下，可能改成 $parent_comment_id 以方便辨識。
+
+### 實作部份：
+
+先從最簡單的做起，所以先變動變數。這時候在思考一些問題，變數的命名到底是不是應該傳入的地方也用一樣的名字來接收比較好？還是接收的名字要用該 function 自己需求的命名法？我是採用後者，只是在思考會不會造成誤解
+
+接著是編輯跟刪除的功能。另外開一個 function 然後思考需要哪些變數，可以先寫出來。
+
+然後是首頁上面呈現，之後在放進去需要的位置，接著研究一下要怎麼傳入。因為需要作者權限才可以刪除，這邊就只要留言的作者 id 是不是跟作者一樣就可以了。需要的是登入中的使用者 id、留言的作者 id，然後是要處理的留言的 id：
+
+```
+function memberInterface($login_user, $comment_user_id, $comment_id) {
+  // 傳入登入者 user_id, 留言作者 userid, 留言文章id
+  if ($login_user === $comment_user_id) {
+    return "<div><a href='./update.php?id=$comment_id'>編輯文章</a>
+       <a href='./handle_delete.php?id=$comment_id'>刪除文章</a></div>";
+  }
+}
+```
+
+然後在相對應的位置放上去，就可以在迴圈當中自動判斷有沒有權限。
+
+子留言成功可以刪除，然後是發現到主留言的部份，必須要連子留言一併刪除才可以。
+
+實現的方法，就是主留言直接傳入 parent_id = 0，判斷為 0 之後，就執行刪除，並將 parent_id = 主留言 id 的留言一併刪除。這邊要思考，是否要另外寫個 php 或是要另外判斷。
+
+後來發現想太多了，利用 MySQL 的特性，就算傳入空值或沒有的值一樣可以執行。所以就直接修改 SQL 指令改為：
+
+```
+$sql = "DELETE FROM `hugh_comments`
+  WHERE id = $id OR parent_id = $id";
+```
+
+這樣就可以正確刪除無誤了。
+
+後來思考了一下要在 admin.php 共用 index.php 的 function 可能會需要把整個 function 重新設計過。所以在顧慮要不要直接使用原本的就好，或是原本的做一些小修改，像是讓使用者可以連到一個頁面，單純就只有他的那篇文章。又或是像 medium 那樣連留言都一併放入 stories
+
+實際做下來發現跟前面一樣只是 SQL 指令要改一下，還有還多小細節需要去注意。
+
+1. 在別人的留言的部份的子留言要怎麼撈，這會是比較需要思考的地方。
+2. 網頁的連結要另外寫判斷，來得知要連到哪裡去，所以就要取得來源網址才行。
+3. page 的顯示方式也要判斷之後撈資料
+
+comments 的部份，就只是傳入的 SQL 指令要判斷，所以新增一個 $page_is 的變數來標示這是那一個網頁。
+
+最後是只能先暫時放棄這種想法了，決定直接改原本在使用的版本。就只是新增分頁功能上去就好。
+
+在本來的 admin.php上直接做一些改造，使之可以呈現。不過也改的滿多的。
+
+- 在 security_check.php 新增 $page_is 直接動態取得當前頁面資訊
+
+1. 傳入 $page_is、$user_id 後者是因為 admin 的頁面需要，所以另外加上預設值 0
+2. 透過 $page_is 使之判斷頁面之後選取 SQL 指令
+3. 因應 admin.php 有可能剛創帳號，沒內容就去看 admin 所以呈現分頁之前判斷有資料才顯示分頁。
+
+- admin.php 改用首頁的留言顯示功能，但新增一些判斷：
+
+1. SQL 指令可以選擇 admin.php 需要的內容
+2. 在 admin.php 不出現新增留言跟顯示子留言的部份
+
+- 其他部份：
+
+1. handle_add.php、handle_delete.php，轉址改成來源網址。
+2. handle_update 改為從 update.php 取得來源網址之後跟個表單 POST 到 handle_update，就可以利用這個資訊返回原來的網址。
+
+大致的更動都在 function 居多，所以就只放上 function 的部份。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c09f82580e4086145cb975513bb98ed4)
+
+## hw3：簡答題
+
+1. 請說明 SQL Injection 的攻擊原理以及防範方法
+2. 請說明 XSS 的攻擊原理以及防範方法
+3. 請說明 CSRF 的攻擊原理以及防範方法
+
+—
+
+### 1. 請說明 SQL Injection 的攻擊原理以及防範方法
+
+### 攻擊原理
+
+SQL Injection 就是通過可以輸入資料的地方，利用 SQL 的語法的特性去影響 SQL 指令，讓上傳伺服器的 SQL 指令不正常發揮，進而達到攻擊的效果。  
+也就是如果程式設計的時候，沒有留意到需要字元檢查，那就很容易讓一些惡意的指令通過輸入夾帶進去，這些惡意的指令，就會被資料庫認為是正常的指令就這樣執行了，小則被人直接繞過登入，大則被人惡意刪除整個資料庫。
+
+**攻擊方式詳解：**  
+一般在正常登入的時候，通過 SQL 指令：  
+`SELECT * FROM members WHERE username = 'abc' AND password = 'ccc'`  
+去跟伺服器撈出資料之後，只要有資料就可以確認有登入。  
+這時候，駭客要繞過登入的話，就可以直接在帳號的欄位內輸入 `' or 1 = 1`，這樣的話，SQL 收到的指令就變成  
+`SELECT * FROM members WHERE username = '' or 1 = 1 -- AND password = 'ccc'`  
+這種情況下， where 的條件就一定會得到 ture，然後密碼的部份，也因為兩條 hyphen 變成註解了。  
+用下面的圖片來說，一撈就把資料都撈到了，所以就可以通過登入了。
+
+![](https://cdn-images-1.medium.com/max/800/0*3hpvcRXMQquXzME-.gif)
+
+這一切都是因為設計的時候沒有考慮到字符需要轉換的問題，所以使用者輸入的內容，就輕易的被當作是程式的一部分。
+
+**解決方法**
+
+解決方法就是記得要字符轉換，這樣才不會被當做是程式的一部分  
+參考 [W3C PHP Prepared Statements](https://www.w3schools.com/php/php_mysql_prepared_statements.asp) 通過這個方法，就可以避開解決這種狀況。  
+使用
+
+```
+$stmt = $conn->prepare("INSERT INTO MyGuests (firstname, lastname, email) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $firstname, $lastname, $email);
+```
+
+透過這種方式可以設定每個變數的值是什麼型態，進而達到防止 SQL Injection。
+
+`$stmt = $conn->prepare("SELECT * FROM users WHERE username=? and password=?");`
+
+要把每個值設為 ?
+
+`$stmt->bind_param("ss", $username, $password);`
+
+第一格的 s 是 string 字串的意思，有幾個字串就要加幾個 s，當然如果有別種資料，就是要用別種的英文。後面是變數，有幾個變數就要加幾個，要跟前方的 ? 對應。在這種情況下的執行方法也不太一樣。
+
+`$stmt->execute();`
+
+然後就可以使用這個指令執行。
+
+### 2. 請說明 XSS 的攻擊原理以及防範方法
+
+**攻擊原理**
+
+XSS 是跨網站指令碼的意思，是利用一些巧妙的方法，在網站上面寫入指令，通常是因為網頁開發的時候留下的漏洞。像是網站上面的留言功能，如果沒有做過處理，那麼使用者就可以在網頁上面放上指令，像是使用 HTML 標籤，甚至是 CSS 語法，直接把整個網頁弄的亂七八糟，或是使用 JavaScript 的語法，把整個網站的資料拿走都有可能。這會造成很多災難，像是直接使用導向的語法把網站導向別的網站，或是釣魚網站等等的，就會給用戶形成一場災難。只要可以執行 JavaScrip 的地方，就可以做任何想做的事情像是竄改頁面、偷改連結、偷 cookie 等等。
+
+![](https://cdn-images-1.medium.com/max/800/0*bjUhAXff_4CAGPXQ.gif)
+
+通過送出針對 body 的 CSS，把整個網頁背景都變成紅色了。
+
+而 XSS 又分了好幾種：
+
+**1. Stored XSS (儲存型)**
+
+顧名思義就是把資料儲存在資料庫裡面的攻擊方式。像是留言板、論壇文章、部落格等地方，只要是使用者可以任意輸入內容的地方，而資料處理過，只要使用者輸入各種 HTML 標籤，之後上傳，就會被儲存到資料庫內部。當後來有其他使用者讀取到這個網頁的時候，從資料庫下載代碼之後填入就會被當成語法執行。
+
+**2. Reflected XSS (反射型)**
+
+Reflected XSS 指的是不被儲存在資料庫的攻擊方式。  
+通常是使用 GET 的形式得到的攻擊方式。  
+像是在網址中，可以使用 [abc.com?name=“bills”](http://abc.com/?name=%22bills%22) 來取得這個 GET 的 name 叫做 bills。但這時候如果把 bills 換成程式碼例如 `<script> alert(1) </script>` 就會發現可以執行成功了。
+
+比如說這個程式碼：
+
+```
+<?php
+  echo  "<h3>hi, $_GET[name]</h3>";
+  echo  "網址：$_SERVER[REQUEST_URI]";
+?>
+```
+
+可以呼叫 GET 的中的 name 的資料，把 name 的值換成語法，就可以成功執行。第二行把網址顯示出來。  
+在 `name=` 後面直接輸入 `變色 <style> body { background : red; } </style>` ，就會發現又成功了。
+
+![](https://cdn-images-1.medium.com/max/800/0*6DLr5_GtXTR-xUJM.gif)
+
+通過這樣，就可以成功的攻擊了。
+
+**3. DOM-Based XSS**
+
+DOM 是 JavaScript 動態產生網頁所使用的工具。  
+同樣也是從使用者輸入的內容中產生問題，一般使用 JavaScript 選資料的時候需要注意。如果讓使用在輸入的資料的時候，使用錯誤的方法插入資料。就有可能造成被值入惡意代碼的機會。  
+例如在使用 JavaScript 選中資料之後，使用 .innerHTML 插入資料。這時候只要使用者輸入的是 HTML 標籤或是 CSS、JavaScript 程式碼等，就會在顯示的地方，會直接被執行。因為被包裝成 DOM 物件了。
+
+### 解決的方法
+
+要解決前面 1. 2 兩點的方法是通過後端的方法來進行防範。解決方法就是使用：escape，跳脫。把對應的文字換成 HTML 跳脫字元。  
+或是在 PHP 有內建的 `htmlentities()` 或是 `htmlspecialchars()` 這也就是說在顯示資料的地方使用這個先過濾過資料之後再呈現就可以了。
+
+第三種則是要由前端來防範，基本原理相同。不同的是要選擇正確的方法來操作 DOM。以前面舉的例子來說，因為使用了 .innerHTML，所以輸入的東西就有機會被當做是 HTML 語法，這時候只要改為使用 .innerTEXT 就可以保證是純文字，就不會被插入惡意代碼了。
+
+### 參考資料：
+
+[維基百科 跨網站指令碼](https://www.wikiwand.com/zh-tw/%E8%B7%A8%E7%B6%B2%E7%AB%99%E6%8C%87%E4%BB%A4%E7%A2%BC)  
+[【網頁安全】給網頁開發新人的 XSS 攻擊 介紹與防範](https://forum.gamer.com.tw/Co.php?bsn=60292&sn=11267)
+
+### 3. 請說明 CSRF 的攻擊原理以及防範方法
+
+### 攻擊原理
+
+CSRF, Cross-site request forgery，跨站請求偽造。通過跨網域的方式的偽造請求，讓使用者在不知不覺的情況下執行非預期的動作。這是一種讓在用戶已經登入的 Web 應用上，執行非本意的操作的攻擊方法。  
+跟 XSS 最大的差亦是，XSS 是在用戶使用該網站的時候，因為瀏覽中的內容有惡意代碼而被執行了，也就是說是利用用戶對特定網站的信任；CSRF 則是利用用戶儲存在網頁瀏覽器上面的憑證，來讓登入中的用戶進行非本意的操作，也就是利用網站對於用戶瀏覽器的信任。  
+CSRF 攻擊要成立的條件是使用者已經登入網站，而單憑瀏覽器與伺服器端之間的 Session 就確認使用者的身份，而進行的操作，只要攻擊者想要，就可以利用一些手段來欺騙用戶的瀏覽器，讓瀏覽器去執行不是使用者想要執行的動作。這種幾單的身份認證，只可以保證是發自某個用戶的瀏覽器，卻不能保證請求是用戶自願發出的。
+
+常見的攻擊手法，以不正確的 URL 設計作為開端。例如說一間銀行轉帳的時候是使用 GET 的指令：http://www.examplebank.com/withdraw?account=AccoutName&amount=1000&for=PayeeName
+
+這時候只要攻擊者，在另外一個網站放上
+
+```
+<img src="http://www.examplebank.com/withdraw?account=Alice&amount=1000&for=Badman">
+```
+
+那只要該使用者 Alice 存取這個網站，而 Alice 的登入資訊還沒過期，那麼就會自動執行這個網站，接著 Alice 就會損失 1000 資金了。  
+通過這種方式，攻擊者就可以在各種地方放上這種網址，像是論壇、部落格等，所以伺服器只要沒有任何的防護措施，就會讓用戶受到攻擊。
+
+而除了 GET 的請求方式之外，還有 POST 的攻擊方式，幾乎都可以達到只要看網頁或點一下就中招。
+
+### 解決方法
+
+跟 XSS 同為透過跨站請求來發動攻擊的 CSRF，是因為未落實身份確認所致，防禦時可以從這裡著手。
+
+**使用者方面**
+
+這項攻擊可行的原因是因為使用者在登入狀態下才可以達成的。所以使用者應該盡量不使用自動登入。伺服器也要讓使用者在一段時間之後就自動登出，令 session 失效，就可以減少 CSRF 攻擊的可能性。  
+還有一種是關閉 JS 的功能，但這對大多數網頁都依賴 JS 來執行的話，就會少了很多可用的網站了。
+
+**伺服器方面**
+
+剩下主要都是伺服端要負責的，像是網頁的部份，應該要盡量有著安全性更高的操作。正確的 URL 設計可以降低被攻擊的可能性。
+
+檢查 referer 欄位  
+在 header 中有一個 referer 欄位，可以讓使用者帶上來的使後檢查這個欄位，如果帶上來的資料是安全的網頁就通過認證。只可惜 referer 這個欄位是可以篡改。所以這種方式並不是很安全，只能算是個比較便宜行事的方法。
+
+驗證方式  
+可以通過 email 收驗證信、手機收驗證碼或是圖形驗證碼，還有更多的方式，像是 Google 的我不是機器人驗證等。這會是比較安全的作法，缺點是每次使用者都要輸入這些的話，他們可能會覺得很煩。  
+所以要用這種方法，較好的方式是根據發出的請求來變更驗證的難度，就像網路銀行那樣，一般登入可能只需要帳號密碼還有代號。但當需要轉帳的時候，這牽扯到金錢的問題，就可以讓使用者一定要通過手機收驗證碼的方式來認證，就可以保證其安全。
+
+CSRF token  
+在使用者的表單內，另外新增一個隱藏欄位 CSRF token 放置由伺服器或是客戶端生成的 token，當送出表單的時候，通過驗證確認是不是使用者通過同一個來源發出的 request。
+
+瀏覽器本身的防禦  
+現在瀏覽器已經有安全機制可以防護這點了。目前 Chrome 與 Opera 上實現了 SameSite。這種方法就是只要在設置 Cookie 的時候加上一個 SameSite 的指令，讓瀏覽器接收跨站請求的時候，就不會自動帶上 Cookie。
+
+但在這邊有罪重要的一點，就是不要相信客戶端的 Session，最好的方式還是加強使用者的身份辨認機制。
+
+### 參考資料：
+
+[wiki 跨站請求偽造](https://www.wikiwand.com/zh-tw/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0)  
+[從防禦認識CSRF](https://www.ithome.com.tw/voice/115822)  
+[讓我們來談談 CSRF](https://blog.techbridge.cc/2017/02/25/csrf-introduction/)
+
+## 收穫：
+
+這次的作業實際上並沒以很困難，最主要的部份是安全性，大致上就是指令的改變而已。不過也因為這些打開了我的視野，對於安全性有了很多的想法，也因為自己寫的網頁，就會有很多方法可以去試著玩玩看，然後會發現到自己的網頁有非常多的問題，像是可以繞過，改不同帳號的資料，這也是為什麼常常會看到有人專門研究資安的原因吧。這個主題實際上根本研究不完，各種奇怪的攻擊方法都有，真佩服那些人想得出來這些攻擊方法。
+
+從這邊也學習到，資安的問題，大致上也都大同小異，常見的無非就是那幾種，甚至長年上榜的也就那幾種，所以網站只要多多注意一些，本身就可以避開很多的攻擊了。
+
+在這邊學習到的內容我也覺得跟現實生活中滿符合的。就像之前國中的時候騎腳踏車，都會加裝大鎖，目的也是為了防盜而已，但大家都心知肚明，這防君子不防小人。在網路世界的資安應該也是這樣，該做的要盡量做到，讓駭客不會這麼容易就攻破網站，自然駭客就沒興趣想要攻破，可能與成本不符又或是別的網站更容易攻擊之類的理由，同樣也是防君子不防小人。
+
+總結一句話，**資安該做部份就是要做足了，還有不要完全相信客戶端的資料。**

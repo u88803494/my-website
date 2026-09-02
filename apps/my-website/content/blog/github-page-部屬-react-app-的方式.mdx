@@ -1,0 +1,81 @@
+---
+title: "GitHub page 部屬 React app 的方式。"
+slug: "github-page-部屬-react-app-的方式"
+description: "我是參考這篇：如何部署create-react-app項目到Github pages步驟撰寫"
+date: 2019-11-24T15:08:45.222Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/github-page-%E9%83%A8%E5%B1%AC-react-app-%E7%9A%84%E6%96%B9%E5%BC%8F-a3b17b13c845"
+---
+
+我是參考這篇：[如何部署create-react-app項目到Github pages步驟撰寫](https://juejin.im/post/5db29bbbe51d4529df5f683e)
+
+實際上這篇已經寫得很簡單易懂了，所以我就只紀錄一下自己是怎麼操作的。
+
+## 前提：
+
+會需要把 React app 部屬上 GitHub 是因為寫作業的關係：  
+[前端框架 React hw1：todolist 改寫](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-hw1-todolist-%E6%94%B9%E5%AF%AB-b02f52e9a334?source=your_stories_page---------------------------)  
+[前端框架 React hw2：五子棋遊戲](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-hw2-%E4%BA%94%E5%AD%90%E6%A3%8B%E9%81%8A%E6%88%B2-2eedb2117a1f?source=your_stories_page---------------------------)  
+[前端框架 React hw3：BLOG](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-hw3-blog-6bb1388c5b0?source=your_stories_page---------------------------)
+
+所以我已經有 `yarn start` 可用就可以使用的 react app  
+（我在這邊使用 yarn 一樣可以操作）
+
+## 前置作業：
+
+1. 先開設好 GitHub page 的功能，理當設置好之後，帳號裡面會有一個叫做 [你的帳號].github.io 的 repository。
+2. 在 GitHub，新增一個 repository，這邊的命名，會影響到 github.io 的子資料夾名稱。例如設置一個 repository 叫做 littlewang，當佈署好之後資料就會放在 [你的帳號].github.io/littlewang 裡面。  
+   記得不要勾選 Initialize this repository with a README
+3. 複製的指令 `git remote add ...`
+4. 開 command line 切到想要佈署的 react app 資料夾
+5. 使用 `git remote add ...` 把資料夾跟 GitHub repository 串在一起
+6. 把檔案推上去 `git push -u origin master`
+
+這樣基本動作就完成了。
+
+## 方法：
+
+1. 修改 `package.json`
+
+```
+{
+  // ...
+  "homepage": "./", // 新增，用來指定 homepage 的位置，方可抓到對應路徑檔案
+  "dependencies": {
+    // ...
+  },
+  "scripts": {
+    // ...
+    "deploy": "gh-pages -d build" // 佈署的指令
+  },
+}
+```
+
+build 指令要跟 deploy 分開寫，沒辦法放一起。
+
+2. 安裝 `gh-pages`
+
+```
+yarn add gh-pages --save-dev
+```
+
+上述兩個調換順序，會比較好做，因為一次要部屬三個，覺得這樣比較方便
+
+3. 開始部屬
+
+先打包 `yarn build` ，然後部屬上去，就會多了一個 build 的資料夾。
+
+然後是佈署上去 `yarn deploy`
+
+這樣就完成佈署了，會在 GitHub 上面看到一個新分支 gh-pages，可以切過去，就會看到 build 的資料都在這裡。
+
+然後就可以利用
+
+[你的帳號].github.io/[repository 名稱] 去連進佈署好的靜態網站。
+
+## 佈署完成的作業：
+
+[hw1 todolist](https://u88803494.github.io/w21h1_react_todolist/)  
+[hw2 五子棋](https://u88803494.github.io/w21h2_react_gomoku/)  
+[hw3 部落格](https://u88803494.github.io/w21h3_react_blog/)

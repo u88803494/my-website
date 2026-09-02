@@ -1,0 +1,116 @@
+---
+title: "前端基礎：Bootstrap"
+slug: "前端基礎-bootstrap"
+description: "什麼是 Bootstrap？"
+date: 2019-08-10T13:23:29.111Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*doL2L1hjtvdS7u1SdyqW7A.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-bootstrap-71854b31b62"
+---
+
+## 什麼是 Bootstrap？
+
+[官方網站](https://getbootstrap.com/)
+
+Bootstrap 把自己定義為 front-end component library。所以 bootstrap 就是個 library。
+
+簡單說，bootstrap 就是一個 UI library，包含 CSS 跟 JavaScript 兩個部分。有很多的已經寫好的 class，s，只要套上 class 就能讓網頁煥然一新。
+
+另外可搭配 Bootswatch 更換版型
+
+## bootstrap 的功能
+
+bootstrap 有兩個面向：
+
+### 第一個是 CSS 相關
+
+bootstrap 提供的已經定義好的 class
+
+```
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+```
+
+就可以到官方網站的 documentation 下去找，像是 components 裡面的 button 就可以看到相當多已經準備好的按鈕，這時候只要複製那段語法，貼到 html 上即可。[網址](https://getbootstrap.com/docs/4.3/components/buttons/)
+
+這些都是 bootstrap 幫我們定義好的元件，還有 class name，用 devtool 看到寫得很多的 CSS，這些都是 bootstrap 幫我們準備好的。需要的時候，只要呼叫相對應的標籤跟 class name 即可。
+
+也可以點選 example 看到有很多的範例，這些都是 bootstrap 做出來的效果。
+
+所以 bootstrap 準備好了很多的 UI 讓我們使用，可以通過 bootstrap 打造更好看的網頁。
+
+### 另外一個面向是 JavaScript
+
+可以做更多的操作，像是 [輪播](https://getbootstrap.com/docs/4.3/components/carousel/)
+
+這個就要通過 JavaScript 實現了。雖說可以用 CSS 實現，但會非常困難。
+
+這邊需要另外引入 JavaScript 的部分，其實也是因為要用到 JQuery。
+
+另外這個還可以通過 JavaScript 的 DOM 操作，拉到底就可以看到相關語法，結果是 JQuery 的語法，也就可以知道 bootstrap 是基於 JQuery 的。所以要使用這部分的功能，就必須要搭配 JQuery。
+
+官方[文件](https://getbootstrap.com/docs/4.3/getting-started/introduction/#js)內部也有寫到，所以可以像文件內部那樣引用之後就可以使用 bootstrap 的功能了。
+
+所以不引用 JQuery 也就只能做靜態的東西，因為不能操作，除非自己另外寫過。
+
+## Grid 網格系統
+
+這個是 bootstrap 的功能之一。這個一樣有 class name，可以決定在每一種不同的螢幕尺寸之下要佔幾格。
+
+網格系統就是把一行分成 12 格，然後可以看不同的 size 你要放幾格。
+
+這個不是 bootstrap 專屬的，很多的 UI 有關的 framework 都會有。
+
+```
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">col-md-6</div>
+    <div class="col-md-6">col-md-6</div>
+  </div>
+</div>
+```
+
+通過這樣就可以看到網格的形式。
+
+並加上 CSS
+
+```
+<style type='text/css'>
+div {
+    background: red;
+    border:1px solid black;
+  }
+</style>
+```
+
+就可以試著調整視窗寬度，就可以看到 RWD 的行為了。
+
+![](https://cdn-images-1.medium.com/max/800/1*doL2L1hjtvdS7u1SdyqW7A.png)
+
+這個系統就像是顯示文章的時候，螢幕夠寬就顯示四篇文章這樣子，在手機上就一篇一篇的樣子，就是透過網格來調整，根據螢幕的不同寬度來決定需要幾格，進而達到 RWD。
+
+網格系統往下拉還有各種用法，可以參考一下
+
+在使用 framework 的時候，記得要全部用上 frameword 提供的東西，否則出錯的機率很大。
+
+另外一提
+
+webfont 這是一種可以讓網站的字型載入速度加快的方式。像是 [justfont ](https://www.justfont.com/)就是其中一種，這個的方式就是透過一些 JavaScript 程式碼，他會通過搜尋整個網頁有哪些字，然後只載入需要用到的字，進而加速整個網頁的下載速度。
+
+更改 ajax 說明：
+
+PHP 下載資料之後可以使用 json_encode(); 轉換成 json 格式
+
+程式碼如下：
+
+```
+json_encode($row = $result->fetch_assoc());
+```
+
+這樣就可以轉換成 json 格式的資料，方便前端去使用這些資料。
+
+## 收穫：
+
+bootstrap 是個很方便的 framework，讓我們可以快速的使用好看的板型。而我們之前都在手刻 CSS，外加我又是沒什麼美感的人。我只知道如何使用對比色來突顯而已。剩下的都不太懂，所以之前做的留言板也都是很簡單的線條模式而已。即使後來看到要求要變色，然後我就是沒辦法把整個質感往上提昇，所以只好維持原案，然後把要求的地方變色，但怎麼看都是突兀，還好的一點是我是挑選了很淡的顏色來變色，所以整體而言沒這麼醜。現在有了 bootstrap 之後，我感覺鬆了一口氣，終於不用跟那些很困難的 CSS 奮戰了，至少那些元件有一點樣式的東西可以讓我去調整，而不用整個重新設計，因為我不懂得怎麼設計。
+
+有了這些樣式，至少我可以放上去，然後看看整體的感覺，然後在放上去，看看整體的感覺，這樣的話應該會比自己從一張白紙要弄的好看簡單多了。其餘的部份應該就跟之前一樣，就是要多用這樣才會熟悉如何使用 bootstrap 了。

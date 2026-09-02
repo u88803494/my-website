@@ -1,0 +1,417 @@
+---
+title: "前端基礎 JavaScript篇：二期影片筆記"
+slug: "前端基礎-javascript篇-二期影片筆記"
+description: "JavaScript：Callback funtion"
+date: 2019-06-06T14:48:17.663Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*hZc_UGEh7jzNxetvHMOLYw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript%E7%AF%87-%E4%BA%8C%E6%9C%9F%E5%BD%B1%E7%89%87%E7%AD%86%E8%A8%98-224f95c80c81"
+---
+
+## JavaScript：Callback funtion
+
+這在 JavaScript 是一件非常重要的事情，但其實非常簡單
+
+假設我們要取得一個 function 的回傳值，我們會去設立一個變數去接收，然後會想印出來
+
+```
+const result = getData();
+console.log(result);
+```
+
+因為程式是按照順序執行，所以當執行到 `getData();` 的時候，如果 function 運算時間過長，就會導致一直等不到執行下一行，假設要執行五分鐘，等於是要五分鐘後才可以執行下一行印出，這件事情對於 JavaScript 是不合理的，這種情況等於是整個程式都卡住了。在 JavaScript 沒辦法拿一些需要很耗時間的操作來做，假如這個 function 只需要 0.01 秒或是很短的時間就還行，但是如果要 10 秒或是更久，那就顯得不合理，程式會**阻塞**在那邊。
+
+補充資料：[超簡易舉例](https://medium.com/@ad57475747/javascript-%E5%90%8C%E6%AD%A5-%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E8%99%95%E7%90%86-58826f2fed89) . [生活中的例子來舉例](https://medium.com/@mts40110/js-%E5%90%8C%E6%AD%A5-%E7%95%B0%E6%AD%A5-%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E-29e1e1c0193e)
+
+上述的程式碼就很像去夜市買東西排隊，點完之後就站在旁邊等，很快就可以拿到了。點餐的時候有另外一種方式是，比如說去一個排隊的餐廳，對方會給一個號碼牌或通知器給客人，等到號碼到了或通知器通知之後，在去拿餐點，這樣做是因為預期會等比較久，用這種方式就比較有效率，這種方式就不是上面的寫法了，所以會用另外一種寫法，使程式不會堵在那邊，而套用這種模式的寫法就叫做 callback function。
+
+寫法：
+
+```
+function callMe(data) {
+  console.log('done')
+  console.log(data)
+}
+getData(callMe) // 當用到的時候傳一個 function 進去
+```
+
+```
+function getDate(cb) { // cb callback 的縮寫
+  ... 發 request
+  ... response 回來 c
+  cb(response)
+}
+```
+
+而原本的方式
+
+```
+const result = getData();
+```
+
+是只等 getData()處理好了之後，再把資料傳進 result
+
+另外一種寫法是匿名函式(anonymous function)的寫法：
+
+```
+getData(function(data) {
+  console.log('done')
+  console.log(data)
+})
+```
+
+```
+function getDate(cb) { // cb callback 的縮寫
+  ... 發 request
+  ... response 回來 c
+  cb(response)
+}
+```
+
+差別在一個是分開寫，一個是寫在裡面。跟一般的 function 的寫法差異在之前都是寫數字、字串、陣列或物件，而這邊是傳入一個 function
+
+-
+
+比如說要在三秒後執行 function
+
+setTimeout(callback function, 毫秒數)
+
+```
+setTimeout(cb, 3000)
+```
+
+```
+function cb() {
+  console.log('yo')
+}
+// 三秒後
+// yo
+```
+
+-
+
+## GET vs POST
+
+很多時都我們都會用瀏覽器的角度來解釋，大多數會解釋成 GET 會在網頁上面有傳送的資料，POST 則不會有，這其實是瀏覽器幫我們加上的限制。但實際的情況要解釋要全面一些，因為其實還是可以使用 Command line 來取得網站的資料。例如在 Command line 輸入
+
+```
+curl https://google.com
+```
+
+就可以取得網站的資訊。
+
+所以要解釋的話，解釋為 GET 指令會把傳送的資料顯示在網址上，而 POST 則是把傳送的資料放在 body 上。
+
+## 瀏覽器文章導讀
+
+- [An inside look at how browsers work — excellent new 4 part series 📚 Part1](https://developers.google.com/web/updates/2018/09/inside-browser-part1)
+- [An inside look at how browsers work — excellent new 4 part series 📚 Part2](https://developers.google.com/web/updates/2018/09/inside-browser-part2)
+- [An inside look at how browsers work — excellent new 4 part series 📚 Part3](https://developers.google.com/web/updates/2018/09/inside-browser-part3)
+- [An inside look at how browsers work — excellent new 4 part series 📚 Part4](https://developers.google.com/web/updates/2018/09/inside-browser-part4)
+
+[參考資料 (中文](https://cythilya.github.io/2018/11/10/inside-look-at-modern-web-browser/))
+
+-
+
+> 這邊只簡單介紹這一系列的文章，所以不會介紹得太詳細，雖然我會試著翻譯看看，但是太難的部份我就不會寫出來的，所以要詳細資料還是需要去看看原始文章。
+
+### part1
+
+### At the core of the computer are the CPU and GPU
+
+為了瞭解瀏覽器是做什麼的，我們就必須要先了解 CPU 及 GPU，也就是電腦是如何工作的：
+
+### CPU
+
+CPU 的全名是中央處理器（ **C**entral **P**rocessing **U**nit），就像是辦公室的員工，每個都處理不同的任務。CPU 都包在一個小小的 Chip 裡面，裡面有好幾個 core 都包在同一個小小的 chip 內部。不管跑什麼指令都會經過 CPU
+
+### GPU
+
+GPU 全名是圖形處理器（**G**raphics **P**rocessing **U**nit），算圖非常耗效能，越複雜越華麗的時候，卻越耗資源，我們在玩的遊戲質感都很好，畫面都很細緻，所以就會需要越來越強的顯示卡，而關於 GPU 就需要平行運算，運算效能很快，一開始只能處理比較簡單的任務，GPU 最開始是為了處理畫面而生的，但隨著效能越來越好，近年來很多會利用來協助複雜運算，甚至是直接單獨使用 GPU 做複雜運算。
+
+當在電腦或手機上啟動應用程序的時候，應用程序會需要 CPU 跟 GPU 提供運算。通常，應用程序會透過作業系統來利用 CPU 跟 GPU。意思就是說啟動應用程序的時候，作業系統會跑在硬體之上，而應用程序會跑在作業系統之上，這也是為什麼有些程式只有在 mac 上有，有些程式只有在 Windows 有。
+
+GPU 跟 CPU 最主要差異是在他們可以運算的範圍有差異。 GPU 是比較針對繪圖跟平行運算這塊，所以倆著一起使用可以取得最好的平衡。
+
+### Executing program on Process and Thread
+
+Process 中文是處理程序 陸譯，進程
+
+Thread 中文是執行緒 陸譯，進線
+
+> **執行緒**（英語：**thread**）是作業系統能夠進行運算排程的最小單位。 它被包含在行程之中，是行程中的實際運作單位。 一條**執行緒**指的是行程中一個單一順序的控制流，一個行程中可以並行多個**執行緒**，每條**執行緒**並列**執行**不同的任務。 BY WIKI
+
+關於執行緒的解釋我看到一個很好的解釋
+
+> 這間教室有 12 張桌子，外面有 1362 個的學生等著考試～
+
+> 為了輪流進來考試，必須等候叫號進來使用。
+
+> by https://ithelp.ithome.com.tw/questions/10177209
+
+其他補充資料：[Program/Process/Thread 差異](https://medium.com/@totoroLiu/program-process-thread-%E5%B7%AE%E7%95%B0-4a360c7345e5)
+
+作業系統底下跑著很多程式(program)，像是 chrome. firefox . potplayer等等的程式，然後就會跑著多個 process，其中又有多個 thread
+
+作業系統最小的工作單位就是 thread，所以當啟動一個 program 的時候，就會執行 processes 而 processes，又有可能去生產出 threads 來協助工作，可能一個瀏覽器需要 threads，去協助 process 執行很多種的工作
+
+process 可以去請求作業系統執行另外一個 process 來做不同的工作。當這件事情發生的時候，會為了另一個 process 配置不同的記憶體位置。如果兩個 process 需要溝通，就可以透過 **I**nter **P**rocess **C**ommunication (**IPC**)。很多的 application 透過這種方式工作，就可以在當某部份發生錯誤沒有回應之後，就可以透過這樣子很快速地重新啟動發生錯誤的部分，而不用去整個 program 關閉之後重新開啟，也就是不用關閉其他的正在運行中的 application 的 processes 就可以繼續使用。
+
+### Browser Architecture
+
+瀏覽器的運行架構呢？
+
+![一個瀏覽器有多個 processes](https://cdn-images-1.medium.com/max/800/1*hZc_UGEh7jzNxetvHMOLYw.png)
+
+_一個瀏覽器有多個 processes_
+
+所以瀏覽器有這麼多的 processes ，它們之間互相溝通就是利用 IPC
+
+值得注意的是，每一種瀏覽器的架構都不太一樣，因為並沒有規定要如何實現瀏覽器，所以某一種瀏覽器的架構，可能跟其他的瀏覽器完全不一樣。
+
+這邊是以 chrome 為例子的架構
+
+-
+
+### Which process controls what?
+
+Chrome 瀏覽器會有很多種的 processes
+
+![](https://cdn-images-1.medium.com/max/800/1*Ph8_mRCsl5itOHsu9FWUfA.png)
+
+每一種控制的東西都不一樣，有 process 是控制整個瀏覽器的介面，有的 process 是負責 renderer 渲染的，有的是負責 Plugin 的，每一種負責的區塊都不一樣。
+
+### The benefit of multi-process architecture in Chrome
+
+Chrome 的架構是每一個分頁都是一個 process，所以當其中一個分頁掛了之後，卻不影響其他的 tag，就是因為每一個 tag 都跑在一個獨立的 process
+
+下面的圖片示範不同的影響，一個是 chrome 的架構各自獨立 renderer 另外一個則是全部一起 renderer
+
+![](https://cdn-images-1.medium.com/max/800/1*_Jg7WWcpm1d_Y5Z7iGp6FA.gif)
+
+當然這樣也非常耗資源
+
+另外一個這種 multi-process 的好處是安全性跟沙盒，因為每一個 tag 都有自己的執行環境，所以不可能一個 tag 去取得 另外一個 tag 上面的資料。
+
+為了減少記憶體的使用 chrome 會有限制最大可以執行的 processes
+
+-
+
+### Per-frame renderer processes — Site Isolation
+
+這邊是在說 html 的 iframe 是另外用一個 process 跑的，所以一個頁面中有多的 iframe 那麼就會有多個 process
+
+![](https://cdn-images-1.medium.com/max/800/1*_Jg7WWcpm1d_Y5Z7iGp6FA.gif)
+
+-
+
+### part2
+
+### What happens in navigation
+
+這邊是在舉例使用導覽列的時候是如何工作的。
+
+### A simple navigation
+
+**Step 1: Handling input** 處理輸入
+
+在 chrome 時，當網址列輸入資訊， Browser Process 就必須要判斷這個是搜尋請求還是網址，就會利用 UI thread 來判斷
+
+![](https://cdn-images-1.medium.com/max/800/1*AhuCsGgkQ1zXPhVXOMJRBw.png)
+
+**Step 2: Start navigation**
+
+當判斷完成之後，UI thread 就會呼叫 Network thread 並把把資料交給 Network thread，然後 Network thread 就會去處理建立連線的相關事宜，透過適當的協定去做一些事情，像是請求解析 DNS 跟請求 TLS 的建立等等
+
+![](https://cdn-images-1.medium.com/max/800/1*RIyXxLa0Dwnogf0E1JmSig.png)
+
+**Step 3: Read response**
+
+當得到回應之後，然後就會解析 response 的 header 資訊，判斷安全性跟是什麼樣的資料等等。
+
+![](https://cdn-images-1.medium.com/max/800/1*0_DU7X21TISGwRzkaiYZHA.png)
+
+如果是 HTML 的話，下一步就是將數據傳給 renderer process 處理，如果是一個下載的資料像是 zip 檔，就會傳給下載管理器
+
+**Step 3: Find a renderer process**
+
+一旦完成檢查之後，Netword thread 就會告訴 UI thread 已經檢查完成，UI thread 就會找到 renderer process 以便繼續渲染畫面。
+
+![](https://cdn-images-1.medium.com/max/800/1*_aIFd0ihUQtwUUj7JU-tbQ.png)
+
+**Step 4: Commit navigation**
+
+現在 renderer process 已經準備就緒了，一個 IPC 從 Browser process 送往 renderer process 去完成這次的工作。當 browser process 知道 renderer process 完成工作之後，就會加載這個頁面，同時間瀏覽器上面會有很多資訊出現，像是網址會變動，安全指示等等的資訊會變成該網站的資訊
+
+![](https://cdn-images-1.medium.com/max/800/1*PwPDnVoveZWdXlZfXwz18Q.png)
+
+**Extra Step: Initial load complete** 額外步驟，初次載入完成
+
+最後 renderer process 就會透過 IPC 告訴 browser process 已經完成整個任務。這時候 UI thread 會把分頁(tag) 的加載圖示停止，但客戶端的 JavaScript 依然可以加載額外的資源。
+
+- **Navigating to a different site**去其他的網站
+
+當輸入其他網址要去不同的網站之後，將會調用新的 renderer process 來處理新的網站，同時會保持原來的 renderer process 因為需要用來處理卸載等等的事件。browser process 就會透過 IPC 去告訴舊的 renderer process 去渲染新頁面，然後透過 IPC 告訴舊的 renderer porcess 去卸載原來的網頁。
+
+![](https://cdn-images-1.medium.com/max/800/1*9EpqwxIKuOSf0z39oztMXA.png)
+
+part2 就是在介紹 render process 跟 browser process 是如何溝通的。
+
+-
+
+### part3
+
+這篇是在介紹 renderer process 是如何運作的
+
+**Renderer processes handle web contents**
+
+![Renderer process 有很多的組成，有 main thread(主渲染)、worker threads、compositor thread、raster thread](https://cdn-images-1.medium.com/max/800/1*jO6VXkS9eGda00f6e1a02A.png)
+
+_Renderer process 有很多的組成，有 main thread(主渲染)、worker threads、compositor thread、raster thread_
+
+Renderer thread 的核心工作是要將 HTML、CSS 和 JavaScript 轉換成用戶可以互動的網頁。
+
+**Parsing 解析**
+
+**Construction of a DOM 創建一個 DOM**
+
+瀏覽器會把 HTML 解析成為 DOM
+
+這邊有簡單介紹 DOM，DOM 是一個瀏覽器把 HTML 解析成一個 DOM 的結構。
+
+然後瀏覽器在解析的時候，也會去偵測有沒有少標籤，所以有時候少了標籤卻還是可以運作的原因就在此。
+
+**Subresource loading 子資源下載**
+
+網站通常都會用一些額外資源，像是一些 img 標籤，額外引入的 CSS 跟 額外引入的 JavaScript，這些都是額外的資源。這時候就要下載載這些資源
+
+**JavaScript can block the parsing**
+
+當解析的時候遇到 &lt;script> 標籤，就會先停下來去運行 JavaScript。因為 JavaScript 可以去影響 DOM 的結構。這也是為什麼會產生 &lt;script> 放在 header 跟放在 body 底部的差異的原因。
+
+**Hint to browser how you want to load resources**
+
+Web 開發人員可以透過多種方式向瀏覽器發送提示，以便很好的加載資源。如果你的 JavaScript 不使用 document.write()，則可以向&lt;script>標記，async 或 defer 屬性。加了這個之後，就不會在解析的時候運行 JavaScript，而會在完成之後在執行。
+
+**Style calculation**
+
+除了 DOM 之外還有 CSS 需要加載，因為還需要去變動元素的樣式，所以 main thread 會去計算每個 DOM 的節點的樣式，可以利用 chrome 的 DevTools 去觀察 CSS 是如何在每個元素套用外觀的
+
+![](https://cdn-images-1.medium.com/max/800/1*rsIWsa0ENQuezzRYrMz1ng.png)
+
+即使沒有設定 CSS 每個元素都還是有預設的樣式，所以依然會有樣式產生，像是 chrome 也有自己的樣式，而每一種瀏覽器都有自己的預設樣式。
+
+**Layout 排版**
+
+舉例如果要把一個東西畫出來需要哪些資訊
+
+現在，renderer process 已經知道每個節點的文檔結構跟樣式了，但是這樣還不足以渲染頁面。想像一下如果在跟朋友講電話，告訴對方有一個紅色的圓跟藍色的方塊，這樣並不足以讓朋友了解這幅畫的外觀。
+
+![](https://cdn-images-1.medium.com/max/800/1*v1zITd6lQymjY8UwJknEJQ.png)
+
+layout 是一種查看元素的幾何型態的過程。main thread 找遍所有的 DOM 必且計算樣式，並創建包含 x . y 座標跟邊框大小等資訊的 layout tree。layout tree 是類似 DOM tree 的結構，它只包含在頁面上可見的訊息。樣式會通過 layout tree 表現出來，因為需要知道東西要排在哪裡，要怎麼排。
+
+![](https://cdn-images-1.medium.com/max/800/1*9kTkiMXo-aRaeFSlEbj9hg.png)
+
+如果 display: nono 的話，那麼該元素就不是 layout tree 的一部分了，也就是不在 layout tree 上面了就不會顯示出來。但如果是使用 visibility: hidden 的話，就只是看不見，但還是 layout tree 的一部分，所以就會在該元素原本的地方佔有位置，指示不可見而已。同樣的，如果有一個偽類(pseudo class)它有著內容 p :: before \{content：“Hi！”\} 也已經被應用了，那它將會在 layout tree 上出現，即使它不在 DOM 中。
+
+**Paint**
+
+![](https://cdn-images-1.medium.com/max/800/1*_WH0e2w1yifOGVenEww7Ug.png)
+
+有了 DOM、樣式還有 layout 之後，還是沒有足夠的資料渲染一個網頁，假設你要重現一幅畫，你知道元素的大小，形狀和位置，但仍需要判斷它們的繪製順序。
+
+也就是說還差了一個東西，就是前後順序。會需要知道這個紅色的東西，究竟是在藍色的上面還是藍色的下面。
+
+![頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲染圖樣，會產生這樣的錯誤，就是因為沒考慮到 z-index](https://cdn-images-1.medium.com/max/800/1*e4F167P6VN9iEvl5sCTp9Q.jpeg)
+
+_頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲染圖樣，會產生這樣的錯誤，就是因為沒考慮到 z-index_
+
+以上面的例子來說，如果讓 HTML 按照編寫的順序去繪製元素，那將有可能產生不正確的繪製，所以就是利用 z-index 來決定繪製的先後順序。
+
+-
+
+在 paint 階段中，main thread 會走遍所有的 layout tree，然後創造一個 paint records， paint records 就是一個註釋，像是背景優先，然後是文本，在來是矩形。
+
+![](https://cdn-images-1.medium.com/max/800/1*Qa-anFebyis5cGrp8kPtTA.jpeg)
+
+所以在 paint 階段的步驟中就會創造一個 paint records， paint records 就是一個註釋，像是背景優先，然後是文本，在來是矩形。
+
+**Updating rendering pipeline is costly**
+
+![](https://cdn-images-1.medium.com/max/800/1*xhb4M7HtSAJ5F5Bxccg2mw.gif)
+
+最後是如果有使用 JavaScript 去改變一些內容的話，就會需要重新 renderer。例如，如果 layout tree 中的某些内容發生了，則需要為受影響的部分重新生成繪製命令。
+
+所以只要畫面有變動就需要在跑一次。
+
+如果要為元素設置動畫，則瀏覽器必須在每幅之間運行這些操作。大多數顯示器每秒刷新 60 次（60 fps），在這種情況下動畫對人的眼睛來說看起來相當平滑。但是，如果動畫在 60 次中錯過了一幅，則頁面將顯示為"janky”。
+
+![](https://cdn-images-1.medium.com/max/800/1*JS0NvuW4YjtXKzs_YxaZdA.jpeg)
+
+即使渲染操作跟得上螢幕更新，這些計算也會在 main thread 上運行，這表示運作 JavaScript 的時候，渲染可能被阻止。
+
+![時間軸上的動畫幅，但被 JavaScript 阻塞了](https://cdn-images-1.medium.com/max/800/1*CGSV4gE27m32fymvTeABsA.jpeg)
+
+_時間軸上的動畫幅，但被 JavaScript 阻塞了_
+
+這時候可以將 JavaScript 分割為小塊來執行，使用 requestAnimationFrame()安排在每一幅上運行。
+
+![](https://cdn-images-1.medium.com/max/800/1*Ejq93d5rFjRk4Ph7eIdDcg.jpeg)
+
+**What is compositing**什麼是合成
+
+合成就是像在做製作圖片那樣，會有好幾層，先從底層開始慢慢地往上層圖放上去，最後就可以合成畫面。
+
+![](https://cdn-images-1.medium.com/max/800/1*_gbvSpfUPosGvdGK9l3MlQ.gif)
+
+所以當畫面改變的時候，就只需要去變動有變動的圖層就好了
+
+**Raster and composite off of the main thread**
+
+這邊就是在講實際上如何繪圖的
+
+一旦確定了繪製順序，main thread 就會把資訊提交給 compositor thread，compositor thread 會把畫面分割成很小很小的畫面塊，然後給 raster thread 去處理，raster thread 會把畫面交給 GPU 去處理，然後 GPU 的平行處理能力很強，就可以一口氣得把畫面一起繪製出來，而不是一個一個的處理。假設有一百個畫面塊就一口氣畫一百個出來
+
+![](https://cdn-images-1.medium.com/max/800/1*6GSflZ66frgKLIpZOnh_JQ.png)
+
+所以 part 3 只要知道幾個重點就好
+
+**總結一下**
+
+1. 一開始會先把 HTML 轉換成 DOM tree，對應到一個 browser 內部的表示方法。
+2. 算出 style，CSS 的那些規則去套用在 DOM 的節點上面。
+3. 決定位置放在哪裡。layout tree 告訴我們放哪裡
+4. 決定顯示的優先順序，有重疊的時候要先畫 a 還是先畫 b
+5. 最後是怎麼畫出來的
+
+-
+
+### part4
+
+這篇比較難所以就只簡略介紹。
+
+這邊在講說以 browser 來說要怎麼處理這些事件。
+
+比如說點擊了一個東西，對於 browser process 來說只知道點了某個東西，座標 x 跟 y 是甚麼，然後再把資訊傳給 renderer process 然後再還原資訊之後，才知道原來這個座標是點到了一個 button
+
+![](https://cdn-images-1.medium.com/max/800/1*XobKpzX7dHxnJur9vlyXLw.jpeg)
+
+**Finding the event target**
+
+比如說點了一個地方，它會去找點到了哪些 DOM 物件，所以 renderer process 知道畫面有哪些東西，就會去找該座標，我們點了這個點到底是點到了甚麼。
+
+![](https://cdn-images-1.medium.com/max/800/1*T5LMwKVe-0cP9QNNVS-elQ.jpeg)
+
+後面都是說一些優化的資訊，瀏覽器會幫我們做一些優化，以免去影響到渲染。像是移動滑鼠反白文字，基本上都是事件的一種，但當這些事件太頻繁的時候，就會影響到渲染，這樣是不行的，所以瀏覽器就會幫我們降低事件觸發的頻率，所以假設我們在瀏覽器花了0.1秒畫了 1/4 的圓，瀏覽器可能只記錄到開始的點跟結束的點。
+
+part4 主要講的都是一些很進階的東西，像是要怎麼去優化程式碼，或是瀏覽器是如何優化的，還有在處理一些 input 事件的時候要怎麼優化。part4 是比較細緻的一些東西。所指初學者只要了解前 3 part 就好了。
+
+## 收穫：
+
+花了很多時間去看一下 callback function 然後在找資料的途中的範例有些許的不明白，所以我就去看了一下 undefined、null、NaN、空字串等等的資料。了解了更多關於那些比較基本的資訊。後來對於 callback function 比較清楚的就跟我當初所想的定義是一樣。就是透過函式去呼叫函式，**被呼叫的那個 function** 就是 callback function。
+
+透過了 Inside look at modern web browser 解到原來瀏覽器是這樣運行的。從最基礎電腦元件來了解到整個畫面是如何進行的渲染。也知道原來 GPU 為什麼會有這麼多的核心組成，就是為了要平行運算，因為沒人希望畫面是從左上角開始一行一行的出現的，所以我就想到之前看 CCSC 的時候的古早顯示器，就是一行一行印出圖片的樣子。當然現在還是這樣進行的樣子，只是速度快到我們看不出來而已，而為什麼有時候會有畫面出問題的會造成甚麼影響，在這邊也有說明。不過瀏覽器的渲染畢竟跟顯示器是不一樣的，所以不能一概而論。
+
+簡單說我明白了瀏覽器有哪些組成，像是 browser process、renderer process 等等的 process，然後它們的底下又還有其他的 thread ，彼此之間也有互相工作的內容，最後明白他們之間的溝通流程，當在網頁輸入網址的之後網頁是如何進行的，UI thread 會把資料判斷之後交給 network thread 然後去連線，連線完成之後 netword thread 又去判斷資料的安全性跟資料的性質，最後判斷該交給誰去處理，如果是得到的資料是一個 HTML 檔案，就會透過 browser process 交給 renderer process 去渲染，後面也還會有很多的工作機制。簡單說從這裡了解到了，網頁的 process 是如何交換資料，以及它們的流程是如何。然後是畫面如何渲染的，有個 main thread 去交代資料給其他的 threads 處理，所以我們才會有了畫面，然後也明白整個頁面從頭到尾是如何畫出來的。最後是了解一些優化的小知識，不過難度較高，也就沒有去花太多時間理解。

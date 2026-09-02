@@ -1,0 +1,549 @@
+---
+title: "JavaScript 基礎：變數 - 學習筆記"
+slug: "javascript-基礎-變數-學習筆記"
+description: "變數宣告與 undefined"
+date: 2019-04-20T06:21:39.291Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E8%AE%8A%E6%95%B8-%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98-2dee3ad915f4"
+---
+
+## 變數宣告與 undefined
+
+變數就像一個裝東西的箱子，可以把東西裝進去，變數可以命名。
+
+```
+var box = 123 // 建立一個名字叫作 box 的箱子，裡面放資料 123
+```
+
+= 的意思是 "賦值" 的意思
+
+```
+var box = 123
+console.log(box)
+```
+
+變數在 JavaScript 裡面，大小寫是有差異的。
+
+如果建立一個變數，沒有給值，在輸出的時後，就會顯示 undefined
+
+```
+var box
+console.log(box)
+```
+
+結果會出現 undefined ，宣告變數之後沒有給它資料的意思。
+
+如果
+
+```
+var box = 123
+console.log(box51w16wemdp)
+```
+
+console.log 一個沒有宣告的變數，它就會出現錯誤：
+
+```
+D:\Software\cmder\Jslearn
+λ node index.js
+D:\Software\cmder\Jslearn\index.js:2
+console.log(box51w16wemdp)
+            ^
+```
+
+```
+ReferenceError: box51w16wemdp is not defined
+    at Object.<anonymous> (D:\Software\cmder\Jslearn\index.js:2:13)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:877:12)
+    at internal/main/run_main_module.js:21:11
+```
+
+**is not defined**變數沒有定義/宣告的意思
+
+### console.log() ，括號內部也可以做運算
+
+```
+var box = 123
+var hello = 62
+console.log(box + hello)
+```
+
+答案為 185
+
+```
+var box = 123
+var hello = 62
+console.log(box && hello)
+```
+
+回傳 62
+
+> 規範：變數不能用數字開頭，也不能把保留字(ex: var)作為變數，有些特殊符號也不行。
+
+可行命名法：
+
+```
+var this_is_a_box
+var ThisIsABox
+```
+
+要統一用法，然後變數命名不要用代號(ex: a . b . zzz .lll)，要用有意義的字串。
+
+## 1++ 以及 1 --
+
+```
+var a = 0
+a = a+5
+// 意思是 a+5 的值 賦值 給 a 的意思，這時 a 的值就是 5。這段也等同於 a+=5
+```
+
+如果要 +1 也可以寫為 a++ 也等於 a+=1
+
+還有
+
+a -- 是指 a-1 也是a-=1
+
+a-=5 可以讀作 a 減掉，減掉的值是5，所以等於 a - 5
+
+### 為什麼要單獨給 +1 -1 給個特殊用法？
+
+因為在寫程式裡面實在太常使用了。  
+還有一種是把 ++ 放前面 ：
+
+```
+ ++a
+```
+
+那兩者差在哪邊呢？
+
+```
+var a = 0
+console.log(a++ && 30)
+console.log(“a:”, a)
+```
+
+得到：
+
+```
+D:\Software\cmder\Jslearn
+λ node index.js
+0
+a: 1
+```
+
+它會先把第一格 console 跑完，再執行 a++  
+當在跑的時候，判斷就會變成 0 && 30，所以第一格回傳 0  
+在跑第二格時，a 才是已經被加一的值，所以會顯示 1，等同於：
+
+```
+console.log(a++ && 30)
+等同於
+console.log(a && 30)
+a++
+```
+
+如果是
+
+```
+var a = 0
+console.log(++a && 30)
+console.log(“a:”, a)
+```
+
+則
+
+```
+D:\Software\cmder\Jslearn
+λ node index.js
+30
+a: 1
+```
+
+這樣就會先執行 a+=1  
+PS. 不要兩邊都用 ++， 如果需要這樣用，還不如分開寫，會比較容易讓人理解。
+
+## 變數形態
+
+在 JavaScript 宣告變數都只用 `var`。但不代表是沒有形態的，只是在宣告的時候，沒有要求宣告變數型態而已。在 JavaScript，要看變數形態時，用typeof+ 要判斷的變數，
+
+變數的型態有幾類：  
+primitive 最原始的類型，然後有三種：  
+boolean：就是 true 及 false。  
+number：所有的數字都是，小數跟整數都算。  
+string：字串，用雙引號或單引號括起來的內容。  
+除了這三種，還有另外的  
+object 物件  
+undefined 沒定義也是一種 typeof 的回傳值  
+function 函式  
+特別的是 null 也是 object ，是從 JavaScript 存在的時候，就是這樣了，常常被認為是設計錯誤。[原因](http://skyroxas.tw/javascript-null-%E6%98%AF%E4%B8%8D%E6%98%AF%E5%80%8B%E7%89%A9%E4%BB%B6%EF%BC%9F/)
+
+## 陣列（Array）
+
+陣列就是指一個陣形，像隊伍行列般，依次序排列。  
+下面先用 var 來舉例：如果要登記 50 人的成績，利用變數去命名會變成：
+
+```
+var score1 = 30
+var score2 = 100
+var score3 = 3
+var score4 = 3
+var score5 = 30
+…
+var score50 = 10
+(score1+score2+…+score50)/50
+```
+
+這樣太重複了，而通常在寫程式太重複的事情就會有一些方法優化。  
+陣列就是解決之道。
+
+> [wiki陣列](https://zh.m.wikipedia.org/zh-tw/数组)
+
+> [MDN 陣列](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array)
+
+> [陣列的運用](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Obsolete_Pages/Obsolete_Pages/Obsolete_Pages/%E9%99%A3%E5%88%97%E7%9A%84%E9%81%8B%E7%94%A8)
+
+陣列，就像很多差不多類型的箱子，box[0] . box[1] . box[2] 裡面裝著不同的東西，通常都是放相近的東西，要放不同的也行，只是這樣會很奇怪。中括號內的數值稱為 index 索引。陣列的第一個元素是 0，他從零開始。題外話，有些程式是從 1 開始，不過大部分的都是從 0。  
+改成陣列的話
+
+```
+var index = 10
+var score = [] // 先宣告 score 是一個陣列
+score[0] = 30
+score[1] = 50
+score[index] = 100 // 用變數表示陣列的第幾個
+…
+```
+
+這個就是會搭配迴圈使用。  
+東西性質不一樣也可以用陣列，只是這樣就比較沒有意義，直接用變數就好了。陣列其實就是一連串的變數。  
+也可以直接給值
+
+```
+var score = [1, 3, 5, 10, 100 ]
+console.log(score)
+// [ 1, 3, 5, 10, 100 ]
+```
+
+要取得這個陣列的長度：
+
+```
+var score = [1, 3, 5, 10, 100 ]
+console.log(score.length)
+5 // .length 結果
+```
+
+如果要取得最後一個數的值
+
+```
+var score = [1, 3, 5, 10, 100 ]
+console.log(score[score.length — 1]) // -1 是因為長度為 5 陣列第五個的數字是4，所以如果沒有 -1 會得到 undefined，因為它沒有 index 5 的值。
+// 100
+```
+
+```
+var score = [1, 3, 5, 10, 100 ]
+score[score.length] = 1000 // 這樣等於 score[5]
+// 所以它就會往陣列多放一個元素，這樣是往陣列的最後面放元素
+console.log(score)
+// [ 1, 3, 5, 10, 100, 1000 ]
+```
+
+更直覺的方式是
+
+```
+var score = [1, 3, 5, 10, 100 ]
+score.push(1000) // 後面曾加一位元素，值為 1000
+score.push(0.3) // 後面曾加一位元素，值為 0.3
+console.log(score, score.length)
+[ 1, 3, 5, 10, 100, 1000, 0.3 ] 7 //因為這時候陣列長度也會改變，所以回傳 7
+```
+
+試著玩玩看
+
+```
+var score = []
+score[10] = 100 // 宣告第十一位的值 100
+score.push(1000)
+score.push(0.3)
+console.log(score)
+//這樣就會從第十一個開始有值，前面的通通是空值。
+```
+
+這樣就會從第十一個開始有值，前面的通通是空值。
+
+```
+D:\Software\cmder\Jslearn
+λ node index.js
+[ <10 empty items>, 100, 1000, 0.3 ]
+```
+
+## 最直覺的變數形態：物件（object）
+
+假設針對學生需要儲存他們的姓名、分數、地址…等。用陣列就需要列好幾種陣列，這樣管理起來非常不方便。  
+就需要一個資料結構是可以儲存所有的東西，這就是物件。
+
+> ps. 在電腦科學中，資料結構（英語：data structure）是電腦中儲存、組織資料的方式。 by wiki
+
+> [mdn 物件](https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects)
+
+### [點記法 (Dot notation)區段](https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects/Basics#%E9%BB%9E%E8%A8%98%E6%B3%95_%28Dot_notation%29)
+
+你可透過點記法 (Dot notation) 存取物件的屬性與函式。物件名稱 (這裡是 person) 作為命名空間 (Namespace) — 為了能存取物件所封裝的所有東西，這也是必須首先輸入的項目。接著你寫一個「點」以及你所想存取的項目，可能是簡單屬性的名稱、陣列屬性的項目，又或是針對物件函式之一的呼叫。
+
+### [括弧記法 (Bracket notation)](https://developer.mozilla.org/zh-TW/docs/Learn/JavaScript/Objects/Basics#%E6%8B%AC%E5%BC%A7%E8%A8%98%E6%B3%95_%28Bracket_notation%29)
+
+這很像在陣列中存取項目的方法。其實基本上是一樣的東西 ─ 但前者是透過指數 (index number) 選擇項目；括弧記法則是透過各成員數值相關的名稱來選擇項目。因此物件有時亦稱作**「相聯陣列 (Associative array)」**；也就是說，其「將字串對應到數值」的方式，與陣列「將數字對應到數值」的方式相同。
+
+格式：key: value
+
+```
+var peter = {
+  name:”peter”, // 格式：key: value
+  score: 100,
+  address: “taipei”,
+  phone: “0912222”,
+}
+console.log(peter)
+```
+
+回傳就出現
+
+```
+D:\Software\cmder\Jslearn
+λ node index.js
+{ name: 'peter', score: 100, address: 'taipei', phone: '0912222' }
+```
+
+或是跟陣列一起用：
+
+```
+var students = []
+var peter = {
+   name:”peter”, // 格式：key: value
+   score: 100,
+   address: “taipei”,
+   phone: “0912222”,
+}
+students.push(peter)
+console.log(students[0])
+```
+
+就可以列出 peter 的全部資料。
+
+如果把 console 改為
+
+```
+console.log(students[0].name)
+// peter // 因為 name 值為 peter
+```
+
+改為
+
+```
+console.log(students[0].score)
+// 100 // 因為 score 值為 100
+```
+
+也可以使用
+
+```
+console.log(peter.score)
+// 100 // 這是利用物件的存取方式
+```
+
+或是
+
+```
+console.log(peter[“score”]) // 括弧記法
+// 100
+```
+
+物件內部的 key 也可以放陣列、物件
+
+```
+var students = []
+var peter = {
+ name：”peter”, // 格式：key: value
+ scores: [1, 2, 3],
+ address: “taipei”,
+ phone： “0912222”,
+  father: {
+     name: “mark”,
+     phone: “0912345678”
+ }
+}
+students.push(peter)
+console.log(peter.father.name)
+```
+
+最後一段的 console 寫那樣就可以準確的取得 peter 他老爸的名字 mark
+
+也可以
+
+```
+console.log(peter.[“father”][“name”])
+```
+
+也會取得一樣結果。
+
+### 變數的運算
+
+```
+var a = 10
+var b = 20
+console.log(a + b)
+// 30
+```
+
+**1. 要注意變數形態**
+
+```
+var a = 10
+var b = “20” // 字串
+console.log(a + b)
+// 1020
+```
+
+a 就會被當成字串與 b 相加，變為字串相加：1020。反之，也是一樣。  
+解決方法是利用 number()
+
+```
+var a = 10
+var b = “20”
+console.log(a + Number(b)) // Number() 就會把括號內的變為數字，N 務必大寫
+```
+
+另外一種是使用一種 function
+
+```
+var a = 10
+var b = “20”
+console.log(a + parseInt(b, 10))
+// 30
+```
+
+參考：[JavaScript parseInt() 函数](http://www.w3school.com.cn/jsref/jsref_parseInt.asp)
+
+```
+parseInt(變數, 該變數的進位方式)
+parseInt(b, 10)
+// 回傳轉換成 10 進位的值
+```
+
+這邊的意思是顯示 b 的數字，b 的進位方式是十進位，這種時候就可以忽略，10的部分。
+
+```
+var a = '10'
+var b = 20
+console.log(parseInt(a, 2) + b) // 把 a 理解為二進位 10 十進位則是 2。
+//22
+```
+
+2. 浮點數誤差
+
+```
+var a = 0.2 + 0.1
+console.log(a)
+console.log(a == 0.3)
+```
+
+小數在電腦的儲存方式，它沒辦法很精準的儲存到 0.2、0.1等數字，幾乎所有的程式都有這種問題，如果可以盡量不要用到小數。
+
+## 萬年經典題：== 與 ===
+
+= ：賦值的意思
+
+==：比較
+
+```
+var a = 10 == 10
+console.log(a)
+// true
+// => 它這邊 會先判斷 10 == 10 得答案 true。然後再賦值給 a，所以 a = true。
+```
+
+兩個等號與三個等號的差異，三個等號會比較型態。
+
+===：比較+比較型態
+
+用 == 的時候常常會在運算時出問題，所以建議大家永遠都用三個等號。至少可以在 debug 的時候，可以知道型態沒錯誤。
+
+## 從 Object 的等號 真正理解變數
+
+```
+console.log([] === []) // 前面等於建了一個陣列，後面等於在另外建了一個陣列
+// false
+console.log([1] === [1]) // 因為是不同的陣列，就是編號.空值一樣，也是不相等
+// false
+console.log({} === {})
+// false
+console.log({a:1} === {a:1})
+// false
+```
+
+為什麼會這樣呢？因為物件是**儲存記憶體位置**的，是**指向某個記憶體**，呼叫時，再指向某個記憶體，然後呼叫記憶體的內容，而且在 JavaScript 無法得知記憶體位置，所以當我們在宣告一個新的物件時，即使裡面的內容一樣，它的儲存的記憶體位置還是不一樣。當 JavaScript 在 === 判斷的時候，它是也會判斷較底層的內容，也就是儲存的記憶體位置。
+
+```
+var obj = {
+ a:1
+}
+var obj2 = obj
+console.log(obj === obj2)
+// true
+```
+
+在這邊直接把 obj2 = obj ，所以直接相等了，理由下述。
+
+```
+var obj = {
+ a:1
+}
+var obj2 = obj
+obj2.a = 2
+console.log("obj:" , obj)
+// obj: {a:2}
+console.log("obj2:" , obj2)
+// obj2: {a:2}
+console.log(obj === obj2)
+// true
+```
+
+在這邊，假設 obj 的紀體位置是 0x01。var obj2 = obj，等於宣告了一個 obj2 它是採用 obj 的值，obj2 會直接指向 obj 所指的記憶體位置，所以 obj2 的記憶體位置是存 obj 的記憶體位置 0x01。所以 obj2.a =2 也會改到 obj 的東西，因為它們是同一個東西。
+
+這時候，如果加一行 obj2 = \{b:1\}
+
+```
+var obj = {
+ a:1
+}
+var obj2 = obj
+obj2.a = 2 //這個是對 obj2 裡面的 a 屬性改值為 2，就會針對它指向的東西改值
+obj2 = {b:1}
+//這是對 obj2 整個變數給它一個新的物件，就會指向新的物件的記憶體位置
+```
+
+```
+console.log("obj" , obj)
+console.log("obj2" , obj2)
+console.log(obj === obj2)
+```
+
+所以物件裡面放的是記憶體位置，那個記憶體位置指向所需要的內容，物件裡面儲存的不是那些內容，所以呼叫物件的時候，才會調用出來。
+
+```
+var obj = {
+ a:1
+}
+var obj2 = obj
+obj2.a = 2
+obj2.b = 1 // 在這邊並沒有宣告一個新的物件，所以會額外添加一個 b:1 的名稱跟值
+console.log(“obj” , obj)
+console.log(“obj2” , obj2)
+console.log(obj === obj2)
+```
+
+收穫：在這邊陣列跟物件稍微卡關了一陣子，導致我覺得說是不是有哪邊搞不懂，所以查了很多的資料想去了解，於是先繼續往下學習，學到了後面原來是差在理解物件的運作原理，一理解之後就整個樣貌清楚多了。很清楚的明白陣列的原理，以及它是怎麼一回事，應用範圍以及要如何使用。稍微理解了資料結構的基礎，還有記憶體的問題，之前看 Crash course computer science 的時候，有講到資料的結構，這使我更加的明白這次的學習內容。

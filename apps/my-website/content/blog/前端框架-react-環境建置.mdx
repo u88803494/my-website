@@ -1,0 +1,407 @@
+---
+title: "前端框架 React：環境建置"
+slug: "前端框架-react-環境建置"
+description: "快速建置 React 環境"
+date: 2019-10-18T08:43:33.680Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*hm2fzxL6607QrOgsgSDIvQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE-333f5ecfb611"
+---
+
+## 快速建置 React 環境
+
+先參考 React 官方網站：[英文官網](https://reactjs.org/) [中文官網](https://zh-hant.reactjs.org)
+
+[像是一分鐘添加 React](https://reactjs.org/docs/add-react-to-a-website.html#add-react-in-one-minute) 可以用類似 JQuery 的方式來把 Reacr 加入到網站裡面。
+
+其他的部分，就必須要懂 webpack 跟 babel 才可以建置。
+
+## 前置作業：webpack
+
+要建置 React 的環境，就會需要 import bundle，而要使用 import 就需要 webpack，所以就需要設置。
+
+安裝 webpack 之後，開設三個檔案 index.html、index.js、utils.js。分別寫入：
+
+utils.js:
+
+```
+export function log(str) {
+  console.log(str)
+}
+```
+
+index.js:
+
+```
+import { log } from './utils.js';
+log('hello world');
+```
+
+接著設置 webpack 的設定檔
+
+把 utils.js 跟 index.js 分別份入 src 資料夾，慣例上都會把來源放入 src 資料夾。
+
+另外還要設置把結果放到 dist 資料夾，以及設定結果的檔案名稱。最終結果如下：
+
+```
+const path  = require('path');
+```
+
+```
+module.exports = {
+  entry: "./src/index.js",
+  output: path.join(__dirname, "./dist"),
+  filename: "bundle.js"
+}
+```
+
+除此之外，還要設定一下 package.json 在 script 新增指令，方便之後使用:
+
+```
+"scripts": {
+  "start": "webpack --mode development",
+  "build": "webpack --mode production",
+}
+```
+
+一個是開發者環境，另一個是產品環境。
+
+之後就可以使用 `yarn start` 或是 `npm run start` 來替代那一長串的指令。
+
+## 前置作業：babel
+
+因為之後寫的程式碼基本上都是 ES6，而很多瀏覽器不一定對 ES6 有這麼高的支援度，所以就需要透過 babel 轉成 ES5
+
+一樣要通過 npm 或 yarn 下載
+
+```
+yarn add @babel/core babel-loader @babel/preset-env
+```
+
+babel-loader 這是給 Webpack 使用的
+
+然後開立一個設定檔 `.babelrc`
+
+```
+{
+  "presets": ["@babel/preset-env"] // 這個可以根據瀏覽器的環境而設定
+}
+```
+
+然後就可以在 webpack 設定 loader
+
+```
+webpack.config.js:
+const path = require('path');
+```
+
+```
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+  },
+  module: {
+    reules: [
+      {
+        test: /\.js$/, // 針對 .js 的檔案
+        exclude: /node_modules/, // 排除，因為這裡面已經做過了
+        use: {
+          loader: 'babel-loader' // 使用這個 loader 處理
+        }
+      }
+    ]
+  }
+}
+```
+
+然後試試看吧 index.js 的部份改變一下：
+
+```
+index.js:
+import { log } from './utils.js';
+const obj = {
+  text: 'hello world!!!',
+}
+```
+
+```
+const {text} = obj;
+log(text);
+```
+
+增加 ES6 語法解構，然後運行 `npm run start` 就會發現成功了，也可以印出 hello world!!!
+
+就可以來看看 bundle.js 裡面的內容
+
+![](https://cdn-images-1.medium.com/max/800/1*hm2fzxL6607QrOgsgSDIvQ.png)
+
+可以看到反白的部份，確認到確實是被轉成 ES5 的語法了
+
+## 把 React 加進來
+
+在這邊也是需要安裝幾個 react 相關的應用
+
+```
+yarn add react react-dom @babel/preset-react
+```
+
+裝玩就差不多 ok 了。
+
+只是有些設定需要改動一下，在 `.babelrc` 設定 `@babel/preset-react`
+
+```
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+```
+
+然後是開啟一個 xxx.js 來使用 React，這邊使用 App.js 來命名：
+
+```
+import React, { component } from 'react'; // 引入 React 跟 component
+```
+
+```
+class App extends Component { // 繼承 component
+  render() {
+    return (
+      <h1> hello React </h1>
+    )
+  }
+}
+```
+
+```
+export default App // 輸出
+```
+
+另外一種寫法：
+
+```
+import React from 'react'; // 只引入 React
+```
+
+```
+class App extends React.Component { // 改成繼承 React 底下的 component
+  render() {
+    return (
+      <h1> hello React </h1>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+這樣是差不多結構的語法，只是一個先引出，一個後引出
+
+然後改寫 index.js:
+
+```
+import React from 'react'; // 分別引入
+import ReactDOM from 'react-dom'; // 分別引入
+import App from './App'; // 分別引入
+```
+
+```
+ReactDOM.render(<App />, document.getElementById('root'))
+// 要把東西訊染到 root
+// 這邊的意思是當執行的時候，會把 App 這個 Component 給 rneder 到 root 的 DOM 上面
+```
+
+然後 index.html 記得要加上 id 為 root 的 div，  
+這樣就可以使用 `yarn start` 轉換了
+
+```
+<!DOCTYPE html>
+<html lang="en">
+```
+
+```
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> hello </title>
+</head>
+```
+
+```
+<body>
+  hello
+  <div id="root"></div>
+```
+
+```
+<script src="./dist/bundle.js"></script>
+</body>
+```
+
+```
+</html>
+```
+
+最後就成功的渲染上去了。
+
+![React 就成功跑起來了](https://cdn-images-1.medium.com/max/800/1*3UtgKFE9D6Y21fGkxKd6hA.png)
+
+_React 就成功跑起來了_
+
+但這樣子的話，在改的時候就非常不方便，debug 也十分的不方便，所以就可以找些方法來優化這個流程。
+
+## webpack dev server
+
+這邊要來幫之前建制的環境做點小優化。
+
+### webpack.config.js
+
+bundle.js 的名字，如果一直都一樣的話，在瀏覽器上面，就會被 Cache 保存下來，這時候瀏覽器就不會因為伺服器的檔名不一樣了，就重新下載。
+
+這時候就要使用一個方法，這是 webpack 提供的功能。
+
+```
+[hash]
+```
+
+用中括號刮起來裡面寫 hash 這樣 webpack 就會在產生的時候自動加上 hash
+
+```
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.[hash].js",
+  },
+```
+
+然後嘗試 Run 一次
+
+![就可以看到產生 hash](https://cdn-images-1.medium.com/max/800/1*c0Af6bmQA3I84-6A-LOnOA.png)
+
+_就可以看到產生 hash_
+
+一旦改了一點點的內容，產生出來的 hash 就不一樣了。
+
+這時候又有另外一個問題就是 html 的引用的檔名不就得跟著改，這部份也要優化，總不能每次都要手動嘗試。
+
+這時候就要用到一個 webpack 的 plugin，當然這是要安裝的，在 command line 上面安裝：
+
+```
+yarn add html-webpack-plugin
+```
+
+安裝完成之後，再去 webpack.config.js 新增。要先引用之後才可以，使用：
+
+```
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+```
+
+```
+module.exports = {
+  ...
+  ...
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html' // 這樣就會用指定的 html 當作 template
+    })
+  ]
+}
+```
+
+然後記得原本 html 的引入要刪除，
+
+然後就可以轉換看看，會發現轉換後也跑到 src 那邊去了。
+
+![左邊是原本的，右邊是轉換過的，可以看到多了一行引入。](https://cdn-images-1.medium.com/max/800/1*riZUu4Ex1vY1qkyA5na43w.png)
+
+_左邊是原本的，右邊是轉換過的，可以看到多了一行引入。_
+
+通過這種方式就不用每次都自己去改。
+
+### 存檔即更新
+
+一樣要依賴安裝
+
+```
+yarn add webpack-dev-server
+```
+
+這可以提供一個方便我們開發的環境。
+
+安裝好之後只要去改 package.json 即可。把原本的 script 的部份改變一下
+
+```
+"scripts": {
+  "start": "webpack-dev-server --mode development --open --hot",
+}
+```
+
+只要改開發環境即可。
+
+接下來就只要啟用他
+
+```
+yarn start
+```
+
+等執行完成，就會開啟一個視窗，這時候就完成了。
+
+只要改變一些內容，然後儲存就會跟著更新。
+
+![](https://cdn-images-1.medium.com/max/800/1*53EqiKNgiU99B0OkoOfRsw.gif)
+
+透過這種方式，當存檔之後，就會自動的跑 webpack 處理，然後呈現畫面。
+
+透過這種方便的方式就可以很好的寫程式
+
+## 另一個選擇：create react app
+
+除了前述的建制環境的方法之外，React 官方有提供更簡潔的指令。
+
+這個好處就像是懶人包，只要下一個指令就可以建造環境
+
+note: 要再沒有安裝過其他東西（像是 webpack、git 等）的資料夾底下
+
+[參考官網](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app)
+
+```
+npx create-react-app my-app
+cd my-app
+npm start
+```
+
+使用指令安裝
+
+```
+npx create-react-app my-app
+```
+
+安裝完成之後可以切到資料夾 my-app 裡面。
+
+使用 `npm run start` 就可以開始使用，一樣會自動開啟一個網頁
+
+這邊就是使用 localhost:3000 來顯示的，使用這種方式會安裝比較多東西，所以跑起來需要的時間當然也會比較久一些。
+
+![localhost:3000](https://cdn-images-1.medium.com/max/800/1*zW-KrC1VhhheVb6tyNNQXw.png)
+
+_localhost:3000_
+
+但有時候並不一定需要這麼多東西，就可以自行安裝即可。
+
+## 收穫：
+
+花了好一陣子心力終於把這部份弄懂了，也體會到細心的重要性。在這之中不小心打錯一個指令結果一直沒發現，弄了好幾個小時才發現。
+
+讓我的進度多花了一些時間才達成，好在的是最終終於達成了，也發現一些限制。
+
+關於 React 的基礎環境在這裡弄的更熟，沒想到真的是需要這麼多東西的安裝才可以實現更方便的寫程式。
+
+從這之中知道以前學習的東西都是環環相扣，從 babel 到 webpack 等等，其實最後面的自動化環境我還以為是要使用 webpack 的 `.watch` 功能，結果跟我想得不一樣，是通過 server 的方式，這也確實方便。
+
+不過我想應該會跟其他的簡易伺服器軟體衝突吧，因為使用的 port 都是一樣的，這也是為什麼官方的 React app 會使用 port 3000 的關係。
+
+所以之後也許可以找找看有沒有改變 port 的方法。

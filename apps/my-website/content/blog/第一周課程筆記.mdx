@@ -1,0 +1,216 @@
+---
+title: "第一周課程筆記"
+slug: "第一周課程筆記"
+description: "學程式找工作迷思"
+date: 2019-04-17T12:19:40.109Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%AC%AC%E4%B8%80%E5%91%A8%E8%AA%B2%E7%A8%8B%E7%AD%86%E8%A8%98-9f4fc117ea3a"
+---
+
+## 學程式找工作迷思
+
+### 刷題
+
+刷題指的是像以前國高中那種時候，所謂的題海戰術，一直寫題目，寫得夠多的話，將來面試的話那些題目，可能都看過了。但這邊有個前提是那些東西都要先很會，刷題才有幫助。如果基礎不好，就刷題的話，常常就只是背答案而已，遇到一點變化就掛了。
+
+千萬別刷題，這不是給我們這種初學者的
+
+除非像是 Google. Facebook 之類的大公司，不然的話，大部分公司都會考一些實務上的問題，所以初學者倒不如去加強自己的基礎。
+
+### 資料結構與演算法
+
+初學階段，也是千萬別學。因為基礎不夠，所以直接學習會有難度，梯度較陡。CS50 到後面也是很難，所以要量力而為。
+
+### Codewar 的超強解法，該學嗎？
+
+在初學者階段，只要能解題就很好了。那些難度也很高，隨著時間變強之後，其實自己也會慢慢學到如何使用那種解法了，沒必要現階段接觸，很容易變成死背硬記。先想辦法可以用迴圈等方式解出來，再去想如何解得更簡單。
+
+### 總結
+
+一步一腳印，該學的自然有天會學到。重點是程式碼要給人看懂。
+
+## 軟體工程師產業概觀
+
+1. 做 AI
+2. 做 ML 機器學習
+3. 資安
+4. 網頁
+5. 手機
+6. 演算法
+7. Data
+8. 系統運維
+9. .... more
+
+按照載具不同，粗分為三種
+
+desktop: 電腦可執行的程式都算
+
+**web: 前端、後端**
+
+mobile: android iOS
+
+## Web 相關基礎知識
+
+### 前後端簡易區分
+
+1. 前端：你看得到的
+
+只要你在瀏覽器上面看到的東西，都可以是前端工程師的範疇  
+ 例如說 Google 首頁。通常是 HTML . CSS . JavaScript。
+
+2. 後端：你看不到的
+
+後端處理那些你看不見的商業邏輯，例如說 Google 怎麼執行搜尋？  
+怎麼把搜尋結果從資料庫裡面撈回來？並且丟回前端
+
+### 網頁的本質
+
+網頁其實就是一個瀏覽器看得懂的檔案(html)，由瀏覽器負責顯示出來。
+
+### 前端三劍客
+
+網頁又可以說是由三個部分組成
+
+1. HTML，網頁的結構跟內容
+
+2. CSS，網頁的外觀
+
+3. JavaScript，程式相關的東西（商業邏輯、表單驗證、運算）
+
+**Chrome Dev tool**很重要的好朋友
+
+### Client 與 Server
+
+1. 客戶端（Client）
+
+只要是在你的機器上跑的東西，就是客戶端。例如說網頁、App 等等。
+
+對伺服器而言，**任何來自 Client 端的東西都是不安全的。**
+
+2. 伺服器（Server）
+
+伺服器就是一個在遠方的機器，你不知道裡面有什麼，你也沒辦法進去裡面  
+可以想成是一個黑盒子。
+
+### Request 與 Response
+
+當客戶端需要某個網頁時，就會去跟伺服器 request 資料，然後伺服器在去找資料，然後 Response 給客戶端。通常 Response 的都是原始碼，並由瀏覽器轉換成我們看到的網頁。
+
+## 程式相關基礎知識
+
+### 程式是什麼？
+
+就是一行一行的指令用電腦看得懂的形式去表示出來。
+
+最簡單的就是 Command Line 裡面的指令。
+
+### 程式語言是什麼？
+
+每種程式語言都是根據不同目的發展出來，其實本質都一樣。
+
+### 程式語言如何執行？
+
+程式語言 → Compiler → 機器語言*(這是概略的概念而已)。*
+
+### 程式基礎概念
+
+**變數 Variable**
+
+```
+var a = 1 ，有一個變數 a 且把 a 的值儲存為 1。
+```
+
+**陣列 Array**
+
+```
+var score = []
+ score[0] = 65 index 索引值，從0開始
+ score[1] = 30
+ score[2] = 55
+ score[3] = 80
+ score[4] = 90
+```
+
+```
+console.log(score[0] + score[1] + score[2] + score[3] + score[4])
+```
+
+拿來儲存相似的東西，可以想成是一個 List，index 從 0 開始
+
+突然很好奇，變數可以儲存到多少呢？於是上網查[資料](https://social.msdn.microsoft.com/Forums/zh-TW/92d69f8c-3abe-4f5a-a001-29ac333d763b?forum=237)：長度限制
+
+> 每個陣列之維度長度都受限於 **Integer** 資料型別的最大值，也就是 _(2 ^ 31) — 1_。然而，陣列之總大小也同時受限於系統可用的記憶體。若您試圖對總大小超過可用的 RAM 之陣列進行初始化，Common Language Runtime 將擲回 [OutOfMemoryException](http://msdn2.microsoft.com/zh-tw/library/system.outofmemoryexception%28VS.80%29.aspx) 例外狀況。
+
+根據這個回答來看，他的大小應該跟記憶體配置有關係。
+
+**條件判斷 if...else**
+
+```
+var score = 50
+if(score >= 60) {
+  console.log(‘及格’)
+ } else {
+  console.log(‘不及格’)
+}
+```
+
+非常常用的語法，也非常直觀
+
+**迴圈 while . for**
+
+```
+var i = 1
+while(i < 10) {
+  console.log(i)
+  i++ // 等同於 i=i+1 或 i+=1
+ }
+```
+
+迴圈就是會不斷重複執行一樣的事情，直到終止條件被觸發
+
+```
+for(var i=1; i<=10; i++){
+  console.log(i)
+}
+```
+
+比較常用的迴圈形式
+
+**函式 function**
+
+```
+function add(a, b) {
+   return a+b
+ }
+```
+
+```
+console.log(add(10, 20)) // 30
+```
+
+就跟小時候學的數學很像
+
+## Git 相關基礎知識
+
+是一個用來做版本控制的程式。
+
+超重要概念 branch 等於平行時空
+
+Feature branch 通常是指從 develop 再開分支的意思
+
+Git 與 GitHub 的關係
+
+Git 的版本控制式存在自己的電腦上，如果要給別人看到的話，就必須要放到 GitHub 上或是類似的地方。
+
+GitHub Flow
+
+很簡單的開發方式，new branch → Pull Request → merge to master
+
+GitHub Blog
+
+1.新開一個 repository，把 issue 當作 blog 來用
+
+2.學習 Markdown 語法
+
+3.可參考：https://github.com/Lidemy/blog-example

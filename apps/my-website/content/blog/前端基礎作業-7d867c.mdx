@@ -1,0 +1,35 @@
+---
+title: "前端基礎作業"
+slug: "前端基礎作業-7d867c"
+description: "這邊指講解 hw1 的作業，所以筆記也只寫 hw1 的。"
+date: 2019-05-27T13:18:24.469Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-7d867ced0fdc"
+---
+
+這邊指講解 hw1 的作業，所以筆記也只寫 hw1 的。
+
+第一是語意化標籤的用法，最好還是需要使用，而且用了那些標籤也不要直接針對標籤下 css，要額外開一個 class 然後針對 class 下 css。
+
+-
+
+class 可以指名多個 class
+
+```
+class="btn btn-main"
+```
+
+這樣的話，中間的空白等於告訴說，指名兩個 class 分別是 btn 跟 btn-main，所以這兩個 class 所下的 css 都可以套用。
+
+-
+
+viewpoint
+
+另外一點是 viewpoint 的概念，就像是一整片的區域用個望遠鏡在看，所以只能看到一小部分，就是青蛙以管窺天的那種，因為手機在設計的時候，是會顯示整個版面的，但是又希望字體不要太小，所以會把字體放大，變成一次只能看整個版面的一部分。所以必須要針對這點在 head 下指令
+
+```
+<meta name = "viewport" content = "width=device-width, initial-scale=1" />
+```
+
+這段的意思就是指使用設備的寬度調整內容。這樣子在手機上面才可以正常操作。

@@ -1,0 +1,1093 @@
+---
+title: "後端基礎：用 PHP 與 MySQL 學習後端基礎 part3 實戰 Blog 部落格"
+slug: "後端基礎-用-php-與-mysql-學習後端基礎-part3-實戰-blog-部落格"
+description: "永遠的第一步：思考這個產品的全貌"
+date: 2019-07-23T04:36:45.333Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*dw2pQb7lheLFAlNhes7PDg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E7%94%A8-php-%E8%88%87-mysql-%E5%AD%B8%E7%BF%92%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-part3-%E5%AF%A6%E6%88%B0-blog-%E9%83%A8%E8%90%BD%E6%A0%BC-9e082d982dfa"
+---
+
+## 永遠的第一步：思考這個產品的全貌
+
+第一步就是必須要思考整個結構，需要有哪些頁面以及資料結構，然後就是 datebase 的 table 要長什麼樣子。
+
+在一開始就要想說這個產品會長什麼樣子，當然如果有可以參考的地方會更好。像是，https://blog.huli.tw/
+
+可以看到會有一個首頁，然後有一個可以看到所有文章的頁面，可能也有 about 自我介紹的部分。然後最重要的是有一個單一文章的頁面，越來顯示文章用。如果要詳細點的話，可以加上側邊欄位，像是有最新文章。
+
+所以以 blog 這專案來說，只要有分類功能，發表文章功能，關於我功能。這是最簡單的部落格功能。
+
+index.php 所有文章
+
+article.php?id=x 單一文章
+
+about.php 關於我
+
+而分類功能，就只要限定一個就好了，不然會變得太複雜
+
+admin.php 後台管理頁面，跟職缺類似
+
+add.php
+
+handle_add.php
+
+update.php
+
+handle_update.php
+
+delete.php
+
+後台的部分其實跟 Job Board 是差不多的。這個專案是前台的部分比較複雜。一般後台都長得差不多，頂多有一些不一樣。
+
+接下來就是規劃資料結構長什麼樣子
+
+## 規劃出需要的資料結構
+
+最主要是要放文章，所以就要有個 articles 放在 database 裡面
+
+```
+# articles(table)
+```
+
+```
+id
+title
+content
+category_id 分類
+create_at
+```
+
+```
+# categories(table)
+```
+
+```
+id 分類 id
+name 分類名稱
+create_at
+```
+
+這樣就可以透過 #categories 的 id 跟 # articles 的 category_id 把這兩個 table 關聯起來。**這也是關聯式資料庫的重點。**
+
+在這裡要變動分類的名稱，就不需要去變動 # articles 上面的資料了。
+
+關於我的頁面就不用存在資料庫了，因為不會變動。
+
+多個 categories ，就必須要能夠管理。那其實就很簡單，直接把 後台管理介面另外新增一個管理 categories 的介面即可。
+
+admin_category.php 後台管理頁面
+
+add_category.php 新增分類
+
+handle_add_category.php
+
+update_category.php
+
+handle_update_category.php
+
+delete_category.php
+
+接下來就可以在資料庫 開 table 了
+
+## 建置 database
+
+建置也沒很難，就不多說了。
+
+由於之前已經在職缺報報學過如何刻出介面。所以這次就改從後端的實作開始。
+
+分類的管理比較簡單，所以就先從這邊開始
+
+## 後台管理分類實作
+
+連線資料庫部分，因為之前的職缺報報已經用了，所以就可以直接拿來使用。conn.php 就不用重新寫過。
+
+然後就從 admin_category.php
+
+新增分類 管理文章，然後是條列的實際存在的分類，以及編輯或刪除選項。
+
+先用 HTML 寫出來一個基本的樣式，先不要使用 PHP
+
+![](https://cdn-images-1.medium.com/max/800/1*-aDmAY7vDUEZKeJzX11PkQ.png)
+
+然後就來寫新增分類的程式碼。其實就是一個表單 用 POST 送上資料。需要的資訊也很簡單，就是一個名稱。
+
+```
+add_category.php：
+```
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+ <body>
+ <h1>新增分類</h1>
+ <form action="handle_add_category.php" method="post">
+  名稱：<input type="text" name="name" />
+  <input type="submit" />
+</form>
+
+</body>
+</html>
+```
+
+接著是添加分類的 handle
+
+```
+handle_add_category.php：
+```
+
+```
+<?php
+ require_once('./conn.php');
+```
+
+```
+$name= $_POST['name'];
+```
+
+```
+if (empty($name)) {
+  die('empty date');
+ }
+```
+
+```
+$sql = "INSERT INTO categories(name) VALUES('$name')";
+ $result = $conn->query($sql);
+ if ($result) {
+  header('Location: ./admin_category.php');
+ } else {
+  die("failed. ". $connn->error);
+ }
+```
+
+```
+?>
+```
+
+這樣就可以新增了。
+
+接著回到分類管理的 PHP 把資料改成動態新增，就需要 PHP 語法。
+
+一樣呼叫 資料之後 echo 出來。
+
+```
+admin_category.php：
+```
+
+```
+<?php require_once('./conn.php')?>
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+<body>
+<h1>分類管理</h1>
+<a href="./add_category.php">新增分類</a>
+<a href="admin.php">管理文章</a>
+<ul>
+<?php
+  $sql ="SELECT * FROM categories ORDER BY create_at DESC";
+  $result = $conn->query($sql);
+  if($result->num_rows > 0) {
+   while($row = $result->fetch_assoc()) {
+    echo "<li>";
+    echo   $row['name'];
+    echo   " <a href='update_category.php?id=$row[id]'>編輯</a>";
+    echo   " <a href='delete_category.php?id=$row[id]'>刪除</a>";
+    echo "</li>";
+   }
+  }
+?>
+</ul>
+
+</body>
+</html>
+```
+
+再來就是實作 delete_category.php 的部份。
+
+因為是直接執行就好，所以是很簡單的部份。要先引入這個 ID。就可以通過指令刪除該 ID
+
+```
+<?php
+  require_once("./conn.php");
+  $id = $_GET['id'];
+  $sql = "DELETE FROM categories WHERE id=" . $id;
+  if($conn->query($sql)) {
+    header("Location: ./admin_category.php");
+  } else {
+    die("failed.");
+  }
+?>
+```
+
+編輯的功能就跟 add 是差不多的。所以可以直接複製 add 的功能來修改。
+
+這邊就需要新增一個 id 以方便發送資料使用。因為需要拿出資料才可以編輯。所以一樣要呼叫 conn.php，然後把資料在 value 印出來。就完成了
+
+```
+update_category.php：
+```
+
+```
+<?php
+ require_once("./conn.php");
+ $id = $_GET['id'];
+ $sql = "SELECT * FROM categories WHERE id=" . $id;
+ $result = $conn->query($sql);
+ $row = $result->fetch_assoc();
+?>
+```
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+ <body>
+ <h1>編輯分類</h1>
+ <form action="handle_update_category.php" method="post">
+  名稱：<input type="text" name="name" value="<?php echo $row['name']?>" />
+  <input type="hidden" name="id" value="<?php echo $row['id']?> /">
+  <input type="submit" />
+</form>
+
+</body>
+</html>
+```
+
+接下來就是編輯的發送功能。
+
+```
+<?php
+ require_once("./conn.php");
+```
+
+```
+ $name= $_POST['name'];
+ $id = $_POST['id'];
+```
+
+```
+ if (empty($name) || empty($id)) {
+  die('empty date');
+ }
+```
+
+```
+ $sql = "UPDATE categories SET name = '$name' WHERE id =". $id;
+ $result = $conn->query($sql);
+ if ($result) {
+  header('Location: ./admin_category.php');
+ } else {
+  die("failed. ". $conn->error);
+ }
+```
+
+```
+?>
+```
+
+跟 職缺報報其實差不了多少。
+
+-
+
+接下來就是管理文章的界面，實作完管理文章之後在整個串起來，部落格就完成了。這次先從後台開始做，先做分類，因為比較簡單，做完之後，就可以依照原有的基礎去打造管理文章的界面，這樣就會容易一些。
+
+## 後台管理文章實作
+
+管理文章跟管理分類本質上是一樣的，就是都是新增、刪除、編輯、查詢都是一樣的動作。等於可以直接複製 category 的檔案，然後修一修就好了。這也是小技巧之一，可以加速開發的速度。
+
+從文章管理的後台開始：
+
+```
+admin.php:
+```
+
+```
+<?php require_once('./conn.php')?>
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+<body>
+<h1>分類管理</h1>
+<a href="./add.php">新增文章</a>
+<a href="admin_category.php">管理分類</a>
+<ul>
+<?php
+  $sql ="SELECT * FROM articles ORDER BY create_at DESC";
+  $result = $conn->query($sql);
+  if($result->num_rows > 0) {
+   while($row = $result->fetch_assoc()) {
+    echo "<li>";
+    echo   $row['title'];
+    echo   " <a href='update.php?id=$row[id]'>編輯</a>";
+    echo   " <a href='delete.php?id=$row[id]'>刪除</a>";
+    echo "</li>";
+   }
+  }
+?>
+</ul>
+
+</body>
+</html>
+```
+
+目前就先只能看到 title 就好。
+
+接下來就是新增文章的部份。複製新增分類的頁面。然後開始新增需要 post 的資料格子。
+
+需要標題、內容、分類。
+
+標題可以用 input 。內容可以用 textarea。分類就要用一個 html 內建的元素 select 來製造出選項。
+
+```
+<form action="handle_add.php" method="post">
+    <div>標題：<input type="text" name="name" /></div>
+    <div>內容：<textarea type="text" name="name"></textarea></div>
+    <div>
+        分類：
+        <select name="category_id" id="">
+                <option value="">分類一</option>
+        </select>
+    </div>
+    <input type="submit" />
+</form>
+```
+
+這邊跟管理分類不一樣的是。就必須要把分類撈出來了。就要先引入資料庫。然後選到之後再把資料撈出來。接著就要改造 select 使之可以顯示分類。
+
+```
+add.php:
+```
+
+```
+<?php
+  require_once("./conn.php");
+  $sql = "SELECT * FROM categories ORDER BY created_at DESC";
+  $result = $conn->query($sql);
+?>
+```
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+ <body>
+ <h1>新增文章</h1>
+<form action="handle_add.php" method="post">
+    <div>標題：<input type="text" name="title" /></div>
+    <div>內容：<textarea type="text" name="content"></textarea></div>
+    <div>
+      分類：<select name="category_id" id="">
+    <?php
+     while($row = $result->fetch_assoc()) {
+      echo "<option value='$row[id]'>$row[name]</option>";
+     }
+    ?>
+      </select>
+    </div>
+    <input type="submit" />
+</form>
+</body>
+</html>
+```
+
+然後是上傳的部份：
+
+```
+handle_add.php:
+```
+
+```
+<?php
+ require_once('./conn.php');
+```
+
+```
+$title = $_POST['title'];
+ $content = $_POST['content'];
+ $category_id = $_POST['category_id'];
+```
+
+```
+if (empty($title) || empty($content) || empty($category_id)) {
+  die('empty date');
+ }
+```
+
+```
+$sql = "INSERT INTO articles(title, content, category_id)
+  VALUES('$title', '$content', '$category_id')";
+ echo $sql;
+ $result = $conn->query($sql);
+ if ($result) {
+  header('Location: ./admin.php');
+ } else {
+  die("failed. ". $conn->error);
+ }
+```
+
+```
+?>
+```
+
+-
+
+再來就是功能的部份。這邊就要先從刪除開始，因為是比較簡單的功能。一樣也是複製 category 的刪除。這邊非常簡單，只要改 $sql 的選擇部份就好。
+
+```
+delete.php：
+```
+
+```
+<?php
+  require_once("./conn.php");
+  $id = $_GET['id'];
+  $sql = "DELETE FROM articles WHERE id=" . $id;
+  if($conn->query($sql)) {
+    header("Location: ./admin.php");
+  } else {
+    die("failed.");
+  }
+?>
+```
+
+-
+
+然後是編輯的部份。這邊就比較不一樣了。因為要實作的部份就比較多，但一樣可以複製 category 的部份。然後要使用 add 的部份，來新增資料。然後因為這邊的部份需要使用兩個 table 的資料，articles 跟 categories。所以就要先決定完成其中一部份，這邊就先完成 articles 的部份，不然兩個一起做的話會很混亂。
+
+textarea 跟 input 不一樣，因為沒有 value 可以使用，所以就直接印在標籤內部就好了。
+
+```
+update.php:
+```
+
+```
+<?php
+ require_once("./conn.php");
+ $id = $_GET['id'];
+ $sql = "SELECT * FROM articles WHERE id=" . $id;
+ $result = $conn->query($sql);
+ $row = $result->fetch_assoc();
+?>
+```
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta http-equiv="X-UA-Compatible" content="ie=edge">
+ <title>BLOG 部落格</title>
+</head>
+ <body>
+ <h1>編輯文章</h1>
+ <form action="handle_update.php" method="POST">
+  <div>標題：<input type="text" name="title" value="<?php echo $row['title'];?>"/></div>
+    <div>內容：<textarea type="text" name="content"><?php echo $row['content'];?></textarea></div>
+  <input type="hidden" name="id" value="<?php echo $row['id'];?> "/>
+  <input type="submit" />
+</form>
+
+</body>
+</html>
+```
+
+然後是還要在撈出分類，但變數已經重複了。所以就要使用另外的變數，剩下的指令都差不多。複製分類的部份，然後在變動變數。
+
+下面只秀出有變動的部份：
+
+```
+<?php
+  $sql_category = "SELECT * FROM categories ORDER BY created_at DESC";
+ $result_category = $conn->query($sql_category);
+?>
+```
+
+```
+ <body>
+  <div>
+      分類：<select name="category_id">
+    <?php
+     while($row_category = $result_category->fetch_assoc()) {
+      echo "<option value='$row_category[id]'>$row_category[name]</option>";
+     }
+    ?>
+      </select>
+    </div>
+  <input type="hidden" name="id" value="<?php echo $row['id'];?> "/>
+  <input type="submit" />
+</form>
+
+</body>
+</html>
+```
+
+但是這樣的話。並沒有把該文章本來的分類抓下來。所以一樣就要設置之後才可以讓選項預選本來的值。
+
+方法可以參考 [w3school](http://www.w3school.com.cn/tags/att_option_selected.asp) 然後不用寫的成 `selected="selected"` 也是可以使用的只需要寫 `selected` 即可。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/cadd514d39a6689e01f38569ba7f68d6)
+
+-
+
+再來就是編輯的上傳功能。一樣複製 category 的。
+
+```
+handle_update.php:
+```
+
+```
+<?php
+ require_once("./conn.php");
+```
+
+```
+$title = $_POST['title'];
+ $content = $_POST['content'];
+ $category_id = $_POST['category_id'];
+ $id = $_POST['id'];
+```
+
+```
+if (empty($title) || empty($id) || empty($content) || empty($category_id)) {
+  die('empty date');
+ }
+```
+
+```
+$sql = "UPDATE articles SET title = '$title', content = '$content',
+  category_id = '$category_id' WHERE id =". $id;
+ $result = $conn->query($sql);
+ if ($result) {
+  header('Location: ./admin.php');
+ } else {
+  die("failed. ". $conn->error);
+ }
+?>
+```
+
+至此為止，後台的部份都完成了。剩下就是前台的部份，也只需要完成所有文章、單一文章、關於我。
+
+## 實作部落格前台頁面
+
+前台來說，首先先完成 index.php 需要一個導覽列，然後是顯示有哪些文章的地方。所以就簡單的切一下，弄出一個骨架並且加上 CSS。
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Blog 部落格</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <h1>BLOG</h1>
+    <a class="active" href="./index.php">首頁</a>
+    <a href="./about.php">關於我</a>
+  </nav>
+  <div class="container">
+    <div class="articles">
+      <div class="article">
+        <h1><a href="http://123.com"></a> 標題</h1>
+      </div>
+      <div class="article">
+        <h1><a href="http://123.com"></a> 標題</h1>
+      </div>
+    </div>
+```
+
+```
+</div>
+</body>
+</html>
+```
+
+CSS
+
+```
+body {
+  font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+}
+```
+
+```
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #404092;
+  height: 71px;
+}
+```
+
+```
+.nav h1 {
+  display: inline-block;
+  color: white;
+}
+```
+
+```
+.nav a {
+  padding: 25px;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+}
+```
+
+```
+.nav a.active, .nav a:hover {
+  background: #6c6cb0;
+} // .nav a.active 就可以讓同樣的高亮顯示
+```
+
+```
+.container {
+  margin-top: 100px;
+}
+```
+
+```
+.article {
+  border: 1px dotted #000;
+}
+```
+
+```
+.article ~ .article {
+  margin-top: 20px;
+}
+```
+
+```
+.article a {
+  text-decoration: none;
+  color: #000;
+}
+```
+
+再來就是關於我的部份，可以直接複製 index.php 的部份，然後做些修改。
+
+然後是為了要讓文字可以正確呈現
+
+在 CSS 使用
+
+```
+.about {
+  white-space: pre-line;
+}
+```
+
+可以讓文字的排版正確。
+
+```
+<!DOCTYPE html>
+<html lang="en">
+```
+
+```
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Blog 部落格</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+```
+
+```
+<body>
+  <nav class="nav">
+    <h1>BLOG</h1>
+    <a href="./index.php">首頁</a>
+    <a class="active" href="./about.php">關於我</a>
+  </nav>
+  <div class="container">
+    <div class="about">
+      關於我
+```
+
+```
+外較營老問
+      生工兒程導形畫！學告信師天界到羅友的校不個強麼找改其科下示是片，景整他雲本害種重人會股術精？止基華一……學張致那歌型校想加布話升然言的紅太古然了我空些到年嗎個建們性裡國務國以人字有，市案吸王表觀己愛名西老香告，河始確輪國有是組全的統提電種操出庭化好，落名勢招果並說晚什月種了……但格成。
+```
+
+```
+想得安資速他活色。怎不止聽廣積的人寫由引一共微是……的南人人過。黨已料去持苦他式是教須，新期被會員常決年，是男做新有出統陸經家為！
+```
+
+```
+雜注在成機區之……不另賽落專心管。覺一會辦這真上時始香，的月要家當以戰待……官兩人的燈包投學家角，角應也子的都是立什分出我！
+```
+
+```
+一夫到金戲雙：細就魚服的。見素我死思發：男樣們；法能寫讓提節正麼我始的家之決時的表水子何流畫法光這下，的候媽再說高統自不小此的情然狀去斷人記身！
+    </div>
+  </div>
+</body>
+```
+
+```
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*dw2pQb7lheLFAlNhes7PDg.png)
+
+-
+
+呈現單一文章的部份也是一樣，直接使用 index.php 的部份去修改。
+
+## 把全部串連起來
+
+接下來是把所有的資料串起來讓可以呈現出來。
+
+因為之前在 admin.php 有做過相關的設定了，所以可以直接採用那邊的資料來做修改。
+
+```
+index.php:
+```
+
+```
+<?php require_once('./conn.php');?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Blog 部落格</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <h1>BLOG</h1>
+    <a class="active" href="./index.php">首頁</a>
+    <a href="./about.html">關於我</a>
+  </nav>
+  <div class="container">
+    <div class="articles">
+      <?php
+        $sql ="SELECT * FROM articles ORDER BY create_at DESC";
+        $result = $conn->query($sql);
+        if($result->num_rows > 0) {
+          while($row = $result->fetch_assoc()) {
+            echo "<div class='article'>";
+            echo   "<h1><a href='./article.php?id=$row[id]'>
+              $row[title]</a></h1>";
+            echo "</div>";
+          }
+        }
+      ?>
+    </div>
+  </div>
+</body>
+</html>
+```
+
+通過這樣就可以讓文章每篇自動呈現。然後是修改 單一文章的界面
+
+```
+articles.php:
+```
+
+```
+<?php
+  require_once('./conn.php');
+  $id = $_GET['id'];
+  $sql = "SELECT * FROM articles WHERE id = " . $id;
+  $result = $conn-.query('$sql');
+  $row = $result->fetch_assoc();
+```
+
+```
+  $title = $row['title'];
+  $content = $row['content'];
+?>
+```
+
+透過這樣子就可以拿到資料。不過類別的話，因為是不同的 tabl 就要另外改寫了。但這邊先試試看可不可以拿到 title 跟 content
+
+所以把 $title 跟 $content 引入正確位置之後，就可以正確呈現。
+
+接下來就是分類功能的實作了。
+
+因為有兩張 table 所以就需要用到 left join 的功能。
+
+```
+$sql = "SELECT A.title, A.content, C.name FROM articles as A
+  LEFT JOIN categories AS C ON A.category_id =
+  C.id WHERE A.id = " . $id;
+```
+
+這邊用法，因為資料用全名太長，所以利用 AS 成字母來取代，這樣就可以有效的縮短整個語法。
+
+通過這樣就可以抓到想要的資料，name 就是分類 table 的類別名稱。
+
+![](https://cdn-images-1.medium.com/max/800/1*jAEoQV0JlwCWC0IMK5IPVA.png)
+
+接下來是自己實作的部份，所以大致上是寫下一些我自己的想法跟作法。
+
+## 進階練習：新增草稿
+
+目前在後台的部份是直接送出就發送了，但在一般的部落格系統中，會有一個草稿功能，必須要改個狀態，才會變成發布。在這種狀態下前台看不到草稿的文章，只有後台才可以看到。
+
+-
+
+針對這題就是讓文章額外多一個欄位，只能有 0 跟 1，預設值是 0，意思是草稿，發布之後就變成 1。然後前台在選擇文章的時候，就要把這個加入設定，選取這個欄位數值為 1 的。題目是說改狀態，所以應該是使用選單的方式，我印象中大多是使用按鈕一個按鈕是保存成草稿，另外一個則是發布。但仔細思考，要用按鈕的話，就變成要判斷是那哪個按鈕。但我印象中，案按鈕的話，送出都是一樣會將所有資料送出。所以目前就先以選單的方式來，然後選單預設就是草稿。
+
+然後要修改的時候發現，因為檔案很多，所以是個大工程。但可能每個部份都只改一小點而已…
+
+新增一個欄位名稱為 published，0 是草稿，1 是發表。
+
+index.php 的選擇要改為
+
+```
+SELECT * FROM articles WHERE published = 1 ORDER BY create_at DESC
+```
+
+除此之外，就是編輯的部份的部份需要修改一下。
+
+額外添加一行，來呈現選擇器。其實一開始會想得很複雜。但不用只需要讓該判斷的地方判斷一下就好了。判斷成功在顯示 selected 就可以出現預設選項。
+
+```
+<div>發怖狀態：
+    <select name="published">
+        <option value="0" <?php if ($row['published'] === '0') echo 'selected';?>>草稿</option>
+        <option value="1" <?php if ($row['published'] === '1') echo 'selected';?>>發怖</option>
+    </select>
+</div>
+```
+
+其他的部份就沒什麼了，都是 handle 的部份需要改一下，要多一個欄位才可以上傳資料。
+
+## 進階練習：加上關於我頁面管理
+
+目前都是寫死的，所以如果要新增我的頁面管理，就需要在 admin.php 上面新增這個功能。
+
+-
+
+目前想法是就放在 articles 裡面即可，因為關於我實際上也是一篇文章。感覺上另外開個 table 放置的話有點浪費空間。以這樣的作法，就是也要新增一個欄位，專門標示這是關於我的文章。然後在關於我的頁面直接指定撈欄位的資料即可。
+
+以這樣來說，因為關於我也是文章，這樣要不要使用標題來指定關於我呢？標題關於我這三個字才會被撈到這樣，不過這樣好像不太好，因為根據使用者會亂搞的原因，用這種方式雖然節省一個欄位，但可以想像會出現很多的 bug，所以這種方法還是先作罷。採用欄位的方式即可。
+
+至於關於我，要不要在一般文章顯示，我覺得因為關於我也算是一般文章，所以顯示也無所謂，不顯示的話就是在撈資料的時候設定排除就好，不過這部份是屬於比較簡單的，沒有很難。所以我就選擇在一般文章也顯示的作法。
+
+不過因為一般來說關於我只有一篇文章，需要的大概也只是修改而已，所以新增一個欄位叫做 about 然後是關於我的那篇就用布林值設為 1，另外為了 避免有 bug，本想就把這個值設為唯一值。但會發現問題，因為其他文章都是 0 那就不能當作唯一值了。
+
+後來發現要不顯示於文章列表也可以，就是在選擇的時候只選擇 about = 0 的文章即可。
+
+然後新增文章的時候，會有 bug 就是要求一定要有值，這時候也不難，就是改一下讓 about 可以為空值，且預設值就是 0。
+
+因為我是另外弄一個修改關於我的 php，而我不想另外新增一個 handle 來處理，所以這種情況下就是把不需要修改的部份使用 hidden 並帶值即可使用原本的 update 來處理資料。
+
+另外有思考過，能否使用一個頁面來新增或編輯關於我呢？應該可以，因為為關於我沒資料的話，載入的時候，就只是不會有資料而已，依然會有格子。這時候就是在 action= 那邊判斷資料庫的資料有沒有找到 about 的資料，有的話就導入修改的 php，沒有的話就導入新增的 php。
+
+解到這邊就在思考，那我是否可以把上傳的 add 跟 update 結合在一起，看來也是可以，引導到的 php 上面多做一個判斷式即可。有 id 就把 $sql 使用update 編輯用的，如果沒有 id 就用插入的方式新增。
+
+-
+
+實作方面
+
+就是真的就開了一個欄位表明該篇文章是 about 然後設定值為 1。然後編輯的時候，就是找出 about = 1 的那筆，然後使用 handle_update.php 上傳。而下載資料的部份也是。就直接找出 about = 1 的那筆，然後在呈現出來而已。
+
+## 進階練習：加上評論功能
+
+文章底下，可以開評論，不過不用註冊，讓訪客可以輸入暱稱跟評論，這會是比較複雜的功能。
+
+— —
+
+這題在構思下，就跟留言板差不多，就是另外開一個 table 來儲存大家的評論。然後把每篇評論都加上 文章的 ID，以辨別是哪篇文章的評論。
+
+-
+
+實作的話，要先把每篇文章下面新增添加留言的功能，並在下方顯示留言。
+
+取自於留言板的部份，發現要改起來要更動滿多東西的。因為要新增評論，就必須要有一個 handle 來處理。然後後面的部份，還要另外抓取評論才行。大致上先弄好一個界面跟 預設一些留言。
+
+所以是直接在下面新增一個 hr 隔開。然後在下面做留言的部份。
+
+```
+<hr>
+  <form action="./handle_index.php" method="post" class="new" style="border: 1px dotted #000; display:inline-block; padding:5px;">
+        <div class="new__username">暱稱：<input type="text" name="nickname" /></div>
+        <div class="new__comment"><textarea name="comment" id="" cols="30" rows="10"></textarea></div>
+        <div class="new__btn"><input type="submit" value="送出留言" /></div>
+  </form>
+  <div class=comments style="margin-top:20px; padding:5px;">
+    <div style="padding:5px 0; margin:40px 0">
+      <div class="original＿＿nickname">' . $row['nickname'] . '</div>
+      <div class="original＿＿createdAt">留言時間：</div>
+      <div class="original＿＿comment">' . $row['comment'] . '</div>
+    </div>
+    <div style="padding:5px 0; margin:40px 0">
+      <div class="original＿＿nickname">' . $row['nickname'] . '</div>
+      <div class="original＿＿createdAt">留言時間：</div>
+      <div class="original＿＿comment">' . $row['comment'] . '</div>
+    </div>
+  </div>
+```
+
+出來結果就會長這樣。
+
+![](https://cdn-images-1.medium.com/max/800/1*C-IhT_5j3nF80n_ble2mrQ.png)
+
+再來就是實作的部份，因為這次東西有點多，所以先製作如何上傳評論。上傳的部份必須要帶著文章 ID 剛好這邊也有用到 ID，所以就可以直接取用。
+
+需要於原來的 form 表單新增一個 input hidden 來隱藏著帶著資料用來標示顯示的資料。
+
+```
+<input type="hidden" name="article_id" value="<?php echo $id; ?>"/>
+```
+
+然後是一個 handle 來上傳資料
+
+```
+<?php
+require_once('./conn.php');
+```
+
+```
+$nickname = $_POST['nickname'];
+$comment = $_POST['comment'];
+$article_id = $_POST['article_id'];
+```
+
+```
+if (empty($nickname) || empty($comment)) {
+  die('請檢查資料');
+}
+```
+
+```
+$sql = "INSERT INTO comments(nickname, comment, article_id)
+  VALUES ('$nickname', '$comment', '$article_id')";
+
+$result =$conn->query($sql);
+```
+
+```
+if ($result) {
+  header("Location: ./article.php?id='$id'");
+} else {
+  echo 'failed, ' . $conn->error;
+}
+```
+
+```
+?>
+```
+
+通過這樣，就可以讓資料上傳之後回到該篇文章。
+
+再來就是呈現評論的部份了。
+
+-
+
+要先新增一個 table 專門用來儲存評論
+
+![](https://cdn-images-1.medium.com/max/800/1*eqiywFN2V83OIn0hpSMC1w.png)
+
+呈現評論等於是要結合兩個表單，就需要使用 LEFT JOIN 的功能。所以要有一個 article_id 來表示是那篇文章的評論。然後就可以通過下方的 sql 指令來取得想要的資料。
+
+```
+// 評論的撈資料
+$sql_comments = "SELECT C.nickname, C.comment, C.created_at FROM comments AS C LEFT JOIN articles as A ON C.article_id = A.id WHERE C.article_id = $id ORDER BY C.created_at DESC";
+```
+
+上面的指令除了撈出需要的資料之外，另外還有按照發文順序排序。
+
+後面就是利用迴圈來取得所有的資料。這樣才可以呈現出想要的評論。功能上還可以限制評論一次呈現的數量。這部份就先不弄了。
+
+最後結果如下面呈現的樣子。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/d10f7c300b99c94dbf04abff9458d4a2)
+
+-
+
+在這邊思考後，其實評論也是一種文章，所以可以直接儲存在同一個 articles table 就好了，然後另外開一個欄位來標明是那一篇文章的評論就好了，該欄位 0 的時候，就是文章。如果有 0 以外的數字，就是文章的 id，所以就是評論。
+
+不過還有 nickname 需要儲存，把 nickname 儲存在 articles table 又不太合理，所以除非要節省資源，否則還是分開儲存比較實在。
+
+-
+
+接下來的就是魔王練習的部份。我就只大概構思就好，不實作了。怕浪費很多時間在這上面。
+
+## 魔王練習：一篇文章可以有多個分類
+
+需要考慮資料庫怎麼存，後台怎麼改寫以及前台怎麼顯示，會花上很多的時間還有心思，因為要考慮的東西還滿多的。
+
+-
+
+首先多個分類，應該就是按照一般的儲存方式，一個分類一個資料。需要構思的是 articles table 要怎麼儲存多個分類，這邊會想到 medium 限制 5 個的好處，這樣的好處就是我可以直接開五個欄位 category_id1, category_id2, … 就好了，直接儲存五個便可。
+
+另外構思一下如果要可以儲存無限種分類呢？應該就需要另外一張 table 裡面儲存文章的分類，然後利用文章 id 來分別表示是哪個文章儲存的分類。
+
+如果以最多五個分類來說的話，除了第一個之外，其他就可以可以有預設值 0 ，如果沒有選擇分類預設值就是 0。
+
+後台部份，要用選單的話，如果分類的種類一多，就會很難選擇。前台的部份，一樣可以使用分類後面繼續加註即可，不過比較難的應該是撈資料的部份，然後撈玩之後還要呈現。也因為有時候可能一篇文章只有一個分類，所以還要判斷分類的資料是不是 0。
+
+可以感覺到工作量應該真的很大，所以就先這樣構思一下就好了。以後有機會再來做。
+
+## 魔王練習：搜尋功能
+
+這個難度很高。要有一個輸入框輸入關鍵字，也就是標題或內文內含有那些字，就代表示符合。所以要新增一個搜尋頁面，讓訪客很快的可以找到關鍵字的文章。
+
+-
+
+這題感覺上就是考 LIKE 的應用。而且 LIKE 有很多種用法，有搜尋開頭，有搜尋結尾，還有搜尋中間。不知道能不能一起搜尋，如果可以會比較簡單一點。
+
+發現確實可以使用多個 LIKE 的功能。
+
+```
+SELECT * FROM `articles` WHERE `title` LIKE '%的%' OR `content` LIKE '%的%' ORDER BY create_at DESC
+```
+
+還可以更多的
+
+```
+SELECT * FROM `articles` WHERE `title` LIKE '%的%' OR `content` LIKE '%的%' OR `title` LIKE '%的' OR `content` LIKE '%的' OR `title` LIKE '的%' OR `content` LIKE '的%' ORDER BY create_at DESC
+```
+
+所以根據這樣去搜尋。
+
+其餘部份就是頁面呈現。
+
+## 收穫：
+
+在這次的部落格實作中學習到了不少的東西。像 JOIN 功能的應用，在這邊就摸得更是熟悉了。然後也因為實作的 BLOG 功能的增加摸索了更多資料庫的細節。也發現資料庫真的很強大，很多的功能都可以透過 SQL 指令來實現，這樣就可以很大程度的降低寫程式的難度，因為少了很多寫程式碼的需求，像是各種排序都可以直接跟資料庫請求資料，甚至還可以直接透過資料庫去搜尋關鍵字。
+
+而我們就可以更專心於在功能上面的撰寫，而不是自己還要在那邊寫一些基礎的功能。我最開始的想法確實就是這樣想，很多東西都是自己在想怎麼造輪子，所以排序法什麼的我不太會，只是了解而已，我就感到很愧疚。但在這邊發現，原來還好。因為很多時候資料庫都幫我們做好了。不需要自己去撰寫，當然懂了會更好，代表自己更厲害了，我想之後我也會希望自己可以摸懂各種排序法到底怎麼寫出來。

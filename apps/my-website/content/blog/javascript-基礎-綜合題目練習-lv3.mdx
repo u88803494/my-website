@@ -1,0 +1,405 @@
+---
+title: "JavaScript 基礎： 綜合題目練習 Lv3"
+slug: "javascript-基礎-綜合題目練習-lv3"
+description: "請寫一個 function sort，接收一個陣列並且回傳由小到大排序後的陣列。（禁止使用內建函式 sort）"
+date: 2019-05-04T15:32:38.438Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E7%B6%9C%E5%90%88%E9%A1%8C%E7%9B%AE%E7%B7%B4%E7%BF%92-lv3-56bd73a1407f"
+---
+
+## 練習一：排序
+
+請寫一個 function sort，接收一個陣列並且回傳由小到大排序後的陣列。（禁止使用內建函式 sort）
+
+提示：如果你已經會找第 n 小的值了，試著把這個概念應用到這題上。
+
+sort([ 6, 8, 3, 2]) 預期回傳值：[2, 3, 6, 8]
+
+sort([ 1, 2, 7 ,5]) 預期回傳值：[1, 2, 5, 7]
+
+預期是利用找出最小值的方式找到一個回傳一個到新陣列，並刪除原陣列裡面的最小值，等到陣列刪光的時候，就可以回傳新陣列了。
+
+以上次的找到第 n 小值來實作，卻一直卡卡的，雖然有個雛形，但是卻一直失敗，所以多次修改之後就可以使用了。
+
+見 [JavaScript 基礎： 綜合題目練習 Lv2](https://medium.com/@hugh_Program_learning_diary_Js/javascript-%E5%9F%BA%E7%A4%8E-%E7%B6%9C%E5%90%88%E9%A1%8C%E7%9B%AE%E7%B7%B4%E7%BF%92-lv2-11373e2c686b) 第十題
+
+這是老師的版本的修改版：
+
+```
+function findMin (arr) {
+ let min = arr[0];
+ let minIndex = 0;
+   for (let i = 0;i < arr.length; i += 1) {
+     if (min > arr[i]) {
+       min = arr[i];
+       minIndex = i
+     }
+   }
+   return minIndex
+} //可以找出最小值的 index
+```
+
+```
+function sort(arr) {
+ let result = [];
+ const length = arr.length; // 因為陣列長度會變化，所以必須額外定義次數
+ for (let i = 0;i < length; i += 1) {
+   let minIndex = findMin(arr);
+   result.push(arr[minIndex]) // 添加最小值
+   arr.splice(minIndex, 1);// 刪除最小的 index
+ }
+ return result;
+}
+```
+
+```
+console.log(sort([100, 99, 80, 1223, 43, 32, -10]))
+```
+
+我也想嘗試自己的版本去修改看看
+
+```
+function findMin (arr) {
+ let min = arr[0];
+ for (let i = 0;i < arr.length; i += 1) {
+   if (min > arr[i]) {
+     min = arr[i];
+   }
+ }
+ return min;
+} //可以找出最小值的陣列
+```
+
+```
+function deleteMin (arr, del) { // 實作出刪除陣列的 function
+  for (let i = 0;i < arr.length; i += 1) {
+    if (arr[i] === del) {
+       arr.splice(i, 1);
+    }
+  }
+  return arr
+}
+```
+
+```
+function sort(arr) {
+ let min;
+ let result = []; //需要一個新陣列來儲存
+ const length =  arr.length; // 一樣要另外取長度
+ for (let i = 0;i < length; i += 1) {
+   min = findMin(arr);
+   arr = deleteMin(arr ,min);
+   result.push(min); // 逐步添加結果
+   }
+ return result;
+}
+```
+
+```
+console.log(sort([100, 99, 80, 1223, 43, 32, -10]))
+```
+
+老師的解答：
+
+跟上述一樣。
+
+重點是要我們知道排序的方式，這排序法不是最好的，但是卻是最容易入門的，所以以這排序法來講就是去找 n 次的最小值，最後得到結果。這個方法的缺點是，會去動到原本的 arr。
+
+## 練習二：壓平陣列
+
+請寫出一個 function flatten，接收一個多維陣列並回傳「壓平」後的陣列。
+
+flatten([1, 2, 3]) 預期回傳值：[1, 2, 3]
+
+flatten([1, 2, [1, 2], [1, 3], 6]) 預期回傳值：[1, 2, 1, 2, 1, 3, 6]
+
+flatten([1, [2, [3, [4]], 5], 6]) 預期回傳值：[1, 2, 3, 4, 5, 6]
+
+我不懂多維陣列
+
+所以找了篇最簡單看懂的文章來加強
+
+[用 JavaScript 學習資料結構和演算法：陣列（Array）篇](https://blog.kdchang.cc/2016/06/23/javascript-data-structure-algorithm-array/)
+
+> 事實上在 JavaScript 中只支援一維陣列，但我們可以用陣列嵌套陣列的方式來達成多維
+
+根據這邊可以理解為，就是單純的陣列套陣列，所以以這題來講，我必須一直不停地找陣列下去，嘗試了幾個指令，無法得知陣列中的陣列長度。
+
+可[參閱](http://www.jstips.co/zh_tw/javascript/flattening-multidimensional-arrays-in-javascript/)
+
+一個遞迴的題目。
+
+難再遞迴通常沒想到是它的話，就怎麼想也想不出來，簡單的方面是如果有想到的話就很快可以做出來
+
+`forEach()` 方法會將陣列內的每個元素，皆傳入並執行給定的函式一次。
+
+```
+function flatten(arr) {
+ var result = []
+ for(let i = 0; i < arr.length; i += 1) {
+  if (Array.isArray(arr[i])) {
+   let flatArr = flatten(arr[i]) // 這邊會得到一個陣列中的陣列
+   flatArr.forEach(function(value) {
+   // 呼叫自己，所以會重新開始但用內層的陣列去跑，所以會有好幾次
+    result.push(value) // 分別把打開的陣列加入 result
+   })
+  } else {
+   result.push(arr[i]) //只要偵測到該 index 不含陣列就直接添加
+  }
+ }
+ return result
+} // 最後會一次把所有的解析結果回傳，最終就會得到答案
+```
+
+```
+console.log(flatten([1, [2, [3, [4]], 5], 6]))
+```
+
+## 練習三：印出聖誕樹
+
+請寫一個 function tree，接收一個數字 n，按照規律列印出大小為 n 的聖誕樹
+
+（這邊編輯器有點問題空白顯示不出來，用 \_ 代表空白）  
+tree(1) 預期輸出：
+
+-
+
+tree(2) 預期輸出：  
+\_\*
+
+---
+
+_\*  
+_\*
+
+tree(5) 預期輸出：  
+\_**_\*  
+_\*\***\*  
+\_\_\*\*\***  
+\_**\*\*\*\*\*
+
+---
+
+\_**\_\*  
+\_\_**\_  
+\_\_\_\_\_  
+\_**\_\*  
+\_\_**\*
+
+先觀察可以得知以中間為軸往左右邊各自延伸 n - 1 個星號，然後中間的軸，樹葉的部分軸長 n ，下面的樹幹也是軸長 n
+
+當前想法是先把樹的上半部左右分開各自一個 function，然後下半部一個 function
+
+一行行列印
+
+樹的左邊會得到兩個值，傳輸 空白的次數 跟 星號的次數，接著按照所需次數印出，再來是印出右半部的樹，後來決定通通分開寫，所以寫了空白的 function 、左邊星號的 function、右邊星號 function、還有數的下半部分，最後把他們通通組在一起。
+
+因為 console.log 的特性，所以必須儲存好一行的值之後一次印出在換下一行繼續計算
+
+```
+function space (many) {
+ let result =’’
+ for (let i = 1; i <= many; i += 1){
+ result += ‘ ‘
+ }
+ return result
+}
+```
+
+```
+function printStarLeft (many) {
+ let result =’’
+ for (let i = 1; i <= many; i += 1) {
+ result += ‘*’
+ }
+ return result
+}
+```
+
+```
+function printStarRight (many) {
+ result = ‘’
+ for (let i = 1; i <= many; i += 1) {
+ result += ‘*’
+ }
+ return result
+}
+```
+
+```
+function bottom(many) {
+ result = ‘’
+ for(let i = 1; i <= many; i += 1) {
+ result += ‘ ‘
+ }
+ result += ‘*’
+return result
+}
+```
+
+```
+function tree (n) {
+ if (n === 1) return console.log('*')
+ for(let i = 1; i <= n; i += 1) {
+   result = ‘’
+   result += space(n-i) + printStarLeft(i) + printStarRight(i-1)
+```
+
+```
+ console.log(result)
+ }
+ for(let i = 1; i <= n; i += 1) {
+ console.log(bottom(n-1))
+ }
+}
+```
+
+```
+(tree(20))
+```
+
+檢討：
+
+分為 top 跟 bottom，然後先實作 bottom 因為較簡單
+
+```
+function tree(n) {
+ if (n === 1) return console.log(‘*’)
+ printTreeTop(n);
+ printTreeBottom(n);
+}
+```
+
+```
+function printTreeTop(n) {
+ for(let i = 1; i <= n; i += 1) {
+ console.log(‘ ‘.repeat(n — i) + ‘*’.repeat(2 * i — 1))
+ }
+}
+```
+
+```
+function printTreeBottom(n) {
+ for(let i = 1; i <= n; i += 1) {
+ console.log(‘ ‘.repeat(n — 1) + ‘*’)
+ }
+}
+```
+
+```
+tree(1)
+```
+
+n = 1 時，作用有誤，所以需要額外訂定。
+
+## 練習四：判斷圈圈叉叉勝負
+
+請寫出一個 function winner，接收一個代表圈圈叉叉的陣列，並回傳贏的是 O 還是 X，如果平手或還沒下完，請回傳 draw。
+
+winner([  
+[‘O’, ‘O’, ‘X’],  
+[‘O’, ‘X’, ‘X’],  
+[‘O’, ‘X’, ‘O’]  
+]) 預期回傳值：O
+
+winner([  
+[‘O’, ‘O’, ‘X’],  
+[‘O’, ‘X’, ‘X’],  
+[‘X’, ‘X’, ‘O’]  
+]) 預期回傳值：X
+
+winner([  
+[‘O’, ‘O’, ‘X’],  
+[‘O’, ‘O’, ‘X’],  
+[‘X’, ‘X’, ‘’]  
+]) 預期回傳值：draw
+
+這是一個二維陣列。花了很多時間在研究一下規律，大致上能知道他可以區分為直列跟橫列，一個一個把直橫列給畫下來找規律還是一樣看不出個所以然。只知道大概可以使用判斷式來一一判斷，會覺得要寫很長一列。
+
+判斷橫排有沒有連成一列。在判斷直排，然後再判斷其他。
+
+最後得結果
+
+```
+function winner (arr) {
+ //橫排
+ for (let i = 0; i < 3; i += 1) {
+ if (arr[i][0] === arr[i][1] && arr[i][1] === arr[i][2]) {
+ return arr[i][0]
+ }
+ }
+ //直排
+ for (let i = 0; i < 3; i += 1) {
+ if (arr[0][i] === arr[1][i] && arr[1][i] === arr[2][i]) {
+ return arr[0][i]
+ }
+ }
+ //斜線
+ if (arr[0][0] === arr[1][1] && arr[1][1] ===arr[2][2]) {
+ return arr[0][0]
+ }
+ if (arr[0][2] === arr[1][1] && arr[1][1] ===arr[2][0]) {
+ return arr[0][2]
+ }
+}
+
+console.log(winner([
+[‘O’, ‘O’, ‘X’],
+[‘O’, ‘X’, ‘X’],
+[‘X’, ‘X’, ‘O’]
+]))
+```
+
+## 練習五：判斷質數
+
+請寫出一個 function isPrime，給定一個數字 n，回傳 n 是否為質數。  
+（質數的定義：除了 1 以外，沒辦法被所有 &lt; n 的正整數整除）
+
+isPrime(1) 正確回傳值：false
+
+isPrime(5) 正確回傳值：true
+
+isPrime(37) 正確回傳值：true
+
+所以就直接拿 2 以上來除，只要通通無法整除就是質數。
+
+質數無法被小於它的數整除這句話也等於只要被所有小於它的數除了有餘數的
+
+```
+function isPrime(n) {
+ if (n === 1) return false
+ for(let i = 2; i < n; i += 1) {
+   if (n % i === 0) {
+     return false
+   }
+ }
+ return true
+}
+```
+
+檢討：根據數學，其實不用檢查到 n -1
+
+所以可以檢查到開根號就好
+
+```
+function isPrime(n) {
+ if (n === 1) return false
+ for(let i = 2; i <= Math.sqrt(n); i += 1) {
+ if (n % i === 0) {
+ return false
+ }
+ }
+ return true
+}
+```
+
+```
+for(let i = 10; i <= 1000; i += 1) {
+ if(isPrime(i)) console.log(i); // 只印出質數
+}
+```
+
+收穫：
+
+在 lv 3 這邊，有很多的地方，著實讓我卡了很久，不過好在可以解出答案來，但其實一兩題是偷看解答，所以必須要再花時間，思考一下能否不看任何東西解出答案來，針對這部分我需要再加強，還有一些內建函式的應用也是要再加強，常常都會忘記有那些東西，變成我自己實作一個內建函式出來，雖然這也不錯，不過卻會讓我的程式碼看起來好長，當然這也有好處就是了，因為這樣的話我就可以更加熟悉那些內建函式的原理。

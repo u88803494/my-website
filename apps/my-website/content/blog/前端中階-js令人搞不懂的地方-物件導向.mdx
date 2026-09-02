@@ -1,0 +1,879 @@
+---
+title: "前端中階：JS令人搞不懂的地方-物件導向"
+slug: "前端中階-js令人搞不懂的地方-物件導向"
+description: "什麼是物件導向？"
+date: 2019-09-26T06:35:55.446Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*p9vHvBcniwiA8_jYWT2oEA.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-cdea0e3266ee"
+---
+
+## 什麼是物件導向？
+
+在前篇 closure 的最終範例 [前端中階：JS令人搞不懂的地方-Closure(閉包)](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-closure-%E9%96%89%E5%8C%85-cbb9c6a4185c?source=your_stories_page---------------------------)
+
+實際上就很接近物件導向的概念了
+
+```
+function createWallet(initMoney) {
+  var money = initMoney;
+  return {
+    add: function(num) {
+      money += num;
+    },
+    deduct: function(num) {
+      if (num >= 10) {
+        money -= 10;
+      } else {
+        money -= num
+      }
+    },
+    getMoney() {
+      return money;
+    }
+  }
+}
+var myWallet = createWallet(99);
+myWallet.add(1);
+myWallet.deduct(100);
+console.log(myWallet.getMoney());
+// 90
+```
+
+以本來的改寫前的範例來說，因為任何人都可以改 money 的值。而在物件導向的世界，呼叫 function 的方式則不太一樣，用起來就像是個物件的形式。很多時候，我們在用的時候就像是物件導向。
+
+而 `myWallet.add()` 意思就像是對 `myWallet` 這個物件做一些操作。
+
+把很多的東西，都做成一個一個的物件，這樣就可以不需要一直 Call function，看起來也模組化一些，資訊也可以隱藏起來。
+
+## 物件導向的基礎範例
+
+在 ES6 之後就有了 class 這個語法可以使用。這是一種語法糖，實際上的 JavaScript 本身並沒有 class 可以使用，但這邊就先以 class 來說明物件導向。
+
+class 後面要接名稱，名稱務必大寫。
+
+```
+class Dog {
+  sayHello() {
+    console.log('hello');
+  }
+}
+```
+
+定義好的 class 就只是一個設計圖。還必須要把它實體才可以。就需要通過 `new` 指令
+
+```
+class Dog {
+  sayHello() {
+    console.log('hello');
+  }
+}
+```
+
+```
+var d = new Dog();
+```
+
+通過 new 指令，就像是把一個設計圖實現，真的出現一隻狗的那種感覺，就可以稱之為 instance。
+
+然後就可以呼叫函式
+
+```
+class Dog {
+  sayHello() {
+    console.log('hello');
+  }
+}
+```
+
+```
+var d = new Dog();
+d.sayHello();
+// hello
+```
+
+當然除此之外，還可以新增更多的 Function
+
+```
+class Dog {
+  setName(name) {
+    this.name = name
+  }
+```
+
+```
+  sayHello() {
+    console.log('hello ,' + this.name);
+  }
+}
+```
+
+```
+var d = new Dog();
+d.setName('abc');
+d.sayHello();
+// hello ,abc
+```
+
+this 在 class 的用途是誰呼叫它就指向呼叫它的，在這邊是 `d.setName('abc');` d 通過 setName 呼叫 this，所以這個 this 就是 d
+
+setName 就會被稱為 setter，當然就還有 getter
+
+```
+class Dog {
+  // setter
+  setName(name) {
+    this.name = name
+  }
+  // getter
+  getName() {
+    return this.name
+  }
+```
+
+```
+  sayHello() {
+    console.log('hello ,' + this.name);
+  }
+}
+```
+
+```
+var d = new Dog();
+d.setName('abc');
+d.sayHello();
+// hello ,abc
+```
+
+有設定就會有取得，這是很常見的模式，一般而言，不會想直接去操作 class 內部的值，通常是直接操作 getter & setter 會比較方便。
+
+—
+
+一般我們在建立狗的時候，都會想給它一個名字。所以就可以通過 instance 的時候傳參數的方式，來設立。
+
+```
+var d = new Dog('abc');
+```
+
+那至於 class 要怎麼實作，就是有一個建構子 constructor，可以用來接收參數。在 call `new Dog` 的時候，就等於在呼叫 constructor，所以就可以傳入變數。constructor 的目的就是讓 instance 初始化，所以建立的時候，就會呼叫 constructor。而 this 則是指向那個 instance。
+
+```
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+```
+
+```
+  getName() {
+    return this.name
+  }
+  sayHello() {
+    console.log('hello ,' + this.name);
+  }
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+var b = new Dog('dfsfde');
+b.sayHello();
+// hello ,dfsfde
+```
+
+當然也可以另外建立一個新的 instance。
+
+## ES5 的物件導向
+
+接下來就是要看 ES5 的情況之下，物件導向長什麼樣子，利用前面的例子反推回去，會比較清楚。
+
+```
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+```
+
+```
+  getName() {
+    return this.name
+  }
+  sayHello() {
+    console.log('hello ,' + this.name);
+  }
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+var b = new Dog('dfsfde');
+b.sayHello();
+// hello ,dfsfde
+```
+
+ES5 寫法：
+
+```
+function Dog(name) {
+  var myName = name;
+  return {
+     getName: function() {
+       return myName
+     },
+     sayHello: function() {
+       console.log('hello, ' + myName)
+     }
+  }
+}
+```
+
+```
+var d = Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+var b = Dog('dfsfde');
+b.sayHello();
+// hello ,dfsfde
+```
+
+沒有 new 也可以跑。每次弄一個新賦值都會回傳一個物件，所以就可以測試一下。
+
+```
+console.log(d.sayHello === b.sayHello) // false
+```
+
+會發現兩個同樣的 function 卻不是一樣的東西，代表儲存了兩次。不過一般而言，在這種情況下我們會希望可以只使用單一個 function 去跑不同的東西即可。
+
+因為如果按照這個模式來說，如果有一千隻狗，就等於有一千個 sayHello() 的 function 了，每個都是做一樣的事情，這種情況下我們只需要一個一樣的 function 就好了。
+
+以 class 中 `this` 來說，大家都是跑一樣的東西，只不過因為是不同的 instance ，所以這個 this 指向的地方不一樣。但都是同一個 function。
+
+而在 ES5 就有提供一個很類似的機制，因為希望可以保持一樣的語法：  
+ `var d = new Dog('abc');` ，然後利用 function 實作。
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+var d = new Dog('abc');
+console.log(d)
+// Dog { name: 'abc' }
+```
+
+這邊就可以看到 d 就是 Dog 的 instance。
+
+那平常要怎麼知道是 function 還是 constructor，就是傳入的時候有加上 new 就會當作 constructor。
+
+所以不加的話，就會 return undefined 因為並沒有回傳任何東西：
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+var d = Dog('abc');
+console.log(d)
+// undefined
+```
+
+設定的部份完成了，接下來就是實作 function，JavaScript 的機制有個 .`prototype` 就可以連結 function
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+var b = new Dog('dfsfde');
+b.sayHello();
+// hello ,dfsfde
+```
+
+接下來就可以測試兩個 function 是不是一樣的：
+
+```
+console.log(d.sayHello === b.sayHello) // true
+```
+
+兩個就會一樣了，因為這兩個都是 prototype 上面的 function，就可以利用這種方式在 JavaScript 上面實作物件導向。
+
+## 從 prototype 來看「原型鍊」
+
+先定義一下 `.__proto__` 跟 `.prototype` 的差異。
+
+`.prototype` ：用來實現基於原型的繼承與屬性的共享。ex: 用來指定屬性或 function
+
+`.__proto__` ：構成原型鏈，同樣用於實現基於原型的繼承。ex: 繼承資料
+
+來源：[知乎](https://www.zhihu.com/question/34183746)
+
+繼續沿用範例講解
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+var b = new Dog('dfsfde');
+b.sayHello();
+// hello ,dfsfde
+```
+
+以這例子來說，JavaScript 一定有某些機制，才可以把 `d` 跟 `.prototype.sayHello()` 連結在一起。
+
+在 JavaScript 裡面有個屬性是 `.__proto__` 這個屬性是暗示說，你在 d 身上找不到，就去找 `d.__proto__`
+
+這個就很類似於之前講到的 scope chain。
+
+所以就可以印出這個部份：
+
+```
+console.log(d.__proto__);
+Dog { getName: [Function], sayHello: [Function] }
+```
+
+所以其實就是 `Dog.prototype`
+
+```
+console.log(d.__proto__ === Dog.prototype);
+// true
+```
+
+兩者印出來的資料是一樣的。
+
+所以 class 只是形式比較好看而已，實際上的底層還是一樣是 `.prototype` 。
+
+實際運作如下：
+
+當呼叫 `d.sayHello()` 的時候，
+
+```
+d.sayHello()
+```
+
+```
+1. d 本身有沒有 sayHello
+2. d.__proto__ 有沒有 sayHello
+ 這邊先假設沒有，就在往上找
+3. d.__proto__.__proto__ 有沒有 sayHello
+4. 找 d.__proto__.__proto__.__proto__ // null
+5. 這邊就只剩下 null 了，這邊也是頂層
+```
+
+```
+d.__proto__ = Dog.prototype
+d.__proto__.__proto__ = Object.prototype
+Dog.prototype.__proto__ = Object.prototype
+```
+
+所以印出試試看
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// hello ,abc
+```
+
+```
+console.log(d.__proto__.__proto__.__proto__)
+// null
+```
+
+接著來測試看看
+
+這邊測試看看幫 Object 還有 Dog 之間的比較，彼此針對 prototype 加上 function
+
+```
+function Dog(name) { // 等於 constructor
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('dog hello,' + this.name);
+}
+```
+
+```
+Object.prototype.sayHello = function() {
+  console.log('object hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('abc');
+d.sayHello();
+// dog hello ,abc
+```
+
+會發現呼叫到 dog 的 function 理由很簡單，因為會從 `d` 開始往上找 `d.__proto__` ，再找到 `d.__proto__.__proto__` 最後找到頂 `d.__proto__.__proto__.__proto__` 這就會形成一個 prototype chain 就稱作為原型鏈，這就類似之前說的 scope chain。在 JavaScript 裡面有很多類似的 chain 機制。
+
+Dog 的 `.__proto__` 會是什麼？
+
+```
+console.log(Dog.__proto__) // [Function]
+console.log(Dog.__proto__ === Function.prototype) // true
+```
+
+會是一個 Function 的 prototype 這很合理，因為本來就是 function 的一種。
+
+```
+console.log(d.__proto__ === Dog.prototype) // true
+```
+
+因為 d 是 Dog 的原型，d 這個 instance 可以通過 `d.__proto__` 與 `Dog.prototype` 連接在一起。所以就可以利用 `.__proto__` 去找到要找到的東西。
+
+### toString.call()
+
+講解 [前端中階：JS令人搞不懂的地方-變數](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8-a864ede72f1d?source=your_stories_page---------------------------) 寫到的部分。
+
+```
+console.log(Object.prototype.toString.call('123'))
+// [Object string]
+```
+
+這不能寫成
+
+```
+var a = '123';
+console.log(a.toString()) // '123'
+```
+
+這樣會把內容轉換成 string 而已，因為當呼叫 `a.toString()` 時，實際上 a 並沒有 `a.toString()` 這個方法。  
+這個字串其實本身會有自己的 prototype chain。
+
+```
+console.log(a.__proto__ === String.prototype) // true
+```
+
+這樣用的效果是當 a 沒有，就去找 a 對應的屬性的 `.__proto__`  
+的方法，所以就會找到 String.prototype 上所有的方法。因為是通過 prototype chain 才可以取得針對 String 的方法。所以即使名字一樣，有會一位這種 prototype 的原因而找到不一樣的同名方法。
+
+```
+console.log(a.toString() === String.prototype.toString())
+// true
+```
+
+```
+console.log(a.__proto__.toString() === String.prototype.toString())
+// true
+```
+
+從這邊就可以證明，就是通過 prototype chain 才可以呼叫得到的。
+
+所以要呼叫 Object 裡面的 toString 就必須要想辦法避開這個 prototype chain 才可以呼叫到，這就好像是不同的作用域之間，有著同名變數、函式一樣。呼叫同名函式的時候，永遠就會先呼叫到最接近自己的作用域的函式。再上層的就無法呼叫，因為被擋住了。
+
+不過也可以反其道而行，直接針對 String 增加一個函式利用，
+
+```
+String.prototype.first = function() {
+  return this[0];
+}
+```
+
+```
+var a = '123';
+```
+
+```
+console.log(a.first());
+// 1
+```
+
+所以我們可以在 String 的 prototype 添加一個方法，這樣子所有的 String 都可以使用這個方法了。這種方式針對 Array 也可以。
+
+所以就可以使用 `.__proto__` 跟 `.prototype` 來做很多處理。
+
+總結就是可以利用 `.prototype` 這個特性來新增變數、函式。  
+而通過 `.__proto__` 就可以來找查變數、函式、屬性、方法等資源。
+
+## new 背後做了些什麼事情
+
+在理解 new 之前先理解一個知識。
+
+```
+function test() {
+  console.log(this)
+}
+```
+
+```
+test();
+```
+
+會發現 this 有非常龐大的值
+
+![這不是這篇的重點，知道 this 有這麼多東西即可](https://cdn-images-1.medium.com/max/800/1*p9vHvBcniwiA8_jYWT2oEA.gif)
+
+_這不是這篇的重點，知道 this 有這麼多東西即可_
+
+除此之外， function 還有一種呼叫方式叫做 `.call()` 我們使用 test 並且帶入值 `test.call('123')`
+
+```
+function test() {
+  console.log(this)
+}
+```
+
+```
+test.call('123');
+// [String: '123']
+```
+
+```
+test.call({});
+// {}
+```
+
+就會發現印出的東西改變了。
+
+意思就是說，使用 `.call()` 的時候，傳入的東西就會變成 this 的值。
+
+`.call()` [MDN 說明](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Function/call) ，寫的還滿困難的。
+
+我自己的話是解釋成 `.call()` 第一個參數是 function 或值 ，其他就是 function 傳入的值。  
+下面的說法也很類似，只是他把第一個當成第零個，實際上就像是有的程式語言的 array 是從 0 還是從 1 開始一樣的問題，知道意思就好。
+
+> 任何一個 function.call() 的狀況下，我們可以把整個參數陣列( arguments )向右平移，而**第零個參數則是告訴函數我們想使用的 this**。
+> by [原型函數最實用的三個方法](https://medium.com/@realdennis/javascript-聊聊call-apply-bind的差異與相似之處-2f82a4b4dd66)
+
+通過 `.call()` 第一個參數就是 this 指向的對象的原理，就可以試著手動建立一個 new 的模型。
+
+```
+function Dog(name) {
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('hii');
+```
+
+以上面的範例來說，這邊要模擬 new 做的事情。所以另外設立一個 newDog 來模擬：
+
+```
+function Dog(name) {
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('hii');
+```
+
+```
+var b = newDog('hello');
+// b.sayHello()
+```
+
+```
+function newDog(name) {
+  var obj = {}; // 1. 先建立一個空物件
+  Dog.call(obj , name); // 2. 呼叫 constructor，this 指向這個物件
+  console.log(obj); // { name: 'hello' }
+}
+```
+
+1. 會先建立一個空物。
+2. 呼叫 constructor 。把 Dog 利用 `.call()` 帶入空物件，第一個參數放入 空物件 (obj) 從這邊就可以知道 this 就是指向 obj，`.call()` 第二個之後的參數就是原本要帶入的值。
+
+試著印出來，就會發現印出了一個物件，是一個把資料都放好的物件。
+
+接下來就要指定 Function 的部份。
+
+```
+function Dog(name) {
+  this.name = name;
+}
+```
+
+```
+Dog.prototype.getName = function() {
+  return this.name;
+}
+```
+
+```
+Dog.prototype.sayHello = function() {
+  console.log('hello,' + this.name);
+}
+```
+
+```
+var d = new Dog('hii');
+```
+
+```
+var b = newDog('im new dog');
+b.sayHello(); // hello,im new dog
+```
+
+```
+function newDog(name) {
+  var obj = {}; // 1. 先建立一個空物件
+  Dog.call(obj , name); // 2. 呼叫 constructor，
+  obj.__proto__ = Dog.prototype; // 3. 建立物件的原型鏈
+  return obj;  // 4. 回傳完成的 obj
+}
+```
+
+3. 建立物件的原型鏈，針對 obj 的 `.__proto__` 等同於 Dog 的 `.prototype` 就可以完成關聯。
+
+4. 把完成的物件回傳，就是一個玩整個機制。
+
+並且使用 `b.sayHello()` 就會發現可以印出資料。
+
+### 小結：
+
+在使用 new 的時候的流程就如同上方呈現的：
+
+1. 建立一個空物件
+2. 連結 constructor ，這樣才可以初始化建構子的內容。
+3. 建立物件的原型鏈，少了這步驟就沒有 function 可以使用。
+4. 回傳這個完成的物件。
+
+## 物件導向的繼承：Inheritance
+
+繼承的部份，就像是繼承自己爸媽的 DNA
+
+```
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+  getName() {
+    return this.name;
+  }
+  sayHello() {
+    console.log('hello,' + this.name);
+  }
+}
+```
+
+```
+class BlackDog extends Dog {
+  test() {
+    console.log('test', this.name)
+  }
+}
+```
+
+```
+const d = new BlackDog('hey im black dog');
+```
+
+```
+d.test();
+// test hey im black dog
+```
+
+```
+d.sayHello();
+// hello,hey im black dog
+```
+
+雖然 `BlackDog` 沒有 constructor 但在這邊依然可以印出，主要是因為繼承了 `Dog` 的 constructor。當然也可以直接使用 `Dog` 的方法。
+
+繼承在這邊的用途就是，當需要用到一些屬性的時候，就可以直接從別的物件導向那邊繼承，不用都要自己寫。
+
+狗本身就有名字有動作，有自己的屬性跟方法。而如果要另外一種狗，例如黑狗，黑狗也會有同樣的屬性跟方法，只是可能有些微的差異，所以就可以通過繼承直接使用狗的屬性跟方法，就不用自己重新寫過。
+
+假如我們希望可以讓這隻 `BlackDog` 被建立的時候，就打招呼。那也可以直接寫入 constructor。
+
+```
+class BlackDog extends Dog {
+  constructor() {
+    this.sayHello();
+  }
+  test() {
+    console.log('test', this.name)
+  }
+}
+```
+
+```
+const d = new BlackDog('hey im black dog');
+// ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor
+```
+
+會發現產生錯誤，告訴我們在呼叫 this 之前必須要 call super。
+
+否則照原本的模式，就只會初始化 `BlackDog` 的 constructor，就沒有了繼承的作用了。
+
+所以 `super()` 等於呼叫了上一層繼承層的 constructor，那既然已經繼承了上一層的 constructor 就必須要也要接收，所以 constructor 就要接收上一層的 name。
+
+這樣子才可以連上一層的 `Dog` 的 constructor 一併初始化，之後並接收這些初始化的值。
+
+```
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+  getName() {
+    return this.name;
+  }
+  sayHello() {
+    console.log('hello,' + this.name);
+  }
+}
+```
+
+```
+class BlackDog extends Dog {
+  constructor(name) {
+    super(name); // Dog.constructor，name 一定要傳，否則就無法接收資料
+    this.sayHello();
+  }
+  test() {
+    console.log('test', this.name)
+  }
+}
+```
+
+```
+const d = new BlackDog('hey im black dog');
+// hello,hey im black dog
+```
+
+繼承之後在 constructor 一定要使用 `super()` 跟變數去接收這些初始化之後的資料。
+
+繼承的好處就是可以先把一些基本的東西寫好，然後細微的部份再繼承之後做細微的修改。
+
+## 總結：
+
+終於把物件導向的部份學習完成了。但我似乎想的有些複雜，才導致我去查了很多資料。
+
+不過也實在是因為物件導向的東西比較底層，所以在學習上本身就會有一定的難度。
+
+尤其是那些 `.__proto__` 以及 `.prototype` 使用 `console.log()` 出來之後更是讓我倍感複雜。所以這部份為了可以更好的理解，我就有去看了一些文章。
+
+果然如此，原型鏈真的要很複雜也很複雜，因為還有更多更細節的部份，也一樣會需要看到 ECMA 的說明書才可以理解其定義。
+
+這邊會覺得有定義還是重要，先給個定義之後，再去學習可能會好一些。在中途可能因為不是很清楚定義到底是什麼，所以中間就越來越混亂了。
+
+於是我就找了大量的資料，像是找到了[知乎](https://www.zhihu.com/question/34183746)的一篇，寫的好詳細阿！各種五花八門的寫法，但多瀏覽幾次之後就會發現實際上沒這麼困難。
+
+比較簡單的是有沒有 new 過 new 過得就變成一個實體，實體的 `.__proto__` 就會指向其 new 之前的 function 的 `.prototype` 。
+
+`function.prototype.__proto__` 就會等於 `Object.prototype` 等等的部份。
+
+另一個我覺得也滿重要的是 functionX 的 `.__proto__` 每一層各自有什麼，通過理解到底有什麼會讓我把整體狀況弄得更加清楚：
+
+`functionX.__proto__` 等於 `Function.prototype`
+
+`functionX.__proto__.__proto__` 等於 `Object.prototype`
+
+`functionX.__proto__.__proto__.__proto__` 等於 `null`
+
+這樣研究下來之後，就不會覺得有些什麼地方沒這麼清楚。當然我也知道因為那張圖的關係，我會有許多的東西並沒有搞得很懂。這部份也許之後會在來學習了。
+
+上一篇：[前端中階：JS令人搞不懂的地方-Closure(閉包)](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-closure-%E9%96%89%E5%8C%85-cbb9c6a4185c?source=your_stories_page---------------------------)
+
+下一篇：[前端中階：JS令人搞不懂的地方-this](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-this-b9b9c6960c03?source=your_stories_page---------------------------)

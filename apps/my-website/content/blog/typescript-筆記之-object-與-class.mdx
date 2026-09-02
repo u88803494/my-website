@@ -1,0 +1,177 @@
+---
+title: "TypeScript 筆記之 Object 與 Class"
+slug: "typescript-筆記之-object-與-class"
+description: "Object"
+date: 2021-10-23T03:14:48.716Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*2V5I9Mw4hUEXFkAPV000ww.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/typescript-%E7%AD%86%E8%A8%98%E4%B9%8B-object-%E8%88%87-class-43945d5e4fa6"
+---
+
+## Object
+
+在 TS 中，有個型別叫做 `object` 而在 `object` 型別中相當於 `{}` 也就是空陣列，所以這個型別很少使用，因為我們在指定型別，就是希望提高可讀性並知道內容的型別。
+
+![因為型別指定為 object 或 { } ，所以無論呼叫值存在與否都會報錯](https://cdn-images-1.medium.com/max/800/1*2V5I9Mw4hUEXFkAPV000ww.png)
+
+_因為型別指定為 object 或 \{ \} ，所以無論呼叫值存在與否都會報錯_
+
+在 TS 中，我們可以針對物件內容定義型別：
+
+![](https://cdn-images-1.medium.com/max/800/1*7Qm1HwvkU3SQAPAK-UZYXw.png)
+
+這邊就可以看到，age 還沒定義，所以就會報錯。
+
+## interface
+
+以前面的例子來說，每次都要針對一個物件型別去寫另外一個指定型別的物件，其實可讀性是有點差的，所以 interface 就可以解決這個問題。
+
+![](https://cdn-images-1.medium.com/max/800/1*1ilFOKZACjAtNMoN2JWtIA.png)
+
+而這樣的好處是，這個寫好的型別還可以共用。
+
+## Class
+
+### 基本
+
+在 ES6 中 JS 多了 class 語法，但實際上不夠完善，所以在 TS 中加強了 Class 的功能。
+
+在 interface 中，常常會在前面加上一個大寫的 I 以標明這是 Interface
+
+![](https://cdn-images-1.medium.com/max/800/1*ps3h4dZv6J70jHtT5H-EYQ.png)
+
+在這裡也把舉例需要的內容都定義好了。
+
+![](https://cdn-images-1.medium.com/max/800/1*VEfy9Dmuf4Hk5iwHR8KO3g.png)
+
+定義好 class 了，x, y 目前為內部變量且必須初始化，也就是指定值，否則會報錯。
+
+**implements 在這邊是繼承類別的意思。**也就是有個型別，但我這邊要利用 IPoint 去實踐這個型別的內容，就可以使用 implements。
+
+且內部變量是不可以拿掉的，否則就會報錯，如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*8XfVJDNojvUk5DNRj5HjWg.png)
+
+而 class 是經過 new 才可以實例化(Instance)成為一個可以使用的物件，在這例子中 point 就是 Point 的實例化之後的物件。
+
+而在這邊，xy，是可以經過外部重新賦值的。
+
+![](https://cdn-images-1.medium.com/max/800/1*-GoOL6qLx5hISNqPr3Dy2Q.png)
+
+但在像內部變量這種寫法，其實是有個更好的寫法。
+
+### constrcutor
+
+constrcutor 就是在初始化這個實例的時候會執行的 function，所以加上之後就可以在 new 的時候傳入值。
+
+![](https://cdn-images-1.medium.com/max/800/1*BGxD8dIYn_btz8krXlyiKA.png)
+
+這樣就可以指定初始化的時候 x, y 的值為多少。然後是原本的 `x: number =0` 也可以改成 `x: number` 了。
+
+### Access Modifier
+
+而在這之中，雖然少寫了一點內容，但其實還是有點繁瑣，所以 TS 中也有更好的方法去解決這個問題，也就是可以通過使用 `public`、`private`、`protected`，其中`public`、`private` 是最常見的。
+
+### public
+
+![](https://cdn-images-1.medium.com/max/800/1*5I8YPk5fiFe0aYUkIlVvWw.png)
+
+當使用 `public` 就會發現出現錯誤，這是因為這樣用的時候 constructor 會自動幫我們生成成員變量（`x: number`, `y: number`）跟自動賦值（`this.x = x`, `this.y = y`），所以就可以簡化程式碼，如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*ABtxNRKM2jM5fDgLZ6YAqA.png)
+
+而在 class 中，所有的屬性都是 public。
+
+private
+
+另外再提出一點，在 class 中，內部變數可以被外界重新賦值的部份，其實是很奇怪的，所以在 class 中就可以透過 access modifer 中的 private 加以限制。
+
+我們把 public 改成 private 就會發現原先的 `point.x` `ponit.y` 開始出現錯誤了。
+
+![](https://cdn-images-1.medium.com/max/800/1*9zCWyo2VULEV3PQ2t1kVsQ.png)
+
+因為被 private 加以限制，另外一個問題是 `Point` 也出現錯誤了：
+
+![](https://cdn-images-1.medium.com/max/800/1*ileq-xpPlU_ZU8yPT5q1VA.png)
+
+這是因為 interface 相當於說明書，其中定義的內容，都是要公開的，而 private 並不是公開的，所以就會得到錯誤訊息，所以簡單的方法就是把 `x` `y` 從 IPoint 中刪除就可以了。
+
+![](https://cdn-images-1.medium.com/max/800/1*lvx9nK7yfQor-UrhuGz9Pw.png)
+
+但在這邊卻發現 `getDistance` 有錯誤。這是因為 `x` `y` 變成 private 的關係，而在這個例子中，我們是需要使用到這個值，但他又是 private 的話，要怎麼辦呢？
+
+這時候就要使用 class 中的 `getter` 跟 `setter` 了，而 `setter` 則是讓我們可以類似之前直接賦值的方式去改變，但這樣做的好處是我們可以針對賦值做一些檢查。
+
+![](https://cdn-images-1.medium.com/max/800/1*oMWfRGgwe_XLnOkqs6fDxw.png)
+
+像這樣就會得到一個錯誤。
+
+`getter` 使用如下：
+
+```
+getX = () => {
+  return this.x
+}
+```
+
+```
+getY = () => {
+  return this.x
+}
+```
+
+這樣 `getDistance` 就可以使用這些 `getter` 來算出結果了。
+
+另外提一下，在 `getDistance` 中的傳入值，因為是另外一個 Point 的 instance，所以直接使用 `getter`就會報錯：
+
+![](https://cdn-images-1.medium.com/max/800/1*BtxOXDM32oqLWcJ82I7m4g.png)
+
+所以也必須要把這些加到 `IPoint` 之中
+
+![](https://cdn-images-1.medium.com/max/800/1*KIqOKjzciPJAoQcq8rBqvA.png)
+
+整體
+
+![](https://cdn-images-1.medium.com/max/800/1*RT8F5d5BkZnB9Ct7TjcTiQ.png)
+
+### 簡潔的 getter 與 setter
+
+而在 TypeScript 中，還有個更簡潔的作法
+
+getter:
+
+```
+get X() {
+  return this.x
+}
+```
+
+setter:
+
+```
+set X (value: number) {
+  if (value < 0) {
+    throw Error('value < 0')
+  }
+  this.x = value;
+}
+```
+
+就可以使用
+
+`point.X` 取得值，利用 `point.X = 10` 來做賦值。
+
+而當然這樣之後 `IPiont` 也需要改寫一下
+
+![但比起原本的更加簡潔](https://cdn-images-1.medium.com/max/800/1*IUVwN4oSic6er4GlBO3t7A.png)
+
+_但比起原本的更加簡潔_
+
+getter 跟 setter 就不用一直重複寫，而且使用方式就更簡潔了
+
+![](https://cdn-images-1.medium.com/max/800/1*Rgxn-DqXLqGxi1HX0Wb4VA.png)
+
+另外一點是，其實大小寫很容易混淆，所以有的人會改成內部變量用 `_` 來標示。
+
+![](https://cdn-images-1.medium.com/max/800/1*EzQ4mlT0kCkyxHLXPzEa1g.png)

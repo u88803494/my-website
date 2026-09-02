@@ -1,0 +1,58 @@
+---
+title: "後端基礎：資安細節隨手筆記"
+slug: "後端基礎-資安細節隨手筆記"
+description: "HASH function 加鹽（salting）"
+date: 2019-08-08T01:17:41.154Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*abreZzG4k_OivP8QIXqhWw.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%B3%87%E5%AE%89%E7%B4%B0%E7%AF%80%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98-deb1e6252944"
+---
+
+## HASH function 加鹽（salting）
+
+除了可以直接把密碼 hash 之外，我們可以另外針對單一用戶添加一段特別的亂碼，最後達到密碼長度更長的結果，也就可以更好的避免被人使用 rainbow table 查表的方式破解密碼。
+
+假設密碼跟加鹽分別是：
+
+```
+pw = '12345' , salt = 'smp3ms2fd00sfs'
+```
+
+原本就是：
+
+```
+hash('12345')
+```
+
+改為
+
+```
+hash('12345smp3ms2fd00sfs')
+```
+
+一般會把 salt 放在資料庫，在比對密碼的時候下載下來比對
+
+## SQL Injection 風險
+
+比如說在 SQL 內部使用變數的值是在網頁上面的顯示的，即便設置成 hidden 也是很容易被 Injection，因為可以通過 devtool 去變更。
+
+```
+$sql = SELECT * FROM $tableName Where ...
+```
+
+假設這個 $tableName 是在網頁上 hidden
+
+![](https://cdn-images-1.medium.com/max/800/1*abreZzG4k_OivP8QIXqhWw.gif)
+
+一樣可以做更改
+
+## Dropbox 如何儲存密碼
+
+[原文](https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/)
+
+![](https://cdn-images-1.medium.com/max/800/1*kFKSB8wohhxYSW3mqcuVNw.png)
+
+dropbox 利用上圖這種方式，把密碼，先經過 SHA512 之後，在經過每個使用者加不同的鹽之後，再用難度為 10 的 bcrypt 處理過。而 bcrypt 被設計成一種很慢，很難以通過字定義硬體或 GPUs 的方式去加速運算。
+
+最後再使用 AES256 加密

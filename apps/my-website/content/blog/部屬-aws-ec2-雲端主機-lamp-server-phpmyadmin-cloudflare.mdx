@@ -1,0 +1,361 @@
+---
+title: "部屬 AWS EC2 雲端主機 + LAMP Server + phpMyAdmin + CloudFlare"
+slug: "部屬-aws-ec2-雲端主機-lamp-server-phpmyadmin-cloudflare"
+description: "前言"
+date: 2019-08-30T15:08:00.635Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*B0C4em1qqJcDTJBCDOqwSg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E9%83%A8%E5%B1%AC-aws-ec2-%E9%9B%B2%E7%AB%AF%E4%B8%BB%E6%A9%9F-lamp-server-phpmyadmin-cloudflare-43871cd5dd01"
+---
+
+## 前言
+
+這是一個學習如何部屬之前寫好的網頁的筆記，參考相當多的資料。後續我會再把參考的資料連結附上。
+
+這篇的目的是學習的筆記之用，所以不一定是使用最好的方式。如果有什麼可以改進的地方，也希望可以跟我提點一下 感謝。
+
+## 首先
+
+註冊成功之後，就按照 amazon 的指示開啟 AWS 免費方案
+
+![](https://cdn-images-1.medium.com/max/800/1*B0C4em1qqJcDTJBCDOqwSg.png)
+
+按照流程走，分別會輸入信用卡，然後是電話認證，他電話認證的方式比較特別，會直接由美國打電話來，在手機上面輸入網頁呈現的認證碼即可。
+
+最後認證成功之後，就可以正式開始架設伺服器。
+
+## 開始
+
+先進入管理控制台，因為現在已經中文化界面也不太一樣了。
+
+![](https://cdn-images-1.medium.com/max/800/1*xB_apWQuTpWoYk7zHeTbAA.png)
+
+然後點選啟動虛擬機器 小標：使用 EC2
+
+### 步驟一
+
+選擇 **Ubuntu Server 18.04**
+
+![](https://cdn-images-1.medium.com/max/800/1*EE-bQWVQthPqhRb1jWtcyw.png)
+
+### 步驟二
+
+選擇綠色標示免費的
+
+![](https://cdn-images-1.medium.com/max/800/1*3fvT7c-2QWWjmZXA9jZIbg.png)
+
+### 步驟三
+
+NEXT 直到 step 6
+
+step 7 設置 Configure Security Group
+
+要增加 port 80 和 port 443，才可以用 http/https 連線
+
+![](https://cdn-images-1.medium.com/max/800/1*pRlQq1yEWKGtj4adVEAAVA.png)
+
+然後按下 Review and Launch
+
+### 步驟四
+
+預覽一下。覺得可以，就按下 Launch。
+
+![](https://cdn-images-1.medium.com/max/800/1*NCxYDafOHxiT873fDlRLdw.png)
+
+### 步驟五
+
+會跳出一個視窗要選擇私鑰，但是我們沒有，所以要選創造一個
+
+![輸入名稱之後按下 Download Key Pair](https://cdn-images-1.medium.com/max/800/1*BXvC4u7ILYiiGDMUfaSF8w.png)
+
+_輸入名稱之後按下 Download Key Pair_
+
+輸入名稱之後按下 Download Key Pair。這個要保存好。然後這時候藍色按鈕就會高亮，就可以按下 Launch Instances>
+
+### 步驟六
+
+成功設置
+
+![](https://cdn-images-1.medium.com/max/800/1*WAaCAYGa7obwtdvBdLomgw.png)
+
+然後就可以按下 View Instances，回到管理界面
+
+小補充：如果不小心關掉界面，可以透過下面的方式，回到剛剛的界面。
+
+回到界面之後，點選最右邊欄位最上方的 EC2 Dashboard 啟用，然後點 running instances
+
+![](https://cdn-images-1.medium.com/max/800/1*6aqfxvi9OeCk1F-rl7_31g.png)
+
+### 步驟七
+
+在這邊看得到的資訊，下面的 bar 往後拉，就可以看到 IPv4 Public IP 把這組 IP 紀起來
+
+![](https://cdn-images-1.medium.com/max/800/1*BHOD82m7VPoc2J5_3MWKUA.png)
+
+## 設定 LAMP 環境
+
+前面已經下載好私鑰了，也記好 ip，然後就可以嘗試連線。
+
+### 連入
+
+```
+ssh -i 私鑰路徑 ubuntu@剛剛的IPv4
+```
+
+```
+ssh -i ~/Documents/key.pem ubuntu@123.123.11.22
+```
+
+會詢問一下是否連入遠端主機  
+問：`Are you sure you want to continue connecting (yes/no)?`  
+輸入：`$ yes`
+
+然後跳出
+
+![](https://cdn-images-1.medium.com/max/800/1*9KcMWlLQgEV3SGGt6OuTXg.png)
+
+最後研究了一下是權限的問題。
+
+於是找了網路資料。有兩種方式：第一個、右鍵內容修改。第二個、直接使用 command line 降低權限。
+
+結果在這邊的權限就卡了很久，最後是發現 cmder 的問題。因為換個 command line 就正常了。
+
+![](https://cdn-images-1.medium.com/max/800/1*15iAF8HNuFKP8hOTP9M4ig.png)
+
+然後另外一點是，aws 有內建指令可以用。
+
+![點開 connect 就可以看到，裡面也教說要調整權限](https://cdn-images-1.medium.com/max/800/1*3tOdCrDCJZHWCQEpLPphWA.png)
+
+_點開 connect 就可以看到，裡面也教說要調整權限_
+
+直接使用 example 裡面的指令也可以，檔案的路徑要調整一下。
+
+接著就可以設定 LAMP
+
+### 設定 LAMP：
+
+1. 更新 ubuntu 的系統  
+   `$ sudo apt update && sudo apt upgrade && sudo apt dist-upgrade`  
+   跳出訊息，是否安裝？或佔用空間 xxx，記得輸入：`y`（會跳出紫色選項，選擇 keep the local version currently installed）
+2. 安裝 Tasksel  
+   `$ sudo apt install tasksel`  
+   跳出訊息，是否安裝？或佔用空間 xxx。輸入：`y`
+3. 用 Tasksel 下載 lamp-server  
+   `$ sudo tasksel install lamp-server`  
+   （會跑一個下載中的紫色框）
+
+這時候，就可以到瀏覽企輸入 IP 位置，看看伺服器
+
+![出現這個頁面](https://cdn-images-1.medium.com/max/800/1*8joDA3U-vgLK8u-xBU4cUw.png)
+
+_出現這個頁面_
+
+出現這個頁面就是安裝成功，接著就可以進行下一步。
+
+## 設定 phpmyadmin
+
+1. 下載 phpmyadmin  
+   `$ sudo apt install phpmyadmin`
+2. 記得連接 apache2（要按空白鍵，有顯示＊字號）
+
+![](https://cdn-images-1.medium.com/max/800/1*ryy7XDC1cpePndklIlJsYA.png)
+
+然後就會詢問，是否要設定 dbconfig-common。選擇 yes  
+這邊主要是詢問你要系統自動設置嗎？如果不要之後就必須要自己手動設置，一般是給熟手要自己調整架構使用的。
+
+接著還會在出現另外一個確認選項。一樣要選 yes
+
+然後就可以設定密碼
+
+### 設定密碼
+
+1. 改變 phpmyadmin 登入的設定，改成可以用密碼登入  
+   `$ sudo mysql -u root mysql`進入 sql 指令  
+   輸入：  
+   `$ UPDATE user SET plugin='mysql_native_password' WHERE User='root';`  
+   `$ FLUSH PRIVILEGES;`  
+   離開 sql 指令  
+   `$ exit`
+2. 設定 root 的密碼  
+   `$ sudo mysql_secure_installation`
+3. 是否設定密碼？ `$ y`  
+   這時候會跳出選擇密碼強度，然後才設定密碼  
+   有三個選項，建議直接選 0，因為我選了 1 之後發現密碼要超級複雜才可以（中英文大小寫+符號混用長度還要一定的長度）  
+   所以除非是需要很注重安全性，否則選 0 之後繼續
+4. 輸入符合規定的密碼。  
+   直接輸入 `預設置密碼 `這時候密碼不會顯示所以不要認為沒有輸入成功。  
+   確定設這個密碼嗎？ `$ y`  
+   幾個設定的問題都可以選 `yes`  
+   最後會出現 All Done!
+5. 就可以在瀏覽器輸入自己的 `IPv4/phpmyadmin` 就看到登入畫面了  
+   帳號：root  
+   密碼：前面設定的密碼
+
+### 把檔案放上去
+
+在前面的操作完成之後，會需要把檔案放上去。這時候需要先退出這邊。輸入 `cd ..` 兩次之後，可以一邊退一邊輸入 ls。直到看到 var 資料夾。
+
+![](https://cdn-images-1.medium.com/max/800/1*LL2_Mi_hknF20GKxbJ478w.png)
+
+然後連進去 `cd var/www/html` 。  
+不一定要這樣連，只是方便之後作業，在作業的時候也可以路徑都加上。變成前面都一定頁寫上 `var/www/html/index.php` 這樣也是可以
+
+### 測試
+
+然後測試開個檔案：
+
+```
+$touch index.php
+```
+
+結果卻發現不行。原來是權限不夠！按照下面的方法：
+
+```
+$sudo chmode -R 777 路徑
+```
+
+這樣就可以改變權限。再試一次
+
+```
+$touch index.php
+// 成功
+$vim index.php
+```
+
+就會出現 vim 界面
+
+```
+<?php
+```
+
+```
+  echo "hello, world";
+```
+
+```
+?>
+```
+
+儲存之後，發現可以正確呈現。  
+這樣就可以進行下個步驟了
+
+### 處理檔案
+
+接著是處理自己的檔案部份。另外在 GitHub 上面開設一個 repository。
+
+開設完成之後，把 repository 的網址複製起來。
+
+![按下紅色標示複製網址](https://cdn-images-1.medium.com/max/800/1*rEtgDnMC9hflItvB48a8GQ.png)
+
+_按下紅色標示複製網址_
+
+回到電腦，把要上傳的資料單獨處於一個資料夾之後  
+（記得把 conn.php 拿掉，因為 .gitignore 檔案還沒上傳之前，並不會讓 conn.php 被忽略）
+
+command line，切換到該資料夾。command line 輸入：
+
+```
+git remote add [想輸入名稱] [GitHub 網址]
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*eoWjbh5DWPhyST82r_2zqg.png)
+
+這樣就連接成功。接著按照下面步驟把資料弄上新的 repository：
+
+1. 開分支 `git branch first`
+2. 切到該分支 `git branch first`
+3. 上傳 `git commit -am "第一次上傳"`
+4. push `git push origin first`
+5. 然後 GitHub 上面 marge。
+
+接著就回到 server 端的 command line，處於`var/www/html` 之下，複製 repository：
+
+```
+git clone https://github.com/u88803494/MessageBoard.git
+```
+
+系統就會自動把，當時 `remote add` 的資料夾一併建立之後把檔案儲存在內部了。
+
+另外因為當初我是忽略 conn.php。所以要手動用 command line 撰寫 conn.php 的指令，其實也可以複製貼上，所以還算簡單。
+
+這樣子就成功上傳伺服器。就可以通過 IPv4/對應路徑/index.php 看看網頁可用。
+
+![這我已經先測試了，所以已經有文章了。](https://cdn-images-1.medium.com/max/800/1*MA7t74EucXxAnziYHD1tEA.png)
+
+_這我已經先測試了，所以已經有文章了。_
+
+## 設定 DNS( 網址可連伺服器 )
+
+設置 DNS 的目的就是希望可以通過網址，就可以直接連線到伺服器。
+
+先登入 gandi.net（購買網址的地方）。因為我昨天已經買好了，所以只要設定而已。進來域名界面之後，點選網址即可。
+
+最簡單，使用 gandi 內建：
+
+![然後就是區域檔紀錄](https://cdn-images-1.medium.com/max/800/1*A5INzoOYgYD1D9aCCf2a9w.png)
+
+_然後就是區域檔紀錄_
+
+在區域檔紀錄，把 A 的 IPv4 改成 AWS 的網址即可。
+
+### CloudFlare
+
+因為我之前曾經用過，對這個印象很深刻，基於研究精神，所以就順便嘗試看看，沒想到還滿簡單的。不知道是之前用過得印象還在還是現在已經改版超簡單，很直覺的就設定好了。
+
+1. 註冊 / 登入 CloudFlare 之後。
+2. 點選 「+Add a Site」
+
+![](https://cdn-images-1.medium.com/max/800/1*ZEBLoWbNspCd7fT8EYPZcA.png)
+
+3. 輸入網址
+
+![](https://cdn-images-1.medium.com/max/800/1*qTHgby8fk2s194H5L1GXJA.png)
+
+4. 選擇方案
+
+![選擇免費方案即可](https://cdn-images-1.medium.com/max/800/1*OMyjvRqh7JsniBaUNRNPOw.png)
+
+_選擇免費方案即可_
+
+5. 設置 IPv4
+
+![紅框輸入 AWS 的 IPv4 即可](https://cdn-images-1.medium.com/max/800/1*LmraDrQa0DSM8lw2WaMdLQ.png)
+
+_紅框輸入 AWS 的 IPv4 即可_
+
+下面還有很多的設定，不用管他們。Name 不輸入的話就是主網域，name 輸入就有子網域。  
+TTL，是域名的更新時間。因為本來 Gandi 本身的設置就比較高，所以更換成功之後要等一段時間才可以成功換新。
+
+6. 更換 nameserver
+
+就會告訴我們本來有 namesever，需要換成 cloudflare 的
+
+![下面兩個就是用來取代的部份。](https://cdn-images-1.medium.com/max/800/1*tkZ8PMEuBRY7D0d1ZMVrrQ.png)
+
+_下面兩個就是用來取代的部份。_
+
+7. 回到 Gandi 的域名界面，選擇名稱伺服器，選擇變更
+
+![](https://cdn-images-1.medium.com/max/800/1*v49NWneWscw2HsyQwPL37A.png)
+
+選擇外部，之後分別輸入儲存即可。
+
+![](https://cdn-images-1.medium.com/max/800/1*ChczKilU2ysm_XXWvqpzjg.png)
+
+設定完成記得回到 CloudFlare，  
+也就是步驟 6 的地方按下 Done, check Nameserver。
+
+8. 等待，也許明天再來看有沒有成功就好。  
+   因為 Gandi 本身設置的 TTL 時間就很長，所以除非一開始沒有連入網址，否則一旦連入之後，就會依照 Gandi 的設置時間存入專門管理域名的伺服器的快取。  
+   這種情況之下，我們就必須要等快取的時間過了，才會變成新的設置。這部份就只能等了。
+
+## 參考資料：
+
+[部署 AWS EC2 遠端主機 + Ubuntu LAMP 環境 + phpmyadmin](https://github.com/Lidemy/mentor-program-2nd-yuchun33/issues/15)  
+[安裝 LAMP Server + phpMyAdmin 在 Linux 系統上輕鬆架設網站](https://magiclen.org/lamp/)  
+[[筆記]部署 AWS EC2 虛擬主機 + Ubuntu LAMP 環境 + phpmyadmin](https://github.com/enter3017sky/mentor-program-2nd-blog/issues/30)
+
+## 結語：
+
+部屬需要網址、DNS、Server。Server 又需要一個很完整的架構 apache、資料庫。其中又有很多的細節需要注意。我也知道有很多的選項可以調整。

@@ -1,0 +1,1710 @@
+---
+title: "前端基礎 JavaScript篇： JavaScript 網頁事件處理"
+slug: "前端基礎-javascript篇-javascript-網頁事件處理"
+description: "eventListener 與 callback function"
+date: 2019-06-03T12:42:25.968Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*CuL-IHHHE1RaQnNX4HTHmw.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript%E7%AF%87-javascript-%E7%B6%B2%E9%A0%81%E4%BA%8B%E4%BB%B6%E8%99%95%E7%90%86-2596dbad9bdc"
+---
+
+## eventListener 與 callback function
+
+### eventListener
+
+方法用於向指定元素添加事件，然後透過函式去控制該事件。
+
+在 JavaScript 常常會傳個 function 進去。
+
+```
+element.addEventListener(事件名稱(event), 函式(function))
+```
+
+[參考資料](https://developer.mozilla.org/zh-TW/docs/Web/API/EventTarget/addEventListener)
+
+關於事件的解釋 [JavaScript 事件](http://www.runoob.com/js/js-events.html)
+
+```
+<script>
+    const element = document.querySelector('#block');
+    element.addEventListener('click', onClick) // 設置為點擊之後呼叫函式
+    function onClick() {
+      alert('click!')
+    }
+</script>
+```
+
+![點一下就會執行該函式](https://cdn-images-1.medium.com/max/800/1*CuL-IHHHE1RaQnNX4HTHmw.gif)
+
+_點一下就會執行該函式_
+
+這個概念就是 event Listener 監聽事件，監聽之後得到事件就會執行，這種稱為 callback function 。所以 function 裡面可以做任何想做的事情。
+
+通常都是直接把 function 寫在裡面。
+
+```
+<script>
+    const element = document.querySelector('#block');
+    element.addEventListener('click', function() {
+      alert('click!')
+    })// 匿名函式的宣告方式
+</script>
+```
+
+### 詳細講解 callback function
+
+講解一下為什麼要使用這個機制，因為使用者在使用的時候，我們不知道使用者什麼時候會去按那個按鈕，所以不能寫一個寫法，讓一行程式碼去等待使用者，這樣的話程式碼會卡住，後面的都不能執行了，所以就會需要一個方式去監聽使用者的動作。
+
+最好的方式就是，告訴瀏覽器，當使用者做出什麼動作的時候，就去呼叫某個 function，就是就叫做 callback function。所以就不用一直等在那邊了。
+
+瀏覽器會一直持續監聽，只要使用者做了某個制定好的特定動作，就會呼叫特定的函式，這樣在使用上會比較便利。
+
+參考資料：
+
+1. [callback function 的](https://ithelp.ithome.com.tw/articles/10006207)基本定義(非 JS)
+2. [JS callback function 詳解](https://ithelp.ithome.com.tw/articles/10192739)
+
+### event(e) 是什麼
+
+通常在呼叫 callback function 的時候，會傳進一個值 event 通常會縮寫成 evt 或是 e，不過這個名稱是可以自己取的。
+
+```
+<script>
+    const element = document.querySelector('#block');
+    element.addEventListener('click', function(e) {
+        console.log(e)
+    }) // 點擊之後印出
+</script>
+```
+
+所以就可以把這個 e 印出來
+
+![裡面會有很多資訊](https://cdn-images-1.medium.com/max/800/1*dgGEgKn8wuIYICt2Yi8FXQ.gif)
+
+_裡面會有很多資訊_
+
+裡面會有很多資訊，像是點擊的 x y 軸，點了什麼資料等等的
+
+-
+
+所以以這個範例來說，當我們點擊之後，瀏覽器就會帶一些資訊進去 e，所以是瀏覽器呼叫的時候自動帶入這些參數，就像是下面的範例般：
+
+```
+onClick({
+  pageX:...
+  pageY:...
+  ...
+})
+```
+
+所以我們就可以利用這個資訊來拿到一些跟事件有關的資訊。
+
+-
+
+另外一個範例，用 window 這個是指瀏覽器的這個視窗
+
+```
+<script>
+    const element = document.querySelector('#block');
+    window.addEventListener('keydown', function(e) {
+      console.log(e.key)
+    })
+</script>
+```
+
+透過這段程式碼，就可以取得在視窗中按了那些 key ，如下圖所表示
+
+![最後一段是示範這些 e 的資訊有多少](https://cdn-images-1.medium.com/max/800/1*PbwW4IpJkBXFzLm6eGZcCw.gif)
+
+_最後一段是示範這些 e 的資訊有多少_
+
+所以就可以透過這樣來取得特定的資訊。
+
+-
+
+```
+<script>
+    const element = document.querySelector('.change-btn');
+    window.addEventListener('click', function(e) {
+      document.querySelector('body').classList.toggle('active')
+    })// 點擊之後 body 切換 active class
+</script>
+```
+
+透過這樣的指令就可以使整個 body 變色
+
+因為這邊選擇 body 之後再把 body 設定為 toggle active 所以點了之後如果沒有 active class 就新增，如果有的話就取消，而 active 是背景顏色紅色，就會達成切換背景顏色的效果。
+
+![](https://cdn-images-1.medium.com/max/800/1*8TIWPED-_6eBboTSCz8uSQ.gif)
+
+## 表單事件處理 onSubmit
+
+在表單上面可以加個額外的事件，可以針對這個事件做處理
+
+```
+<body>
+  <form class="login-form">
+    <div>
+      username: <input name='username' />
+    </div>
+    <div>
+      password: <input name='password' type='password'/>
+    </div> <!-- 後面需要表明這個 type 是 password 才會隱藏 -->
+    <div>
+      password again: <input name='password2' type='password'/>
+    </div> <!-- 後面需要表明這個 type 是 password 才會隱藏 -->
+    <input type='submit' />
+  </form>
+  <script>
+    const element = document.querySelector('.login-form');
+    element.addEventListener('submit', function (e) {
+      alert('submit');
+    })
+  </script>
+</body>
+```
+
+這樣使用之後可以在表單做提交的時候出現一個提示。
+
+-
+
+如果不想要瀏覽器送出資訊
+
+e.preventDefault(); 阻止瀏覽器的預設行為
+
+```
+<script>
+    const element = document.querySelector('.login-form');
+    element.addEventListener('submit', function (e) {
+      e.preventDefault();<!-- 阻止瀏覽器的預設行為-->
+    })
+</script>
+```
+
+所以就會送不出資訊，透過這點可以檢查密碼。
+
+```
+<script>
+    const element = document.querySelector('.login-form');
+    element.addEventListener('submit', function (e) {
+      const input1 = document.querySelector('input[name=password]')
+      const input2 = document.querySelector('input[name=password2]')
+      if (input1.value !== input2.value) {
+        alert('不同密碼')
+        e.preventDefault();
+      }
+    })
+</script>
+```
+
+![就可以利用這點來驗證表單](https://cdn-images-1.medium.com/max/800/1*8XzR0c7i8DYEwFe29g6NaQ.gif)
+
+_就可以利用這點來驗證表單_
+
+利用邏輯就可以寫出很多種功能以供使用
+
+-
+
+備註：form 後面可以接上很多種 http 指令，預設值是 get，所以在送出資料之後，所輸入的東西都會在網頁上面明碼顯示。
+
+## e.preventDefault
+
+prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/prevent)
+
+除了前述的例子之外還有更多的方式可以使用 preventDefault
+
+1. 阻止超連結出去
+
+```
+<body>
+  <form class="login-form">
+    <div>
+      username: <input name='username' />
+    </div>
+    <div>
+      password: <input name='password' type='password' />
+    </div>
+    <div>
+      password again: <input name='password2' type='password' />
+    </div>
+    <input type='submit' />
+    <a href="/test">link</a>
+  </form>
+  <script>
+    const element = document.querySelector('a');
+    element.addEventListener('click', function (e) {
+        e.preventDefault();
+      }
+    })
+  </script>
+```
+
+這種時候只要點擊這個連結，就會沒有反應，因為被阻止了。
+
+-
+
+2. 阻止使用者輸入某個字
+
+```
+<script>
+    const element = document.querySelector('input[name=username]');
+    element.addEventListener('keypress', function(e) {
+      if (e.key === 'e') {
+        e.preventDefault();
+      } // 當輸出等於 e 的時候，阻止預設行為
+    })
+</script>
+```
+
+所以在使用者名稱輸入 e 就會被取消，也就是不能輸入 e，這就可以用作阻止使用者輸入特殊符號等等的功能。
+
+常用的就是表單的驗證跟超連結。
+
+## 事件傳遞機制
+
+下面寫一個例子，來解釋事件傳遞機制
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    .outer {
+      width: 500px;
+      height: 200px;
+      background: red;
+    }
+
+    .inner {
+      width: 300px;
+      height: 100px;
+      background: green;
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+    <div class='outer'>
+      <div class='inner'>
+        <button class='btn'>click me</button>
+      </div>
+    </div>
+    <div>
+    </div>
+  </form>
+  <script>
+    addEvent('.outer'); // 呼叫函式
+    addEvent('.inner');
+    addEvent('.btn');
+
+    function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(className)
+      })// 分開寫方便 debug 用
+    };
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+上述的例子是當被點擊到的時候，就在 console 印出被點到的 class Name
+
+以這例子來說會有地方有三層關係就像積木層與層的堆疊。
+
+![分三次點擊不同地方](https://cdn-images-1.medium.com/max/800/1*fM1y9cycWk3C-zhES4jPvg.gif)
+
+_分三次點擊不同地方_
+
+從圖中可以看到點了按鈕之後，就會一次印出三種，分別是 .btn、.inner、.outer 三者是按照順序執行的，所以是由底層開始往父層執行。也可以想成是按下的時候，先按到第一層 button 所以就印出 .btn，然後再案到第二層 inner 所以印出 .inner ，最後是按到最底層的 outer 所以就印出 .outer。
+
+所以當按下綠色的區塊的時候，就只會印出 inner 跟 outer ，按下紅色區塊則只印出 outer。
+
+[補充資料](https://medium.com/@shihKai/javascript-event-bubbling-%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1-capture-%E4%BA%8B%E4%BB%B6%E6%8D%95%E7%8D%B2-%E7%9A%84%E8%99%95%E7%90%86-34abdbd69397)
+
+## 事件傳遞機制詳解：捕獲與冒泡
+
+當點擊一個元素的時候，會進入捕獲階段(Capture phase)，所以會由最上層的 window → document → … 最後到目標元素。然後就進入冒泡階段(Bubbling phase)，在把事件往上回傳回去。
+
+補充資料：[DOM 的事件傳遞機制：捕獲與冒泡](https://blog.techbridge.cc/2017/07/15/javascript-event-propagation/)
+
+![](https://cdn-images-1.medium.com/max/800/1*wINo5blPb3Tc4A9s5JrjQg.png)
+
+以前述例子所述，就是一層一層的往上傳回去，就會得到結果
+
+**先捕獲再冒泡**
+
+-
+
+.addEventListener 其實有第三個參數，第三個參數就是控制階段用的參數是一個布林值，true — 執行到捕獲階段，false(預設值) — 執行到冒泡階段。
+
+所以可以寫個範例來測試讓他分別印出 捕獲跟冒泡
+
+```
+<script>
+    addEvent('.outer')
+    addEvent('.inner')
+    addEvent('.btn')
+
+    function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 捕獲`)
+      }, true)
+
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 冒泡`)
+      }, false)
+    };
+</script>
+```
+
+![可以發現他們的順序是相反的，理由是這邊會先執行捕獲再來才是冒泡](https://cdn-images-1.medium.com/max/800/1*RwTxtGYKSzDzz0vgD40PUA.jpeg)
+
+_可以發現他們的順序是相反的，理由是這邊會先執行捕獲再來才是冒泡_
+
+看得出來兩者的順序相反，由此可以得如同上述圖片那樣，捕獲就先由最外層(父層)開始，而冒泡的順序則相反。理由是這邊會先執行捕獲再來才是冒泡。
+
+-
+
+這時候再試試看把兩邊的印出對調。
+
+```
+<script>
+    addEvent('.outer')
+    addEvent('.inner')
+    addEvent('.btn')
+
+    function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 冒泡`)
+      }, false)
+
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 捕獲`)
+      }, true)
+   };
+</script>
+```
+
+![.btn 的順序怎麼不太一樣呢？](https://cdn-images-1.medium.com/max/800/1*5PvQurHoHTjKkVnl2icrSQ.jpeg)
+
+_.btn 的順序怎麼不太一樣呢？_
+
+這裡在執行的時候，一樣會先執行捕獲，才執行冒泡
+
+.btn 的順序的差異的原因是在於。因為是點擊 button 的按鈕，是觸發 chick me 本身的事件，所以當執行目標的時候，就會進入目標階段(Target phase)，會根據哪一個放在上面就先執行，所以總結也一樣還是捕獲之後再冒泡。
+
+-
+
+知道這些是有用處的
+
+寫一個監聽 window 的程式碼，然後印出資料，就可以紀錄瀏覽器內發生的 click 事件。
+
+```
+<script>
+    addEvent('.outer')
+    addEvent('.inner')
+    addEvent('.btn')
+
+    window.addEventListener('click', function(e) {
+      console.log(e)
+    },true) // 放在捕獲階段
+
+    function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 冒泡`)
+      }, false)
+    };
+</script>
+```
+
+![無論點哪處，都會記錄資訊](https://cdn-images-1.medium.com/max/800/1*p82KcUX8zRja0VvlVGIh8A.gif)
+
+_無論點哪處，都會記錄資訊_
+
+-
+
+### preventDefault 的向下傳遞機制
+
+跟上述同個程式碼
+
+先在 body 新增一個&lt;a> 元素，然後把本來印出的部份改為 preventDefault。
+
+```
+<body>
+    <div class='outer'>
+      <div class='inner'>
+        <a href='http://www.google.com'>google</a>
+        <button class='btn'>click me</button>
+      </div>
+    </div>
+    <div>
+    </div>
+  </form>
+  <script>
+    addEvent('.outer')
+    addEvent('.inner')
+    addEvent('.btn')
+
+    window.addEventListener('click', function(e) {
+      e.preventDefault();
+    },true)
+
+    function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function(){
+          console.log(`${className} 冒泡`)
+      }, false)
+    };
+  </script>
+</body>
+```
+
+-
+
+```
+window.addEventListener('click', function(e) {
+      e.preventDefault();
+    },true)
+```
+
+這段會阻止瀏覽器視窗內部的點擊行為
+
+實際執行時
+
+![可以看到點了幾次都連不到 google](https://cdn-images-1.medium.com/max/800/1*cYobyDKNRyXR5QDzq23W6w.gif)
+
+_可以看到點了幾次都連不到 google_
+
+這有個原因。是因為 preventDefault 會往下傳遞，所以在 window 一使用preventDefault 之後，就會連帶下面所有的元素也都有 preventDefault 的屬性，最後傳到 a 元素都會帶有 preventDefault 的屬性，也就是說這條路徑之中，只要有其中一個標籤 call 了 preventDefault ，那麼該標籤底下所有的元素都會帶有 preventDefault，也就是預設行為都被取消了，就不會有效果。
+
+## stopPropagation
+
+Propagation 有蔓延、發散之意 [澳典](http://odict.net/propagation/)。stopPropagation 就是停止蔓延傳播的意思。
+
+捕獲跟冒泡的機制，就有點像是逐級往上層層回報的意思，有時候不想要再往上層回報，就可以 call 這個 function 來停止
+
+> `Event` 介面的 `stopPropagation()` 方法可阻止當前事件繼續進行捕捉（capturing）及冒泡（bubbling）階段的傳遞。
+
+> [MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/Event/stopPropagation)
+
+```
+<body>
+  <div class='outer'>
+    <div class='inner'>
+      <button class='btn'>click me</button>
+    </div>
+  </div>
+  <div>
+  </div>
+  </form>
+  <script>
+    addEvent('.outer')
+    addEvent('.inner')
+    addEvent('.btn')
+```
+
+```
+window.addEventListener('click', function (e) {
+      e.preventDefault();
+    }, true)
+```
+
+```
+function addEvent(className) {
+      document.querySelector(className)
+        .addEventListener('click', function () {
+          console.log(`${className} 冒泡`)
+        })
+    };
+```
+
+```
+document.querySelector('.btn')
+      .addEventListener('click', function (e) {
+        e.stopPropagation();
+      })
+```
+
+```
+</script>
+</body>
+```
+
+監聽 btn 的點擊，點擊後阻止傳遞
+
+這時候就只會執行 btn 的冒泡而已。
+
+![不過也因為只有 btn 設置 stopPropagation 所以其他按鈕一樣照常](https://cdn-images-1.medium.com/max/800/1*lD8FwijEXeCG7n3ERg-fVQ.gif)
+
+_不過也因為只有 btn 設置 stopPropagation 所以其他按鈕一樣照常_
+
+所以來測試一下，同時監聽捕獲跟冒泡。
+
+![可以看到一路到 btn 的冒泡就結束了](https://cdn-images-1.medium.com/max/800/1*a4pDBEIHIPSRQJFT9e7Oog.gif)
+
+_可以看到一路到 btn 的冒泡就結束了_
+
+由這邊就可以確認到，真的是先捕獲再冒泡，然後在 btn 冒泡的階段就停止了傳遞。
+
+-
+
+就可以利用 window 來直接停止整個事件，設置之後記得要打 true 這樣才會設置在捕獲階段。
+
+```
+window.addEventListener('click', (e) => {
+  e.stopPropagation();
+ }, true)
+```
+
+這樣在捕獲階段就被停止，所以按任何按鈕都沒有反應了。
+
+![window 的捕獲階段就被停止了](https://cdn-images-1.medium.com/max/800/1*Tk3xqhXEbE0Rnk9BhNScHg.gif)
+
+_window 的捕獲階段就被停止了_
+
+-
+
+可以在一個元素添加兩個或多個監聽事件。同時間也停止觸發。
+
+```
+    document.querySelector('.btn')
+      .addEventListener('click', function (e) {
+        e.stopPropagation();
+        console.log(`btn click1`)
+      })
+```
+
+```
+    document.querySelector('.btn')
+      .addEventListener('click', function (e) {
+        e.stopPropagation();
+        console.log(`btn click2`)
+      })
+```
+
+![多個監聽，且做出反應](https://cdn-images-1.medium.com/max/800/1*-3IpzeY03xryUaM9ULbhHg.gif)
+
+_多個監聽，且做出反應_
+
+-
+
+### stopImmediatePropagation
+
+那我只想要觸發其中一個呢？
+
+就是利用 stopImmediatePropagation
+
+```
+document.querySelector('.btn')
+  .addEventListener('click', function (e) {
+    e.stopImmediatePropagation();
+      console.log(`btn click1`)
+  })
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*RImpwTEFVr5yqAL2nu_xpQ.gif)
+
+可以看到只有一個顯示而已，另外一個則不行
+
+## 新手 100% 會搞錯的事件機制問題
+
+利用選擇器選擇按鈕做測試
+
+![咦，第二個怎麼會不能執行](https://cdn-images-1.medium.com/max/800/1*GJzG3ADCv64vNw9rGqjUYg.gif)
+
+_咦，第二個怎麼會不能執行_
+
+因為 querySelector 只能選到第一個，所以就只有第一個才可以執行。
+
+那要多選就利用 querySelectorAll ？
+
+還是不行，因為這樣選出來的話是一個類陣列
+
+那把它定義出來變成 element 之後再用陣列的方式選
+
+```
+const elements = document.querySelectorAll('.btn')
+elements[i]
+```
+
+接著用迴圈去跑。
+
+```
+const elements = document.querySelectorAll('.btn')
+for(var i = 0; i < elements.length; i += 1) {
+  elements[i].addEventListener('click', function () {
+    alert(i + 1);
+  })
+}
+```
+
+![結果還是不行，通通數字出現 6](https://cdn-images-1.medium.com/max/800/1*TCRf1FlkGXsO7R3-UkogrQ.gif)
+
+_結果還是不行，通通數字出現 6_
+
+這問題是因為作用域的關係
+
+使用 var 的時候 i 值是由載入的網頁那一刻運算出來的，因為迴圈已經跑完了，這時候 i 值是已經跑完迴圈的值了，所以 i 值就會剛好小於 element.length，所以 i 值是 5
+
+![可以看到 i 值等於 5 了](https://cdn-images-1.medium.com/max/800/1*1-RLayw_ITdiUzGYd481xw.png)
+
+_可以看到 i 值等於 5 了_
+
+因為 i = 5 了，所以當點擊之後會直接運算 alert( i+1 ) 得結果 6。按了每一個按鈕都一樣。
+
+**因為網頁是會先跑完所有的資料的，監聽器則是當我們觸發之後才去跑 function 裡面的資料。**這邊是重點，所以再次強調。
+
+那要怎麼解決這個問題？
+
+### 解法一：
+
+這時候改用 let
+
+![i 值就是 not available](https://cdn-images-1.medium.com/max/800/1*84YKZYSbnkCJ1p-mzgR-1Q.png)
+
+_i 值就是 not available_
+
+not available 就是無法使用。
+
+當瀏覽器載入的時候，會先利用迴圈註冊完所有的按鈕的事件監聽器，當我們按下按鈕之後再去做我們要處理的事件的處理。[參考資料](https://github.com/Lidemy/mentor-program-3rd-ChihYang41/pull/11#issuecomment-495922896)
+
+![觀察一下按下按鈕的反應](https://cdn-images-1.medium.com/max/800/1*YzJ9FPs2X2_1p_bgJtJuYw.gif)
+
+_觀察一下按下按鈕的反應_
+
+會發現當按下 2 的時候 i = 1 然後運行 alert(i+1) 於是跳出視窗顯示 2 。
+
+-
+
+另外一個偵測的方式，利用 chrome 的 Event Listener Breakpoints 然後點選 click 事件。
+
+![往下拉之後開啟 Mouse 的選單點選 click 事件](https://cdn-images-1.medium.com/max/800/1*-H3nbFyq3Fit0yJlfstGMQ.gif)
+
+_往下拉之後開啟 Mouse 的選單點選 click 事件_
+
+點選 click 事件之後，就會在所有的 EventListener 的 click 事件暫停。
+
+就可以點選按鈕測試：
+
+![可以看到 i 值跟反黃的 clock 事件代表暫停點在那了](https://cdn-images-1.medium.com/max/800/1*BCnCK8gt1Y54JJtYA2cJpg.gif)
+
+_可以看到 i 值跟反黃的 clock 事件代表暫停點在那了_
+
+由此得知，使用 var 的時候，因為已經有變數 i 的值了，所以就會直接使用 i 的值代進去，所以無論按哪個按鈕都會等於 6 。
+
+而使用 let 的時候，因為作用域範圍較小的關係，i 值只有計算的那一輪有效，function 往上層找的時候，就會去抓取到一個區塊對應的 i 值，然後代入 function 計算。
+
+### 解法二：
+
+一般來說儲存資料不會直接用文字，額是會額外的使用屬性來儲存，以 data 開頭的屬性
+
+```
+data-* // * 可以自己任意變化
+```
+
+參考資料：[資料屬性](https://pjchender.blogspot.com/2017/01/html-5-data-attribute.html)
+
+所以可以寫成如下：
+
+```
+<div class='outer'>
+    <button class='btn' data-value='1'>1</button>
+    <button class='btn' data-value='2'>2</button>
+    <button class='btn' data-value='3'>3</button>
+    <button class='btn' data-value='4'>4</button>
+    <button class='btn' data-value='5'>5</button>
+</div>
+```
+
+然後再運用 function(e) 去取得資料
+
+```
+const elements = document.querySelectorAll('.btn')
+for (var i = 0; i < elements.length; i += 1) {
+  elements[i].addEventListener('click', function (e) {
+    console.log(e.target); //e.target 則是永遠指向觸發事件的 DOM 物件。
+  })
+}
+```
+
+[e.target 參考資料 MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/Event/target)
+
+然後利用 .getAttribute('屬性名稱') 去拿到這個屬性 [MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/Element/getAttribute)
+
+```
+e.target.getAttribute('data-value')
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*1gz8jdOszLr9XxFXJu8AwA.gif)
+
+-
+
+來試一下，如何新增按鈕
+
+先新增一個 add 按鈕，之後設定利用這個按鈕新增按鈕。然後刪除其他按鈕只留 1 .2 號按紐。
+
+```
+<button class='add-btn'>add</button>
+<button class='btn' data-value='1'>1</button>
+<button class='btn' data-value='2'>2</button>
+```
+
+然後我們需要從 3 號開始新增，接著設置一個監聽 add 按鈕的 function 來執行。
+
+```
+let num = 3;// 從三號開始
+```
+
+```
+document.querySelector('.add-btn').addEventListener('click', function () {
+}
+```
+
+接著寫出新增按鈕的函式。要先創造一個按鈕
+
+```
+const btn = document.createElement('button');
+   // 創造一個 element 之後賦值給 btn
+```
+
+接著在這個按紐新增屬性，這邊一定要跟創造按鈕分開寫，否則就很難自由的添加想添加的內容了。
+
+所以創造 element 跟添加/修改 element 的程式碼要分開來寫，也方便辨認。
+
+```
+btn.setAttribute('class', 'btn');
+btn.setAttribute('data-value', num); // btn 新增屬性跟屬性值
+btn.innerText = num // 在內容新增內容 num 按鈕編號
+```
+
+然後按鈕的值記得要+1 才不會每次都產生重複編號的按紐。接著還要選擇在哪邊新增按紐。
+
+```
+num += 1 ;  // 新增按鈕之後要 +1 以免編號重複
+document.querySelector('.outer').appendChild(btn);
+  // 選擇在.outer 底下增加
+```
+
+最後得到：
+
+```
+document.querySelector('.add-btn')
+  .addEventListener('click', function () {
+    const btn = document.createElement('button');
+    btn.setAttribute('class', 'btn');
+    btn.setAttribute('data-value', num);
+    btn.innerText = num;
+    num += 1;
+    document.querySelector('.outer').appendChild(btn);
+      }
+    )
+```
+
+就可新增按鈕：
+
+![發現，新增的按鈕怎麼不能使用呢？](https://cdn-images-1.medium.com/max/800/1*x9pO7k7JPNoAX43Z_MwLBg.gif)
+
+_發現，新增的按鈕怎麼不能使用呢？_
+
+其實是因為程式碼在開網頁的時候就已經先跑完了，所以後面新增的 btn 其實並不會被監聽到，所以也就沒辦法做出回應了。
+
+簡單說，elements 的部分，監聽的只有 1 號跟 2 號按鈕而已，其他後來新增的並沒有被監聽，就不會做出反應了。
+
+至於怎麼處理就是接下來要講的內容。
+
+-
+
+### 小小心得：
+
+在寫監聽的程式碼也是有一定的模式的，必須要先設定要新增的標籤，並且把它放進一個變數，接著在各種新增/修改/刪除…等，最後得到想要的結果之後，還要再設置要放在哪邊。這樣才是完成一段動態新增的程式碼
+
+## event delegation
+
+事件代理
+
+delegation（工作、職務或權力等）分配；委派；授權 [劍橋](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/delegation)
+
+一個簡單的邏輯，當我們有很多個相似的按鈕的時候，自然不可能去一個一個的新增 eventListener，這種時候就必須要利用捕獲跟冒泡的機制，事件會冒泡到它的上層元素，以這邊為範例，所有的 button 都會冒泡到 &lt;div calss='outer'>，所以只要在上層元素處理 eventListener 就好，就可以處理它底下所有的 button，就是透過按鈕新增(後來動態新增)的也可以。
+
+就像是一群人去麥當勞點餐，不可能每個人都在櫃檯等，一定會有人先去做些什麼別的，像是有人去找座位，然後找座位的人會請在櫃檯等的人幫忙拿餐點。所以在這邊也是一樣，就是請上層來處理底下所有的按鈕。
+
+所以就可以修改程式碼。原本設置於按鈕的 eventListener 就可以刪除了。
+
+接著新增監聽 outer，然後測試看看印出 e.target
+
+```
+document.querySelector('.outer').addEventListener('click',
+  function (e) {
+    console.log(e.target);
+  }
+)
+```
+
+![空白處也能按呢!](https://cdn-images-1.medium.com/max/800/1*6GbNNfJtwMo7d1EThtCb5A.gif)
+
+_空白處也能按呢!_
+
+可以發現除了原本的按鈕之外，新增的按鈕也可以做出反應了，這就是因為冒泡的關係，而本來事件就會冒泡，所以就會抓得到。另外點了同排的空白處也可以印出資料，這是因為監聽的對象是一整個 &lt;div calss=’outer’>的關係。
+
+所以就需要加上判斷。
+
+```
+conosle.log(e.target.classList)
+```
+
+我們可以先把要判斷的資料印出來，看看是不是真的有自己想要的內容，這是一個寫程式要養成的好習慣。
+
+發現印出來的東西是一個叫做 DOMTokenList 的東西。所以可以利用一個手法，來取得看看有沒有自己要的資料。
+
+```
+console.log(e.target.classList.contains('btn'));
+```
+
+.contains('搜尋的節點')，如果有回傳 true沒有則回傳 false。
+
+[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Node/contains)
+
+![已經先新增按鈕好了，當按下新增的按鈕也可以回傳](https://cdn-images-1.medium.com/max/800/1*3nEGVVHs0bAYzB5v_g8WqA.gif)
+
+_已經先新增按鈕好了，當按下新增的按鈕也可以回傳_
+
+可以看到有 btn 都會回傳 true，所以就可以利用這樣來判斷。
+
+```
+document.querySelector('.outer').addEventListener('click',
+  function (e) {
+    if (e.target.classList.contains('btn')) {
+      alert(e.target.getAttribute('data-value'));
+    };
+  }
+)
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*1ij1eDecGLRO4DBMjAV73w.gif)
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    /*.outer {
+      width: 500px;
+      height: 200px;
+      background: red;
+    }
+```
+
+```
+.inner {
+      width: 300px;
+      height: 100px;
+      background: green;
+    }*/
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='outer'>
+    <button class='add-btn'>add</button>
+    <button class='btn' data-value='1'>1</button>
+    <button class='btn' data-value='2'>2</button>
+  </div>
+  <div>
+  </div>
+  <script>
+    let num = 3;// 從三號開始
+```
+
+```
+document.querySelector('.add-btn').addEventListener('click', function () {
+      const btn = document.createElement('button'); // 創造一個 element 之後賦值給 btn
+      btn.setAttribute('class', 'btn'); //等同? btn.classList.add('btn');
+      btn.setAttribute('data-value', num); // btn 新增屬性跟屬性值
+      btn.innerText = num // 在內容新增內容 num 按鈕編號
+      num += 1;  // 新增按鈕之後要 +1 以免編號重複
+      document.querySelector('.outer').appendChild(btn); // 選擇在 .outer 底下增加
+    }
+    )
+```
+
+```
+document.querySelector('.outer').addEventListener('click',
+      function (e) {
+        if (e.target.classList.contains('btn')) {
+          alert(e.target.getAttribute('data-value'));
+        };
+      }
+    )
+```
+
+```
+</script>
+</body>
+```
+
+```
+</html>
+```
+
+```
+</html>
+```
+
+利用 event delegation，有很多好處，第一，比較有效率，只用了一個監聽器就可以監聽所有的事件。第二，是可以處理動態新增的事件，一樣可以去處理。
+
+## 綜合示範：簡易密碼產生器
+
+產生一個密碼用的工具，可以選擇要不要英文、數字、特殊符號，按了產生就會產生一個密碼出來。
+
+首先要刻介面，先弄一個選單出來，然後用標籤把選項包起來，增加使用的方便性。
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <input type='checkbox' id='en' /> <label for='en'>英文</label>
+  </div>
+  <script>
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+```
+</html>
+```
+
+還有另外一種方式，直接用 label 標籤包起來
+
+```
+<label><input type='checkbox'/> 英文 </label>
+```
+
+![測試ok](https://cdn-images-1.medium.com/max/800/1*iTOK7k75WFHtRsV5LNthuQ.gif)
+
+_測試ok_
+
+所以就增加兩組分別放數字還有特殊符號
+
+接著生產產生按鈕跟結果，所以先在結果隨便打一些字串協助排版用。CSS 也變更一下 body 的字型還有結果的背景。
+
+```
+<style>
+    body {
+      font-size: 38px;
+    }
+
+    .result {
+      background: rgba(0, 0, 0, 0.5)
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+      <div><label><input type='checkbox' name='en'/> 英文 </label></div>
+      <div><label><input type='checkbox' name='num'/> 數字 </label></div>
+      <div><label><input type='checkbox' name='sp'/> 特殊符號 </label></div>
+  </div>
+  <div>
+    <button class='btn-generate'>產生</button>
+  </div>
+  <div class='result'>s1e6s6sdf</div>
+  <script>
+  </script>
+</body>
+```
+
+![發現有個型出來了](https://cdn-images-1.medium.com/max/800/1*heW-frH33P7qa5vVEZAdRw.png)
+
+_發現有個型出來了_
+
+所以就可以來實作程式的部分
+
+先寫出監聽按鈕的部分
+
+```
+document.querySelector('.btn-generate').addEventlistener('click',
+  function () {
+  }
+)
+```
+
+接下來是要想怎麼產生這個密碼？
+
+先命名一個變數去接收這個字串
+
+先寫一個去接收程式碼去接受勾選的內容
+
+querySelector('input[name=en]') 選中 input 中 name=en 的資料，這是一種選擇器。
+
+.checked 確認 checkbox 是否被選中 [資料](http://www.w3school.com.cn/htmldom/prop_checkbox_checked.asp)
+
+選中資料的方法 [補充](https://pjchender.blogspot.com/2015/11/javascript.html)
+
+```
+document.querySelector('.btn-generate').addEventListener('click',
+  function () {
+    let availableChar = 'abc123'
+        console.log(document.querySelector('input[name=en]').checked)
+  }
+)
+```
+
+![可以顯示 true](https://cdn-images-1.medium.com/max/800/1*nOg1A8l3E6dw3gQzb9Up5A.gif)
+
+_可以顯示 true_
+
+所以就使用這個條件來判斷
+
+判斷成功就添加：於是可以寫成
+
+```
+document.querySelector('.btn-generate').addEventListener('click',
+  function () {
+    let availableChar = ''; // 用來接收產生的字串，預設空字串
+    if (document.querySelector('input[name=en]').checked) {
+      availableChar += 'abcdefghijklmnopqrstuvwxyz'
+    }
+  }
+)
+```
+
+然後多添加幾個來判斷
+
+```
+   document.querySelector('.btn-generate').addEventListener('click',
+      function () {
+        let availableChar = ''; // 用來接收產生的字串，預設空字串
+        if (document.querySelector('input[name=en]').checked) {
+          availableChar += 'abcdefghijklmnopqrstuvwxyz';
+        }
+
+        if (document.querySelector('input[name=num]').checked) {
+          availableChar += '123456789';
+        }
+
+        if (document.querySelector('input[name=sp]').checked) {
+          availableChar += '!@#$%^&*()';
+        }
+
+      alert(availableChar);
+      }
+    )
+```
+
+接著用 alert 測試看看有沒有成功
+
+![可以看到的確可以出現內容](https://cdn-images-1.medium.com/max/800/1*I9YIp0MgjAlCbG6GHDWrwQ.gif)
+
+_可以看到的確可以出現內容_
+
+可以看到都有成功添加
+
+先預設我們要產生的密碼是 10 個字元長度的字串。
+
+所以要一個變數去接收結果
+
+然後寫如何產生，
+
+Math.random() 這會產生一個 0~&lt;1 的數字，所以把它 \*10
+
+Math.random() \*10 這樣就會產生 0 ~ 9.9999999... 的數字。
+
+但我們需要整數，所以用 Math.floor
+
+```
+Math.floor(Math.random()*10)
+```
+
+這樣就可以隨機產生 0~ 9 的數字
+
+然後把 10 改成 availableChar.length 就可以取得 0 ~ availableChar.length - 1
+
+```
+Math.floor(Math.random()* availableChar.length)
+```
+
+然後把結果逐步加入利用 availableChar[] 的陣列，中間數字用上面的方式去取得，以這樣的方式來製造隨機選取其中的字元。
+
+```
+const number = Math.floor(Math.random()* availableChar.length);
+result += available.Char[number]; // 隨機選取其中一位
+```
+
+然後使用 for 迴圈取十次。
+
+```
+let result = ''
+for (let i = 0; i < 10; i += 1) {
+const number = Math.floor(Math.random()* availableChar.length);
+result += available.Char[number]; // 隨機選取其中一位
+}
+```
+
+接著再把結果回覆給 .result
+
+```
+document.querySelector('.result').innerText = result;
+```
+
+得結果：
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    body {
+      font-size: 38px;
+    }
+```
+
+```
+.result {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <div><label><input type='checkbox' name='en' /> 英文 </label></div>
+    <div><label><input type='checkbox' name='num' /> 數字 </label></div>
+    <div><label><input type='checkbox' name='sp' /> 特殊符號 </label></div>
+  </div>
+  <div>
+    <button class='btn-generate'>產生</button>
+  </div>
+  <div class='result'></div>
+  <script>
+    document.querySelector('.btn-generate').addEventListener('click',
+      function () {
+        let availableChar = ''; // 用來接收產生的字串，預設空字串
+        if (document.querySelector('input[name=en]').checked) {
+          availableChar += 'abcdefghijklmnopqrstuvwxyz';
+        }
+
+        if (document.querySelector('input[name=num]').checked) {
+          availableChar += '123456789';
+        }
+
+        if (document.querySelector('input[name=sp]').checked) {
+          availableChar += '!@#$%^&*()';
+        }
+
+        let result = '';
+        for (let i = 0; i < 10; i += 1) {
+          const number = Math.floor(Math.random() * availableChar.length);
+          result += availableChar[number]; // 隨機選取其中一位
+        }
+```
+
+```
+      document.querySelector('.result').innerText = result;
+```
+
+```
+      }
+    )
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+```
+</html>
+```
+
+[JSBIN](https://jsbin.com/finacoj/edit?html,output)
+
+記得要先勾選才可以使用哦!
+
+不然會出現 bug
+
+-
+
+接下來是優化
+
+可以把前面的三個 if 變成 function
+
+```
+function getChar(name, char) {
+  if (document.querySelector('input[name=' + name + ']').checked) {
+    return char
+  }
+}
+```
+
+接著寫 callback function 的部分
+
+```
+document.querySelector('.btn-generate').addEventListener('click',
+  function () {
+  let availableChar = '';
+  availableChar += getChar('en', 'abcdefghijklmnopqrstuvwxyz');
+  availableChar += getChar('num', '123456789');
+  availableChar += getChar('sp', '!@#$%^&*()');
+```
+
+```
+  let result = '';
+  for (let i = 0; i < 10; i += 1) {
+    const number = Math.floor(Math.random() * availableChar.length);
+    result += availableChar[number]; // 隨機選取其中一位
+  }
+```
+
+```
+  document.querySelector('.result').innerText = result;
+}
+```
+
+所以這個新增的 function 會協助去 Check，只要 check 成功，就會直接回傳這個字串。
+
+不過這樣寫會有 bug，判斷之後 false 的話會回傳 undefind，然後 undefind 會被當成字串代進去亂數取得。所以在判斷是後面加個判斷 false 時回傳空字串。
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+<meta name="description" content="[密碼產生器 v1.0]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    body {
+      font-size: 38px;
+    }
+```
+
+```
+.result {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <div><label><input type='checkbox' name='en' /> 英文 </label></div>
+    <div><label><input type='checkbox' name='num' /> 數字 </label></div>
+    <div><label><input type='checkbox' name='sp' /> 特殊符號 </label></div>
+  </div>
+  <div>
+    <button class='btn-generate'>產生</button>
+  </div>
+  <div class='result'></div>
+  <script>
+    function getChar(name, char) {
+      if (document.querySelector('input[name=' + name + ']').checked) {
+        return char;
+      } else {
+        return '';
+      }
+    }
+```
+
+```
+document.querySelector('.btn-generate').addEventListener('click',
+      function () {
+        let availableChar = '';
+        availableChar += getChar('en', 'abcdefghijklmnopqrstuvwxyz')
+        availableChar += getChar('num', '123456789')
+        availableChar += getChar('sp', '!@#$%^&*()')
+```
+
+```
+let result = '';
+        for (let i = 0; i < 10; i += 1) {
+          const number = Math.floor(Math.random() * availableChar.length);
+          result += availableChar[number]; // 隨機選取其中一位
+        }
+```
+
+```
+document.querySelector('.result').innerText = result;
+```
+
+```
+}
+    )
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+[JSBIN](https://jsbin.com/hinoruw/edit?html,output)
+
+-
+
+再次優化
+
+直接把所需要的字串放在 input 標籤裡面
+
+```
+<input type='checkbox' name='en' data-char='abcdefghijklmnopqrstuvwxyz'/>
+```
+
+接下來寫法就不一樣了，要選出所有的 input 的 checkbox
+
+```
+const elements = document.querySelectorAll('input[type=checkbox]')
+// 選擇所有的 input type 是 checkbox 的
+console.log(elements) // 會印出陣列
+// NodeList(3) [input, input, input]
+```
+
+然後就可以利用迴圈去判斷
+
+```
+for (let i = 0; i < elements.length; i += 1) {
+  if (elements.checked) {
+    availableChar += elements[i].getAttribute('data-char')
+  }
+}
+```
+
+這樣會分別判斷，所有的成功取得的 input[type=checkbox]，在這邊就是elements.length 就是 3，從零開始所以會判斷到 i =2 共三次。
+
+成功的話就把屬性 data-char 的值添加進去 availableChar
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta name="description" content="[密碼產生器 v2.1]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    body {
+      font-size: 38px;
+    }
+```
+
+```
+.result {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <div><label><input type='checkbox' name='en' data-char='abcdefghijklmnopqrstuvwxyz' /> 英文 </label></div>
+    <div><label><input type='checkbox' name='num' data-char='123456789' /> 數字 </label></div>
+    <div><label><input type='checkbox' name='sp' data-char='!@#$%^&*()' /> 特殊符號 </label></div>
+  </div>
+  <div>
+    <button class='btn-generate'>產生</button>
+  </div>
+  <div class='result'></div>
+  <script>
+    document.querySelector('.btn-generate').addEventListener('click',
+      function () {
+        let availableChar = '';
+        const elements = document.querySelectorAll('input[type=checkbox]')
+        for (let i = 0; i < elements.length; i += 1) {
+          if (elements[i].checked) {
+            availableChar += elements[i].getAttribute('data-char')
+          }
+
+        }
+```
+
+```
+let result = '';
+        for (let i = 0; i < 10; i += 1) {
+          const number = Math.floor(Math.random() * availableChar.length);
+          result += availableChar[number]; // 隨機選取其中一位
+        }
+```
+
+```
+document.querySelector('.result').innerText = result;
+```
+
+```
+}
+    )
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+[JSBIN](https://jsbin.com/kohapan/edit?html,output)
+
+-
+
+所以有好幾種方式可行，沒有誰好誰壞，每一種的好處跟壞處都不太一樣
+
+像最後一種是要新增種類的時候很方便，只需要添加新的按鈕就適用了
+
+```
+<div><label><input type='checkbox' name='num' data-char='我是中文' /> 中文 </label></div>
+```
+
+可以來這邊測試 [JSBIN](https://jsbin.com/fuwaxas/edit?html,output)
+
+## 綜合示範：動態表單通訊錄
+
+通訊錄要做的是要有個介面可以新增聯絡人，一按之後會出現一個欄位可以輸入名稱跟新增電話號碼
+
+首先要先刻出介面。所以使用 div 標籤新增按鈕
+
+```
+  <div class='app'>
+    <div> // 用 div 使隻自成一行
+      <button class='add-btn'>新增聯絡人</button>
+    </div>
+    <div class='cpntacts'>
+      <div class='row'>
+        姓名：<input name='name' />
+        電話：<input name='phone' />
+        <button>刪除</button>
+      </div>
+    </div>
+  </div>
+```
+
+那麼刪除如何實作，只要在刪除的時候，直接找到輸入的 parent 層即可
+
+新增的時候只要新增一個 row 就可以了。
+
+先寫新增的程式碼
+
+```
+  <script>
+    document.querySelector('add-btn').addEventListener('click',
+    function () {
+      document.querySelector('.contacts').appendChild()
+    }
+  )
+  </script>
+```
+
+新增的時候會一個一個 element 增加的話會不太方便，所以可以採用另外一種方法，直接命一個變數去接收，所要呈現的資料。然後使用 ES6 語法很方便的新增。
+
+```
+  <script>
+    document.querySelector('.add-btn').addEventListener('click',
+    function () {
+      const div = document.createElement('div');
+      div.classList.add('row');
+      div.innerHTML = `
+        姓名：<input name='name' />
+        電話：<input name='phone' />
+        <button>刪除</button>
+`;
+      document.querySelector('.contacts').appendChild(div)
+    }
+  )
+  </script>
+```
+
+新增需要的標籤後，直接在標籤內引入所有要的資訊 [參考資料](http://www.wibibi.com/info.php?tid=400)
+
+接下來實作刪除按鍵，一樣使用事件代理的方式。
+
+```
+  document.querySelector('.contacts').addEventListener('click',
+    function(e) {
+    }
+  )
+```
+
+然後利用一個判斷式，且試試看能不能成功
+
+```
+document.querySelector('.contacts').addEventListener('click',
+    function(e) {
+      if(e.target.classList.contains('delete')) {
+        alert('delete!')
+      }
+    }
+  )
+```
+
+這邊利用了 e.target 之後 去找相鄰的 node 有沒有 delete 有的話回傳 true 沒有的話 回傳 false [.contain()](https://developer.mozilla.org/zh-CN/docs/Web/API/Node/contains)
+
+發現可以成功之後，就是要找 e.target 的 parent
+
+如果不記得指令可以 Google "dom find parent"
+
+找到可以使用 .closest() [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/closest)
+
+就去實作測試
+
+![](https://cdn-images-1.medium.com/max/800/1*1twZGY1-kQ3u0cbl5EmqHQ.gif)
+
+發現有找到
+
+所以就可以利用這樣來寫個移除的方式
+
+```
+document.querySelector('.contacts').removeChild(
+  e.target.closest('.row')
+)
+```
+
+補充一下 .target 是永遠指向觸發事件的 DOM 物件 [MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/Event/target)
+
+```
+<!DOCTYPE html>
+<html>
+```
+
+```
+<head>
+  <meta name="description" content="[簡單通訊錄]">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>test</title>
+  <style>
+    body {
+      font-size: 38px;
+      font-family: '微軟正黑體';
+      font-weight: bold;
+    }
+```
+
+```
+.result {
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class='app'>
+    <div>
+      <button class='add-btn'>新增聯絡人</button>
+    </div>
+    <div class='contacts'>
+      <div class='row'>
+        姓名：<input name='name' />
+        電話：<input name='phone' />
+        <button class='delete'>刪除</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.querySelector('.add-btn').addEventListener('click',
+      function () {
+        const div = document.createElement('div');
+        div.classList.add('row');
+        div.innerHTML = `
+        姓名：<input name='name' />
+        電話：<input name='phone' />
+        <button class='delete'>刪除</button>
+`;
+        document.querySelector('.contacts').appendChild(div)
+      }
+    )
+```
+
+```
+document.querySelector('.contacts').addEventListener('click',
+      function (e) {
+        if (e.target.classList.contains('delete')) {
+          document.querySelector('.contacts').removeChild(
+            e.target.closest('.row')
+          )
+        }
+      }
+    )
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+![可以成功新增且移除了!](https://cdn-images-1.medium.com/max/800/1*NuCuRHGCrs9jBwZw_dI2Fg.gif)
+
+_可以成功新增且移除了!_
+
+[JSBIN](https://jsbin.com/rohunaz/edit?html,output)
+
+## 收穫：
+
+終於完成了這一章節，發現到這一章節實在很龐大，也許考慮之後會把這篇筆記拆開來？
+
+在這裡學到更多的應該是綜合應用，有很多的用法之前有講過也有的沒講過，這邊學了很多像是監聽事件，還有 callback function、冒泡與捕獲等等，都是一些很重要的機制，還有一些重要的指令，像式 stopPrapagation 跟 preventDefault 都是可以很輕易的讓我們去操作捕獲與冒泡的機制的重要指令，剩下的就是再去多熟悉那一些 e.target 的各種用法跟各式各樣的 CSS 指令，以及操作 HTML 的用法，在這之中我也花了很多時間去查證資料，還有驗證使用方式，這真的學到滿多，還有一點是有一些英文單字我也花時間去適應XD，所以收穫滿多的。

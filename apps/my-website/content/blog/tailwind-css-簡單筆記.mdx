@@ -1,0 +1,109 @@
+---
+title: "Tailwind CSS 簡單筆記"
+slug: "tailwind-css-簡單筆記"
+description: "前言"
+date: 2021-08-13T09:27:26.054Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/tailwind-css-%E7%B0%A1%E5%96%AE%E7%AD%86%E8%A8%98-460f101bf945"
+---
+
+## 前言
+
+在之前被人推坑了 Tailwind，說很方便很好寫，但因為疫情的關係加上自己從前前份工作以來到現在工作滿久了(八年多)，心裡就也想說要稍微休息一下，於是就部落格就暫時處於停更的狀態，當然其實是自己有點偷懶，所以就暫時比較沒進度。
+
+而現在因為也該開始把自己的字典做出一點進度了，所以就回來開始學習 Tailwind 的用法。
+
+## 簡單說明
+
+在傳統上我們習慣的撰寫 CSS 如下，通常都會用另外一個檔案來寫：
+
+```
+App.css
+```
+
+```
+.app {
+  margin: 12px;
+}
+```
+
+而在 Tailwind 上是由許多已經建構好的 class name，它們已經內建好這些樣式了，所以只要直接使用即可，而且這樣的好處是，你可以看了就知道這個標籤有哪些的樣式，按照上方相同的例子如下：
+
+```
+App.html 的某個部份
+  <div class="app m-1">
+    ...
+  </div>
+```
+
+可以看到這個 `m-1` 這個在 tailwind 上就是指 0.25rem 也就是 4px 的大小。[參考](https://tailwindcss.com/docs/margin)
+
+在我自己稍微學習一下，我覺得這個特點簡直太棒了，這樣我在撰寫就不用一直去針對每一個 class name 去做調整了，而 Tailwind 的強勢點遠遠不只如此。這個特性在各個常用的屬性都有。
+
+會有這樣的特性 Tailwind 是一個 Utility First 的 CSS 框架，他可以用來搭配像是 Vue、React 等等等的框架做使用。
+
+### 所謂的 Utility First 是什麼呢？
+
+Utility 在[英文的解釋](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/utility?q=Utility)中有**公用設施**的意思，所以在這邊衍生變成以共用的 class name 為主。所以在 Tailwind 中已經把常用的那些 CSS 屬性都用一個 class name 打包好，而我們在使用的時候，只要寫上這些 class name 就好。
+
+而這樣的好處是可以一眼清楚看到這個標籤有什麼樣的屬性。另外一個好處，因為他已經把那些共用的部份都寫起來了，所以我們在寫就不需要一一針對每一個 Class name 去寫好所有的屬性。在之前寫法可能是如下：
+
+```
+App.css
+.app {
+  width: 20rem;
+  margin:0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+```
+
+在 Tailwind 則可以寫成
+
+```
+App.html 的某個部份
+  <div class="w-80 mx-auto my-0 flex flex-col items-center">
+    ...
+  </div>
+```
+
+但這樣又可以說，這樣其實長得很像 inline-style 不是嗎？
+
+而其實細想一下，如果真的把全部都寫出來，那這樣就會變成頗長的標籤了，所以我們在此之前的作法都會是另外開個檔案寫，幾乎不會直接寫 inline-style，而這樣看來 Tailwind 的長度會比較簡潔一些，比較讓人可以接受。
+
+### Hover, focus 等等的狀態變化
+
+而另外一個特點是 Tailwind 可以直接在 class name 上面做 hover。
+
+在撰寫 CSS 的方式上，原來我們是要另外寫 Hover 的狀態。
+
+```
+.app {
+  Height: 10rem;
+  width: 20rem;
+  background-color: rgba(254, 242, 242, 1);
+}
+```
+
+```
+.app:hover {
+  background-color: rgba(239, 246, 255, 1);
+}
+```
+
+像是這個 app，我們需要他的背景在 Hover 的時候變成藍色，就會直接在下面多寫一個 Hover 的狀態。
+
+在 Tailwind 中就可以改成
+
+```
+App.html 的某個部份
+  <div class="h-40 w-80 bg-red-50 hover:bg-blue-50">
+    ...
+  </div>
+```
+
+這樣寫起來整個就是比較簡潔，又容易懂。
+
+像我是以寫 React 為主的人，這下就很方便使用，我可能不太需要在針對一個 Component 而另外去開一個 CSS 的檔案，直接通通寫在 jsx 檔上即可。

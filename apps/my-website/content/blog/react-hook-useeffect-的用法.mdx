@@ -1,0 +1,63 @@
+---
+title: "React hook: useEffect 的用法"
+slug: "react-hook-useeffect-的用法"
+description: "useEffect 的用法跟注意事項"
+date: 2020-02-20T13:30:41.161Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-hook-useeffect-%E7%9A%84%E7%94%A8%E6%B3%95-325ef5f0924f"
+---
+
+## 前言
+
+之前學習的時候，剛好看到一篇有介紹相當於的用法，所以才學會怎麼使用。
+
+取自於這篇，為了以後方便自己遺忘的時候找回記憶，所以特別寫一篇
+
+也因為有很多用法我沒有嘗試過，所以先紀錄下來，之後再來對照使用。
+
+## 什麼是 useEffect？
+
+在 functional component 用來取代 lifecycle 的方式。
+
+基本結構是
+
+```
+useEffect(() => {
+  effect
+  return () => {
+    cleanup
+  };
+}, [input]);
+```
+
+傳入 `useEffect` 的參數有兩個，第一個是 function，第二個是一個陣列，用來指定需要觀察的變數。這個陣列代表的是這個 effect 的 dependency，`useEffect` 就是依賴第二項的陣列來關注需不需要執行。
+
+使用上，第二個陣列是空陣列就代表沒有 dependency，也就是只會執行一次，分別代表：
+
+```
+useEffect(() => {
+    console.log('This is like componentDidMount')
+    return () => {
+      console.log('This is like componentWillUnmount')
+    };
+  }, []);
+```
+
+在這邊寫在 `useEffect` 內的 function 就類似是 componentDidMount ，而 `return` 的 function 則是在 componentWillUnmount 會執行的 function，通過這樣就可以實現兩種常用的 lifecycle
+
+而當有 dependency 的時候，也就是第二個陣列有內容的時候。
+
+```
+useEffect(() => {
+    console.log('This is like componentDidUpdate')
+},[input1, input2])
+```
+
+這樣就可以實現 componentDidUpdate 了，當放在 [input1, input2] 內的值，有變化的時候，就會觸發這個 `useEffect` 的 function 了。
+
+## 使用注意事項
+
+陣列不能傳入會一直變化的變數，否則會一直不停的執行，就會變成無限迴圈。
+
+但很容易發生這種情況，但當真的一定要有會造成無限迴圈的內容需要傳入的時候，就需要搭配 `useCallback` 使用。

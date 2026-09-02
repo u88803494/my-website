@@ -1,0 +1,100 @@
+---
+title: "git 同步非榜定 repository 的方法"
+slug: "git-同步非榜定-repository-的方法"
+description: "前言"
+date: 2019-08-09T06:11:38.537Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*kcngYcv4RIhWwbSmOruuNA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/git-%E5%90%8C%E6%AD%A5%E9%9D%9E%E6%A6%9C%E5%AE%9A-repository-%E7%9A%84%E6%96%B9%E6%B3%95-ecb667330528"
+---
+
+## 前言
+
+寫這篇是因為再跟 [Huli](https://medium.com/u/f1fb3e40dc37) 課程的關係，有時候會需要同步老師的 repository，所以寫下這篇作為紀錄，免得自己下次要做的時候又忘記。
+
+因為我們是從老師的 repository 另外分支出來之後在自己建立 repository，這樣就有自己專屬的作業區。
+
+[老師的 repository](https://github.com/Lidemy/mentor-program-3rd)
+
+[我的 repository](https://github.com/Lidemy/mentor-program-3rd-u88803494)
+
+但老師的課程並不是一開始就很完善，所以後續都會有一些更新。這種時候就需要更新或者是同步老師的檔案
+
+## 怎麼做呢？
+
+### 1. 先在 command line 開一個 branch
+
+```
+git branch update
+```
+
+名稱可以任意取，之前還有取 up-to-date 感覺更符合，不過我以為是有錯的所以後來改掉XD
+
+然後不要忘記切換到該分支
+
+```
+git checkout update
+```
+
+![切換了](https://cdn-images-1.medium.com/max/800/1*VRol2uIcG61H-jZ4IABPYg.png)
+
+_切換了_
+
+切換完成之後就可以往下走了
+
+### 2. 取得目標網址
+
+首先要到 [老師的 repository](https://github.com/Lidemy/mentor-program-3rd) 去點選 clone or download 取得網址
+
+![](https://cdn-images-1.medium.com/max/800/1*kcngYcv4RIhWwbSmOruuNA.png)
+
+### 3. pull 下來
+
+然後打開 Command line 輸入 git pull “目標位置“ “目標的 branch”
+
+> 現在發現我可能搞錯這段指令的意思，所以才會一直忘記要怎麼做，變成只是按照之前指導的一直照做在提交作業XD。解開疑惑的感覺真好。
+
+因為這邊要同步的是 目標網址的 master 所以可以寫成：
+
+```
+git pull https://github.com/Lidemy/mentor-program-3rd.git master
+```
+
+![成功 pull 了](https://cdn-images-1.medium.com/max/800/1*pcISj3F1CD_nvE89CMT9CA.png)
+
+_成功 pull 了_
+
+成功之後，就可以上傳。
+
+### 4. push
+
+輸入 git push “上傳來源地” “要上傳的來源分支名稱”，在這邊就是：
+
+```
+git push origin update
+```
+
+origin 是原本的意思，應該就是指綁定的 repository
+
+![同樣成功了](https://cdn-images-1.medium.com/max/800/1*fHmN5fhmRUcOCqoQXnDcNw.png)
+
+_同樣成功了_
+
+### 5. merge
+
+到榜定的 repository 也就是[我的 repository](https://github.com/Lidemy/mentor-program-3rd-u88803494) 按下 merge 的 pull request，接著在自己確認 merge 即可。這邊就不多說明了，這個很常做本來就會XD
+
+然後就大功告成了。
+
+## 結語
+
+原來我之前一直搞錯意思，我之前把 git push/pull 後面接的兩個指令搞錯意思，我一直以為一個是來源一個是目的，就有點像 A to B 這樣，但這樣測試下來之後才發現整段指令的意思並不是這樣的。
+
+這個指令的意思是要先開一個分支，然後下的指令會根據這個分支而有所改變。假設新開的分支叫做 Z ，那麼：
+
+如果是 pull 的話，輸入 git pull A B 意思就是下載 目標 A 底下的 B 分支到 本機的 Z 分支。
+
+如果是 push 的話，輸入 git pull origin Z 意思就是把 Z 上傳到榜定的 repository。
+
+[參考](https://gitbook.tw/chapters/github/push-to-github.html)

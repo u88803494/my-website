@@ -1,0 +1,124 @@
+---
+title: "JavaScript 進階： npm"
+slug: "javascript-進階-npm"
+description: "什麼是 npm ？"
+date: 2019-05-05T06:46:56.446Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E9%80%B2%E9%9A%8E-npm-abf96671c915"
+---
+
+## 什麼是 npm ？
+
+Node Package Manager, npm. **node 套件管理系統**
+
+> **npm**（全稱 Node Package Manager，即「node包管理器」）是[Node.js](https://zh.wikipedia.org/wiki/Node.js)預設的、以[JavaScript](https://zh.wikipedia.org/wiki/JavaScript)編寫的[軟體套件管理系統](https://zh.wikipedia.org/wiki/%E8%BB%9F%E9%AB%94%E5%A5%97%E4%BB%B6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%B5%B1)。
+
+> by wiki
+
+當寫好一個功能的時候，可以包裝成一個 package 然後上傳給別人使用。
+
+可以直接使用別人寫好的功能，就不用自己在重寫一次了。
+
+[npm 官方網站](https://www.npmjs.com/)
+
+## npm install
+
+試著在 npm 上面找到一個 module 來安裝
+
+[npm 官方網站](https://www.npmjs.com/)
+
+[left-pad](https://www.npmjs.com/package/left-pad) 上面提供很多資訊，像是用途、範例、GitHub 等等資訊，最重要的安裝指令，只要在 Command line 上面輸入安裝指令，以這邊來說是 npm i left-pad 就會安裝這個指令，就會在資料夾下面安裝這個指令，可以用 ls 指令來確認，卻時會多個資料夾，npm 會把所有抓下來的東西放在這個資料夾裡面。
+
+### 引用方法：
+
+```
+var leftpad = require('left-pad')
+```
+
+```
+console.log(leftpad(123, 10, '0'))
+// 0000000123
+```
+
+require 指令其實非常聰明，不一定要完整輸入，在這邊輸入這樣的話，會自動去找當前的資料夾，或是找更底部的資料夾有沒有這個名稱的內容。
+
+假設我 module 裝了一百種，要上傳給 GitHub 會佔據太多空間，而且別人也可以自行從 npm 下載，所以需要把這個資訊給存下來，之後就可以提供別人自己有安裝這個的資訊。
+
+### 安裝方法：
+
+使用方法是要先 npm 初始化
+
+npm init 會出現一堆資訊要輸入，可以按 enter 直接略過，最後輸入 yes 就會多的檔案叫做 package.json ，其實就會寫入了，"dependencies" 的內容就會寫出有哪些 module。
+
+之後就可以用 npm install left-pad - -save 來安裝並儲存 left-pad 這個外部 module。
+
+> 補充資訊：
+
+> 從 npm 5 以後， - - save 就已經變成預設的選項了，因此 npm install 不加 - -save 也是可以的喔，一樣會把資訊寫到 package.json 裡面去！
+
+> package.json 類似物件的形式，只是它的 key 一定要用雙引號
+
+所以當別人拿到這個專案沒有 module 資料庫(library)的時候，它只要有這些檔案，跟 package.json 就可以直接輸入 npm install，就會根據 ”dependencies” 有些甚麼內容，就會安裝那些 module(library)。
+
+所以可以利用 .gitignore 來忽略那些 module(library)，以免上傳過大的資料，造成別人下載太久的困擾。
+
+所以只要當發現錯誤資訊有 Cannot find module 的時候，就可以使用 npm install 把 library 安裝上去。
+
+npm install left-pad - -save -dev 就會把儲存 module 資訊到 “devDependencies” 這個是只有開發的時候會用到的 library，不過一般來說混用也沒差異，這只是要方便分別而已，而 package.json 也只是記錄了這個資料夾的專案有哪些資訊而已。
+
+心得：在這邊才知道原來是這樣使用這些別人寫好的函式，所以才會有 left-pad 的那種爭議，用這種模式來運行真的實在太方便了，所以現在程式越來越發達也是因為這種原因，我們才會有各種越來越強大以及穩定的程式。
+
+## npm scripts
+
+### package.json 內的 "scripts"(腳本)：
+
+寫好一些指令，當用 npm 來執行的時候，就會執行後面寫好的指令。
+
+```
+"指令名稱": "輸出的指令"
+ex:
+"start": "node index.js",
+```
+
+```
+package.json: // 先寫好 scripts
+```
+
+```
+"scripts": {
+ "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+```
+
+執行時：npm run + 指令名稱
+
+```
+λ npm run start
+```
+
+```
+> jslearn@1.0.0 start D:\Software\cmder\Jslearn
+> node index.js
+```
+
+```
+0000000123
+```
+
+所以這個功能可以，幫我們簡化一些常常輸入的指令，就不需要輸入這麼多指令。通常最常用的功能是 start 後面放一些如何使專案跑起來的指令
+
+## yarn：npm 以外的另一種選擇
+
+有中文介面: https://yarnpkg.com/zh-Hant/
+
+一個由 FB 開發比較快的 npm，用起來其實差不多的。
+
+npm install = yarn 就可以安裝，所有需要的 module & library
+
+npm install left-pad - -save = yarn add left-pad 就可以安裝了
+
+npm run start = yarn run start 使用 package.json 寫好的 Scripts
+
+收穫：這些就是方便好用的工具，也確實需要 yarn 這種競爭對手來跟 npm 打對台，這樣才不會有一家獨大的情況產生。在這邊才知道原來是這樣使用這些別人寫好的函式，所以才會有 left-pad 的那種爭議，用這種模式來運行真的實在太方便了，所以現在程式越來越發達也是因為這種原因，我們才會有各種越來越強大以及穩定的程式。
