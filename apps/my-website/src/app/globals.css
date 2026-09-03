@@ -119,3 +119,51 @@ body {
 .streamdown-content a:hover {
   @apply opacity-80;
 }
+
+/* Blog article code blocks (rehype-pretty-code output) */
+figure[data-rehype-pretty-code-figure] {
+  @apply relative my-6 overflow-hidden rounded-lg;
+}
+
+figure[data-rehype-pretty-code-figure] pre {
+  @apply overflow-x-auto p-4 text-sm leading-relaxed;
+}
+
+figure[data-rehype-pretty-code-figure] [data-line] {
+  @apply px-0;
+}
+
+figure[data-rehype-pretty-code-figure] button[data-copy-button] {
+  @apply absolute top-2 right-2 rounded px-2 py-1 text-xs text-white/60 opacity-0 transition-opacity;
+  background: rgb(255 255 255 / 0.08);
+}
+
+figure[data-rehype-pretty-code-figure]:hover button[data-copy-button],
+figure[data-rehype-pretty-code-figure] button[data-copy-button]:focus-visible {
+  @apply opacity-100;
+}
+
+@media (hover: none) {
+  figure[data-rehype-pretty-code-figure] button[data-copy-button] {
+    @apply opacity-100;
+  }
+}
+
+figure[data-rehype-pretty-code-figure] button[data-copy-button]:hover {
+  @apply text-white/90;
+  background: rgb(255 255 255 / 0.16);
+}
+
+figure[data-rehype-pretty-code-figure] button[data-copy-button].is-copied {
+  @apply text-emerald-300 opacity-100;
+}
+
+/* The button has no text child node (see rehype-copy-button.ts) — visible text is
+   entirely driven by ::after, toggled via the .is-copied class */
+figure[data-rehype-pretty-code-figure] button[data-copy-button]::after {
+  content: "複製";
+}
+
+figure[data-rehype-pretty-code-figure] button[data-copy-button].is-copied::after {
+  content: "已複製";
+}

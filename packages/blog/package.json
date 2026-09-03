@@ -12,7 +12,12 @@
     "lint": "eslint src --fix",
     "check-types": "tsc --noEmit"
   },
+  "dependencies": {
+    "@packages/shared": "workspace:*"
+  },
   "peerDependencies": {
+    "framer-motion": "^12",
+    "lucide-react": "^0.552.0",
     "next": "^16",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

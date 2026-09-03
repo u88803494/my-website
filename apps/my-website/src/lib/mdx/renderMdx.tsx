@@ -21,8 +21,21 @@ import * as runtime from "react/jsx-runtime";
  * runtime, or keeping external content out of this pipeline entirely).
  */
 function useMdxComponent(code: string): ComponentType {
-  const fn = new Function(code);
-  return fn(runtime).default;
+  try {
+    const fn = new Function(code);
+    return fn(runtime).default;
+  } catch (error) {
+    console.error("Failed to compile MDX:", error);
+    // Fallback: return error component instead of crashing
+    const ErrorComponent = () => (
+      <div className="rounded border border-red-200 bg-red-50 p-4 text-red-700">
+        <p className="font-bold">Error loading article content</p>
+        <p className="text-sm">{error instanceof Error ? error.message : "Unknown error"}</p>
+      </div>
+    );
+    ErrorComponent.displayName = "MDXErrorFallback";
+    return ErrorComponent;
+  }
 }
 
 interface MdxContentProps {

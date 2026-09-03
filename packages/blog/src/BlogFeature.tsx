@@ -7,16 +7,17 @@ interface BlogFeatureProps {
 
 export function BlogFeature({ posts }: BlogFeatureProps) {
   return (
-    <div className="space-y-12">
+    <div className="mx-auto max-w-2xl space-y-12 px-4 py-12">
       {/* Hero */}
       <div className="space-y-4">
-        <h1 className="text-4xl font-bold">Blog</h1>
-        <p className="text-base-content/70 text-lg">想法、筆記與技術分享。</p>
+        <h1 className="text-4xl font-bold">部落格</h1>
+        <p className="text-base-content/70 text-lg">軟體工程、AI 應用與職涯成長的觀察與紀錄。</p>
       </div>
 
-      {/* Articles Grid */}
+      {/* Articles: a single-column, text-only editorial list, matching the article
+          page's minimal tone */}
       {posts.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div>
           {posts.map((post) => (
             <ArticleCard key={post.slug} post={post} />
           ))}
