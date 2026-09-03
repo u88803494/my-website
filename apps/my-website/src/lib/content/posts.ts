@@ -12,12 +12,20 @@ import { formatDateISO8601, formatDateLocalized, formatDateSimple } from "@/lib/
 import type { Post } from "#site/content";
 
 /**
- * Returns all non-draft posts, sorted by date descending.
+ * Returns all posts, sorted by date descending. Drafts are included in
+ * development only, and always sort below published posts.
+ *
+ * Medium's export carries no date for drafts, so they all fall back to the
+ * export date — newer than every real post, which would otherwise bury the
+ * actual content under them in the dev listing.
  */
 export function getAllPosts(): Post[] {
   return (allPostsData as Post[])
     .filter((post) => process.env.NODE_ENV === "development" || !post.draft)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => {
+      if (a.draft !== b.draft) return a.draft ? 1 : -1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 }
 
 /**
