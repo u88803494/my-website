@@ -36,7 +36,7 @@ Diataxis framework 根據使用者需求將文件分為四種類型：
 - [Development Setup](./guides/development-setup.md) - 設定本地開發環境
 - [Structured Logging](./guides/structured-logging.md) - Logger 系統使用與最佳實踐
 - [Issue Management](./guides/issue-management.md) - P0-P3 優先級系統
-- [Medium Article Sync](./guides/medium-article-sync.md) - 文章自動解析與同步
+- [Medium to MDX Migration](./guides/medium-article-sync.md) - Medium 匯出檔轉 MDX 與已知限制
 - Deployment - 部署到正式環境 _(規劃中)_
 - Contributing - 如何貢獻此專案 _(規劃中)_
 
