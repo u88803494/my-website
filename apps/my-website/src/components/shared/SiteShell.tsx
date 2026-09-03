@@ -22,7 +22,10 @@ const SiteShell: React.FC<SiteShellProps> = ({ children, chrome, navigationMode 
           <Navbar contactLabel={chrome.contactLabel} navigationMode={navigationMode} routes={chrome.routes} />
         </div>
         <NProgressBar />
-        <main className="flex-1 overflow-x-hidden pt-16">{children}</main>
+        {/* overflow-x-clip (not hidden): browsers force an unset overflow-y to compute as
+            auto when overflow-x is non-visible, which turns main into its own scroll
+            container and breaks position:sticky for every descendant inside it */}
+        <main className="flex-1 overflow-x-clip pt-16">{children}</main>
         <div lang={chrome.locale}>
           <ConditionalFooter content={chrome.footer} locale={chrome.locale} />
         </div>

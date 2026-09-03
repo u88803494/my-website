@@ -147,12 +147,24 @@ importers:
       react-intersection-observer:
         specifier: ^10.0.0
         version: 10.0.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      rehype-pretty-code:
+        specifier: 0.14.5
+        version: 0.14.5(shiki@3.20.0)
+      rehype-slug:
+        specifier: 6.0.0
+        version: 6.0.0
+      shiki:
+        specifier: 3.20.0
+        version: 3.20.0
       streamdown:
         specifier: ^1.6.10
         version: 1.6.10(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2)(react@19.2.3)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.4.0
+      unist-util-visit:
+        specifier: 5.1.0
+        version: 5.1.0
       zod:
         specifier: ^4.3.2
         version: 4.3.2
@@ -169,6 +181,9 @@ importers:
       "@tailwindcss/postcss":
         specifier: ^4.1.16
         version: 4.1.18
+      "@types/hast":
+        specifier: 3.0.5
+        version: 3.0.5
       "@types/jsdom":
         specifier: ^27.0.0
         version: 27.0.0
@@ -308,6 +323,10 @@ importers:
         version: 5.8.3
 
   packages/blog:
+    dependencies:
+      "@packages/shared":
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       "@packages/eslint-config":
         specifier: workspace:*
@@ -446,6 +465,9 @@ importers:
 
   packages/tailwind-config:
     dependencies:
+      "@tailwindcss/typography":
+        specifier: 0.5.20
+        version: 0.5.20(tailwindcss@4.1.18)
       daisyui:
         specifier: ^5.0.43
         version: 5.5.14
@@ -2287,6 +2309,14 @@ packages:
         integrity: sha512-Ce0GFnzAOuPyfV5SxjXGn0CubwGcuDB0zcdaPuCSzAa/2vII24JTkH+I6jcbXLb1ctjZMZZI6OjDaLPJQL1S0g==,
       }
 
+  "@tailwindcss/typography@0.5.20":
+    resolution:
+      {
+        integrity: sha512-hwbzQuNUfcPvbegQFatVPl/MY/tcM9KLl963hQ5laJKPh81TEZ1+dNG9PirGvcaDBkp+BCshExAyKVPW91dozw==,
+      }
+    peerDependencies:
+      tailwindcss: ">=3.0.0 || >=4.0.0 || insiders"
+
   "@tanstack/query-core@5.83.1":
     resolution:
       {
@@ -2541,10 +2571,10 @@ packages:
         integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==,
       }
 
-  "@types/hast@3.0.4":
+  "@types/hast@3.0.5":
     resolution:
       {
-        integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==,
+        integrity: sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g==,
       }
 
   "@types/jsdom@27.0.0":
@@ -3631,6 +3661,14 @@ packages:
         integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==,
       }
     engines: { node: ">= 6" }
+
+  cssesc@3.0.0:
+    resolution:
+      {
+        integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==,
+      }
+    engines: { node: ">=4" }
+    hasBin: true
 
   cssstyle@5.3.5:
     resolution:
@@ -4845,6 +4883,12 @@ packages:
     engines: { node: ">=16" }
     hasBin: true
 
+  github-slugger@2.0.0:
+    resolution:
+      {
+        integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==,
+      }
+
   glob-parent@5.1.2:
     resolution:
       {
@@ -4978,6 +5022,12 @@ packages:
         integrity: sha512-3kxEVkEKt0zvcZ3hCRYI8rqrgwtlIOFMWkbclACvjlDw8Li9S2hk/d51OI0nr/gIpdMHNepwgOKqZ/sy0Clpyg==,
       }
 
+  hast-util-heading-rank@3.0.0:
+    resolution:
+      {
+        integrity: sha512-EJKb8oMUXVHcWZTDepnr+WNbfnXKFNf9duMesmr4S8SXTJBJ9M4Yok08pu9vxdJwdlGRhVumk9mEhkEvKGifwA==,
+      }
+
   hast-util-is-element@3.0.0:
     resolution:
       {
@@ -5018,6 +5068,12 @@ packages:
     resolution:
       {
         integrity: sha512-MlWT6Pjt4CG9lFCjiz4BH7l9wmrMkfkJYCxFwKQic8+RTZgWPuWxwAfjJElsXkex7DJjfSJsQIt931ilUgmwdA==,
+      }
+
+  hast-util-to-string@3.0.1:
+    resolution:
+      {
+        integrity: sha512-XelQVTDWvqcl3axRfI0xSeoVKzyIFPwsAGSLIsKdJKQMXDYJS4WYrBNF/8J7RdhIcFI2BOHgAifggsvsxp/3+A==,
       }
 
   hast-util-to-text@4.0.2:
@@ -6548,16 +6604,16 @@ packages:
       }
     engines: { node: ">=18" }
 
-  oniguruma-parser@0.12.1:
+  oniguruma-parser@0.12.2:
     resolution:
       {
-        integrity: sha512-8Unqkvk1RYc6yq2WBYRj4hdnsAxVze8i7iPfQr8e4uSP3tRv0rpZcbGUDvxfQQcdwHt/e9PrMvGCsa8OqG9X3w==,
+        integrity: sha512-6HVa5oIrgMC6aA6WF6XyyqbhRPJrKR02L20+2+zpDtO5QAzGHAUGw5TKQvwi5vctNnRHkJYmjAhRVQF2EKdTQw==,
       }
 
-  oniguruma-to-es@4.3.4:
+  oniguruma-to-es@4.3.6:
     resolution:
       {
-        integrity: sha512-3VhUGN3w2eYxnTzHn+ikMI+fp/96KoRSVK9/kMTcFqj1NRDh2IhQCKvYxDnWePKRXY/AqH+Fuiyb7VHSzBjHfA==,
+        integrity: sha512-csuQ9x3Yr0cEIs/Zgx/OEt9iBw9vqIunAPQkx19R/fiMq2oGVTgcMqO/V3Ybqefr1TBvosI6jU539ksaBULJyA==,
       }
 
   optionator@0.9.4:
@@ -6627,6 +6683,12 @@ packages:
         integrity: sha512-ayCKvm/phCGxOkYRSCM82iDwct8/EonSEgCSxWxD7ve6jHggsFl4fZVQBPRNgQoKiuV/odhFrGzQXZwbifC8Rg==,
       }
     engines: { node: ">=8" }
+
+  parse-numeric-range@1.3.0:
+    resolution:
+      {
+        integrity: sha512-twN+njEipszzlMJd4ONUYgSfZPDxgHhT9Ahed5uTigpQn90FggW4SA/AIPq/6a149fTbE9qBEcSwE3FAEp6wQQ==,
+      }
 
   parse5-htmlparser2-tree-adapter@7.1.0:
     resolution:
@@ -6775,6 +6837,13 @@ packages:
         integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==,
       }
     engines: { node: ">= 0.4" }
+
+  postcss-selector-parser@6.0.10:
+    resolution:
+      {
+        integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==,
+      }
+    engines: { node: ">=4" }
 
   postcss@8.4.31:
     resolution:
@@ -7061,6 +7130,21 @@ packages:
         integrity: sha512-OiM2wrZ/wuhKkigASodFoo8wimG3H12LWQaH8qSPVJn9apWKFSH3YOCtbKpBorTVw/eI7cuT21XBbvwEswbIOA==,
       }
 
+  rehype-parse@9.0.1:
+    resolution:
+      {
+        integrity: sha512-ksCzCD0Fgfh7trPDxr2rSylbwq9iYDkSn8TCDmEJ49ljEUBxDVCzCHv7QNzZOfODanX4+bWQ4WZqLCRWYLfhag==,
+      }
+
+  rehype-pretty-code@0.14.5:
+    resolution:
+      {
+        integrity: sha512-+DhMMNMgOwmE0xu2RmagN63nR0GRObPIQ9TuoNdUYYIDcCr8nWXU1CJUG6yca7vg99Gp5d+62A/+ZvksmsQXjA==,
+      }
+    engines: { node: ">=18" }
+    peerDependencies:
+      shiki: ^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0
+
   rehype-raw@7.0.0:
     resolution:
       {
@@ -7071,6 +7155,12 @@ packages:
     resolution:
       {
         integrity: sha512-lqA4rGUf1JmacCNWWZx0Wv1dHqMwxzsDWYMTowuplHF3xH0N/MmrZ/G3BDZnzAkRmxDadujCjaKM2hqYdCBOGw==,
+      }
+
+  rehype-slug@6.0.0:
+    resolution:
+      {
+        integrity: sha512-lWyvf/jwu+oS5+hL5eClVd3hNdmwM1kAC0BUvEGD19pajQMIzcNUd/k9GsfQ+FfECvX+JE+e9/btsKH0EjJT6A==,
       }
 
   remark-cjk-friendly-gfm-strikethrough@1.2.3:
@@ -8035,10 +8125,10 @@ packages:
         integrity: sha512-goh1s1TBrqSqukSc8wrjwWhL0hiJxgA8m4kFxGlQ+8FYQ3C/m11FcTs4YYem7V664AhHVvgoQLk890Ssdsr2IQ==,
       }
 
-  unist-util-visit@5.0.0:
+  unist-util-visit@5.1.0:
     resolution:
       {
-        integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==,
+        integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==,
       }
 
   unrs-resolver@1.11.1:
@@ -8060,6 +8150,12 @@ packages:
       }
     peerDependencies:
       react: ~19.2.3
+
+  util-deprecate@1.0.2:
+    resolution:
+      {
+        integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==,
+      }
 
   uuid@11.1.0:
     resolution:
@@ -9046,7 +9142,7 @@ snapshots:
     dependencies:
       "@types/estree": 1.0.8
       "@types/estree-jsx": 1.0.5
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdx": 2.0.14
       acorn: 8.15.0
       collapse-white-space: 2.1.0
@@ -9067,7 +9163,7 @@ snapshots:
       unified: 11.0.5
       unist-util-position-from-estree: 2.0.0
       unist-util-stringify-position: 4.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
     transitivePeerDependencies:
       - supports-color
@@ -9214,14 +9310,14 @@ snapshots:
     dependencies:
       "@shikijs/types": 3.20.0
       "@shikijs/vscode-textmate": 10.0.2
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       hast-util-to-html: 9.0.5
 
   "@shikijs/engine-javascript@3.20.0":
     dependencies:
       "@shikijs/types": 3.20.0
       "@shikijs/vscode-textmate": 10.0.2
-      oniguruma-to-es: 4.3.4
+      oniguruma-to-es: 4.3.6
 
   "@shikijs/engine-oniguruma@3.20.0":
     dependencies:
@@ -9239,7 +9335,7 @@ snapshots:
   "@shikijs/types@3.20.0":
     dependencies:
       "@shikijs/vscode-textmate": 10.0.2
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
 
   "@shikijs/vscode-textmate@10.0.2": {}
 
@@ -9328,6 +9424,11 @@ snapshots:
       "@tailwindcss/node": 4.1.18
       "@tailwindcss/oxide": 4.1.18
       postcss: 8.5.6
+      tailwindcss: 4.1.18
+
+  "@tailwindcss/typography@0.5.20(tailwindcss@4.1.18)":
+    dependencies:
+      postcss-selector-parser: 6.0.10
       tailwindcss: 4.1.18
 
   "@tanstack/query-core@5.83.1": {}
@@ -9487,7 +9588,7 @@ snapshots:
 
   "@types/geojson@7946.0.16": {}
 
-  "@types/hast@3.0.4":
+  "@types/hast@3.0.5":
     dependencies:
       "@types/unist": 3.0.3
 
@@ -10135,6 +10236,8 @@ snapshots:
       source-map-js: 1.2.1
 
   css-what@6.2.2: {}
+
+  cssesc@3.0.0: {}
 
   cssstyle@5.3.5:
     dependencies:
@@ -11076,6 +11179,8 @@ snapshots:
       meow: 12.1.1
       split2: 4.2.0
 
+  github-slugger@2.0.0: {}
+
   glob-parent@5.1.2:
     dependencies:
       is-glob: 4.0.3
@@ -11127,20 +11232,20 @@ snapshots:
 
   hast-util-from-dom@5.0.1:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       hastscript: 9.0.1
       web-namespaces: 2.0.1
 
   hast-util-from-html-isomorphic@2.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       hast-util-from-dom: 5.0.1
       hast-util-from-html: 2.0.3
       unist-util-remove-position: 5.0.0
 
   hast-util-from-html@2.0.3:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       devlop: 1.1.0
       hast-util-from-parse5: 8.0.3
       parse5: 7.3.0
@@ -11149,7 +11254,7 @@ snapshots:
 
   hast-util-from-parse5@8.0.3:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/unist": 3.0.3
       devlop: 1.1.0
       hastscript: 9.0.1
@@ -11158,17 +11263,21 @@ snapshots:
       vfile-location: 5.0.3
       web-namespaces: 2.0.1
 
+  hast-util-heading-rank@3.0.0:
+    dependencies:
+      "@types/hast": 3.0.5
+
   hast-util-is-element@3.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
 
   hast-util-parse-selector@4.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
 
   hast-util-raw@9.1.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/unist": 3.0.3
       "@ungap/structured-clone": 1.3.0
       hast-util-from-parse5: 8.0.3
@@ -11177,7 +11286,7 @@ snapshots:
       mdast-util-to-hast: 13.2.1
       parse5: 7.3.0
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
       web-namespaces: 2.0.1
       zwitch: 2.0.4
@@ -11186,7 +11295,7 @@ snapshots:
     dependencies:
       "@types/estree": 1.0.8
       "@types/estree-jsx": 1.0.5
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       comma-separated-tokens: 2.0.3
       devlop: 1.1.0
       estree-util-attach-comments: 3.0.0
@@ -11205,7 +11314,7 @@ snapshots:
 
   hast-util-to-html@9.0.5:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/unist": 3.0.3
       ccount: 2.0.1
       comma-separated-tokens: 2.0.3
@@ -11220,7 +11329,7 @@ snapshots:
   hast-util-to-jsx-runtime@2.3.6:
     dependencies:
       "@types/estree": 1.0.8
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/unist": 3.0.3
       comma-separated-tokens: 2.0.3
       devlop: 1.1.0
@@ -11239,7 +11348,7 @@ snapshots:
 
   hast-util-to-parse5@8.0.1:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       comma-separated-tokens: 2.0.3
       devlop: 1.1.0
       property-information: 7.1.0
@@ -11247,22 +11356,26 @@ snapshots:
       web-namespaces: 2.0.1
       zwitch: 2.0.4
 
+  hast-util-to-string@3.0.1:
+    dependencies:
+      "@types/hast": 3.0.5
+
   hast-util-to-text@4.0.2:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/unist": 3.0.3
       hast-util-is-element: 3.0.0
       unist-util-find-after: 5.0.0
 
   hast-util-whitespace@3.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
 
   hast@1.0.0: {}
 
   hastscript@9.0.1:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       comma-separated-tokens: 2.0.3
       hast-util-parse-selector: 4.0.0
       property-information: 7.1.0
@@ -11840,7 +11953,7 @@ snapshots:
 
   mdast-util-math@3.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       devlop: 1.1.0
       longest-streak: 3.1.0
@@ -11853,7 +11966,7 @@ snapshots:
   mdast-util-mdx-expression@2.0.1:
     dependencies:
       "@types/estree-jsx": 1.0.5
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       devlop: 1.1.0
       mdast-util-from-markdown: 2.0.2
@@ -11864,7 +11977,7 @@ snapshots:
   mdast-util-mdx-jsx@3.2.0:
     dependencies:
       "@types/estree-jsx": 1.0.5
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       "@types/unist": 3.0.3
       ccount: 2.0.1
@@ -11891,7 +12004,7 @@ snapshots:
   mdast-util-mdxjs-esm@2.0.1:
     dependencies:
       "@types/estree-jsx": 1.0.5
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       devlop: 1.1.0
       mdast-util-from-markdown: 2.0.2
@@ -11906,14 +12019,14 @@ snapshots:
 
   mdast-util-to-hast@13.2.1:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       "@ungap/structured-clone": 1.3.0
       devlop: 1.1.0
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
 
   mdast-util-to-markdown@2.1.2:
@@ -11925,7 +12038,7 @@ snapshots:
       mdast-util-to-string: 4.0.0
       micromark-util-classify-character: 2.0.1
       micromark-util-decode-string: 2.0.1
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       zwitch: 2.0.4
 
   mdast-util-to-string@4.0.0:
@@ -12400,11 +12513,11 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  oniguruma-parser@0.12.1: {}
+  oniguruma-parser@0.12.2: {}
 
-  oniguruma-to-es@4.3.4:
+  oniguruma-to-es@4.3.6:
     dependencies:
-      oniguruma-parser: 0.12.1
+      oniguruma-parser: 0.12.2
       regex: 6.1.0
       regex-recursion: 6.0.2
 
@@ -12461,6 +12574,8 @@ snapshots:
       error-ex: 1.3.4
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
+
+  parse-numeric-range@1.3.0: {}
 
   parse5-htmlparser2-tree-adapter@7.1.0:
     dependencies:
@@ -12553,6 +12668,11 @@ snapshots:
       points-on-curve: 0.2.0
 
   possible-typed-array-names@1.1.0: {}
+
+  postcss-selector-parser@6.0.10:
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
 
   postcss@8.4.31:
     dependencies:
@@ -12702,11 +12822,11 @@ snapshots:
 
   rehype-harden@1.1.7:
     dependencies:
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   rehype-katex@7.0.1:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/katex": 0.16.7
       hast-util-from-html-isomorphic: 2.0.0
       hast-util-to-text: 4.0.2
@@ -12714,19 +12834,43 @@ snapshots:
       unist-util-visit-parents: 6.0.2
       vfile: 6.0.3
 
+  rehype-parse@9.0.1:
+    dependencies:
+      "@types/hast": 3.0.5
+      hast-util-from-html: 2.0.3
+      unified: 11.0.5
+
+  rehype-pretty-code@0.14.5(shiki@3.20.0):
+    dependencies:
+      "@types/hast": 3.0.5
+      hast-util-to-string: 3.0.1
+      parse-numeric-range: 1.3.0
+      rehype-parse: 9.0.1
+      shiki: 3.20.0
+      unified: 11.0.5
+      unist-util-visit: 5.1.0
+
   rehype-raw@7.0.0:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       hast-util-raw: 9.1.0
       vfile: 6.0.3
 
   rehype-recma@1.0.0:
     dependencies:
       "@types/estree": 1.0.8
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       hast-util-to-estree: 3.1.3
     transitivePeerDependencies:
       - supports-color
+
+  rehype-slug@6.0.0:
+    dependencies:
+      "@types/hast": 3.0.5
+      github-slugger: 2.0.0
+      hast-util-heading-rank: 3.0.0
+      hast-util-to-string: 3.0.1
+      unist-util-visit: 5.1.0
 
   remark-cjk-friendly-gfm-strikethrough@1.2.3(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2)(unified@11.0.5):
     dependencies:
@@ -12786,7 +12930,7 @@ snapshots:
 
   remark-rehype@11.1.2:
     dependencies:
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
       "@types/mdast": 4.0.4
       mdast-util-to-hast: 13.2.1
       unified: 11.0.5
@@ -12988,7 +13132,7 @@ snapshots:
       "@shikijs/themes": 3.20.0
       "@shikijs/types": 3.20.0
       "@shikijs/vscode-textmate": 10.0.2
-      "@types/hast": 3.0.4
+      "@types/hast": 3.0.5
 
   side-channel-list@1.0.0:
     dependencies:
@@ -13081,7 +13225,7 @@ snapshots:
       shiki: 3.20.0
       tailwind-merge: 3.4.0
       unified: 11.0.5
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
     transitivePeerDependencies:
       - "@types/mdast"
       - micromark
@@ -13409,7 +13553,7 @@ snapshots:
   unist-util-remove-position@5.0.0:
     dependencies:
       "@types/unist": 3.0.3
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   unist-util-stringify-position@4.0.0:
     dependencies:
@@ -13420,7 +13564,7 @@ snapshots:
       "@types/unist": 3.0.3
       unist-util-is: 6.0.1
 
-  unist-util-visit@5.0.0:
+  unist-util-visit@5.1.0:
     dependencies:
       "@types/unist": 3.0.3
       unist-util-is: 6.0.1
@@ -13457,6 +13601,8 @@ snapshots:
   use-sync-external-store@1.6.0(react@19.2.3):
     dependencies:
       react: 19.2.3
+
+  util-deprecate@1.0.2: {}
 
   uuid@11.1.0: {}
 

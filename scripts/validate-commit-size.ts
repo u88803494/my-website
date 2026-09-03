@@ -120,8 +120,28 @@ function reportIssues(
   logger(`   ${advice}\n`);
 }
 
+/**
+ * A merge in progress: MERGE_HEAD exists only between `git merge` and its commit.
+ */
+function isMergeInProgress(): boolean {
+  try {
+    execSync("git rev-parse -q --verify MERGE_HEAD", { stdio: "pipe" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function validateCommitSize(): void {
   console.log("🔍 Validating commit size...\n");
+
+  // A merge commit's size is the difference between two branches — it cannot be
+  // split, and its contents were already reviewed on the source branch.
+  if (isMergeInProgress()) {
+    console.log("⏭️  Merge commit — size limits do not apply\n");
+    process.exit(0);
+  }
+
   const stagedFiles = getStagedFiles();
   if (stagedFiles.length === 0) {
     console.log("✅ No staged files to validate");

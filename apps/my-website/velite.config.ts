@@ -1,4 +1,9 @@
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
 import { defineConfig, s } from "velite";
+
+import { rehypeCopyButton } from "./src/lib/mdx/rehype-copy-button";
+import { rehypePrettyCodeOptions } from "./src/lib/mdx/rehype-pretty-code.config";
 
 export default defineConfig({
   collections: {
@@ -8,9 +13,10 @@ export default defineConfig({
       schema: s
         .object({
           title: s.string(),
-          // 自訂 slug 驗證取代 s.slug()：內建版本的 regex 是 /^[a-z0-9]+(?:-[a-z0-9]+)*$/i，
-          // 只接受 ASCII，會讓中文標題的文章全部噴 "Invalid slug"。
-          // \p{Letter} 涵蓋 CJK，同時仍排除標點與空白；s.unique 保留跨檔案唯一性檢查。
+          // Custom slug validation replacing s.slug(): the built-in regex is
+          // /^[a-z0-9]+(?:-[a-z0-9]+)*$/i, ASCII-only, which flags every
+          // Chinese-titled post as an invalid slug. \p{Letter} covers CJK while
+          // still excluding punctuation and whitespace; s.unique is retained.
           slug: s
             .string()
             .min(1)
@@ -25,7 +31,9 @@ export default defineConfig({
           thumbnail: s.string().optional(),
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
-          code: s.mdx(),
+          code: s.mdx({
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton, validateMdxCode],
+          }),
           raw: s.raw(),
         })
         .transform(({ raw, ...data }) => ({
@@ -41,8 +49,27 @@ export default defineConfig({
   },
 });
 
-// 計算閱讀時間：從原始 MDX 文字（非編譯後的 code）估算，中英文分開計算
-// 中文約 300 字/分鐘、英文約 200 詞/分鐘（中文字之間沒有空白，不能用切詞方式計算）
+// Validate MDX compiled code: ensure no suspicious patterns that would indicate
+// external content source injection or build-time corruption
+function validateMdxCode(tree: any) {
+  const codeString = JSON.stringify(tree);
+  // Reject patterns that shouldn't appear in legitimate MDX output from local files
+  const suspiciousPatterns = [
+    /import\s+(?!React|jsx-runtime|Fragment)/,
+    /export\s+[^;]*(?<!default)/,
+    /new\s+Function/,
+    /eval\s*\(/,
+  ];
+
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(codeString)) {
+      throw new Error(`MDX code contains prohibited pattern: ${pattern}`);
+    }
+  }
+}
+
+// Compute reading time: estimate from raw MDX text (not compiled code)
+// Chinese: ~300 chars/min, English: ~200 words/min
 function computeReadTime(raw: string): string {
   const plainText = raw
     .replace(/```[\s\S]*?```/g, "") // code fence

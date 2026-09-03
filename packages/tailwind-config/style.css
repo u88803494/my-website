@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 /* Scan all packages for Tailwind classes */
 @source "../../packages/*/src/**/*.{js,ts,jsx,tsx}";
 
