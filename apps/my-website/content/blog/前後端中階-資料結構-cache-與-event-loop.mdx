@@ -1,0 +1,205 @@
+---
+title: "前後端中階：資料結構、Cache 與 Event Loop"
+slug: "前後端中階-資料結構-cache-與-event-loop"
+description: "Cache（快取）"
+date: 2019-09-10T15:27:18.124Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*GAH2aKcJ2AClUIDfCKY8Ow.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E5%BE%8C%E7%AB%AF%E4%B8%AD%E9%9A%8E-%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B-cache-%E8%88%87-event-loop-45c4738cecf4"
+---
+
+## Cache（快取）
+
+對岸翻譯，緩存，就是把東西暫存在哪裡讓人讀取。
+
+資料的存取，有分效率跟價格，舉例來說，如果要效率好，快速，就要用記憶體，而如果沒有需要一直存取該筆資料的話，就可以把資料儲存在硬碟，當然硬碟就存取的效率沒這麼好，所以各有好處。
+
+### 適用場景：
+
+假設有份資料需要一直讀取，但不需要即時運算（realtime）的時候。
+
+例如說：今天的溫度  
+比起儲存在 BD ，直接儲存在 Cache 或甚至輸出成靜態 html 就好
+
+也就是說今天的溫度，一天只會預報一次，所以就不需要一直去氣象的 api 抓取資料。一天只要抓一次就好，然後把這筆資料儲存在 cacha，之後有需要的時候，直接跟 cacha 呼叫就好。
+
+### 快取有很多種：
+
+CPU 有快取 （L1, L2 cacha）  
+瀏覽器有快取  
+Server side 也有快取 （Redis, Memcached）
+
+![平時可以把紅色的位置勾起來，以保證拿到的資料都是最新的。](https://cdn-images-1.medium.com/max/800/1*GAH2aKcJ2AClUIDfCKY8Ow.png)
+
+_平時可以把紅色的位置勾起來，以保證拿到的資料都是最新的。_
+
+## 資料結構（ Data Structure）
+
+資料結構有下列幾種：
+
+1. 陣列 Array（數組）
+2. 鏈結串列 Linked List（鏈表）
+3. 堆疊 Stack（棧）
+4. 佇列 Queue（隊列）
+5. 樹 Tree
+6. … 還有一大堆
+
+後方式中國翻譯，需要知道一下，看資料的時候才不會搞不懂。
+
+每一種資料結構有不同的適用場合，最常用的是 array。
+
+## 堆疊 Stack
+
+堆疊 Stack，就很像把麥當勞的餐盤拿回去放一樣，永遠都把東西放在最上面，也永遠只能從最上面拿東西。也就是 **F**irst **I**n, **L**ast **O**ut，這是教科書上面這樣寫的。
+
+舉例來說：
+
+`stack.push(1)` 就會在下面放一層
+
+然後是 `stack.push(30)`就會把 30 放在 1 的上面，就像疊餐盤一樣。一層層疊上去。然後在疊一個 6 上去：
+
+![](https://cdn-images-1.medium.com/max/800/1*Fp9ambJsvFdmiu5HV-Rbcg.png)
+
+反過來，要拿下出來的時候使用指令 `stack.pop()` ，這樣就會先從 6 開始取得。取得兩次之後，還可以再把資料堆上去，例如堆疊 9 `stack.push(9)`
+
+![](https://cdn-images-1.medium.com/max/800/1*Z_6Iz9Ta-8rIstIuV86qvg.png)
+
+實際例子之後在說
+
+### 佇列 Queue
+
+就是排隊，最先排的先進去。**F**irst **I**n, **F**irst **O**ut。
+
+`queue.push(1)` 然後在佇列兩次 `queue.push(30)`、 `queue.push(9)` 。取資料的時候，就可以取值
+
+```
+queue.shift() // 1
+queue.shift() // 30
+```
+
+![紅色表示原本存在，但已經取走得部份。](https://cdn-images-1.medium.com/max/800/1*T3CWu5Lv-MFiFRJOMYzvGw.png)
+
+_紅色表示原本存在，但已經取走得部份。_
+
+## Event Loop
+
+這是一個在 JavaScript 裡面的機制。
+
+瀏覽器在跑 JavaScript 的時候是 Single Thread，一次只能執行一個任務
+
+### Single Thread
+
+單一執行緒，在程式底下友好幾個 process 應用程序，而應用程序底下則是有 thread 執行緒
+
+> Thread我們之前在講process時有提到，現在我們來詳細說明他。在說明之前，我們先來搞清楚program-process-thread之間的關係是什麼？！
+
+> 我們可以將program比喻成建造藍圖，而process就是透過這個藍圖建的工廠，至於thread就是這間工廠的工人，確保這間工廠的功能，而且共享這間工廠所有的資源。
+
+> [參考資料](https://ithelp.ithome.com.tw/articles/10203639)
+
+主要是因為 thread 所需要的資源會更少，但可以專注處理專門的事情。  
+像是一個伺服器，當有人連線進來的時候，就會開一個 thread 幫忙處理使用者的要求，但當有更多使用者連線進來的時候，假設 500 個，就可以開 500 的 thread 去處理這些使用者要求的資料。
+
+那麼什麼是 Single Thread，這個意思就是這個 Process 他一次只能使用一個 Thread 而已，也就是一次只能做一件事。
+
+### 關於非同步
+
+既然 JavaScript 是 Single Thread，那瀏覽器要怎麼處理非同步的事件，像是假設我設定一個定時器，一秒之後才執行某件事情，那不就變成卡在那邊？
+
+所以解決方案出來了，就是要有一個機制來跑非同步的東西，  
+而這個機制的其中一個元件就叫 Event Loop
+
+處此之外還有其他重要概念：Call Stack, Callback Queue  
+這兩個就是前面介紹的 Stack 跟 Queue
+
+### Call Stack
+
+就如同之前的 stack 那樣的順序，這也是所有的程式語言執行程式的方式。
+
+```
+function getSum() {
+   return 1 + getValue();
+}
+```
+
+```
+function getValue() {
+   return 2;
+}
+```
+
+```
+let sum = getSum();
+```
+
+在載入的時候，先依序載入所有的 function，然後在不需要載入之後逆著順序的執行完成，所有的程序。
+
+1. 會先把處於全域環境下的 `let sum = getSum();` 先放入 stack 的順序中，而目前定義的 function 都尚未加入 stack 中。
+2. 當執行到 `getSum();` 的時候。因為 JavaScript 是 Single Thread，所以會暫停執行全域環境的程式。為 `getSum();` 建立一個環境去執行其內容，並把這部分的程式，放入 stack，這時候就有兩個執行環境在 stack 了。
+3. 在 `getSum();` 內部一樣有一個 `getValue();` ，所以就會暫停當前的執行環境。為 `getValue();` 建立一個環境並把這個環境放入 stack，這樣就有三個執行環境在 stack 了。由上而下依序是`getValue();`、 `getSum();`、全域執行環境。
+4. 由於沒有需要堆疊新的執行環境了，於是就開始回傳結果。`getValue();` 回傳結果之後，就移出 stack，這時候由上而下依序就剩下 `getSum();`、全域執行環境。接著就執行 `getSum();`
+5. `getSum();` 內部得到 `getValue();` 的結果之後繼續運行，然後回傳資料之後，就剩下全域執行環境，所以就回到全域執行環境。
+6. 全域執行環境就會得到 `getSum();` 的結果。
+
+[參考資料](https://ithelp.ithome.com.tw/articles/10206190)
+
+上面的意思就是說，假設有 function A、 function B、 function C、 function D。A 呼叫 B，B 呼叫 C，C 呼叫 D，就會依序放入 stack，當 D 沒再呼叫之後，就會逐步地執行 D C B A 最後呼叫 A 的地方得到 A 的值。
+
+所以當寫了一個無限迴圈之後，像是：
+
+```
+function loop() {
+    return loop(1)
+}
+```
+
+```
+loop()
+```
+
+就會一直無限的出現 loop(1) 直到最後 stack 儲存不下了，就會彈出錯誤，因為是 stack 不能儲存 65535 的資料，訊息 stack overflow。意思就是 loop(1) 已經多到溢位（超出 stack 可以儲存的數量）了
+
+![](https://cdn-images-1.medium.com/max/800/1*QmVmj36hO5-26dzMo_dR6g.png)
+
+所有的程式語言都是這樣執行的
+
+### Event loop（含Callback Queue）
+
+![](https://cdn-images-1.medium.com/max/800/1*72EnHBc6j6EuJN_B9RgK8Q.png)
+
+測試範例：[http://latentflip.com/loupe/](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+簡單說明一下整體的機制。分有幾個部分：
+
+1. JavaScript 的主 thread 的 event loop 會一直執行檢查，檢查完 Stack 之後再檢查 Queue。只要發現有東西在裡面就會執行。
+2. Call Stack 按照 **先進後出** 的原則執行任務。
+3. 有碰到 web APIs 也就是異步的部分就執行請求資料，並等待資料回來。
+4. web APIs 的資料回來之後，就放入 Callback Queue。按照**先進先出**的原則執行。
+5. Callback Queue 的部分，裡面有其他內容一樣放入 Stack 按照**先進後出**的原則執行。
+
+在執行 JavaScript 指令的時候，有分同步跟異步。
+
+同步的部分，就會直接進入 stack 的部分，然後執行。
+
+異步的部分，就會先執行部分的動作，像是設定監聽器，ajax 撈資料等…。回來之後再放入 Queue。
+
+event loop 就會一直 stack、queue 一直查看資料只要有就交給 call stack 執行，然後持續檢查下去，檢查另外一邊，然後繼續檢查下去。只要 call stack 為空，就會把 callback queue 的資料放入。
+
+參考資料：
+
+## 收穫：
+
+花了不少時間終於把 event loop 弄得更清楚了。在範例中有用到 `setTimeout()` 原來是他沒寫出來，所以我才會一直誤會，`setTimeout()` 也會疊加再一起，這部分沒寫出來就讓我搞不太懂。
+
+還好後來想一想想通了，就可以順利地理解到底為什麼是那樣子跑。
+
+在這邊也理解到原來資料結構就是一種資料的呈現方式，用來方便搜尋跟整理儲存資料。
+
+而 DOM 也是一種資料結構，因為他是 tree。tree 就像是我們資料夾的形式。所以資料結構就是一個很簡單的概念。
+
+後面再更加理解之後，就可以想到該怎麼寫 event loop 整個的執行順序以及方法。
+
+雖說本來在學 JavaScript 的時候，應該就大致上很清楚這些機制才是。所以在學到的時後，我也在想這就是之前的執行機制。應該是什麼難學習才是。
+
+這其實也是沒錯，只是會覺得必須要把這部分弄清楚，才可以更明白為什麼這樣跑。

@@ -1,0 +1,220 @@
+---
+title: "React + Redux 補充資料 part2 thunk & promise"
+slug: "react-redux-補充資料-part2-thunk-promise"
+description: "接續前篇：React + Redux 補充資料 part1"
+date: 2020-03-10T05:46:06.726Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*aX9fZQD5Gruf_vuaqzHLFg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-redux-%E8%A3%9C%E5%85%85%E8%B3%87%E6%96%99-part2-thunk-promise-d743bcd2cfdb"
+---
+
+接續前篇：[React + Redux 補充資料 part1](https://medium.com/@hugh_Program_learning_diary_Js/react-redux-%E8%A3%9C%E5%85%85%E8%B3%87%E6%96%99-part1-652784b43bc1?source=your_stories_page---------------------------)
+
+在這篇之中，已經把呼叫 API 的地方抽到 container 了。
+
+然後我們可以新增一個 action，然後把 dispatch 傳入 action ，接著我們就可以在 action 裡面使用 dispatch 來操作 action。
+
+![新 action，其實就是把在 container 的抽出來而已](https://cdn-images-1.medium.com/max/800/1*aX9fZQD5Gruf_vuaqzHLFg.png)
+
+_新 action，其實就是把在 container 的抽出來而已_
+
+這樣就可以改成呼叫這個 function，並把 diseepatch 傳入。
+
+![](https://cdn-images-1.medium.com/max/800/1*FigYnRNcC7AL5rjQME3s6w.png)
+
+不過這樣做的話，就變得比較不像是一個 action creator 了。長得也不太一樣了。
+
+一些小型的 app，這樣就 ok 了。這樣的好處是如果有其他地方需要像這樣子呼叫，就不用重複寫了，只需要呼叫一個 `getPostList` 即可。
+
+所以就有人研究了一些 redux 的 middleware。
+
+## Redux thunk
+
+middleware 的形式就很像剛剛寫的那樣，先經過一個 middleware，然後在發送 action。也就是先經過 middleware 之後，才去 reducer 做處理。
+
+在這邊就是 action 這邊 return 一個 function，這樣子 redux-thunk 幫助我們執行這個 function。
+
+### 設定 redux-thunk
+
+首先就是要安裝跟設定了
+
+```
+npm install redux-thunk
+```
+
+接著就是在 index.js 引入 thunk 的東西。
+
+新增 `applyMiddleware` 以及 thunk
+
+```
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware
+ } from 'redux';
+import thunk from 'redux-thunk';
+```
+
+然後把其引入 createStore
+
+```
+const store = createStore(reducers, applyMiddleware(thunk));
+```
+
+這樣設定就 ok 了
+
+### 如何使用
+
+![](https://cdn-images-1.medium.com/max/800/1*AUBIFRogx1CzNHypju8edA.png)
+
+而設定好之後，只要 action 是 return 一個 function，就會去執行這個 function。
+
+好處就是不用傳 dispatch 了，所以 action 不用接收，而PostContainer 也不用傳入了。
+
+原因在於 return 的 function 就可以接收到 dispatch 了
+
+```
+action.js:
+```
+
+```
+export const getPostList = () => {
+ return function (dispatch) {
+  dispatch(getPosts())
+  WebAPI.getPosts().then(res => {
+   dispatch(getPostsSuccess(res.data))
+  })
+ }
+}
+```
+
+而這邊整體的執行順序是
+
+1. container 串接的地方執行 `this.props.getPostList();`
+2. 接著就會執行這邊內部的部份 `{ dispatch(action.getPostList()) }`
+3. 這一段又會先執行 `action.getPostList()` ，接著就會進入這個 action 執行
+4. 而這個 action 是 return 一個 function。
+5. `{ dispatch(action.getPostList()) }` 就會把上一步驟 return 的內容當成引數傳入。也就是把這個return 的 funcion 給 dispatch 出去。
+
+而 redux-thunk 的作用就是一旦發現你 dispatch 一個 function，他就會協助你去執行這個 function，並且把 dispatch 給傳進去。
+
+也就是說在 redux-thunk 的那一層執行這個 function。
+
+這樣 action 就可以維持 pure function 的狀態了。
+
+而因為大多數會用到非同步，都是因為要 call API，所以就有人專門做了個 middleware 。
+
+### code
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/22686ec69bd1004b79506d90c9bc822e)
+
+## redux-promise-middleware
+
+在 redux-promise 的設計概念就是 action-in & action-out
+
+### 安裝
+
+```
+npm i redux-promise-middleware -s
+```
+
+這個模式也接近 redux-thunk，所以先把 redux-thunk 拿掉。
+
+然後新增
+
+```
+import promise from 'redux-promise-middleware';
+```
+
+```
+const store =
+  createStore(reducers, applyMiddleware(promise));
+```
+
+現在已經跟 thunk 一樣是傳入 function 即可，也因為機制不同所以 action 也可以改掉了。
+
+### 使用方式
+
+redux-promise 的核心思想是 type 可以自訂，然後搭配一個 payload，而這個 payload 則要是一個 promise。
+
+也就是我們在呼叫的 webAPI 都是會回傳一個 Promise，因為我們還可以用 `.then()` 去執行它。
+
+action 就可以改版了：
+
+```
+export const getPostList = () => ({
+ type: 'GET_POSTS',
+ payload: WebAPI.getPosts(),
+})
+```
+
+直接 return 一個物件即可。
+
+接著就可以在 reducer 印出這些 action
+
+![](https://cdn-images-1.medium.com/max/800/1*EqYL5v6-qN6NfyM116NSvw.png)
+
+可以看到傳送中就是原本的 type 名稱加上 `_PENDING` ，成功之後就會看到加上 `_FULFILLED` 加上資料的 action，這代表了成功
+
+所以也就可以把原本的改用這種形式了。
+
+reducer 就可以改用這兩個 type 值來做一些處理
+
+```
+case 'GET_POSTS_PENDING':
+  return {
+    ...globalState,
+    isLoadingGetPosts: true,
+  };
+case 'GET_POSTS_FULFILLED':
+  return {
+    ...globalState,
+    isLoadingGetPosts: false,
+    posts: action.payload.data
+  };
+```
+
+這樣就可以取得資料了。
+
+### 原理
+
+所以 redux-promise 只要傳兩個值給他一個是 type，另外一個是 promise，接著就可以根據 promise 的反應來做處理
+
+而 redux-promise 做了什麼？
+
+1. 當收到一個 action 的 payload 是一個 promise 的時候
+2. 他就會先 `dispatch({type: 'GET_POSTS_PENDING'})` 而 type 會取決於原本傳進來的 type
+3. 然後他就執行這個 payload。
+4. 當成功之後，就會在執行另外一個 dispatch，錯誤也是會執行另外一種 dispatch
+
+```
+// redux-promise
+type = 'GET_POSTS';
+=> dispatch({ type: type + '_PENDING' })
+=> action.payload.then(data => dispatch({
+  type: type + '_FULFILLED',
+  payload:data
+})).catch(err =>{
+  dispatch({
+    type: type + '_REJECTED',
+    payload: err
+  })
+})
+```
+
+所以在 redux-promise 上，就只需要傳入一個 Action 其中包含 promise，就可以在 reducer 中有了執行中以及成功或失敗要怎麼執行了。
+
+在使用這個就可以很方便。
+
+## redux-logger
+
+這是一個 middleware 用意是在協助 redux debug，直接安裝即可。
+
+## 其他細節
+
+### 導入的方式
+
+在引用 Redux 的時候，比較簡單的形式，可以從寫一個初始資料，並且試試看能不能在需要用到的地方取得這個值，這會是一個比較簡單的開始。用這方式至少是可以先確認到接收值得部份是沒問題的。
+
+然後在寫改變值得部份，也就是開始寫 action。

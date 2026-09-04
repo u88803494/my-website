@@ -1,0 +1,572 @@
+---
+title: "前端框架 React：React Form 報名表單"
+slug: "前端框架-react-react-form-報名表單"
+description: "先從刻介面開始"
+date: 2019-10-28T13:21:21.586Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*aHCaObSM3va3UTPauNVYeQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-react-form-%E5%A0%B1%E5%90%8D%E8%A1%A8%E5%96%AE-ebd5e3a7201a"
+---
+
+## 先從刻介面開始
+
+最簡便的方法，直接使用官網介紹的指令
+
+`npx create-react-app 專案名稱`
+
+`npx create-react-app form`
+
+這樣就可以直接最簡單生成一個 app 的專案，這裡面有許多可能會用到的東西，但不需要就可以先刪除掉了。
+
+設置表單之後，是一個沒有任何作用的，按下提交之後，預設會使用 GET 把資料提交出去。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/63db06e3f082281f9f414edce4a96aa1)
+
+接著就要設計 state 的部分，因為 React 裡面 state 對應到畫面。
+
+## controlled 與 un-controlled 的差異
+
+接下來就是處理事件的部分了，在 React 裡面有個 onSubmit 事件可以監聽。
+
+```
+<form onSubmit={this.handleSubmit}>
+```
+
+接下來就是寫下 這個 function 了，可以先用 alert 來測試
+
+```
+handleSubmit = () => {
+  alert('submit')
+}
+```
+
+這時候就可以使用這樣的寫法了，這是因為 `npx create-react-app` 幫我們安裝好這個功能。
+
+但是這時候會發現整個畫面被換頁了，原來是因為提交 form 的時候本來就會因為傳送資料而換頁。所以就需要使用 `e.preventDefault()` 的好時機了。
+
+```
+handleSubmit = (e) => {
+  alert('submit');
+  e.preventDefault();
+}
+```
+
+這樣就可以阻止預設行為，也會停在原來的頁面了。
+
+—
+
+在 React 裡面，對於表單有兩種不同的 component，一種是 controlled component 另外一種是 uncontrolled component。
+
+兩者都是 component，只是一個是針對 controlled element 另外一個針對 uncontrolled element
+
+什麼是 uncontrolled component 這個用法是比較少見，uncontrolled 就是像在 input 內輸入一些資料之後，因為沒有一個 state 去對應到這個資料，所以就破壞了畫面跟 state 要同步的原則。
+
+[參考資料](https://ithelp.ithome.com.tw/articles/10201339)
+
+所以就要透過一些方式來調整這些資料，在 uncontrolled component 的部分，就可以依賴 `React.createRef()` 來處理這部分的問題，除此之外當然還要再標籤上面做連結。
+
+```
+constructor(props) {
+  super(props)
+  this.input = React.createRef()
+}
+...
+...
+...
+```
+
+```
+<div>
+  姓名：<input type="text" name="name" ref={this.input} />
+</div>
+```
+
+而傳入的 `ref={this.input}` 就會是經過 `React.createRef()`處理之後的 DOM，是該標籤的 DOM，所以就可以用這個方法來取得資料。利用 `this.input` 內的屬性，`this.input.current` 就可以取得該 element 的資料：  
+`this.input.current.value` 取得該 element 的值。
+
+```
+handleSubmit = (e) => {
+  e.preventDefault();
+  console.log(this.input)
+  console.log(this.input.current)
+  alert(this.input.current.value)
+}
+```
+
+這樣子在提交的時候，就可以取得使用者輸入的資料，我們可以試著把他們印出來：
+
+![只有印出 this.input 的內容跟 this.input.current 的內容](https://cdn-images-1.medium.com/max/800/1*ySJ9n3qI-AYECS54sxdbwA.png)
+
+_只有印出 this.input 的內容跟 this.input.current 的內容_
+
+這就是使用 uncontrolled component 的方式，使用 uncontrolled component 的時候，這是在 React 比較推薦的方法
+
+不過這樣子還是不知道使用者在送出資料之前出入了什麼內容。因為這樣的程式碼只有在提交的時候才會有反應。
+
+當然也可以使用 `querySelector()` 的方式，這是 JavaScript 原本的方式。
+
+![](https://cdn-images-1.medium.com/max/800/1*aHCaObSM3va3UTPauNVYeQ.png)
+
+不過在 React 並不推薦直接操作 dom，因為這樣子可能會有一些 bug
+
+所以還可以使用除了 uncontrolled component 之外的方法。
+
+這也是比較正統的方式，就是一樣在 this.state 新增資料：
+
+```
+constructor(props) {
+  super(props)
+ this.state = {
+    name: '123',
+  }
+}
+...
+...
+...
+```
+
+```
+<div>
+  姓名：<input type="text"
+    name="name" value={this.state.name} />
+</div>
+```
+
+這時候如果在 name 預設一些資料，就會發現這個 input 不能變動資料了，這是因為 React 會在這時候把它鎖住，實際上也會跳出錯誤，要求要補上一個 function
+
+![](https://cdn-images-1.medium.com/max/800/1*1P-i4pSK15NNDsTfExeVeA.png)
+
+```
+姓名：<input type="text" name="name"
+value={this.state.name} onChange={this.handleInputChange} />
+```
+
+然後這個 function 要去改變 state 才可以影響 render，
+
+就可以使用 `e.target.value` 取得值，
+
+當然也可以先測試看看不改變 state，這時候就會發現目標值改了，但是因為 state 沒改變，所以也不會 render 的問題
+
+![不改變 state 只印出看看](https://cdn-images-1.medium.com/max/800/1*lKKJjZtwnasBCbD-njq1Ow.png)
+
+_不改變 state 只印出看看_
+
+所以一定要去改變這個 state，才可以。從這邊就可以知道為什麼之前沒有使用 `onChange` 的時候，會鎖定整個畫面，因為一定要改變 state 才可以改變畫面。
+
+針對每個 input 都需要做同樣的處理，這樣就會讓整個程式碼看起來比較冗長。
+
+![](https://cdn-images-1.medium.com/max/800/1*eZD9vix3V20MNx_qgA_9mg.png)
+
+這邊就要利用解構來處理，讓整體看起來更優雅。
+
+![](https://cdn-images-1.medium.com/max/800/1*MEcY1-BTAGvOSSfez5gatw.png)
+
+當然 `onChange` 就每個都要不一樣了，也要另外新增 function
+
+![](https://cdn-images-1.medium.com/max/800/1*mm8H_9PZ46O4g0CIvtAhHA.png)
+
+但這樣子就不太合理了，如果我這個 form 有十個輸入，不就要做十個差不多的 callback 嗎？
+
+這時候就可以利用一個小技巧，使用 `e.target.name` 來做區別。
+
+```
+handleInputChange = (e) => {
+  this.setState({
+    [e.target.name]: e.target.value
+  })
+}
+```
+
+這邊有個重點，key 的部分要用中括號 `[ ]` 包起來，否則就會被認為是字串，用中括號包起來的意思就是在表達這是一個動態的值。
+
+而其他的部份都也可以這樣子用了。
+
+## 幫其他元件加上 state
+
+目前就是已經把 input 都串上了，剩下就是其他的部份。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/63db06e3f082281f9f414edce4a96aa1)
+
+先來幫 raido 加上，因為不明白會取得什麼樣的資料，所以可以先用另外個 function 來測試看看
+
+```
+<div>
+ 性別：
+   <input type="radio" name="gender" value="male"
+     id="gender_male" onChange={this.handleGenderChange} />
+   <label htmlFor="gender_male">男生</label>
+   <input type="radio" name="gender" value="female"
+     id="gender_female" onChange={this.handleGenderChange} />
+   <label htmlFor="gender_female">女生</label>
+</div>
+```
+
+function：
+
+```
+handleGenderChange = (e) => {
+  console.log(e.target.value)
+}
+```
+
+這樣在點選就會發現直接把 value 印出了。這表示這樣的選項是可以選出值來。
+
+整個構成跟 handleInputChange 是一樣的，所以就一樣使用 handleInputChange 了。
+
+```
+<div>
+ 性別：
+  <input type="radio" name="gender" value="male"
+    id="gender_male" onChange={this.handleInputChange} />
+  <label htmlFor="gender_male">男生</label>
+  <input type="radio" name="gender" value="female"
+    id="gender_female" onChange={this.handleInputChange} />
+   <label htmlFor="gender_female">女生</label>
+</div>
+```
+
+關於這部份官方文件都有很好的介紹可以看：
+
+文件關於 `<select>` 標籤的部份，可以得知，也是同個方法取值。所以也可以套用 handleInputChange。
+
+但這邊會有問題，就是選單預設顯示第一個選項，但是當我按下之後，因為還沒選擇，所以會變成回傳值為空。
+
+比較簡單的修改法就是 state 預設是 taipei
+
+```
+this.state = {
+  name: '',
+  address: '',
+  review: '',
+  gender: '',
+  city: 'taipei',
+  time: [],
+}
+```
+
+然後還有另外一個問題，就是如果 gender 有預設值，但是 render 出來卻沒被選中，這部份就可以使用 checked
+
+假設預設值是 female
+
+```
+this.state = {
+  name: '',
+  address: '',
+  review: '',
+  gender: 'female',
+  city: 'taipei',
+  time: [],
+}
+```
+
+就可以在 render 的時候做比較，
+
+```
+<div>
+    性別：
+    <input type="radio" name="gender" value="male"
+      checked={gender === 'male'}
+      id="gender_male" onChange={this.handleInputChange} />
+    <label htmlFor="gender_male">男生</label>
+    <input type="radio" name="gender" value="female"
+      checked={gender === 'female'}
+      id="gender_female" onChange={this.handleInputChange} />
+    <label htmlFor="gender_female">女生</label>
+  </div>
+```
+
+### 縣市選單：
+
+這部份只需要在 select 上面掛上值即可。
+
+### 有空的時間：
+
+```
+<div>
+  是否吃素<input type="checkbox" name="time" value="yes"
+    onChange={ e=> alert(e.target.value)}/>
+</div>
+```
+
+使用這樣的方式，會發現，不管怎麼點都是印出 yes
+
+![這例子比較不適當，所以後來有改](https://cdn-images-1.medium.com/max/800/1*xhinzSP-O40ArAbYno8Skg.gif)
+
+_這例子比較不適當，所以後來有改_
+
+所以這邊就要不同的處理了，就要使用另外的 function
+
+```
+是否吃素：<input type="checkbox" name="time" value="yes"
+  onChange={this.handleCheckboxChange}/>
+```
+
+順便把例子改造成多選
+
+這種情形就不太一樣了，因為 checkbox 是一種多選的形式，而我們這邊需要的只是開關的功能而已，所以多選的話就會利用一個 array 表示：
+
+```
+this.state = {
+  name: '',
+  address: '',
+  review: '',
+  gender: 'female',
+  city: 'taipei',
+  time: [],
+}
+```
+
+在這邊可以使用一個判斷方式，就是當把東西拿掉之後的長度來判斷，把他拿掉的時候，發現長度都是一樣，就代表說根本就沒拿掉任何東西，因為本來就在裡面：
+
+```
+time: [1, 2] => 去掉 2 => [1] // 代表說 2 真的在裡面，就什麼都不用做
+```
+
+```
+time: [1, 2] => 去掉 3 => [1, 2] // 代表說沒有拿掉任何東西，這種時候就應該把 3 加到裡面去 => [1, 2, 3]
+```
+
+根據我們拿掉的結果，就可以決定後續要做什麼動作。
+
+所以要在原本的標籤加上一些內容
+
+```
+  <div>
+    有空的時間：<input type="checkbox" name="time" value="1"
+      onChange={this.handleCheckboxChange} />星期一
+    <input type="checkbox" name="time" value="2"
+      onChange={this.handleCheckboxChange} />星期二
+    <input type="checkbox" name="time" value="3"
+      onChange={this.handleCheckboxChange} />星期三
+  </div>
+```
+
+function:
+
+```
+  handleCheckboxChange = (e) => {
+    const { time } = this.state // 取得原值
+    const value = e.target.value // 取得數據，無論勾選與取消勾選都會傳值
+    const newTime = time.filter(item => item !== value)
+    // 把非 value 的部份保留
+    this.setState({
+      time:
+        newTime.length !== time.length ? newTime : [...time, value]
+    })
+    // 如果兩者長度不相等，就把 newTime 作為新值。如果長度相等，就在加上 value
+    /* 如果取消勾選 arr 長度就會變短，所以就可以用 newTime 取代，
+    而如果 arr 長度相等，就代表原來沒這個值，就必須要加上去 */
+  }
+```
+
+透過上述方式，就可以正常的勾選跟取消勾選，資料也會跟 state 同步。
+
+然後就可以試試看作預設值：
+
+```
+super(props)
+this.state = {
+  name: '',
+  address: '',
+  review: '',
+  gender: 'female',
+  city: 'taipei',
+  time: ['1'],
+}
+```
+
+這邊的方式就是在標籤上面加上指令判斷：
+
+```
+<div>
+ 有空的時間：<input type="checkbox" name="time" value="1"
+  checked={time.indexOf('1') >= 0}
+  onChange={this.handleCheckboxChange} />星期一
+ <input type="checkbox" name="time" value="2"
+  checked={time.indexOf('2') >= 0}
+  onChange={this.handleCheckboxChange} />星期二
+ <input type="checkbox" name="time" value="3"
+  checked={time.indexOf('3') >= 0}
+  onChange={this.handleCheckboxChange} />星期三
+</div>
+```
+
+`.indexof()` 有找到資料就會回傳 index，沒有就會回傳 -1，所以只要大於等於 0 就是 true，就會有 ckecked。
+
+這樣就完成了簡單的表單與 state 同步的功能。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/b657f35f082c4d36751fc6ab9ee42b03)
+
+但這樣子看下來，整個 checkbox 已經有點冗長，所以還可以再做一些優化，獨立把 checkbox 做成一個 component
+
+```
+const CheckBox = ({ value, label, checked, onChange }) => (
+  <span>
+    <input
+      type="checkbox"
+      value={value}
+      name="time"
+      checked={checked}
+      onChange={onChange}
+    />{label}
+  </span>
+)
+```
+
+這邊是縮寫，把 function 改成類似 arrow function，然後也省略 return，所以是後面直接接上小括號
+
+接著就可以利用這個 component 去改寫原來的標籤了：
+
+```
+<div>
+ 有空的時間：
+ <CheckBox value={"1"} label={'星期一'}
+  checked={time.indexOf('1') >= 0}
+  onChange={this.handleCheckboxChange} />
+ <CheckBox value={"2"} label={'星期二'}
+  checked={time.indexOf('2') >= 0}
+  onChange={this.handleCheckboxChange} />
+ <CheckBox value={"3"} label={'星期三'}
+  checked={time.indexOf('3') >= 0}
+  onChange={this.handleCheckboxChange} />
+</div>
+```
+
+當然，也可以把其他有重複性的做優化，像是 input 的部份。
+
+```
+const Input = ({ name, label, value, onChange }) => (
+  <div>
+    {label}：<input type="text" type='text' name={name}
+      value={value} onChange={onChange} />
+  </div>
+)
+```
+
+標籤：
+
+```
+<Input name={'name'} value={name} label={'姓名'}
+  onChange={this.handleInputChange} />
+<Input name={'address'} value={address} label={'地址'}
+  onChange={this.handleInputChange} />
+```
+
+整體會看起來更簡潔一些
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/94a44fea6407dd3e9631b68e36116b0e)
+
+## 進階練習：表單驗證功能
+
+這邊的表單驗證功能是在 submit 的時候，做一些判斷。判斷說這個 name 是空的話，就做一些動作。像是警告視窗或是選項背景變紅之類的。或是加上其他的限制也可以。
+
+驗證限制：所有選項必填。
+
+—
+
+這邊就是自主練習的部份，只有說明而已，所以都是我自己的想法跟作法。
+
+因為只是送出的時候驗證，所以我想應該就是在送出的 function 把驗證放入如果哪項驗證錯誤，就彈出視窗這樣子。
+
+```
+handleSubmit = (e) => {
+  // 送出驗證
+  this.state.name !== '' &&
+  this.state.address !== '' &&
+  this.state.review !== '' &&
+  this.state.gender !== '' &&
+  this.state.city !== '' &&
+  this.state.city !== 'empty' &&
+  this.state.gender !== '' &&
+  this.state.time.length !== 0 ?
+  alert('提交成功') : alert('你是不是有秘密滿著我們QQ');
+  console.log(this.state)
+  e.preventDefault();
+}
+```
+
+用 React 還真簡單噎，想當初純 JavaScript 我弄了好一陣子。
+
+## 進階練習：表單還沒 submit 就驗證
+
+這邊要練習的是還沒 submit 之前，就可以驗證的功能，這邊要使用的是利用一個監聽器 `onBlur` 來驗證。
+
+這個監聽器當從當前表單輸入欄位切到下一個輸入欄位就會執行。
+
+> 用來監聽元素的失焦情況，失焦的意思指的是失去焦點，瀏覽器是根據網友的滑鼠游標聚焦至**其他**元素時，認定**原本**的元素失焦 [參考資料](http://www.wibibi.com/info.php?tid=385)
+
+—
+
+這邊看到這個標題時，我還以為是在輸入的時候就可以驗證了，所以本來想寫在 onChange 上面。
+
+當然題目已經提到要使用 `onBlur` 來練習就是利用`onBlur`來練習了，但實際也沒有很難，就是寫上監聽，然後引向另外一個 function 而已。
+
+直接在元素加上 `onBlur` 即可。
+
+```
+<Input name={'name'} value={name} label={'姓名'}
+ onChange={this.handleInputChange} onBlur={this.handleInputBlur} />
+```
+
+接下來就是思考一個部分，因為可能要好幾個部分共用這個 function，所以要思考一下能否先判斷是哪一種 input，然後才判斷，否則會判斷到別的地方的資料。
+
+這邊要使用之前指導的方式， `e.target.name` 來知道當前是哪個屬性。接著就可以藉此來判斷有沒有填寫內容。然後判斷的部分，只需要判斷 state 就好了，因為現在畫面的 render 都以 state 為準。
+
+```
+handleInputVerity = (e) => {
+  const { name, address, review, gender, city, time } = this.state
+  switch (e.target.name) {
+    case 'name':
+      if (name === '') alert('名字要寫')
+      break;
+    case 'address':
+      if (address === '') alert('地址要寫')
+      break;
+    case 'review':
+      if (review === '') alert('心得要寫')
+      break;
+    case 'gender':
+      if (gender === '') alert('性別要寫')
+      break;
+    case 'city':
+      if (city === '' || city === 'empty') alert('告訴我們你住哪裡')
+      break;
+    case 'time':
+      if (time.length === 0) alert('你何時方便？')
+      break;
+  }
+}
+```
+
+這樣就完成了判斷，剩下就可以把 alert 的部分改成各種形式皆可。另外是每個需要的地方都要填上 `onBlur` 就好。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/73797c1e947aaa96b947757cfc7dc521)
+
+## 魔王練習：自動暫存內容
+
+這是一個可以讓使用者有著良好體驗的優化。像是如果打了很長的內容，不小心關了或是按到上一頁，再回來東西也依然不會不見。
+
+也就是說當還沒 submit 的時候，資料先儲存起來，等到下一次進入這個頁面的時候，再把資料拿回來。
+
+在這邊就可以儲存在瀏覽器提供的 `localStorage` 裡面，等到下次回來之後，就自動從這邊取出值。
+
+—
+
+我想這邊的內容也跟之前學習到的部分也是可以拿來套用的。主要就是遵循整個 render 的機制，把需要儲存的地方放在對應的 lifecycle method 裡面即可。
+
+所以有分 Mounting 之後可以利用 componentDidMount，確認一下 `localStorage` 內部有沒有儲存資料，有的話就取出，然後 `.setState()` 到 `this.state` 內部。
+
+接著 Updating 是每次改變資料的時候，就把資料在 componentDidUpdate 的 method 做比較，如果不一樣，就把資料存入。
+
+然後是按下提交之後，要清除 `localStorage` 的資料。
+
+這樣應該就完成，但這邊跟之前一樣，我只寫出我對魔王題的想法，不打算真的寫，因為應該會滿花時間的。
+
+## 結論：
+
+表單的部分也是一個很重要的應用，所以需要花一個單元來學習。在這裡的部分，不是單純的練習題目，還兼學習的部分。
+
+在這裡重要的部分，就是表單的部分要怎麼處理，同樣的也是要以 state 為準，所以就必須要把畫面輸入的部分，想辦法讓他先經過 state，然後再 render 到畫面上去。
+
+controlled component 跟 uncontrolled component 兩者也是一個重要的部分，想辦法把元件變成 controlled component，這樣才有利 React 的基本原模式。

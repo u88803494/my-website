@@ -1,0 +1,69 @@
+---
+title: "ESlint 的使用隨手筆記"
+slug: "eslint-的使用隨手筆記"
+description: "由於這次的作業需要使用 ESlint，本來以為是很簡單的一些小細節不要讓程式碼很怪就好，但是當我在 Commit 的時候卻發現，ESlint…"
+date: 2019-04-28T13:28:51.601Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/eslint-%E7%9A%84%E4%BD%BF%E7%94%A8%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98-73ae8938fa01"
+---
+
+由於這次的作業需要使用 ESlint，本來以為是很簡單的一些小細節不要讓程式碼很怪就好，但是當我在 Commit 的時候卻發現，ESlint 的要求還真的非常的多，也因此讓我多認識了一些課堂上沒教的東西。這個要求雖然讓我們變得麻煩許多，不過我想久了之後應該會跟我在寫每日進度一樣，本來要寫一小時，後面變成一下就寫好。
+
+> ESLint 是一個團隊統一程式碼結構的工具，如果程式碼不符合規範，則會出現相對應的提示，而其中有三大主流規範是許多開發者愛用的：
+
+> Google
+
+> Airbnb
+
+> JavaScript Standard Style
+
+> 三個都有各自的擁護者，風格上 Airbnb 較為嚴謹，每一種語法都有嚴格的規範；而 JavaScript Standard Style 感受上較為輕鬆，像是每行的最後方也不需要加上分號，也不至於強制要求每一種語法的寫法，簡單來說：整齊就好。
+
+> [透過 ESLint 學習 JavaScript ES6](https://ithelp.ithome.com.tw/articles/10195212)
+
+在這篇我看到了 ESlint 的工具不用每次都使用 Commit 來查看需要修正的地方，所以我就搜尋了 Notepad+++ 可用的 ESlint
+
+結果沒找到，搜尋到了別人用 VSCode 來達成 ESlint 的，所以決定試著改用 VSCode。
+
+安裝成功之後都是英文，看得很不習慣，於是找方法改中文，原來選項沒有內建 ，要去套件那邊找，搜尋 configure display language 就可以找到各種語言。
+
+然後套件一樣可以找到 ESlint 所以找到之後安裝就可以使用了，使用起來有效率多了，不必查字，會協助我糾正，我只要慢慢學起正確的寫法即可
+
+## 找到了 airbnb 的 ESlint
+
+[中文說明](https://github.com/jigsawye/javascript)
+
+## var, let, const
+
+變數有兩種類別。全域變數以及區域變數。
+
+> 全域變數：在函式作用域(function scope)之外宣告的變數，全域變數在整個程式中都可以被存取與修改。
+
+> 區域變數：在函式作用域(function scope)內宣告，每次執行函式時，就會建立區域變數再予以摧毀，而且函式之外的所有程式碼都不能存取這個變數。
+
+> [全域變數參考](https://www.iware.com.tw/blog-JavaScript%20%E5%AE%A3%E5%91%8A:%20var%E3%80%81let%E3%80%81const.html)
+
+`let` 與 `const` 的作用域都只在區塊內。
+
+在定義變數的時候，使用 let 定義的是可以變動的函數而如果有不需要變動的固定變數則是使用 const。
+
+所以這樣使用的好處是當使用 let 與 const 時，是在區塊內使用的變數，而當這些變數離開區塊的時候，就會被消除，所以這樣會節省資源。
+
+const 與 let 的差異，可以使其他人在閱讀程式碼的時候，可以從定義 const 變數得知，這個變數之後不會再修改，以得到更方便的閱讀性。
+
+const 在陣列以及物件的時候，卻又可以添加資料。其原因是因為，兩者屬於記憶體定址，跟陣列以及物件指向的東西沒關係，指向的東西是可以修改的。[參考資料](https://pjchender.blogspot.com/2017/01/const.html)
+
+參考資料：
+
+[Day26 var 與 ES6 let const 差異](https://ithelp.ithome.com.tw/articles/10209121)
+
+[var, let, const 差異](https://medium.com/@totoroLiu/javascript-var-let-const-差異-e3d930521230)
+
+## 分號
+
+對於分號有些疑問，於是 [查詢](https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/245355/) 這邊知道原來分號是代表一段程式碼的結束。
+
+收穫：
+
+ESlint 真的是個很難搞的東西，好不容易寫一些作業想說先提交好了，結果卻被瘋狂擋住。看到那一長串資料之後就又是頭痛頭大，所幸我 Google 的功夫還算行，花了一些時間解決這些問題，感覺很不錯，也變成稍微提前複習了 ES6。很有意思的經驗，而且也在解決 ESlint 的限制的同時，把自己寫程式碼的習慣做了一些修改，我也覺得按照 airBnb 的標準寫的程式碼，看起來就是比較美觀吧！還是因為好不容易完成的成就感作祟呢？

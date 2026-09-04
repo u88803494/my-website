@@ -1,0 +1,119 @@
+---
+title: "JavaScript 基礎：新手最會出錯的地方"
+slug: "javascript-基礎-新手最會出錯的地方"
+description: "「回傳」與「印出」的差異"
+date: 2019-04-24T15:31:13.587Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E6%96%B0%E6%89%8B%E6%9C%80%E6%9C%83%E5%87%BA%E9%8C%AF%E7%9A%84%E5%9C%B0%E6%96%B9-8c7fdfc99bd2"
+---
+
+## 「回傳」與「印出」的差異
+
+console.log() 印出
+
+```
+function add(a, b) {
+ console.log(a, b)
+}
+```
+
+```
+add(1, 2)
+//1 2
+```
+
+```
+function add(a, b) {
+ console.log(a, b)
+}
+```
+
+```
+console.log(add(1, 2))
+//1 2  // 印出
+//undefined // 回傳
+```
+
+只要 function 沒加 return 就會預設 return undefined
+
+return 就是回傳任何東西
+
+function 通常都要 return 回傳值，而不是在 function 內部"印出"。
+
+瀏覽器的差異，瀏覽器沒執行一個指令就會印出了什麼內容，所以一般都在 node.js 使用。
+
+## 超級無敵重要的 Immutable 觀念
+
+Immutable 不可變：除了物件跟陣列之外，所有的東西都是不可變
+
+```
+var a=’hello’
+a =’yo’ // a 是可以改變的 但字串的記憶體不變也不會消失
+```
+
+a: ‘hello’ 0x01 定義一個 a 變數是 字串’hello’ 存在0x01  
+a: ‘yo’ 0x02 新建一個記憶體空間 0x02 儲存 ‘yo’ 然後’yo’把指定給 a
+
+```
+var a=’hello’
+a +=’yo’ //a = a + ‘yo’
+```
+
+a: ‘hello’ 0x01 定義一個 a 變數是字串’hello’，存在 0x01  
+a: ‘helloyo’ 0x02 新建一個記憶體空間 0x02 儲存 ‘helloyo’ 然後’yo’把指定給 a
+
+不可變可以用在哪呢？
+
+```
+var a=’hello’
+a = a.toUpperCase()
+//很多人會忘記給值，因為’hello’是不可變的，
+//所以必須回傳，造一個新的記憶體位置來儲存新值。
+console.log(a)
+```
+
+簡單說除了物件跟陣列以外都必須要指定或創造一個新的變數來去接收 function 回傳的值，才會儲存在記憶體空間，才可以呼叫。
+
+關於物件與陣列：Mutator methods 表示是可以改變東西的
+
+```
+var arr = [1, 2, 3]
+arr = arr.indexOf(2) //也必須要回傳
+console.log(arr)
+// 1 // 2 的 index 是 1
+```
+
+```
+var arr = [1, 2, 3]
+arr.push(4) //直接添加了一個陣列
+console.log(arr)
+//[1, 2, 3, 4]
+```
+
+會在原始的記憶體位置直接添加一位，也就是會改動原本儲存的內容。看到這邊在想是不是因為陣列的儲存方式是透過指向的方式來儲存，所以一添加就會改到原來儲存的長度。
+
+```
+var arr = [1, 2, 3]
+arr = arr.push(‘4’)
+// 這行會把陣列添加一位 '4'變成[1, 2, 3, '4']，
+// 然後回傳這個陣列的長度
+console.log(arr)
+//4
+```
+
+array.push()：添加一個或多個元素至陣列的末端，並且回傳陣列的新長度。[解釋](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/push)
+
+因為這樣很多人看不懂，所以比較不會有人寫 arr = arr.push(‘4’)
+
+**重點：**
+
+**只要回傳的不是一個陣列.物件，最好就是設個變數去接收。**
+
+## 愛用 console.log 的理由
+
+debug 的小技巧，在所有不知道在幹嘛的地方就是放進 console.log 這樣才可以知道該行有沒有照著自己的想法走。
+
+只要發現程式有錯卻不知道哪邊有問題，就把有疑問的地方都用 console.log 來找尋。
+
+收穫：這部分比較簡單，但是也有滿重要的觀念的，不可變的問題，就是很重要的部分，這部分使我了解到，那些時候必須要定義一個變數，卻也發現有一些設計似乎不是這麼符合人性。

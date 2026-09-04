@@ -1,0 +1,121 @@
+---
+title: "React Blog 的新增/編輯/刪除介面實作"
+slug: "react-blog-的新增-編輯-刪除介面實作"
+description: "緣由"
+date: 2020-02-09T13:53:11.555Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*-yOpTaxA2rIn0c3ESBYpSA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-blog-%E7%9A%84%E6%96%B0%E5%A2%9E-%E7%B7%A8%E8%BC%AF-%E5%88%AA%E9%99%A4%E4%BB%8B%E9%9D%A2%E5%AF%A6%E4%BD%9C-860272b9da97"
+---
+
+## 緣由
+
+這是接續上一篇：[React 中如何實作的彈出視窗](https://medium.com/@hugh_Program_learning_diary_Js/react-%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%E7%9A%84%E5%BD%88%E5%87%BA%E8%A6%96%E7%AA%97-48935aee5183?source=your_stories_page---------------------------)
+
+這裡需要實作的是整個介面，主要是把新增跟編輯的介面寫在一起，然後另外寫個刪除的介面，大致上結構都一致。
+
+## 實作
+
+### 新增跟編輯
+
+因為考慮太多比較複雜，所以就先以在這一層實作一個狀態來處理較好，因為編輯的部分我要改值，而之後可以直接回傳這個值給上一層就好。
+
+而這邊因為用的是新增跟編輯的部分，所以還要額外傳入一個 status 作為分辨到底是新增還是編輯。
+
+介面的部分，主要就是從 bootstrap 裡面找到適合的 input 跟 textarea 然後套用進去即可。
+
+可以從 forms 這邊來找。
+
+編輯部份的考量點，必須要另外呼叫 api 送出資料，然後必須要通知主頁面的 status，這樣實作下來感覺會複雜很多。
+
+但這是後面的事情了，只要先考慮如何做出來新增的時候都是空白，然後編輯的時候，裡面有資料可以編輯就好。
+
+這部分就仰賴於上一層傳進來 post 即可，因為這是在 `.map()` render 的時候已經切成一筆一筆的資料，所以傳進來的資料就剛好是按下按鈕的文章內容，就可以把這些資料放進去。
+
+```
+const EditingWindow = ({ onHide, show, post, status }) => {
+```
+
+```
+}
+```
+
+所以在這裡也要把那些資料都放進去
+
+```
+const newPost = { title: '', author: '', body: '', }
+const [thisPost, setThisPost] = useState(post ? post : newPost)
+```
+
+但這邊比較特殊，所以要用三元運算子去把辨認一下要擺什麼資料，才不會混亂。
+
+然後就可以寫內部取得值得方法跟把資料送出的部分，而這邊因為還是寫介面，所以就直接印出撰寫在輸入框的內容
+
+而後續的內容，就是很簡單的，只要判斷一下 `ThisPost` 有沒有值，有的話就把值放進去，跟添加 `onChange` 來改變值就好，如下：
+
+```
+<Form.Group controlId="formBasicPassword">
+<Form.Label>作者</Form.Label>
+  <Form.Control
+    type="text"
+    placeholder="author/作者"
+    value={thisPost && thisPost.author}
+    onChange={(e) => { changePost(e, 'author') }}
+  />
+</Form.Group>
+```
+
+會使用 changePost 是因為在這邊狀態用的是把資料通通寫在一起的物件，所以要改成另外寫過 function 比較好。
+
+![這邊要更正一下，只有一層算是淺拷貝](https://cdn-images-1.medium.com/max/800/1*-yOpTaxA2rIn0c3ESBYpSA.png)
+
+_這邊要更正一下，只有一層算是淺拷貝_
+
+先做淺拷貝，然後把 `updatePost` 物件用 `switch case` 做判斷之後替換，所以這邊 function 要傳入 e 跟 資料種類用做判斷。然後再把這個值傳給 `setThisPost` 即可變更狀態。
+
+這邊這樣用主要是不能直接去改值。
+
+而其餘的部分都是這樣呈現，所以就不另外寫上來了。
+
+更正：可以直接使用 ES6 的語法去變動就好。
+
+然後每個 input 新增一個 name，這樣就可以利用 `e.target.name` 去取得是什麼類型的資料了。
+
+接著就可以直接去變動資料：
+
+```
+const changePost = (e) => {
+  setThisPost({
+    ...thisPost,
+    [e.target.name]: e.target.value ,
+  })
+}
+```
+
+完成之後，如果需要測試可以寫：
+
+```
+<Button
+  variant="outline-primary"
+  onClick={() => console.log('送出', thisPost)}
+>
+  Save changes
+</Button>
+```
+
+這樣就可以確認到有無成功送出資料。
+
+### 刪除
+
+刪除的部分，思考之後決定另外寫過，其實也可以寫在一起，寫在一起的話就是需要多一個判斷，但實際上還是會分開來寫，因為又判斷又是表單的部分的話，會看起來比較混亂，所以最後一定會被我拆開變成判斷是新增/編輯 component 還是刪除 component，不如就直接開開來寫就好了。
+
+而刪除就比較簡單了，就是把前面寫好的部分抽出來改造就好。
+
+![](https://cdn-images-1.medium.com/max/800/1*8X36JRPaOw7awvB-Qoa8hQ.png)
+
+這樣大致就完成整個介面的部分，之後就是寫按鈕的功能了。
+
+## CODE
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/8687d6a18b3d02b5522ab3cf329d0094)

@@ -54,3 +54,7 @@ next-env.d.ts
 
 # browser automation artifacts (Playwright / Chrome DevTools MCP)
 .playwright-mcp/
+
+# Medium official export (source material for the MDX migration).
+# Kept local only: once converted, content/blog/*.mdx is the source of truth.
+medium-source/

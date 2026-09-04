@@ -1,0 +1,104 @@
+---
+title: "前端框架 React：官方教程-圈圈叉叉小遊戲"
+slug: "前端框架-react-官方教程-圈圈叉叉小遊戲"
+description: "前言"
+date: 2019-11-10T07:49:18.798Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*xmMWXU_JmINqMB3sXQ9Geg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E5%AE%98%E6%96%B9%E6%95%99%E7%A8%8B-%E5%9C%88%E5%9C%88%E5%8F%89%E5%8F%89%E5%B0%8F%E9%81%8A%E6%88%B2-29576eb15058"
+---
+
+## 前言
+
+這篇是基於 [React 官網的教學](https://zh-hant.reactjs.org/tutorial/tutorial.html)在這邊要把一些自己思考的細節做一些筆記。
+
+在官方教程中，要實作一個圈圈叉叉的小遊戲，在這遊戲中可以理解到整體到底怎麼跑 React 的流程。
+
+這邊也有一些先決條件，像是必須要懂得一些 JavaScript 的語法，或是對於程式語言常見的組成有一定的熟悉：如 function、object、array 以及（某種程度上）class，有一定的涉獵。
+
+最好也可以熟悉 ES6 語法。
+
+## 開始
+
+第一步驟一定是創建一個 React app 來使用，這邊跟官網教學寫的用法不一樣。
+
+直接在資料夾底下輸入 `npx create-react-app tictactoe && cd tictactoe`
+
+這樣就可以在當前資料夾底下創造一個資料夾 tictactoe 並變成 react app 並且切換進去該資料夾。
+
+然後就開始把官方的文件移植到這個 app 裡面。刪除
+
+1. 刪除 `src/` 資料夾底下的所有檔案
+2. 在 `src/` 資料夾中加入[這個 CSS 程式碼](https://codepen.io/gaearon/pen/oWWQNa?editors=0100)並命名為 `index.css`。
+3. 在 `src/` 資料夾中加入[這個 JS 程式碼](https://codepen.io/gaearon/pen/oWWQNa?editors=0010)並命名為 `index.js` 的檔案。
+4. 在 `src/` 資料夾中加入這三行程式碼在 `index.js` 檔案的最上方：
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+```
+
+這樣整個畫面就有簡單的雛形了，
+
+![](https://cdn-images-1.medium.com/max/800/1*xmMWXU_JmINqMB3sXQ9Geg.png)
+
+剩下的部分因為之前在另外一個課程學過，我就跳過我知道的部分，只寫那些我覺得需要寫的部分。
+
+在這部分可以針對格子裡面的值，進行設定 `state` ，所以可以單獨使一個 component 有自己的值。
+
+```
+class Square extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
+
+  render() {
+    return (
+      <button
+        className="square"
+        onClick={() => this.setState({value: 'X'})}
+      >
+        {this.state.value}
+      </button>
+    );
+  }
+}
+```
+
+在這種情況下，因為每一格都是獨立的 component，所以每個格子都可以有自己的值。
+
+不過最終因為需要再上層得知這邊的值是什麼，所以就交給 Square 的 parent component 去決定。
+
+> 提升 State
+
+> 目前，每個 Square component 都能更新這個遊戲的 state。如果要分出勝負的話，我們需要將這九個方格的值都紀錄在某處。
+
+> 也許我們會覺得 Board 應該從每個 Square 中確認該方格的狀態。雖然這個方法在 React 中是可行的，但我們並不鼓勵你這麼做，因為你的程式碼會變得很難懂，很容易有 bug，也很難重寫。最好的方式是把這整個遊戲的 state 存放在 Board parent component 中，而不是在每一個 Square 中。Board component 會藉由傳遞 props 的方式告訴每一個 Square 該顯示什麼值，[就如同我們剛開始先傳給每個 Square 一個數字是一樣的](https://zh-hant.reactjs.org/tutorial/tutorial.html#passing-data-through-props)。
+
+> **為了從多個 children 中收集資料，或是讓兩個 child component 互相溝通，你需要在它們的 parent component 裡宣告一個共享的 state。這個 parent component 可以將 state 透過 props 向下傳給 children。這讓 child component 之間還有跟它們的 parent component 能隨時保持同步。**
+
+controlled component 在這邊的例子就是通過 parent component 去完全控制 child component。
+
+## 不可變性
+
+不可變性在這邊是指資料的不可變，通過不可變。就可以當不可變資料跟之前不一樣的時候，用來跟資料的資料做比較，又或是把這些資料儲存起來，用來追蹤使用紀錄
+
+## Function Component
+
+之前我以為只能純粹用來 render 固定的資料，現在在這邊知道原來可以通過傳入 `props` 直接使用上一層 component 的資料。而在這些例子也知道，同一個 component 的其他 function 也可以用來 render
+
+## 運算子優先順序
+
+針對答案的部份，就必須要理解運算子優先順序的問題。[參考 MDN](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Operators/Operator_Precedence)
+
+```
+(squares[a] && squares[a] === squares[b]
+  && squares[a] === squares[c])
+```
+
+在這判斷式之中，由於 `===` 的順序高於 `&&`，所以會先判斷完相等之後才開始判斷 `&&` 。這樣就可以知道到底這三著有無相等，且是否有值。

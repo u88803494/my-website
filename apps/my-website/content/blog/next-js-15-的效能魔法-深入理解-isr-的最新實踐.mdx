@@ -1,0 +1,229 @@
+---
+title: "Next.js 15 的效能魔法：深入理解 ISR 的最新實踐"
+slug: "next-js-15-的效能魔法-深入理解-isr-的最新實踐"
+description: "想讓網站快得像火箭，內容又能隨時更新？Next.js 的 ISR 就是你的答案。本文帶你一次搞懂。"
+date: 2025-06-19T04:17:26.995Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*hBg1NrYGb1ObZzylyOFqkg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/next-js-15-%E7%9A%84%E6%95%88%E8%83%BD%E9%AD%94%E6%B3%95-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-isr-%E7%9A%84%E6%9C%80%E6%96%B0%E5%AF%A6%E8%B8%90-5685f8256474"
+---
+
+> _想讓網站快得像火箭，內容又能隨時更新？Next.js 的 ISR 就是你的答案。本文帶你一次搞懂。_
+
+這篇文章會帶你解決一個所有 Web 開發者都會遇到的經典難題：**到底該怎麼做，才能讓網站又快、內容又新？**
+
+![](https://cdn-images-1.medium.com/max/800/1*hBg1NrYGb1ObZzylyOFqkg.png)
+
+我們將以目前最新的 **Next.js 15.3.4 (App Router)** 為基礎，用最白話的方式，一步步拆解它的「增量靜態再生」(Incremental Static Regeneration, ISR) 這項強大功能。
+
+讀完後，你會清楚地學到：
+
+- 為什麼網站的「速度」和「新鮮度」總是像在拔河？
+- ISR 是如何聰明地解決這個問題的。
+- 如何使用 `revalidate`、`dynamicParams` 等設定，來打造自動更新的靜態頁面。
+- 如何透過 `revalidatePath` 和 `revalidateTag` 這兩個王牌功能，做到精準、即時的內容更新。
+
+無論你是剛接觸 Next.js 的新手，還是希望能活用最新功能的老手，這篇文章都能幫你徹底掌握這項打造高效能現代網站的關鍵技術。
+
+> _如何在靜態網站的極致速度與動態網站的內容彈性之間，找到完美的平衡點。_
+
+身為 Web 開發者，我們總是在一個經典的兩難中掙扎：我們希望網站像純靜態頁面一樣，擁有閃電般的載入速度；但同時，我們也需要網站的內容能夠隨時更新，以反應最新的資訊。
+
+過去，這似乎是一個魚與熊掌不可兼得的選擇題，開發者必須在兩種極端的渲染模式中做出取捨。為了解決這類複雜的挑戰，社群中出現了許多強大的工具，其中最具代表性的，莫過於 Next.js。
+
+## 什麼是 Next.js？
+
+Next.js 是 Vercel 團隊基於 React 打造的一款開源 Web 開發框架，其標語是「The React Framework for Production」。它在 React 的基礎之上，提供了一整套解決方案與架構，包含了檔案系統路由、程式碼分割、伺服器端渲染、靜態網站生成等眾多功能，讓開發者能更專注於業務邏輯，同時輕鬆建構出高效能、SEO 友好的現代化網站應用。
+
+正是因為 Next.js 內建了如此強大的渲染能力 — — 從靜態網站生成 (SSG) 到伺服器端渲染 (SSR) — — 它才能夠不斷探索，並最終提出像 ISR 這樣突破性的解決方案，來應對開發者最棘手的效能與內容更新挑戰。
+
+## 什麼是 ISR？
+
+簡單來說，ISR (Incremental Static Regeneration) 是一種混合策略。它允許您在建置時先產生一批靜態頁面，但在網站上線後，能夠在背景**增量地**、**自動地**或**按需地**重新生成這些頁面。
+
+想像一下一個數位化的新聞看板。看板上的大部分內容是固定的（靜態的），但上面的頭條新聞需要定期更新。ISR 就像是讓這個看板擁有了一個能力：在不拆掉整個看板的前提下，悄悄地、有效率地只更換那塊頭條新聞的區域。
+
+ISR 主要透過兩種核心機制來實現：**時間基礎的再生成 (Time-based Revalidation)** 和 **隨選再生成 (On-demand Revalidation)**。
+
+## ISR 的基石：Route Segment Config
+
+在現代 Next.js App Router 中，ISR 的實現不再僅僅是 `fetch` 的一個選項，而是透過在頁面或佈局檔案中導出的幾個關鍵設定來共同完成的。這讓我們的控制力更強大、意圖也更清晰。
+
+讓我們以一個動態的部落格文章頁面 `app/blog/[id]/page.tsx` 為例，看看這些設定如何協同工作：
+
+```typescript
+// app/blog/[id]/page.tsx
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+}
+// 1. 設定頁面的再驗證週期為 60 秒
+export const revalidate = 60;
+
+// 2. 告訴 Next.js 如何處理未在建置時生成的路徑
+export const dynamicParams = true; // true 的話會即時生成，false 則會 404
+
+// 3. 在建置階段，預先生成一部分熱門文章的頁面
+export async function generateStaticParams() {
+  // 假設我們只預先生成前 10 篇最熱門的文章
+  const posts: Post[] = await fetch('https://api.example.com/posts?limit=10').then((res) =>
+    res.json()
+  );
+  return posts.map((post) => ({
+    id: post.id,
+  }));
+}
+// 頁面元件本身
+export default async function Page({ params }: { params: { id: string } }) {
+  const post: Post = await fetch(`https://api.example.com/blog/${params.id}`).then(
+    (res) => res.json()
+  );
+  return (
+    <main>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </main>
+  );
+}
+```
+
+這個範例完美展示了現代 ISR 的運作模式：
+
+1. `generateStaticParams`: 在 `next build` 時，Next.js 會呼叫此函式，取得一個包含 `id` 的陣列（例如 `[{ id: '1' }, { id: '2' }, ...]`）。它會為這些 `id` **預先生成**靜態的 HTML 頁面。這確保了您最熱門、最重要的頁面能夠以最快的速度被存取。
+2. `dynamicParams = true`: 如果此時有一個請求進來，訪問的是一個**沒有**被 `generateStaticParams` 預先生成的頁面（例如 `/blog/11`），這個設定會告訴 Next.js：「不要放棄！請**即時地 (on-demand)** 為這個新的 `id` 生成頁面，並將其快取起來供後續使用。」這就是 ISR 強大的動態擴展能力。如果設為 `false`，則訪問 `/blog/11` 會直接顯示 404 頁面。
+3. `export const revalidate = 60`: 這個設定為此路徑下的所有頁面（無論是預先生成的還是即時生成的）設定了一個 60 秒的快取生命週期。當一個頁面的快取超過 60 秒後，下一次的請求會觸發背景的重新生成，以確保內容的逐步更新。
+
+## 更新快取的兩種模式：時間基礎 vs. 隨選觸發
+
+基於上述的架構，我們有兩種主要的策略來更新我們的快取內容
+
+### 模式一：時間基礎的再生成 (Time-based Revalidation)
+
+這是最常見的自動更新機制，透過 `export const revalidate` 來實現。
+
+**場景**：您的文章列表頁，希望每小時自動與後端同步一次。
+
+```javascript
+// app/blog/page.tsx
+// 將此頁面的快取有效期設定為 1 小時 (3600 秒)
+export const revalidate = 3600;
+export default async function Page() {
+  const posts: Post[] = await fetch('https://api.example.com/blog').then((res) => res.json());
+  return (
+    <main>
+      <h1>所有文章</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+這個設定簡單明瞭，適用於那些內容會更新，但不需要絕對即時的場景。官方建議設定一個相對較長的時間（例如一小時而不是一秒），如果需要更精準的即時更新，應優先考慮「隨選再生成」。
+
+### 模式二：隨選再生成 (On-demand Revalidation)
+
+這是 ISR 更強大、更靈活的模式。它讓您可以透過外部事件來**主動觸發**、**即時更新**快取。
+
+**工具 1:**`revalidatePath`**(精準的路徑更新)**
+
+`revalidatePath` 就像一把手術刀，讓您能精準地指定哪一個頁面路徑需要更新。實際操作上，這個指令通常會放在一個 Server Action 或 API Route 中，當您在後台完成某個動作（例如新增文章）後被呼叫。
+
+**範例：使用 Server Action 更新路徑**
+
+```typescript
+// app/actions.ts
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+// 這是一個 Server Action，會在後台被呼叫
+export async function createPost() {
+  // ... 這裡有新增文章到資料庫的邏輯 ...
+
+  // 通知 Next.js 將 /blog 這個路徑的快取設為無效
+  revalidatePath("/blog");
+}
+```
+
+當 `createPost` 被執行後，`/blog` 頁面的快取會立刻失效。下一個訪客就能看到包含最新文章的列表。
+
+**工具 2:**`revalidateTag`**(更強大的範圍更新)**
+
+當一個資料變動會影響到網站上多個頁面時，`revalidateTag` 就成了您的最佳利器。它讓您從「關心頁面」轉變為「關心資料」。 它的比喻是：您不是給拆除大隊一個明確的地址，而是下了一個範圍命令：「**市內所有被貼上『紅色危樓』標籤的建築，不管它在哪一條街，全部拆除！**」
+
+要使用 `revalidateTag`，需要兩步關鍵操作：
+
+**第一步：在抓取資料時「貼標籤」**
+
+您必須先在獲取資料的程式碼中，為相關的資料請求「貼上標籤」。這樣 Next.js 才知道哪些資料是屬於同一個群組的。
+
+**場景**：您的「文章列表頁 (`/blog`)」和「首頁 (`/`)」都會顯示文章相關的資料。
+
+您可以在抓取資料時，像這樣為它們都貼上 `posts` 的標籤：
+
+```javascript
+// app/blog/page.tsx - 使用 fetch
+export default async function Page() {
+  const data = await fetch("https://api.vercel.app/blog", {
+    next: { tags: ["posts"] }, // 為這個 fetch 請求貼上 'posts' 標籤
+  });
+  const posts = await data.json();
+  // ...
+}
+```
+
+如果您不是直接使用 `fetch`，而是透過 ORM (如 Prisma) 連接資料庫，您可以使用 Next.js 提供的 `unstable_cache` 函式來包裹您的資料庫查詢，並為其貼上標籤：
+
+```typescript
+// app/some-other-page/page.tsx - 使用 ORM 和 unstable_cache
+import { unstable_cache } from "next/cache";
+import { db } from "@/lib/db"; // 假設這是您的資料庫實例
+
+const getCachedPosts = unstable_cache(
+  async () => {
+    // 這裡執行實際的資料庫查詢
+    return await db.select().from(posts);
+  },
+  ["all-posts"], // 快取鍵 (cache key)，必須是唯一的字串陣列
+  {
+    tags: ["posts"], // 同樣為這份來自資料庫的資料貼上 'posts' 標籤
+  },
+);
+```
+
+**第二步：按標籤觸發更新**
+
+當您在後台新增或修改了一篇文章後，您就可以在 Server Action 中呼叫 `revalidateTag`，一次性地讓所有貼有相同標籤的快取全部失效。
+
+**範例：使用 Server Action 按標籤更新**
+
+```javascript
+// app/actions.ts
+"use server";
+
+import { revalidateTag } from "next/cache";
+
+export async function createPost() {
+  // ... 這裡有新增文章到資料庫的邏輯 ...
+
+  // 讓所有被貼上 'posts' 標籤的資料快取全部失效
+  revalidateTag("posts");
+}
+```
+
+執行 `revalidateTag('posts')` 後，前述的「文章列表頁」和「首頁」的快取都會同時被標記為無效。這樣，您就無需手動管理所有受影響的頁面路徑，極大地提高了大型應用的可維護性。
+
+## 結論：速度與彈性的完美結合
+
+在 Next.js 15 的 App Router 中，增量靜態再生 (ISR) 已經演變成一套成熟且強大的頁面渲染與快取策略。透過 `revalidate`, `dynamicParams` 和 `generateStaticParams` 的組合，我們可以為網站的不同部分量身打造最適合的效能方案。
+
+- 對於有規律更新的內容，使用**時間基礎的再生成**可以輕鬆實現自動化。
+- 對於需要即時反應的事件驅動內容，**隨選再生成**提供了無與倫比的靈活性和精準度。
+
+掌握這套現代化的 ISR 實踐，不僅僅是學會一個 Next.js 的功能，更是理解了一種全新的網站架構思維。它讓我們能夠自信地打造出既擁有極致效能，又不犧牲內容新鮮度的、真正面向未來的 Web 應用。

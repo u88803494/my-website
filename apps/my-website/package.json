@@ -15,6 +15,7 @@
     "format:check": "prettier --check .",
     "check": "echo '🔍 Running comprehensive code quality checks...' && pnpm run check-types && pnpm run lint && prettier --write . && echo '✅ All checks completed with auto-formatting!'",
     "content:build": "velite build",
+    "convert:medium-to-mdx": "tsx scripts/medium-to-mdx/index.ts",
     "sync:latest": "tsx scripts/sync-latest-articles.ts",
     "parse:articles": "tsx scripts/batch-parse-articles.ts",
     "sync:all-articles": "pnpm run sync:latest && pnpm run parse:articles"
@@ -72,6 +73,7 @@
     "axios": "^1.13.1",
     "cheerio": "^1.1.2",
     "daisyui": "^5.4.2",
+    "domhandler": "^5.0.3",
     "eslint": "^9.39.0",
     "eslint-config-next": "15.4.7",
     "eslint-config-prettier": "^10.1.8",

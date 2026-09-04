@@ -1,0 +1,417 @@
+---
+title: "前端基礎：AJAX 與 API 作業思考解法心得"
+slug: "前端基礎-ajax-與-api-作業思考解法心得"
+description: "hw1：抽獎程式"
+date: 2019-06-23T11:33:02.057Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*6HeapFkQFdv9JlcG.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-ajax-%E8%88%87-api-%E4%BD%9C%E6%A5%AD%E6%80%9D%E8%80%83%E8%A7%A3%E6%B3%95%E5%BF%83%E5%BE%97-5cf382bf5fbf"
+---
+
+## hw1：抽獎程式
+
+住你家樓上的王媽媽最近剛開了火鍋店，想要讓每個來消費的客人都能夠抽獎，可是他想要創新一點，不想要用實體的籤，想要靠著程式來作抽獎，而且希望每個獎項都有固定的機率。
+
+她已經委託一間公司寫好了抽獎的 API，而你要幫忙的地方是實作前端介面並且跟 API 串接，這樣子就是一個完整的抽獎程式了！就衝著王媽媽答應你做完後可以獲得一客免費的 A5 和牛火鍋這點，說什麼也要把這個網站做好！
+
+這是 API 的網址：https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery
+
+用 GET 即可，API 會回傳一個 JSON 格式的物件，內容為：
+
+```
+{
+  prize: "獎項名稱"
+}
+```
+
+API 會按照機率回傳不同的獎項名稱，請你針對不同的獎項名稱做處理。
+
+獎項名稱一共有四種：FIRST、SECOND、THIRD 以及 NONE。
+
+1. FIRST，頭獎，在網頁上顯示字樣：「恭喜你中頭獎了！日本東京來回雙人遊！」，並且把背景改成天空色，網頁上放一張飛機的圖片。
+2. SECOND，二獎，在網頁上顯示字樣：「二獎！90 吋電視一台！」，並且在網頁上放一張電視的圖片。
+3. THIRD，三獎，在網頁上顯示字樣：「恭喜你抽中三獎：知名 YouTuber 簽名握手會入場券一張，bang！」，並且在網頁上放 YouTube 的 Logo。
+4. NONE，銘謝惠顧，在網頁上顯示字樣：「銘謝惠顧」，並起把整個網頁變成黑底白字。
+
+有一點要特別注意，API 偶爾可能會不太穩定，會回傳錯誤。如果發生任何預期之外的情形（回傳的獎項不是以上四種，或是 Server 直接回傳錯誤），請跳出提示視窗（alert）：「系統不穩定，請再試一次」。
+
+-
+
+思考了之後，就想到直接先寫出判斷種了哪一種獎品，再來切版，因為現在還沒對於要怎麼皆有個想法XD。
+
+所以先寫出可以印出結果的 JS
+
+```
+const request = new XMLHttpRequest();
+request.onload = function () {
+  if (request.status >= 200 && request.status < 400) {
+    const result = JSON.parse(request.responseText);
+    console.log(result.prize);
+    switch(result.prize) {
+      case 'FIRST':
+        console.log('頭獎');
+        break;
+      case 'SECOND':
+        console.log('二獎');
+        break;
+      case 'THIRD':
+        console.log('三獎');
+        break;
+      case 'NONE':
+        console.log('沒中');
+        break;
+      default:
+        console.log('發生錯誤');
+    }
+  } else {
+    console.log('err'); // 印出錯誤
+  }
+};
+```
+
+```
+request.onerror = function () {
+  console.log('error');
+};
+```
+
+```
+request.open('GET', 'https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery', true);
+request.send();
+```
+
+然後規劃如何切版。目前試著切出一個小視窗，然後會顯示中了甚麼獎，然後再下面擺放出相對應的圖片。
+
+完成之後調整一下呈現方式。
+
+因為每一種獎項要呈現的不同，所以要設定不同的 CSS 所以就每種獎項另外設置添加的 CSS，接著只要再需要的時候去呈現就好了。
+
+另外在思考的是因為想使用 JavaScript 判斷之後填充所需要的內容的方式。不過又覺得這方式重複性太高，所以再思考要先把不同的地方用array 儲存，然後同樣的內容用 function 包起來之後呼叫，並傳入所需要的 array 值，透過這樣的方式免去重複寫內容的工作。
+
+JavaScript 的時候，我想要使用 JavaScript 添加的方式，但發現有重複的部分，我再思考要如何可以少寫一點重複性值高的 code，最後想到我就用一個範本，然後透過判斷式取得得到第幾個獎項，之後再把對應的用詞跟圖片代入即可，這樣可能是個不錯的方式，但又發現資料有所重複的部分，思考了一下，決定要使用陣列包物件的方式試試看。所以會一直想要用綜合應用的方式去解題，這也是為了我可以做深入學習，這樣才是真正的把要學得學會。  
+然後因為題目其實沒有規定要如何實作，所以我一開始寫的時候一直再想，我是不是應該製作一個 button 來控制呢？還想說那這樣還可以順便複習一下上一個作業 [Week7] hw1 的做法，感覺起來很不錯呢？但好像會花不少時間。所以暫時先以重新整理的方式來做規劃。也有可能是我會在抽完獎之後顯示一個 button，案下去就會重新整理網頁。這應該是最簡單的作法。
+
+所以決定使用陣列包物件的方式，然後抽到對應的之後回傳物件即可印出，且可以成功執行。
+
+```
+const request = new XMLHttpRequest();
+```
+
+```
+function prizeResult(i) {
+  const prizeContent = [{
+    title: '恭喜你中頭獎了！日本東京來回雙人遊！',
+    picture: './abroad.png',
+  },
+  {
+    title: '二獎！90 吋電視一台！',
+    picture: './lcd_tv.jpg',
+  },
+  {
+    title: '恭喜你抽中三獎：知名 YouTuber 簽名握手會入場券一張，bang！',
+    picture: './YouTube.png',
+  },
+  {
+    title: '銘謝惠顧',
+    picture: '',
+  }]; // 儲存得獎的恭喜詞與圖片路徑
+  /* for (let i = 0; i < prizeContent.length; i++) {
+    console.log(`得獎詞：${prizeContent[i].title}, 圖片地址：${prizeContent[i].picture}`)
+  } // 可印出 */
+  return prizeContent[i]
+}
+```
+
+```
+function whichPrize(prize) {
+  switch (prize) {
+    case 'FIRST':
+      console.log(prizeResult(0));
+      ;
+      break;
+    case 'SECOND':
+      console.log(prizeResult(1));
+      break;
+    case 'THIRD':
+      console.log(prizeResult(2));
+      break;
+    case 'NONE':
+      console.log(prizeResult(3));
+      break;
+    default:
+      alert('系統不穩定，請再試一次');
+  } // 必須要 return 然後得到些甚麼，才可以繼續運行，或是直接再這裡面運行應該也可以
+}
+```
+
+```
+request.onload = function load() {
+  if (request.status >= 200 && request.status < 400) {
+    const result = JSON.parse(request.responseText);
+    whichPrize(result.prize); // 傳入抽中的值，判斷抽中哪個獎項
+  } else {
+    alert('系統不穩定，請再試一次');
+  }
+};
+```
+
+```
+request.onerror = function error() {
+  alert('系統不穩定，請再試一次');
+};
+```
+
+```
+request.open('GET', 'https://dvwhnbka7d.execute-api.us-east-1.amazonaws.com/default/lottery', true);
+request.send();
+```
+
+寫是這樣寫，在思考是否直接把動態網頁的部分寫在 prizeResult 上面呢？
+
+發現是可以的，而且也不會讓程式碼看起來很亂：
+
+```
+function prizeResult(i) {
+  const prizeContent = [{
+    title: '恭喜你中頭獎了！日本東京來回雙人遊！',
+    picture: './abroad.png',
+  },
+  {
+    title: '二獎！90 吋電視一台！',
+    picture: './lcd_tv.jpg',
+  },
+  {
+    title: '恭喜你抽中三獎：知名 YouTuber 簽名握手會入場券一張，bang！',
+    picture: './YouTube.png',
+  },
+  {
+    title: '銘謝惠顧',
+    picture: '',
+  }]; // 儲存得獎的恭喜詞與圖片路徑
+  /* return prizeContent[i]; */
+  const container = document.querySelector('body');
+  const div = document.createElement('div');
+  div.classList.add('app');
+  div.innerHTML = `
+  <div class="app__prize">${prizeContent[i].title}</div>
+  <div class="app__picture"><img src="${prizeContent[i].picture}">  </div>`;
+  container.appendChild(div);
+}
+```
+
+於是就有了結果，下面是把資料整合在一起
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/e3d716a36847d14116740df7797d0acf)
+
+## hw2：留言板
+
+上次你幫王媽媽寫的抽獎程式大受好評，成功吸引了許多消費人潮，而 A5 和牛火鍋的滋味你也唸唸不忘，希望有機會能夠再吃一次。
+
+剛好，王媽媽又有了新的需求，他希望可以做一個留言板，讓客人們都可以上去留言，他就可以從這些留言中得知店裡哪邊做得好，哪邊做不好，並且加以改善。同樣地，他也去找了外包公司把 API 的部分搞定了，所以你只要負責前端的部分即可。
+
+老樣子，這次做完一樣會有 A5 和牛火鍋可以吃。
+
+底下是一個留言板的 API，主要的功能有兩個：撈取留言與新增留言，現在請你做一個頁面，可以讓他們新增留言以及看到最新的 20 則留言。
+
+Base URL：https://lidemy-book-store.herokuapp.com/
+
+![](https://cdn-images-1.medium.com/max/800/1*VOPhVYuvoNBw16vZYMmcsw.png)
+
+-
+
+一樣先切版，所以先參考一下網路上面留言版的形式，接著參考資料，發現只有留言的部分而已，所以只要做個最簡單版本即可。剩下大致上就是讓頁面看起來不要這麼奇怪就好。
+
+接著參考一下之前的四周作業，回想一下網址的用法，發現之前用的用法跟現在的是不同的模組。不過大致上就是之前那種改用現在這種。
+
+這樣的話，需要一個位置是一般正常的網頁，有留言的框跟按鈕，可以輸入跟送出留言。下方就是動態生成的各個留言。
+
+所以先切一個標題就是表明這是甚麼留言版，然後是輸入框跟送出鈕。接著在下方也切出別人的留言的區域是如何顯示的。以方便後續給 JS 動態新增使用。
+
+```
+<body>
+  <div class="board">
+    <div class="new">
+      <div class="new__title">店家名稱</div>
+      <div class="new__enter">
+        輸入框
+        <input type="text" name="" id="" class="new__input">輸入內容
+        <div><button type="submit">送出留言</button></div>
+      </div>
+    </div>
+    <div class="original">原來的留言</div>
+  </div>
+  <script type="javascript" src="index.js"></script>
+</body>
+```
+
+大致上先安排這樣的骨架，接著是開始調整樣式。
+
+簡單調整之後就可以開始寫 JavaScript 的部分了 ：
+
+所以一樣先從伺服器取得資料之後想辦法印出資料，緊接著再把留言的按鈕製作完成。
+
+留言按鈕可能需要去把資料傳上網站，所以需要研究一下要怎麼傳上去。接著是傳上去之後，要在同步一次資料，讓留言可以動態新增上去，這部分比較不熟悉，也需要再觀察一下，如何使用。
+
+所以先試試看把得到的 JSON 資料從後面印出來
+
+```
+for (let i = (json.length - 1); i >= 0; i -= 1) { // 留言從最後一筆開始顯示
+  const div = document.createElement('div');
+  div.classList.add('original__content');
+  div.innerHTML = json[i].content;
+  container.appendChild(div);
+}
+```
+
+並且添加元素就可以成功在網頁上面顯示資料。
+
+在來是如何新增資料的部分。
+
+看了一下資料發現是要先把資料轉成格式
+
+但發現 .send() 填入東西就可以發送，但發現只能發送字串而已。用其他的方式都不行。
+
+本來以為是要轉成 JSON 格式寄送，但是發現轉換之後即便加上 header 也不行傳送，會直接得到 500 錯誤。
+
+然後觀察一下之後發現伺服器是 *‘Content-type: text/xml’*的，所以要研究如何使用這種方式上傳。
+
+最後發現自己看錯了，用了 firefox 實際看到之後，就發現標頭是 Content-Typeapplication/json; charset=utf-8
+
+所以就要加上一個標頭才可以真正傳輸資料。
+
+[參考網站](http://www.w3school.com.cn/ajax/ajax_xmlhttprequest_send.asp)
+
+```
+function post(json) {
+  const obj = {
+    content: '',
+  };
+  obj.content = json;
+  const uploadDate = JSON.stringify(obj); // 轉換成 json 格式
+  console.log(uploadDate, typeof uploadDate);
+  request.open('post', 'https://lidemy-book-store.herokuapp.com/posts', true);
+  request.setRequestHeader('Content-type', 'application/json');
+  request.send(uploadDate);
+}
+```
+
+後來在寫題目的時候發現需要用排序的方式顯示最新的，結果發現看不懂文件的用法。於是就用 break 的判斷來強制 20 次跳出。
+
+結果後來上班再觀察一下就發現原來要搭配 sort 才可以調整順序。果然有休息是很重要的，睡一下才好多了才看得清楚更多東西。所以我決定以後如果真的太疲倦就要適度的休息才行。
+
+然後也因為發現如何跟伺服器請求倒過來排序的資料，所以迴圈也需要修改一下。另外有一個想法是想要試著實現看看留言之後直接只刷新留言板，卻發現要實作起來似乎有點難度。因為有很多地方需要解決，試著做出送出資料後就把新留言同步上去，所以額外把發送命令打包。但發現這樣做其實有點難度，可能還要先清掉原本的資料，之後再把新資料弄上去。而且也發現會發生一些問題，在於資料上傳沒這麼快，所以一樣會遇到等待的問題，所以直接寫在送出的後面，會導致沒辦法撈到最新的資料。而且似乎會傳不上去？應該是因為有兩個 request 的關係吧？
+
+不過這部分感覺難度未明，而且現在人在公司不方便寫，就留給明天，先思考 hw3 怎麼寫
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/d91e63afdffebb31e5cd8444ef2411a6)
+
+-
+
+## hw3：再戰 Twitch API
+
+還記得之前你幫果凍做的小程式嗎？可以看到 Twitch 上面熱門的遊戲，讓他從中挑選一個並且直播。這個成效很不錯，但是身為一個實況主，他又面臨了新的挑戰。
+
+最近又太多太多實況主了，每個都有不同的特色，除了精進自己的實力以外，也要觀察一下競爭對手在做什麼。於是，他想拜託你寫一個網頁，可以顯示出某個特定遊戲的一些熱門實況，好讓他能夠方便觀察競爭對手。
+
+請串接 [Twitch API v5](https://dev.twitch.tv/docs/v5/)，顯示出 League of Legends 目前正在直播的前 20 個實況。
+
+![](https://cdn-images-1.medium.com/max/800/0*6HeapFkQFdv9JlcG.png)
+
+## 作業提示
+
+1. [Twitch API](https://dev.twitch.tv/docs/v5/) 裡面有一個 API 是可以拿到現在正在直播的某個遊戲底下的資料，API 的描述是「Gets a list of live streams.」，看到這行就代表你找對 API 了。
+2. API 要帶的參數有一個 `game` 的欄位，請帶`League%20of%20Legends`
+3. 請顯示 20 個實況，不多不少，要剛好 20 個
+
+附註：Twitch API 有兩個版本，v5 是舊版，但這個作業建議用 v5
+
+-
+
+這作業對我來說或許很有梯度的吧！因為我上次實戰的時候，也是花了很多時機在大海撈針。只希望這次可以更有系統地找到我要的資料。
+
+所以按照這題目的意思，我需要切一個載版去程載所有的直撥方格，也許可以使用 iframe 的方式吧？簡單說我要先切出一個區域，用來放直播的頁面，而直播的頁面我也打算使用動態生成的方式。這次的切版會比較簡單一些，因為我只是將我需要的資料放進去而已。
+
+總言之，先切個版再說了。
+
+https://gist.github.com/u88803494/b9f71f915d8ad6d99a0daec61fa64158
+
+剩下就是按照題目的意思找出要使用的 api，然後還要夾帶那些資訊。
+
+從 API 可以看到要使用的資源是
+
+```
+curl -H 'Accept: application/vnd.twitchtv.v5+json' \
+-H 'Client-ID: 7jnow7*********rbd3*********m6' \
+-X GET 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&_limit=20'
+```
+
+所以就是要想辦法把相對應的資料代進去了。
+
+接著看到[這篇關於 AJAX](https://developer.mozilla.org/zh-TW/docs/Web/Guide/AJAX/Getting_Started) 於是就先研讀一下。發現到跨網域請求還有些事情要做。接著使用上面的資料去獲取 JSON 資料。是可以取得了，不過因為太龐大必須要研究一下怎麼使用，還好的是現在網路很方便。有很多解析工具，後來發現 VSCODE 也有這樣的工具。所以就直接解析，還可以呈現樹狀結構。有發到有網址之後就嘗試使用 iframe 來放置。結果卻發生錯誤，查詢之後才發現原來這樣放置需要 X-Frame-Options 的 header。不過 twitch 沒有提供這項資訊吧? 所以就應該不能使用這方法，也認識到原來現在已經沒有在用這種方式開發了，因為這種方式容易被惡意網站覆蓋。
+
+```
+const request = new XMLHttpRequest();
+const container = document.querySelector('.app');
+request.onload = function load() {
+  if (request.status >= 200 && request.status < 400) {
+    const response = request.responseText;
+    console.log(response); // 確認可以取得資料
+  } else {
+    console.log('err');
+  }
+};
+```
+
+```
+request.onerror = function error() {
+  console.log('error');
+};
+```
+
+```
+request.open('GET', 'https://api.twitch.tv/kraken/streams/?game=League%20of%20Legends&limit=20', true);
+request.setRequestHeader('Accept', 'application/vnd.twitchtv.v5+json');
+request.setRequestHeader('Client-ID', '7****************************6');
+request.send();
+```
+
+因為有確認到可以取得資料，所以就先繼續往下面寫。
+
+最後發現跟我想的差很多。我本來以為題目是有辦法做到，可以看到直播。後來在搜尋才知道，只能夠看到圖片、顯示名稱、LOGO 而已，甚至還去翻了 twitch 整個介面已經跟老師給的圖片不一樣了。不過還是按照原來題目的意思去寫。
+
+所以整個 block 又在重新切版。而且為了要做到可以外連出去。想說要新增 一個 a 標籤來讓整個 block 可以外連，本來已經寫好了可以使用的了，為了一個 a 標籤花了很多時間，還動到整個都亂掉了。最後發現其實只要把 block 的標籤改成 a 這樣才可以外連。 class 用原來的即可。
+
+所以整體而言完成了。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/3de9aa96c54c4428c02b5e114b04413d)
+
+## hw4：簡答題
+
+1. 什麼是 Ajax？
+2. 用 Ajax 與我們用表單送出資料的差別在哪？
+3. JSONP 是什麼？
+4. 要如何存取跨網域的 API？
+5. 為什麼我們在第四週時沒碰到跨網域的問題，這週卻碰到了？
+
+-
+
+### 什麼是 Ajax？
+
+AJAX 就是 Asynchronous JavaScript and XML。是一種非同步利用 JavaScript 傳送與接收資料的方式，原來是透過 XML 的方式去溝通的。但現在已經不限於 XML 了。原則上現在多用 JSON 格式。透過這種方式可以不重新整理網頁而讓網頁變動。
+
+### 用 Ajax 與我們用表單送出資料的差別在哪？
+
+利用 Ajax 來送出表單的差異在於一般送出表單之後，網頁會需要重新整理才可以看到資料。而利用 Ajax 卻可以將資料送出而整個網頁不用重新整理，只需變動資料的部分就好。
+
+### JSONP 是什麼？
+
+JSONP 是一種利用 script 標籤，來突破同源政策限制的方法。最主要是透過 src 的原理，帶上一個網址，因為這種方法可以繞過同源政策的限制，所以算是一種邪道般技巧，不過想出來的人應該是滿天才的。
+
+### 要如何存取跨網域的 API？
+
+要存取跨網域的 API，就需要跨來源資源共用（CORS）來突破限制。是利用 header，去比對紀錄好其他網域可以存取資料的方式。通常是使用 Access-Control-Allow-Origin 這個 header，必須要伺服器加上這個才可以 header 才可以跨來源存取資源。然後是使用 XMLHttpRequest 這個方法來，跨網域存取資料。
+
+### 為什麼我們在第四週時沒碰到跨網域的問題，這週卻碰到了？
+
+因為是使用瀏覽器來跨網域請求資料。而這個限制是瀏覽器加上的，目的就是為了安全性，所以我們這周會碰到跨網域限制。而第四週是使用 node.js 來發送請求，因為沒通過瀏覽器，所以就不會有這些限制的存在。

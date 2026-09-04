@@ -1,0 +1,59 @@
+---
+title: "input 的外框去除解法"
+slug: "input-的外框去除解法"
+description: "前言"
+date: 2021-08-17T07:40:03.495Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*ULzHtTbTHvAmXUXw-iaQrg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/input-%E7%9A%84%E5%A4%96%E6%A1%86%E5%8E%BB%E9%99%A4%E8%A7%A3%E6%B3%95-6bed97a2547a"
+---
+
+## 前言
+
+最近因為開始製作字典網站，字典網站的經典就是需要搜尋欄位對吧。
+
+但之前請朋友幫我設計的搜尋列，長得卻不是很標準的 input 樣式，所以在 focus 的時候會出現一個外框，長得跟我改好的完全不一樣，就必須要想辦法消除之，所以特別另外紀錄下來，因為在 Textarea 跟 input 都會有這個問題。
+
+## 產生情況與解法
+
+### 情況
+
+因為我這個設計稿是請我朋友設計的，雖然他設計得很隨意，但也有一些挑戰性，所以我就是著照原本他的規劃下去實作。最後實作完畢的樣式如下：
+
+![跟一般的 input box 不太一樣，有明顯的圓角](https://cdn-images-1.medium.com/max/800/1*ULzHtTbTHvAmXUXw-iaQrg.png)
+
+_跟一般的 input box 不太一樣，有明顯的圓角_
+
+可以看出來整個圓角非常的多，這就跟 input box 的預設形式不大一樣了，所以在 focus 的時候會發現…
+
+![](https://cdn-images-1.medium.com/max/800/1*x-QSqlpymtyNKjq7C3A6qg.png)
+
+很明顯的外框，還挺不好看的，所以今天就要來把他消除。
+
+其實我就知道這個是跟 focus 有關的問題，之前也解決過類似的問題，所以我最先是從 dev tool 去找原因，最後在 dev tool 發現是 focus-visible 的樣式。
+
+也發現這是跟 outline 有關係的，所以就簡單的加上下列粗體的 class name：
+
+```
+<input
+  type=""
+  className="focus-visible: outline-none"
+/>
+```
+
+```
+示意的 code 不代表使用之後可以長得像圖片所示
+```
+
+這是 Tailwind 的 Code，只要直接加在 class name 上即可。
+
+```
+focus-visible: outline-none
+```
+
+等同於 CSS 的
+
+```
+input:focus-visible: outline-none;
+```

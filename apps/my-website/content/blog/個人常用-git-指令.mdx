@@ -1,0 +1,39 @@
+---
+title: "個人常用 Git 指令"
+slug: "個人常用-git-指令"
+description: "這個是用來紀錄一下自己會想要用，但常常忘記指令怎麼打的清單。"
+date: 2021-03-22T13:05:26.675Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%80%8B%E4%BA%BA%E5%B8%B8%E7%94%A8-git-%E6%8C%87%E4%BB%A4-d587cc04f823"
+---
+
+這個是用來紀錄一下自己會想要用，但常常忘記指令怎麼打的清單。
+
+## `git diff`
+
+統計兩個不同版本的 commit
+
+`git diff --stat` 統計各個檔案的修改數量
+
+`git diff --shortstat` 統計全部修改數量
+
+`git diff`
+
+## git rebase
+
+## git log
+
+`git log --oneline` 一行顯示所有的 commit 跟 hash
+
+`git log -p` 額外多顯示每個 commit 更改的內容
+
+`git log -p file` 同上，但可以指定只顯示某個檔案相關的 commit
+
+`git log --stat` 看到每次 commit 修改的檔案以及行數
+
+`git log --shortstat` 看到每次 commit 修改得總行數
+
+## git checkout
+
+`git checkout .` 把所有修改未 commit 的部份移除

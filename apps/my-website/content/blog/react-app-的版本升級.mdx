@@ -1,0 +1,28 @@
+---
+title: "React app 的版本升級"
+slug: "react-app-的版本升級"
+description: "在 React app 中，之前出了個問題，因為 React-script 的版本因素，導致我之前上傳到 GitHub repository 的專案使用 yarn start 啟用之後會產生錯誤如下："
+date: 2020-03-07T11:17:16.191Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-app-%E7%9A%84%E7%89%88%E6%9C%AC%E5%8D%87%E7%B4%9A-6910256a4783"
+---
+
+在 React app 中，之前出了個問題，因為 React-script 的版本因素，導致我之前上傳到 GitHub repository 的專案使用 `yarn start` 啟用之後會產生錯誤如下：
+
+```
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined     at validateString (internal/validators.js:118:11)     at Object.join (path.js:375:7)     at noopServiceWorkerMiddleware (C:AlexPractiseReact website ront-end ode_modules
+```
+
+後來找了好久才發現居然是因為 react-scripts 版本的關係，必須要是 3.4.0 才可以。
+
+但是到底要如何升級 react-scripts 呢？
+
+解法很簡單，步驟有兩個：
+
+1. 直接到 `package.json` 內部把 react-scripts 的版本手動修改成 3.4.0。
+2. 輸入指令 `npm install`
+
+這樣就可以成功安裝 3.4.0 的 react-scripts 了。
+
+最後找到了正確解答，在國外的某個網站裡面：

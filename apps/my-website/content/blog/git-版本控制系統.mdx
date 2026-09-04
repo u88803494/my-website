@@ -1,0 +1,51 @@
+---
+title: "Git 版本控制系統"
+slug: "git-版本控制系統"
+description: "在學習之前，查詢 Git 了解到 Git 的誕生。Git 是從 Linus 誕生的版本控制系統，原先只有集中式管理系統，便宜的難用，收費的不符合開源精神，所以一直沒有版本管理系統，後來版本越來越大不得已就選用了付費的。雖然這個付費的系統給予…"
+subtitle: "在學習之前，查詢 Git 了解到 Git 的誕生。Git 是從 Linus 誕生的版本控制系統，原先只有集中式管理系統，便宜的難用，收費的不符合開源精神，所以一直沒有版本管理系統，後來版本越來越大不得已就選用了付費的。雖然這個付費的系統給予 Linus…"
+date: 2019-04-16T06:44:38.768Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%B5%B1-565d597c6774"
+---
+
+在學習之前，查詢 Git 了解到 Git 的誕生。Git 是從 Linus 誕生的版本控制系統，原先只有集中式管理系統，便宜的難用，收費的不符合開源精神，所以一直沒有版本管理系統，後來版本越來越大不得已就選用了付費的。雖然這個付費的系統給予 Linus 的開發者免費使用，結果卻後來有人嘗試破解這個付費的系統，結果被發現了，後來對方不給使用之下，Linus 社群的人就自己用 C 語言開發了免費的分布式管理系統 Git。也了解到什麼是分散式的結構，就是每個人電腦上面有一個開發的版本，連上的時候在彼此交換修改了什麼。[詳細可以看這邊](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137402760310626208b4f695940a49e5348b689d095fc000)
+
+嘗試使用之前上 JavaScript 課程的時候，所建立的檔案，用來練習版本控制，卻發現檔名有空白會有問題，於是上網搜尋，發現只要把檔名用雙引號包起來即可 或是在空白的地方添加雙引號也可以也行，範例如下：
+
+```
+"files name"
+files" "name
+```
+
+## 開始使用 git
+
+明白到要先初始化，所以要輸入 git init 初始化資料庫，然後利用 git status 來檢查狀態，可以利用 git add 來添加版本控制，添加之後使用 git status 檢查狀態，就可以發現已經加入了。
+
+git commit 之後就會跳出 vim 我們就可以在這邊輸入此版本的資訊。除了可以直接 commit 檔案之外，還可以使用 git commit -m "訊息內容" 來提示自己。接著就可以使用 git log 來檢查有否成功。
+
+而每次有了新版本都需要重新 git add 且 git commit 才可以加入版本控制。
+
+突然對於減號有了疑問 於是查詢之後：[特殊符號大全](https://www.cnblogs.com/balaamwe/archive/2012/03/15/2397998.html)
+
+> - 減號 (dash)：此外也是系統指令的選項符號。ex: ls -expr 10–2
+
+### 指令
+
+git checkout 回到某一個版本
+
+git log --oneline 可以有簡易版的 log 可以用前面七碼來帶值，所以輸入 git checkout 版本編號 就可以回到那個版本，就可以去看這個版本長什麼樣子。如果要回到最新版本，輸入 git checkout master 就可以回到最新版本。
+
+.gitignore 忽略檔案 建立一個檔案名字叫 .gitignore 之後，把要忽略的檔案給放進這個檔案內之後，之後 commit 他就會自動忽略這些檔案。這個檔案也是可以 commit 的。
+
+另外，如果可以把 add 跟 commit 一起做，輸入 git commit -am "說明" 就可以同時添加版本控制跟 commit 。這個指令只能 commit 原本就設定要版本控制的檔案，也就是已經 git add 過的檔案。
+
+[git 指令集合](https://git-scm.com/docs/git-commit)
+
+## 總結：
+
+第零步： git init 初始化。第一步，建立 .gitignore 把要忽略的檔案，寫在這個檔案內部，這檔案也需要加入版本控制內。第二步，git add . 全部內容都加入 stage 的區域。第三步，建立一個 commit ，輸入 git commit -am "init" 建立第一個 commit ，就是建立一個新版本。建立之後，有兩種，第一個是有新的檔案 newfiles，就必須要 git add newfiles 之後才可以 commit 。第二種是更改現有檔案，就可以直接 Git commit -am "說明" 上傳了。在添加進 stage 之前，可以用 git diff 檢查此版本跟上一版本的差異。
+
+1. 加入版本控制 (git add) → 把東西放入 temp 資料夾
+2. 新建版本(git commit ) → 把 temp 資料夾複製改為版本名稱，或 git commmit -am "說明" 這樣就是直接把 temp 資料夾改為版本名稱，這說明只是指 git 的運作是類似這樣。
+3. 切換版本 (git checkout) → 去到某個資料夾底下。

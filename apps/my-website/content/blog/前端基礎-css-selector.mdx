@@ -1,0 +1,1160 @@
+---
+title: "前端基礎：CSS selector"
+slug: "前端基礎-css-selector"
+description: "CSS 簡介"
+date: 2019-05-21T14:17:52.208Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*tanphDGUhChHi2OYabn_0Q.jpeg"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-css-selector-4b62158fd3db"
+---
+
+## CSS 簡介
+
+Cascading Style Sheets, CSS，階層式樣式表。
+
+負責整個網頁的樣式，所以使用的頻率會比 html 更高
+
+三個方式改變樣式。
+
+第一種：直接加在標籤後面。
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div style="background:red;">
+   hello
+ </div>
+  </body>
+</html>
+```
+
+這種比較不常用，因為很難維護。是把兩種混在一起，所以會很難改。
+
+第二種：用&lt;style> 標籤。
+
+```
+selector { <!-- 怎樣去選到要操作的元素 -->
+  attribute: value; <!-- 選完之後再加上一些屬性 -->
+}
+```
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <style>
+     div {
+    background: green;
+  }
+   </style>
+  </head>
+  <body>
+    <div>
+   hello
+ </div>
+  </body>
+</html>
+```
+
+這種方式一但資料多起來，其實也很難以維護。
+
+第三種：把 CSS 另外放一個檔案
+
+開一個檔案叫做 style.css 把元素放進去。
+
+在用 &lt;link> 標籤呼叫。
+
+```
+style.css:
+div {
+  background: blue;
+}
+```
+
+```
+index.html:
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+   <!-- 因為在同一個位置所以直接輸入 ./ -->
+  </head>
+  <body>
+    <div>
+   hello
+ </div>
+  </body>
+</html>
+```
+
+分開放的好處是把 CSS 跟 html 分開，想修內容就修 html，想修樣式就修 CSS。
+
+## CSS selector： Universal selectors
+
+意思就是會選到所有的東西
+
+- 就是 Universal selectors
+
+```
+style.css:
+* {
+  color: red;
+}
+```
+
+所以這樣的話，所有的元素都會被使用紅色的字體。
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" /> <!-- 因為在同一個位置所以直接輸入 ./ -->
+  </head>
+  <body>
+    <span> span1 </span>
+    <span> span2 </span>
+ <div>
+      <span> span3 </span>
+ </div>
+    <span> span4 </span>
+  </body>
+</html>
+```
+
+## CSS Selector：標籤
+
+如何去選到我們要選的那個元素。
+
+直接填標籤名稱
+
+```
+style.css:
+div {
+  color: red;
+}
+```
+
+```
+body {
+ background: pink;
+}
+```
+
+```
+index.html:
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <span> span1 </span>
+    <span> span2 </span>
+ <div>
+      <span> span3 </span>
+ </div>
+    <span> span4 </span>
+  </body>
+</html>
+```
+
+![呈現這樣子的頁面](https://cdn-images-1.medium.com/max/800/1*pISEVNN20MARXWJGAyiY_g.png)
+
+_呈現這樣子的頁面_
+
+這個標籤 selector 會選到所有的標籤。
+
+## CSS Selector：id 與 class
+
+最常用的 Selector
+
+id：類似身分字號，整個網頁只有一個 ID 是長這樣，才能透過這樣辨識
+
+class：id 只能有一個，class 可以有很多個。
+
+id : #
+
+```
+style.css:
+#div1 { /* # 代表 ID 的意思 */
+  color: red;
+}
+```
+
+```
+body {
+ background: pink;
+}
+```
+
+```
+index.html:
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div id="div1">
+   hello
+ </div>
+ <div>
+   這絕對沒變色
+ </div>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Ha3lG2MlZdFSfV9dV6e5Ow.png)
+
+class： .xxxx
+
+```
+style.css:
+#div1 { /* # 代表 ID 的意思 */
+  color: red;
+}
+```
+
+```
+.bg-yellow { /* 用. 來標示名字 */
+ background:yellow;
+
+}
+```
+
+```
+.text-purple {
+ color:purple;
+}
+```
+
+```
+body {
+ background: pink;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" /> <!-- 因為在同一個位置所以直接輸入 ./ -->
+  </head>
+  <body>
+ <div id="div1">
+   hello
+ </div>
+ <div class="bg-yellow text-purple">
+ <!-- 這個用法可以設置多個屬性 -->
+   這絕對有變色
+ </div>
+ <div>
+   這絕對沒變色2
+ </div>
+ <div class="bg-yellow">
+   這絕對有變色3
+ </div>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*XHT4TWNRjmJq3r6Bikr67Q.png)
+
+各個元素可以共享一個 class，ID 是整份檔案只能有一個，這兩個都是最常用的元素。
+
+## CSS Selector：同時符合
+
+這邊要講的是要如何選才可以同時符合條件。
+
+今天要讓 &lt;span> 跟 &lt;div> 分開，也就是說只對對應到&lt;div>標籤
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div id="div1">
+   hello
+ </div>
+ <div class="bg-yellow">
+   這絕對有變色
+ </div>
+ <div>
+   這絕對沒變色2
+ </div>
+ <span class="bg-yellow">
+ <!-- 今天要讓這個跟 div 分開，也就是說只對對應到<div標籤> -->
+   這絕對有變色3
+ </span>
+  </body>
+</html>
+```
+
+就可以在 style.css 更改：
+
+把 div 加在前面，就必須要又符合是 div 標籤，又符合這個 class
+
+```
+/* style.css: */
+div.bg-yellow { /* 把 div 加在前面，就必須要又符合是 div 標籤，又符合這個 class  */
+ background:yellow;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*6qK7PdprSfHGlr_CXFt5dg.png)
+
+另外一個例子：
+
+如果要讓他符合兩個條件才可以使用 CSS 的話。
+
+```
+/* style.css: */
+div.bg-yellow.bg-real-yellow { /* 這樣的話就必須要同時符合bg-yellow 跟 bg-real-yellow 才行 中間不能有空格 */
+ background:yellow;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" /> <!-- 因為在同一個位置所以直接輸入 ./ -->
+  </head>
+  <body>
+ <div id="div1">
+   hello
+ </div>
+ <div class="bg-yellow" "bg-real-yellow"> <!-- 只套用在這邊 -->
+   這絕對有變色
+ </div>
+ <div>
+   這絕對沒變色2
+ </div>
+ <div class="bg-yellow">
+   這絕對有變色3
+ </div>
+  </body>
+</html>
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" /> <!-- 因為在同一個位置所以直接輸入 ./ -->
+  </head>
+  <body>
+ <div id="div1">
+   hello
+ </div>
+ <div class="bg-yellow bg-real-yellow"> <!-- 只套用在這邊 -->
+   這絕對有變色
+ </div>
+ <div>
+   這絕對沒變色2
+ </div>
+ <div class="bg-yellow">
+   這絕對有變色3
+ </div>
+  </body>
+</html>
+```
+
+在 CSS那邊不能有空格，在 html 卻有空格。這樣就是同時符合才可以使用，也可以在第一個 . 面前加入一個 div ，就會變成要同時符合三個條件才行。
+
+![](https://cdn-images-1.medium.com/max/800/1*6qK7PdprSfHGlr_CXFt5dg.png)
+
+## CSS Selector：底下的元素
+
+這邊介紹 div 標籤底下的 div 標籤要如何選到
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div class="lv1">lv1
+   <div>lv2
+  <div>lv3</div>
+   </div>
+ </div>
+  </body>
+</html>
+```
+
+```
+/* style.css: */
+.lv1 {
+  background: red;
+}
+```
+
+這樣的話 lv1 lv2 lv3 都會變成紅色背景，因為都在 lv1 的 div 底下。
+
+![](https://cdn-images-1.medium.com/max/800/1*lOUJZSmH7n0tYh2dUraOPw.png)
+
+當需要選lv1 底下的元素的時候就可以從 CSS 下手。
+
+```
+/* style.css: */
+.lv1 > div { /* 選 lv1 底下的 div */
+  background: red;
+}
+```
+
+改成這樣就會往下一層放紅色背景
+
+![](https://cdn-images-1.medium.com/max/800/1*P2n9NJuOyN_dz6zY90Rupg.png)
+
+如果第三層下面有一個二層的 div 也同樣會選到
+
+![](https://cdn-images-1.medium.com/max/800/1*iiDB0rvIv-BiOcH7qjZCRQ.png)
+
+如果要在選下一層：
+
+```
+/* style.css: */
+.lv1 > div > div {/* 選lv1 底下的div 底下的 div */
+  background: red;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Mv2LItLXou3KhkIP2O3ctw.png)
+
+```
+/* style.css: */
+.lv1 div { /* 選 div lv1 底下的 */
+  background: red;
+}
+```
+
+這樣寫會把 div 底下全部的元素都選了。
+
+利用這樣的特性可以選 特定 class 底下的 class
+
+```
+/* style.css: */
+.lv1 .bg-red { /* 選 lv1 底下的 bg-red */
+  background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div class="lv1">lv1
+   <div>lv2
+  <div class="bg-red">lv3</div>
+   </div>
+   <div class="bg-red">
+   lv3 下方的 lv2
+   </div>
+ </div>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Tg2EqLA7t0QAU7gvFh-4TQ.png)
+
+如果加一個 > ，這表示只選下一層有後面那個 class 名稱的層
+
+```
+/* style.css: */
+.lv1 > .bg-red { /* 選 lv1 底下的 bg-red */
+  background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div class="lv1">lv1
+   <div>lv2 <!-- 因為這邊沒有 bg-red 標籤，所以忽略-->
+  <div class="bg-red">lv3</div>
+   </div>
+   <div class="bg-red">
+   lv3 下方的 lv2
+   </div>
+ </div>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*fnH2haGbSEpJiA2YQwriVA.png)
+
+從邊就可以知道為什麼要叫階層式了，因為是一層一層的關係。
+
+## CSS Selector：~ 與 +
+
+如何選旁邊的元素
+
++：選旁邊一格的元素
+
+```
+/* style.css: */
+.bg-red + .bg-red { /* +是表要選旁邊的 選到.bg-red 旁邊的 bg-red */
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div class="bg-red">div1</div>
+ <div>div2</div>
+ <div class="bg-red">div3</div> <!--只有兩個相鄰的 bg-red 會選到下方的-->
+ <div class="bg-red">div4</div> <!--符合bg-red旁的bg-red所以選到這個-->
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*pG_pkMHEnhJPejhMisZ0rA.png)
+
+~：選旁邊所有的元素
+
+```
+/* style.css: */
+.bg-red ~ .bg-red { /* ~選旁邊所有的 bg-red 元素 */
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <div class="bg-red">div1</div> <!--這個得旁邊-->
+ <div>div2</div> <!--沒有 bg-red 所以不選-->
+ <div class="bg-red">div3</div> <!--是在 div1 的旁邊往後且有 bg-red 所以被選到-->
+ <div class="bg-red">div4</div> <!--是在 div1 的旁邊往後且有 bg-red 所以被選到-->
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*yTXMUAJ_Wmc6EhuNLR6q-g.png)
+
+這個可以用在讓元素跟元素中間有距離
+
+```
+/* style.css: */
+.bg-red ~ .bg-red { /* ~選旁邊所有的 bg-red 元素 */
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <span class="bg-red">span1</span>
+ <span class="bg-red">span2</span>
+ <span class="bg-red">span3</span>
+ <span class="bg-red">span4</span>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*D9lVuHoIH9y9lJH__lhtPQ.png)
+
+通常在設置的時候，不能把設定套用在第一個元素，像是設置邊距，如果套用到第一個，就會使格式變得很奇怪
+
+```
+/* style.css: */
+.bg-red {
+ margin-left:20px
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <span class="bg-red">span1</span>
+ <span class="bg-red">span2</span>
+ <span class="bg-red">span3</span>
+ <span class="bg-red">span4</span>
+  </body>
+</html>
+```
+
+![多了紅色處，一般都是第一個元素要貼齊瀏覽器的邊框](https://cdn-images-1.medium.com/max/800/1*dDyMqAOV2wF9KcxcppDuPQ.png)
+
+_多了紅色處，一般都是第一個元素要貼齊瀏覽器的邊框_
+
+在這邊只能選同層的，如果如果中間有別層，則不會選中該層。
+
+```
+/* style.css: */
+div ~ span { /* 選 div 旁邊以後的 span */
+ background: red;
+ margin-left:20px
+}
+```
+
+```
+=================
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <span class="bg-red">span1</span>
+ <span class="bg-red">span2</span>
+ <span class="bg-red">span3</span>
+ <div>
+  <span>spanNext</span> <!-- 不同層跳過 -->
+ </div>
+ <span>span4</span> <!-- div 旁邊的 span 所以選中這層， -->
+ <div>divOut</div> <!-- 不符合所以跳過 -->
+ <span>span5</span> <!-- div 後面的 span 還是選中 -->
+ <span>span6</span> <!-- div 後面的 span 還是選中 -->
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*tuUSYgtlaF52G8YglMZnBQ.png)
+
+## CSS Selector：Pseudo-classes，以 hover 為例
+
+[Pseudo-](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/pseudo?q=Pseudo) 假，偽
+
+Pseudo-classes 有很多種，可以自行搜尋。
+
+hover： **把游標放在電腦螢幕上的某個位置** [劍橋](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/hover)
+
+意思就是針對滑鼠移動上去的時候，要做什麼來設定。
+
+```
+/* style.css: */
+span:hover {
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+ <span>span1</span>
+ <span>span2</span>
+ <span>span3</span>
+ <span>span4</span>
+  </body>
+</html>
+```
+
+這樣就可以在滑鼠移動到 span 上面的時候背景加上紅色。這邊要截圖有點難度，所以就先不擷圖了。
+
+然後因為這個要滑鼠移動上去才會顯示，使用 devTools 並不會直接顯示，所以只要在 devTools 上面設定一下就好。
+
+![勾選之後就強制套用了，所以去點別的元素它也一樣會顯示在那，除非取消勾選才會消失](https://cdn-images-1.medium.com/max/800/1*HDW8jIDDQLk8E9sYjfymhw.png)
+
+_勾選之後就強制套用了，所以去點別的元素它也一樣會顯示在那，除非取消勾選才會消失_
+
+還可以直接改顏色，可以直接顯示，點選單下方的 background: 後面的紅色框就可以改顏色。
+
+## CSS Selector：nth-child
+
+nth-child 這也是 Pseudo-class 的其中之一
+
+可以選到第幾個元素
+
+```
+/* style.css: */
+.wrapper div:first-child { /* 原本 wrapper div 是選擇全部，用了冒號後面接nth-child 就變成可以挑選要第幾個元素 */
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div>row1</div>
+      <div>row2</div>
+      <div>row3</div>
+      <div>row4</div>
+      <div>row5</div>
+    </div>
+  </body>
+</html>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*BIKnx-i54XVimljCYP623A.png)
+
+用 first-child 可以選第一個元素
+
+last-child 可以選最後一個元素
+
+要選中間，例如第三個就可以使用 nth-child(3)
+
+```
+/* style.css: */
+.wrapper div:nth-child(3) {
+ background: red;
+}
+```
+
+還可以填特別的值例如： nth-child(odd)，就會選奇數元素。
+
+nth-child(even) 選偶數元素
+
+nth-child(3n) 選 3n 的元素 ex 0 . 3 . 6 . 9 . 12... 的元素，n 從零開始 +1
+
+nth-child(3n+1) 選 1 . 4 . 7 . 10 . 13... 的元素
+
+括號內都可以在變化 4n-2 . 5n+3 …. 都可以
+
+在這邊
+
+```
+.wrapper div:nth-child(3) 會先看 nth-child(3) 才看前面的 div
+```
+
+所以今天把 div 換成 class 名稱的話，就會直接看底下的第三個元素，才會在看有沒有符合條件的 class 名稱。
+
+```
+.wrapper .other:nth-child(3)
+在這邊是指要選 wrapper 底下的 nth-child(3) 且是 other
+```
+
+所以
+
+```
+/* style.css: */
+.wrapper div:nth-child(1) {
+ background: red;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <span>row1</span> <!--這是 nth-child(1) 但它不是 div 所以選不到-->
+      <div>row2</div>
+      <div>row3</div>
+      <div>row4</div>
+      <div>row5</div>
+    </div>
+  </body>
+</html>
+```
+
+它會先看是第幾個位置的元素，然後才根據條件判斷，如果就是要選到第一個，也可以不要 CSS 檔案裡面的 div
+
+```
+/* style.css: */
+.wrapper :nth-child(1) { /* 這樣就可以選到第一個 */
+ background: red;
+}
+```
+
+## CSS Selector：before 與 after
+
+pseudo-element 偽元素。跟 pseudo-class 不一樣的地方，在於它可以選到一些那個元素的某個部分。
+
+為了與 pseudo-class 做區別，會使用兩個冒號 ::
+
+::before
+
+::after
+
+可以不用靠 html 生成一些內容。
+
+```
+/* style.css: */
+.wrapper::before {
+  content:"123";
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div>row1</div>
+      <div>row2</div>
+      <div>row3</div>
+      <div>row4</div>
+      <div>row5</div>
+    </div>
+  </body>
+</html>
+```
+
+![直接在 wrapper class 的標籤的內文前面添加一個 123](https://cdn-images-1.medium.com/max/800/1*HOQC1pAJy-JxemIxC5qPkg.png)
+
+_直接在 wrapper class 的標籤的內文前面添加一個 123_
+
+會用在，像是錢的符號，所以到時候需要修改時，只要改 CSS 就可以了，不用去動 html。
+
+如果是使用 after 就是照字面意思，顯示在內文的後面。
+
+```
+/* style.css: */
+.wrapper::after {
+  content:attr(wrapper);
+}
+```
+
+利用 attr(wrapper) 可以抓取 wrapper 的值
+
+```
+/* style.css: */
+.price::after {
+  content: attr(data-symbol); /*會把內容顯示 data-symbol的值*/
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="price" data-symbol="NTD">
+  1000
+    </div>
+    <div class="price" data-symbol="RMB">
+  1000
+    </div>
+  </body>
+</html>
+```
+
+![會把 data-symbol 後面所接的內容給顯示上去，這樣資料一多就不需要一個個手動添加。](https://cdn-images-1.medium.com/max/800/1*Unii3mKZgCbBkStKpjv4pQ.png)
+
+_會把 data-symbol 後面所接的內容給顯示上去，這樣資料一多就不需要一個個手動添加。_
+
+利用 attr 就可以取出資料，顯示在前面或後面，可以剩下很多的功夫。
+
+另一個注意事項是 content 一定要接東西，即使是空字串也行，偽元素才會有作用，沒有 content 就可以在 devTools 發現完全不顯示，也就是沒有作用。
+
+參考資料：[偽元素一覽表](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements)
+
+## CSS Selector 權重計算方式
+
+如果有多種 CSS 套用的話，到底會以哪邊的為主。
+
+```
+<!-- index.html -->
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <title> I am titlesdpfs</title>
+  <link rel="stylesheet" href="./style.css" />
+ </head>
+ <body>
+  <div class="wrapper">
+   <div class="list">
+    <div id="pickme" class="item">
+    pick me
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
+```
+
+使用這個範例，來確定優先度
+
+```
+/* style.css*/
+.wrapper {
+ color:red; /* css 有些屬性可以繼承的，所以下面的都會成為紅色 */
+}
+```
+
+```
+.item {
+ color:blue; /* 添加item後，就可以從 devtools 看到原本的屬性被劃掉 代表被這個規則蓋掉*/
+}
+```
+
+```
+.item {
+ color:green; /* 如果有兩個相同元素，會以後面的為主 */
+}
+```
+
+```
+#pickme {
+ color:pink; /*如果利用 ID 來選，就會蓋掉 class*/
+}
+```
+
+```
+/*如果要選得很仔細，還可以*/
+div.wrapper > div.list > div.item {
+ color:yellow; /*確實可以選到，但是優先度輸給 id 所以還是被蓋掉*/
+}
+```
+
+可以從 devTools 看到結果
+
+![id > class > 標籤 越詳細的贏](https://cdn-images-1.medium.com/max/800/1*9V3durKRREAQAGKAPgvRmw.jpeg)
+
+_id > class > 標籤 越詳細的贏_
+
+掌握一個原則 id > class > 標籤，越詳細的贏
+
+因為整個 html 只有 id 所以指定的程度最高
+
+背後也有一個計算公式。
+
+有三位數，按照順序比下來
+
+**\_\_\_**id**\_\_\_**| **class . pseudo class . attribute** | \_**\_tag\_\_**  
+**\_\_\_**0,**\_\_** |**\*\***\_\_**\*\***0,**\*\***\_\_\_**\*\***| **\_**0**\_**
+
+按照順序比下來
+
+第一個位數(id)一樣的話，比第二個位數(class,etc)，一樣在比第三個(element)。
+
+比法是比第一個 若有兩個 id 就 id 填 2
+
+```
+/* style.css*/
+.wrapper {
+ color:red;
+}
+```
+
+```
+.item {/* 0,1,0 */
+ color:blue;
+}
+```
+
+```
+.item {
+ color:green;
+}
+```
+
+```
+#pickme { /* 這個是 1,0,0 */
+ color:pink;
+}
+```
+
+```
+div.wrapper > div.list > div.item { /* 3 個 class及標籤 所以是 0,3,3 */
+ color:yellow;
+}
+```
+
+```
+#list #pickme { /*這樣就是 2,0,0 ，因為有兩個 id*/
+ color:#121F96;
+}
+```
+
+在這邊的比較，如果權重都一樣，那最後就是比順序
+
+例如說 0,3,2 vs 0,3,2 即使標籤的位置不同，也不會影響順序，這兩者順序就是相等的，這時候就是比誰在後面，就會以在後面的為優先
+
+```
+/* style.css*/
+div.wrapper > div > div.item { /*0,3,2*/
+ color:yellow;
+}
+```
+
+```
+div > div.list > div.item { /*0,3,2*/
+ color:blue;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*nMjXINI_JazYn4xEfWEsUg.jpeg)
+
+但還是有例外，就是最高規則：inline style，也就是直接加在 html 標籤後面，等同於 1, 0, 0, 0, 0。
+
+```
+<!-- index.html -->
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <title> I am titlesdpfs</title>
+  <link rel="stylesheet" href="./style.css" />
+ </head>
+ <body>
+  <div class="wrapper">
+   <div class="list">
+    <div id="pickme" class="item" style="color:orange;">
+    pick me
+    </div>
+   </div>
+  </div>
+ </body>
+</html>
+```
+
+```
+/* style.css*/
+div.wrapper > div.list > div { /*0,3,2*/
+ color:yellow;
+}
+```
+
+```
+div > div.list > div.item { /*0,3,2*/
+ color:blue;
+}
+```
+
+```
+#pickme {
+ color:red
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*tanphDGUhChHi2OYabn_0Q.jpeg)
+
+更強規則：!important，等同於 1, 0, 0, 0, 0
+
+直接標註 !important 在 css 的屬性內，
+
+```
+/* style.css*/
+div.wrapper > div.list > div { /*0,3,2*/
+ color:yellow;
+}
+```
+
+```
+div > div.list > div.item { /*0,3,2*/
+ color:blue !important;
+}
+```
+
+```
+#pickme {
+ color:red
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*A1pXNJsuquyJ1ebrO79etw.jpeg)
+
+如果有多個 !imporant：就比其他的權重來得到優先順序。
+
+```
+/* style.css*/
+div.wrapper > div.list > div { /*,1,0,0,3,2*/
+ color:yellow !important;
+}
+```
+
+```
+div > div.list > div.item { /*1,0,0,3,2*/
+ color:blue !important;
+}
+```
+
+```
+#pickme {/*1,0,1,0,0*/
+ color:red !important;
+}
+```
+
+一般很少會使用 !important 這種寫法，因為不該直接這樣蓋掉其他規則，蓋掉之後要在設置其他規則，就會很難寫。
+
+## 收穫：
+
+在這邊學習到選擇器的應用，原來選擇器的種類有這樣多種，而且還有很方便的指定方式，可以指定一個範圍的標籤，或是使用計算的方式讓系統自動幫我們指定要改變那些欄位屬性。也知道原來還可以比較權重，才決定誰是可以顯示的顏色，所以有這樣的規則的話，才可以覆蓋別的顏色，不會說一定要每個都直接指定才行。
+
+在這篇學習當中，我也覺得因為牽扯到網頁的顯示，所以不得不使用截圖的方式，就不像 JavaScript 可以用文字表達出來。這也導致這篇長到不行，不過也不是壞事，因為這樣可以很清楚的表達最後會呈現的內容是長什麼樣子，之後我有需要回來看這篇的時候也會比較清晰容易回想吧！

@@ -1,0 +1,376 @@
+---
+title: "[Week2]解題的想法"
+slug: "week2-解題的想法"
+description: "給定 n（1&lt;=n&lt;=30），依照規律「印出」正確圖形"
+date: 2019-04-28T13:56:45.202Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/week2-%E8%A7%A3%E9%A1%8C%E7%9A%84%E6%83%B3%E6%B3%95-ebe58e5ce"
+---
+
+## hw1：印出星星
+
+給定 n（1&lt;=n&lt;=30），依照規律「印出」正確圖形
+
+這題比較沒難度就不解釋了
+
+```
+function printStars(n) {
+  if (n >= 1 && n <= 30) {
+    for (let i = 1; i <= n; i += 1) { console.log('*'); }
+  } else if (n < 1 || n > 30) {
+    console.log('輸入範圍是1~30喔!');
+  }
+}
+```
+
+```
+printStars(6);
+```
+
+## hw2：首字母大寫
+
+**給定一字串，把第一個字轉成大寫之後「回傳」，若第一個字不是英文字母則忽略。**
+
+個人想法，先拆成陣列後(.split(‘’))，檢驗 index 0 的範圍是否在小寫英文的編碼內，如果是就把 index 0 的字 使用 .toUpperCase 轉換，接著再回傳合併.join(‘’)
+
+解答：
+
+```
+function upper(str) {
+ var arr = []
+ arr = str.split(‘’)
+ if (arr[0]>’a’ && arr[0]<’z’){
+ arr[0] = arr[0].toUpperCase()
+ str = arr.join(‘’)
+ return str
+ } else {
+ return str
+ }
+}
+```
+
+```
+console.log(upper(‘sleep’))
+```
+
+## hw3：反轉字串
+
+給定一個字串，請「印出」反轉之後的樣子（不能使用內建的 `reverse` 函式）
+
+```
+reverse('yoyoyo')
+正確輸出：oyoyoy
+```
+
+```
+reverse('1abc2')
+正確輸出：2cba1
+```
+
+```
+reverse('1,2,3,2,1')
+正確輸出：1,2,3,2,1
+```
+
+想法，一樣先化成各自的陣列 用 .length - i -1去轉換，本來是想用暫存，再帶回原來的陣列，但發現不可行。所以決定改為另外新建立一個新陣列，桌一添加之後回傳
+
+解：
+
+```
+function trans (str) {
+  var str = str.split('')
+  var newstr = []
+  var arrnum = 0
+  for (var i=0;i < (str.length);i++){
+    arrnum = str.length - 1 - i
+    newstr[i] = str[arrnum]
+  }
+  return newstr.join('')
+}
+console.log(trans('im your father go sell matches'))
+//  sehctam lles og rehtaf ruoy mi
+```
+
+## hw4：印出因數
+
+先幫大家複習一下數學，給定一個數字 n，因數就是所有小於等於 n 又可以被 n 整除的數，所以最明顯的例子就是 1 跟 n，這兩個數一定是 n 的因數。現在請寫出一個函式來「印出」所有的因數
+
+```
+printFactor(10)
+```
+
+```
+正確輸出：
+1
+2
+5
+10
+```
+
+```
+printFactor(7)
+```
+
+```
+正確輸出：
+1
+7
+```
+
+想法是直接從最小數開始除，只要除出來的數字餘數為 0 。那就是它的因數，但因為因數除了自己本身之外最大值為自己的一半，所以只要除到自己的一半就可以了，然後再印出本身的數字，後來試用之後發現這樣對電腦而言沒省多少時間，卻增加編寫複雜度，所以之後再試試看寫這樣子就好了。
+
+```
+function printFactor(n) {
+  for(let i=0 ; i <= n ; i+=1) {
+    if (n % i == 0) {
+      console.log(i);
+    }
+  }
+  return n;
+}
+```
+
+```
+printFactor(98);
+```
+
+## hw5：自己的函式自己寫
+
+其實仔細思考的話，你會發現那些陣列內建的函式你其實都寫得出來，因此這一題就是要讓你自己動手實作那些函式！
+
+我們要實作的函式有兩個：join 以及 repeat。（再次強調，這一題要你自己實作這些函式，所以你不會用到內建的`join`以及`repeat`）
+
+join 會接收兩個參數：一個陣列跟一個字串，會在陣列的每個元素中間插入一個字串，最後回傳合起來的字串。
+
+repeat 的話就是回傳重複 n 次之後的字串。
+
+```
+join([1, 2, 3], '')，正確回傳值：123
+join(["a", "b", "c"], "!")，正確回傳值：a!b!c
+join(["a", 1, "b", 2, "c", 3], ',')，正確回傳值：a,1,b,2,c,3
+```
+
+```
+repeat('a', 5)，正確回傳值：aaaaa
+repeat('yoyo', 2)正確回傳值：yoyoyoyo
+```
+
+### .Join()
+
+我對 join 的初步想法是利用迴圈直接把字串添加進一個變數，印象中只要變數的值有字串，那整個變數就會變成字串。
+
+後來發現寫的部分有錯誤。因為額外添加的字串的最後一個並不會加上去。
+
+構思了很久，甚至還直接把每一次的動作都給寫出來，最後發現，我用 if else 就好了，然後才又發現，果然對 i+=1 的指令不熟，因為 ESlint 一直告訴我那邊要修正，一修正我就覺得不正確阿！後來回頭思考了才發現，ESlint 的修正是對的沒錯，但我卻因為這樣在那邊卡關卡很久。因為其實我早就想對解法了，只是可能因為對 ESlint 不熟悉的關係，所以一直以為自己沒寫好，這就讓我想也許我下次先 notepad++ 寫好之後再用 VSCode 協助我修正好了。
+
+```
+function join(str, concatStr) {
+  let newStr = '';
+  for (let i = 0; i < str.length; i += 1) {
+    if (i < (str.length - 1)) {
+      newStr = newStr + str[i] + concatStr;
+    } else {
+      newStr += str[i];
+    }
+  }
+  return newStr;
+}
+```
+
+### .repeat()
+
+repeat 的話就比較簡單，就是把字串用迴圈然後把重複的次數代進去就好
+
+```
+function join(str, concatStr) {
+  var newStr = ''
+  for (let i = 0 ; i < str.length ; i += 1) {
+    newStr = newStr + str[i] + concatStr
+  }
+  //newStr = str[0] + concatStr + str[1]
+  return newStr;
+}
+function repeat(str, times) {
+  let newStr = ''
+  for (let i = 0 ;i < times ; i+=1) {
+    newStr += str ;
+  }
+  return newStr;
+}
+console.log(join(['a', 'b', 'c'] , "!"));
+console.log(repeat('ia', 15));
+```
+
+## hw6：簡答題
+
+一步步寫下底下這個程式的執行流程，並且試著猜猜看它在做什麼：
+
+```
+function isValid(arr) {
+  for(var i=0; i<arr.length; i++) {
+    if (arr[i] <= 0) return 'invalid'
+  }
+  for(var i=2; i<arr.length; i++) {
+    if (arr[i] !== arr[i-1] + arr[i-2]) return 'invalid'
+  } //需要前面兩個加總等於這個數，才會 false 執行下一行
+  return 'valid'
+}
+```
+
+```
+isValid([3, 5, 8, 13, 22, 35])
+```
+
+這次因為有兩個迴圈以及判斷，所以需要思考一下如何跑的，所以在程式碼內打上一些備註，以方便思考。思考過後發現必須要 isValid([3, 5, 8, 13, 21, 34]) 才是可以得到 valid 的值。
+
+流程：
+
+1. 執行第 11 行，呼叫函式 isValid，並輸入陣列 [3, 5, 8, 13, 22, 35]
+2. 執行函式，到第 1 行，所以設定 arr 為陣列 [3, 5, 8, 13, 22, 35]。
+3. 第 2 行，迴圈，設置 i 為 0 ，檢查 i 是否小於陣列長度，是，開始進入第一輪迴圈。
+4. 第 3 行，判斷陣列 arr[0] 是否 &lt;= 0 ，不是，繼續往下。
+5. 回到第 2 行，i 值+1，i 現在為 1，檢查 i 是否小於陣列長度，是，開始進入第二輪迴圈。
+6. 第 3 行，判斷陣列 arr[1] 是否 &lt;= 0 ，不是，繼續往下。
+7. 回到第 2 行，i 值+1，i 現在為 2，檢查 i 是否小於陣列長度，是，開始進入第三輪迴圈。
+8. 第 3 行，判斷陣列 arr[2] 是否 &lt;= 0 ，不是，繼續往下。
+9. 回到第 2 行，i 值+1，i 現在為 3，檢查 i 是否小於陣列長度，是，開始進入第四輪迴圈。
+10. 第 3 行，判斷陣列 arr[3] 是否 &lt;= 0 ，不是，繼續往下。
+11. 回到第 2 行，i 值+1，i 現在為 4，檢查 i 是否小於陣列長度，是，開始進入第五輪迴圈。
+12. 第 3 行，判斷陣列 arr[4] 是否 &lt;= 0 ，不是，繼續往下。
+13. 回到第 2 行，i 值+1，i 現在為 5，檢查 i 是否小於陣列長度，是，開始進入第六輪迴圈。
+14. 第 3 行，判斷陣列 arr[5] 是否 &lt;= 0 ，不是，繼續往下。
+15. 回到第 2 行，i 值+1，i 現在為 6，檢查 i 是否小於陣列長度，不是，往下執行。
+16. 第 5 行，迴圈，設置 i 為 2，檢查 i 有沒有小於陣列長度，是，所以進入第一輪迴圈。
+17. 第 6 行，判斷 arr[2] 不等於 arr[1] 加上 arr[0]，不是，所以繼續往下。
+18. 回到第 5 行，i 值+1，i 現在為 3 ，檢查 i 有沒有小於陣列長度，是，所以進入第二輪迴圈。
+19. 第 6 行，判斷 arr[3] 不等於 arr[2] 加上 arr[1]，不是，所以繼續往下。
+20. 回到第 5 行，i 值+1，i 現在為 4 ，檢查 i 有沒有小於陣列長度，是，所以進入第二輪迴圈。
+21. 第 6 行，判斷 arr[4] 不等於 arr[3] 加上 arr[2]，是，所以回傳 invalid。
+
+收穫：在寫作業的時候，其實還滿順利的，題目也不難，因為是很好理解的內容，所以我們只要想一下如何使用 JavaScript 把程式寫出來可以執行就行，不過這周卻難在需要使用 ESlint 來檢查程式碼的完整度，而且還是最嚴苛之一的 Airbnb，所以說我為了交作業可以說吃了不少苦頭。好在最後順利的把程式碼給修正了。寫作業這邊的收穫就是下次務必要把題目看清楚，我是因為一直都看著課程大綱在執行動作，所以不小心就把本周的導讀給忘了看，所以少了一些啟發，也導致我以為我的程式沒問題，好在有發現，就趕緊修正了。
+
+[ESlint 的使用隨手筆記](https://medium.com/@hugh_Program_learning_diary_Js/eslint-%E7%9A%84%E4%BD%BF%E7%94%A8%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98-73ae8938fa01?source=friends_link&sk=82addaaf525fe501d0a8ad8e2d9f37ff)
+
+---
+
+## 2019/04/29
+
+## [Week2] 的檢討
+
+這篇是作業的檢討，只寫我對問題的看法，以及一些想法，還有對於自己不懂的地方的查詢。
+
+### 第一題：printStars
+
+> 這題比較沒難度就不解釋了，照著做就行了。有很多人會把字串拼好再印出來，也是 ok
+
+```
+function printStars(n) {
+  for (let i = 0; i < n; i += 1) {
+    console.log('*');
+  }
+}
+```
+
+> 給定 n (1≦ n ≦ 30)，按照規律印出正確圖形。
+
+> 這邊給的 n 給範圍，不是要判斷，目的是要讓題目的定義更清楚，所以如果遇到沒有給範圍的面試題，就可以詢問清楚。
+
+## 題目：hw2 首字母大寫
+
+**給定一字串，把第一個字轉成大寫之後「回傳」，若第一個字不是英文字母則忽略。**
+
+> 有很多人都會用 charAt 或是先把字串用 split 變成陣列再來做這題，但其實在 JS 裡面你本來就可以用 str[0] 取到第一個字，不需要用 chatAt。
+> 另一個常見問題是會檢查第一個字是否是小寫再轉，但內建的 toUpperCase 如果本來就是大寫，轉完也還是大寫，想一下之後會發現根本不需要檢查。
+
+```
+function capitalize(str) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+```
+
+初學對於 JavaScript 的特性不解，原來可以把字串當陣列呼叫，然後仔細想想，其實之前上課有上到，可是為什麼在實作的時候，沒有想到呢？所以我在思考說，那之後學到那些內建函式，我應該要拿那些內建函式做 3 ~ 10 個的應用，這樣我才可以徹底理解它們吧！而且原來也不需要判斷大小，果然初學者都想很細，然後會想得太細了，之後我覺得就是必須要多方面的想想，這樣會更好。
+
+字串同時也是陣列，且是以一個字為單位的字串，所以除非有需要兩個字以上，不然沒有必要去切成陣列。
+
+所以只要利用內建函式把第一個字母轉大寫，然後在使用 .slice(1) 把第一個之後的字母給附上去即可，把第一個字母轉為大寫。
+
+另一種解法：
+
+```
+function capitalize(str) {
+  return str.replace(str[0], str[0].toUpperCase());
+}// 取代成大寫的意思。
+```
+
+寫一行其實跟寫兩行差不多，因為有些編譯器，其實會把兩行放在一起執行，對於效能影響不大。
+
+## hw3：反轉字串
+
+**給定一個字串，請「印出」反轉之後的樣子（不能使用內建的**`reverse`**函式）**
+
+## 第三題：reverse
+
+迴圈倒著做就好
+
+```
+function reverse(str) {
+  let result = '';
+  for (let i = str.length - 1; i >= 0; i -= 1) {
+    result += str[i];
+  }
+  console.log(result);
+}
+```
+
+曾經在按鍵精靈這樣用過，作業卻忘了，下次多注意。
+
+## 第四題：printFactor
+
+> 這題的迴圈不要從 0 開始，因為語意上是不通的，你不會想拿數字去除以 0
+
+```
+function printFactor(n) {
+  for (let i = 1; i <= n; i += 1) {
+    if (n % i === 0) {
+      console.log(i);
+    }
+  }
+}
+```
+
+這邊其實我也沒注意到不能從 0 開始，所以下次需要在多注意細節，還好是 JavaScript 有些錯誤會被忽略，才能順利執行。
+
+## 第五題：內建函式自己做
+
+> 最常見的錯誤是最後面多了一個連接的字串。另外，當陣列是空的的時候可以特別處理，在這情形下應該要回傳空字串
+
+```
+function join(arr, concatStr) {
+  if (arr.length === 0) { // special case
+    return '';
+  }
+```
+
+```
+  let result = arr[0];
+  for (let i = 1; i < arr.length; i += 1) {
+    result += concatStr + arr[i];
+  }
+  return result;
+}
+```
+
+> repeat 比較容易，就迴圈一下
+
+```
+function repeat(str, times) {
+  let result = '';
+  for (let i = 0; i < times; i += 1) {
+    result += str;
+  }
+  return result;
+}
+```
+
+在 join 那邊想說我沒判斷阿，那為什麼我的程式碼如果輸入空陣列也是可以得到空陣列？原來是我後面的那個判斷式，也等於在判斷空字串。而且我這題也有用到字串直接當陣列拆的技巧，怎麼前面就沒想到呢XD？也許是寫作業中進步了，所以就自然地使用了。

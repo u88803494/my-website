@@ -1,0 +1,101 @@
+---
+title: "讓 React 根據捲動隱藏導覽列"
+slug: "讓-react-根據捲動隱藏導覽列"
+description: "目的"
+date: 2020-02-03T09:38:47.427Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*gVkfkfCSdJpTBPSObcHGZw.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%AE%93-react-%E6%A0%B9%E6%93%9A%E6%8D%B2%E5%8B%95%E9%9A%B1%E8%97%8F%E5%B0%8E%E8%A6%BD%E5%88%97-9dc59e3a4312"
+---
+
+## 目的
+
+捲動時，偵測是向上捲動還是向下捲動。
+
+這邊需求是利用滑鼠向下捲動的時候，大概跟 navbar 同寬就隱藏 navbar；當向上捲動的時候，大概是 navbar 兩倍寬度就顯示 navbar；其他條件，當 到頂的時候就強制顯示。
+
+## 作法
+
+需要透過 `componentDidMount` 跟 `componentWillUnMount` 處理這過程，並且還要去偵測捲動程度，否則就會出現一直偵測到的現象。
+
+```
+import React from 'react';
+import { Nav, Navbar } from 'react-bootstrap';
+```
+
+```
+class TheNavbar extends React.Component {
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll)
+  }
+```
+
+```
+componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+```
+
+```
+handleScroll = () => {
+    console.warn('the scroll things')
+  }
+
+  render() {
+    return (
+      <Navbar collapseOnSelect expand="lg"
+        bg="dark" variant="dark" fixed="top">
+        <Navbar.Brand href="/#">React-Bootstrap</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="/#">首頁</Nav.Link>
+            <Nav.Link href="/#posts">文章列表</Nav.Link>
+            <Nav.Link href="/#about">關於我</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    )
+  };
+}
+```
+
+```
+export default TheNavbar;
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*gVkfkfCSdJpTBPSObcHGZw.gif)
+
+為了因應這個部份，就必須要把當前的位置紀錄下來，然後還要累計移動的高度，跟是否隱藏，所以就需要三個狀態來管理這件事情。
+
+```
+constructor(props) {
+  super(props)
+  this.state = {
+    positionY: window.pageYOffset,
+    movedY: 0,
+    isHidden: false,
+  }
+}
+```
+
+然後是撰寫處理的 function，而這邊因為是必須要按照一個流程走，一定要按照順序來執行，否則會出錯，所以會需要按照下方那樣子執行：
+
+1. 先紀錄位置當下的位置
+2. 偵測到 scroll 之後，呼叫 `handleScroll` ，把原來的位置紀錄下來
+3. 舊的位置跟的新位置做比較，算出差異，才把這個值，累加進 `movedY`
+4. 接著判斷累積的 `movedY`
+5. 當 `movedY` 到達 navbar 的寬度就讓 `isHideen` 變動，進而影響 navbar。
+
+## code
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/1ec8c8672843ba6aaa6a78c4fe5f1b44)
+
+## 待改善
+
+執行效率可能會有一些問題，之後可以再研究如何省道多餘的執行。
+
+像是當前顯示 navbar 的時候就把向上滾動的指令忽略
+
+如果是向下則反

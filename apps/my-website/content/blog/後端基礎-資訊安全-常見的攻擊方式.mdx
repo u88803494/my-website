@@ -1,0 +1,129 @@
+---
+title: "後端基礎：資訊安全-常見的攻擊方式"
+slug: "後端基礎-資訊安全-常見的攻擊方式"
+description: "SQL Injection"
+date: 2019-07-31T14:21:38.199Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*Dusftp7utIH2vz-5fgIhHQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%B3%87%E8%A8%8A%E5%AE%89%E5%85%A8-%E5%B8%B8%E8%A6%8B%E7%9A%84%E6%94%BB%E6%93%8A%E6%96%B9%E5%BC%8F-711fb7e68751"
+---
+
+## SQL Injection
+
+先複習一下。
+
+在登入的時候，會先去資料庫找尋有沒有這筆帳號密碼，有的話就登入，沒有的話則否。
+
+![](https://cdn-images-1.medium.com/max/800/1*Ecm-EUwL01TT2be74eArYA.png)
+
+但如果輸入的帳號密碼改成其他的形式
+
+![](https://cdn-images-1.medium.com/max/800/1*DztJhb_zZp5-nQZ1s7vctA.png)
+
+像是這樣子
+
+通過這樣就 SQL 指令就會被影響變成不同的意思
+
+![](https://cdn-images-1.medium.com/max/800/1*Dusftp7utIH2vz-5fgIhHQ.png)
+
+變成搜尋 username 空字串，1 = 1 兩者都是 ture 所以就會找到資料。
+
+這種情況就叫做 SQL Injection
+
+設計不良的程式會**讓輸入變成程式的一部分**，攻擊者就可以構造出特殊的文字變成程式。
+
+—
+
+解決方法參考 [W3C](https://www.w3schools.com/php/php_mysql_prepared_statements.asp) https://www.w3schools.com/php/php_mysql_prepared_statements.asp
+
+```
+$stmt = $conn->prepare("INSERT INTO MyGuests (firstname, lastname, email) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $firstname, $lastname, $email);
+```
+
+就可以把透過這個方法原本的 SQL 指令改寫進去
+
+```
+$stmt = $conn->prepare("SELECT * FROM users WHERE username=? and password=?");
+```
+
+要把每個值設為 ?
+
+```
+$stmt->bind_param("ss", $username, $password);
+```
+
+第一格的 s 是 string 字串的意思，有幾個字串就要加幾個 s，當然如果有別種資料，就是要用別種的英文。後面是變數，有幾個變數就要加幾個，要跟前方的 ? 對應。在這種情況下的執行方法也不太一樣。
+
+```
+$stmt->execute();
+```
+
+然後就可以使用這個指令執行。[詳細使用參考](https://websitebeaver.com/prepared-statements-in-php-mysqli-to-prevent-sql-injection)
+
+—
+
+另外提一點是可以使用
+
+```
+echo mysqli_error($conn);
+```
+
+來印出錯誤來 debug
+
+—
+
+通過[這篇文章](https://websitebeaver.com/prepared-statements-in-php-mysqli-to-prevent-sql-injection)可以找到很多使用方法
+
+這個用法跟直接使用 sql 語法很接近。只是要先宣告一個變數去接收資料，然後針對這個變數下指令。$stmt 就是 statement 的簡寫，接收之後再使用 ->bind_param()針對相對應的資料結構以及對應的變數去下指令 ，之後執行。
+
+執行後取得資料，一樣也要是執行撈資料的步驟，只是這邊有些語法可能不太一樣。
+
+```
+$result = $stmt->get_result(); 就可以得到抓回來的資料。
+```
+
+## XSS（cross site scripting）
+
+![](https://cdn-images-1.medium.com/max/800/1*bBgbraz85nZaPWfPF4bOIw.png)
+
+這種情況下可以放入 CSS 甚至是 JavaScript 的語法。
+
+上面這兩種都是因為沒有處理好「使用者輸入」造成的攻擊機會，而造成非預期的程式執行。一個針對的是資料庫，一個針對的是網頁。
+
+解決方法就是在輸出的時候自動忽略，或是換成別種形式儲存。
+
+—
+
+以前面所寫的留言板作業來說，只要通過在留言板輸入 &lt;h1>hello&lt;/h1>，&lt;h1>hello&lt;/h1> 就可以在顯示的時候執行 html 語法。同樣地，如果是使用 &lt;script>的話，就可以執行 JavaScript 了。這會造成很多災難，像是如果直接使用導向的語法把網站導向別的網站，像是釣魚網站等等的，就會給用戶形成一場災難。
+
+只要可以執行 JavaScrip 的地方，就可以做任何想做的事情像是竄改頁面、偷改連結、偷 cookie
+
+解決方法就是使用：escape，跳脫。
+
+echo htmlspecialchars($str, ENT_QUOTES(要跳脫的字元), ‘utf-8’) 也就是說在顯示資料的地方使用這個先過濾過資料之後再呈現就可以了。
+
+## 竄改 COOKIE
+
+只要打開 devtools 就會發現可以更改 cookie 的資料，所以來自客戶端的資料都不可信就是因為如此。
+
+![](https://cdn-images-1.medium.com/max/800/1*2FGnIcsbKRUt_N_pKeOW4w.gif)
+
+所以如果是把 cookie 儲存重要的用戶資料，那就可以很容易的被偽造身分。
+
+這就可以通過 session 機制來解決這個問題，這就好像是去大樓，換一張通行證，之後就以證認人。這邊就不多說了，因為之前作業已經實作過類似這個機制了。
+
+這邊寫上真正的解決方法：
+
+php 就可以通過 uniqid 來發個 session id 的通行證。[參考資料](https://www.php.net/manual/zh/function.uniqid.php)
+
+這個指令會產生一個近乎亂碼的值，然後就可以把它存在 cookie 裡面。這時候我們的檢查方法就不一樣了。不能再只是檢查有沒有這個 cookie 而已。而是要從伺服器那邊抓取下來之後檢查。這樣之後就不怕竄改 client 的 cookie 了。
+
+session id 可以存在很多位置，cookie 只是其中一種。
+
+另外一點是儲存在 browser 的 session id 可以被偷走。這時候就可以使用 XSS 的方式，直接把 session id 發 request 到 駭客指定的位置，就可以被偷走。
+
+## 明碼儲存密碼
+
+這種時候，如果資料庫被偷走。使用者的密碼就曝光了。解決之道就是利用 HASH FUNCTION 讓密碼不這麼明顯，容易猜到。

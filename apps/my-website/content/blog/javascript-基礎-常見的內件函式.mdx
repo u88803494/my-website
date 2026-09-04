@@ -1,0 +1,523 @@
+---
+title: "JavaScript 基礎：常見的內件函式"
+slug: "javascript-基礎-常見的內件函式"
+description: "Number 類型的內建函式(數字相關函式)"
+date: 2019-04-23T13:32:59.787Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E5%B8%B8%E8%A6%8B%E7%9A%84%E5%85%A7%E4%BB%B6%E5%87%BD%E5%BC%8F-df3ded1f69fc"
+---
+
+## Number 類型的內建函式(數字相關函式)
+
+內建函式很多很多，所以可以不需要自己去創造輪子，借用別人的即可，但是也因為太多了，所以不需要知道全部的相關函式，有需要再去 Google 查詢也行，關鍵字＂Number JavaScript＂，就可以到一堆資源，例如：[MDN_Number](http://Number%20類型的內建函式)
+
+常用：
+
+Number()： Number(string(字串))把括號內的轉為數字
+
+```
+a = 10
+b = ‘20’
+```
+
+```
+console.log(a + Number(b))
+//30
+```
+
+[parseInt](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/parseInt)() ：parseInt(string (字串) , radix(字串的進位方式)) 把括號的內容轉變為十進位整數數字。 [解釋1](http://www.w3school.com.cn/jsref/jsref_parseInt.asp) [解釋2](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/parseInt) radix 最大只能到 36。
+
+```
+a = 10
+b = ‘20.35’
+```
+
+```
+console.log(a + parseInt(b, 36)) // 他不解析小數點以下，所以會無條件捨去
+//82
+```
+
+parseFloat()：`parseFloat(string(字串))` 回傳浮點數(小數)，主要功能是回傳小數點。[解釋一](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Obsolete_Pages/Obsolete_Pages/Obsolete_Pages/%E9%A0%90%E5%85%88%E5%AE%9A%E7%BE%A9%E7%9A%84%E5%87%BD%E6%95%B8/parseInt_%E5%92%8C_parseFloat_%E5%87%BD%E6%95%B8) [解釋二](http://www.w3school.com.cn/jsref/jsref_parseFloat.asp)
+
+```
+a = 10
+b = ‘20.351645169416’
+```
+
+```
+console.log(a + parseFloat(b))
+//30.35
+```
+
+.toFixed()：NumberObject.toFixed(num(到第幾位)) 搭配數字物件使用，只取前面幾位，通常用作捨去小數點使用，也會四捨五入，傳回的為字串。[解釋1](http://www.w3school.com.cn/jsref/jsref_tofixed.asp)
+
+```
+b = ‘20.353534’
+```
+
+```
+console.log(parseFloat(b).toFixed())//.toFixed()括號不輸入為捨棄所有小數
+// 20
+```
+
+```
+a = 10
+b = ‘20.353534’
+```
+
+```
+console.log(parseFloat(b).toFixed(3))
+//20.354
+```
+
+[JS小數點參閱](http://www.iqianduan.net/blog/js-tofixed)
+
+Number.MAX_VALUE：在 JavaScript 裡面可以儲存的最大數字，超過該值就會不精準
+
+```
+console.log(Number.MAX_VALUE)
+// 1.7976931348623157e+308
+```
+
+```
+var a = 999999999999999999999999999999999999999999999999999999999999999999
+var b = 299999999999999999999999999999999999999999999922999999999999999999
+console.log(a * b * a * b * a * b)
+//Infinity 超過直接告訴是無限
+```
+
+### Math 相關函式 常數 constant
+
+[Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
+
+Math.PI : 圓周率
+
+```
+console.log(Math.PI)
+//3.141592653589793
+```
+
+Math.ceil(): 無條件進位，[ceil](https://tw.dictionary.search.yahoo.com/search?p=ceil) 是天花板的意思，引申為頂到天的意思。
+
+```
+console.log(Math.ceil(10.1))
+//11
+```
+
+Math.floor():無條件捨去，floor 是地板的意思。
+
+```
+console.log(Math.floor(10.99999))
+//10
+```
+
+Math.round(): 四捨五入。
+
+Math.sqrt(): 開根號
+
+```
+console.log(Math.sqrt(10.99999))
+//3.3166232827983344
+```
+
+Math.pow(): Math.pow(base, exponent)，base：基底，exponent：指數。
+
+```
+console.log(Math.pow(2, 10))
+//1024
+```
+
+Math.random():隨機產生一個小數，範圍介於0~1之間，但不包含1。 [解釋](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
+
+```
+console.log(Math.floor(Math.random()*10 + 1))
+// 這樣就可以傳輸 1~10 的隨機數字，也可以自行添加，就可以想要傳甚麼都可以
+```
+
+### 數字變字串
+
+.toString: _number_.toString(_radix_)，radix，number 的進位方式
+
+```
+var a = 2
+a= a.toString()//數字+空字串，就會變成字串
+console.log(a)
+console.log(typeof a)
+```
+
+或是
+
+```
+var a = 2
+a+='' //數字+空字串，就會變成字串
+console.log(a)
+console.log(typeof a)
+//2
+//string
+```
+
+> [參閱](http://www.runoob.com/jsref/jsref-tostring-number.html)
+
+## String 類型的內建函式
+
+[MDN String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+
+.toUpperCase()：把字串變大寫
+
+.toLowerCase()：把字串放小寫
+
+還有一種方法可以透過 [ASCII](https://zh.wikipedia.org/wiki/ASCII) 的編碼來變換：
+
+.charCodeAt()：括號內為第幾個字母，但是從 0 開始數，所以 0 是第一個，1 是第二個以此類推
+
+```
+var char = ‘ABCDEFGHIJKLMNOPQRSTUWXYZ’
+var aCode = char.charCodeAt(0) // 取得第一個字母的編碼
+console.log(aCode)
+//65
+```
+
+.fromCharCode()：括號內可接受一個指定的 Unicode 值，然后回傳一个字符串。
+
+```
+var char = ‘g’ //A=>65, a=>97 ,差距 32(= 97–65)
+var aCode = char.charCodeAt(0) // 取得第一個字母的編碼
+var str = String.fromCharCode(aCode — 32)//調整編碼的差距
+console.log(str)
+//G
+```
+
+或是讓程式幫忙推算
+
+```
+var char = 'g' //A=>65, a=>97 ,差距 32(= 97 - 65)
+var aCode = char.charCodeAt(0) // 取得一個字母的編碼
+var CodeGap = 'a'.charCodeAt(0) - 'A'.charCodeAt(0) // 計算編碼差距
+var str = String.fromCharCode(aCode - CodeGap)
+console.log(str)
+//G
+```
+
+字串也可以比大小，所以可以用來比較是不是大小寫字母
+
+```
+var char = ‘J’
+console.log(char >= ‘A’ && char <= “Z”)
+//true
+```
+
+[.indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf)：arr.indexOf(searchElement[, fromIndex])，searchElement，是欲在陣列中搜尋的元素，fromIndex，是選擇性陣列中搜尋的起始索引。
+
+搜尋是否有這個字
+
+```
+var str = ‘hey hello world yoyoyo’ //從零開始數，數到第 4 個。
+var index = str.indexOf(‘hello’)
+```
+
+```
+console.log(index)
+//4
+```
+
+如果搜尋不存在的
+
+```
+var str = ‘hey hello world yoyoyo’
+var index = str.indexOf(‘hello!!’)
+```
+
+```
+console.log(index)
+//-1 就會回傳負數
+```
+
+.replace()： string.replace(searchvalue,newvalue)，searchvalue，找尋的值，newvalue，取代的值。功用是取代字串.值。[解釋一](http://www.runoob.com/jsref/jsref-replace.html) [參閱](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/String/replace)
+
+```
+var str = ‘hey hello world yoyoyo’.replace(‘y’, ‘!!!’)
+console.log(str)
+//he!!! hello world yoyoyo //這樣使用他只會取代第一個 y 的字串
+```
+
+如果要找更多還有正規表達法，來找更多字串。
+
+```
+var str = 'hey hello world yoyoyo'.replace(/y/g, '!!!')
+// /g 是 gobel 的意思，所以會取代全部
+console.log(str)
+//he!!! hello world !!!o!!!o!!!o
+```
+
+.split()： 方法用於把一个字符串分割成字符串陣列，可以決定用什麼資料來切。[解釋一](http://www.w3school.com.cn/jsref/jsref_split.asp)
+
+```
+var str = ‘hey hello world yoyoyo’
+console.log(str.split(‘y‘)) //以 y 為分割的陣列
+//[ 'he', ' hello world ', 'o', 'o', 'o' ]
+```
+
+用法是如果有一長串的資料，就可以利用這樣來切
+
+```
+var str = ‘data1,data2,dat3,data4,data5’
+console.log(str.split(‘,’))
+//[ ‘data1’, ‘data2’, ‘dat3’, ‘data4’, ‘data5’ ]
+```
+
+.trim()：取代空格
+
+```
+var str = '          data1,data2,dat3,data4,data5 '
+console.log(str.trim())
+```
+
+```
+// data1,data2,dat3,data4,data5
+```
+
+.length: 這就不用加括號了，因為它不是函式。
+
+```
+var str = ‘ data1,data2,dat3,data4,data5 ‘
+console.log(str.length)
+//39
+```
+
+字串也可以跟陣列一樣用 [] 來存取
+
+```
+var str = '          data1,data2,dat3,data4,data5 '
+console.log(str[22], str[23], str[24], str[25], str[26])
+//d a t 3 ,
+```
+
+## Array 類型的內建函式(陣列相關函式)
+
+.join() ：會把()內的資料給添加在所有陣列後面，也會將陣列（或一個[類陣列（array-like）物件](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Indexed_collections#Working_with_array-like_objects)）中所有的元素連接、合併成一個字串，並回傳此字串。[參考](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/join)
+
+```
+var arr = [1, 2, 3]
+console.log(arr.join(‘!’)) // 如果()內沒東西，會自動在字串跟字串之間加逗號
+//1!2!3
+```
+
+.map()： .map(function)會建立一個新的陣列，其內容為原陣列的每一個元素經由回呼函式運算後所回傳的結果之集合。
+
+```
+var arr = [1, 2, 3]
+function double(x) {
+ return x*2
+}
+console.log(arr.map(double))
+```
+
+```
+var arr = [1, 2, 3]
+function negtive(x) {
+ return x*-1
+}
+console.log(arr.map(negtive))
+//[ 2, 4, 6 ]
+```
+
+也可以
+
+```
+var arr = [1, 2, 3]
+
+console.log(arr.map(function (x) { //隱匿函式
+ return x*-1
+}))
+//[ -1, -2, -3 ]
+```
+
+.map 可以無限接下去，像是：
+
+var arr = [1, 2, 3]
+
+```
+console.log(
+ arr
+ .map(function (x) {
+ return x*-1
+ })
+ .map(function (x) {
+ return x*2
+ })
+)
+//[ -2, -4, -6 ]
+```
+
+.filter()： 可以把東西過濾掉，True 的東西會留下來，false 的東西會不見。會建立一個經指定之函式運算後，由原陣列中通過該函式檢驗之元素所構成的新陣列。
+
+```
+var arr = [1, 2, 3, -2, 3, -5]
+```
+
+```
+console.log(
+ arr
+ .filter(function (x) {
+ return x>0
+ })
+)
+//[ 1, 2, 3, 3 ]
+```
+
+這底下一樣可以無限接各種 Array 函式
+
+```
+var arr = [1, 2, 3, -2, 3, -5]
+```
+
+```
+console.log(
+ arr
+ .filter(function (x) {
+  return x>0
+ })
+ .map()
+ .filter()
+ .map()
+)
+```
+
+唯獨不能接 .join() 因為 .join() 輸出的就不是一個陣列了。
+
+.slice()：slice 就是分片，變成一塊一塊。會回傳一個新陣列物件，為原陣列選擇之 `begin` 至 `end`（不含 `end`）部分的淺拷貝（shallow copy）。而原**本的陣列將不會被修改**。 [解釋](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+
+```
+var arr = [0, 1, 2, 3, 4, 5, 6]
+```
+
+```
+console.log( arr.slice(3)) // 這邊表示我從陣列 3 之後的都要
+//[ 3, 4, 5, 6 ]
+```
+
+```
+var arr = [0, 1, 2, 3, 4, 5, 6]
+```
+
+```
+console.log( arr.slice(3, 4))
+// 這邊表示我要從陣列 3 之後到陣列 4 (不包含)的陣列
+// [ 3 ]
+```
+
+.splice()： 簡單說，可以插入元素，又可以刪除元素。可以藉由刪除既有元素並／或加入新元素來**改變**一個陣列的內容，這**會修改原本的陣列**。 [解釋](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/splice)
+
+```
+var months = [‘Jan’, ‘March’, ‘April’, ‘June’];
+months.splice(1, 0, ‘Feb’);// 從 index 1，刪除 0 個元素，然後插入 'Feb'
+console.log(months);
+// ["Jan", "Feb", "March", "April", "June"]
+```
+
+```
+months.splice(4, 1, ‘May’);
+// 從上面輸出的內容 index 4，刪除 1 個元素，然後插入'May'
+console.log(months);
+// ["Jan", "Feb", "March", "April", "May"]
+```
+
+.sort()：會[原地（in place）](https://zh.wikipedia.org/wiki/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95)對一個陣列的所有元素進行排序，並回傳此陣列。排序不一定是[穩定的（stable）](https://zh.wikipedia.org/wiki/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95#%E7%A9%A9%E5%AE%9A%E6%80%A7)。預設的排序順序是根據字串的 Unicode 編碼位置（code points）而定。
+
+由於依賴執行環境的實作，所以並不能保證排序的時間及空間複雜度。
+
+```
+var months = [‘March’, ‘Jan’, ‘Feb’, ‘Dec’];
+months.sort();// 按照字母順序排序
+console.log(months);
+// expected output: Array [“Dec”, “Feb”, “Jan”, “March”]
+```
+
+```
+var array1 = [1, 30, 4, 21, 100000];
+array1.sort(); // 當字串排
+console.log(array1);
+// expected output: Array [1, 100000, 21, 30, 4]
+```
+
+那排數字呢？
+
+由小排到大
+
+```
+var arr = [1, 30, 4, 21, 100000];
+```
+
+```
+arr.sort(function(a, b) {
+ if (a===b) return 0 //這個 a ,b 如果進來了 a===b 就回傳 0 不換位置
+ if (b>a) return -1 // 如果想要換位置 就會傳 1 或是 -1
+ return 1
+})
+```
+
+```
+console.log(arr)
+//[ 1, 4, 21, 30, 100000 ]
+```
+
+由大排到小
+
+```
+var arr = [1, 30, 4, 21, 100000];
+```
+
+```
+arr.sort(function(a, b) {
+ if (a===b) return 0 //這個 a ,b 如果進來了 a===b 就回傳 0 不換位置
+ if (a>b) return -1 // 如果想要換位置 就會傳 1 或是 -1
+ return 1
+})
+```
+
+```
+console.log(arr)
+//[ 100000, 30, 21, 4, 1 ]
+```
+
+利用三元運算子：
+
+```
+var arr = [1, 30, 4, 21, 100000];
+```
+
+```
+arr.sort(function(a, b) {
+ if (a===b) return 0 //這個 a ,b 如果進來了 a===b 就回傳 0 不換位置
+  return a > b ? 1 : -1
+})
+```
+
+```
+console.log(arr)
+//[ 100000, 30, 21, 4, 1 ]
+```
+
+或是：
+
+```
+var arr = [1, 30, 4, 21, 100000];
+```
+
+```
+arr.sort(function(a, b) {
+ return b - a
+})// 只要負值或正值就排序 0，則不排。
+```
+
+```
+console.log(arr)
+//[ 100000, 30, 21, 4, 1 ]
+```
+
+思路：我們想由小到大  
+if b>a => return -1  
+if b&lt;a => return +
+
+收穫：藉由這邊我了解到了更多各種函式的操作方法，還有 JavaScript 那學不完的內建函式，我就有突發奇想，如果假設我改造現職公司的系統使之自動化，然後我就可以藉由內建的函式來把程式碼寫的艱深難懂，讓別人看不懂，不過只是個空想，我想我公司沒人懂這塊。也明白其實每一種函式都可以自己寫出來，所以有時間的話，也許會挑戰自己試著寫那些內建函式的功能出來。

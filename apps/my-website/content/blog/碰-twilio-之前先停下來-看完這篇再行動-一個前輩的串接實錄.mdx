@@ -1,0 +1,168 @@
+---
+title: "碰 Twilio 之前先停下來，看完這篇再行動：一個前輩的串接實錄"
+slug: "碰-twilio-之前先停下來-看完這篇再行動-一個前輩的串接實錄"
+description: "官方文件太繞？從我奮鬥兩個月的記憶裡，挖出來的 Twilio Video 避坑指南你是不是也曾在整合第三方服務時，看官方文件看到快睡著？"
+date: 2025-07-15T02:48:19.728Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*dI8xfb5_clvkQYsHgfQyAg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%A2%B0-twilio-%E4%B9%8B%E5%89%8D%E5%85%88%E5%81%9C%E4%B8%8B%E4%BE%86-%E7%9C%8B%E5%AE%8C%E9%80%99%E7%AF%87%E5%86%8D%E8%A1%8C%E5%8B%95-%E4%B8%80%E5%80%8B%E5%89%8D%E8%BC%A9%E7%9A%84%E4%B8%B2%E6%8E%A5%E5%AF%A6%E9%8C%84-1b9b1df327e0"
+---
+
+![](https://cdn-images-1.medium.com/max/800/1*dI8xfb5_clvkQYsHgfQyAg.png)
+
+你是不是也曾在整合第三方服務時，看官方文件看到快睡著？
+
+**曾經，我也為此花了快兩個月的時間，在無數個坑裡打滾。** 回頭看那段經歷，我發現官方文件解釋了每個 API _能做什麼_，卻很少聊到在真實專案裡 _該怎麼組合_，更別提那些會讓你抓狂的各種狀況了。
+
+這篇文章，就是我從記憶裡挖出來的一些心得和開發模式，希望能幫你少走一些我走過的冤枉路。
+
+在這篇只會介紹串接 Twilio 最核心的部分！但基本上核心串接完成之後，其他部分難度就大降了。
+
+以下用 Nextjs 撰寫**虛擬碼 (Pseudocode)。**
+
+## 核心觀念：先搞懂規則，再上牌桌
+
+動手前，有四個角色你一定要先認識，不然肯定會一團亂：
+
+1. **Room（房間）：** 就是一個**虛擬聊天室**，大家都在這裡碰面，由 Twilio 的伺服器管著。
+2. **Participant（參與者）：** 任何進來的人，包括**你自己** (`LocalParticipant`) 和**其他人** (`RemoteParticipant`)。
+3. **Track（軌道）：** 真正傳送畫面的**數據流**。你的攝影機畫面是一個 `VideoTrack`，麥克風聲音是 `AudioTrack`。
+4. **Access Token：** 一張**有時效、有權限的臨時房卡**。前端不能拿萬能鑰匙（API Keys），只能憑這張房卡進門。
+
+## 後端：蓋一個安全的「授權櫃檯」
+
+第一步，也是最重要的，就是蓋一個安全的後端來發放「房卡」。用 Next.js 的 API Routes 來做這件事超方便。
+
+**注意：以下為虛擬碼 (Pseudocode)，旨在說明概念，並非可直接執行的程式碼。**
+
+```typescript
+// 檔案位置： /api/generate-twilio-token
+// 收到前端來的請求
+function handler(請求) {
+  // === 安全第一 ===
+  // 這裡一定要先檢查，發請求的人是不是合法的登入使用者
+  // ... 你自己的使用者身份驗證邏輯 ...
+  // 從請求中拿出使用者名稱跟想進入的房間名
+  const userName = 請求.body.userName;
+  const roomName = 請求.body.roomName;
+  // === 呼叫 Twilio ===
+  // 1. 拿出存在伺服器環境變數裡、絕不外洩的 Twilio 金鑰
+  const twilioKeys = {
+    accountSid: process.env.TWILIO_ACCOUNT_SID,
+    apiKey: process.env.TWILIO_API_KEY_SID,
+    apiSecret: process.env.TWILIO_API_KEY_SECRET,
+  };
+  // 2. 用這些金鑰，向 Twilio SDK 要求一張新的 Access Token
+  const accessToken = createNewTwilioToken(twilioKeys, userName);
+
+  // 3. 告訴 Twilio，這張 Token 只能用在指定的房間
+  grantVideoAccess(accessToken, roomName);
+  // === 回傳結果 ===
+  // 把產生好的 JWT 格式 Token 回傳給前端
+  return response.json({ token: accessToken.toJwt() });
+}
+```
+
+## 前端：優雅地處理各種突發狀況
+
+前端最麻煩的就是**處理非同步事件**。人隨時會進來、離開、斷線，我們得準備好。
+
+### 1. 概念：用一個專屬 Hook 集中管理房間邏輯
+
+我習慣把所有跟 Twilio 房間有關的髒活累活，都丟到一個自訂的 Hook (`useTwilioRoom`) 裡，讓 UI 元件保持清爽。
+
+**注意：以下為虛擬碼 (Pseudocode)。**
+
+```javascript
+// 檔案位置： /hooks/useTwilioRoom.js
+function useTwilioRoom(token) {
+  // 我們需要管理的狀態：房間物件、所有參與者的列表
+  const [room, setRoom] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  // 當拿到前端傳來的 token 後，執行連線
+  useEffect(() => {
+    if (!token) return;
+    // 概念：呼叫 Twilio SDK 的 connect 方法，傳入 token
+    const twilioRoom = connectToTwilio(token);
+    setRoom(twilioRoom);
+    setParticipants(twilioRoom.currentParticipants);
+    // === 這裡就是事件監聽的藝術 ===
+    // 監聽事件：當有「新的人」進來時
+    twilioRoom.on("participantConnected", (newParticipant) => {
+      // 概念：把新的參與者加到我們的 participants 狀態列表中
+      addParticipantToList(newParticipant);
+    });
+    // 監聽事件：當有「某個人」離開時
+    twilioRoom.on("participantDisconnected", (leavingParticipant) => {
+      // 概念：從 participants 狀態列表中移除這個人
+      removeParticipantFromList(leavingParticipant);
+    });
+
+    // 最重要的清理工作：當這個 Hook 被銷毀時 (例如使用者跳頁)
+    return () => {
+      // 概念：主動告訴 Twilio 我要離開房間了，釋放資源
+      disconnectFromRoom(room);
+    };
+  }, [token]);
+
+  // 把整理好的狀態回傳給 UI 元件使用
+  return { room, participants };
+}
+```
+
+### 2. 概念：讓每個參與者，都成為一個獨立元件
+
+千萬別直接在 `useEffect` 裡操作 DOM，那在 React 裡是災難的開始。更好的方法是，讓每個參與者的畫面都由一個專屬的元件負責。
+
+**注意：以下為虛擬碼 (Pseudocode)。**
+
+```javascript
+// 檔案位置： /components/ParticipantView.js
+function ParticipantView({ participant }) {
+  // 建立一個 ref，用來指向未來要放影像畫面的那個 div
+  const videoRef = useRef(null);
+  useEffect(() => {
+    // === 處理影音軌道 ===
+
+    // 概念：取得這個參與者發布的所有影音軌道
+    const allTracks = participant.tracks;
+    // 遍歷所有軌道
+    for (const track of allTracks) {
+      // 如果這個軌道是可見的 (subscribed)
+      if (track.isSubscribed) {
+        // 概念：把這個 track 的影像畫面，掛到 videoRef 這個 DOM 元素上
+        attachTrackToDOM(track, videoRef.current);
+      }
+    }
+    // === 同樣要監聽未來的新增與移除事件 ===
+    // participant.on('trackSubscribed', ...);
+    // participant.on('trackUnsubscribed', ...);
+    // === 清理工作 ===
+    return () => {
+      // 概念：當這個元件消失時，要把掛上去的畫面全部移除乾淨
+      detachAllTracksFromDOM(participant.tracks);
+    };
+  }, [participant]);
+
+  // 回傳一個容器，用來顯示這個參與者的畫面和名字
+  return (
+    <div className="participant-container">
+      <div ref={videoRef} className="video-wrapper" />
+      <p>{participant.identity}</p>
+    </div>
+  );
+}
+```
+
+## 結語
+
+這段打造 Twilio 視訊功能的旅程，說實話，真的不容易。我一開始也跟大家一樣，把官方文件翻了個底朝天，但總覺得少了點什麼；接著跑去研究官方的範例專案，結果光是啟動就遇到一堆問題。
+
+過程中，我找到一位印度開發者的版本，寫得清楚多了，給了我不少啟發，但離我想要的完整功能，始終差了那麼一步。
+
+最終，我只能用最簡單也最有效的方法：**直接去看 Twilio SDK 的 TypeScript 原始碼**。我就這樣一行一行地追蹤、一個一個地摸索，像在拼湊一塊巨大的拼圖。直到某個瞬間，所有零散的觀念突然串連起來，我才終於打造出一個能穩定運作的視訊功能。
+
+這趟旅程雖然艱辛，但也讓我真正體會到，**追根究柢、直面源頭，才是解決複雜問題的最終王道**。它證明了只要不放棄，再難的技術也能被我們一步步征服。
+
+> _如果你想看看我更早期的奮鬥紀錄，可以參考這篇文章：_[_人生重構-Day29-再戰新產品-串接視訊功能-Twilio_](https://hugh-program-learning-diary-js.medium.com/%E4%BA%BA%E7%94%9F%E9%87%8D%E6%A7%8B-day29-%E5%86%8D%E6%88%B0%E6%96%B0%E7%94%A2%E5%93%81-%E4%B8%B2%E6%8E%A5%E8%A6%96%E8%A8%8A%E5%8A%9F%E8%83%BD-twilio-0b668701e571)

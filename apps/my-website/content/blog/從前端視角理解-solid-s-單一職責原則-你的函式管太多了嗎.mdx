@@ -1,0 +1,194 @@
+---
+title: "從前端視角理解 SOLID：S — 單一職責原則，你的函式管太多了嗎？"
+slug: "從前端視角理解-solid-s-單一職責原則-你的函式管太多了嗎"
+description: "本文為 從前端視角理解 SOLID 系列的第二篇。"
+date: 2025-07-25T03:31:40.008Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*PTtBUdmdUzmSpBW2IXrS9A.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-s-%E5%96%AE%E4%B8%80%E8%81%B7%E8%B2%AC%E5%8E%9F%E5%89%87-%E4%BD%A0%E7%9A%84%E5%87%BD%E5%BC%8F%E7%AE%A1%E5%A4%AA%E5%A4%9A%E4%BA%86%E5%97%8E-05a71a450216"
+---
+
+> _本文為_[**_從前端視角理解 SOLID_**](https://hugh-program-learning-diary-js.medium.com/從前端視角理解-solid-一切的開端-b10abdc2490b)_系列的第二篇。_
+
+> [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)
+
+> **第二篇：S — 單一職責原則 (本文)**
+
+在上一篇導論中，我們聊到了 SOLID 原則如何作為一面「透鏡」，幫助我們理解並打造更穩健的前端架構。今天，我們就從這趟旅程的第一站開始，深入探討五大原則中最基礎、也最核心的一個：**S — 單一職責原則 (Single Responsibility Principle, SRP)。**
+
+### 釐清詞彙：到底什麼是「單一職責」？
+
+單一職責原則 (Single Responsibility Principle, SRP) 的官方定義是：
+
+> **_一個模組或一個類別，只應該有一個會需要變更它的理由 (A class should have only one reason to change)。_**
+
+這句話聽起來有點抽象。用更白話的前端語言來「翻譯」，它的意思是：
+
+**一個元件或一個函式，就只專心做好一件事情。**
+
+如果一個函式同時負責「從 API 獲取資料」、「處理複雜的資料格式轉換」、最後還「根據不同狀態回傳不同的 JSX」，那它就違反了單一職責原則。因為「API 規格變更」、「資料結構變更」或「UI 樣式變更」這三個**完全不同的理由**，都可能導致你需要回頭修改這個函式。
+
+當多種職責耦合在一起，程式碼的複雜度就會呈指數級增長，最終變得難以維護與測試。
+
+### 具象化理解：瑞士刀 vs. 專業工具組
+
+為了更好地理解這個概念，我們可以想像一個情境：
+
+你是一位專業的鐘錶維修師傅。在你面前有兩種工具可以選：
+
+1. **一把萬能瑞士刀**：上面有螺絲起子、有小刀、有鑷子、有放大鏡。
+2. **一組專業維修工具**：一支精密的螺絲起子、一把鋒利的小刀、一支防靜電的鑷子、一個高倍率的放大鏡。
+
+你會選擇哪一個？答案顯而易見。
+
+- **瑞士刀**就像一個**違反 SRP（單一職責）** 的巨大元件。它什麼都能做一點，但什麼都做不好。當你想升級其中一個功能（例如換一個更高倍率的放大鏡），你必須換掉整把刀，而且使用起來也笨手笨腳。
+- **專業工具組**則完美體現了 **SRP（單一職責）的精神**。每個工具都有它獨一無二、不可取代的職責。它們各自獨立，你可以單獨升級或替換任何一個工具，而完全不影響其他工具。它們組合在一起時，能發揮出最強大的專業能力。
+
+我們的目標，就是將我們的程式碼，從一把笨重的瑞士刀，打造成一組精良、高效的專業工具。
+
+![](https://cdn-images-1.medium.com/max/800/1*PTtBUdmdUzmSpBW2IXrS9A.png)
+
+### 前端實戰：告別肥胖元件 (Fat Component)
+
+在 React 開發中，最常見的 SRP 違規現場，就是一個「肥胖元件」。讓我們來看一個典型的例子：一個顯示使用者個人資料的元件。
+
+**反面教材：一個什麼都做的**`UserProfile`**元件**
+
+```typescript
+// UserProfile.tsx (違反 SRP 的版本)
+import React, { useState, useEffect } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+const UserProfile = ({ userId }: { userId: number }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  // 職責一：獲取遠端資料 (Data Fetching)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://api.example.com/users/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user');
+        }
+        const data = await response.json();
+        setUser(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [userId]);
+  // 職責二：處理載入與錯誤狀態 (State Logic)
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  // 職責三：渲染 UI (Rendering)
+  return (
+    <div>
+      <h1>{user?.name}</h1>
+      <p>Email: {user?.email}</p>
+    </div>
+  );
+};
+export default UserProfile;
+```
+
+這個 `UserProfile` 元件顯然管得太多了。它集**資料獲取**、**狀態管理**和**畫面渲染**三大職責於一身。這使得它難以測試（你必須模擬 fetch）、難以複用（你想在別的地方用這套 fetch 邏輯怎麼辦？複製貼上？）。
+
+**遵循 SRP 的重構：拆分成 Custom Hook 與純 UI 元件**
+
+現在，我們用 SRP 來重構它，把它拆分成兩樣「專業工具」：
+
+**工具一：專門負責「資料獲取與狀態管理」的 Custom Hook**
+
+```typescript
+// hooks/useUser.ts (專職的 Custom Hook)
+import { useState, useEffect } from "react";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+// 這個 Hook 只負責一件事：根據 userId 獲取使用者資料並管理相關狀態
+export const useUser = (userId: number) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://api.example.com/users/${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user");
+        }
+        const data = await response.json();
+        setUser(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [userId]);
+  return { user, loading, error };
+};
+```
+
+**工具二：專門負責「渲染 UI」的純元件 (Presentational Component)**
+
+```typescript
+// components/UserProfile.tsx (遵循 SRP 的版本)
+import React from 'react';
+import { useUser } from '../hooks/useUser';
+
+// 這個元件也只負責一件事：根據傳入的 props 渲染畫面
+const UserProfile = ({ userId }: { userId: number }) => {
+  const { user, loading, error } = useUser(userId);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  return (
+    <div>
+      <h1>{user?.name}</h1>
+      <p>Email: {user?.email}</p>
+    </div>
+  );
+};
+export default UserProfile;
+```
+
+重構之後，好處顯而易見：
+
+1. **高可讀性**：每個部分都只做一件事，程式碼意圖清晰。
+2. **高可複用性**：`useUser` 這個 Hook 可以在任何需要獲取使用者資料的地方被重複使用。
+3. **高可測試性**：我們可以獨立地為 `useUser` 這個 Hook 撰寫單元測試，而完全不用關心 UI 長什麼樣子。
+
+這就是單一職責原則在現代前端開發中的威力。
+
+### 背景資料
+
+單一職責原則 (SRP) 的概念，由羅伯特·C·馬丁 (Robert C. Martin) 在他的著作中系統性地提出。其核心思想源自於一個觀察：一個軟體模組的變更，通常都源自於某個特定「角色」或「利益關係人」的需求。SRP 強調，一個模組應該只為一個「角色」服務，這樣才能在需求變更時，將影響範圍降到最低。
+
+### 結論
+
+單一職責原則是 SOLID 中最容易理解，也最容易被忽略的原則。它提醒我們，在動手寫程式碼之前，先花點時間思考「**這段程式碼的核心職責是什麼？**」。
+
+養成將不同職責分離的習慣，是告別「義大利麵程式碼」、邁向「高內聚、低耦合」的第一步，也是最關鍵的一步。當你的每個元件、每個函式都像一個個精密的專業工具時，你所構建出來的系統，自然會優雅、穩健且充滿彈性。

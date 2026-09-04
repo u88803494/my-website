@@ -1,0 +1,297 @@
+---
+title: "前端中階作業：gulp & webpack"
+slug: "前端中階作業-gulp-webpack"
+description: "gulp & webpack & todolist"
+date: 2019-10-05T13:09:58.953Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%BD%9C%E6%A5%AD-gulp-webpack-cedf4b018be5"
+---
+
+## hw1：Gulp
+
+gulp 就是用來把原本的工作流程自動化的，現在請你寫一個 gulp 的設定檔，依序完成以下事情：
+
+1. 把 scss 編譯成 css
+2. 把 js 用 babel 轉成 ES5 語法
+3. 把 css 以及 js 壓縮
+
+—
+
+這邊的作業在學習怎麼使用 gulp 的時候就已經大致上完成了。
+
+可以參考[我的 gulp 筆記](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-gulp-791132bea9f1?source=your_stories_page---------------------------)
+
+這邊簡單講解一下，困難點就是 babel 的安裝，因為有很多的細節要調整。另外一個困難點，比較簡單一些，就是 CSS 的壓縮，因為現存的有一些壓縮都不能使用了，所以就需要用關鍵字慢慢找，最後我找到一款 gulp-minify-css，就可以使用，其他還有 gulp-clean-css 等都可以使用。
+
+轉換完成之後再把 function 一起使用 `exports.default` 即可。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/19cbc57e276fe3ad3e9e5948892f9647)
+
+## hw2：Webpack
+
+Webpack 的目的其實就是讓前端也能夠像 Node.js 那樣，支援 `module.exports` 以及 `require`。
+
+為了讓你體驗 Webpack，在這個作業中你只要做以下簡單的幾件事情就好：
+
+1. 寫一個檔案叫做 `utils.js`，裡面有一個叫做 `add` 的 function
+2. 寫一個檔案叫做 `index.js`
+3. 在 `index.js` 裡面引入 `add` 這個 function 並且輸出`add(10, 3)`
+4. 用 Webpack 把以上檔案打包產生出 `bundle.js`
+
+—
+
+這部分主要也是難在學習如何使用 webpack 而已，但相比之下比 gulp 更簡單。
+
+同樣的是參考[學習筆記](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-webpack-b2c1f5ab7d2?source=your_stories_page---------------------------)
+
+重點就是在設置 `webpack.config.js` 而已。有個是 entry，放的是需要轉換的檔案，output 要設置路徑跟檔案名稱
+
+```
+const path = require('path');
+```
+
+```
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+  },
+};
+```
+
+## hw3：Todo List
+
+之前在第十三週時已經讓大家寫過一個 todo list，這次我們要來點不一樣的。
+
+其實有一種寫法非常直覺，而且寫起來非常方便，那就是「只要資料更新，我就全部重新 render」。
+
+什麼意思呢？之前我們寫第七週的作業時，新增的話就是新增一筆資料，然後在 DOM 上面 append，刪除的話就是直接把 DOM 上面的那筆元素刪掉。
+
+可是其實還有另外一種做法，用程式碼示意的話會長這樣：
+
+```
+var list = []
+function addTodo(todo) {
+  list.push(todo)
+  render()
+}
+```
+
+```
+function removeTodo(id) {
+  list = list.filter(item => item.id !== id)
+  render()
+}
+```
+
+```
+function render(){
+  $('.todo-list').empty()
+  $('.todo-list').append(list.map(item => `<li>${todo.content}</li>`)) // 示意
+}
+```
+
+每次只要資料有更新，你就更新資料就好，然後把畫面全部重新渲染。如此一來的好處就是你完全不用管 DOM，你只要更新程式裡面的資料即可。
+
+現在請你把之前實作的 Todo list 改成這種形式，更新資料並且 re-render。
+
+—
+
+這個想法比較簡單，就是把之前的作業拿來用，然後修改 append 的方式。
+
+不過除此之外還有一些細節要注意。
+
+像是要有方法的儲存資料，可以先直接儲存在瀏覽器上面，這部分要找一下怎麼儲存。
+
+另外一部分是重新 render 的部分要思考一下，這是整體而言不一樣的地方。
+
+大致上就是，一旦使用者送出/刪除資料就清空，然後從資料儲存的地方抓取資料出來，然後 render 吧，所以每一次做出送出/刪除資料的時候，就在最後步驟重新 render。
+
+### 小總結處理點：
+
+1. 資料的儲存
+2. 重新 render 的方法。
+
+實作方面，就是要先寫出直接 render 整個頁面的 function render。
+
+render 中，可能會要有編號，但看了一下我本來的程式碼，本來就沒有用上 id，所以應該是不需要用 id 就可以刪除。
+
+render 的資料的部分，我想到有些移除掉的，勢必變成 undefined，所以在 render 的時候，可能還要先排除掉那些已經被刪除的資料。看了一下原來題目就有講這部分了，所以就更快了。
+
+最後是發現根本不需要儲存資料，而且我資料就直接使用 array 了，所以可以使用 array 的內建函式來處理即可。
+
+最後完成的結果如下：
+
+index.html:
+
+```
+<!doctype html>
+<html lang="en">
+```
+
+```
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+```
+
+```
+<!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title> week18 hw3 todolist </title>
+```
+
+```
+<style>
+    body {
+      font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+    }
+```
+
+```
+.todolist__done {
+      margin-top: 0.5rem;
+    }
+```
+
+```
+.todolist__content {
+      font-size: 19px;
+      padding-right: 80px;
+    }
+```
+
+```
+.todolist__delete {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: inline-block;
+    }
+  </style>
+</head>
+```
+
+```
+<body>
+  <div class="container">
+    <div class="todolist__input">
+        <h1> todolist </h1>
+        <input class="form-control form-control-sm" id="input" type="text" placeholder="輸入代辦事項 輸入完成按下 enter 送出">
+        <hr>
+    </div>
+    <div class="todolist__list"></div>
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="index.js"></script>
+```
+
+```
+</div>
+</body>
+```
+
+```
+</html>
+```
+
+index.js
+
+```
+const todolist = ['洗衣服', '曬衣服'];
+function render() {
+  $('.todolist__list').empty();
+  function todolistItem(i) {
+    return `
+    <div class="todotlist__item form-check">
+      <input class="todolist__done form-check-input" type="checkbox" value="" id="defaultCheck1">
+      <label class="todolist__content form-check-label" for="defaultCheck1">
+        ${todolist[i]}
+      </label>
+      <button type="button" class="todolist__delete btn btn-outline-secondary" data-id=${i}>刪除</button>
+      <hr>
+    </div>
+  `;
+  }
+  for (let i = 0; i < todolist.length; i += 1) {
+    $('.todolist__list').append(todolistItem(i));
+  }
+}
+```
+
+```
+$(document).ready(() => {
+  render();
+  $('#input').keypress((e) => {
+    const code = (e.keyCode ? e.keyCode : e.which);
+    if (code === 13) {
+      const input = $('#input').val(); // 從輸入框取得資料
+      $('#input').val(''); // 清空輸入框
+      todolist.push(input); // 添加資料
+      render();
+    }
+  });
+```
+
+```
+// 刪除 事件代理
+  $('.container').on('click', (e) => {
+    if (e.target.classList.contains('todolist__delete')) {
+      const id = e.target.getAttribute('data-id');
+      todolist.splice(id, 1); // 移除對應的 id 資料
+      render();
+    }
+  });
+});
+```
+
+## hw4：簡答題
+
+1. gulp 跟 webpack 有什麼不一樣？我們可以不用它們嗎？
+2. hw3 把 todo list 這樣改寫，可能會有什麼問題？
+3. CSS Sprites 與 Data URI 的優缺點是什麼？
+
+—
+
+1. gulp 跟 webpack 有什麼不一樣？我們可以不用它們嗎？
+
+gulp 跟 webpack 的差異在一個是協助自動化，另外一個是協助前端打包的。基本上，這兩個也不是必要的，不用這兩個也一樣可以寫前端，少了這兩個就是很不方便而已。
+
+2. hw3 把 todo list 這樣改寫，可能會有什麼問題？  
+   todolist 這樣寫的問題是，如果資料很龐大的話，可能 render 就要很久了，所以會需要一些動畫來替代，否則使用者可能會以為網頁掛掉。  
+   或是使用者可能因為等待太久就不使用了。  
+   也有一種原因，像是使用者的設備效能不高，所以稍微資料多一點就跑不動。
+
+3. CSS Sprites 與 Data URI 的優缺點是什麼？
+
+### CSS Sprites
+
+CSS Sprites 是一種處理技巧，可以把很多小圖片結合在一起，藉此減少多餘的 request。
+
+優點是當專案越來越大的時候，這種方式就可以有效的降低伺服器的資源消耗。
+
+缺點是因為圖片是經過處理的，所以就必須要有技巧地處理，而這種處理在網頁呈現上面也要經過處理，如果沒處理好容易圖片互相干擾。或是跑版
+
+### Data URI
+
+Data URI 是一種檔案格式，把小型的檔案經過 base64 編碼之後，轉成看起來像一串亂碼的編碼。通常用來轉碼一些小型的圖檔，這樣的好處是不用通過外部引入，也可以減少 request 的次數。
+
+優點就是減少 request 的次數，可以通過直接寫在網頁裡面，所以就不需要額外請求了。也可以把一些多媒體文件保存為檔案。
+
+缺點就是，通過這樣轉換之後的小型檔案，雖然說小型，但是這編碼在寫程式的時候還是滿多字元的，所以開發者在使用的時候，可能會因為這樣的關係，在搜尋資料的時候造成延遲等問題。另一個問題這些轉換過的圖檔不能儲存在快取。
+
+參考資料：[使用 DATA URI 將圖片以 Base64 編碼並內崁至網頁中，加速載入速度](https://blog.gtwang.org/web-development/minimizing-http-request-using-data-uri/)

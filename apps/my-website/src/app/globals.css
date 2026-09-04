@@ -129,6 +129,24 @@ figure[data-rehype-pretty-code-figure] pre {
   @apply overflow-x-auto p-4 text-sm leading-relaxed;
 }
 
+/* Shiki puts the theme's foreground colour on <pre> as an inline style, but the
+   article's prose-code:text-base-content also matches the <code> inside it —
+   which rendered dark text on the dark code background. Inheriting restores the
+   theme colour; highlighted tokens carry their own inline colour and win over
+   this, so syntax highlighting is unaffected. */
+figure[data-rehype-pretty-code-figure] code {
+  color: inherit;
+}
+
+/* Embeds migrated from Medium carry its fixed width="700", which overflows the
+   viewport on phones and gives the whole page a horizontal scrollbar. */
+.prose iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.5rem;
+}
+
 figure[data-rehype-pretty-code-figure] [data-line] {
   @apply px-0;
 }

@@ -33,7 +33,10 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://henryleelab.com/blog/${post.slug}`,
+      // Must match the canonical URL from generateMetadata exactly. A raw CJK
+      // slug here would disagree with the percent-encoded canonical, showing
+      // Google two different URLs for the same page.
+      "@id": `https://henryleelab.com/blog/${encodeURIComponent(post.slug)}`,
     },
   };
 

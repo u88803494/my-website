@@ -1,0 +1,370 @@
+---
+title: "JavaScript 基礎： 綜合題目練習 Lv1"
+slug: "javascript-基礎-綜合題目練習-lv1"
+description: "練習一：請你分別用 for loop 以及 while 迴圈，印出 1~9。"
+date: 2019-04-25T13:26:14.355Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E7%B6%9C%E5%90%88%E9%A1%8C%E7%9B%AE%E7%B7%B4%E7%BF%92-lv1-b3c600aff43e"
+---
+
+## 練習一：請你分別用 for loop 以及 while 迴圈，印出 1~9。
+
+### for loop
+
+```
+for (var i = 1;i <= 9;i++) {
+ console.log(i)
+}
+```
+
+### while
+
+```
+var i = 1
+while (i<=9) {
+ console.log(i)
+ i++
+}
+```
+
+## 練習二：寫一個能夠印出 1~n 的函式
+
+```
+function print (n) {
+ for (var i = 1;i <= n;i++) {
+ console.log(i)
+ }
+}
+```
+
+```
+print(9)
+// 印出 1~9
+```
+
+## 練習三：寫一個能夠印出 n 個 \* 的函式
+
+一開始我把題目會錯意，結果寫成了練習四的解答，就無痛移植了。然後看了一下發現就只是個小修改而已，我可以感覺到自己的進步，感覺很好。
+
+```
+function star (n) {
+ var a = ‘’
+ for (var i = 1; i<=n;i++){
+ a = a+’*’
+ }
+ console.log(a.length) //加入個指令方便確認到底出了幾顆星
+ console.log(a)
+}
+```
+
+```
+star(10)
+```
+
+## 練習四：寫一個能回傳 n 個 \* 的函式
+
+這題其實是練習三解答出來，因為看錯題目的意思XD，好在我看成的意思是第四題的，所以就無痛移植了。
+
+因為忘了如何添加，所以就直接先試著讓他印出，結果想到用字串的方式添加就好。然後開始動手寫迴圈，過程中不小心把變數命名放在迴圈裏面，想說怎麼一直不能跑，想了一下才注意到，原來我放進去變成每次都重新命名。然後當成功輸出之後又想偷懶，於是就直接讓程式輸出字串長度，又方便確認又好用。
+
+```
+function star (n) {
+ var a = ‘’
+ for (var i = 1; i<=n;i++){
+ a = a+’*’
+ }
+ console.log(a.length) //加入個指令方便確認到底出了幾顆星
+ return a
+}
+```
+
+```
+console.log(star(527))
+```
+
+## 練習五：判斷大小寫
+
+印象中上課有看到大小寫判斷，但是指令我忘了，所以就去查筆記，這就是好處XD。然後查到指令了，但對該指令可以說不熟所以也查了一下 [.charCodeAt(](http://www.runoob.com/jsref/jsref-charcodeat.html)) 就是可以判斷第幾個字的編碼，左思右想，我又生性懶惰，於是我決定用寫範圍內的編碼來判斷。
+
+```
+function isUpperCase (str) {
+ var strCode = str.charCodeAt(0) //取得首字編碼
+ if (strCode >= ‘A’.charCodeAt(0) && strCode <=’Z’.charCodeAt(0)) {
+ return true
+ } else if(strCode >= ‘a’.charCodeAt(0) && strCode <=’z’.charCodeAt(0)) {
+ return false
+ } else {
+ return ‘Not English’
+ }
+ }
+ //大寫 true 小寫 false
+console.log(isUpperCase(‘?bv’))
+```
+
+```
+// Not English
+```
+
+因為我太無聊了，所以決定擅自增加功能XD
+
+後來才注意到可以直接比較XDD
+
+所以再改寫
+
+```
+function isUpperCase (str) {
+ if (str >= ‘A’ && str <=’Z’) {
+ return true
+ } else if(str >= ‘a’ && str <=’z’) {
+ return false
+ } else {
+ return ‘Not English’
+ }
+ }
+ //大寫 true 小寫 false
+console.log(isUpperCase(‘這是英文’))
+// Not English
+```
+
+判斷的條件本身就是回應 true 所以回傳值也可以直接改為 判斷條件，就不必多做運算。
+
+```
+function isUpperCase(str) {
+ var char = str[0]
+ return char >= ‘A’ && char <=’Z’ // 回傳是不是大寫字母
+}
+```
+
+```
+console.log(isUpperCase(‘A591s9e19s’))
+```
+
+## 練習六：回傳第一個大寫字母以及它的 index
+
+這題明顯我就比較難以想像該如何解答，所以先寫下幾個條件
+
+1. 回傳第一個大寫字母
+2. 回傳第一個大寫字母的 index
+3. 根據題目來說，應該是要使用 .indexOf()
+
+這樣要一個一個找出來嗎？如果是就必須分開寫 indexOf('A') indexOf(‘B) ...
+
+試試看之後，發現上述方式不可行 ，因為第一個之後就有可能回傳 -1 那 str 就變成-1 無法嘗試
+
+所以試著想利用 if 但是會變成雙重迴圈 而且也不知道該如何撰寫
+
+或是把字串切成陣列，然後一個個indexOf
+
+或是寫兩個 function 但我連一個都想不出來如何寫XD
+
+先找到 indexOf 然後再 行不通
+
+每個位置變成陣列在 一個個化成編碼，然後再比較陣列的第幾個是大寫的編碼範圍內 成功!!
+
+```
+function position(str) {
+ var oneWord = str.split("")//確認可以成功分割
+  for (var i = 0;i< oneWord.length ;i++){
+   if(oneWord[i]>='A'&& oneWord[i]<='Z') {
+    var chi1 = "第一個大寫字母："
+    var chi2 ="大寫字母位於的index："
+    var 逗號 ="，"
+    var result = chi1 + oneWord[i] + 逗號 + chi2 + i //寫好回傳的解
+    return result
+   }
+  }return -1
+
+ }
+```
+
+```
+console.log(position("i'm your Father go sell matches!!!"))
+console.log(position("i'm your father go sell matches!!!"))
+//第一個大寫字母：F，大寫字母位於的index：9
+//-1
+```
+
+我試著玩玩看變數，結果玩出了好多玩法，玩到快笑死XD
+
+可以把我想顯示的字用變數命名寫中文，甚至還可以用中文當變數，然後在命名一個變數把它們串起來，就可以回傳XD
+
+其實沒必要分割，因為字串本身就可以當作陣列存取。然後 return 後面可以直接計算。
+
+```
+function position(str) {
+  for (var i = 0; i < str.length; i++){
+   if(str[i]>='A'&& str[i]<='Z') {
+    //寫好回傳的解
+    return str[i] + ' ' + i // 回傳答案跟空白還有 index 位置
+   }
+  }return -1
+}
+console.log(position("i'm your Father go sell matches!!!"))
+console.log(position("i'm your father go sell matches!!!"))
+// F 9
+// -1
+```
+
+## 練習七：回傳陣列裡面所有小於 n 的數的數量
+
+想法：把陣列用迴圈分別比較，確定小於的就用計數器+1直到結束之後回傳數量。
+
+```
+function findSmallCount(arr, n) {
+var count = 0
+ for (var i = 0; i < arr.length; i += 1) {
+  if(arr[i] < n) {
+   count = count + 1 //arr[i]<n 計數+1
+  }
+ }
+  return count
+}
+```
+
+```
+console.log(findSmallCount([1, 2, 3, 4], 10))
+```
+
+更簡單的解法：
+
+> filter() 會回傳一個陣列，其條件是 return 後方為 true 的物件，很適合用在搜尋符合條件的資料。
+
+```
+function findSmallCount(arr, n) {
+ return arr.filter(function (item) {
+   // 這邊把 arr 給代進去 所以 item = arr
+ return item < n  //回傳 n 小於 item 的陣列
+ }).length // 取得這個陣列的長度
+}
+```
+
+```
+console.log(findSmallCount([1, 2, 3, 4], 10))
+```
+
+比較複雜的方法，因為順序不是單純由上往下，而是代入來代入去。
+
+## 練習八：回傳陣列裡面所有小於 n 的數的總和
+
+稍作修改即可
+
+```
+function findSmallerTotal(arr,n) {
+ var Total = 0
+   for (var i = 0; i<arr.length;i++) {
+   if(arr[i]<n) {
+   Total += arr[i]
+   }
+ }
+ return Total
+}
+```
+
+```
+console.log(findSmallerTotal([1, 2, 3], 3))
+```
+
+## 練習九：回傳陣列裡面所有小於 n 的數
+
+簡單說就是利用前面的迴圈把小於的數添加進一個新的陣列，再回傳即可。
+
+這邊犯了一個錯把 .push 賦值給變數了，因為這樣會回傳陣列長度。
+
+```
+function findAllSmall(arr,n) {
+ var result = []
+ for (var i = 0; i<arr.length;i++) {
+    if(arr[i]<n) { //每找到一個小於的陣列就添加進新陣列
+   result.push(arr[i])
+  }
+ }
+ return result
+}
+```
+
+```
+console.log(findAllSmall([1, 2, 3], 3))
+```
+
+```
+function findSmallCount(arr, n) {
+ return arr.filter(function (item) {
+ // 這邊把 arr 給代進去 所以 item = arr
+ return item < n //回傳 n 小於 item 的陣列
+ })
+}
+console.log(findSmallCount([1, 2, 3, 4], 10))
+```
+
+## 練習十：回傳陣列總和
+
+```
+function sum(arr) {
+ var result = 0
+ for (var i = 0; i<arr.length; i+= 1) {
+ result += arr[i]
+ }
+ return result
+}
+```
+
+另外一種做法：
+
+[.reduce()](https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)： 將一個累加器及陣列中每項元素（由左至右）傳入回呼函式，將陣列化為單一值。
+
+```
+arr.reduce(callback[accumulator, currentValue, currentIndex, array], initialValue)
+```
+
+**參數**
+
+`callback`用於處理陣列中每個元素的函式，可傳入四個參數：
+
+`accumulator`用來累積回呼函式回傳值的累加器（accumulator）`currentValue`原陣列目前所迭代處理中的元素。就是批次處理的值，名稱可以自訂。
+
+`currentIndex`選擇性原陣列目前所迭代處理中的元素之索引。若有傳入 `initialValue`，則由索引 0 之元素開始，若無則自索引 1 之元素開始。`array`選擇性呼叫 `reduce()` 方法的陣列。`initialValue`選擇性於第一次呼叫 `callback` 時要傳入的累加器初始值。若沒有提供初始值，則原陣列的第一個元素將會被當作初始的累加器。假如於一個空陣列呼叫 `reduce()` 方法且沒有提供累加器初始值，將會發生錯誤。
+
+這是一個累加的內建函式，可以把值回傳之後再依序累加回傳，值到加總完成回傳值，如果有給她初始值的話，就會從陣列第一個元素 + 初始值開始回傳，這兩個值回傳之後的值，會傳到 accumulator 裡面，然後再去跑一次相加。
+
+```
+function(accumulator, currentValue) {
+return currentVaue + accumulator
+}
+```
+
+accumulator：累加器，會把回傳值在返回給自己值，然後再去回傳運算，也就是說 accumulator 會等於 return 的值，然後在帶去 return 做運算
+
+這樣做的好處是把第一個的參數變成可以一直記憶某個狀態的變數
+
+```
+function sum(arr) {
+ return arr.reduce(function(accumulator, value) {
+  return accumulator + value
+ }, 0)
+}
+```
+
+```
+console.log(sum([3, 4, 11]))
+```
+
+流程：  
+在這邊，會先把 [3, 4, 11
+
+] 代進 .reduce，reduce裡面又有一個 function，所以就會先執行該 function。  
+第一次執行：回傳 初始值 "0" + arr[0] "3" 到 accumulator，accumulator = 3
+
+第二次執行：回傳 accumulator "3" + arr[1] "4" 到 accumulator，accumulator = 7。
+
+第三次執行：回傳 accumulator “7” + arr[2] “11” 到 accumulator，，accumulator = 18。
+
+arr.reduce(function(accumulator, value) \{ return accumulator + value\}, 0) 這整串等於 18 。
+
+然後sum fucntion 回傳 18，印出 18。
+
+## 解完了!!
+
+收穫：
+
+感覺通體舒暢，有滿滿的自信我真的進步了很多，因為我都是獨立解出來的了!!! 所以我想我真的進步滿多的!! 有一題特別難，因為沒有直接可以使用的內建函式，變成有點像是自己再創造新函式的感覺，解的時候一看到題目就頭痛，因為毫無想法，想一想中間就要吃飯了，我卻是吃飯一下，突然有個想法就跑到房間來寫下，因為怕忘記，然後吃完飯後花了很多時間，想通了就寫出來了!! 而且比我想像的簡潔好多喔!!! 所以今天非常的有收穫，也非常地有成就感。

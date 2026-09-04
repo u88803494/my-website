@@ -1,0 +1,754 @@
+---
+title: "前端基礎：CSS 的各種裝飾"
+slug: "前端基礎-css-的各種裝飾"
+description: "背景：background"
+date: 2019-05-22T14:16:03.362Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*YxuiGosZjKUkL4PTP5kxTg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-css-%E7%9A%84%E5%90%84%E7%A8%AE%E8%A3%9D%E9%A3%BE-b0e51f46e3f7"
+---
+
+## 背景：background
+
+有兩種方式：可以使用顏色的英文，red. green. blue,etc。另外一種是三原色表示法像是使用色碼，或是 rgb、rgba，還可以設置成圖片
+
+```
+/* style.css: */
+#box1 {
+ background: red;
+}
+```
+
+```
+#box2 {
+ background: #ff00f0;
+}
+```
+
+```
+#box3 {
+ background: rgb(99, 40, 100);
+   }
+```
+
+```
+#box4 {
+ background: rgba(99, 100, 255, 0.1);/* 最後一位是透明度 */
+   }
+```
+
+除了設置顏色之外，還可以放圖片在背景，還可以調整顯示的寬度高度。
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg")/* 在背景顯示圖片
+ height:500px;/* 圖片的高度 */
+ width:2000px;/* 圖片的寬圖 如果圖片不夠寬，則會直接把圖片重複顯示*/
+}
+```
+
+然後還可以設置圖片要怎麼顯示、對齊。
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg") center; /* 如何對齊 */
+ height:500px;
+ width:2000px;
+}
+```
+
+除了從中間開始顯示之外，還可以設置 left right top bottom no-repeat 等條件，還可以設置兩個條件
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg") center right; /* 如何對齊 */
+ height:500px;
+ width:2000px;
+}
+```
+
+還可以調整圖片的大小
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg")center right;
+ height:500px;
+ width:2000px;
+ background-size: 200px 300px; /*調整圖片大小寬 高*/
+}
+```
+
+還可以使用 % 表示，一樣要寬高都要寫，這邊的比例是以 height width 的寬度來做比較的，不是用原始圖片大小來比較。
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg")center right;
+ background-size: 50% 50%; /*調整圖片大小寬 高*/
+ height:500px;
+ width:2000px;
+}
+```
+
+contain：**包含；容納；盛**[**劍橋辭典**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/contain)
+
+使用這個，可以讓圖片高寬符合其中一邊，這樣好處是圖片不會變形。常用在比較寬的圖片，因為這樣會根據螢幕寬窄來變動圖片。
+
+```
+#box1 {
+ background:url("./10756594_p0.jpg") no-repeat center center;
+ background-size: contain; /*調整圖片大小寬 高*/
+ height:500px; /* 所以這邊就不能設定 width */
+}
+```
+
+cover： **覆蓋**
+
+永遠會填滿整個背景，也會隨著寬度縮放。
+
+```
+#box1 {
+ background:url("./34428602_p0.jpg") no-repeat center center;
+ background-size: cover;
+ height:500px;
+}
+```
+
+這些設定也可以在 devTools 看到
+
+![](https://cdn-images-1.medium.com/max/800/1*_U9v_jzIoit2p0rWklelRA.png)
+
+## 把自己框起來：border 與 border-radius
+
+border：可以出現一個框然後會推擠到 box ，就是由 box 往外面長的意思，原文的意思也是這樣。
+
+**border**​ **在…上加邊，給…鑲邊；圍，沿著**[**劍橋字典**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/border)
+
+```
+#box1 {
+ background: red;
+ border: 20px solid green;/*依序是寬度 類型 顏色*/
+}
+```
+
+一樣也可以在 devTool 看到
+
+![](https://cdn-images-1.medium.com/max/800/1*x7qZDo1ZCCVCF5PoJ9ZtFA.png)
+
+甚至還可以直接在 devtools 變更 border style
+
+![可以看到有很多的選項](https://cdn-images-1.medium.com/max/800/1*YxuiGosZjKUkL4PTP5kxTg.png)
+
+_可以看到有很多的選項_
+
+這些選項都是可以使用的 border 類型，也可以在 css.style 裡面做更改。最常用的就是 solid 實現。
+
+另外還有 border-radius：也就是可以設定四個角的弧度
+
+outline：設置在 box 之外的顯示，用法跟 border 一樣，由原來的元素往外面長，所以不會動到原本的元素，類似外框的意思。
+
+```
+/* style.css: */
+#box1 {
+ background: red;
+ border: 20px solid green;/*依序是寬度 類型 顏色*/
+ border-radius: 140px;
+ outline:30px dotted blue;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*QdbyWn96KCfngSGlcQ3WKw.png)
+
+其他跟 border 有關係的設定
+
+用作簡單繪圖
+
+![可以看到逐步變圓形一但到達 125px 也就是半徑就變成完整的圓了](https://cdn-images-1.medium.com/max/800/1*dTAsemVWPfipBoGM1Is2aQ.gif)
+
+_可以看到逐步變圓形一但到達 125px 也就是半徑就變成完整的圓了_
+
+border 可以分開設置
+
+```
+/* style.css: */
+#box1 {
+ background: red;
+ height:100px;
+ width:100px;
+ border-top: 10px solid green;
+ border-bottom: 10px solid pink;
+ border-left: 10px solid blue;
+ border-right: 10px solid yellow;
+}
+```
+
+然後寬度也可以從 10 px 改成 70 px，效果如下：
+
+![原本是 10 px 改為 70 px 之後整個變大了](https://cdn-images-1.medium.com/max/800/1*mT7Cd_2o9Hw9w25PEltUyA.gif)
+
+_原本是 10 px 改為 70 px 之後整個變大了_
+
+然後把 box1 的寬高都設置為零的話。
+
+```
+/* style.css: */
+#box1 {
+ background: red;
+ height:0px;
+ width:0px;
+ border-top: 170px solid green;
+ border-bottom: 170px solid pink;
+ border-left: 170px solid blue;
+ border-right: 170px solid yellow;
+}
+```
+
+![可以發現變成只有四色了，中間的紅色不見了](https://cdn-images-1.medium.com/max/800/1*c67yqL6CtyCD2VDZ2sZbNA.png)
+
+_可以發現變成只有四色了，中間的紅色不見了_
+
+就可以利用這點來畫個三角形
+
+```
+/* style.css: */
+#box1 {
+ background: transparent;
+ height:0px;
+ width:0px;
+ border-top: 170px solid transparent;
+ border-bottom: 170px solid pink;
+ border-left: 170px solid transparent;
+ border-right: 170px solid transparent;
+}
+```
+
+其他背景色通通改成 transparent 透明
+
+![得到一個三角形](https://cdn-images-1.medium.com/max/800/1*cet2hqTjDNsrIUlfh91Haw.png)
+
+_得到一個三角形_
+
+當然也可以透過修改其他屬性來達成各種三角形，像是修改 left. right 的值。
+
+```
+/* style.css: */
+#box1 {
+ background: transparent;
+ height:0px;
+ width:0px;
+ border-top: 00px solid transparent;
+ border-bottom: 170px solid pink;
+ border-left: 100px solid transparent;
+ border-right: 300px solid transparent;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*03UXrBR46KHuFazQPRzIUg.png)
+
+所以會看到很多用 CSS 來畫的圖形，都是透過這樣的方式實現的。實際開發時，幾乎不會用到 outline。
+
+## 邊距：margin 與 padding
+
+內邊距 padding
+
+外邊距 margin
+
+可以用 devTools 的圖片來解釋
+
+![](https://cdn-images-1.medium.com/max/800/1*tmL9nQALQ4r1zP_X-xXQOg.png)
+
+這也跟 border 一樣除了可以直接設置全部的邊距之外，也可以分別設置
+
+```
+padding: 30px; 全部
+```
+
+```
+各個方向的 padding：
+padding-top:50px
+padding-bottom:50px;
+padding-left:50px;
+padding-right:50px;
+```
+
+```
+較簡易的用法：
+padding: 10px 30px; /*上下 10px 左右 30px*/
+padding: 10px 30px 50px 70px; /*上 10px 右 30px 下 50px 左 70px*/
+padding: 10px 30px 50px; /*上 10px 左右 30px 下 50px*/
+```
+
+padding，感覺比較像是往外延伸的感覺。
+
+margin，就是離其他東西的距離，外圍會最多一個框，而不會改到裡面的內容。
+
+在瀏覽器像是 chrome 會預設 body 有 8px 的 margin，所以會不能貼齊，所以很多人網頁會額外設置 body 的 margin:0px 來清除這種狀況
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ width: 100px;
+ height: 100px;
+ padding: 10px 30px 50px 70px;
+}
+```
+
+```
+#box2 {
+ background: green;
+ width: 100px;
+ height: 100px;
+ margin: 50px;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="box1">
+  box1
+    </div>
+    <div id="box2">
+  box2
+    </div>
+  </body>
+</html>
+```
+
+![用 devtool 可以看到 padding 跟 margin 的差異](https://cdn-images-1.medium.com/max/800/1*Lx0g-z1fDkhpjoNLh_DJ3w.gif)
+
+_用 devtool 可以看到 padding 跟 margin 的差異_
+
+## 文字相關屬性
+
+color、font-family、font-weight 與 line-height
+
+### color
+
+文字不需要前綴，直接使用 color 就可以，除了直接使用文字以外，一樣也可以用三原色方式選取，還可以使用透明度。色碼、rgb、rgba
+
+font-size 設置文字大小
+
+font-weight 設置字的重量，意思是指粗細度
+
+font-family 文字的字形
+
+```
+font-size: 30px;
+font-weight: 900;
+/* 除了用英文之外還可以 用數字 300是較細的 500是一般 700是粗體 最大值 900 */
+font-family: /*字形，要有瀏覽器支援才可以，如果不支援就會用電腦預設的*/
+```
+
+### letter-spacing 字的距離
+
+```
+letter-spacing: 10px;/* 字與字的間距 */
+```
+
+### line-height
+
+這可以設置行與行之間的落差，使用 px 強制設置行高或使用 em 來表示，em 的功能是可以以字的大小為距離的評估
+
+```
+line-height: 12px /* 行高 */
+```
+
+### text-align
+
+對齊方式，這個只能針對左邊對齊右邊對齊中間對齊
+
+```
+#box1 {
+ background: orange;
+ height: 100px;
+ color:rgb(255, 20, 100, 0.5);
+ font-size: 12px;
+ font-weight: 900;
+ font-family: fantasy;
+ letter-spacing: 10px;/* 字與字的間距 */
+ line-height: 1.5em ;/* 行高 */
+ text-align: center;/*對齊方式*/
+}
+```
+
+![一個個取消可以看到各種效果。](https://cdn-images-1.medium.com/max/800/1*kL6yP340tTG5wNTKxLDfFQ.gif)
+
+_一個個取消可以看到各種效果。_
+
+### 所以如果要在 box 內置中對齊呢？
+
+這個問題在 CSS 一直都是經典問題。
+
+把 line-height 設置的跟 height 一樣高
+
+```
+background: orange;
+ height: 100px;
+ color:rgb(255, 20, 100, 0.5);
+ font-size: 12px;
+ font-weight: 900;
+ font-family: fantasy;
+ letter-spacing: 10px;/* 字與字的間距 */
+ line-height: 100px
+ text-align: center;/*對齊方式*/
+```
+
+這樣做的缺點是，只適用於一行內容，超過的話就會直接顯示在下行，就會破功
+
+![只有第一行可以放置中間](https://cdn-images-1.medium.com/max/800/1*h4nQRqr_4idtYgZldN34Hw.png)
+
+_只有第一行可以放置中間_
+
+或是可以使用 padding
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ text-align: center;/*對齊方式*/
+ padding: 30px 0px; /* 上下 30 左右 0 */
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="box1">
+  hello, this is box1
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. dummy text of the printing and typesetting industry.
+
+    </div>
+  </body>
+</html>
+```
+
+![這樣的好處是多行也可以支援。](https://cdn-images-1.medium.com/max/800/1*em0n2YtJwmdwtwbuKCRIlg.png)
+
+_這樣的好處是多行也可以支援。_
+
+## 文字相關 part2：word-break 與 white-space
+
+在使用一個很長的無空白字串的時候，如果有設定寬度，而因為只有一串字，就會超過那個寬度
+
+![](https://cdn-images-1.medium.com/max/800/1*idswlIyBSCTfCEHPF06DhA.png)
+
+就需要調整一個 CSS 屬性 word-break
+
+```
+word-break: break-all;
+```
+
+就可以換行
+
+![](https://cdn-images-1.medium.com/max/800/1*K_09ReLwUG5Y-Opjy6WZKA.png)
+
+word-break: break-all 的特點是，換行的時候，不會管字單字的完整性，所以會出現單字被切掉的情況。
+
+這時候就可以使用另外一個屬性
+
+```
+word-break: break-word;
+```
+
+就是根據單字來換行，這就如同平常我們文章的顯示方式。
+
+-
+
+另外一種情況是如果有換行的情況，但是我不希望被斷行
+
+```
+white-space: nowrap;
+```
+
+告訴瀏覽器不要被包起來
+
+![這樣就會一行一直下去](https://cdn-images-1.medium.com/max/800/1*xSqcIPvbFNIOHOftQ2zG2w.png)
+
+_這樣就會一行一直下去_
+
+在這邊學到可以設定文字要怎麼顯示，有各種各式各樣的方式可以顯示。
+
+## overflow 與 text-overflow
+
+溢出、超出的意思
+
+依照前面所舉的來說，超出寬度的情況就可以這樣稱呼。
+
+這種時候就可以設定 overflow 屬性
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ width:100px;
+ font-size: 12px;
+ font-weight: bold;
+ text-align: center;
+ white-space: nowrap;
+ overflow: hidden; /* 隱藏超出的部分 */
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*sCHBSZ3aAvQSiPffQV1S4Q.png)
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ width:100px;
+ font-size: 12px;
+ font-weight: bold;
+ text-align: center;
+ white-space: nowrap;
+ overflow: scroll;/* 這樣就會變成一個可以滾動的區域 */
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*5NWW51xZZVACaBZovf0ebw.gif)
+
+在這裡設置成 auto 之後也是一樣滾動，差別在於使用 scroll 的話，就會是無論有沒有超過都是顯示滾輪。
+
+-
+
+### text-overflow: ellipsis
+
+這是省略號的意思。
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ width:100px;
+ font-size: 12px;
+ font-weight: bold;
+ text-align: center;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis; /*需搭配 overflow: hidden; */
+}
+```
+
+![就會把多的字用...取代](https://cdn-images-1.medium.com/max/800/1*Re-VZ-X_U8AmI5q_NHELKg.png)
+
+_就會把多的字用...取代_
+
+這屬性需要兩個條件來搭配
+
+1. 需搭配 overflow: hidden;
+2. 搭配 white-space: nowrap;
+
+這樣才可以正確使用，所以需要強制他一行，超過之後不顯示，才可以使用這樣的功能，這個功能會很常使用。
+
+overflow 的話會比較常用，因為應用範圍較廣。
+
+## 加了質感瞬間升級：transition
+
+transition 是轉變的意思，這個功能就是可以讓他在轉變的時候有一些效果。
+
+```
+/* style.css: */
+#box1 {
+ background: orange;
+ width:200px;
+ height: 100px;
+ transition: all 1s;
+/* 第一個是要針對哪個部分 第二個是多久 第三個是漸變的動畫效果*/
+}
+```
+
+```
+#box1:hover {
+ background: green;
+ color:white;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="box1">
+  box1
+    </div>
+  </body>
+</html>
+```
+
+![當滑鼠移動過去的時候就會有效果，不過這邊沒辦法把滑鼠錄進去，就請自行想像這是滑鼠接觸之後的效果](https://cdn-images-1.medium.com/max/800/1*qRY4x5e668YsabI27hwUvw.gif)
+
+_當滑鼠移動過去的時候就會有效果，不過這邊沒辦法把滑鼠錄進去，就請自行想像這是滑鼠接觸之後的效果_
+
+所以利用這種功能，可以修飾很多東西，像是按鈕，或是特效之類的。
+
+然後關於這個可以使用的效果，可以直接使用 devTools 查看，會有很詳細的介紹，也可以直接在這邊調整使用。
+
+![](https://cdn-images-1.medium.com/max/800/1*g2b8M-LV6H0ckvQgfSCFTQ.gif)
+
+有一個重點要注意是 transition 要放在變換之前，如果放在要變話的 CSS 上的話，就只會在接觸到該屬性的時候有效果。
+
+## Die Verwandlung：transform 的妙用
+
+transform 變形轉換的意思。使用上有點像是在 呼叫 funcfion 的感覺。
+
+```
+/* style.css: */
+#box1 {
+ width: 200px;
+ height: 100px;
+ border-radius: 30px;
+ text-align: center;
+ line-height: 100px;
+ color: white;
+ background: orange;
+ transition: all 0.5s;
+ margin: 100px;
+}
+```
+
+```
+#box1:hover {
+ transform: scale(2); /*放大兩倍*/
+}
+```
+
+![一樣是滑鼠移動上去時會有變化。](https://cdn-images-1.medium.com/max/800/1*XfcAHC8Ki7RaxiES5BINwA.gif)
+
+_一樣是滑鼠移動上去時會有變化。_
+
+一樣 devTool 可以看到有很多種功能。
+
+適用一個旋轉的功能。
+
+```
+/* style.css: */
+#box1 {
+ width: 200px;
+ height: 100px;
+ border-radius: 30px;
+ text-align: center;
+ line-height: 100px;
+ color: white;
+ background: orange;
+ transition: all 0.5s;
+ margin: 100px;
+}
+```
+
+```
+#box1:hover {
+ transform: rotate(720deg); /*旋轉*/
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*4o5HHNDBQXV9K-t-Oq4KPg.gif)
+
+transform: translate
+
+有好幾種可以指定 x,y 軸的
+
+transform: translate(x, y)
+
+transform: translateX(x)指定X軸
+
+transform: translateY(y)指定Y軸
+
+會按照原本的位置做偏移
+
+```
+/* style.css: */
+#box1 {
+ width: 200px;
+ height: 100px;
+ border-radius: 30px;
+ text-align: center;
+ line-height: 100px;
+ color: white;
+ background: orange;
+ transition: all 0.5s;
+ margin: 100px;
+}
+```
+
+```
+#box1:hover {
+ transform: translate(50px, -20px); /*位移*/
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*3N1WA4g-qvBqMtu82DBgMg.gif)
+
+假設我們想要讓 box1 置中
+
+```
+/* style.css: */
+#box1 {
+ position: absolute;/*使用這個屬性才可以在 top left 使用 %*/
+ top: 50%;
+ left: 50%;
+ width: 200px;
+ height: 100px;
+ border-radius: 30px;
+ text-align: center;
+ line-height: 100px;
+ color: white;
+ background: orange;
+ margin: 100px;
+}
+```
+
+以這樣來說元素會拉遠距離。但是是以 box1 的左上角 來做為標準
+
+![以紅色標記處為準](https://cdn-images-1.medium.com/max/800/1*wNWAlbuKqWlgwAtsMLIXHg.png)
+
+_以紅色標記處為準_
+
+要把移動到這中間，就是使用 translate
+
+```
+/* style.css: */
+#box1 {
+ position: absolute;/*使用這個屬性才可以在 top left 使用 %*/
+ top: 50%;
+ left: 50%;
+ width: 200px;
+ height: 100px;
+ border-radius: 30px;
+ text-align: center;
+ line-height: 100px;
+ color: white;
+ background: orange;
+ transform: translate(-50%, -50%);
+ /*這邊的 % 是以 box1 這個元素為準，所以剛好移動一半，就對準正中間了*/
+}
+```
+
+![這樣元素就會在正中間了](https://cdn-images-1.medium.com/max/800/1*VXp7xZudUtOHo6FowPlb3g.png)
+
+_這樣元素就會在正中間了_
+
+這是一個很常用的方法。
+
+## 收穫:
+
+為了這寫這篇筆記，我又去找了新的工具，也就是 gif 的螢幕擷取軟體，換了好幾款終於找到一款簡單好用的了。我覺得這些 CSS 的語法，如果不用動態的方式表示，筆記會變得太難以表達，用圖片表達，肯定也只能表達得很抽象，筆記寫到最後，我真的很慶幸我有去找軟體來用，果然跟我想的一樣，後面的內容甚至已經到達可以直接做動畫了吧！
+
+在這邊學得滿多的應用，都是在實作 CSS 的修飾，學到了很多的修飾方式，我才知道原來 CSS 這麼強大，光用 CSS 就可以做很多的事情了。而且在後面有一種倒吃甘蔗的感覺，因為介紹的工具越來越實用。要我說，擷取出來的畫面，也有種越來越漂亮的感覺，自己把筆記從頭到尾瀏覽一次，也是有這樣的感覺，所以可以確實的了解到 CSS 真的就像是衣服一樣是在修飾的，就像女人都喜歡穿衣服來修飾自己那樣子吧！就像講流行服飾的節目常講的那樣XD

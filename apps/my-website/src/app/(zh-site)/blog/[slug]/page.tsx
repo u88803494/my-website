@@ -35,7 +35,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   const displayPost = toPostForDisplay(post);
-  const url = `https://henryleelab.com/blog/${slug}`;
+  // Encode from Velite's raw slug: params.slug may already be percent-encoded,
+  // and re-encoding that would double-encode the canonical URL
+  const url = `https://henryleelab.com/blog/${encodeURIComponent(post.slug)}`;
   const ogImageUrl = post.thumbnail ?? DEFAULT_OG_IMAGE_URL;
 
   return {

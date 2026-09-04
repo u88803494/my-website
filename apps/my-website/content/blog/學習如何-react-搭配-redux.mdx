@@ -1,0 +1,428 @@
+---
+title: "學習如何 React 搭配 Redux"
+slug: "學習如何-react-搭配-redux"
+description: "Redux 誕生的目的："
+date: 2020-01-04T14:11:22.479Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*-r1Q7tqftDjJ9aU-M37m2w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%AD%B8%E7%BF%92%E5%A6%82%E4%BD%95-react-%E6%90%AD%E9%85%8D-redux-97a23c231920"
+---
+
+## Redux 誕生的目的：
+
+當有一些 state 是很多層地方都需要共用的時候，就會用得到 Redux 的功能。或是當 state 跟實際應用到的 component 相差很多層的時候，就會用到 Redux。
+
+假設在上層的 A component，中間有 B、C、D …. 最後才會到 Z component，而這個 Z component 又需要 A component 的 state 的時候，照原本的做法就會需要非常複雜的一個一個傳遞下去，但這樣太沒有效率，所以這時候利用 Redux 就可以跨領域傳遞了。
+
+又或是像下圖的例子，
+
+![](https://cdn-images-1.medium.com/max/800/1*-r1Q7tqftDjJ9aU-M37m2w.png)
+
+當 E 需要改 B 的時候，就必須要把 state 放在 root 才可以，然後再一層一層的傳遞下去，這也是一個很浪費時間的舉動。
+
+這時候會需要一些解決方案，就是使用 Redux，下面介紹的是 redex 得原理。
+
+## subscribe
+
+所以就假設我們創造一個叫做 globalState.js，裡面就直接放一個 state，然後 export 出去
+
+```
+globalState.js:
+```
+
+```
+let globalState = {
+```
+
+```
+}
+```
+
+```
+export globalState
+```
+
+這樣就可以在需要的地方引入這個，就可以透過直接修改這個來達成效果。
+
+但是這樣子呢，雖然可以改變這個 globalState，但是卻沒有辦法重新 render，因為並沒有觸發 render 的機制，所以就要寫一些 code 來解決這個問題。
+
+利用的是 subscribe 的機制，也就是說我在改這個 globalState 的時候，不要直接去改，而是利用一個由 globalState.js 提供的 callback 去改這個 globalState 裡面的值。
+
+![](https://cdn-images-1.medium.com/max/800/1*2cOg_U82IBnUG4Yo1b23jA.png)
+
+並且還需要通知其他特定的 component 這個狀態改變了，
+
+![](https://cdn-images-1.medium.com/max/800/1*hFo3koxvBqEvfl3ANKSsCg.png)
+
+這樣寫 `subscribe` 就可以把所有的 cb 都放在 callbacks，而當有人呼叫 `setGlobalState` 的時候，就可以使用 `notifyAll()` 來把所有的 cb 都執行一次。
+
+![](https://cdn-images-1.medium.com/max/800/1*MnQnIAjxZ1-8tptf-84WFQ.png)
+
+像是在這邊呼叫。
+
+![](https://cdn-images-1.medium.com/max/800/1*bOL9M9RMZnS43PBHl2c5AA.png)
+
+而 subscribe 的 function 可以放在 componentDidMount 裡面，這是[官網說明](https://zh-hant.reactjs.org/docs/react-component.html#componentdidmount)的部分。
+
+![](https://cdn-images-1.medium.com/max/800/1*hFo3koxvBqEvfl3ANKSsCg.png)
+
+## connect
+
+但在這邊會有個小問題，也就是說假設我還有其他 component 也要做同樣的事情，這樣就會需要一直寫重複的內容。
+
+![](https://cdn-images-1.medium.com/max/800/1*bOL9M9RMZnS43PBHl2c5AA.png)
+
+所以為了更方便的使用，我們可以另外寫一個 function 叫做 connect，那這個會把 component 跟 globalState 做連結。
+
+```
+function connect(comp) {
+
+}
+```
+
+接著就可以在內部寫一個新的 component，並且把這些重複內容都放進來。
+
+![雙斜線後的是模擬資料，假設資料是 test: 1，用了解構就會變成傳入這樣的內容](https://cdn-images-1.medium.com/max/800/1*VRl24FyK4Y3PhMNIqHjBrg.png)
+
+_雙斜線後的是模擬資料，假設資料是 test: 1，用了解構就會變成傳入這樣的內容_
+
+然後再把這部分的資料 return 出去並使用解構的語法，把資料通通放上去。所以如果我有兩筆資料，就一樣也會傳入
+
+![](https://cdn-images-1.medium.com/max/800/1*Iq7tkeF97JwesmDt8FRWlg.png)
+
+這時候就要用 export 也要改
+
+```
+export default connect(Nav)
+```
+
+這樣就有點像是另外寫一個 component 包出另外一個 component，這可以稱為 HOC, higher order component
+
+所以在 nav 也要更改，因為本來的東西是自己的，但現在變成被傳入的，所以就用 `this.props` 才可以使用這些資料。
+
+![](https://cdn-images-1.medium.com/max/800/1*dCp3rFzSZz0YEKYHd_ln_A.png)
+
+然後還要把整個 `Wrapper` return 回去
+
+這邊整個概念就是接收一個 component，然後處理過後再回傳另一個 component。
+
+## 用指令保護內容 action
+
+像在 button 這邊，我在設置的時候使用的方式是直接改值
+
+```
+<button onClick={
+  () => {
+    setGlobalState({ navText: Math.random() })
+  }
+}>click me</button>
+```
+
+但這樣會造成一些問題，像是我可以直接把值改成任意得資料，又或是空的資料，這樣就會造成一些問題。
+
+又或是假設今天有個人看不懂這個 code，他可能要測試，這時候再隨便一個地方加上 code 去改這個值，那這樣整個程式都會無法運作，因為本來寫在別的地方的 `navText` 就會在運作的當下被消失了。
+
+![](https://cdn-images-1.medium.com/max/800/1*nlSfTZDjINOiNbqOjvOVkQ.png)
+
+不想發生這種問題，就改成傳指令的方式。也就是說不要讓人直接改這邊的值，
+
+另外在 globalState.js 額外多一個命名叫做 `dispatch` 的 function。
+
+```
+export const dispatch = (action) => {
+```
+
+```
+}
+```
+
+在操作的地方就可以用來取代 `setGlobalState` 了。
+
+![](https://cdn-images-1.medium.com/max/800/1*dCBM4s4Dt_NUVtEK2bdpfw.png)
+
+而 `dispatch` 裡面就要改用一個 action，一個動作。
+
+action 也會有他的狀態，像是他是做什麼用的 — type，這邊用大寫，才不會跟別的東西搞混，跟他的值 — value，在這邊用之前的值。
+
+這個 action 的作法則是要先判斷 type 對不對，才去做改值的動作，其實用法跟 `setGlobalState` 是一樣的，只是多一層去保護那個值不被改動而已，所以 `setGlobalState` 就可以刪除了。
+
+然後引入的部分也要改一下：
+
+```
+import { dispatch } from '../globalState';
+```
+
+備註：在這裡這種方式是可以避免別人不小心蓋掉我的東西而已，並不是讓別人完全無法改。
+
+### 小技巧
+
+避免打錯參數名稱，前面用的 type 指令，常常會發生一件事情，就是打錯指令像是本來要打 `UPDATE_NAV_TEXT` 結果打成 `UPDATE_NAV_TEST` 。這時候就會發生錯誤，但是會非常難以找到在哪裡，這種時候就可以利用一種方式。
+
+就是把指令另外開個檔案用變數儲存，然後引用。
+
+![](https://cdn-images-1.medium.com/max/800/1*Ms2YvjSfbXeb4WqnLKk_Vg.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*bpBM6t0IPWlP4goV8UzMmQ.png)
+
+這樣的話，當打錯了，就會被提醒。
+
+![](https://cdn-images-1.medium.com/max/800/1*O3fZ4uXos19ZYCBrrwRq1A.png)
+
+會需要這種規則是當如果在一個團隊規模較大的時候，就會需要用到這樣的規則，才不會容易犯錯。
+
+### 另一個小技巧 — 不用記太多種指令的形式
+
+在前面的例子中，常常會發生一件事情，可能每種不同的 type 需要夾到的值的命名不大相同，常見的有 value、array、test 或其他。這時候就可以多寫一個 function，來避免這種情況。
+
+另外開個檔案，叫做 actions.js，寫個 function 並且 return 格式就好，並把傳入直接用來當作值即可。
+
+```
+actions.js:
+```
+
+```
+import { UPDATE_NAV_TEXT } from './actionTypes';
+```
+
+```
+export const updateNavText = (text) => {
+  return {
+    type: UPDATE_NAV_TEXT,
+    value: text,
+  };
+};
+```
+
+改成這樣之後，就可以避免這個問題，而原來的引入也變多餘，可以刪除了。
+
+![](https://cdn-images-1.medium.com/max/800/1*yu2mhYwPjY0uWUVgSSuG5g.png)
+
+### 判斷式種類一多之後的處理技巧
+
+![](https://cdn-images-1.medium.com/max/800/1*30VytXfDwTbTPryjlxU69A.png)
+
+像這樣都是 if else 一多之後，處理起來就覺得很麻煩，也不好看，在這邊就可以另外寫過一個 function
+
+![](https://cdn-images-1.medium.com/max/800/1*iowXaznyiNGEr3uXmcrKlQ.png)
+
+並把值放進去處理之後回傳，在這邊保留就寫法跟新寫法，直接把 if else 改成 switch case 的形式，這樣會看起來清楚明白得多。
+
+取名 reduce 的用意是跟之前在使用 array 的 function 很類似。
+
+在這就可以另外抽出去使用，又自成一個檔案了。
+
+![](https://cdn-images-1.medium.com/max/800/1*j8Wc2ANowNC2iY8hCgRFlQ.png)
+
+## Redux
+
+前面寫的這些，其實就是 redux 的核心概念。
+
+![](https://cdn-images-1.medium.com/max/800/0*9RhqHkBf4lmmQKbR)
+
+STORE 就是 globalState.js，其他則是名字相似。而這整體就是 Redux。
+
+### Redux 使用
+
+redux 需要額外設定才可使用，當然也要先安裝。
+
+```
+yarn add redux
+yarn add react-redux
+```
+
+開始把之前的例子改成 Redux 吧
+
+redux 的差異在並不會把每個資料都存在一起，而是會分各種不同的子 state 不會放在一起，利用 `.module` 來做為區別，就像是下方圖示：
+
+![](https://cdn-images-1.medium.com/max/800/1*rgZ__pfQIuE3DizkuLiebA.png)
+
+所以在 redux 的介紹裡面可以看到 combineReducers
+
+![](https://cdn-images-1.medium.com/max/800/1*PUayzAacFgF7ouMQfd4etg.png)
+
+要用 redux 要先在整個 react 最頂層的 index.js 使用如下
+
+在 redux 中，需要在 index.js 中引入，
+
+```
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+```
+
+```
+const store = createStore()
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*0nOZ8MM0iprIjDqqEYSGUg.png)
+
+而在這邊 react-redux 的作用就像是前述 connect 的 function 那樣，用作把 react 跟 redux 串在一起。
+
+ps. redux 可以獨立於 react 之外
+
+並且要串上 reducer
+
+因為前面有說 reducer 可以有多個 module，所以就需要 combine 起來，然後傳入
+
+![](https://cdn-images-1.medium.com/max/800/1*Yle_AUJtrGNovs5Vnco25A.png)
+
+所以要把檔案 combine 之後，在創造一個 store，
+
+然後本來的 app 用 provider 包起來，主要是把 store 放在這裡，給大家共用
+
+接著就會看到有錯誤，
+
+![](https://cdn-images-1.medium.com/max/800/1*RvwqhZh2llMUqGiu9MvkJQ.png)
+
+而主要的原因是需要給他一個初始值，
+
+![設定一個值，然後直接當預設值即可。](https://cdn-images-1.medium.com/max/800/1*nuQ5__VA7Fi0bCK_MZ2CvA.png)
+
+_設定一個值，然後直接當預設值即可。_
+
+也因為這邊用了 globalState 的關係，由於要改造成 redux，所以就用不到 globlaState 了，就可以把他刪除了。一樣會產生錯誤：
+
+![](https://cdn-images-1.medium.com/max/800/1*fy0xVXYGr8Ahn-MyHfRARQ.png)
+
+主要是 nav 這裡的 connect 需要改成內建的，所以直接把寫好的 function connect 刪除
+
+而 redux 的 connect 比較強大，可以傳入不少資料，就像連結內部下方所示。
+
+```
+import { connect } from 'react-redux'
+```
+
+```
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+```
+
+```
+export default VisibleTodoList
+```
+
+像是 `mapStateToProps` 的意思，就是需要那一些 state，還可以換名字：
+
+```
+nav.js:
+import { connect } from 'react-redux';
+```
+
+```
+...
+...
+...
+```
+
+```
+const mapStateToProps = state => {
+  return {
+    navText: state.nav.navText
+  }
+}
+```
+
+```
+export default connect(mapStateToProps)(Nav);
+```
+
+改寫這樣的內容進去就行，return 的部份就會變成下層 component 的 props，這樣的好處就是可以只傳入需要的資料，不需要用到的狀態也不會拿到。
+
+這樣就可拿到初始化的狀態了
+
+![](https://cdn-images-1.medium.com/max/800/1*0VwihMiherh_AdFwtzphRA.gif)
+
+不過，當下還不能使用 click me，因為還有地方沒改。
+
+home 的檔案也需要改一下，有關 click 的部份，也就是 dispatch 的部份，就要透過 connect 來操作，才能跟 Redux 關聯起來。
+
+![](https://cdn-images-1.medium.com/max/800/1*RNwzurOcd2W1GKs5vVyoqw.png)
+
+在這裡可以直接傳 dispatch 下去，但因為這樣可能會有些問題，所以官方推薦是另外寫過一個 function，也就是說完全看不到 dispatch 這個 function，等於是另外再包一層等於是把細節隱藏起來了。
+
+```
+import { connect } from 'react-redux'
+```
+
+```
+...
+...
+...
+```
+
+```
+const mapDispatchToProps = dispatch => {
+  return {
+    updateNav: text => dispatch(updateNavText(text)),
+  }
+}
+export default connect(null, mapDispatchToProps)(Home);
+```
+
+然後這樣就只需要在裡面使用 寫好的 function 就好。
+
+![](https://cdn-images-1.medium.com/max/800/1*SjL-Sw4RqVV5ImnxhzTPXw.png)
+
+## component
+
+在 Redux 中，可以把 componet 分成兩種，分別是：
+
+```
+container, component
+```
+
+差異是 container 知道 redux ，而 component 不知道 redux。這樣分的話，會看起來比較簡潔。
+
+簡單說就是把 redux 的部份分割出去，開另外一個檔案來寫，這樣的話 component 就可以保持原樣。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/5611d0f8de786d1deb46daa3fb8390cb)
+
+另外開一個檔案叫做 `navContainer` 把 redux 的部份另外放進來，
+
+```
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Nav } from './Nav';
+```
+
+```
+const NavContainer = (props) => {
+  return <Nav {...props} />
+};
+```
+
+```
+const mapStateToProps = state => {
+  return {
+    navText: state.nav.navText
+  };
+};
+```
+
+```
+export default connect(mapStateToProps)(NavContainer);
+```
+
+這樣 component 就可以保持原樣。
+
+不過這樣寫就有一點需要改變了，因為變成是 `NavContainer` 是最後的輸出，所以就必須要改變一下 `import` 跟 `export` 的部份了，就可以正常執行了。
+
+## 總結：
+
+### 起頭
+
+1. 建立 reducer
+2. 建立 store
+3. 在頂層加上 `<Provider>`
+
+### 使用
+
+1. 建立 container
+2. 設置 `mapStateToProps` 、 `mapDispatchToProps`
+3. 設置 connect
+
+## 碼：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/31a9fa84f87546f1333b6f512bd45539)

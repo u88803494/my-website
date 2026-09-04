@@ -1,0 +1,114 @@
+---
+title: "JS 額外補充：hoisting 變數提升（二）"
+slug: "js-額外補充-hoisting-變數提升-二"
+description: "Hoisting"
+date: 2019-06-05T03:11:46.104Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/js-%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-hoisting-%E8%AE%8A%E6%95%B8%E6%8F%90%E5%8D%87-%E4%BA%8C-c5a52674e6e2"
+---
+
+這篇是接續這篇內容的建議先參考該篇在來看這篇：[JS 額外補充 hoisting 變數提升](https://medium.com/@hugh_Program_learning_diary_Js/%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-3779505a3216?source=your_stories_page---------------------------)
+
+## Hoisting
+
+變數(宣告)提升
+
+```
+function test() {
+  console.log(a);
+  var a = 10;
+}
+// undefined
+```
+
+最簡單的就是上述的範例會等於
+
+```
+function test() {
+  var a;
+  console.log(a);
+  a = 10;
+}
+```
+
+```
+// undefined
+```
+
+變數提升最重要的目的：可以在宣告 function 之前就使用到該 function，後來就演變成變數也可以提升
+
+```
+function test() {
+ let a = 1;
+ function test2() {
+  console.log(a)
+ }
+ test2();
+}
+```
+
+```
+test();
+// 1
+```
+
+以這樣來說，他找不到 a 就會出去上層找 a 所以得到答案 1
+
+-
+
+如果改為
+
+```
+function test() {
+ let a = 1;
+ function test2() {
+  console.log(a)
+  var a = 10;
+ }
+ test2();
+}
+```
+
+```
+test();
+// undefined
+```
+
+會這樣是因為 var a 也會變數提升，所以等於重新定義了一次，所以印出來就是 undefined
+
+前面說 let 不會變數提升，所以把這題改成 let
+
+```
+function test() {
+ let a = 1;
+ function test2() {
+  console.log(a)
+  let a = 10;
+ }
+ test2();
+}
+```
+
+```
+test();
+// a is not defined
+```
+
+如果沒有變數提升不應該是往上找嗎？
+
+這個現象說明 let 還是有變數提升的，但是方式跟 var 不一樣
+
+var 的話 變數會被初始化為 undefined
+
+let 的話 在給值之前去存取的話，會出現 `ReferenceError: is not defined` ，有個名稱叫做 Temporal Dead Zone，這邊的意思是，從變數提升的位置到實際賦值的位置，都稱作為 Temporal Dead Zone, TDZ. [補充資料](https://segmentfault.com/a/1190000008213835)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/b5bd81b9cfbd9d73c008f0bafaabb42b)
+
+所以如果中間有任何的程式碼都被視為 TDZ
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/a381c118e7e421836444881bd311a3b6)
+
+所以在 TDZ 的區塊內要用到那個變數，就會跳出 `ReferenceError: a is not defined` 的錯誤
+
+**這些資料其實不一定要非常明白，只需要記得第一個例子所表示的，當成補充資料來了解即可。**

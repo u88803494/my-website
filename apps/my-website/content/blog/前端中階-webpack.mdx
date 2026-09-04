@@ -1,0 +1,158 @@
+---
+title: "前端中階：webpack"
+slug: "前端中階-webpack"
+description: "介紹 webpack"
+date: 2019-10-03T12:55:35.704Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*a0zXcvzG7XLbCN9i4Ic-Dw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-webpack-b2c1f5ab7d2"
+---
+
+## 介紹 webpack
+
+從 [webpack 官方網站](https://webpack.js.org/) 就可以看到 webpack 的用途，就是用來打包用的。
+
+另外有中文翻譯的[ webpack](https://www.webpackjs.com/) 可參考
+
+![](https://cdn-images-1.medium.com/max/800/1*a0zXcvzG7XLbCN9i4Ic-Dw.png)
+
+它可以打包腳本 / CSS / 圖片等。
+
+documents 開頭第一句就是 At its core, webpack is a _static module bundler_ for modern JavaScript applications.
+
+意思就是一個可以用於現代的 JavaScript 的應用程式的靜態模組化打包器。
+
+### 為什麼會需要使用 webpack？
+
+因為想要用 node.js 那樣子的模組化開發。
+
+在前端網頁的部份，是不能夠使用 `require()` 或是 `import` 的，主要是網頁不能夠互相引用。但是隨著專案越來越大之後，不如果分開來寫，那就會很難寫。
+
+所以就會希望在前端網頁也可以像 node.js 那樣使用 `require()` 或是 `import` 。這種時候就要通過 webpack 來達成模組化開發的功能，開發完成之後在通過 webpack 把這些模組化開發的檔案 bundle 成一個檔案，這樣子網站就可以上線了。在開發的時候也不會這麼的辛苦了。
+
+當然這種情況也可以使用 `<script>` 引入，不過用 `<script>` 標籤的缺點就是會需要多好幾個 request，會比較花費網路資源。
+
+而且在使用 `<script>` 引入的時候，引入的變數就會變成全域變數了。這樣如果變數名稱有衝突的話，就會有被蓋掉的風險
+
+## 簡單範例
+
+官網首頁往下拉，就可以看到簡單的範例。
+
+![](https://cdn-images-1.medium.com/max/800/1*6riXUcA09MBspfGQbNAFGQ.png)
+
+分別照範例的位置以及檔案名稱開好之後，在 command-line 上運行指令 `webpack` 就可以組成一個 bundle.js。
+
+所以就可以從 Get Started 開始安裝 webpack
+
+## 安裝 webpack
+
+自己開創一個資料夾或是切換到想要使用 webpack 的資料夾後
+
+1. 初始化資料夾 `yarn init -y` -y 可以顯示初始化完成的結果。
+2. 安裝 webpack `yarn add webpack`
+3. 安裝 webpack-cli `yarn add webpack-cli`
+4. 這樣就安裝完成了。
+
+這樣安裝只針對當前資料夾，如果要換個資料夾就需要重新安裝，雖然 webpack 有全局安裝，但是官方網站不推薦這樣安裝。
+
+之後要使用 webpack 就可以只用指令：  
+`yarn webpack 轉換的主檔案名稱`  
+ex: `yarn webpack index.js`
+
+## gulp 與 webpack 的差異
+
+1. 兩者是不太一樣的，所以不要搞混了
+2. gulp 是把任務自動化，像是壓縮圖片、移動檔案、compile css、轉換 JavaScript、minify js or css
+3. webpack 是可以用 import 把資源加載進來，連圖片或是 CSS 也可以，因此可以作到 compile CSS、轉換 JavaScript 等功能。
+
+## webpack 使用說明
+
+從 webpack v4.0.0 開始，不需要引入一個文件就可以直接使用，等於是有預預設值。
+
+所以當安裝完成之後，不需要 webpack.config.js 即可輸出資料。只是這邊都是用預設值來輸入跟輸出。
+
+輸入來源預設值為 `./src` 所以要轉換的檔案直接放在這個資料下即可。
+
+輸出預設值為 `./dist` 輸出的檔案就會自己在這邊建立，
+
+以上的資料夾如果沒有可以自己建立，但是這部分需要安裝 webpack-cli，但是我沒成功，不知道是否是 yarn 的限制。總之就是自己建立一個 webpack.config.js 會比較好。
+
+然而，webpack 仍然還是高度可配置的。所以就需要通過在設定好 webpack 好的資料夾新增一個 webpack.config.js 的檔案來管理。
+
+而 webpack.config.js 的管理有四個概念：
+
+- 入口(entry)
+- 輸出(output)
+- loader
+- 插件(plugins)
+
+最簡單的介紹，最簡單的部分，只需要 entry 跟 output 而已，其他部分就先不介紹了。有興趣深入了解可以去看[官網](https://webpack.js.org/concepts/)
+
+### entry
+
+**entry point**告訴我們 webpack 應該使用哪個文件，這些文件作為模組建構其內部的入口結構圖。從這裡邊可以找到需要哪些模組。
+
+可以通過在 wepack.config.js 中配置 `entry` 屬性，來指定一個入口起點（或多個入口起點）。
+
+接下來我們看一個 `entry` 配置的最簡單例子：
+
+```
+webpack.config.js:
+```
+
+```
+module.exports = {
+  entry: './path/to/my/entry/file.js'
+};
+```
+
+當然，因為是模組化設計了，自然 entry 可以引入多個來源囉。
+
+webpack.config.js
+
+```
+module.exports = {
+  entry: {
+    pageOne: './src/pageOne/index.js',
+    pageTwo: './src/pageTwo/index.js',
+    pageThree: './src/pageThree/index.js'
+  }
+};
+```
+
+這邊是利用 key & value 的方式來導入。詳細請[參考 webpack 官方網站](https://webpack.js.org/concepts/entry-points/)
+
+## output
+
+output 屬性告訴我們，要在哪邊輸出 webpack 的結果以及如何命名這些檔案。基本上整個結構上的東西都會輸出到指定輸出中的資料夾：
+
+```
+webpack.config.js：
+```
+
+```
+const path = require('path');
+```
+
+```
+module.exports = {
+  entry: './path/to/my/entry/file.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'my-first-webpack.bundle.js'
+  }
+};
+```
+
+在上面的示例中，我們通過 `output.filename` 和 `output.path`，告訴 webpack 要輸出的 bundle 的名稱，以及我們想要 bundle 生成到哪個路徑內。
+
+而 `output` 屬性還有更多可設定的特性，要了解更多可以參考 [webpack 官方網站](https://webpack.js.org/configuration/output/)
+
+## 結論：
+
+通過簡單的安裝，簡單的設定，就可以使用這些 webpack。除此之外還可以通過 `yarn webpack 檔案名稱` 來做簡單的轉換，不過還是設定一個 webpack.config.js 比較好。
+
+至少一眼就可以看得出來到底是怎麼回事，之後需要修改也可以很方便地修改，然後想要引入多個文件也很容易，就像在寫 JSON 或是物件那樣簡單。
+
+而 webpack 也有相當多的細節可以設置，看得出來是一個很強大的工具，不過要使用在比較大的專案上面應該也需要研究一下。

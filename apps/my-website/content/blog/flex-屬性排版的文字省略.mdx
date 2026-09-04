@@ -1,0 +1,60 @@
+---
+title: "flex 屬性排版的文字省略"
+slug: "flex-屬性排版的文字省略"
+description: "緣由"
+date: 2020-02-03T09:44:31.709Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*_SexxJF9YLBYSJVtdmjzpw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/flex-%E5%B1%AC%E6%80%A7%E6%8E%92%E7%89%88%E7%9A%84%E6%96%87%E5%AD%97%E7%9C%81%E7%95%A5-1844ccb0f09d"
+---
+
+## 緣由
+
+排版上 flex 如果要用文字省略，會造成無法成功的效果，只會單純的有切掉的效果。
+
+## 實際使用
+
+在使用文字省略的 CSS 屬性時。
+
+```
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap;
+```
+
+這三個屬性的時候，不能把當前的屬性設置成這樣： `display: flex;` 。也就是說不能同時存在。
+
+參考資料：https://www.itread01.com/content/1549143744.html
+
+一開始看到這篇資料我還不懂意思，直到自己亂試試出來才發現這篇寫的才是對的。
+
+這次我的作法最主要是因為有文章標題跟操作用的按鈕，所以分別把文章標題跟操作按鈕另外用 div 包起來，並在其上一層做 flex，  
+並把 `white-space: nowrap` 寫在上一層，這樣才可以達成只有一行的效果。
+
+![](https://cdn-images-1.medium.com/max/800/1*S3QneZhT7PdJf85r6izcUw.png)
+
+```
+.blog__post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+}
+```
+
+所以重點是需要做文字省略的部分要做粗體的部分，然後下一層才設定隱藏文字。
+
+```
+.blog__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 20px 0 30px ;
+}
+```
+
+也就是說，必須要上面的 標籤設置 flex 跟 `white-space: nowrap` 接著才在子標籤設置省略的屬性。
+
+## 成功
+
+![](https://cdn-images-1.medium.com/max/800/1*_SexxJF9YLBYSJVtdmjzpw.png)

@@ -1,0 +1,476 @@
+---
+title: "前端中階：JS令人搞不懂的地方-this"
+slug: "前端中階-js令人搞不懂的地方-this"
+description: "this 的意義在哪"
+date: 2019-09-26T14:17:07.632Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*EiEpZSHBA2YwxOyO2Mz2OQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-this-b9b9c6960c03"
+---
+
+## this 的意義在哪
+
+通過前面其他部分的基礎，對 this 就可以深入的理解了。主要 this 的用途就是物件導向，用來指這個物件的 instance，這個功能有其必要性。因為如果沒有 this 也沒有其他的方法來設定這些東西。
+
+this 是用來指哪個 instance 在 call 這個 function。
+
+```
+class Dog {
+  constructor(name) {
+    this.name = name;
+  }
+```
+
+```
+  getName() {
+    return this.name;
+  }
+```
+
+```
+  sayHello() {
+    console.log('hello,' + this.name);
+  }
+```
+
+```
+}
+```
+
+```
+class BlackDog extends Dog {
+  constructor(name) {
+    super(name);
+    this.sayHello();
+  }
+```
+
+```
+  test() {
+    console.log('test', this.name)
+  }
+}
+```
+
+```
+const d = new BlackDog('hey im black dog');
+// hello,hey im black dog
+```
+
+## 在沒有意義的地方呼叫 this，預設值會是什麼？
+
+this 除了在 instance 裡面使用之外，其他地方也可以使用，這邊又會來講這個問題。
+
+```
+function test() {
+  console.log(this);
+  console.log(this === global)
+}
+```
+
+```
+test();
+// global(一長串資料)
+// true
+```
+
+第一個 `console.log(this)` 會印出一長串的東西，這些東西就是 global，由第二個 `console.log()` 可以看出來。
+
+同樣的東西，在瀏覽器上面運作就不一樣了。
+
+![印出 Window](https://cdn-images-1.medium.com/max/800/1*n9hrumAPjzmIAQPoQcq1Ew.png)
+
+_印出 Window_
+
+這是因為在瀏覽器上的 this 就是印出 window
+
+所以依據環境的不同 this 會不一樣。
+
+但這很奇怪，在一個不需要的地方卻有這種數值。這種時候，只需要加一個 use strict 就可以避開這奇怪的一點。use strict 就是嚴格模式，出來的值就是 undefined
+
+```
+'use strict';
+function test() {
+  console.log(this);
+}
+```
+
+```
+test();
+// undefined
+```
+
+因為本來就不需要有值，所以在嚴格模式之下，就消除這點。在瀏覽器也是一樣的。
+
+關於這種情境，this 在閉包也是一樣的。
+
+![輸出 undefined](https://cdn-images-1.medium.com/max/800/1*EiEpZSHBA2YwxOyO2Mz2OQ.png)
+
+_輸出 undefined_
+
+一般來說， this 的值都是預設值。除了一些情況之外，像是在 DOM 的情況下。
+
+![](https://cdn-images-1.medium.com/max/800/1*n5Oz-zD7NDtKj8FHfKlryg.png)
+
+這邊的 this 就是你操作當下的元素，例如說點了一個按鈕，那 this 就是那個按鈕，這是很直覺的一件事情。
+
+所以除了在物件導向跟 DOM 之外，this 是沒有意義的。
+
+## 另外兩種呼叫 function 的方法：call 與 apply
+
+`.call()` 第一個值傳入什麼 this 就是什麼。
+
+```
+'use strict';
+function test() {
+  console.log(this);
+}
+```
+
+```
+test.call(123);
+// 123
+```
+
+```
+test.call({});
+// {}
+```
+
+```
+test.call([1]);
+// [ 1 ]
+```
+
+```
+test.call('aaa');
+// 'aaa'
+```
+
+另外一個叫做 `.apply()` 這個跟 `.call()` 一樣，第一個值傳入什麼就是什麼，差異在這個後面接的是一個 array。
+
+```
+'use strict';
+function test(a, b, c) {
+  console.log(this);
+  console.log(a, b, c);
+}
+```
+
+```
+test.call(123 ,1 ,2 ,3);
+// 123
+// 1 2 3
+```
+
+```
+test.apply(123 ,[1 ,2 ,3]);
+// 123
+// 1 2 3
+```
+
+有一些公司會考這兩個的差異，其實差異在一個可以傳入無限的參數，另外一個只接受兩個參數， `.call()` 可以用逗號無限延伸； `.apply()` 則只一個參數跟一組 array，`.apply()`的參數都要用 array 代入而已。
+
+簡單的差異就差在一個傳入 array，另外一個則否。
+
+共同的重點是都可以改變 this 的值。
+
+## 用另一種角度來看 this 的值
+
+因為 this 是針對物件導向設計的，這邊就來試試看使用 object 看看會有什麼差異。
+
+```
+'use strict';
+var obj = {
+  a: 10,
+  test: function(a, b, c) {
+    console.log(this); // obj
+  }
+}
+```
+
+```
+obj.test();
+// { a: 10, test: [Function: test] }
+```
+
+從這個範例可以知道 this 就是這個物件本身。
+
+**重點：this 的值跟程式碼在哪裡無關，跟怎麼呼叫有關係。**
+
+舉個例子：
+
+```
+'use strict';
+var obj = {
+  a: 10,
+  test: function(a, b, c) {
+    console.log(this); // obj
+  }
+}
+```
+
+```
+obj.test();
+// { a: 10, test: [Function: test] }
+```
+
+```
+var func = obj.test;
+func() // 等同於 obj.test()
+// undefined
+```
+
+this 的值就不一樣了！就是因為只跟 this 怎麼呼叫有關係。
+
+還有另外一種有趣的解法，就是通過 `.call()` 來解釋：
+
+```
+obj.test(); => obj.test.call(obj)
+```
+
+從這樣就可以看得出來這個 this 倒底指的是什麼
+
+```
+'use strict';
+var obj = {
+  a: 10,
+  inner: {
+    test: function(a, b, c) {
+      console.log(this); // obj
+    }
+  }
+}
+```
+
+```
+obj.inner.test(); => obj.inner.test.call(obj.inner)
+// { test: [Function: test] }
+```
+
+```
+obj.inner.test.call(obj.inner)
+// { test: [Function: test] }
+```
+
+兩個都會是一樣的，也就是說，在 `.call()` 的第一個參數，放入 `.test`之前的部分，所以就可以通過這樣子來看出 this 的值是什麼。
+
+就可以利用這種方式來判斷之前的 `func`
+
+```
+var func = obj.inner.test;
+func() => func.call(undefined);
+// undefined
+```
+
+這就是幾個比較簡單的判斷方式。
+
+而實際上，最原始呼叫 function 的方式就是通過這種方式來呼叫的，我們所使用的一長串的呼叫方法只是語法糖。
+
+### 小結 this：
+
+1. 在跟物件無關的地方 call this，this 的值就是 global 或是 window 這要看環境。在嚴格模式之下就是 undefined
+2. 在物件導向之下 call this，this 就是 instance 本身。
+3. 在物件的底下 call this，就看 `.call()` 的第一個參數是什麼，那就是什麼。也就是呼叫的函式前面那一段。就是跟 function 怎麼被呼叫有關係。
+
+### 小測驗：
+
+```
+function log() {
+   console.log(this);
+}
+var a = { a: 1, log: log };
+var b = { a: 2, log: log };
+```
+
+```
+log();
+a.log();
+b.log.apply(a)
+```
+
+—
+
+解答：
+
+```
+log();
+// global, window
+// 在這種情況下等於是沒有意義的呼叫，所以就是全域或是在嚴格模式之下是 undefined
+```
+
+```
+a.log();
+// { a: 1, log: [Function: log] }
+// 這樣呼叫等於 a.log.call(a) 所以就是 a 本身
+```
+
+```
+b.log.apply(a)
+// { a: 1, log: [Function: log] }
+// 因為已經 .apply(a) 蓋掉本來的 this 所以解答也是 a 本身
+```
+
+## 強制綁定 this：bind
+
+```
+'use strict';
+var obj = {
+  a: 10,
+  test: function() {
+    console.log(this);
+  }
+}
+```
+
+```
+obj.test();
+// { a: 10, test: [Function: test] }
+const func = obj.test;
+func();
+```
+
+這種情況下值是不一樣的，但我們可能會想要它無論怎麼呼叫， this 的值都是一樣的。
+
+要實現這個功能，就要使用 `.bind()` ， `.bind()` 的原理是直接回傳一個 function
+
+```
+'use strict';
+var obj = {
+  a: 10,
+  test: function() {
+    console.log(this);
+  }
+}
+```
+
+```
+const bindTest = obj.test.bind(obj);
+bindTest();
+// { a: 10, test: [Function: test] }
+```
+
+```
+const bindTest1 = obj.test.bind(123);
+bindTest1();
+// 123
+```
+
+```
+const bindTest2 = obj.test.bind('sfdsfdcxbd');
+bindTest2();
+// sfdsfdcxbd
+```
+
+```
+const bindTest3 = obj.test.bind('sfdsfdcxbd');
+bindTest3.call('dsops');
+// sfdsfdcxbd
+```
+
+所以利用 `.bind()` 就可以綁定 this 的區域，在呼叫上就可以鎖定想要呼叫的區域，這部分即便後來使用 `.call()` 也無法改變。
+
+> 補充：呼叫 **bind** 的時候, 其實會 new 一個新的 function, 但是我說一堆定義倒不如你直接去看MDN, 所以囉, 詳細的定義以及特性請參考 MDN, 強烈建議去看 MDN, 不要一知半解的唷
+> [如何理解 Javascript 的 bind ( Function.prototype.bind )?](http://jazzlion.github.io/2016/06/27/%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-Javascript-%E7%9A%84-bind-Function-prototype-bind/)
+
+## arrow function 的 this
+
+```
+class Test {
+  run() {
+    console.log('run this', this);
+    setTimeout(function() {
+      console.log(this);
+    }, 100)
+  }
+}
+```
+
+```
+const t = new Test();
+t.run();
+```
+
+![在瀏覽器上面的結果。](https://cdn-images-1.medium.com/max/800/1*9vA4Hb0RSWkWJS9Xzh2nGA.png)
+
+_在瀏覽器上面的結果。_
+
+在這邊因為是 100 毫秒之後才呼叫的，所以作用上就等於是在全域呼叫這個 function 是同個意思。等同於下方：
+
+```
+function() {
+  console.log(this);
+}
+```
+
+但是呢！對於箭頭函式來說，狀況就不一樣了。
+
+```
+class Test {
+  run() {
+    console.log('run this', this);
+    setTimeout( () => {
+      console.log(this);
+    }, 100)
+  }
+}
+```
+
+```
+const t= new Test();
+t.run();
+```
+
+![兩邊的 this 就變得一樣了。](https://cdn-images-1.medium.com/max/800/1*6hG7gBnyRLGwD4QwxNcfEg.png)
+
+_兩邊的 this 就變得一樣了。_
+
+這是箭頭函式的特性，這個特性就是箭頭函式的 this 跟怎麼呼叫沒關係，是類似 scope 的行為，看程式碼定義在哪裡。就會利用定義的 block 來呈現這個 this 的值。
+
+所以這個 this 跟怎麼定義的有關係，這是箭頭函式比較不一樣的地方。
+
+## 總結：
+
+原來 this 這邊沒想像中的困難，可能早先在某篇文章看到說， this 是很讓人難以捉模。所以我對 this 就有的它很難的印象，可能這個印象真的很深，所以前面看文章我覺得還是很困難。
+
+不過我想也可能跟我沒有深入去理解有關係。像我找問題中的有個範例，很類似於下面取自 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) 的：
+
+```
+var module = {
+  x: 42,
+  getX: function() {
+    return this.x;
+  }
+}
+```
+
+```
+var unboundGetX = module.getX;
+console.log(unboundGetX()); // The function gets invoked at the global scope
+// expected output: undefined
+```
+
+```
+var boundGetX = unboundGetX.bind(module);
+console.log(boundGetX());
+// expected output: 42
+```
+
+當時我就在一直想為什麼 boundGetX 是 42，所以在 this 那邊我想了很久，還是沒有理解，但為了進度所以我就跳過，這真的比較可惜，至少我現在搞懂了，因為我少看了這個式子接續上面的，難怪會犯錯。
+
+整體來說，我覺得最重要的還是 this 小結的部分最重要了，所以再次強調。而且再補上一個小重點。
+
+### 小結 this：
+
+1. 在跟物件無關的地方 call this，this 的值就是 global 或是 window 這要看環境。在嚴格模式之下就是 undefined
+2. 在物件導向之下 call this，this 就是 instance 本身。
+3. 在物件的底下 call this，就看 `.call()` 的第一個參數是什麼，那就是什麼。也就是呼叫的函式前面那一段。就是跟 function 怎麼被呼叫有關係。
+
+例外：箭頭函式的 this 是看作用域，也就是看定義的時候在哪。
+
+另外一點是通過 `.call()` 、 `.apply()` 可以更加的理解到底物件底下的 this 是怎麼運作的。
+
+還有一點是 `.bind()` 是這麼的方便，可以指定 this 到底是什麼，我查了一下範例，好像有些地方這個是很重要的，期待可以看到實際應用的部分。
+
+上一篇：[前端中階：JS令人搞不懂的地方-物件導向](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-cdea0e3266ee?source=your_stories_page---------------------------)

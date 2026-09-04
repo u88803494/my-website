@@ -1,0 +1,890 @@
+---
+title: "後端基礎作業：安全性加強作業"
+slug: "後端基礎作業-安全性加強作業"
+description: "hw1：幫密碼穿衣服"
+date: 2019-07-28T12:35:43.477Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*Er9nCYbB8DaQPBHNJLJFeg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-%E5%AE%89%E5%85%A8%E6%80%A7%E5%8A%A0%E5%BC%B7%E4%BD%9C%E6%A5%AD-23dd690929e3"
+---
+
+## hw1：幫密碼穿衣服
+
+在課程中有提到上次寫的會員系統的缺陷之一，那就是密碼存明碼。密碼存明碼的風險就是一旦你的伺服器被入侵，資料庫被偷走的時候，使用者的密碼就外洩了。
+
+你可能會問說：「所以，難道資料庫不能存密碼嗎？」
+
+是的，我們要改存「另外一種形式」。
+
+這是什麼意思呢？有一種東西叫做：Hash function，中文翻作雜湊函數，這個函數的重點就是它是單向的。你輸入 123 可以得到 202cb962ac59075b964b07152d234b70，但你沒辦法從 202cb962ac59075b964b07152d234b70 推出輸入是 123。
+
+聽起來很神奇對吧？
+
+所以我們的密碼就必須利用這種 hash function，在存入資料庫以前先轉變成另外一種形式。在驗證密碼的時候也是同理，我們不驗證密碼，而是驗證`hash_function(password)`跟資料庫裡面所存的密碼是不是一致。
+
+這樣一來，就算我們的資料庫整個被偷走，駭客們還是不知道使用者的密碼是什麼（或其實是說很難知道啦，要花很多時間）。
+
+PHP 在 5.5 以上提供了兩個函式：`password_hash`跟`password_verify`，請你利用這兩個函式把之前會員註冊跟登入的頁面改寫，讓你的系統變得更安全一點。
+
+### 想法及實作
+
+關於這一題，就是測驗函式的應用了。因為是沒理解過的函式，所以要去找資料理解怎麼使用。
+
+[現代PHP password_hash 雜湊加密採用隨機SALT 使用方式](https://adon988.logdown.com/posts/2513623-modern-php-password-hash-hash-encryption-using-random-salt-uses)
+
+`password_hash('密碼' , 密碼的處理方法)` 回傳一組希哈值
+
+`password_verify('密碼' , 驗證的希哈值)` 回傳 true 或 false
+
+所以根據這樣，我們可以在網路註冊的時候，把對方的密碼變成希哈值後上傳資料庫。而當對方需要登入的時候，就從資料庫把希哈值下載之後，跟對方輸入的密碼做比對。
+
+```
+<?php
+```
+
+```
+$hash = password_hash('memem', PASSWORD_DEFAULT);
+// 註冊的時候
+```
+
+```
+if (password_verify('memem', $hash)) {
+  echo 'Password is valid!';
+} else {
+  echo 'Invalid password.';
+} // 登入的時候
+```
+
+```
+?>
+```
+
+在處理密碼的時候遇到一些問題。因為 register.php 原始的設定是傳送密碼之後會經過網路交給 handle* register.php 再去做上傳的處理，但這樣的話密碼依然是明碼經過網路，感覺上就很容易被攔截。不過 Google 之後，沒看到這種情況的處理方式，找到的方式就是透過 JavaScript，這樣也對，因為 php 的確無法在客戶端使用。所以這邊就先只處理 handle* register.php 的部分。
+
+後來發現密碼我有預設儲存最大 16 ，而實際的 hash 不只這些位數，所以會有錯誤產生。修改資料庫之後再次測試發現還是會有錯。理由是 hash 每次輸入一樣的 input 都會產生不一樣的 output，還是得要用 `password_verify` 來驗證資料。
+
+等於是我必須要從資料庫撈下 hash，然後再把使用者輸入的密碼去做比對。而這樣子整個登入的架構就要修改一下。
+
+```
+<?php
+require_once('./conn.php');
+```
+
+```
+$username = $_POST['username'];
+$password = $_POST['password'];
+```
+
+```
+// 判斷輸入的資料正確性
+if (!ctype_alnum($username)) { // 判斷是否為英文數字
+  die('只能是英文數字<br>'. '<a href="./login.php">回到上層重新登入</a>');
+} else if (empty($username) || empty($password)) {
+```
+
+```
+die('請輸入正確帳號密碼<br>' . '<a href="./login.php">回到上層重新登入</a>');
+}
+$sql = "SELECT * FROM `hugh_member` WHERE `username` = '$username'";
+```
+
+```
+$result = $conn->query($sql); // 其實這段有撈到資料就等於確認到有帳號$account_data = $result->fetch_assoc(); // 取得伺服器上的資料
+```
+
+```
+// 比對密碼
+if (password_verify($password, $account_data['password'])) {
+  setcookie("member_id", $account_data['id'], time()+3600*24);
+  // 埋 cookie
+  header('Location: ./index.php');
+} else {
+  echo '帳號或密碼錯誤，請重新確認';
+}
+?>
+```
+
+## hw2：通行證
+
+在上一週的作業裡面，我們把會員的帳號存在 Cookie 裡面，藉此判斷會員是不是已經登入了，以及驗證身份。可是這樣子做其實會有問題產生，首先，先跟我唸一遍資安金句：
+
+> 千萬不要相信來自 Client 端的資料
+
+為什麼？因為只要是存在 Client 端的資料，都是可以被篡改的。假設有人把 Cookie 裡面的會員帳號改成：admin，那他就可以以管理員的身份登入了。
+
+那要怎麼辦才好呢？
+
+你可以回想你要去商業辦公大樓面試的時候，通常會要你在櫃檯換證。換了證之後，認證不認人，你的證是誰，你就是誰。在會員系統的實作上面，我們也可以參考這一個機制。
+
+1. 會員輸入帳號密碼，按下登入
+2. 若錯誤，返回錯誤訊息
+3. 若正確，亂數產生一個通行證 ID，並且在資料庫裡面記下通行證 ID 與會員 ID 的對應關係
+4. 把通行證 ID 設置到 Cookie
+5. 下次再發 Request 來，就會把通行證 ID 一起帶上來
+6. 檢查通行證 ID 是否有對應到的 ID，有的話就代表是那個人
+
+我們引入了通行證的機制以後，就不用怕有人會竄改 Client 端的資料了，除非通行證被偷走，不然不可能用猜的把通行證 ID 猜出來。（所以你的通行證 ID 通常會長得很像亂碼）
+
+現在這個作業，就要你把會員系統的驗證換成上面這個通行證的機制，你會需要在資料庫新增一個 Table 來儲存通行證跟帳號的對應關係，可參考以下結構：
+
+Table 名稱：users_certificate
+
+![](https://cdn-images-1.medium.com/max/800/1*Er9nCYbB8DaQPBHNJLJFeg.png)
+
+（附註：這一題你絕對不會用到 $\_SESSION 這個東西，如果你查到任何跟 $\_SESSION 有關的東西請自動略過。）
+
+### 想法
+
+這裡題目是說 cookie 儲存的是使用者帳號。但我的是儲存使用者的 id 不知道會不會有影響呢？但根據題目還是會需要實作。
+
+這邊是說登入之後會產生一組亂碼作為通行證。所以說登出之後就必須要清除，然後伺服器上面的也要刪除。
+
+但這樣 cookie 自動過期的部份就也需要在下次登入的時候偵測之後刪除。但這樣的話好像便得有點太複雜了。關於這點就需要思考到底要不要做
+
+### 實作部分
+
+首先是找到亂碼產生的部份，找到個其中一個版本連 &lt;>[]\{\} 都放進來，但測試之後發現會產生錯誤。所以就把那些符號拿掉就正常了。產生亂碼的程式碼如下：
+
+```
+function getrand_id(){
+    $id_len = 32;//字串長度
+    $id = '';
+    $word = 'abcdefghijkmnpqrstuvwxyz23456789!@#$%^&*()-=ABCDEFGHIJKLMNPQRSTUVWXYZ';
+       //字典檔 你可以將 數字 0 1 及字母 O L 排除
+    $len = strlen($word);//取得字典檔長度
+
+    for($i = 0; $i < $id_len; $i++){ //總共取 幾次
+        $id .= $word[rand() % $len];//隨機取得一個字元
+    }
+    return $id;//回傳亂數 id
+}
+```
+
+這邊 php 的取隨機數字的模式不太一樣 rand() 在 windows 是取 0 ～ 32767
+
+> PHP rand 函數有兩種比較常見的寫法，第一種就是前段所述，不需要設定參數，讓 rand 根據作業系統的限制範圍去產生一個隨機整數，以 Windows 作業系統來說，rand 函數會在 0 ~ 32767 之間取出一個隨機整數，如果要超過這個範圍呢？那就自己指定 min 與 max 區間吧！接著我們就用範例來呈現 PHP rand 函數的實際運作結果。
+
+> [參考](https://www.wibibi.com/info.php?tid=PHP_rand_%E9%9A%A8%E6%A9%9F%E6%95%B4%E6%95%B8%E5%87%BD%E6%95%B8)
+
+本來對這部份很疑惑，但想了想也是，因為這樣取的話等於是 1~67\*n 頂多就是最大數字取餘數的有些部份可能會有高一點的機率被選中。但整體來說還是算很平均的被選中，所以也可以算是很平均的隨機。尤其是使用的字元越少的話就越平均。
+
+—
+
+接下來就先處理 handle_login.php
+
+埋 cookie 的部份就變得比較複雜了。必須要埋了之後，並把這個數值上傳到資料庫。就可能要另外寫一個 function 來使用。
+
+通過新增兩個函式，發現確實可以上傳成功。
+
+```
+<?php
+require_once('./conn.php');
+```
+
+```
+$username = $_POST['username'];
+$password = $_POST['password'];
+```
+
+```
+// 判斷輸入的資料正確性
+if (!ctype_alnum($username)) { // 判斷是否為英文數字
+    die('只能是英文數字<br>'. '<a href="./login.php">回到上層重新登入</a>');
+} else if (empty($username) || empty($password)) {
+    die('請輸入正確帳號密碼<br>' . '<a href="./login.php">回到上層重新登入</a>');
+}
+```
+
+```
+$sql = "SELECT * FROM `hugh_member` WHERE `username` = '$username'";
+```
+
+```
+$result = $conn->query($sql); // 其實這段有撈到資料就等於確認到有帳號
+$account_data = $result->fetch_assoc(); // 取得伺服器上的資料
+```
+
+```
+function generatorId(){
+  $id_len = 32;//字串長度
+  $id = '';
+  $word = 'abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()-=ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  //字典檔 可以將 數字 0 1 及字母 O L 排除
+  $len = strlen($word);//取得字典檔長度
+```
+
+```
+for($i = 0; $i < $id_len; $i++){ //總共取 幾次
+      $id .= $word[rand() % $len];//隨機取得一個字元
+  }
+  return $id;//回傳亂數 id
+}
+```
+
+```
+function cookieUpdate($conn, $cookie_id, $username) {
+  $sql = "INSERT INTO `hugh_member_certificate`(`id`, `username`) VALUES ('$cookie_id', '$username')";
+  $result = $conn->query($sql);
+```
+
+```
+if (!$result) {
+    echo 'failed, ' . $conn->error;
+  }
+}
+```
+
+```
+if (password_verify($password, $account_data['password'])) { // 比對密碼
+  $cookie_id = generatorId(); // 先生成後儲存，方便後續應用
+  setcookie("certificate", $cookie_id, time()+3600*24); // 埋 cookie
+  cookieUpdate($conn, $cookie_id, $username);
+  header('Location: ./index.php');
+} else {
+  echo '帳號或密碼錯誤，請重新確認';
+}
+```
+
+```
+?>
+```
+
+另外是 cookie 的儲存資料已改。所以就需要把 cookie 的名稱改變一下，改改為 certificate
+
+-
+
+接下來就是修改首頁的顯示了。更改 cookie 的名字為 certificate
+
+index.php 的確認登入方面
+
+要實作的時候，發現跳出提示，沒有主鍵就不給刪除編輯等功能。於是就調整 certificate 的架構。多個 id 主鍵來調整資料。這邊的差異在於 sql 指令的不同，本來是透過 cookie 儲存的會員 id 來帶出所有資訊資訊，但這邊沒有會員 id 了，所幸的是資料庫上有記錄對應的會員名稱，所以就可以透過 JOIN 來抓取資料。
+
+```
+$sql = "SELECT M.nickname, M.id FROM hugh_member_certificate AS C LEFT JOIN hugh_member AS M ON C.username = M.username WHERE C.certificate_id = '$cookie_id'";
+```
+
+最後是思考到登出的部分，因為覺得通行證一定是一次只有一個。但這種情況要顧慮兩種一是使用者手動登出，這可以透過登出的頁面來刪除資料。另外一種是 cookie 時間過期，這部分就通過登入的時候執行刪除指令來達成即可。
+
+登出的部分：就是新增一個指令去刪除對應的 cookie 通行證即可。
+
+```
+<?php
+$cookie_id = $_COOKIE['certificate'];
+$sql = "DELETE FROM hugh_member_certificate WHERE certificate_id = '$cookie_id'";
+```
+
+```
+if(!$conn->query($sql)) { // 執行刪除，刪除失敗就停止 PHP
+  die("failed.");
+}
+  setcookie("certificate", "", time()-3600*24); // 清除 cookie
+?>
+```
+
+再來是登入的時候清除其他的通行證。必須要另外用個指令刪除，所以就另外製作一個 function 來刪除。
+
+```
+function deleteOldCertificate($conn, $username) {
+  $sql = "DELETE FROM hugh_member_certificate
+    WHERE username = '$username'";
+```
+
+```
+$result = $conn->query($sql);
+```
+
+```
+if (!$result) {
+    echo 'failed, ' . $conn->error;
+  }
+}
+```
+
+然後把這個 function 放在登入成功的執行處，就可以成功刪除，舊的 cookie 了。
+
+這樣整體而言完成了我想得到的部分。感覺還滿不錯的。
+
+## hw3：加強留言板
+
+在上次的作業中，只有顯示留言跟新增留言這兩個基本功能而已。而這次的作業，我們要再多加幾個功能，讓這個留言板變得更完整。
+
+1. 會員可以刪除自己的留言
+2. 會員可以編輯自己的留言
+3. 實作分頁系統，一頁只顯示二十筆資料，並且可以換到其他頁
+
+### 個人想法
+
+在這裡第一點跟第二點就必須要新增一個管理頁面，然後會員可以單獨看到自己的留言，然後留言後面多兩個編輯跟刪除的選項，刪除可以直接使用 handle 來處理，編輯就需要一個單一頁面跟編輯後送出的 handle 來處理了。
+
+第三點，筆數的選法有找到比較舊的[資料](http://www.programmer-club.com.tw/ShowSameTitleN/sqllanguage/2095.html)。可以透過 LIMIT 跳過前面幾筆，選後面幾筆這樣。
+
+> 這個問題，用 MySQL 的人就比較幸福了
+> MySQL 可以用 LIMIT 來限定取出的筆數
+> 例如：
+> SELECT _ FROM table_1 LIMIT 50
+> 表示取前 50 筆
+> SELECT _ FROM table_1 LIMIT 50, 50
+> 表示跳過前 50 筆後，取 50 筆，也就是 51~100 筆
+
+然後是換頁的部分，以 php 來說每次換頁都要重新跑一次資料。然後是根據換頁的按鈕來去看要怎麼下指令撈資料，所以按鈕本身要 hidden 一些值才行吧。
+
+另外一個困難點是，我要想辦法看能不能動態生成剛好的按鈕，目前是想到似乎可以找尋特定 table 有幾筆資料，應該可以抓出這個值之後再來讓程式運算需要多少個按鈕來換頁。
+
+### 實作部分
+
+直接在可以留言的部分新增一個管理我的留言，切換到管理介面。
+
+```
+echo    " <a href='./admin.php?user_id=$row[id]'>管理文章</a>";
+```
+
+通過雙引號包單引號，可以不用做字串拼接就成功引用資料。
+
+然後就要思考 admin.php 需要哪些資料。
+
+可以直接套用 index.php 來修改，思考一下很多功能都可以沿用，然後就只要在文章的後面新增兩個編輯跟刪除的按鈕即可。
+
+刪除比較簡單可以先實作。
+
+編輯比較困難一點，要傳入文章 id 做一些處理。
+
+先製作 admin.php 因為後台不需要留言功能，所以先以呈現歡迎詞+使用者暱稱。然後是修改這個界面的一些問題，必須要檢查有沒有 cookie，以免有使用者通過網址進入 admin，這邊很簡單，就是把原來呈現要求登入的頁面，改成 header(“Location: ./index.php”); 即可以把擅入的人請到首頁。
+
+然後確認到有 cookie 之後，這邊就不需要這麼那些 function 了。可以通過簡單的指令來全選需要的資料即可呈現。
+
+需要的資料有 user_id 對應的 id 的文章，需要 user_id、comment、created_at、nickname。使用指令
+
+```
+SELECT C.id, C.comment, M.nickname, C.created_at FROM hugh_comments AS C LEFT JOIN hugh_member AS M on C.user_id = M.id WHERE C.user_id = $id ORDER BY created_at DESC
+```
+
+去撈資料，但很神奇的是最新一筆資料永遠也不會出現，但只要新增一筆就會出現。而且更奇怪的是那筆新增的又看不到。
+
+後來才發現原來是因為指令不能寫在一起要分開寫因為我想要在迴圈之前先用該指令呼叫暱稱，結果這樣好像就算是被用了一次。所以後面迴圈就少了最新的一圈的資料。只能分開寫才可以順利執行。
+
+```
+<?php
+if(!isset($_COOKIE["certificate"])) {
+  header("Location: ./index.php");
+} else {
+  $sql = "SELECT * FROM hugh_member WHERE id = $id";
+  $result = $conn->query($sql);
+  $row = $result->fetch_assoc();
+  // 管理界面的提示以及歡迎
+  echo '<a href="./signout.php">登出</a>';
+  echo ' <a href="./index.php">回到首頁</a>';
+  echo '<div>歡迎你 <b>' .$row['nickname']. '</b> 以下是你的留言列表</div>';
+  // 顯示使用者留言
+
+  $sql_comment = "SELECT C.id, C.comment, M.nickname, C.created_at FROM hugh_comments AS C LEFT JOIN hugh_member AS M on C.user_id = M.id WHERE C.user_id = $id ORDER BY created_at DESC";
+```
+
+```
+$result_comment = $conn->query($sql_comment); // 要分開撈不然會有 bug
+  if ($result_comment->num_rows>0) {
+    while($row_comment = $result_comment->fetch_assoc()) {
+      echo '<div class="original＿＿board">';
+      echo   '<div class="original＿＿createdAt">留言時間：' . $row_comment['created_at'] . '</div>';
+      echo   '<div class="original＿＿comment">' . $row_comment['comment'] . '</div>';
+      echo '</div>';
+      }
+    }
+}
+?>
+```
+
+再來就可以修改一下添加編輯跟刪除的選項。
+
+```
+while($row_comment = $result_comment->fetch_assoc()) {
+  echo '<div class="original＿＿board">';
+  echo "<a href='./update.php?id=$row_comment[id]'>編輯文章</a>";
+  echo " <a href='./delete.php?id=$row_comment[id]'>刪除文章</a>";
+  echo   '<div class="original＿＿createdAt">留言時間：' . $row_comment['created_at'] . '</div>';
+  echo   '<div class="original＿＿comment">' . $row_comment['comment'] . '</div>';
+  echo '</div>';
+}
+```
+
+這樣就可以正確抓到文章 id，之後就可以設置刪除跟編輯的功能了。
+
+先從刪除功能基本功能很簡單
+
+```
+require_once('./conn.php');
+```
+
+```
+$id = $_GET['id'];
+
+  $sql = "DELETE FROM `hugh_comments` WHERE id = $id";
+```
+
+```
+if($conn->query($sql)) {
+    header("Location: ./admin.php");
+  } else {
+    die("failed.");
+  }
+```
+
+發現轉跳失敗。原來是我忘了要把資料 admin 的 user_id 帶入。所以等於是在自動轉跳後轉到 admin.php 所以就直接失敗了。那就是變成要在 admin.php 的選項中帶入才行
+
+```
+echo "<a href='./update.php?user_id=$id&id=$row_comment[id]'>編輯文章</a>";
+```
+
+```
+echo " <a href='./delete.php?user_id=$id&id=$row_comment[id]'>刪除文章</a>";
+```
+
+那這樣 delete.php 就可以取得兩種值。
+
+寫到這邊其實覺得還有很多地方可以優化，**像是 id 的名稱部份，我可能就除了載資料的時候沒辦法之外，就把這些變數另外給一個更清楚的名稱才對。**
+
+所以 delete.php 的畫面呈現這樣就可以正確刪除了。
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+$id = $_GET['id'];
+  $user_id = $_GET['user_id'];
+```
+
+```
+$sql = "DELETE FROM `hugh_comments` WHERE id = $id";
+```
+
+```
+if($conn->query($sql)) {
+    header("Location: ./admin.php?user_id=$user_id");
+  } else {
+    die("failed.");
+  }
+```
+
+```
+?>
+```
+
+再來是編輯的部份。先直接取自 delete.php 的指令做修改，然後是單一畫面的呈現部份。也是直接抓 index.php 的一部分，來修改成單一文章的畫面。
+
+修改中突然注意到，應該要通通加上偵測 cookie 防堵沒權限濫用。
+
+所以就是修改
+
+```
+// 防堵直接網址連進來。
+if(!isset($_COOKIE["certificate"])) {
+  die('你沒有權限');
+}
+```
+
+然後是完成編輯頁面
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+$id = $_GET['id'];
+  $user_id = $_GET['user_id'];
+```
+
+```
+$sql = "SELECT * FROM hugh_comments WHERE id = $id";
+?>
+```
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> 編輯 </title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="board">
+  <div class="notice">本站為練習用網站，因教學用途刻意忽略資安的實作，註冊時請勿使用任何真實的帳號或密碼</div>
+  <?php
+    // 改為偵測防堵直接網址連進來。
+    if(!isset($_COOKIE["certificate"])) {
+      die('你沒有權限');
+    }
+    // 顯示歷史留言的部份
+    $sql = "SELECT * FROM hugh_comments WHERE id = $id"; // 直接在伺服器選取前 20 筆
+```
+
+```
+$result = $conn->query($sql);
+    if ($result->num_rows>0) { // num_rows 會告訴有幾筆資料。
+      $row = $result->fetch_assoc();
+      echo "<form action='./handle_update.php' method='post' class='new'>";
+      echo    "<h2> 編輯文章 </h2>";
+      echo    "<div class='new__comment'><textarea name='comment' cols='30' rows='10'>$row[comment]</textarea></div>";
+      echo    "<input type='hidden' name='id' value=$id />";
+      echo    "<input type='hidden' name='user_id' value=$user_id />";
+      echo    "<div class='new__btn'><input type='submit' value='編輯完成' /></div>";
+      echo "</form>";
+    }
+  ?>
+  <input type='hidden' name='id' value=$id />
+  <input type='hidden' name='user_id' value=$user_id />
+</div>
+</div>
+</body>
+</html>
+```
+
+再來是編輯之後的上傳功能。
+
+```
+<?php
+  require_once('./conn.php');
+```
+
+```
+if(!isset($_COOKIE["certificate"])) {
+    die('你沒有權限');
+  }
+```
+
+```
+$id = $_POST['id'];
+  $user_id = $_POST['user_id'];
+  $comment = $_POST['comment'];
+```
+
+```
+if (empty($id) || empty($comment)) {
+  die('empty date');
+ }
+```
+
+```
+$sql = "UPDATE hugh_comments SET comment = '$comment' WHERE id = $id";
+ $result = $conn->query($sql);
+ if ($result) {
+  header("Location: ./admin.php?user_id=$user_id");
+ } else {
+  die("failed. ". $conn->error);
+  }
+?>
+```
+
+一樣是加上偵測 cookie 以及轉址功能的注意改寫一下即可。
+
+後來發現每個上傳功能都應該要檢查一下 cookie 跟對應的使用者是否正確才可以達到安全性的要求。這意謂者可能要另外開一個檔案來專門存檔檢查的部份。甚至有可能防堵的部份必須要擴大到很多地方。
+
+所以除此之外另外新增一個檔案名稱為 security_check.php，內容如下：
+
+```
+<?php
+  // 防堵直接網址連進來。
+  if(!isset($_COOKIE["certificate"])) {
+    die('你沒有權限');
+  }
+```
+
+```
+// 驗證會員 cookie 是否符合
+  function mumberCheck($conn, $user_id) {
+    $sql = "SELECT  M.id, M.nickname, C.certificate_id
+      FROM hugh_member AS M LEFT JOIN hugh_member_certificate AS C
+      ON C.username = M.username WHERE M.id = $user_id";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+
+    // 不符合就停止運作
+    if($row['certificate_id'] !== $_COOKIE["certificate"]) {
+      die("這不是你的文章");
+    }
+  }
+```
+
+```
+mumberCheck($conn, $user_id);
+```
+
+```
+?>
+```
+
+使用 function 的方式是為了避免與引入的地方的變數衝突。
+
+### security_check.php 放置位置
+
+1. handle_delete.php
+
+2. handle_update.php
+
+3. handle_add.php
+
+這邊把一些名稱變更了，把有執行上傳動作的都加上 handle 並把名稱改成更適合的
+
+—
+
+### 實作分頁系統，一頁只顯示二十筆資料，並且可以換到其他頁
+
+這部份需要先製作 button 來表示頁數。然後 button 需要帶值。然後要控制 button 的數量，就必須要從資料庫撈有幾筆，然後使用 ceil ( float $value ) 來得到無條件進位的整數，就等於需要製作幾顆按鈕
+
+需要的東西有
+
+1. 按鈕
+2. 使用 a 標籤來取得資料。
+
+程式碼必須要有頁數的預設值，預設是 1，然後按下按鈕之後，會傳入值 GET 導向 page 2 然後再去執行 SQL SQL 就使用 LIMIT 的指令來撈資料，也因為這樣，就必須要 funcion 化，才可以執行。
+
+換頁的時候是導向 /.index.php?page= 這樣就可以直接 GET 值，然後還要偵測有沒有輸入頁數，有的話在針對頁數做處理。
+
+```
+if (!isset($_GET["page"])){ //假如$_GET["page"]未設置
+  $page=1; //則在此設定起始頁數
+} else {
+  $page = intval($_GET["page"]+0); //把頁數變成整數
+}
+```
+
+接著是實作換頁的部份。先使用 html 測試呈現。接著就可以使用迴圈呼叫出來。然後發現一個問題是選項較多之後會有突破邊框的 bug。本來試想透過 CSS 來修正。但是發現無論是使用 word-wrap: break-word; 還是什麼的都不行，數字都會被中斷，整體看起來就怪怪的。最後是決定改用添加一個判斷式，固定數次之後添加 &lt;br> 來達到換行，才不會出現奇怪的情況。
+
+```
+echo "<div class='pages'>";
+for($i = 1; $i<=10;$i++) {
+  echo "<a class='page' href='./index.php?page=$i'>$i</a>";
+  if($i % 15 === 0) { // 每十五次換行
+    echo "<br>";
+  }
+}
+echo "</div>";
+```
+
+再來就必須要把資料庫上面的資料抓下來，先得知道到底有幾筆資料。然後不知道怎麼處理。就先假裝自己已經把資料抓下來，然後先用這個假設來實作，實作中就會知道需要哪些資料，所以先假設總共有 381 筆以及準備一些變數：
+
+```
+$total = 381; // 假設總數量
+```
+
+```
+$per = 20; // 每頁顯示數量
+```
+
+```
+$pages = ?; // 總頁數
+```
+
+然後要得知總頁數只要
+
+```
+$pages = ceil($total/$per); // 總頁數
+```
+
+就可以得到總頁數。接著就是把這邊放入迴圈，讓他呈現有幾頁。
+
+```
+$total = 381; // 假設總數量
+$per = 20; // 每頁顯示數量
+$pages = ceil($total/$per); // 總頁數
+```
+
+```
+// 處理頁數是較晚的事情了
+echo "<div class='pages'>頁數："; // 印出頁數
+for($i = 1; $i<=$pages;$i++) {
+    #style 後面可以砍掉，等明天 css 套用即可
+    echo "<a style ='margin:0 3px;' class='page' href='./index.php?page=$i'>$i</a>";
+    if($i % 20 === 0) { // 每二十次換行
+        echo "<br>";
+    }
+}
+echo "</div>";
+```
+
+後來有一些方法可以修正呈現方式。只顯示一些些頁數就好。
+
+在另外補上抓取幾筆資料的部份，就可以正確呈現頁數的形式。
+
+後來寫一寫太複雜了，所以打包成 function 的形式以方便使用，這樣就可以很方便的把變數傳入之後使用，且不會造成混亂。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/040b9d58124502cad27c15c3d0bde42f)
+
+### 然後總結一下：
+
+**安全性檢查：**
+
+另外增設一個檔案 security_check.php
+
+1. 檢查有無 cookie
+2. 執行上傳的時候 檢查身份有沒有正確
+3. security_check.php 使用 function 的方式是為了避免與引入的地方的變數衝突。
+
+**security_check.php 放置位置**
+
+1. handle_delete.php
+2. handle_update.php
+3. handle_add.php
+
+**換頁功能**
+
+1. 利用 `$_GET["page"]` 抓取到的資料來判斷 `$page` 要如何呈現
+2. 新增變數 `$per` 用來調整每頁顯示數量
+3. 分別傳入 function 內使用
+4. comments 修改 LIMIT 的條件來達成正確的顯示
+
+**名稱變動**
+
+1. handle_index.php -> handle_add.php
+2. delete.php -> handle_delete.php
+3. signout.php -> handle_signout.php
+
+第一個的變動的原因是原本是因為在首頁執行而使用 index 變更為 add 來表示其執行的動作。
+
+第二個變動的原因是因為本來就是執行 handle 的事情。
+
+第三個變成 handle 直接導向出去，但保留 html 語法，因為之後可能用來修改美化。
+
+**打包成 function**
+
+1. index.php
+
+- function comments 留言的
+- function numPages 分頁
+
+1. admin.php
+
+- function userInterface 使用者的界面
+- function userComments 用戶的留言
+
+**之後的想法**
+
+1. 可能想要改成 class 的形式，因為 function 越包越多，然後變數一多也變得看起來有些混亂。 但因為不熟悉物件導向，怕寫壞XD
+2. 有一些可以改成雙引號包單引號，就不會看起來整串這麼長了。也不需要字串拼接。
+
+## hw4：簡答題
+
+1. 請說明雜湊跟加密的差別在哪裡，為什麼密碼要雜湊過後才存入資料庫
+2. 請舉出三種不同的雜湊函數
+3. 請去查什麼是 Session，以及 Session 跟 Cookie 的差別
+4. `include`、`require`、`include_once`、`require_once` 的差別
+
+—
+
+### 1. 請說明雜湊跟加密的差別在哪裡，為什麼密碼要雜湊過後才存入資料庫
+
+這題我也不是很清除，我只知道雜湊用了之後，就可以讓密碼看起來像亂碼。然後上次直播的時候，從老師那邊得知，雜湊是屬於有形式的儲存資料的方法，所以用在密碼上面效率不差的樣子。  
+剩下就是另外查資料的部份了。看了一些參考資料之後，以下是我的理解。
+
+> 讓我們先來瞭解什麼叫加密 (Encryption)：
+
+> _在密碼學中，加密（英語：Encryption）是將明文資訊改變為難以讀取的密文內容，使之不可讀。只有擁有解密方法的對象，經由解密過程，才能將密文還原為正常可讀的內容。_
+
+從這邊得知道原來雜湊並不是加密，真正的加密之後會得到一組金鑰，那些資料必須用那個金鑰才可以看到內容。也就是說加密是指可逆的，就是說可以從加密後的資料通過金鑰，得到原始的內容。
+
+> 雜湊 (Hashing) 的定義：
+
+> _由一串資料中經過雜湊演算法（Hashing algorithms）計算出來的\***\*資料指紋（data fingerprint）\*\***，經常用來識別檔案與資料是否有被竄改，以保證檔案與資料確實是由原創者所提供。_
+
+而雜湊是不可逆的，所以雜湊不是加密。雜湊通常用在驗證不需要得知內容的資料，像是密碼。通過雜湊，我們會得到一組看起來像是亂碼的值。然後當需要驗證密碼的時候，再把輸入的密碼轉換成雜湊，看是否一致，來確認是不是當初輸入的密碼。
+
+結論就是由於他們的定義上是完全不同的東西。雜湊本身不具備加密功能，雜湊是不可逆推的。所以沒辦法用在傳遞資料上面，傳遞資料的時候是需要加密資料的。雜湊的用途在於驗證資料的正確性。雜湊在應用上除了密碼之外，還有驗證檔案正確性等用途。加密貨幣好像也是通過這種形式來產生地址。
+
+參考資料：  
+[如何區分加密、壓縮、編碼](https://blog.m157q.tw/posts/2017/12/23/differences-between-encryption-compression-and-encoding/)  
+[加密和雜湊有什麼不一樣？](https://blog.m157q.tw/posts/2017/12/25/differences-between-encryption-and-hashing/)  
+[雜湊不是加密，雜湊不是加密，雜湊不是加密。](https://dotblogs.com.tw/regionbbs/2017/09/21/hashing_is_not_encryption)
+
+### 2. 請舉出三種不同的雜湊函數
+
+- SHA 系列：SHA-0、SHA-1
+- SHA-1 已經被證明不夠安全。（在可接受的時間範圍內，可以找到內容不相同輸入卻得到相同輸出。）
+- SHA-2：SHA-256、SHA-512
+- SHA-3：SHA3–256、SHA3–512
+- MD5 也已經被證明不夠安全。（在可接受的時間範圍內，可以找到內容不相同輸入卻得到相同輸出。）
+- BLAKE2
+
+BLAKE2 的強度跟 SHA-2/SHA-3 差不多，是現在的主流  
+參考資料：  
+[加密和雜湊有什麼不一樣？](https://blog.m157q.tw/posts/2017/12/25/differences-between-encryption-and-hashing/)  
+[BLAKE2系列哈希算法](https://zhuanlan.zhihu.com/p/28563960)
+
+### 3. 請去查什麼是 Session，以及 Session 跟 Cookie 的差別
+
+cookie 在使用上很方便，但因為 cookie 是處存在客戶端上面的，所以就有可能被修改資料，而做出偽造的 cookie，所以重要的資料就不能夠儲存在 cookie 中了。所以為了解決這個問題就誕生了 session，session 中的數據是保留在服務器端的。
+
+Session 有點類似會話的概念，也就是說可以從開始對話，對方接收資料，然後回應你，緊接著又可以開始另外一個對話直到結束為止，比如從撥電話到交談、掛斷，這樣的一個會話期間，可以稱之為 Session，所以中文翻成會期似乎也不為過。  
+Session 的另外一個優點是「保持狀態」，是指通信交談的其中一方，可以所有的消息作關聯，使得消息之間可互相連結，並且依賴，就像是巷口的早餐店阿姨，還記得你最愛吃的火腿蛋不喜歡有美乃滋。而 Session 則是一種持久網路協定，讓Client 端與 Server 端可以作一種對話，並將兩端建立關連，保持伺服器與Client可以持續的與Server作交談。  
+Cookie 就像是一張號碼牌，用來確認身份而已。而 Session 就像是一張數位會員卡，晶片裡面只儲存了一些些訊息，但是當你一刷，電腦就帶出一堆資料，不僅可以記錄你的點餐號碼，還可以記憶你的餐點細節，消費記錄和點餐喜好…等。而這就解決號碼牌遺失領不到餐的問題，但是他不是記憶你帥氣得穿搭或長相，而是靠著所謂的Session ID。
+
+Session 的運作通過一個 `session_id` 來進行。把 `session_id` 存在放客戶端的 cookie 中。當客戶端 request 資料的時候，伺服器檢查 requset 中 cookie 保存的 session_id 並通過這個 session_id 與服務器端的 session data 關聯起來，進行資料的保存和修改。
+
+當你瀏覽一個網頁時，伺服器隨機產生字串作為 session_id ，然後保存在 cookie 中。當下次訪問時，cookie 會帶有這個字串，然後瀏覽器就知道你是上次訪問過的某某某，然後從伺服器取出上次記錄的使用者資料。
+
+兩者間的差異是 cookie 數據保存在客戶端，session 數據保存在伺服器端。
+
+參考資料：  
+[Session 和 Cookie 的區別與聯繫](http://wiki.jikexueyuan.com/project/node-lessons/cookie-session.html)  
+[cookie 和 session](https://kknews.cc/other/gglegle.html)  
+[會員系統用Session還是Cookie? 你知道其實他們常常混在一起嗎？](https://progressbar.tw/posts/92)
+
+### `4. include`、`require`、`include_once`、`require_once` 的差別
+
+include 跟 require 的差異在於警告方式不同，include 的檔案缺失只會出現警告而已，但是 require 則是會跳出錯誤並且停止運行。  
+require 和 include 幾乎完全一樣，除了處理失敗的方式不同之外。require 在出錯時產生 `E_COMPILE_ERROR` 級別的錯誤。換句話說將導致腳本中止而 include 只產生警告（`E_WARNING`），腳本會繼續運行。
+
+**require V.S. include**
+
+require( )會將目標檔案的內容讀入，並且把自己本身代換成這些讀入的內容。這個讀入與代換的動作發生在 PHP 引擎編譯程式碼的時候，而不是發生在 PHP 引擎開始執行編譯好的程式碼時（PHP 3 引擎的工作方式是編譯一行，執行一行；但是到了 PHP 4 就不太一樣了，PHP 4 先把整個程式碼全部編譯完成後，再將這些編譯好的程式碼一次執行完畢，在編譯的過程中不會執行任何程式碼）。
+
+require( ) 適合用來引入靜態的內容（如版權宣告），而 include( ) 則適合用來引入動態的程式碼（程式內容會依其他程式碼而變動）。
+
+**include_once、require_once**
+
+這兩者用途跟同名的是一模一樣的，唯一的差別在於 include_once、require_once 不可以重複引用，使用的時候會先檢查是否已經在這個程式中的其他位置引用過了，如果有救不會再次引入。這功能算是很重要的，因為在引入的時候常常有變數已經使用過了，如果又再次引入，根據 PHP 不允許相同名稱的函數被重複宣告的機制，就會引發錯誤訊息。所以一般而言都會推薦使用 include_once、require_once。
+
+**總結**
+
+**include 和 include_once**
+
+都是用來引入檔案，後者可避免重複引入，故建議用後者。引不到檔案會出現錯誤息，**但程式不會停止**。
+
+**require 和 require_once**
+
+都是用來引入檔案，後者可避免重複引入，故建議用後者。引不到檔案會出現錯誤息，**而且程式會停止執行**。
+
+參考資料：  
+[php.net 關於 require 的說明](https://www.php.net/manual/zh/function.require.php)  
+[PHP引用檔案的函數區別( REQUIRE , REQUIRE_ONCE , INCLUDE , INCLUDE_ONCE)](https://sanji0802.wordpress.com/2008/02/25/php%E5%BC%95%E7%94%A8%E6%AA%94%E6%A1%88%E7%9A%84%E5%87%BD%E6%95%B8%E5%8D%80%E5%88%A5requirerequire_onceincludeinclude_once/)  
+[初學者最易混淆的 include、include_once、require、require_once 之比較](https://injerry.pixnet.net/blog/post/39082306)
+
+## 收穫：
+
+本以為很簡單的，結果深入之後發現細節越來越多，甚至還有自己在那邊測一測，然後就發現問題了，於是我就去實作，搞得我要死不活XD。偏偏最近事情多，狀況又多甚至還有點狀況不好。
+
+然後在這之中，真的覺得必須要開一個檔案來紀錄做了一些什麼事情才行。因為我在前面實作 blog 的時候就有這樣做過了，不去詳細紀錄的話，真的會記不清楚自己到底做了哪些功能。這樣也變成必須研究一下 readme.md 要怎麼撰寫才可以。目前是使用紀錄的方式來撰寫，就當成工作日誌這樣。做了哪些修改，新增哪些功能，然後什麼什麼的這樣子。這樣可能可以比較清楚的理解一下自己做了哪些。
+
+在實作安全性的部份，也發覺真的很多地方都要檢查一下才可以。因為很多時候可以靠著登入登出就破解自己的系統了XD。甚至登入之後換別的帳號，然後就可以修改別的使用者的留言。這樣很像有點作弊，導致我就花了一些時間在這上面，最後做出了要把安全性另外寫出來引入的方式，不然之後要修改的話，應該會非常的麻煩。
+
+在實作之中，也發現自己做了越來越多的 function 甚至還開始有了一些共用的變數，要給各個 function 各自引入。最主要的是因為 PHP 沒辦法像 JavaScript 那樣，引用父層的變數，變成就要一一傳入，我寫了一大堆的 function 通通都要傳入 $conn。真的就如同老師在物件導向的直播上面說的那樣，用 class 來節省寫一些重複的內容。所以我就還滿想花時間改寫物件導向，不過這樣會花很多時間，剛剛要提交作業的時候在查看網址的時候，就發現我上次題一作業已經 13 天前了。就覺得還好我先下了要先交作業的決定，不然一改下去不知道會花多少時間在研究跟改寫。我是覺得改寫是必要的，因為後面還會需要再度去實作更多的功能，所以就感覺物件導向是在必行。
+
+## 作業修正：
+
+後續觀察到有一些地方可以修正，像是驗證的方式，我應該是要驗證 cookie 上的資料，然後取得使用者名稱。
+
+然後後續就可以使用，使用者名稱撈資料。
+
+新增 共通.php 專門放 function
+
+security_check.php 改成通過驗證之後回傳使用者名稱，往後都使用使用者名稱撈資料
+
+新增一個共通 function 專門透過使用者名稱撈資料。
+
+然後需要一個 $user 來取得 使用者名稱，但影片介紹的沒有 nickname 的問題，所以這部份需要在思考
+
+拿掉 $user_id 的功能，通通使用 certificate 來找到是誰

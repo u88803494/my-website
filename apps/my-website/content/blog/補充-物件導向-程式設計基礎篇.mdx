@@ -1,0 +1,997 @@
+---
+title: "（補充）物件導向：程式設計基礎篇"
+slug: "補充-物件導向-程式設計基礎篇"
+description: "從最基本的物件導向開始講，並且以 PHP 為範例"
+date: 2019-07-12T12:37:39.775Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*t_WcMw7x4fiLxywOg5l73w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%A3%9C%E5%85%85-%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91-%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%9F%BA%E7%A4%8E%E7%AF%87-4adbc146e3be"
+---
+
+從最基本的物件導向開始講，並且以 PHP 為範例
+
+## 名詞介紹
+
+物件導向設計
+
+面向對象（中國用語）
+
+**O**bject-**O**riented **P**rogramming
+
+## 為什麼要有物件導向？
+
+之前計算譏為例子。
+
+```
+function setResult() {
+```
+
+```
+}
+```
+
+```
+function appendResult() {
+```
+
+```
+}
+```
+
+```
+function inputNumber() {
+```
+
+```
+}
+```
+
+```
+function inputOperator() {
+```
+
+```
+}
+```
+
+```
+document.querySelector('.number').addEventListener('click'. () => {
+  inputNumber(document.query('.number').innerTEXT);
+})
+```
+
+```
+document.querySelector('.operator').addEventListener('click'. () => {
+  inputNumber(document.query('.number').innerTEXT);
+})
+```
+
+這樣寫程式碼非常分散。
+
+如果上面的功能在另外加一些計算的 function 像是 add() … 等。整個程式碼就會看起來很亂，因為並沒有就搞不清楚哪個部份是計算用的，哪個部份是顯示資料用的。
+
+在 JavaScript 的 Object 就有點像物件導向了。如果沒有物件的話，像之前學生分數的例子，就必須要列好幾個 array 來儲存學生的資料。而我們使用物件的方式就可以把學生的資料呈現，而且可以知道項目明細跟項目的資料。
+
+```
+array:
+```
+
+```
+const students = [];
+const studentsScore = [];
+const studensName = [];
+```
+
+```
+{
+  score: 100,
+  name: 'peter',
+  height: '190',
+}
+```
+
+而物件的儲存方式就比較像現實生活中的方式，因為可以清楚的知道姓名身高分數等等。就是利用物件的屬性來儲存，而物件導向就是類似這樣子的概念，把東西集合在一起，以方便使用。
+
+## 究竟什麼是物件導向？
+
+在這邊使用 php 為範例。物件導向最重要的就是 class
+
+```
+<?php
+class Dog {
+  function hello() {
+    echo "I am dog";
+  }
+}
+```
+
+```
+$dog = new Dog();
+$dog->hello();
+?>
+```
+
+這樣子就會印出 I am dog”
+
+class 中文叫做類別，類別就是一個設計圖，定義了物件有什麼樣的東西，有什麼屬性，有什麼方法（method），就是 function，放在 class 內部就是方法，放在外部就是 function。
+
+以這邊的例子來說 class Dog 定義了要打造一隻 Dog 需要哪些內容的設計圖。所以需要使用的時候，就要另外打造出來 就是 new Dog(); 在這邊的意思。把 new Dog(); 定義進變數之後，在呼叫使用。
+
+所以一個 class 就是設計圖，而實際打造（new）出來就是實體（Instance）
+
+![](https://cdn-images-1.medium.com/max/800/1*t_WcMw7x4fiLxywOg5l73w.png)
+
+用概房子來說， class 就像是左邊的設計規劃圖，而實際出來之後，就像右邊那樣的完整。
+
+## PHP 中的 Class
+
+在 PHP 的 Class 會需要加上一個值 public 來讓哪邊都可以存取這個方法或屬性。就像下方粗體縣市的那樣。
+
+```
+<?php
+class Dog {
+  public $name = '';
+  function hello() {
+    echo "I am dog";
+  }
+}
+```
+
+```
+$dog = new Dog();
+$dog->hello();
+?>
+```
+
+其實在寫方法（ function） 的時候，前面的預設就是加上一個 public ，這個意思就是公有的，所以任何時候都可以呼叫。
+
+另外有一個 private 就是私人的，這樣就不能夠在外部呼叫，這個就是封裝（Encapsulation），用亦是把一些實作的細節都寫在 class 裡面，所以並不是要給人呼叫使用的。
+
+```
+<?php
+```
+
+```
+class Dog {
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG';
+  }
+}
+```
+
+```
+$a = new Dog(); // 變數名稱亦可改
+$a->hello();
+?>
+```
+
+這樣一樣會印出 I am DOG
+
+在這邊的意思就是 a 呼叫 hello 這個方法，就是像跟這個狗打招呼，狗就會回應 I am DOG。裡面實作的細節就是通過 hello 去呼叫私有的 function getHelloSentence，最後得到結果。而直接在外部呼叫 getHelloSentence 是會跳出錯誤的。因為並不需要給人知道實作的細節。
+
+$this 就是只這個 class Dog 的實體，因為已經 new 出來了。
+
+-
+
+```
+<?php
+```
+
+```
+class Dog {
+  private $name = 'default';
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG';
+  }
+}
+```
+
+```
+$a = new Dog();
+$a->name = 'lucky';
+$a->hello();
+?>
+```
+
+在這邊等於是去變動 name 的資料。但由於 name 是設置 private。所以就會出現報錯
+
+![](https://cdn-images-1.medium.com/max/800/1*r-yUB6TruMIeXYqX1xFGAw.png)
+
+只要改成 public 就可以正常運行。所以利用這樣，就可以來改變一下程式碼
+
+```
+<?php
+```
+
+```
+class Dog {
+  public $name = 'default';
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG, name is ' . $this->name;
+  }
+}
+```
+
+```
+$a = new Dog();
+$a->name = 'lucky';
+$a->hello();
+?>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*3lh1SKmoBXLRLdLKDvvF2Q.png)
+
+通過 $this 就可以存取自己的變數。至於為什麼要用 this，因為這樣就是指定改變的是這個實體（Instance）
+
+```
+<?php
+```
+
+```
+class Dog {
+  public $name = 'default';
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG, name is ' . $this->name;
+  }
+}
+```
+
+```
+$a = new Dog();
+$a->name = 'lucky';
+$b = new Dog();
+$b->name = 'hello';
+```
+
+```
+$a->hello();
+$b->hello();
+?>
+```
+
+這樣就會輸出不同的 名字
+
+![](https://cdn-images-1.medium.com/max/800/1*tEPO3Mu561UM-vgMrvnI8A.png)
+
+在這邊舉的例子用意是 class 是一個設計圖可以用來 new 出很多的實體（Instance）
+
+這樣就可以擁有 a 狗 b狗 c狗… 很多的狗
+
+-
+
+不過一般並不讓別人隨便變動變數，所以就可通過另外一個方法（funcion），把名字傳進去。
+
+```
+<?php
+```
+
+```
+class Dog {
+  private $name = 'default';
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG, name is ' . $this->name;
+  }
+```
+
+```
+//setter
+  public function setName($name) {
+    $this->name = $name;
+  }
+```
+
+```
+}
+```
+
+```
+$a = new Dog();
+$a->setName('lucky');
+$b = new Dog();
+$b->setName('hello');
+```
+
+```
+$a->hello();
+$b->hello();
+?>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*tEPO3Mu561UM-vgMrvnI8A.png)
+
+結果還是可以一樣的，而這邊變動變數的部份是有個專有名詞，就做 setter。除了 setter 還有 getter
+
+```
+// getter
+public function getName() {
+  return $this->name;
+}
+```
+
+至於為什麼要這麼做？因為只希望別人利用那兩種 method 來變動資料，並不希望被直接改值。
+
+比如說我們要這個 name 不能是髒話，用 public 的話，就可以變動成任意的用詞，就沒辦法阻止這件事情。
+
+但如果今天是用 setter 的話，因為是 function 所以可以做很多的事情。像是判斷如果是髒話就直接不讓它執行。
+
+```
+// setter
+public function setName($name) {
+  if ($name === 'fuck') return;
+  $this->name = $name;
+}
+```
+
+可以保證東西不被變動到。
+
+這也是物件導向其中一個很重要的點。
+
+-
+
+其實之前也已經用過了
+
+![](https://cdn-images-1.medium.com/max/800/1*TSXS9ESjzAOGBOwP161_6g.png)
+
+## 物件導向如何實作？
+
+在工作上其實每個人的作法都不一樣。在工作上面，有時後會需要提供別人使用自己寫好的 class。
+
+有的人會實作出來在說，有的人要去想想，我要怎麼讓別人很方便的使用。這個的方法就是，先寫出怎麼讓人使用，之後再來實作需要的部份。至於怎麼實作，這其實需要依靠經驗。
+
+以計算機為例子：
+
+```
+js:
+class Calculation {
+```
+
+```
+}
+```
+
+```
+const calculation = new Calculation();
+calculation.input(1);
+calculation.input('+');
+calculation.input(3);
+const result = calculation.getResult();
+console.log(result);
+```
+
+這邊先寫出來，如果別人要使用，會怎麼使用。
+
+都用 input 處理資料，是因為如果要把運算符跟數字分開的話，那就還要請對方判斷型別，會造成使用上的麻煩，所以就寫在裡面即可。
+
+補充：物件跟 instance 差在哪裡？
+
+instance 就是一個 class Dog 建立（new）出來的。
+
+```
+$a = new Dog();
+```
+
+以上面為例子 new 出來後指向的變數 a，那 a 本身是物件，但是 a 這個物件是那個 class 的 instance。
+
+## JavaScript 的 class 實作
+
+在 JavaScript 中，本來是沒有 class 的語法，是後來新增上去。JavaScript 沒有真的 class 語法。
+
+透過把 class 語法餵給 babel 就可以知道。
+
+![](https://cdn-images-1.medium.com/max/800/1*AcKyltUHImREucnmuWhHig.png)
+
+所以就是透過編譯器來把 class 轉成 JS 可用的程式碼。
+
+-
+
+現在先以 php 作為實例。
+
+在 new 一個 instance 出來的時候，我們喜歡稱為傳一些資訊進去，這部份就叫做初始化。
+
+```
+$a = new Dog();
+$a->setName('lucky');
+```
+
+例如說我希望這個狗， new 出來的時候就叫做 lucky。所以就可以直接傳入。
+
+```
+$a = new Dog('lucky');
+```
+
+class 就要能夠接收這個值。就必須要使用建構子來接收這些資料。
+
+```
+function __construct($name) { // 建構子
+  $this->name = $name;
+}
+```
+
+這要用兩個底限在前面作為標示。這樣就可以達到接收變數的目標
+
+```
+function __construct
+名字是固定的不可改變。
+```
+
+建構子內部可以放任何東西。所以也可以直接把 call function 的部份直接份進去，就會直接呼叫。
+
+```
+<?php
+```
+
+```
+class Dog {
+  private $name = 'default';
+  function __construct($name) { // 建構子
+    $this->name = $name;
+    $this->hello();
+  }
+  public function hello() {
+    echo $this->getHelloSentence();
+  }
+  private function getHelloSentence() {
+    return 'I am DOG, name is ' . $this->name;
+  }
+```
+
+```
+public function setName($name) {
+    if ($name === 'fuck') return;
+    $this->name = $name;
+  }
+```
+
+```
+public function getName() {
+    return $this->name;
+  }
+```
+
+```
+}
+```
+
+```
+$a = new Dog('lucky');
+$b = new Dog('hello');
+?>
+```
+
+-
+
+建構子（function **\_\_construct）**其實可以做的事情很多很多。你想得到的幾乎都可以，要初始化一些東西。像有人會把需要做的事情另外寫一個 class 包起來。
+
+```
+class Db {
+  public function __construct($s, $u, $p, $d) {
+    $this->serverName = $s;
+    $this->username = $u;
+    $this->init();
+  }
+```
+
+```
+private function init() {
+    $this->conn = mysqli_db_connet(..'傳參數'.);
+  }
+```
+
+```
+public function query() {
+    $this->result = mysqli_query($this->conn, $str);
+  }
+}
+```
+
+```
+$db = new DB(serverName, username, password, db);
+$db->query('...');
+echo $db->result()
+```
+
+這樣子，在之後使用的時候，就只需要改參數就好了。這個跟單純呼叫 function 是不一樣的。可以想像成是再把 function 集中起來管理的意思。以這個為例子來說，就是把 db 的初始化在裡面都做好了，就不需要在外面再初始化，也看不到初始化的部份。
+
+-
+
+接下來回到 JavaScript 的部份。
+
+JS 的部份就建構子不需要加底限，整個 class 也不需要另外加上 function
+
+```
+class Calculator {
+  constructor(name) {
+    this.name = name;
+  }
+  hello() {
+    console.log(this.name);
+  }
+}
+```
+
+```
+const calculation = new Calculator(' i am big');
+calculation.hello();
+```
+
+this 指的是實體本身。
+
+像之前使用 php 來說，如果是使用 fucntion 就必須要不停的傳入值，這樣才可以知道，要跟什麼地方連線。
+
+```
+mysqli_connect($conn);
+mysqli_query($conn, $query);
+mysqli_fetch_result($conn, $query);
+```
+
+就必須要不停的傳入 $conn，而使用物件導向就可以減少傳入參數的次數
+
+```
+mysqli_connect($conn);
+$conn->connect();
+```
+
+```
+mysqli_query($conn, $query);
+$conn->query($query);
+```
+
+```
+mysqli_fetch_result($conn, $query);
+$conn->fetch_result($query);
+```
+
+為什麼可以這樣做呢？因為 this 透過 this 就可以直接使用在內部已經儲存好的資料了。這就是為什麼需要 this。上述的 this 都是發生在 function 裡面。
+
+```
+$conn->fetch_result($query);
+這個的底下可能像這樣子
+function fetch_result($q) {
+  $this->conn->mysql_fetch_result($q);
+}
+```
+
+因為底層已經直接幫利用 this 來抓取資料。所以就不用顯式的直接寫出來。這種用法也可以稱為隱式。
+
+在 JavaScript 的 this 就是用來指這個實體。這是最原始的用途。但在 JavaScript 中除了 class 內部之外，又有別種用途，所以 this 就變得比較複雜。
+
+-
+
+回到計算機的部份：
+
+```
+class Calculator {
+  constructor() { // 放入預設值
+    this.text = '';
+  }
+  input(str) {
+    this.text += str;
+  }
+  getResult() {
+    return this.text;
+  }
+}
+```
+
+```
+const calculation = new Calculator();
+calculation.input(1);
+calculation.input('+');
+calculation.input(3);
+const result = calculation.getResult();
+console.log(result);
+```
+
+```
+// 1+3
+```
+
+這樣就會得到了字串。所以直接在輸出加上一個 eval() ，就可以變成運算功能。
+
+```
+class Calculator {
+  constructor() { // 放入預設值
+    this.text = '';
+  }
+  input(str) {
+    this.text += str;
+  }
+  getResult() {
+    return eval(this.text);
+  }
+}
+```
+
+```
+const calculation = new Calculator();
+calculation.input(1);
+calculation.input('+');
+calculation.input(3);
+const result = calculation.getResult();
+console.log(result);
+```
+
+> `eval()` 的參數是一個字符串。如果字符串表示的是表達式，`eval()` 會對表達式進行求值。如果參數表示一個或多個 JavaScript 語句， 那麼 `eval()` 就會執行這些語句。注意不要用 `eval()` 來執行一個算術表達式；因為 JavaScript 可以自動為算術表達式求值。 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/eval)
+
+所以計算機就可以透過這種方式來建立。其他還有一些細節沒有說明，因為之前就曾經解過了。詳細可以參考之前的[作業](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-javascript-%E8%A7%A3%E9%A1%8C%E6%83%B3%E6%B3%95%E6%80%9D%E8%B7%AF%E7%AD%86%E8%A8%98-5b79c5e5661d)。往下拉到 hw3 就是了。
+
+## 繼承 Inheritance
+
+物件某種程度上是在反應現實生活的情況，例如說狗，他可能是屬於一種界門綱目科數種的一種，他是屬於一個動物。所以狗算是一種動物，就可以建立一個 class 來創立動物的類別。
+
+```
+class Animal {
+  public $name = 'default';
+```
+
+```
+// 初始化
+  public function __construct($name) {
+    $this->name = $name;
+  }
+  public function sayHello() {
+    echo 'I am '. $this->name;
+  }
+}
+```
+
+```
+$a = new Animal('leo');
+$a->sayHello();
+```
+
+然後要創立一個狗的類別。
+
+```
+class Dog {
+  public $name = 'default';
+```
+
+```
+public function __construct($name) {
+    $this->name = $name;
+  }
+  public function sayHello() {
+    echo 'I am '. $this->name;
+  }
+```
+
+```
+public function run() {
+    echo "I am running";
+  }
+}
+$a = new Dog('leo');
+$a->sayHello();
+$a->run();
+```
+
+這時候相比之下，發現其實 Animal 跟 Dog 有很多地方會重複。因為狗也是屬於一種動物，所以狗也會有名字，也可以有發出聲音。理所當然，狗一定也有動物的屬性跟方法。
+
+但這時候如果又在 Dog 的類別上面，寫了一堆 Animal 也有的 method，就不合乎程式的精神了。因此有了繼承 （Inheritance）這的方式來解除這個問題。
+
+```
+class Animal {
+  public $name = 'default';
+  public function __construct($name) {
+    $this->name = $name;
+  }
+  public function sayHello() {
+    echo 'I am '. $this->name;
+  }
+}
+```
+
+```
+class Dog extends Animal {
+  public function run() {
+    echo "I am running";
+  }
+}
+$a = new Dog('leo');
+$a->run();
+```
+
+透過 extends Animal 來繼承 Animal 的屬性跟方法。就一樣可以執行了。
+
+但如果 Dog 裡面也有一個 sayHello 那麼就會以 Dog 裡面的 sayHello 為主。這種情況就叫做 override，覆寫。
+
+當然這時候在 Dog 內部使用，也可以抓到 Dog 的 parent 層（Animal）的變數值。
+
+```
+class Animal {
+  public $name = 'default';
+  public function __construct($name) {
+    $this->name = $name;
+  }
+  public function sayHello() {
+    echo 'I am '. $this->name;
+  }
+}
+```
+
+```
+class Dog extends Animal {
+  public function run() {
+    echo "I am running". $this->name;
+  }
+}
+$a = new Dog('leo');
+$a->run();
+```
+
+![執行結果](https://cdn-images-1.medium.com/max/800/1*dAw49fNTzKzTX3M9iuPWnQ.png)
+
+_執行結果_
+
+但如果 parent 的屬性是 private，就不能夠繼承了
+
+```
+class Animal {
+  private $name = 'default';
+  public function __construct($name) {
+    $this->name = $name;
+  }
+  public function sayHello() {
+    echo 'I am '. $this->name;
+  }
+}
+```
+
+```
+class Dog extends Animal {
+  public function run() {
+    echo "I am running". $this->name;
+  }
+}
+$a = new Dog('leo');
+$a->run();
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*PfzSQqJtNL9xGoF9bdASLQ.png)
+
+但一般來說會希望可以繼承，但是又不想設定為 public。那就可以使用 protected
+
+```
+protected $name = 'default';
+```
+
+-
+
+如果想要在 function 裡面使用 parent 的方法呢？
+
+就要使用 parent::(要使用的 function_name)
+
+```
+class Dog extends Animal {
+  public function run() {
+    echo "I am running". $this->name;
+  }
+```
+
+```
+public function sayYoAndHello() {
+    parent::sayHello();
+    echo 'yo';
+  }
+}
+$a = new Dog('leo');
+$a->sayYoAndHello();
+```
+
+-
+
+在 JavaScript 裡面使用 parent 是使用 super
+
+```
+class Calculator {
+  constructor() { // 放入預設值
+    this.text = '';
+  }
+  input(str) {
+    this.text += str;
+  }
+  getResult() {
+    return eval(this.text);
+  }
+}
+```
+
+```
+class ChineseCalculator extends Calculator { // 新增輸入中文判斷
+  input(str) {
+    if (str === '三') {
+      super.input(3);
+    } else {
+      super.input(str);
+    }
+  }
+}
+// 透過這樣就可以小修改程式碼
+```
+
+```
+const calculation = new ChineseCalculator();
+calculation.input(1);
+calculation.input('+');
+calculation.input('三');
+const result = calculation.getResult();
+console.log(result);
+```
+
+透過另外一個 class 繼承就可以小修改原本的程式碼，可以保持原本的程式碼，又另外加上一些功能。
+
+## static 靜態方法
+
+在 class 裡面有個 static 的方法建立方式，可以讓人不用建立實體就可以呼叫 class 裡面的方法，透過這種方式呼叫出來的就就叫靜態方法。不過呼叫的方法不一樣，要透過雙冒號來呼叫。
+
+```
+class Dog extends Animal {
+  public function run() {
+    echo "I am running". $this->name;
+  }
+```
+
+```
+public function sayYoAndHello() {
+    parent::sayHello();
+    echo 'yo';
+  }
+  public static function test() {
+    echo '請給我食物';
+  }
+}
+```
+
+```
+Dog::test();
+```
+
+靜態除了 function 之外還有靜態變數。
+
+```
+class MentorProgramAPI {
+  static $version = 1;
+  public function getTwitchResult() {
+
+  }
+}
+```
+
+```
+echo MentorProgramAPI::$version;
+```
+
+```
+// 1
+```
+
+這種用法就可以得知道一些 class 的一些資訊
+
+而這種跟建立實體之後在呼叫有什麼差異呢？
+
+靜態的變數是綁在 class 的，一個 class 只能有一個。而另一種是綁在實體上才能呼叫。假設利用同一個 class 建立好幾個實體，那每一個實體的變數雖然雖然儲存的內容都一樣，但實際上的變數的記憶體位置是不同的，所以是不同的變數。
+
+所以如果使用靜態的變數，那就永遠都是同一個變數，因為靜態的變數是跟著 class 走的。
+
+另外一點是當 new 一個實體出來的時候 static 並不會跟著 instance 出來。所以通常這個都是存一些不會去改到的資料，而每一個 instance 都會用到的資料。
+
+用途：比如說一個時區的 class，當我們要傳入時區的時候，希望判斷一下是不是一個正確的時區。如果 new 出來之後再來判斷，感覺就很奇怪。這時候就可以設置為 static 直接就可以傳入值判斷。
+
+## JavaScript 的 class 與 prototype
+
+```
+class Calculator {
+  constructor() {
+    this.text = '';
+  }
+  input(str) {
+    this.text += str;
+  }
+  getResult() {
+    return eval(this.text);
+  }
+}
+```
+
+```
+const calculator = new Calculator();
+calculator.input(1);
+calculator.input('+');
+calculator.input(3);
+const result = calculator.getResult();
+console.log(result);
+```
+
+JavaScript 本來沒有 class，但我們希望依然可以保有 new 的語法。
+
+```
+const calculator = new Calculator();
+```
+
+那麼這時候的 Calculator() 到底是什麼呢？這時候可以回想起最常用的 function 就像是：
+
+```
+function Calculator() {
+ ...
+}
+```
+
+這時候我們使用 new 去呼叫它，這個 function 就變成 constructor 建構子。我們就可以傳進一個參數，裡面也可以使用 this 那些了。
+
+```
+// constructor 建構子
+function Calculator(name) {
+  this.name = name;
+  this.text = ''
+}
+```
+
+接著使用 prototype就可以使用這些資料。
+
+```
+// constructor 建構子
+function Calculator(name) {
+  this.name = name;
+  this.text = '';
+}
+```
+
+```
+Calculator.prototype.input = function(str) {
+  this.text += str;
+}
+```
+
+```
+Calculator.prototype.getResult = function() {
+  return eval(this.text);
+}
+```
+
+```
+const calculator = new Calculator('name');
+calculator.input(1);
+calculator.input('+');
+calculator.input(3);
+const result = calculator.getResult();
+console.log(result);
+```
+
+```
+// 4
+```
+
+這樣寫可以跟 class 的寫法做的比較，剛好 VSCODE 可以直接切換，所以下面就擷取一張來方便做比較。
+
+![](https://cdn-images-1.medium.com/max/800/1*g_In0aCbZ4E22TeIRnw9mQ.gif)
+
+而 class 的寫法，可以比較輕易的看得懂。
+
+因為希望可以讓 JavaScript 的寫法可以像是其他語言的物件導向那樣。
+
+在原始的時候，使用的方法，第一個接在 new 後面的 function 會被當成是 建構子。然後當需要新增方法的時候，就可以透過 prototype 來另外新增方法。其實這些內容是一樣的。
+
+至於什麼是 prototype，之後才會學到。
+
+## 收穫：
+
+在物件導向這邊，也算是花了滿多的時間學習。物件導向一個重要的精神就是把方法（function ）通通包在一起。在中間了解到物件導向是怎麼樣實作的，還有 JavaScript 的物件導向是怎麼出來的。也有去查了一下 prototype，不過尚不了解。也覺得這個可以留待以後在學習就好。學習到了封裝的方法，還有繼承以及靜態的方法，原來物件導向是怎麼的強大好用。可以很方便的去繼承別的類別，好做出一些修改。而 JavaScript 的 class 是怎麼實作的，在這邊也有一點認識，而且也發現 VScode 居然可以把 prototype 轉換成 class 語法，說明也說轉成 ES2015 的語法，所以由此可以得知真的就是 ES6 後來新增的語法，怪不得不被列入物件導向語法。
+
+然後我會覺得這邊其實沒有很實在的感覺，我大概只是了解到我之前寫得那些落落長的程式碼，可以改成物件導向的形式，好方便使用，可以讓程式碼看起來簡潔點，但實際上物件導向的強大，我可能還沒能夠體會到，因為例子都是很簡單的，只能夠了解到物件導向是怎麼回事。那這個應該就是留待之後碰到物件導向的用法的時候，再去深刻體會就好了吧！

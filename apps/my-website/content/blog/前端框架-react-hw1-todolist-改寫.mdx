@@ -1,0 +1,643 @@
+---
+title: "前端框架 React hw1：todolist 改寫"
+slug: "前端框架-react-hw1-todolist-改寫"
+description: "hw1：Todo List"
+date: 2019-11-05T06:43:04.917Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*_TfHdvtBL8Mhn0l0qxPZFg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-hw1-todolist-%E6%94%B9%E5%AF%AB-b02f52e9a334"
+---
+
+## hw1：Todo List
+
+請你用 React 實作出一個 todo list，介面跟功能就參考之前用 jQuery 寫出來的那個就行了。
+
+—
+
+這個作業改自：[前後端中階作業： todolist](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E5%BE%8C%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%BD%9C%E6%A5%AD-todolist-eeaf6b93cfcc?source=your_stories_page---------------------------)
+
+後來思考這邊應該只是一個純前端，所以就很乾脆的直接從畫面開始實作了。
+
+作法就決定參考這邊寫的：[前端框架 React：todolist](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-todolist-3ef24b08a444?source=your_stories_page---------------------------)
+
+### 從介面開始
+
+先在 index.html 把原始檔案關於 bootstrap 需要的部份寫上去，變成如下的樣子：
+
+```
+<!DOCTYPE html>
+<html lang="en">
+```
+
+```
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,
+    initial-scale=1, shrink-to-fit=no" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="Web site created using
+    create-react-app" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title> [Week21] hw1 todolist </title>
+</head>
+```
+
+```
+<body>
+  <noscript>You need to enable JavaScript to run this app.
+    </noscript>
+  <div id="root"></div>
+</body>
+```
+
+```
+</html>
+```
+
+這樣就應該可以直接使用 bootstrap 了，然後開始寫 render 的部份，這邊先把上半份弄上去
+
+```
+  render() {
+    return (
+      <div className="App container">
+        <div className="todolist__input">
+          <h1> todolist </h1>
+          <input className="form-control form-control-sm" id="input"
+            type="text" placeholder="輸入代辦事項
+              輸入完成按下 enter 送出" />
+          <hr />
+        </div>
+        <div className="todolist__list"></div>
+      </div>
+    );
+  }
+```
+
+有些部份應該可以拿掉了，像是原本用來 render 的 todolist\_\_list，不過這邊先保留。
+
+接著就是另外寫過一個 component 來寫資料的部份，這樣才不會看起來很複雜。可以先測試可行與否？
+
+```
+class App:
+```
+
+```
+this.state = {
+  todos: [1, 3, 2, 5, 6],
+}
+```
+
+```
+...
+...
+...
+```
+
+```
+<div className="todolist__list">
+  {todos.map(todo => (
+    <Todo todo={todo}/>
+  ))}
+</div>
+```
+
+class Todo:
+
+```
+class Todo extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+```
+
+```
+  render() {
+    const {todo} = this.props
+    return (
+      <div>{todo}</div>
+    )
+  }
+}
+```
+
+![可以看到畫面確實有呈現](https://cdn-images-1.medium.com/max/800/1*_TfHdvtBL8Mhn0l0qxPZFg.png)
+
+_可以看到畫面確實有呈現_
+
+然後就可以把那些 todo 的 class name 等資料放進去。
+
+```
+class Todo extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+```
+
+```
+  render() {
+    const { todo } = this.props
+    return (
+      <div className="todotlist__item form-check">
+        <input className="todolist__done form-check-input"
+          type="checkbox" name="done" />
+        <label className="todolist__content form-check-label">
+          {todo}
+        </label>
+        <button type="button" className="todolist__edit btn
+          btn-outline-secondary" >編輯</button>
+        <button type="button" className="todolist__delete btn
+          btn-outline-secondary" >刪除</button>
+        <hr />
+      </div>
+    )
+  }
+}
+```
+
+這邊也發現一些問題，像是有一些結尾沒補，以及也發現原來 JSX 頂層只能有一個
+
+整體的畫面就出來了。
+
+![](https://cdn-images-1.medium.com/max/800/1*ZfMwshwr9Y4WNjtaXyDiDw.png)
+
+### 新增
+
+然後就是輸入框的部份，在這邊使用 `onChange={this.handleChange}` 來紀錄資料，然後按照原本的方式來用，會發現沒辦法 `onChange` 無法監聽到 enter 的部份。
+
+[Google](https://codeday.me/bug/20180103/114731.html) 之後發現原來要利用另外一種監聽器：  
+`onKeyPress={this.handleSubmit}`
+
+```
+  handleSubmit = (e) => {
+    if(e.key ==='Enter') {
+      console.log('yes')
+    }
+  }
+```
+
+這樣就可以抓到使用的按鍵，然後就是撰寫程式碼，把資料擺入相對應的地方。
+
+```
+handleSubmit = (e) => {
+  const { todos, todoText } = this.state
+  if (e.key === 'Enter') {
+    this.setState({
+      todos: [...todos, {
+        id: this.id,
+        isCompleted: false,
+        content: todoText,
+      }],
+      todoText: '',
+    }, ()=> console.log(this.state))
+    this.id++
+  }
+}
+```
+
+這時候會發生錯誤，因為 render 的地方還沒改動，可以先把 Render 的地方刪掉就會發現可以正常運行了。
+
+然後就來改寫 Render 的部份，先為了本來的 `.map()` 加上 key 值，這樣才可以增進 React 的效能。
+
+```
+<div className="todolist__list">
+  {todos.map(todo => (
+    <Todo todo={todo} key={todo.id} />
+  ))}
+</div>
+```
+
+然後是改寫裡面的內容，
+
+```
+return (
+  <div className="todotlist__item form-check">
+    <input className="todolist__done form-check-input"
+      type="checkbox" name="done" />
+    <label className="todolist__content form-check-label">
+      {todo.content}
+    </label>
+    <button type="button" className="todolist__edit btn
+      btn-outline-secondary" >編輯</button>
+    <button type="button" className="todolist__delete btn
+      btn-outline-secondary" >刪除</button>
+    <hr />
+  </div>
+)
+```
+
+這樣才可以正確印出，現在就確認到可以印出資料了，當然還不夠完善，這等之後再來補齊就好。
+
+接下來就開始實作其他的功能。
+
+### 刪除
+
+先針對按鈕添加功能，
+
+```
+class Todo extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+```
+
+```
+  delete = () => {
+```
+
+```
+  }
+```
+
+```
+  editing = () => {
+```
+
+```
+  }
+```
+
+```
+  render() {
+    const { todo } = this.props
+    return (
+      <div className="todotlist__item form-check">
+        <input className="todolist__done form-check-input"
+          type="checkbox" name="done" />
+        <label className="todolist__content form-check-label">
+          {todo.content}
+        </label>
+        <button type="button" className="todolist__edit btn
+          btn-outline-secondary"
+          onClick={this.editing} >編輯</button>
+        <button type="button" className="todolist__delete btn
+          btn-outline-secondary"
+          onClick={this.delete} >刪除</button>
+        <hr />
+      </div>
+    )
+  }
+}
+```
+
+然後是實作上一層也就是 class App 的部份，因為這邊才是實際執行的 function，只有這邊才可以對 state 做改變。
+
+```
+class Todo:
+delete = () => {
+  const { todo, deleteTodo } = this.props
+  deleteTodo(todo.id)
+}
+```
+
+class App:
+
+```
+deleteTodo = (id) => {
+  this.setState({
+    todos: this.state.todos.filter(todo => todo.id !== id)
+  })
+}
+```
+
+當然還要把這個 function 傳入
+
+```
+<div className="todolist__list">
+  {todos.map(todo => (
+    <Todo todo={todo} key={todo.id} deleteTodo={this.deleteTodo} />
+  ))}
+</div>
+```
+
+這樣就完成刪除的部份，當點下之後，就會啟動 class Todo 的 delete，然後這裡會呼叫 class App 的 deleteTodo，這樣的話被點中的就會把該筆資料過濾（移除）掉。
+
+## 標示
+
+這部份我作法就不太一樣，但也很簡單的利用 JSX 的特別屬性 `checked={}` 即可。
+
+```
+測試用資料：
+this.state = {
+  todos: [
+    { id: 8, isCompleted: true, content: 'hello' },
+    { id: 9, isCompleted: false, content: 'world' },
+    { id: 10, isCompleted: false, content: 'hello world' },
+  ],
+  todoText: ''
+}
+```
+
+```
+class Todo:
+<input className="todolist__done form-check-input"
+  type="checkbox" name="done" checked={todo.isCompleted} />
+```
+
+這樣就可以成功的把完成的部份打勾…
+
+![](https://cdn-images-1.medium.com/max/800/1*kgJF6QQTkAta47vYVgdxpg.png)
+
+當然這邊變成只讀功能，因為還沒辦法傳入資料。所以就在掛上一個  
+`onChange={this.mark}`
+
+```
+Todo:
+```
+
+```
+mark = () => {
+  const { todo, markTodo } = this.props
+  markTodo(todo.id)
+};
+```
+
+然後是 App 的部份，
+
+```
+markTodo = (id) => {
+  this.setState({
+    todos: this.state.todos.map(todo => {
+      if (todo.id !== id) return todo
+      return {
+        ...todo,
+        isCompleted: !todo.isCompleted
+      } // 只把不同 id 的部份做相反的處理
+    })
+  })
+}
+```
+
+```
+以及要記得傳入：
+<div className="todolist__list">
+  {todos.map(todo => (
+    <Todo todo={todo} key={todo.id}
+      deleteTodo={this.deleteTodo}
+      markTodo={this.markTodo} />
+  ))}
+</div>
+```
+
+## 編輯
+
+針對 state 另外設定兩個狀態參數，用來決定是否顯示哪些內容：
+
+```
+this.state = {
+  todos: [],
+  todoText: '',
+  editingTodo: {},
+  isEditing: false,
+  isProcessing: false
+}
+```
+
+然後額外開啟一個暫存區域，用來放置編輯中的資料
+
+接著是把另外調整背景色跟編輯的視窗另外各自切 component 出去，然後就可以把這些內容用來直接使用斷路做判斷
+
+```
+{isEditing && <Editing />}
+{isProcessing && <Processing />}
+```
+
+這樣就可以根據狀態決定要不要 render 這邊，可以省下多餘的 render 的部份。
+
+分別實作 Processing 跟 Editing
+
+```
+import React from 'react';
+```
+
+```
+class Editing extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+```
+
+```
+  render() {
+    return (
+      <div id="light" className="editing__area">
+        <h1>編輯頁面</h1>
+        <hr />
+        <h6>Notice：編輯完成按下 enter 即可送出資料</h6>
+        <input className="form-control form-control-sm" type="text"
+          placeholder="編輯完成後按下 enter 即可" />
+        <button type="button" className="editing__cancel btn
+          btn-outline-secondary">取消編輯</button>
+      </div>
+    );
+  }
+}
+```
+
+```
+function Processing() {
+  return <div id="fade" className="editing__background" />
+}
+```
+
+```
+export { Editing, Processing }
+```
+
+當然也可以另外引出，所以就直接另外開個獨立檔案來放置並且 export 出去
+
+這邊 Editing 使用 class 就是因為之後應該會需要傳值進來，要測試是否正常就可以透過更改 `isEditing` 或 `isProcessing` 來了解是否正常運行
+
+確認到正常運行之後，還不能開始實作這部份，要先實作 editTodo 的按鈕，所以要針對 class Todo 的部份撰寫開啟編輯功能的部份，
+
+```
+class Todo:
+```
+
+```
+editing = () => {
+  const { editTodo, todo } = this.props
+  editTodo(todo.id, todo.content) // 傳入並呼叫 class 的 function
+};
+```
+
+```
+...
+...
+```
+
+```
+render() {
+  ...
+  <button type="button" className="todolist__edit btn
+    btn-outline-secondary"  onClick={this.editing} >編輯</button>
+}
+```
+
+在這邊把這些值傳入，是因為之後會用到。
+
+順帶一提，這邊也可以使用 `e.target` 來判斷點到的什麼，就可以把 function 都寫在一起，但目前為了方便辨別，所以就分開寫。
+
+```
+if(e.target.className.indexOf('edit')) {alert('有惹')}
+```
+
+像上述的方式就可以找到 class name 裡面有 edit 就可以知道這邊的 `e.target.className` 選到的元素的是用來編輯用的。
+
+這些都是可以優化的部份。
+
+然後回到 class App，針對 `editTodo` 就可以把這些值暫存進去，表示這是編輯的時候需要用到的資料。當然同時間也要把編輯的東西給打開，所以就要改值為 true 就可以啟用編輯的背景跟視窗：
+
+```
+editTodo = (id, content) => {
+ this.setState({
+  editingTodo: { id: id, content: content },
+  isEditing: true,
+  isProcessing: true
+ })
+}
+```
+
+當然這時候還沒辦法同步，所以就還要繼續寫下去。要把值傳入，也因為這邊因為要用到的是 onChange 事件，所以就都要寫在 Editing 裡面
+
+接著就可以針對各個需要的把值或 function 傳入使用，這邊只有 Editing 的 class 需要用到而已
+
+```
+{isEditing && <Editing cancelEdit={this.cancelEdit}
+  editingTodo={editingTodo} // 傳入狀態，才可以更改
+  handleEditingChange={this.handleEditingChange} // onChange 要用的
+  handleUpdate={this.handleUpdate} // 送出編輯要用的  />}
+```
+
+這邊按照順序就是傳入 function，然後在需要執行的地方直接使用，或是如果有值要傳回來，就可以另外在 class Editing 裡面呼叫並傳入，  
+所以針對 class Editing 也要撰寫使用的部份，
+
+```
+render() {
+ const { editingTodo, cancelEdit } = this.props;
+ return (
+  <div id="light" className="editing__area">
+    <h1>編輯頁面</h1>
+    <hr />
+    <h6>Notice：編輯完成按下 enter 即可送出資料</h6>
+    <input className="form-control form-control-sm" type="text"
+      placeholder="編輯完成後按下 enter 即可"
+      value={editingTodo.text} onChange={this.Change}
+      onKeyPress={this.Update} />
+    <button type="button" className="editing__cancel btn
+      btn-outline-secondary" onClick={cancelEdit}>取消編輯</button>
+  </div>
+);
+}
+```
+
+針對 input 的值，把 app 獲得的暫存值存入 value，然後當然要監聽 onChange 事件才可以把暫存值跟著同步，接下來的 onKeyPress 也就是監聽 enter 的送出，當然這部份就需要寫過，function 如下：
+
+```
+update = (e) => {
+  if (e.key === 'Enter') {
+    handleUpdate(editingTodo.id)
+    // 這邊傳入 id 也可以，這樣 app 就可以根據這個 id 決定要怎麼改 state
+    // 當然因為狀態上面已經有標注了，所以這邊用不到
+  }
+}
+```
+
+```
+change = (e) => {
+  const { handleEditingChange } = this.props
+  handleEditingChange(e.target.value)
+}
+```
+
+update 的部份，因為要判斷是否按下 enter，所以就寫這邊，也可以說一定要這樣寫，否則會無法使用，因為 handleUpdate 不是這個 class 的，無法得知這邊的資料。
+
+change 的部份則是為需要把值傳上去，所以就要這樣子寫。
+
+最後就可以把實際執行的部份寫出來了。
+
+```
+class App:
+```
+
+```
+handleEditingChange = (text) => {
+  // 從傳入的改變，id 直接取暫存區的即可。
+  const { editingTodo } = this.state
+  this.setState({
+    editingTodo: {
+      ...editingTodo,
+      text: text
+    }
+  })
+}
+```
+
+```
+handleUpdate = () => {
+  const { editingTodo, todos } = this.state
+  this.setState({
+    todos: todos.map(todo => {
+      if (todo.id !== editingTodo.id) return todo
+      return {
+        ...todo,
+        content: editingTodo.text
+      }
+    }),
+    isEditing: false,
+    isProcessing: false,
+    editingTodo: {},
+  })
+}
+```
+
+handleEditingChange 最簡單，就跟新增的輸入框差不多的內容。
+
+handleUpdate 則就比較多事情一點，這邊就是要把原來的值蓋掉，就要透過 `.map()` 去篩選需要更改的部份在改就好。然後改完之後記得還原原來的部份，把編輯跟背景都關了，然後編輯的暫存區清空。
+
+另外一點這樣寫的好處是可以保存狀態，像是假設我在編輯中關閉視窗，這樣之後要重新整理或是關閉頁面回來的還原應該也是滿容易的。
+
+## 加上 localStorge
+
+要先實作儲存才可以實作取出，所以就先從儲存實作吧
+
+```
+componentDidUpdate(prevProps, prevState) {
+  // 試著寫會還原狀態的 app
+  window.localStorage.setItem('todoapp',
+    JSON.stringify(this.state));
+}
+```
+
+也不難就是把所有狀態儲存而已XD
+
+然後是取出，這部份幾乎都差不多…
+
+```
+componentDidMount() {
+  const todoData = window.localStorage.getItem('todoapp');
+  if (todoData) {
+    const oldData = JSON.parse(todoData);
+    console.log(oldData)
+    this.setState({
+      ...oldData
+    })
+    this.id = oldData.todos[oldData.todos.length - 1].id + 1
+  }
+}
+```
+
+很簡單的改造下就成了。
+
+### 完整程式碼：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/e2789b4b8c550376b71de3acf1a48622)
+
+## 結語：
+
+這部份沒有很困難，就是很多小細節要慢慢的去調整而已，跟原生 JavaScript 不同的是原生的可以通通寫在一起，看起來會比較直觀，而 React 的則是會有點東一塊西一塊的感覺，看程式碼需要跳過來跳過去，不過這應該算小缺點，畢竟原生的雖然很直覺，但當變得很大的時候勢必會很難改寫吧。
+
+所以這種有區分的還是會比較好，只是要花一點時間去習慣整個思考的流程就是了。

@@ -1,0 +1,282 @@
+---
+title: "前端基礎作業"
+slug: "前端基礎作業"
+description: "hw1：切版"
+date: 2019-05-27T11:20:50.182Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/0*0obtEy9Z0QoxIYNt.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E%E4%BD%9C%E6%A5%AD-3c48194221be"
+---
+
+## hw1：切版
+
+請切出如下圖的版面：
+
+![](https://cdn-images-1.medium.com/max/800/0*0obtEy9Z0QoxIYNt.png)
+
+不需要做到完全一樣，但可以盡你所能做的相似，除此之外，還要支援超基本的 RWD，在手機上看也不會跑版。
+
+你可以觀察[這個網頁](https://lidemy.github.io/mentor-program-kristxeng/homeworks/week2/hw1/)來決定應該如何實作。
+
+-
+
+按照之前所學到的。先劃分出大區塊大致分為，導覽列，導覽列下方的主題，再下方的內容，還有年份的註腳。
+
+然後根據這樣先把四個區域劃分出來，並應用 border 弄出一個暫時的方框來。
+
+![](https://cdn-images-1.medium.com/max/800/1*QpLBrZswlLClP2gM9leReQ.png)
+
+後續再做小修改
+
+修改了 逐步修改內部
+
+有一小點卡住，因為看範例連導覽列都可以自動添加行數，所以我就嘗試看看了，找了很久最終發現，直接把高度設為 auto 就好，剩下就給內容去填充就好了。
+
+在做這篇的時候學到滿多的。
+
+知道說，可以利用一個板塊乘載所有的內容，然後置中，這樣就可以讓版面看起來簡潔許多。也了解到說可以使用 max & min 來設置最大最小高寬度，所以只要再條件之外的寬高度都是會自動的。
+
+最有趣的是發現，只要使用 margin: 0px auto; 就可以使資料置中，還滿好用的。
+
+本來有發現可以使用
+
+```
+/*尺寸小於則採用*/
+@media screen and (max-width: 300px) {
+```
+
+```
+}
+```
+
+來因應寬度而變動資料，結果最後沒用到就達到效果了，所以作罷。
+
+最後有做出如同課程圖片要求的網頁了
+
+做完回頭一看，真沒想到我也可以弄了上百行的原始碼，因為太多占版面，所以就先不弄上來了。
+
+## hw2：仿 Medium
+
+請切出如下圖的版面：
+
+![](https://cdn-images-1.medium.com/max/800/0*n3XfmOb4F0LNm_uL.png)
+
+可以先觀察[這個網頁](https://lidemy.github.io/mentor-program-kristxeng/homeworks/week2/hw2)。
+
+文字可以自己換成其他的，只要效果有達到就好。一樣要支援簡易的 RWD，在手機上看不會跑版（拍手會自動隱藏）。
+
+-
+
+拉到一定的尺寸拍手就會變成不見
+
+所以就是有了變換屬性
+
+於是就需要屬性
+
+```
+@media screen and (max-width: 1190px){ /* 尺寸到達一定範圍內實現 */
+    .medium__clap {
+        display: none;
+    }
+}
+```
+
+這樣才會自動消失
+
+比較需要思考的點是拍手，需要用到 fixed 屬性來使他強制處於一個位置，不過也不難，只要在 body 先設置 position 之後在設置 clap 的即可。
+
+剩下就是逐漸的修整 CSS 的風格而已了。這題會比上一題塊許多完成。
+
+## hw3：CSS Diner
+
+請完成這個小遊戲：https://flukeout.github.io/
+
+-
+
+因為英文不好看不懂他要幹嘛，所以翻譯之後才發現，原來只是要我們正確的選擇就好了，所以一二關一下就過了。接著就是熟悉選擇器的應用了，隨著難度提高必須要想辦法選擇到題目要求的，所以會有好幾個選項。大致上就是跟著右邊的提示，接著觀察一下如何使用就可以了。練習到原來黃瓜的英文可以用 pickle 但這個英文好像是醃黃瓜，圖示卻是普通黃瓜。
+
+第十六題 :only-child
+
+這邊比較奇怪
+
+直接使用 plate:only-child 不可以，結果試著在中間加個空白變成 plate :only-child 就成了，看樣子應該是 bug 因為去 MDN 查的範例也沒加空白。
+
+第十九題 :nth-last-child(A) 這個元素是會選擇第幾個到最後一個的元素 題目要求的是第一個 bento 但我覺得輸入第一個肯定不會是對的答案，果然如此，震動的是第二個。看半天還是不懂，就找了網路上的，答案是輸入 `bento:nth-last-child(3)` 就行了，我在想是不是因為他會照順序第一第二然後第三，沒有第三所以從第一個開始算起，這樣還滿怪的。所以就去上網找更多的資料；
+
+從 MDN 的資料看到，**這個選擇器的用途是從最後一個元素開始數起**，所以答案是沒錯的 https://developer.mozilla.org/zh-CN/docs/Web/CSS/:nth-last-child
+
+**再次檢視提示，原來是我沒看清楚。**
+
+-
+
+後面出現了 :nth-of-child 於是就查了資料 https://www.webdesigns.com.tw/CSS3-nth-of-type.asp
+
+在此之到 這個會比較精準，會把同類系的才納入計算。
+
+題目二十二這邊，我用 :nth-of-child(3+2n) 因為題目看起來像這樣。結果不行，於是改為 :nth-of-child(2n+3) 就通過了，看樣子內部還必須要按照格式來否則會不能。
+
+:empty 空選擇器：選中任何底下沒有任何元素的元素。
+
+:not()，不是選擇器：選中任何不是括號內指定的元素。 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:not)
+
+[attribute] [CSS Attribute Selectors 屬性選擇器](https://www.wibibi.com/info.php?tid=CSS_Attribute_Selectors_%E5%B1%AC%E6%80%A7%E9%81%B8%E6%93%87%E5%99%A8)
+
+多學了不少的選擇器，每一種都有每一種的用途。
+
+-
+
+## hw4：Flexbox Froggy
+
+請完成這個小遊戲：http://flexboxfroggy.com/
+
+-
+
+[詳細介紹 flex-box](https://www.oxxostudio.tw/articles/201501/css-flexbox.html)
+
+justify-content 就是一個為內容合理安排的意思。定義了如何分配內容的位置的屬性。參考資料：[詳細版的 MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/justify-content) [介紹性的 runoob](http://www.runoob.com/cssref/css3-pr-justify-content.html)
+
+> justify-content 決定了內容元素與整個 Flexbox 的「**水平對齊**」位置，回想一下最上面講的 Flexbox 盒子模型，具有 main start 與 main end 左右兩個端點，justify-content 就是按照這個方式做設定，而其中的設定值總共有下列五個。( 範例：[css-flexbox-demo3.html](https://www.oxxostudio.tw/demo/201501/css-flexbox-demo3.html)、[W3C 說明](http://www.w3.org/TR/css3-flexbox/#justify-content-property) )
+
+align-items
+
+> align-items 剛好和 justify-content 相反，align-items 決定了內容元素與整個 Flexbox 的「**垂直對齊**」位置，再回想一下最上面講的 Flexbox 盒子模型，具有 cross start 與 cross end 左右兩個端點，align-items 與 align-self 就是按照這個方式做設定，設定值總共有下列五個。( 範例：[css-flexbox-demo4.html](https://www.oxxostudio.tw/demo/201501/css-flexbox-demo4.html)、[W3C 說明](http://www.w3.org/TR/css3-flexbox/#align-items-property) )
+
+flex-direction：指定內部元素在主軸的方向。 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-direction)
+
+-
+
+組合技
+
+```
+flex-direction:row-reverse;
+justify-content:flex-end;
+```
+
+一旦把方向反轉之後，就會變成 start 跟 end 點的交換。所以轉換之後必須要讓他返回原點必須要用 end 來標明
+
+-
+
+```
+flex-direction:column;
+justify-content:flex-end;
+```
+
+這邊在轉換方向之後，方向也跟著改變，所以必須要使用 justify-content:flex-end 來呈現，而不是使用 align-items。
+
+-
+
+order: 可以調整區塊優先度的屬性。
+
+[CSS3教學－透過display:flex的order屬性，就可改成DOM元素的順序](https://www.minwt.com/webdesign-dev/css/18320.html)
+
+根據這邊的測試，是可以讓**區塊根據數字的大小決定先後順序**的方法。
+
+-
+
+接下來碰到 align-self 不太懂與 align-items 的差異，於是找了資料
+
+[align-self vs align-items](https://blog.csdn.net/iefreer/article/details/50776127)
+
+> 其中align-items属性用于弹性容器，而align-self用于弹性项目。
+
+- **flex-wrap** 超出範圍時是否換行的屬性，分為換行、不換行、換行時反轉。參考資料： [MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/flex-wrap)
+
+組合技
+
+```
+flex-direction:column;
+flex-wrap:wrap;
+```
+
+先讓橫列變直列，然後在設定換行，這樣的話換行也變成直行了，不在是原本的橫列換行。
+
+-
+
+flex-flow: 因為 flex-direction 跟 flex-wrap 時常一起使用，所以這個是把這兩個屬性合併使用，第一位為 flex-direction 的值，第二位為 flex-wrap 的值。
+
+```
+flex-flow: column wrap;
+```
+
+所以這樣一行是等同於
+
+```
+flex-direction:column;
+flex-wrap:wrap;
+```
+
+-
+
+接下來是介紹 align-content 跟 align-items 的差異。差在 align-content 可以針對多行，而 align-items 只能針對單行。align-content 確定了行之間的間距，而align-items 確定了整個項目在容器中的對齊方式。
+
+-
+
+最後一題沒提示，自行發揮題。
+
+觀察到紅色位置最下面，按照順序來看必須要反轉。於是就先輸入 flex-direction:column 來反轉並解直行排，後面觀察到青蛙是擠在一坨必須要換行，換了之後因為反轉的關係，所以排版不是人們所想像的，只能在反轉換行，於是青蛙就符合了順序。所以就使用 flex-flow 來把兩者合併。接下來就簡單了，只要把青蛙給置中之後在分開放就好了。
+
+```
+flex-flow:column-reverse wrap-reverse;
+justify-content:center;
+align-content:space-between;
+```
+
+題目給四行，結果我三行就解決了，感覺滿爽的。
+
+附上可愛的結業畫面
+
+![](https://cdn-images-1.medium.com/max/800/1*4j8n8syhYl7ciBFZNczXqg.gif)
+
+## hw5：簡答題
+
+請將答案寫在 [hw5.md](https://github.com/Lidemy/mentor-program-3rd/blob/master/homeworks/week6/hw5.md)。
+
+1. 請找出三個課程裡面沒提到的 HTML 標籤並一一說明作用。
+2. 請問什麼是盒模型（box modal）？
+3. 請問 display: inline, block 跟 inline-block 的差別是什麼？什麼時機點會用到？
+4. 請問 position: static, relative, absolute 跟 fixed 的差別是什麼？分別各舉一個會用到的場合
+
+-
+
+## 請找出三個課程裡面沒提到的 HTML 標籤並一一說明作用。
+
+&lt;b>粗體的文字&lt;/b> 如同意思，只要把需要的文字用這個標籤包住就會變成粗體
+
+&lt;I>斜體字&lt;/I>同上，變成斜體。
+
+&lt;u>文字加底線&lt;/u>同上，加底線。
+
+&lt;sub>文字下標&lt;/sbu>把文字變成下標。
+
+## 請問什麼是盒模型（box model）
+
+box model 就是一個把區塊的概念更加進化的工具。讓我們可以把元素看成一個盒子，去控制一些設定，讓版面變成我們想要的樣子。
+
+可以從 chrome dev tools 可以看到一個盒子。
+
+![](https://cdn-images-1.medium.com/max/800/0*5J0oM1mU1OEbECvw.png)
+
+這就是用來乘載元素所使用的盒模型，利用這個盒模型可以定義 margin border padding。分別是外距、邊框、內距。利用這幾個屬性可以讓我們很輕易的排版出我們要的樣子。
+
+## 請問 display: inline, block 跟 inline-block 的差別是什麼？
+
+inline：在排版的時候，會按照順序排列在同一行上面，也因為如此，也有一些設定值不能更動，所以靈活性會少一些。
+
+block：排版的時候，如果 display 設置的屬性是 block，他會每個 block 都會換行。幾乎所有的設定都可以設置。
+
+inlin-block：這個屬性就是 inline + block 的屬性，既有 inline 的特性，又有 block 的特性。inline-block 可以不用換行，而且又可以使用所有的屬性， margin. border. padding 都可以使用，所以是最靈活的 display 屬性。
+
+## 請問 position: static, relative, absolute 跟 fixed 的差別是什麼？
+
+static 是瀏覽器的預設的。不會被特別的定位，就是按照排版出現。
+
+relative 跟 static 類似，relative 是相對定位，意思是可以相對於原始的位置來做移動。
+
+absolute 絕對定位，需要有個參考點，所以 absolute 會參照上一層有無定位，如果有就會按照該層來做絕對定位，如果沒有就往上找，最後如果都沒有就會以 body 來做定位。
+
+fixed 是按照瀏覽器的位置來做相對定位。所以可以設置到任何地方，而且 fixed 不會跟其他的元素干擾。
+
+## 心得：
+
+總算完成了作業，第一題比較複雜，因為要修改的東西很多，所以如果第一題完成之後，後面其實還滿順的，尤其小遊戲，很可愛很有趣，幾乎都有很好的提示，所以可以很順利地過關。最後是簡答題，就是說說自己知道的東西，但因為 CSS 很多東西都滿抽象的，我知道但是說不太出來，所以有參考一下別人的資料，在用自己的話重新整理說出來，算是總複習的那種感覺。

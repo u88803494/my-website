@@ -1,0 +1,182 @@
+---
+title: "JavaScript 基礎：迴圈"
+slug: "javascript-基礎-迴圈"
+description: "古早時代的迴圈"
+date: 2019-04-20T13:56:10.198Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E5%9F%BA%E7%A4%8E-%E8%BF%B4%E5%9C%88-afffd16841e9"
+---
+
+## 古早時代的迴圈
+
+會介紹到一些，不是 JavaScript 內建的迴圈。
+
+迴圈 loop ，也就是一直做一樣的事情，它需要一個終止條件。無窮迴圈，就會不停地一直重複下去，通常是因為沒有給終止條件或是給錯條件。
+
+## label & goto
+
+這不是 JavaScript 的語法，這個語法會在程式碼跑到 goto 的時候，跳到指定的 label 標籤繼續執行。
+
+## Do ... while...
+
+Do 先做某件事情 然後 while 判斷迴圈
+
+```
+var i = 1
+```
+
+```
+do {
+ console.log(i)
+ i++
+} while(true) // 這樣就是一個無窮迴圈
+```
+
+正確寫法：
+
+```
+var i = 1
+```
+
+```
+do {
+ console.log(i)
+ i++
+} while(i < 100)
+
+console.log(‘i=’, i)
+```
+
+等於
+
+```
+var i = 1
+```
+
+```
+do {
+ console.log(i)
+ i++
+ if(i>100){
+ break // 成功執行到這邊就跳出迴圈
+ }
+} while(true)
+
+console.log(‘i=’, i)
+```
+
+[break 及 continue](http://www.runoob.com/jsref/jsref-continue.html)
+
+> continue 用於跳過循環中的一個迭代，並繼續執行循環中的下一個迭代。
+
+> continue 與 [break](http://www.runoob.com/jsref/jsref-break.html) 語句的區別是， break 是結束整個循環體，continue是結束單次循環。
+
+> 但是，在執行 continue 語句時，表現出了兩種不同類型的循環：
+
+- 在 **while** 循環中，會先判斷條件，如果條件為 true，循環再執行一次。
+- 在 **for** 循環中，自增長表達式 (如：i++) 會先計算，然後再判斷條件是否為true，再決定是否執行迭代。
+
+簡單說 continue 就是直接碰到這個指令，直接進行下一個迴圈，break 則是碰到就直接跳出迴圈，往迴圈後面的指令執行。
+
+寫出來的程式碼可以在 chrome 上面測試
+
+可以加上一行 debugger，只要重新整理之後，執行就會停在 debugger 那行，可以從 Sources 裡面看到，這個欄位也可以一行行的測試，還可以看到變數的值。
+
+學習方法：按照程式碼一行行去思考，這邊會如何執行，並把它寫下來，這樣會比較清楚。
+
+## while 迴圈
+
+do... while ... 無論如何都會先執行一次，才判斷。
+
+而 while 迴圈則是先檢查在做，一般情況大多是使用 while 迴圈居多。
+
+```
+var i = 1
+```
+
+```
+while (i<=100){
+ console.log(i) // 可以把 ++ 放進去，變成console.log(i++)
+ i++
+}
+```
+
+```
+console.log(‘i=’, i)
+```
+
+## for loop
+
+更常用的迴圈
+
+while為例：
+
+```
+var i = 1 // 初始值
+```
+
+```
+while (i<=100){ //終止條件
+ console.log(i)
+ //....
+```
+
+```
+ i++ //i 每一圈都要做的事情
+}
+```
+
+那麼 for 則是：
+
+```
+var i = 1
+```
+
+```
+for (初始值; 終止條件; 每一圈都要做的事情) {
+
+}
+```
+
+所以可以寫成：
+
+```
+for (var i = 1; i <= 100;i++) {
+   console.log(i)
+}
+```
+
+只輸出偶數
+
+```
+for (var i = 1; i <= 10;i++) {
+ if (i%2) continue //
+ console.log(i)
+}
+```
+
+也可以
+
+```
+for (var i = 1; i <= 10;i*=2) {
+ console.log(i)
+}
+```
+
+這樣會列出的 1 2 4 8。 16就超過10了 所以會跳出不顯示。
+
+與陣列結合：
+
+```
+var score = [10, 25, 50, 70, 60]
+```
+
+```
+for (var i = 0; i < score.length;i++) {
+ console.log(score[i])
+}
+//會列出所有的分數
+```
+
+心得：再一次的理解迴圈，不過這次理解更多，因為從 goto 指令開始了解，可以理解到古早的迴圈是怎麼回事，現在的迴圈設計的使用方式跟以前比起來算是相反的設計，所以可以了解到，為什麼很多人會說迴圈很困難了，因為如果少了認識 goto 的話，在理解上就會造成一些困擾。

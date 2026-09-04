@@ -1,0 +1,232 @@
+---
+title: "前端中階：JavaScript event loop"
+slug: "前端中階-javascript-event-loop"
+description: "學習影片： What the heck is the event loop anyway? | Philip Roberts | JSConf EU"
+date: 2019-09-27T10:36:11.082Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*GahKbzdTqlyohBFZsId7Lw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-javascript-event-loop-3508a16c5ae"
+---
+
+學習影片：  
+[What the heck is the event loop anyway? | Philip Roberts | JSConf EU](https://www.youtube.com/watch?v=8aGhZQkoFbQ&feature=youtu.be)
+
+JavaScript 是單線程（single thread）
+
+在 JavaScript 引擎中，像是 V8 ，實際上並不包含 setTimeout 或是 DOM、http request、Web APIs、AJAX 。這些都是由瀏覽器提供的。
+
+## Call Stack
+
+Stack 是一種先進後出的資料格式。
+
+```
+function multiply(a, b) {
+  return a * b;
+}
+```
+
+```
+function square(n) {
+  return multiply(n, n);
+}
+```
+
+```
+function printSquare(n) {
+  var squared = square(n);
+  console.log(squared);
+}
+```
+
+```
+printSquare(4);
+```
+
+運行之後，會把主要的區域放入 Stack，我們把主要區域稱為 `main()` ，首先先把 `main()` 放入 stack。
+
+![](https://cdn-images-1.medium.com/max/800/1*GahKbzdTqlyohBFZsId7Lw.png)
+
+然後執行下去，查詢聲明的函式，最後是查詢到 `printSquare(4);` 呼叫了一個函式，所以就把他放入 stack。
+
+![](https://cdn-images-1.medium.com/max/800/1*_8XmHJKWh-m0XOxK3Huv1Q.png)
+
+接個 `printSquare()` 又呼叫了 `square()` 於是放入 stack ，`square()` 又呼叫了 `multiply()` 所以也把這部份放入 stack。
+
+![](https://cdn-images-1.medium.com/max/800/1*f7j-C4EMLun7ygOThjvdQQ.png)
+
+然後`multiply()` 返回（`return`）了值。所以把 `multiply()` 彈出這個 stack，`square()` 也得到了返回值，所以也彈出 stack。
+
+![](https://cdn-images-1.medium.com/max/800/1*pHWxWFd5e_jCAoMnm7c3TQ.png)
+
+最後到了 `printSquare()` 調用了 console.log ，所以再次放入 stack
+
+![](https://cdn-images-1.medium.com/max/800/1*T1wdafQnk45BCOrlnmlGCA.png)
+
+到這邊已經沒有 return 了。所以又把剩下的 stack 執行完畢。
+
+先執行 console.log，彈出。`printSquare()` 也沒東西了，彈出，最後是 `main()` 也到 `main()` 彈出，就執行結束。
+
+![](https://cdn-images-1.medium.com/max/800/1*KFNTlGi8mxzNZua_EqTd_g.png)
+
+這就是 stack 的模式。
+
+### stack overflow
+
+當我們有一個 foo 函式，結果他又回傳呼叫自己，那不就成了一個無限循環。這種時候一直呼叫 `foo()` 。
+
+當超過一個上限之後，會溢位了。
+
+![](https://cdn-images-1.medium.com/max/800/1*yXAd_Sh5STC4gqQUoacS3A.png)
+
+### blocking
+
+嚴格上沒有什麼阻塞不阻塞，這僅僅是指代碼運行便得很慢
+
+只要是在 stack 裡面變得很慢就是 blocking。
+
+像是執行一個資料的請求，每次請求都要等待結束之後再次請求就會呈現一直 loading 的狀態。
+
+![這是一個假設性的代碼](https://cdn-images-1.medium.com/max/800/1*5JA6de9Cni1_28RRVL7Dew.png)
+
+_這是一個假設性的代碼_
+
+假設一個程式是 single thread 而每次執行一個請求之後，就要乾巴巴的等待請求完成，這會造成什麼問題？
+
+因為是 single thread，所以一次只能執行一件事情，所以當請求資料的時候就停在那邊，那瀏覽器就不能做其他事情，像是渲染頁面等。
+
+所以解決方法就是提供異步功能， asynchronous callback，意思就是給他一組代碼，當請求完成之後才執行這段代碼，這稱為 callback
+
+—
+
+```
+console.log('hi');
+```
+
+```
+setTimeout(function cb() {
+  console.log('there');
+}, 5000);
+```
+
+```
+console.log('JSConfEU');
+```
+
+以這範例來說
+
+1. main() 放入 stack
+2. `console.log('hi')`就放入 stack，然後執行移出 stack 印出 hi
+3. setTimeout(cb, 5000) 放入 stack，然後執行，不知道為何就從 stack 消失了。
+4. `console.log('JSConfEU')` 放入 stack，然後執行移出 stack 印出 JSConfEU
+5. main() 全部執行完畢，接著就移出 stack
+6. 不知道原因，5 秒後 setTimeout 的 cb 內容出現在 stack， `console.log('there')`，然後執行移出 stack 印出 there
+
+而這個不知道原因則基本上是依賴 Event loop 來達成的。
+
+![](https://cdn-images-1.medium.com/max/800/1*_tLkDebCVcikxVFPUIAAwQ.png)
+
+記住這張圖，JavaScript 的確一次只能做一件事，所以很多時候， JavaScript 只是調用這些瀏覽器提供的 APIs 或其他的。
+
+所以接下來，來看看完整的情況下是怎麼個運作方式。
+
+![](https://cdn-images-1.medium.com/max/800/1*qCrWB9YU-ODO4W83TOFhLQ.png)
+
+放入 `main()` ，stack 放入 `console.log('hi')`，印出 hi
+
+![](https://cdn-images-1.medium.com/max/800/1*HUy6HIUEezT3gFIjwJnqrw.png)
+
+`console.log('hi')` 移出 stack，然後把 setTimeout(cb) 放入 stack
+
+![](https://cdn-images-1.medium.com/max/800/1*74Er-e1D1Duic2nSqT5PFw.png)
+
+所以這時候 JavaScript 去呼叫 web APIs，讓 web apis 使用 timer 計時
+
+![](https://cdn-images-1.medium.com/max/800/1*Q5czGS09k94nYcic6gshmg.png)
+
+這時候就可以移出 setTimeout(cb)，並繼續往下放入 `console.log('JSConfEU')`
+
+![可以看到 web APIs 依然在計時](https://cdn-images-1.medium.com/max/800/1*_Dvx_z5SmeQhQCojE7Gw1g.png)
+
+_可以看到 web APIs 依然在計時_
+
+然後 `console.log('JSConfEU')` 執行印出 `JSConfEU `且移出 stack，也因為 `main()` 執行完成，所以就把 `main()` 也一併移出 stack
+
+![這邊可以看到依然在計時](https://cdn-images-1.medium.com/max/800/1*8hH2ROhXxEZ49JRt6OCuTA.png)
+
+_這邊可以看到依然在計時_
+
+當 timer 計時完成之後，就把 web APIs 的內容推送到 task queue
+
+![](https://cdn-images-1.medium.com/max/800/1*TFeGiCUx2-B1GFuGk_NwjQ.png)
+
+這時候就要看 event loop，它會持續偵測 stack 以及 queue 有沒有任務在等待中，如果 stack 為空且 queue 有任務，它就要從 queue 中把任務推到 stack。
+
+當 event loop 偵測到 task queue 有一個 cb 於是就把這個 cb 推送給 stack。
+
+![](https://cdn-images-1.medium.com/max/800/1*XW2X5KGfpxnruZr_IaqeKA.png)
+
+這個 Stack 就好像 JavaScript 的土地，只要到這邊就像回到 V8 的懷抱裡面。於是執行的時候，就把其內部的 `console.log('there')` 放入 stack，然後執行。
+
+![](https://cdn-images-1.medium.com/max/800/1*W_yxpcZ7eyV0ds7JS6oJYA.png)
+
+接著就從 stack 移出 `console.log('there')` ，cb 也執行完畢了，所以 cb 也移出 stack
+
+![done](https://cdn-images-1.medium.com/max/800/1*nFXF8veFGuKzAEyCzAIvmw.png)
+
+_done_
+
+大功告成
+
+這也是為什麼有時候，我們在使用的時候，JavaScript 會出現跟我們預期不一樣的情況。
+
+好比如這邊的秒數設置為 0 ， `setTimeout(cb, 0)`
+
+```
+console.log('hi');
+```
+
+```
+setTimeout(function cb() {
+  console.log('there');
+}, 0);
+```
+
+```
+console.log('JSConfEU');
+```
+
+他的執行順序就如同上方所顯示的，只是因為秒數為 0 ，呼叫了 web apis 了之後，就會立刻處於準備好的資料的狀態，就會把 cb 放到 task queue，等到 stack 的部份執行完成之後 event loop 才會把 task queue 的東西放上去。
+
+![](https://cdn-images-1.medium.com/max/800/1*_viiLjWuMFQKp__SjDMgBQ.png)
+
+**最主要的原因就是因為 event loop 會把 stack 的內容執行到清空之後，才把 queue 的內容放進 stack 執行。**
+
+因此，這些 web APIs 都是通過相同的工作原理，即使是一個 AJAX 的請求也是按照這個模式走。
+
+![](https://cdn-images-1.medium.com/max/800/1*IroQbnxqj-wFIz_i_Lfy7w.png)
+
+而在 event loop 需要處理的還不只是 task queue，還有像是 render queue，等，都是需要 event loop 去偵測並放入 stack 的一部分。
+
+所以通過 web APIs 跟 task queue 的協同處理，就可以讓 JavaScript 除了執行之外，還可以同時 render
+
+![](https://cdn-images-1.medium.com/max/800/1*Ts1m7I58NFSPXYt_5TUcQg.gif)
+
+講者 phillip Roberts 寫的： [event loop 網頁](http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D)
+
+## 總結：
+
+從這邊就可以知道，為什麼 JavaScript 可以這麼順暢的執行一些任務。主要就是依靠 Event loop 來協調任務，才不會阻塞卡住。
+
+講者也強調，要多使用 APIs 的方式，才不致於使網頁的效能很差。所以從對 event loop 的了解，我們在設計整個網頁的時候，也要能很好的利用 event loop 的機制來寫網頁。
+
+render queue 是一直執行的，按照作者意思是每隔一陣子就會執行，所以會一直呈現可執行狀態，所以特別需要 event loop。
+
+event loop 的機制：
+
+1. 一直持續檢查。
+2. 當 stack 有東西就先執行 stack 的部份，直到 stack 裡面的內容清空，執行完畢。
+3. 檢查 render queue ，然後執行。這邊沒細講不太清楚，要不要放入 stack，我是覺得應該要放。另一點是沒說 event loop 是先搜尋 render queue 還是 callback queue，但因為 render 在該網站看起來似乎優先，所以就放這個步驟。
+4. 檢查 callback queue，有一個內容就放入 stack，然後 stack 執行。
+5. 執行完畢，當 event 偵測到 stack 為空且 queue 有東西，就回到步驟三，繼續檢查。
+6. callback queue 是分開執行，一個上了 stack 之後，就把那個執行完成，才可以把下一個放入 stack，這樣才可以讓 render queue 有機會處理 render 的部份。

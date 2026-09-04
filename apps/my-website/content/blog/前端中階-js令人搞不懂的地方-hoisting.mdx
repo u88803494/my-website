@@ -1,0 +1,905 @@
+---
+title: "前端中階：JS令人搞不懂的地方-hoisting"
+slug: "前端中階-js令人搞不懂的地方-hoisting"
+description: "這部份文章是接續其他篇章，可以拉到最底下面參考。"
+date: 2019-09-22T14:06:58.492Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*VIQyoGuHYr4OMpk89Zqc1g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-hoisting-beb1fc451c2"
+---
+
+這部份文章是接續其他篇章，可以拉到最底下面參考。
+
+## 什麼是 hoisting（提升）？
+
+如果沒有賦值直接印出，會顯示錯誤如下：
+
+```
+console.log(b) // b is not defined
+```
+
+但如果在下方賦值，就會變成有定義沒賦值：
+
+```
+console.log(b) // undefined
+var b = 10
+```
+
+這是因為這種情況下，是看起來等於下方的樣子：
+
+```
+var b
+console.log(b) // undefined
+b = 10
+```
+
+這種情況就叫做變數提升
+
+提升的用途就是常用的部份就是 function
+
+```
+test();
+```
+
+```
+function test() {
+  console.log(123)
+}
+```
+
+這個 function 可以先呼叫在定義，就是因為有提升的功能才可以應用。
+
+但有例外情況。假如是把變數賦值一個 function 的話又不能提升 function
+
+```
+test(); // test is not a function
+```
+
+```
+var test = function () {
+  console.log(123)
+}
+```
+
+理由是提升的部份只有 test 的變數，所以就只是 undefined，那 undefined 當然就不是 function 了
+
+## hoisting 的順序
+
+hoisting 只會發生在它的範圍內，意思就是只會發生在該區塊內部。
+
+```
+var a = 'global';
+function test() {
+  console.log(a);
+  var a = 'local';
+}
+```
+
+```
+test();
+```
+
+```
+====上方等於下方這樣子====
+```
+
+```
+var a = 'global';
+function test() {
+  var a
+  console.log(a);
+  a = 'local';
+}
+```
+
+```
+test();
+```
+
+也就是只會發生在 function 的內部，因為在這種情況下一個 function 就是一個區塊。
+
+### 另外一個是 function 有提升的優先權：
+
+```
+function test() {
+  console.log(a); // [Function a]
+  function a () {
+```
+
+```
+  }
+  var a = 'local';
+}
+```
+
+```
+test();
+==================
+function test() {
+  console.log(a); // [Function a]
+  var a = 'local';
+  function a () {
+```
+
+```
+  }
+}
+```
+
+```
+test();
+```
+
+可以看到不管如何都是 function 先提升
+
+### 重複的 function 的情況
+
+```
+function test() {
+  console.log(a); // [Function a]
+  a(); // 2
+  var a = 'local';
+  function a() {
+    console.log(1)
+  }
+  function a() {
+    console.log(2)
+  }
+}
+test();
+```
+
+所以後面會蓋掉前面的 function 這很直覺。
+
+### 傳入的變數跟內部的變數一樣
+
+```
+function test(a) {
+  var a;
+  console.log(a)
+  a = 456;
+}
+```
+
+```
+test(123);
+// 123
+```
+
+這是因為已經賦值過了，所以重新宣告也不會改變其內部的值。 `var a;`  
+就會被當作不存在。除非在`var a;` 賦值 `var a = undefined;` 那麼結果就會變成 undefined
+
+### 變數跟 function 誰大？
+
+```
+function test(a) {
+  console.log(a)
+  var a = 10
+  function a() {
+
+  }
+  var a = 10
+}
+```
+
+```
+test(123)
+// [Function a]
+```
+
+從這邊看到 function 會蓋過變數的提升，所以 function 比較大
+
+順序：
+
+1. function
+2. arguments
+3. var
+
+從 ECMAScript 了解 hoisting
+
+小測驗：
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a);
+  var a = 7;
+  console.log('2.', a);
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a);
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+利用這個小測驗講解：
+
+```
+var a = 1;
+function test(){
+  var a
+  console.log('1.', a); // a 變數提升，所以答案是 undefined
+  a = 7; // 相當於
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a); // 30，在 inner 裡面被變動
+  function inner(){
+    console.log('3.', a); // 8
+    a = 30;
+    b = 200; // 沒賦值，所以被宣告成全域變數
+  }
+}
+test();
+console.log('5.', a); // 1，這邊的 a 跟 test() 裡面的沒影響
+a = 70;
+console.log('6.', a); // 70
+console.log('7.', b); // 200
+```
+
+ECMAScript 等於是 JavaScript 的規格書，所以可以直接從這邊看。ES6 的時候名詞變得不太一樣，這點需要注意。
+
+![](https://cdn-images-1.medium.com/max/800/1*LwbrsorzLhMp5vPpMoKC7g.png)
+
+當轉換成可以執行 code 的時候，就會進入一個 excution context 裡面。這會變成一個 stack，最上面的就是一可以執行的區域。
+
+![](https://cdn-images-1.medium.com/max/800/1*VIQyoGuHYr4OMpk89Zqc1g.png)
+
+這邊意思是每次進入一個區域就會變成一個 execution context，並按照 stack 的方式堆疊。堆疊由下面開始往上疊，執行由最上面開始執行。
+
+所有關於這個 scope 的資訊都會儲存在 execution context 內部。
+
+![每一個執行環境都會變成一個 variable object](https://cdn-images-1.medium.com/max/800/1*LJpk8qEAaOGgTEzs-R_ZPw.png)
+
+_每一個執行環境都會變成一個 variable object_
+
+每一個執行環境都會變成一個 variable object。在裡面被宣告的變數都會被加入 variable object
+
+variable object 就可以想像程式一個物件
+
+```
+VO: {
+  a: 1
+```
+
+```
+}
+```
+
+```
+function test() {
+  var a = 1
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*T5VX9iALTFlMQD29w6WTXA.png)
+
+![接續上文，因為剛好換頁，所以分開](https://cdn-images-1.medium.com/max/800/1*1MPneW86Aad8hYm-r2g_mQ.png)
+
+_接續上文，因為剛好換頁，所以分開_
+
+當進入 execution context 裡面的時候，會按照下列順序把宣告的東西綁定在 variable object 裡面：
+
+- 對於每個參數，都會把他放入 variable object 裡面，呼叫的是什麼就改寫什麼
+
+這邊的意思就是說，當進入 variable 的時候，就會直接改寫
+
+```
+VO: {
+  a: 1 -> 123 // 進入 function test 就把 a 值改寫
+  b: undefined
+}
+```
+
+```
+a = 1;
+```
+
+```
+function test(a, b) {
+
+}
+```
+
+```
+test(123);
+```
+
+- 對於 function 的宣告，一樣會放入 VO，當有同名變數的時候 function 就會取代
+
+```
+VO: {
+  a: 1 -> pointer to function a,
+  // 進入 function test 就把 a 改成是 function a 的記憶體位置
+  b: undefined
+}
+```
+
+```
+a = 1;
+```
+
+```
+function test(a, b) {
+  function a() {
+  }
+}
+```
+
+```
+test(123);
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*jli_QNhyfalWsBqu_-OL7g.png)
+
+- 對於變數的宣告。一樣會加到 variable object 上面，初始化成 undefined。當進入 variable object 的時候，如果有同名重複的就不重複宣告。
+
+```
+VO: {
+  a: 123,
+  b: 0x01(pointer to function b),
+  c: undefined // 因為有 c 所以變成 undefined
+}
+```
+
+```
+function test(a, b) {
+  function b() {
+  }
+  var a = 30; // 這邊的賦值就先不管他
+  var b = 30; // 賦值不管
+  var c = 30;
+}
+```
+
+```
+test(123);
+```
+
+這邊是指進入這個 function test 的狀況，產生 execution context 的時候，會這樣處理。
+
+從這邊執行的時候模型，就可以知道為什麼上面會這樣處理。
+
+## 理解 Execution Context 與 Variable Object
+
+接下來就講解 JavaScript 是怎麼樣執行前面的小測驗的。
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a);
+  var a = 7;
+  console.log('2.', a);
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a);
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+當開始執行的時候，會創有一個 global EC(Execution Context)，同時建立 global VO(variable object)，
+
+```
+global EC
+global VO {
+```
+
+```
+}
+```
+
+第一件事情是找參數，但是這邊是 global EC，所以沒有參數問題。  
+所以就開始找 function，找到有一個 `test()`
+
+```
+global EC
+global VO {
+  test: func,
+```
+
+```
+}
+```
+
+然後找變數宣告，就找到一個 `var a` ，所以就放入並且初始化成 undefined
+
+```
+global EC
+global VO {
+  test: func,
+  a: undefined,
+```
+
+```
+}
+```
+
+當執行之後 a 就會被換成 1
+
+然後進入 function test()，就會創造另外一個 Execution context
+
+```
+test EC
+test VO {
+  inner: true,
+  a: undefined
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+```
+
+```
+}
+```
+
+所以執行的時候，到了第一個印出部份，就會印出 undefined
+
+```
+test EC
+test VO {
+  inner: true,
+  a: undefined
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+```
+
+```
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a);
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a);
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+然後繼續往下， `var a = 7` 因為已經有 a 了，所以等於只是賦值而已。  
+`a = 7` ，到了第二個印出，就會印出 7。
+
+```
+test EC
+test VO {
+  inner: true,
+  a: 7
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+```
+
+```
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a);
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+繼續執行下去 `a++` ， a 的值變成 8， `var a` ，因為已經有 a 了，所以就不管它，然後到了 `inner()` 所以就會進入這個 function
+
+```
+inner EC
+inner VO { // 因為沒東西，所以就是空的
+```
+
+```
+}
+```
+
+```
+test EC
+test VO {
+  inner: true,
+  a: 8
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+```
+
+```
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a);
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+然後是執行第三個印出，因為 inner 的 VO沒東西，所以就會往上面找，找到 test VO 裡面有資料，就會應用這邊的資料。
+
+```
+inner EC
+inner VO { // 因為沒東西，所以就是空的
+```
+
+```
+}
+```
+
+```
+test EC
+test VO {
+  inner: true,
+  a: 8
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+```
+
+```
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a); // 8
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+然後執行到 `a = 30; b = 200;` 就會改變 a 的值，b 的部份，因為一路往上找到 global 都沒有，所以就會在全域宣告變數 b，並且賦值。
+
+```
+inner EC
+inner VO { // 因為沒東西，所以就是空的
+```
+
+```
+}
+```
+
+```
+test EC
+test VO {
+  inner: true,
+  a: 30
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+  b: 200
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a);
+  function inner(){
+    console.log('3.', a); // 8
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+然後 `inner()` 結束了，就退出 EC，然後繼續執行下去，印出第四個資料
+
+```
+test EC
+test VO {
+  inner: true,
+  a: 30
+```
+
+```
+}
+```
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1,
+  b: 200
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a); // 30，因為已經被變動了
+  function inner(){
+    console.log('3.', a); // 8
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a);
+a = 70;
+console.log('6.', a);
+console.log('7.', b);
+```
+
+`test()` 也執行完了，所以就退出`test()` ，繼續往下印出第五個資料。然後往下， a 賦值 70 ，接著印出第六個。再來印出第七個，b 已經被改成 200，就印出 200，然後就執行結束。
+
+```
+global EC
+global VO {
+  test: func,
+  a: 1, -> 70, // a = 70 被改變
+  b: 200
+}
+```
+
+```
+=============
+```
+
+```
+var a = 1;
+function test(){
+  console.log('1.', a); // undefined
+  var a = 7;
+  console.log('2.', a); // 7
+  a++;
+  var a;
+  inner();
+  console.log('4.', a); // 30，因為已經被變動了
+  function inner(){
+    console.log('3.', a); // 8
+    a = 30;
+    b = 200;
+  }
+}
+test();
+console.log('5.', a); // 1
+a = 70;
+console.log('6.', a); // 70
+console.log('7.', b); // 200
+```
+
+## let 與 const 的詭異行為
+
+算是補充資料，因為 let 跟 const 的表現比較不一樣。
+
+```
+console.log(a)
+let a = 10;
+// a is not defined
+```
+
+這樣就會以為是沒有 hoisting
+
+```
+let a = 10
+function test() {
+  console.log(a)
+  let a = 30;
+}
+```
+
+```
+test();
+// a is not defined
+```
+
+照理來說應該會往上找到全域，但卻顯示 is not defined，這邊就可以確認到應該是有 hoisting，只是 hoisting 的表現跟我們想的不一樣。
+
+```
+let a = 10
+function test() {
+  let a
+  console.log(a)
+  a = 30;
+}
+```
+
+```
+test();
+// a is not defined
+```
+
+所以可以看成如上方，只是底層是不給存取這部份，存取就顯示  
+ is no defined。
+
+所以在提升的位置，到賦值之前都不能使用，這區域就被稱為 TDZ(Temporal Dead Zone)
+
+2019/10/14 發現，現在會顯示
+
+```
+ReferenceError: Cannot access 'a' before initialization
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*hAI-XPp-0SG4oDXwutsqVA.png)
+
+這樣就可以更加明確的知道是 TDZ 的問題。
+
+## 總結：
+
+在這裡把 hoisting 弄懂了，底層到底在幹麻也有了大致上的了解。在自己試著解的時候，結果還犯了錯誤，原來只是我有些地方沒注意到。
+
+這表示 hoisting 真的很多細節需要注意，主要也跟 execution context 有關係，之前也有寫過相關的學習筆記。
+
+但那時候比較偏向硬記規則，但通過對於 execution context 的理解，讓我在這邊更容易理解一些。
+
+主要是知道 execution context 在幹麻即可，不過這邊的執行寫的比較不像 stack，好在的是我已經知道 Stack 了，所以在後面的學習部份切換比較不會有問題。
+
+也因為希望可以更深入理解，所以就強調性的把執行的部份，詳細的寫出來，這樣可以把整個狀況弄的更清楚。
+
+剩下部份就是再往後面深入理解跟作筆記，這樣才可以學得很完整。
+
+上一篇：[前端中階：JS令人搞不懂的地方-變數的生存範圍（scope）](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8%E7%9A%84%E7%94%9F%E5%AD%98%E7%AF%84%E5%9C%8D-scope-b548fa067687?source=your_stories_page---------------------------)
+
+下一篇：[前端中階：JS令人搞不懂的地方-Closure(閉包)](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-closure-%E9%96%89%E5%8C%85-cbb9c6a4185c?source=your_stories_page---------------------------)

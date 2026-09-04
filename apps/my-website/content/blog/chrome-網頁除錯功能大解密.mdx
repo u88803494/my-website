@@ -1,0 +1,142 @@
+---
+title: "Chrome 網頁除錯功能大解密"
+slug: "chrome-網頁除錯功能大解密"
+description: "應用開發者工具可以檢查網頁的元素以及各種狀態，可以從選單開啟，或是直接使用 F12 開啟，又或是直接針對想了解的元素直接右鍵案檢查即可。"
+date: 2019-05-25T13:35:12.683Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*mVb9U8dblhw-HRmJnKi9TQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/chrome-%E7%B6%B2%E9%A0%81%E9%99%A4%E9%8C%AF%E5%8A%9F%E8%83%BD%E5%A4%A7%E8%A7%A3%E5%AF%86-9b057688a5af"
+---
+
+應用開發者工具可以檢查網頁的元素以及各種狀態，可以從選單開啟，或是直接使用 F12 開啟，又或是直接針對想了解的元素直接右鍵案檢查即可。
+
+如果是針對元素右鍵檢查的話， 會直接看到上面有很多設定值可以修改。
+
+調整除錯介面以符合螢幕解析度
+
+在介面時，介面的右上角有一個關閉按鈕旁邊的 … 可以點開就可以選擇要把 dev tools 放在哪種位置，也可以獨立出來，以方便使用。
+
+dev tools 可以模擬手機載具的效果在與關閉按鈕的同一排最左邊，可以看到一個像手機的圖示，就可以從這邊變更螢幕大小，利用這點就可以很輕易的在網頁上面測試自己的響應式網站
+
+## 搜尋想要 debug 的 html css
+
+右鍵檢查想要看的元素
+
+也可以在 dev tools 開啟的時候，按下 ctrl + F 就可以用關鍵字搜尋
+
+除了用關鍵字搜尋之外，也可以用 標籤 > xxx 搜尋標籤底下所需要的標籤或是 class 名稱
+
+在搜尋 css 的時候，可以透過 style 下面的格子來搜尋
+
+### 使用 chrome dev tools 撰寫前端程式碼
+
+可以直接針對 dev tools 撰寫程式碼，但這只並不會寫在實際的檔案上面，所以需要另外複製回實際的檔案才可以儲存。
+
+另外工具上面除了可以做編輯之外，還可以直接拖曳元素改變位置，都會直接呈現在網頁上面，所以很方便編輯作業。
+
+### 偵測狀態事件
+
+設置之後可以強制啟用該事件
+
+什麼事偵測狀態事鍵？也就是偽類 :hover :active 之類的 [說明](https://www.jianshu.com/p/52f5006efe19)
+
+使用這個方法就可以強制啟用該事件
+
+![紅色處](https://cdn-images-1.medium.com/max/800/1*mVb9U8dblhw-HRmJnKi9TQ.png)
+
+_紅色處_
+
+點開之後只要打勾就可以強制該事件啟用
+
+## CSS3 transtion 效率
+
+![](https://cdn-images-1.medium.com/max/800/1*o1VKcIarl7r6kRV07CUieA.png)
+
+點擊紅框處就會出現一個視窗可以調整效率
+
+## 偵測 CSS3 Animation 效果
+
+![](https://cdn-images-1.medium.com/max/800/1*k60-rl6aHy_kBUnAaugVtg.png)
+
+從這邊就可以叫出調整動畫的功能
+
+## JavaScript 與效能調校
+
+### 從 Network 了解網頁資訊
+
+這次事 dev tools 裡面的 network 選像。
+
+在瀏覽器打開 network 頁面之後，在連入網頁可以發現有很多的資訊出現。
+
+左下角有個 xx requests，代表連上這個網頁下載了 xx 個檔案，也會顯示有多少 kb的資料，讀取時間多久等等的
+
+![](https://cdn-images-1.medium.com/max/800/1*JgsiFDpe2peDGWWms0E_6w.gif)
+
+### 利用 console 執行與維護 JavaScript
+
+在之前很多人都會使用 alert 來跳出視窗顯示。其實比較推薦的是使用 Console.log 搭配 dev tool，就可以直接在 console 上面看到顯示什麼。還有一個好處是可以直接在上面撰寫程式直接做測試
+
+可以利用 console.table(想看的內容)，可以直接做出一個列表來看出來有什麼資料
+
+console.time(執行的內容) 搭配 console.timeEnd 可以測出執行要多久的時間。
+
+### 如何線上除錯 JavaScript (event)
+
+在 Dev tool 可以監聽有哪些事件
+
+![箭頭在往下點可以看到更多的詳細資訊](https://cdn-images-1.medium.com/max/800/1*vzvUMCNKmqo17UjA2EY2fA.gif)
+
+_箭頭在往下點可以看到更多的詳細資訊_
+
+還可以透過 sources 來設定中斷點
+
+像這邊設置 click 為中斷點，就是在出現 click 事件的時候，就出現中斷。
+
+![這邊是設置之後，點擊那個點擊按鈕，所以就被中斷了](https://cdn-images-1.medium.com/max/800/1*IYZi7SJIZ5mM5ME7dXbFvw.gif)
+
+_這邊是設置之後，點擊那個點擊按鈕，所以就被中斷了_
+
+### 如何線上除錯 JavaScript (斷點篇)
+
+![紅色是設置的中斷點](https://cdn-images-1.medium.com/max/800/1*6oto_3Br11kCoKnI8X3pGA.png)
+
+_紅色是設置的中斷點_
+
+在中斷點這邊，中斷的部分並不會執行到，所以顯示的會是執行這行之前的資訊，透過藍色的按鈕就可以執行到下一行的斷點。
+
+利用這點就可以測試顯示出的素質，例如說利用 for 迴圈
+
+![可以看到每次點擊就會使 block 那邊顯示的 i 值有所變化](https://cdn-images-1.medium.com/max/800/1*WBetUlKouDuiyw_tnsNzvg.gif)
+
+_可以看到每次點擊就會使 block 那邊顯示的 i 值有所變化_
+
+watch 也可以監視數值的變化，只是 watch 就需要手動添加才會監視。
+
+### Performance
+
+可以監視效能如何。
+
+利用上面提示的按鍵，就可以讓他錄製執行的內容，錄製完成之後，就會跳出一些報表
+
+可以區間選擇看 FPS 多少等等的各項數據
+
+## 好用工具介紹
+
+pesticide for chrome 可以方便看到網頁如何排版的工具
+
+wappalyzer 可以看到一個網站用了哪些函式庫，除此之外還可以方便是不是 WordPress 架站的。
+
+### 利用 chrome 創建 web server
+
+web server for chrome 這個套件可以安裝簡易伺服器
+
+chrome devtools 教學資源補充
+
+[developer.chrome.com](https://developer.chrome.com/home) chrome dev tools 的官方網站
+
+chrome devtools 中文手冊 原網址不太能用
+
+## 收穫：
+
+更明白整個 dev tools 如何使用，也釐清了之前疑惑的按鍵的用途。在這邊我學到了更多應用 dev tools 的方法了。

@@ -1,0 +1,149 @@
+---
+title: "讓 Windows 也可以客製化 Terminal：Q&A"
+slug: "讓-windows-也可以客製化-terminal-q-a"
+description: "紀錄幾個自己碰到的問題。"
+date: 2021-05-22T05:24:54.424Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%AE%93-windows-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%A2%E8%A3%BD%E5%8C%96-terminal-q-a-f577a2edb7c7"
+---
+
+## 前言
+
+本來到 Terminal 就應該結束了，但實際上因為還有很多小細節的關係，所以另外在開一篇來寫這些細節，一方面是給自己的紀錄，所以之後有發現更多小細節要修改，大致都會紀錄在這篇內容中。
+
+## 我要怎麼找到原本硬碟中的資料？
+
+這部份其實安裝好後應該都會出現在預設路徑中，所以在 WSL 中，會把原本的硬碟掛載在 Linux 中的 mnt 資料夾中：
+
+```
+# 切換到 C 槽
+cd /mnt/c
+```
+
+```
+# 切換到 D 槽
+cd /mnt/d
+```
+
+## 無法使用 node
+
+因為 wsl 中的 Ubuntu 沒有安裝 node，所以會推薦直接安裝 nvm 方便管理 node 版本。
+
+安裝 nvm：
+
+```
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+```
+
+然後設定一下：
+
+```
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+```
+
+然後輸入 `nvm -v`，有看到版本號，就代表成功了，但還沒結束。
+
+接下來要安裝需要的 node 版本：
+
+```
+# 安裝最新版 node，輸入
+nvm install node
+```
+
+```
+# 或是選擇自己想要的版本，像我想安裝目前最新的 LTS 版的 node
+nvm install 14.17
+```
+
+安裝好後，就可以使用 `npm run start` 的指令了，但會發現速度怎麼這麼慢呢？所以就需要另外一個解決方式了。
+
+## Node 怎麼這麼慢？
+
+會慢是因為每次開啟新的 session 時，nvm 都會檢查所有版本的資料夾，我參考[這篇](https://psheon.github.io/2019/10/04/workspace-setup/)的作法，通過設定 `~/.zshrc` 即可。
+
+```
+# 增加延遲載入函數
+lazy_load() {
+  echo "Lazy loading nvm with $3 ..."
+```
+
+```
+local -a names
+  if [[ -n "$ZSH_VERSION" ]]; then
+    names=("${(@s: :)${1}}")
+  else
+    names=($1)
+  fi
+  unalias "${names[@]}"
+  . $2
+  shift 2
+  $*
+}
+group_lazy_load() {
+  local script
+  script=$1
+  shift 1
+  for cmd in "$@"; do
+    alias $cmd="lazy_load \"$*\" $script $cmd"
+  done
+}
+```
+
+```
+# 引入延遲載入函數(請自行設定關鍵字)
+export NVM_DIR="$HOME/.nvm"
+group_lazy_load $HOME/.nvm/nvm.sh nvm node npm npx yarn pm2
+unset -f group_lazy_load
+```
+
+另外一個原因，下面才會說明，是跟下面那個問題同一個因素。
+
+## React 無法偵測修改後刷新(live reload 失效)
+
+這個部份的最底層原因是因為之前說過的 WSL2 的架構的原因，因為 WSL2 是掛載的，所以跨 OS 溝通會有很大的問題存在。
+
+> 見 ：[WSL1 與 WSL2 架構上的差異](https://hugh-program-learning-diary-js.medium.com/%E8%AE%93-windows-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%A2%E8%A3%BD%E5%8C%96-terminal-%E5%9F%BA%E7%A4%8E%E8%A8%AD%E5%AE%9A%E7%AF%87-a146febfdd10)。
+> 更多討論見：[HRM not working on WSL 2](https://github.com/microsoft/WSL/issues/4417)
+
+解決的作法有兩個
+
+1. 改用 WSL1，
+2. 直接把檔案放在 Linux 之下，以我的習慣我會直接放在 `~/` 底下，另外建一個專門放自己的檔案的地方。
+
+```
+# 切到 lunux 上個人資料夾
+cd ~/
+```
+
+```
+# 看一下路徑
+pwd
+/home/[username]
+# 所以 ~/ 指的資料夾是自己的使用者資料夾，[username] 是當初建立 linux 指定的
+```
+
+```
+# 建立資料夾
+mkdir repository
+```
+
+```
+# 切進去
+cd repository
+```
+
+```
+# 複製自己的專案或是做任何想做的
+git clone xxxx
+```
+
+可以測試一下，會發現存在 Linux 跟 Windows 硬碟上有著速度上的巨大差異。
+
+### 相關篇章
+
+> 資料來源：
+> [NVM official GitHub](https://github.com/nvm-sh/nvm)
+> [用 10 分鐘建置 Windows 全端、深度學習的開發環境](https://psheon.github.io/2019/10/04/workspace-setup/)
+> [HRM not working on WSL 2](https://github.com/microsoft/WSL/issues/4417)

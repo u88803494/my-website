@@ -1,0 +1,412 @@
+---
+title: "網路基礎概論：HTTP協定"
+slug: "網路基礎概論-http協定"
+description: "什麼是 HTTP？"
+date: 2019-05-12T05:55:58.602Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%B6%B2%E8%B7%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E8%AB%96-http%E5%8D%94%E5%AE%9A-f97e334a92e"
+---
+
+## 什麼是 HTTP？
+
+**超文本傳輸協定**（英語：**H**yper**T**ext **T**ransfer **P**rotocol, **HTTP**） [wiki](https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE)
+
+> **HTTP是一种能够获取如 HTML 这样的网络资源的**[protocol](https://developer.mozilla.org/en-US/docs/Glossary/protocol)(通讯协议)。**它是在 Web 上进行数据交换的基础，是一种 client-server 协议，也就是说，请求通常是由像浏览器这样的接受方发起的。一个完整的Web文档通常是由不同的子文档拼接而成的，像是文本、布局描述、图片、视频、脚本等等。**
+
+> [來源](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview)
+
+什麼是 HyperText？
+
+> **超文字**（英語：**Hypertext**）是一種可以顯示在[電腦顯示器](https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E9%A1%AF%E7%A4%BA%E5%99%A8)或其他[電子裝置](https://zh.wikipedia.org/wiki/%E9%9B%BB%E5%AD%90%E8%A8%AD%E5%82%99)的文字，其中的文字包含有可以連結到其他欄位或者文件的[超連結](https://zh.wikipedia.org/wiki/%E8%B6%85%E9%80%A3%E7%B5%90)，允許從目前閱讀位置直接切換到超連結所指向的文字。超文字文件透過超連結相互連結，超連結通常透過滑鼠點選、按鍵設定或觸控螢幕來點閱。
+
+> [by wiki 超文本](https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC)
+
+網頁前端跟網頁後端就是在透過 HTTP 來溝通，也是網際網路的基礎，HTTP 就是協定的一種。
+
+在這邊突然想到暗網的資料，所以就查了一下，原來以為是協定的不同，仔細看一下還是跟 HTTP 協定比較無關，這人覺得這篇比較清楚跟比較中立。https://www.ettoday.net/dalemon/post/34297
+
+在這篇可以看到 暗網一樣也是使用 http 協定 [解析它的來由與技術原理](https://www.techbang.com/posts/21262-house-of-cards-network-of-mysterious-dark-web-really-exists-analysis-of-its-origins-and-technical-principles)
+
+## HTTP request
+
+### 基礎知識：
+
+Client 客戶端：我們的電腦、瀏覽器等
+
+Server 伺服端：提供服務的伺服器
+
+Client → request 請求→ Server
+
+Client ← response 回應← Server
+
+> **用戶端**（英語：Client），是指與[伺服器](https://zh.wikipedia.org/wiki/%E4%BC%BA%E6%9C%8D%E5%99%A8)相對應，為客戶提供本地服務的程式。 [by wiki](https://zh.wikipedia.org/wiki/%E5%AE%A2%E6%88%B7%E7%AB%AF)
+
+> 何謂伺服器(Server) ?
+
+> 定義
+
+> 1. 一個管理資源並為使用者提供服務的電腦軟體，通常分為檔案伺服器（能使使用者在其它電腦存取檔案），資料庫伺服器和應用程式伺服器。
+
+> 2. 執行以上軟體的電腦。 [by blueeyes](https://www.blueeyes.com.tw/knowledge_server.php)
+
+可以從 chrome 上面案 F12 看到 header . response等資訊。
+
+header 包含了很多種 header。request 也會在裡面。
+
+response 就會有 html 語法
+
+1. 瀏覽器傳一個 HTTP request 到 Server
+2. Server 回傳一個 response ，通常是 HTML 文字，只有瀏覽器看得懂
+
+瀏覽器 → 製造 request → 傳給 Server
+
+server → 處理 → 傳 response 回來
+
+## DNS Server
+
+Domain Name System, DNS。
+
+類似計程車的地位，只需要跟計程車司機說地標，就可以帶你到正確的目的地。
+
+Client → github.com 是哪 → DNS Server
+
+Client ← 13.250.177.223 ← DNS Server
+
+專門處理 Domain 跟實際 IP 的轉換
+
+### /hosts
+
+> **hosts檔案**（域名解析檔案）是一個用於儲存[電腦網路](https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C)中各節點資訊的電腦檔案。這個檔案負責將[主機名稱](https://zh.wikipedia.org/wiki/%E4%B8%BB%E6%A9%9F%E5%90%8D%E7%A8%B1)對映到相應的 [IP 位址](https://zh.wikipedia.org/wiki/IP%E5%9C%B0%E5%9D%80)。hosts 檔案通常用於補充或取代網路中 [DNS](https://zh.wikipedia.org/wiki/DNS) 的功能。和 DNS 不同的是，電腦的使用者可以直接對hosts檔案進行控制。
+
+> [host文件](https://zh.wikipedia.org/wiki/Hosts%E6%96%87%E4%BB%B6) by wiki
+
+小時候裝盜版軟體的時候，會需要我們去改 hosts IP 像是
+
+```
+kweidfsnle.com 127.0.0.1
+```
+
+它可以把一個 domain name 對應到一個 IP 位置
+
+當電腦在發送 request 的時候 local host 會先去 /hosts 查詢，就會直接返回這邊的結果，假如在這個時候，系統要求要這個網址 kweidfsnle.com 就會直接得到這個 IP 位置 127.0.0.1
+
+一般來說，通常測試的時候才會使用到 /host，代表的是自己電腦上的服務。
+
+所以以前述盜版的例子來說：
+
+例如 adobe
+
+正常的流程 request → adobe server → response (確認是否是正版)
+
+盜版的流程 request → ??? → xxx (因為根本沒有這項服務，所以不會去確認)
+
+**其實 DNS 在做的事情很簡單，就是把請求的 domain name 轉換成 IP 位置而已**
+
+## 瀏覽器只是一個程式
+
+這是絕不可以忘記的重點。
+
+瀏覽器發送 request 到一個網站，然後拿到一個 response 然後把內容渲染出來。所以假如今天沒有瀏覽器的話，一樣可以拿到這個 response，可以利用 JavaScript 的程式。
+
+[Request - Simplified HTTP client](https://github.com/request/request) 這套就可以在 CLI 上面使用
+
+```
+In command line:
+npm install request
+```
+
+安裝這套，然後把頁面上的東西放到 index.js
+
+```
+index.js:
+const request = require('request');
+```
+
+```
+request('http://www.google.com', function (error, response, body) {
+  console.error('error:', error); // Print the error if one occurred
+  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+  console.log('body:', body); // Print the HTML for the Google homepage.
+});
+```
+
+request 後面接上想要去的網址
+
+就可以得到有無錯誤、狀態代碼、body 的資訊。
+
+所以也可以利用 command line 抓取檔案下來。
+
+**脫離了瀏覽器，但是自己寫程式的話還是可以做到很多瀏覽器可以做到的事情。我們依然可以發 request 到任何的 server，而且可以拿到 response。**
+
+## Header 與 Body
+
+Header 就是額外資訊；Body就是主要資訊。
+
+request 跟 response 都分成 Header 跟 Body。
+
+```
+const request = require('request');
+```
+
+```
+request(
+ 'https://www.google.com',
+ function (error, response, body) {
+  console.log(response.headers) // 取得 google 的 header
+ }
+);
+```
+
+## GET 與 POST
+
+GET：拿資訊，是最常見的，所以通常我們都會忽略有這回事。
+
+在網址列輸入一個網址連對方網路，通常就是發一個 GET 指令給對方，然後再看對方的 response，就會在這邊的瀏覽器顯示 response 的資訊。
+
+POST：例如再登入網站的時候，輸入表單之後，就是使用 POST 可以在 header 往下面拉，就會看到 Form Data 這邊就是登入的時候填寫的內容。點選 view source 可以看到一堆像亂碼的東西，這個就是 Form Data 的 body，而 chrome 這邊則是預設用比較容易讀懂的方式顯示。
+
+## 其他的 HTTP Method
+
+PUT： put 方法會取代掉指定資源的全部資訊。
+
+舉例：使用這個指令的時候
+
+```
+原本是：
+雞腿飯 2
+排骨飯 5
+```
+
+```
+使用指令
+PUT
+雞腿飯 3
+=====資料結果======
+雞腿飯 3 // 就會用新資料把所有資料都取代掉了
+```
+
+Patch：指定資源的部分修改，所以用 patch 會比較好，比較不會無意間蓋掉其他資源。但通常都是混用，因為太像了。
+
+```
+原本是：
+雞腿飯 2
+排骨飯 5
+```
+
+```
+使用指令
+Patch
+雞腿飯 3
+=====資料結果======
+雞腿飯 3 // 只會把一樣內容做更改
+排骨飯 5
+```
+
+Delete：刪除指定資源。
+
+Options：會回傳該伺服器支援哪些方法（Method）
+
+MDN：[HTTP 請求方法](https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Methods)
+
+## HTTP Status code
+
+[HTTP 狀態碼](https://zh.wikipedia.org/wiki/HTTP%E7%8A%B6%E6%80%81%E7%A0%81) by wiki
+
+2 開頭最常見，代表的是成功
+
+204 通常是刪除資源成功會有這種狀態
+
+3 開頭代表的是重新導向
+
+最常見的是301 . 302
+
+301 就是永久的被移到新的位置
+
+```
+GET a.com
+status code: 301 // 會伴隨一個 header Location
+Location: b.com
+所以下次只要請求 a.com
+瀏覽器就會直接導到 b.com
+```
+
+```
+GET a.com → b.com
+```
+
+302 是暫時的被移到新的位置
+
+```
+GET a.com
+status code: 302 // 會伴隨一個 header Location
+Location: b.com
+所以下次再請求 a.com
+瀏覽器還是會去請求 a.com
+```
+
+```
+GET a.com
+status code: 302
+Location: b.com // 後來才會再次被導向 b.com
+```
+
+就像是去餐廳吃飯，如果看到餐廳的搬遷公告，下次就會直接去新的地點了，如果看到的是暫時性的搬遷，例如說在裝潢，那下次要去的時候還是會先去原來的地方看看，好了解是裝潢好了嗎？還是說還是一樣。
+
+4 開頭是用戶端錯誤
+
+常見的就是 404 not found
+
+5 開頭是伺服端的錯誤
+
+像是搶票的時候常常會出現這種錯誤
+
+500 或是 503 比較常見
+
+```
+快速記憶：
+1** : hold on
+2** : here you go
+3** : go away
+4** : You fucked up // 你搞砸
+5** : I fucked up // 我搞砸
+```
+
+## 實作一個超簡易 HTTP Server
+
+```
+server.js:
+var http = require(‘http’) // 因為已經內建函式庫，可以直接呼叫
+```
+
+```
+var server = http.createServer(handleRequest);
+// 這樣就會 create 一個 server，裡面還可以放一個 function
+```
+
+```
+function handleRequest (req, res) {
+ console.log(req.url) // 顯示 url
+ res.write(‘hello’)
+ res.end() // response 結束
+}
+```
+
+```
+server.listen(5000) // (port)
+```
+
+寫這樣就可以使用 node server.js 直接執行，就會發現一直在執行中，但也沒跳出任何東西。因為這段程式碼沒有要求要顯示任何東西。這是很正常的，因為一個 server 端本來就是要一直處在那邊才可以接收任何訊息。
+
+接著就可以在瀏覽器輸入 http://localhost:5000/ 就會出現 hello，這就是前段程式碼的內容。
+
+然後就會看到 Command line 顯示了一些資訊。
+
+```
+λ node server.js
+/ // 因為這邊是顯示 url，而我們是使用本地的，這行就是根目錄的意思
+/favicon.ico // 這個是網頁的 icon 通常瀏覽器預設會發 request 去得到 icon
+```
+
+我們也可以更進一步，讀取 hello 在網址輸入 http://localhost:5000/hello
+
+```
+
+λ node server.js
+/
+/favicon.ico
+/hello // 切換目錄又跑一次
+/favicon.ico
+```
+
+這時候如果把 server 關掉，就會不行執行了，因為已經沒有 server 來處理這些 request。
+
+這時候也可以在修改 server
+
+```
+var http = require('http') // 因為已經內建函式庫，可以直接呼叫
+```
+
+```
+var server = http.createServer(handleRequest);
+// 這樣就會 create 一個 server，裡面還可以放一個 function
+function handleRequest (req, res) {
+ console.log(req.url)
+ if (req.url === '/') { // 等於根目錄的話
+  res.write('welcome!')
+  res.end()
+  return
+ }
+ if (req.url === '/hello') { // 等於 /hello 的話
+  res.write('hello')
+  res.end()
+  return
+ }
+
+ if (req.url === '/redirect') {
+  res.writeHead(200, {
+   'lidemy': ' good' // 這區是 header，可以在開發者工具看得到
+  })
+  res.end()
+  return
+
+ }
+ res.writeHead('404')
+ res.end()
+}
+```
+
+```
+server.listen(5000) // (port)
+```
+
+所以如果是重新導向的話 ，只要改代碼加 Location : 網址即可
+
+```
+var http = require(‘http’) // 因為已經內建函式庫，可以直接呼叫
+```
+
+```
+var server = http.createServer(handleRequest);
+// 這樣就會 create 一個 server，裡面還可以放一個 function
+function handleRequest (req, res) {
+ console.log(req.url)
+ if (req.url === ‘/’) { // 等於根目錄的話
+ res.write(‘welcome!’)
+ res.end()
+ return
+ }
+ if (req.url === ‘/hello’) { // 等於 /hello 的話
+ res.write(‘hello’)
+ res.end()
+ return
+ }
+
+ if (req.url === ‘/redirect’) {
+ res.writeHead(302, {
+ ‘Location’: ‘http://goole.com' // 這樣就可以轉到 google
+ })
+ res.end()
+ return
+
+ }
+ res.writeHead(‘404’)
+ res.end()
+}
+```
+
+```
+server.listen(5000) // (port)
+```
+
+但 google 也會在轉址一次到 http://www.google.com
+
+在這邊可以理解到為什麼有些網址可以不輸入 www 有些則不行，原來是這邊的設定上的差異。所以我就試著開著開發者工具，然後在網址上面輸入 kimo.com.tw 然後發現被轉址到 tw.yahoo.com 了，上面也寫著 301，原來如此。
+
+總結：
+
+http 就是個協定，就是為了要方便網路上的傳輸。
+
+瀏覽器就是個程式而已，替我們收發處理網路上的一些事情，瀏覽器上面會有些限制，而不是 server 本身的限制，所以我們是可以繞過這些限制。甚至可以自己做出一個瀏覽器。
+
+收穫：可以大致了解 http 是個協定，目的就是方便網路傳輸以及溝通，有很多的代號也在這邊可以獲得理解了。我想這些代號應該就是為了節省網路的費用吧！因為利用代號可以省下輸入輸出很多文字，而以前的網路應該挺貴的，所以也是一樣每個資源都要省，才會使用代號這種方式。也從代號這邊讓我理解到很多網站換新網址的時候都可以自動轉跳的原理，原來就是 http 的功能而已。

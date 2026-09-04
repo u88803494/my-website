@@ -1,0 +1,76 @@
+---
+title: "TypeScript 最後一塊型別拼圖：Generics type"
+slug: "typescript-最後一塊型別拼圖-generics-type"
+description: "Generics"
+date: 2021-10-23T03:55:37.048Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*hlX3rd2xXhWlSM_XLPdJlw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/typescript-%E6%9C%80%E5%BE%8C%E4%B8%80%E5%A1%8A%E5%9E%8B%E5%88%A5%E6%8B%BC%E5%9C%96-generics-type-515457f9dbd2"
+---
+
+## Generics
+
+是一種特別的型別，是只在定義宣告時，先不指定具體的型別，而是可以執行的時候才確認型別的特殊方式。
+
+在 array of number 中可以使用：
+
+```
+let array1: number[] = [1, 2, 3];
+```
+
+來指定型別，其實也可以使用
+
+```
+let array2: Array<number> = [1, 2, 3];
+```
+
+來做同樣的處理，在 IDE 中，把滑鼠指向 `array2` 會發現他顯示的跟第一個是一樣的：
+
+![](https://cdn-images-1.medium.com/max/800/1*yYsO2_biIVlxaK89qFaQlA.png)
+
+今天假設有一個函式可以回傳最後一個值：
+
+![](https://cdn-images-1.medium.com/max/800/1*G1o3x1n7IXB5z_R00E774A.png)
+
+就可以發現最終結果會得到數字型別，而如果想要處理字串，則會報錯。
+
+![](https://cdn-images-1.medium.com/max/800/1*hlX3rd2xXhWlSM_XLPdJlw.png)
+
+但我們又希望去可以處理的話，要怎麼辦呢？
+
+第一個想到的作法是可以使用聯合型別
+
+![](https://cdn-images-1.medium.com/max/800/1*3cGP9uAi_Ts3Q6Ntnp2r2g.png)
+
+但這都是訂死的，並不能完全解決問題，所以就輪到 Generics type 登場了，我們可以在函數前面加上 `<>` 來指定這是一個 Generics 並且直接使用。
+
+![](https://cdn-images-1.medium.com/max/800/1*epNLMHtMURlBwMfy4mqrVQ.png)
+
+![](https://cdn-images-1.medium.com/max/800/1*21kZcO5zj6rTGvwwwy_pOg.png)
+
+這樣就發現 l1 跟 l2 分別是不同型別了。而 `T` 是一個約定俗成的寫法。
+
+當然其實我們也可以在呼叫時，直接指名回傳值。
+
+![](https://cdn-images-1.medium.com/max/800/1*t-u1mpsOHrBm3oh5ViilCQ.png)
+
+這樣 l3 就會是字串或是布林值
+
+另外一個例子：
+
+![](https://cdn-images-1.medium.com/max/800/1*8UYCtr2ln6l_4gUiE7xxDw.png)
+
+在這例子中，我們需要的是兩個分別是不同的型別，除了直接指定之外，還可以使用 Generics 來達成。
+
+![](https://cdn-images-1.medium.com/max/800/1*LqAezKvcjJ4zaff95PaH2A.png)
+
+可以發現被自動指定型別了，所以有多個不同的 Generics 就可以用逗號隔開。
+
+當然我們也可以直接指定型別：
+
+![](https://cdn-images-1.medium.com/max/800/1*RU9kg2OKmf5oafLTdIvo_w.png)
+
+或是我們想省點事情的話，還可以指定預設的 Generics 型別。
+
+![](https://cdn-images-1.medium.com/max/800/1*LKYjsmN3lFrWi_R7JtKWLw.png)

@@ -1,0 +1,717 @@
+---
+title: "Redux 作業：為了 blog 加上 redux 吧！"
+slug: "redux-作業-為了-blog-加上-redux-吧"
+description: "Notice 話說上次忘了寫作業筆記XD 所以這篇肯定會有尾沒有頭！"
+date: 2020-03-02T13:11:54.828Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*xoGQM2_ZEpAgThugNQDs_w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/redux-%E4%BD%9C%E6%A5%AD-%E7%82%BA%E4%BA%86-blog-%E5%8A%A0%E4%B8%8A-redux-%E5%90%A7-29bc45219884"
+---
+
+**Notice**  
+話說上次忘了寫作業筆記XD  
+所以這篇肯定會有尾沒有頭！
+
+## hw1：SPA 部落格加強版
+
+延續上週的作業，我們這次要把 Redux 給加進來。就如同我們教過的一樣，Redux 通常適合用在儲存「global 的狀態」，因此在這個作業中你必須增把 Navbar 的部分改成用 Redux 來處理，所以你應該會在 store 裡面儲存現在所在的分頁，而且還需要建立一個 action 來改變分頁的狀態。
+
+除了這些以外呢，也希望你能新增一些功能：
+
+1. 發表文章
+2. 刪除文章
+3. 編輯文章
+
+API 格式：
+
+endpoint：[https://qootest.com](https://qootest.com/)  
+使用說明：https://github.com/typicode/json-server
+
+```
+POST /posts {title, author, body} 新增 posts
+GET  /posts 取得所有 post
+GET  /posts/:id 取得某個 post
+DELETE /posts/:id 刪除 post
+PUT /posts/:id {title, author, body} 更新 post
+```
+
+## 作業思考
+
+在這部分，因為我之前沒有做很徹底的美化 blog，最主要原因是自己美感不足，外加上沒有參考的對象，後來才發現原來 wordpress 就有很多很美觀的部落格可以參考切版用。
+
+而我後續會找一個自己喜歡的來試著模仿切版，然後試著思考一下發文、編輯、刪除的位置跟實作的方式，當然也不要用那種太難的方式，盡力簡單一些。
+
+ps. 同時間也要把新增、編輯、刪除的按鈕寫上去以及如何呈現也要想好。
+
+而這次的 api 也不太一樣，所以就是需要另外串過。
+
+然後是我覺得我應該要把文章的部分也儲存在 store 裡面，當刪除、編輯的時候才可以直接使用。
+
+另外有在思考分頁功能要怎麼實作，但覺得這樣做下去還滿花費時間，所以可能就會去思考一下實際怎麼實現就好。
+
+## 參考模板
+
+## 研究一下特點
+
+1. navbar 下滑會自動消失，上滑兩格才會自動出現
+2. navbar 的頁面標籤被滑鼠指到的時候會顯示底下的線，當前的頁面會固定出現。還會把選項顯示出來。
+3. 上部份文章標題被指到的時候，會有顏色變化
+4. 下部份文章，被指到的時候，會有往上浮的特效，標題特效同上
+5. 側邊欄位，放了電子報訂閱表單，social media
+6. footer 內有電子報訂閱 、IG 圖、social media、聯絡資訊、網站資訊等
+
+## 自家 API 特點
+
+可變動內容：標題、作者、內容
+
+系統預設內容：發表時間（這是一串數字 XD）、文章 id
+
+## 開始實作
+
+先找個畫面優化，這次找上 React Bootstrap 這個 library。
+
+只要在 index.html 引入 bootstrap 的網址，接著只要 import 需要的內容，就可以使用這個 library 幫我們打包好的 component
+
+![](https://cdn-images-1.medium.com/max/800/1*xoGQM2_ZEpAgThugNQDs_w.png)
+
+```
+import { Button } from 'react-bootstrap';
+```
+
+```
+<Button variant="primary"> 123456 </Button>
+```
+
+因為一個一個寫太複雜，所以就只記錄怎麼解決一些疑難雜症，並把疑難雜症另外紀錄，方便以後查找。
+
+### `<pre>` 標籤效果無法使用
+
+[React 的 JSX 中的 &lt;pre> 標籤效果無法呈現](https://medium.com/@hugh_Program_learning_diary_Js/react-%E7%9A%84-jsx-%E4%B8%AD%E7%9A%84-pre-%E6%A8%99%E7%B1%A4%E6%95%88%E6%9E%9C%E7%84%A1%E6%B3%95%E5%91%88%E7%8F%BE-8e1e7fd5a9b?source=your_stories_page---------------------------)
+
+### flex 佈局的文字省略
+
+[flex 屬性排版的文字省略](https://medium.com/@hugh_Program_learning_diary_Js/flex-%E5%B1%AC%E6%80%A7%E6%8E%92%E7%89%88%E7%9A%84%E6%96%87%E5%AD%97%E7%9C%81%E7%95%A5-1844ccb0f09d?source=your_stories_page---------------------------)
+
+### 捲動偵測
+
+[讓 React 根據捲動隱藏導覽列](https://medium.com/@hugh_Program_learning_diary_Js/%E8%AE%93-react-%E6%A0%B9%E6%93%9A%E6%8D%B2%E5%8B%95%E9%9A%B1%E8%97%8F%E5%B0%8E%E8%A6%BD%E5%88%97-9dc59e3a4312?source=your_stories_page---------------------------)
+
+還有須改善的部份如下：
+
+另外一個 bug 是無法根據 hashtag 的東西來高亮使用中的分頁
+
+這部份跟移除 router 有關系，等到作業的最後再來處理就好
+
+### 彈出視窗的呈現
+
+[React 中如何實作的彈出視窗](https://medium.com/@hugh_Program_learning_diary_Js/react-%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AF%A6%E4%BD%9C%E7%9A%84%E5%BD%88%E5%87%BA%E8%A6%96%E7%AA%97-48935aee5183?source=your_stories_page---------------------------)
+
+所以就先用原始的方式來實作，但是後來發現因為新增跟編輯用的是一樣的內容，所以需要先把這些內容放在上上層…，實際上這邊也可能需要用到 Redux 的功能了。
+
+後來發現是自己想太多，其實只要分開寫就好了，所以當時也是想得太過於複雜。
+
+### 視窗的功能
+
+在這裡要考慮的很多，分別是新增、編輯、刪除。這邊依序來實作，本來一直想著比較難的編輯，但是這邊從新增會比較好下手。
+
+[React Blog 的新增/編輯/刪除介面實作](https://medium.com/@hugh_Program_learning_diary_Js/react-blog-%E7%9A%84%E6%96%B0%E5%A2%9E-%E7%B7%A8%E8%BC%AF-%E5%88%AA%E9%99%A4%E4%BB%8B%E9%9D%A2%E5%AF%A6%E4%BD%9C-860272b9da97?source=your_stories_page---------------------------)
+
+上篇都只有把介面寫出來，然後按下按鈕之後會把資料印出來，或是印出刪除哪個資料，但實際上功能並沒有實作，所以接下來就是功能了。
+
+### 新增、編輯跟刪除的功能實作
+
+接下來就是要實作按鈕的功能。
+
+[React Blog 的新增/編輯/刪除功能實作](https://medium.com/@hugh_Program_learning_diary_Js/react-blog-%E7%9A%84%E6%96%B0%E5%A2%9E-%E7%B7%A8%E8%BC%AF-%E5%88%AA%E9%99%A4%E5%8A%9F%E8%83%BD%E5%AF%A6%E4%BD%9C-cefdfc5f8a11?source=your_stories_page---------------------------)
+
+這邊除了功能之外，還添加偵測的功能，防止送出空值，輸入項目空值時也會有提醒。
+
+### Redux 的實作
+
+首先先安裝 redux `yarn add redux react-redux`
+
+這邊就直接硬上了，先把最上層的 index.js 的引入 store 以其其他搭配的元素
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+import navReducer from './reducer';
+```
+
+```
+const reducer = combineReducers({
+  nav: navReducer,
+})
+```
+
+```
+const store = createStore(reducer);
+```
+
+```
+ReactDOM.render(
+  <Provider sotre={store}>
+    <App />
+  </Provider>, document.getElementById('root'));
+```
+
+```
+serviceWorker.unregister();
+```
+
+然後由於只是要練習 Redux 怎麼使用，但在前面實作的時候，就有發現到有些地方可以使用，所以就決定不把 navbar 改成 reudx 了。畢竟之後要當作品又還要改回來，這樣簡直自找麻煩，所以就直接實作別的。
+
+那麼要改變什麼呢？
+
+這邊我想套用 Redux 的部份就是文章列表的部份，因為像是彈出視窗的部份，就可以直接這樣引用，然後使用 Redux 的好處就是我也不必要一層一層的傳遞下去了。
+
+主要是我光是 post_list 的部份就要傳了三層，加上彈出視窗那層則是高達四層，所以利用 redux 解決這個問題就是剛剛好。而這樣做的好處是我的首頁的部份也可以把這些資料用來展示用了。
+
+目前思考的作法是，一樣在原始的位置呼叫 API，只不過則是另外使用 action 把資料塞進 store 裡面這樣，然後接下來就只要修改其他相對應的 component 即可了吧。
+
+而這邊就改成實作 Post_list 的部分：
+
+因為還沒用到 redux 的非同步套件，所以就用 componeDidUpdate 來把資料更新到 redux 上面。
+
+從簡單的部份開始，先從 action 開始下手，在 actionType 新增一個：
+
+```
+export const UPDATE_POSTS_LIST = "UPDATE_POSTS_LIST";
+```
+
+接下來就可以利用這個來得知是否要上傳資料，action.js 新增一個函式：
+
+```
+import { UPDATE_NAV_TEXT, UPDATE_POSTS_LIST } from './actionTypes';
+...
+```
+
+```
+export const updatePosts = (posts) => ({
+ type: UPDATE_POSTS_LIST,
+ posts,
+})
+```
+
+然後是 reducer.js 怎麼更新資料的部份：
+
+```
+import { UPDATE_NAV_TEXT, UPDATE_POSTS_LIST } from './actionTypes';
+```
+
+```
+...
+...
+...
+```
+
+```
+const postsState = {
+  postsListData: []
+}
+```
+
+```
+const postsReducer = (globalState = postsState, action) => {
+  switch (action.type) {
+    case UPDATE_POSTS_LIST:
+      return {
+        postsListData: action.posts,
+      }
+    default:
+      return globalState;
+  }
+}
+```
+
+```
+export { postsReducer } // 之後可能會新增別的 reducer，所以改用這種形式
+```
+
+接下來就是 post_list.js 的部份，在使用資料之前要先新增一個 PostsListContainer.js，在這裡要套用使用 connect 把資料串接起來。
+
+```
+PostsListContainer.js:
+```
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+import Posts from '../component/post_list/';
+import { updatePosts } from '../actions';
+```
+
+```
+const PostsContainer = (props) => {
+  return <Posts {...props} />
+}
+```
+
+```
+const mapStateToProps = state => { // return 時，告訴需要什麼資料
+  return {
+    postsListData: state.posts.postsListData,
+  }
+}
+```
+
+```
+const mapDispatchToProps = dispatch => {
+  return {
+    updatePosts: data => dispatch(updatePosts(data)),
+  }
+}
+```
+
+```
+export default connect(
+  mapStateToProps, // 接收資料
+  mapDispatchToProps // 送出資料用
+)(PostsContainer);
+```
+
+接下來就可以寫 post_list.js 了，直接把原本撈資料的部份改成撈資料後傳給 redux 的 store：
+
+```
+componentDidMount() {
+  getPosts()
+    .then(res => {
+      const result = res.data // 篩選無用資料
+        .filter(
+           ({ title, author, body }) => title && author && body
+        );
+      this.props.updatePosts(result); // 傳給 Redux
+    })
+}
+```
+
+接著也因為上傳之後，redux 就會把資料送回來，就可以直接在 render 裡面使用，所以就是把原本依賴自身 component 的 status 改成使用 redux 上面的 postsListData 的資料即可。
+
+```
+render() { /** 之後可以改成兩種呈現方式，條列式格狀顯示 */
+  const { isCreate } = this.state;
+  const { history, postsListData } = this.props; // 從 Redux 抓資料了
+```
+
+```
+return (
+    <div className="blog">
+      ...
+      ...
+      ...
+```
+
+```
+      <main className="blog__posts">
+        {/** 判斷是否讀取中 */
+          postsListData.length ?
+            <RenderPosts
+              data={postsListData}
+              history={history}
+              handleChangePosts={this.handleChangePosts}
+            /> :
+            <Spinner animation="border" />
+        }
+      </main>
+    </div>
+  )
+}
+```
+
+也就是把傳入的資料直接改傳入 postsListData 就好。
+
+這邊還可以優化成直接在 `<RenderPosts>` 的 component 拿資料就好，但目前先不做之後再來優化。
+
+再來就是各個功能的實現了。
+
+因為是要讓文章列表可以新增、編輯、刪除，所以我們就需要讓資料可以傳進也可以傳出，所以一樣要對於編輯視窗串接 connect 才行。
+
+### 新增、編輯、刪除
+
+因為本身寫好的功能就是用同一個 function 處理了，所以這邊也就直接把處理的功能一起寫進 reducer 裡面就好，否則就必須要一直弄一堆 function 會看起來比較亂。
+
+實作流程其實跟上面的差不多，先新增一個 actionType 而且把 action 寫好。
+
+```
+actionType.js:
+```
+
+```
+export const CHANGE_POSTS = "CHANGE_POSTS";
+```
+
+```
+action.js:
+export const changePosts = (post) => ({
+  type: CHANGE_POSTS,
+  post
+})
+```
+
+然後寫到這邊會發現，因為都是 posts 相關的功能，所以這裡舊部需要另外新增一個 reducer 了。直接使用 postsReducer 新增一個 switch case 的新 case 來判斷即可。
+
+```
+const postsReducer = (globalState = postsState, action) => {
+  switch (action.type) {
+    case UPDATE_POSTS_LIST:
+      return {
+        postsListData: action.posts,
+      }
+    case CHANGE_POSTS:
+      return handleChangePosts(action.post)
+    default:
+      return globalState;
+  }
+}
+```
+
+而因為有很多處理的功能是寫在一起的，這邊就另外寫的 function ，這個 function 則是回傳一個物件給 switch case 回傳就好。
+
+而這裡因為已經把資料儲存在 redux 上了，所以原本的 post_list 也可以改成把 id 傳下去就好，當編輯視窗彈出之後，才把資料從 redux 上面撈出來。
+
+首先先串 connect：
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+import { EditingWindow } from '../component/editing_window';
+import { changePosts } from '../actions';
+```
+
+```
+const EditingWindowContainer = (props) =>
+  <EditingWindow {...props} />;
+```
+
+```
+const mapStateToProps = state => { // return 時，告訴需要什麼資料
+  return {
+    posts: state.posts.postsListData,
+  }
+}
+```
+
+```
+const mapDispatchToProps = dispatch => {
+  return {
+   changePosts: post => dispatch(changePosts(post))
+  }
+}
+```
+
+```
+export default connect(mapStateToProps, mapDispatchToProps)(EditingWindowContainer);
+```
+
+給方法改資料跟傳入資料。接著就可以改成傳 postId：
+
+```
+const ControllerButton = ({ postId }) => {
+  const [editingShow, setEditingShow] = useState(false);
+  const [deleteShow, setDeleteShow] = useState(false);
+```
+
+```
+  const handleEdit = () => setEditingShow(true);
+  const handleDelete = () => setDeleteShow(true);
+```
+
+```
+  return (
+    <div className="blog__controller">
+      <Button variant="outline-success" onClick={handleEdit}>
+        編輯
+      </Button>
+      {
+        editingShow &&
+        <EditingWindow /** 編輯視窗 */
+          show={editingShow}
+          onHide={() => setEditingShow(false)}
+          status="editing"
+          postId={postId}
+        />
+      }
+```
+
+```
+      <Button variant="outline-danger" onClick={handleDelete}>
+        刪除
+      </Button>
+      {
+        deleteShow &&
+        <DeleteWindow
+          show={deleteShow}
+          onHide={() => setDeleteShow(false)}
+          status="delete"
+          postId={postId}
+        />
+      }
+    </div>
+  );
+};
+```
+
+看到一堆重複性，其實沒差，之後也會改成 redux 的形式。就可以通通移除了。
+
+editing_window 撈資料的部份，則是多傳入 postId (從上層來)、posts(從 redux 來的資料)、changePosts(redux 改變資料用的 function)。
+
+這邊因為要抓資料，所以就需要多一個選取正確資料之後篩入的，新增：
+
+```
+const editingPost = posts.find(post => post.id === postId);
+```
+
+因為傳入的是全部的文章資料，所以要篩出正確的資料，然後塞到初始值裡面就好。
+
+```
+const [thisPost, setThisPost] = useState(
+  postId ? editingPost : newPost // 利用 postId，判斷是新增還是編輯
+);
+```
+
+然後還有一個重點是 redux 上的 action 一開始我是想說只能夾帶一個參數，所以我就改成傳入物件的形式，這樣在 reducer 就有比較多的資料可以應用。
+
+原本的從 post_list 上的 handleChangePost 改成 Redux 的 changePosts
+
+```
+changePosts({ status, thisPost });
+```
+
+其他部份則是差不多，就不多寫了。
+
+然後回到編寫 postReducer 內的 function handleChangePosts，這邊其實跟之前在 post_list 上的同名 function 作用是差不多，只是使用的資料的形式要改變一下而已。
+
+```
+const handleChangePosts = ({ status, thisPost, postId }) => {
+  /** 第一個變數是方式，第二個變更的資料 */
+  const { postsListData } = globalState;
+  switch (status) {
+    case 'create':
+      const id =
+        postsListData.length !== 0 ? postsListData[0].id + 1 : 1;
+      return {
+        postsListData: [{
+          ...thisPost,
+          createdAt: new Date().getTime(),
+          id,
+        },
+        ...postsListData,  // 放後面才能符合逆排序
+        ],
+      }
+    case 'editing':
+      return {
+        postsListData: postsListData.map((post) => {
+          if (post.id !== thisPost.id) return post;
+          return {
+            ...post,
+            ...thisPost,
+          };
+        })
+      };
+    case 'delete':
+      return {
+        postsListData: postsListData.filter(
+          post => post.id !== postId
+        )
+      }
+    default:
+      console.log('一定是搞錯了什麼');
+  }
+}
+```
+
+thisPost 是從 `<EditingWindow>` 傳進來的，所以就乾脆直接用了，而 postId 則是 `<DeleteWindow>` 傳進來的文章 id。經過這個 hanadleChangePosts 就可以把資料改變了。而伺服上的 API 則是原本的，所以只有伺服器上的回傳正確的 status 之後才會把 redux 上面的資料改變。
+
+其他的部份則是一些小細節上的修改，所以也不多寫了。接下來就是把編輯視窗跟刪除視窗改用 reudx 的部份了。
+
+### 彈出視窗改用 redux
+
+前面把視窗的資料改成取得 redux 全都是因為我打算要把彈出視窗也改用 reudx 實作，這樣才不會變成到處都在呼叫彈出視窗，然後寫了好幾次這樣。
+
+還有一個重點是就可以直接把整個彈出視窗的位置拉到上層一點的地方。
+
+然後實作的方式也會改成使用物件或多個變數，因為需要辨識彈出視窗的用途，要知道他是新增、編輯還是刪除的視窗，為此也要思考一下，如何把 `<EditingWindow>` 跟 `<DeleteWindow>` 整合在一起。就不用寫兩次 container 了。
+
+所以整理一下要實作的部份：
+
+1. 彈出視窗改用 redux
+2. 把彈出視窗的 component 位置拉高
+3. 把 `<EditingWindow>` 跟 `<DeleteWindow>` 整合在一起
+
+### 實作
+
+實作方面，就概述就好了。
+
+實作的方法是以 redux 上面更新資料為準，所以就需要給一個 funcion 讓按鈕可以控制並且傳值進去，用作區分是要做什麼用的，主要是需要傳輸的資料就兩個，一個是 method，也就是標明是新增、編輯或刪除，另外一個就是 postId，也就是標示編輯跟刪除的目標的 ID。
+
+按鈕：
+
+```
+post_list.js:
+```
+
+```
+<Button
+  variant="outline-success"
+  data-name="editing"
+  data-id={post.id}
+  onClick={handleShow}
+>
+  編輯
+</Button>
+```
+
+按鈕的 function，這邊利用 e.target，省去多寫很多額外的 Function：
+
+```
+const handleShow = (e) => {
+  const { id, name } = e.target.dataset;
+  showManagementWindow({ method: name, postId: parseInt(id, 10) }); // event 接收的是 string
+};
+```
+
+可以參考這邊：[React 中的事件(event)如何在呼叫 function 中取得資料](https://medium.com/@hugh_Program_learning_diary_Js/react-%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6-event-%E5%A6%82%E4%BD%95%E5%9C%A8%E5%91%BC%E5%8F%AB-function-%E4%B8%AD%E5%8F%96%E5%BE%97%E8%B3%87%E6%96%99-7e3b2bf88de2?source=your_stories_page---------------------------)
+
+然後是 action.js:
+
+```
+export const showManagementWindow = postState => ({
+  type: SHOW_ARTICLE_MANAGEMENT_WINDOW,
+  postState,
+});
+```
+
+```
+export const hideMangementWindow = postState => ({
+  type: HIDE_ARTICLE_MANAGEMENT_WINDOW,
+  postState,
+});
+```
+
+然後是 reducer.js:
+
+```
+const wnidowReducer = (globalState = windowState, action) => {
+  switch (action.type) {
+    case SHOW_ARTICLE_MANAGEMENT_WINDOW:
+      return {
+        ...action.postState,
+        show: true,
+      };
+    case HIDE_ARTICLE_MANAGEMENT_WINDOW:
+      return {
+        ...windowState, // 把狀態還原
+      };
+    default:
+      return globalState;
+  }
+};
+```
+
+透過這兩個 action creator 就可以展現跟隱藏了。
+
+然後接下來就是把資料傳給 `<EditingWindow>` 跟`<DeleteWindow>` 了，因為前面說要打包兩者在一起，所以就另外開個檔案叫做 article_management.js
+
+然後建立一個新的 component
+
+```
+import React from 'react';
+import DeleteWindow from './delete_window';
+import EditingWindow from './editing_window';
+import './article_management.css';
+```
+
+```
+const ArticleManagement = (props) => {
+  const { method } = props;
+  return (
+    <>
+      {method === 'create' && <EditingWindow {...props} />}
+      {method === 'editing' && <EditingWindow {...props} />}
+      {method === 'delete' && <DeleteWindow {...props} />}
+    </>
+  );
+};
+```
+
+```
+export default ArticleManagement;
+```
+
+分別引入之後，利用他們的 method 來判斷需不需要顯示。當然，這時候，因為已經另外寫過了，所以原本寫在 post_list.js 裡面相依的部份就可以拿掉了。全部都在這個 component 裡面 render 即可。
+
+所以還要串上 container 才行，ArticleManagementContainer.js:
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+import ArticleManagement from '../component/article_management';
+import { changePosts, showManagementWindow, hideMangementWindow } from '../actions';
+```
+
+```
+const ArticleManagementContainer = props => <ArticleManagement {...props} />;
+```
+
+```
+const mapStateToProps = state => ({
+  ...state.showWindowData,
+  posts: state.posts.postsListData,
+});
+```
+
+```
+const mapDispatchToProps = dispatch => ({
+  changePosts: post => dispatch(changePosts(post)),
+  showManagementWindow: showData =>
+    dispatch(showManagementWindow(showData)),
+  onHide: () => dispatch(hideMangementWindow()),
+});
+```
+
+```
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ArticleManagementContainer);
+```
+
+其他部份則是沒什麼太大差異，主要是我把原本標示新增、編輯跟刪除的從 status 改成 method，因為感覺比較合理。
+
+### 修正不正常顯示
+
+navbar 無法正常高亮：[React-Bootstrap 搭配 Router 的導覽列解法](https://medium.com/@hugh_Program_learning_diary_Js/react-bootstrap-%E6%90%AD%E9%85%8D-router-%E7%9A%84%E5%B0%8E%E8%A6%BD%E5%88%97%E8%A7%A3%E6%B3%95-3856726546d6?source=your_stories_page---------------------------)
+
+## CODE
+
+## GitHub page：
+
+## hw2：簡答題
+
+1. 為什麼我們需要 Redux？
+2. Redux 是什麼？
+3. Single Page Application 是什麼？有哪些頁面一定要用這個架構去設計嗎？
+
+**為什麼我們需要 Redux？**
+
+使用 Redux 的目的是可以為了 React 解決一些問題。而 Redux 則是解決跨 component 傳遞資料的問題。
+
+在 React 中，有時候可能有些資料需要跨很多層 component，與其一層一層的傳下去，不如直接使用 Redux 跨 component 去傳遞資料。
+
+**Redux 是什麼？**
+
+Redux 是一個全域的狀態管理套件，也是一種資料傳遞的方式。
+
+**Single Page Application 是什麼？有哪些頁面一定要用這個架構去設計嗎？**
+
+SPA 是網站或應用架構，通過動態改變畫面來達成跟用戶互動。
+
+有一些可能護要用到 SPA，像是基於網頁的網頁遊戲、音樂播放界面、影片播放網站等。
+
+不過大部分沒有的頁面是一定要用這個架構來設計的，但使用這個架構設計的好處是可以給使用者更好的體驗。

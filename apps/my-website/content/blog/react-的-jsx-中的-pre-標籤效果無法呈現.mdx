@@ -1,0 +1,30 @@
+---
+title: "React 的 JSX 中的 <pre> 標籤效果無法呈現"
+slug: "react-的-jsx-中的-pre-標籤效果無法呈現"
+description: "解決方案："
+date: 2020-02-03T09:49:17.817Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-%E7%9A%84-jsx-%E4%B8%AD%E7%9A%84-pre-%E6%A8%99%E7%B1%A4%E6%95%88%E6%9E%9C%E7%84%A1%E6%B3%95%E5%91%88%E7%8F%BE-8e1e7fd5a9b"
+---
+
+## 解決方案：
+
+從這裡發現只要使用 [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) 就可以解決這個問題，也就是需要文字的部分寫下：
+
+```
+{`
+  內容
+  xxx
+  xxx
+`}
+```
+
+但是利用 `<pre>` 標籤的話，連寫 code 的空白都會被納入，這樣如果需要文字置中就會跑板，那解決方法就是使用 CSS 屬性即可。
+
+```
+white-space: pre-line;
+text-align: center;
+```
+
+利用 `pre-line` 就不會出現空白，這樣就可以置中了

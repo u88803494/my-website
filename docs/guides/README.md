@@ -37,7 +37,7 @@
 
 ### 內容
 
-- **[Medium 文章同步](./medium-article-sync.md)** - 文章自動解析與同步流程
+- **[Medium 文章遷移至 MDX](./medium-article-sync.md)** - 匯出檔轉 MDX 的流程與已知限制
 
 ### 部署相關
 

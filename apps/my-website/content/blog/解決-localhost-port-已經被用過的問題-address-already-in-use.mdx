@@ -1,0 +1,48 @@
+---
+title: "解決 localhost port 已經被用過的問題, address already in use"
+slug: "解決-localhost-port-已經被用過的問題-address-already-in-use"
+description: "localhost port 已經被用過, localhost 無法釋放 port, address already in use"
+date: 2022-11-15T11:16:40.741Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*Gg-0vl_8-qowSTKgxAmW2w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%A7%A3%E6%B1%BA-localhost-port-%E5%B7%B2%E7%B6%93%E8%A2%AB%E7%94%A8%E9%81%8E%E7%9A%84%E5%95%8F%E9%A1%8C-address-already-in-use-4908e23f1d3a"
+---
+
+最近因為公司的專案需要，改成使用 mono repo 開發。
+
+使用的是 nx 的套件，但最近發現 常常我重新啟動 localhost 的時候，會發生address already in use 的錯誤訊息如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*Gg-0vl_8-qowSTKgxAmW2w.png)
+
+弄了一陣子，最後我發現只好重新開機來解決，真是萬用解法
+
+這篇就這樣結束了！
+
+當然不會這樣就結束
+
+所以我就去查詢一下原因為何
+
+原來是因為 node 沒有被真的結束，佔用了那個 port，所以要解決就很簡單
+
+輸入指令：
+
+```
+sudo lsof -i :4200
+```
+
+就可以看到
+
+![](https://cdn-images-1.medium.com/max/800/1*SuRL9zoL9r8FiYAKEe1AOA.png)
+
+PID 就是佔用的 node 的 pid，所以我們就可以利用這個 pid 來結束這個程序
+
+輸入指令：
+
+```bash
+kill -9 96160
+```
+
+就可以結束這個程序，再次跑起來便可
+
+![](https://cdn-images-1.medium.com/max/800/1*5fMIcR9AcaKFS0rmDXug4Q.png)

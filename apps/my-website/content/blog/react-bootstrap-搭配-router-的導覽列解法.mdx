@@ -1,0 +1,149 @@
+---
+title: "React-Bootstrap 搭配 Router 的導覽列解法"
+slug: "react-bootstrap-搭配-router-的導覽列解法"
+description: "其實這算是我自己沒想清楚就套用的錯誤，但在此紀錄筆記下來，省得以後又再次犯錯。"
+date: 2020-02-24T06:09:12.528Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*lGB1hscvzzwD3iBXCYN51g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/react-bootstrap-%E6%90%AD%E9%85%8D-router-%E7%9A%84%E5%B0%8E%E8%A6%BD%E5%88%97%E8%A7%A3%E6%B3%95-3856726546d6"
+---
+
+其實這算是我自己沒想清楚就套用的錯誤，但在此紀錄筆記下來，省得以後又再次犯錯。
+
+一開使用了 React-Bootstrap 的導覽列內容，最後導致我的導覽列無法正常運行。
+
+從中可以看到分頁的標籤是使用 Bootstrap 所寫的元件：
+
+```
+<Nav.Link href="#features">Features</Nav.Link>
+```
+
+原本寫法是套用這個標籤的語法，然後直接使用，不過這樣就造成了 BUG，也就是說只能透過點擊這些標籤才可以高亮，其他方式則是不行。
+
+主要是有首頁有快捷按鈕直接快速可以切換到文章列表，所以這些不能高亮的問題很重要。
+
+在這途中我有找到一些解法，也在此記錄下來。
+
+## 解法一（不佳）：
+
+使用套件 react-router-bootstrap，這是一個可以串接 Router 跟 Bootstrap 的套件。安裝好之後只有兩種 componet 可以用。
+
+### 優點：
+
+直接看官網介紹套用即可。
+
+### 缺點：
+
+1. 套件看來有點時間沒更新，而且套用之後整個網站看起來會複雜一些。
+2. 只能給 BrowserRouter 使用
+
+### 用法
+
+這邊就利用 `<LinkContainer>` 即可，要把原來的 href 拿掉，改用 to，用起來就類似 Router 的 `<NavLink>`
+
+Following plain React Bootstrap component
+
+```
+<Button href="/foo/bar">Foo</Button>
+```
+
+becomes
+
+```
+<LinkContainer to="/foo/bar">
+  <Button>Foo</Button>
+</LinkContainer>
+```
+
+所以直接套用即可，包含 title 的連結也是
+
+![](https://cdn-images-1.medium.com/max/800/1*lGB1hscvzzwD3iBXCYN51g.png)
+
+然後是處理首頁的按鈕。
+
+原先是：
+
+```
+<a href="/posts" rel="noopener noreferrer" className={className} >
+    <Button ariant={variant}>
+      {text}
+    </Button>
+</a>
+```
+
+改成
+
+![](https://cdn-images-1.medium.com/max/800/1*1L07jfjb5y_kadvXpEE7ZA.png)
+
+不可以直接在原本的 a 標籤外面直接包上 `<LinkContainer>` 否則會變成兩次 active。
+
+然後因為搭配了 BrowserRouter，在佈署到 GitHub page 的時候要搭配 basename 才行。
+
+![](https://cdn-images-1.medium.com/max/800/1*k8o-rdjQWr-5ypDEGcUCAg.png)
+
+## 解法二（較佳）：Router 原生解法
+
+一開始我是使用解法一，因為比較急，所以沒有想清楚底層原理就直接用，才導致混亂，最後逐步使用 dev-tool 之後，就發現問題點所在。
+
+參考之前的筆記：
+
+### 首頁的按鈕
+
+就更簡單處理了：
+
+```
+const SeeMoreButton = ({ className, text, variant }) => (
+  <Button variant={variant} href="#/posts" className={className} >
+    {text}
+  </Button>
+)
+```
+
+因為只是利用 hashtag 而已，所以只要改這樣就可以運行。button 加上 href 且利用 hashtag 就不會有 a 標籤的換頁行為。
+
+### 導覽列：
+
+直接使用 `<Route>` 跟 `<Link>` 組成 componet 即可。
+
+```
+const Item = ({ to, text, exact }) => (
+  <Route
+    path={to}
+    exact={exact}
+    children={({ match }) => (
+      <Link to={to} className={match ? "active" : "">
+        {text}
+      </Link>
+    )}
+  />
+)
+```
+
+然後每一個都使用這個 component 即可。
+
+```
+<Nav className="mr-auto">
+  <Item to='/' exact={true} text='首頁' />
+  <Item to='/posts' text='文章列表' />
+  <Item to='/about' text='關於本站' />
+</Nav>
+```
+
+但這時候會發現，導覽列變成 a 標籤的原生樣式了。原來是缺少一個 class name 而已。
+
+所以只要在對應會生成 a 標籤的位置加上 classname `nav-link` 即可。
+
+```
+<Link to={to} className={`nav-link ${match ? "active" : ""}`}>
+  {text}
+</Link>
+```
+
+然後導覽列標題的就跟首頁按鈕的原理一樣，直接加上 hashtag 即可。
+
+```
+<Navbar.Brand href="/#">React-Blog</Navbar.Brand>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*e--gDwrjfLuJ-SeINsTv-Q.gif)

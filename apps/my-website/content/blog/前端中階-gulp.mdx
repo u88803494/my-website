@@ -1,0 +1,227 @@
+---
+title: "前端中階：gulp"
+slug: "前端中階-gulp"
+description: "介紹"
+date: 2019-10-02T07:32:50.125Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*yxdsdze3vbQ-9J8ztexocg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-gulp-791132bea9f1"
+---
+
+## 介紹
+
+gulp 官網：
+
+從官網的介紹可以看到， gulp 就是一個可以把工作流程加強，然後自動化的工具。
+
+### 為什麼需要 gulp？
+
+因為我們想把一堆工作流程自動化。
+
+就像是 SCSS 我們可以把寫好的 scss 轉化成 css。像是寫好的 ES6 或更新的語法，通過 babel 轉換成 ES5 的語法。
+
+這種時候我們就要做很多事情，這種時候我們就需要一個腳本，只要下一個指令，就可以自動幫我們轉換完成。這就是 gulp 的用意。
+
+其他部份，像是壓縮 CSS 或是壓縮 js 檔案。壓縮之後看起來就像亂碼一樣，因為檔案會變小。
+
+壓縮可以把那些多餘空白 tab 通通都消除，所以會少了很多資料，就檔案變小。
+
+就像是 JQuery 的 jquery.js vs jquery.min.js 的差異那樣。
+
+做了這些事情就可以降低流量，所以上去正式環境之前都會先做壓縮。
+
+所以少了 gulp 也不會怎樣，就只是每次都要手動下好幾種指令比較麻煩而已。
+
+## 安裝 gulp
+
+可以根據官方首頁安裝，或是直接看 [quick start](https://gulpjs.com/docs/en/getting-started/quick-start)
+
+這邊用 quick start 簡易說明：
+
+首先需要具備 node.js、npm。
+
+1. 安裝 gulp-cli `npm install --global gulp-cli`
+2. 開啟資料夾，可以用 command line 或是手動皆可，切換可需要使用 gulp 的資料夾
+3. 初始化 `npm init`
+4. 安裝 gulp package `npm install --save-dev gulp`
+5. 這樣就安裝好了，可以使用指令檢查 `gulp --version`
+
+![gulp -v 也可以](https://cdn-images-1.medium.com/max/800/1*qTkmvBdAYQgWofXzzlHUPQ.png)
+
+_gulp -v 也可以_
+
+CLI version 就是第一步驟安裝的
+
+local version 就是當前資料夾的部份。
+
+## 使用 gulp 基礎 - tasks
+
+gulp 實際上還是用 JavaScript 去寫的，所以可以直接套用 JavaScript 的知識即可。所以 node 模組跟 JavaScript 的指令都可以使用。
+
+在 gulp 中，可以把檔案拆開來，不一定要放在同一個 gulpfile.js，可以拆開來放，然後最後在合在一起，以免檔案太大。
+
+參考 [get-start](https://gulpjs.com/docs/en/getting-started/creating-tasks)
+
+```
+const { series } = require('gulp');
+```
+
+```
+// clean function 不會被輸出，所以可以放一些私人的 task
+// 但依然可以被在 series() 上使用
+function clean(cb) {
+  // body omitted
+  cb();
+}
+```
+
+```
+// build function 可以被輸出，所以他是公開的，也可以在 gulp 命令上執行
+// 同樣的，也可以在 series() 上被使用
+function build(cb) {
+  // body omitted
+  cb();
+}
+```
+
+```
+exports.build = build; // 這邊被導出的才可以使用 gulp，稱為公開
+exports.default = series(clean, build);
+// 私人公開全都要從這邊，才可以被 default 執行
+```
+
+```
+// 這邊公開私人的差異就在於，公開可以被單獨使用，私人則否
+```
+
+這就是建立好的任務，所以就可以執行看看。
+
+使用 `gulp` 就可以執行預設任務。
+
+![](https://cdn-images-1.medium.com/max/800/1*4m2GJrNeAkTQNKXa4RAkFw.png)
+
+`gulp --tasks` 就可以看到結構狀
+
+![build 就是可執行的任務，default 也是，不過預設就是所以可以用 gulp 執行](https://cdn-images-1.medium.com/max/800/1*kjrzqg5JOpYGHuS1j2DeUg.png)
+
+_build 就是可執行的任務，default 也是，不過預設就是所以可以用 gulp 執行_
+
+`gulp build` 就可以單純執行 build function
+
+![](https://cdn-images-1.medium.com/max/800/1*Mp0Wl6rQTsueJpwxkz2xaA.png)
+
+gulp 提供一個非常強大的功能，分別是 `series()` 和 `parallel()` ，它們允許把任務分割使用，在使用這些指令整合在一起。
+
+想要批次就使用 `series()` 會一筆一筆處理。
+
+使用 `parallel()` 則是會平行處理，兩者有所不同，`parallel()` 適合處理不相干的，像是 JavaScript 跟 CSS
+
+```
+const { parallel } = require('gulp');
+```
+
+```
+function javascript(cb) {
+  // body omitted
+  cb();
+}
+```
+
+```
+function css(cb) {
+  // body omitted
+  cb();
+}
+```
+
+```
+exports.build = parallel(javascript, css);
+```
+
+除此之外還有很多功能，像是判斷執行環境，之後在決定要如何輸出。
+
+或者是 `series()` 跟 `parallel()` 交互使用等。
+
+ps. function 跟 function 中間的 `cb()` 不能不用，否則會無法串著使用。
+
+## gulp 的異步任務
+
+[異步](https://gulpjs.com/docs/en/getting-started/async-completion)
+
+任務的串接有好幾種方式，除了上述的 callback 之外（就是 `cb()`）。還可以使用 return 的方式。有非常多種方式 [streams](https://nodejs.org/api/stream.html#stream_stream), [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises), [event emitters](https://nodejs.org/api/events.html#events_events), [child processes](https://nodejs.org/api/child_process.html#child_process_child_process), or [observables](https://github.com/tc39/proposal-observable/blob/master/README.md)
+
+比較常見的就是 streams，如下：
+
+```
+const { src, dest } = require('gulp');
+```
+
+```
+function streamTask() {
+  return src('*.js')
+    .pipe(dest('output'));
+}
+```
+
+```
+exports.default = streamTask;
+```
+
+這邊的 `.pipe` 就如同於在 command line 上面使用的 `|` 是一樣的。  
+ `A | B` 這樣可以讓 A 的輸出，變成 B 的輸入，所以就可以簡化指令。而跟這邊的 `.pipe` 指令是一樣的意思。
+
+而這邊的例子，會把 `src()` 的來源，放到 `.pipe(dest())` 的目的地。
+
+而當任務(task)不會返回任何東西的時候，就要使用 `cb()` 來串接了。
+
+## gulp 如何處理文件
+
+通過前述的例子，可以知道 `src()` 以及 `dest()` 的用途了。所以接下來是說明如何處理文件的方式。
+
+因為 gulp 在處理文件的時候是 `.src()` 通過給予一個由 node stream 產生的 glob 參數，由 `.src()` 產生的 stream 就要從 task 中通過 return 來返回內容並產生一個異步完成的信號。
+
+```
+const { src, dest } = require('gulp');
+const babel = require('gulp-babel'); // 引用
+```
+
+```
+exports.default = function() {
+  return src('src/*.js')
+    .pipe(babel()) // 在中間安插要執行的東西。
+    .pipe(dest('output/'));
+}
+```
+
+大多數情況下，利用 `.pipe()` 方法將插件放置在 `src()` 和 `dest()` 之間，並轉換流（stream）中的文件。
+
+而這些操作用的就需要自行去找尋，可以使用關鍵字 gulp scss 或是 glup babel 等去搜尋。
+
+安裝之後還要引用才可以使用
+
+gulp-babel 安裝參考：
+
+發現還是不行，於是在找到並安裝：
+
+這樣就可以轉換成功了，但又出現另外一個問題，所以在搜一下。找到：
+
+這是 webpack 的，但是抱著死馬當活馬醫的態度，試試看。沒想到就轉換成功了
+
+於是就轉換成功了。
+
+![](https://cdn-images-1.medium.com/max/800/1*yxdsdze3vbQ-9J8ztexocg.png)
+
+## 結論：
+
+gulp 就是個工具。
+
+通過引入模組的方式，把功能引入之後，就可以在內部使用。
+
+而在使用方式上面，舊版的是使用 task 的方式，但已經變成不推薦的方式了。
+
+現在的話，是使用 function 的方式。function 內部可以直接 return 執行內容。可以把一些指令串在一起，通過這樣一個一個步驟的通過 `.pipe()` 串接想要執行的功能。最後回傳結果即可。
+
+最後是 `exports` 出去即可，如果有多個想執行的 function。就需要用 `series()` 或 `parallel()` 把這些命令串在一起，但切記不能加上括號，因為加上括號就不是 callback 了。
+
+這邊主要是通過 callback 的方式來呼叫，這也是為什麼最後面有提到為什麼 return 沒放的話就要使用傳入 cb 的方式。

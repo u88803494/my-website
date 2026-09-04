@@ -1,0 +1,79 @@
+---
+title: "打包一個 Axios with Typescript"
+slug: "打包一個-axios-with-typescript"
+description: "主要是利用 Record 來簡化 Type 的寫法，然後 Axios 可以透過傳入 T 來改變既定型別。"
+date: 2023-08-10T12:01:01.621Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E6%89%93%E5%8C%85%E4%B8%80%E5%80%8B-axios-with-typescript-928d6cb86a2d"
+---
+
+主要是利用 Record 來簡化 Type 的寫法，然後 Axios 可以透過傳入 T 來改變既定型別。
+
+Record 的第一個是 key 的名稱型別，第二個則是 value 的型別。
+
+```typescript
+import axios, { AxiosResponse } from "axios";
+import { jwtStorage } from "@company/web/util/storage";
+
+type Parameters = Record<string, string>;
+type Body = Record<string, string | number>;
+
+const jwtToken = jwtStorage.get();
+
+const request = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  headers: {
+    "Accept-Language": "zh-TW",
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    locale: "zh-tw",
+    Authorization: `Bearer ${jwtToken}`,
+  },
+  timeout: 5000,
+});
+
+const getQueryString = (parameters: Parameters = {}) => `?${new URLSearchParams(parameters).toString()}`;
+
+const get = <T>(path: string, parameters: Parameters = {}): Promise<AxiosResponse<T>> => {
+  const pathWithQuery = `${path}${getQueryString(parameters)}`;
+  return request.get(pathWithQuery);
+};
+
+const post = <T>(path: string, body: Body): Promise<AxiosResponse<T>> => request.post(path, body);
+
+export const fetchApi = { get, post };
+```
+
+然後是利用 Axios 的 create 可以創造出一個到處都可以用的實例，然後我們就可以利用這個實例，使得我們可以不用一直寫重複的 headers。
+
+然後是搭配 Axios 內建的型別，透過 &lt;T> 傳入，這樣就可以給予 Promise 特定的型別。
+
+剩下的部分則是一些 storage 的簡單應用如下：
+
+stroage:
+
+```typescript
+import { STORAGE_KEY } from "@company/web/util/constant";
+
+class Storage {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  get = () => {
+    if (typeof window === "undefined") return "";
+    return window.localStorage.getItem(this.name) ?? "";
+  };
+
+  set = (data: string) => {
+    window.localStorage.setItem(this.name, data);
+  };
+
+  clear = () => window.localStorage.removeItem(this.name);
+}
+
+export const userIdStorage = new Storage(STORAGE_KEY.USER_ID);
+export const jwtStorage = new Storage(STORAGE_KEY.JWT);
+```

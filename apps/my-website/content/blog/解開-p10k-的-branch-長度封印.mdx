@@ -1,0 +1,46 @@
+---
+title: "解開 p10k 的 branch 長度封印"
+slug: "解開-p10k-的-branch-長度封印"
+description: "解決 branch 名稱被縮寫的問題"
+date: 2023-01-12T12:02:22.568Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*ILBqAp3g7IqrE_OuCr5uig.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%A7%A3%E9%96%8B-p10k-%E7%9A%84-branch-%E9%95%B7%E5%BA%A6%E5%B0%81%E5%8D%B0-107b462e29fd"
+---
+
+我相信現在大家程式開發普遍都喜歡用雙螢幕吧
+
+而且現在螢幕尺寸越來越大
+
+而在公司開發，常常會應公司要求而去使用一些有前綴的 branch name，就導致越來越長
+
+而且在使用 zsh + p10k 時，卻發現 branch name 會很長的關係，所以就被消除，變成中間有 …，如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*ILBqAp3g7IqrE_OuCr5uig.png)
+
+這樣的話往往就很容易分不清楚自己到底是哪個 branch
+
+後來經過我研究之後發現，原來 p10k 就有一個地方可以改
+
+打開 p10k 的檔案，路徑 `~/.p10k.zsh `找到下面圖片這塊
+
+![其實說明都直接告訴你了XD](https://cdn-images-1.medium.com/max/800/1*0BSjUYvOsj3oOT8GLbyaWg.png)
+
+_其實說明都直接告訴你了XD_
+
+刪除或 comment 這行
+
+```bash
+(( $#branch > 32 )) && branch[13,-13]="…"
+```
+
+儲存之後在 command line 輸入
+
+```bash
+source ~/.zshrc
+```
+
+這樣就成功套用了
+
+![](https://cdn-images-1.medium.com/max/800/1*ye7Iu7YzBD6MuPVuUdRKvQ.png)

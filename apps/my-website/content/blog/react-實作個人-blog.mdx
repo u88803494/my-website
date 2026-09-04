@@ -1,0 +1,47 @@
+---
+title: "React：實作個人 BLOG"
+slug: "react-實作個人-blog"
+description: "之前就決定要把 React Blog 作為自己的 final project 了，所以就有稍微做了一些實作。"
+date: 2026-09-02T00:53:38.137Z
+tags: ["medium"]
+draft: true
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*j7wCIyxkTtujz_XE9Ygxyg.png"
+mediumUrl: "https://medium.com/p/dee4e0f5dab6"
+---
+
+之前就決定要把 React Blog 作為自己的 final project 了，所以就有稍微做了一些實作。
+
+而現在課程都完成之後，就是要把整個網站架構出來，不過目前還是以最小可行性方案來實作，否則什麼都要弄細節，感覺弄不出一個譜來。
+
+所以目前就先決定要實作的方向：
+
+1. 首頁改成介紹這個 BLOG 的功能，參考 — 方格子加入作者頁面
+2. 部落格文章新增使用 bootstrap 的 Card 來顯示內容
+3. 部落格可以切換顯示方式 — 條列式、格子式
+4. 單一文章頁面 — 參考方格子美化
+5. 單一文章頁面 — 新增編輯、刪除按鈕
+6. 實作後台，登入後才顯示新增、編輯、刪除
+7. 關於我 — 實作自我介紹
+8. footer 加上社群按鈕等
+
+為了最快上路，所以就單純做：
+
+1. 文章列表 — 新增顯示部份內容的方式
+2. 後台 — 用密碼 hash 認證的後台
+3. 首頁 — 簡單新增方格子加入作者頁面
+
+## 文章列表實作
+
+### 參考對象
+
+模擬了方格子的使用者文章列表
+
+還加上 RWD，實現圖片變動
+
+大寬度：
+
+![](https://cdn-images-1.medium.com/max/800/1*j7wCIyxkTtujz_XE9Ygxyg.png)
+
+小寬度
+
+![](https://cdn-images-1.medium.com/max/800/1*LWCK8Cg_4GdWIgLibKsYRQ.png)

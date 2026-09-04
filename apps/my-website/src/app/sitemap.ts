@@ -15,7 +15,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...allPosts.map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
+      // CJK slugs must be encoded to match the canonical URL from
+      // generateMetadata and the JSON-LD @id; sitemap URLs must be escaped too
+      url: `${BASE_URL}/blog/${encodeURIComponent(post.slug)}`,
       lastModified: post.updatedDate ?? post.date,
       changeFrequency: "monthly" as const,
       priority: 0.7,

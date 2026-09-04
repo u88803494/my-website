@@ -1,0 +1,81 @@
+---
+title: "Hooks 簡單筆記"
+slug: "hooks-簡單筆記"
+description: "簡單紀錄一下自己學習 Hook 的精簡筆記。"
+date: 2021-10-04T12:03:16.125Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/hooks-%E7%B0%A1%E5%96%AE%E7%AD%86%E8%A8%98-3f897b2223ab"
+---
+
+簡單紀錄一下自己學習 Hook 的精簡筆記。
+
+## useEffect 和 useLayoutEffect 的差異
+
+兩者功用差不多，唯一只差在一些小細節如下：
+
+useEffect 是當瀏覽器 paint **完**後執行
+
+useLayoutEffect 是當瀏覽器 paint **之前**執行。
+
+應用場景：在如果頁面會先 render 一些資料，然後在用 useEffect 取得資料後去改變畫面，那就會造成頁面閃一下，這時候就可以改用 useLayoutEffect，直接在畫面出來之前去改變資料，變不會出現畫面好像閃一下的情況。
+
+## useEffect 的小細節
+
+### 針對某個資料使用：
+
+```
+useEffect(() => {
+  // do something
+  console.log(word);
+```
+
+```
+  return () => {
+    // clear up
+    console.log('clear up');
+  };
+}, [word]);
+```
+
+return 是用來清除上一輪的 effect，所以以 `word` 這筆偵測的資料來說 在 return 內的會是上一筆的資料，而使用場景則可以見[官網](https://zh-hant.reactjs.org/docs/hooks-effect.html#example-using-hooks-1)
+
+### Mount and unmount:
+
+```
+useEffect(() => {
+  // Mount
+```
+
+```
+return () => {
+    // unmount
+  };
+}, []);
+```
+
+這只是用 life cycle 來理解 `useEffect` 的方式，但實際上在 `useEffect` 的原理是當 function 執行完畢之後，才會去執行 `useEffect` 的內容，所以就會有上述的差異。
+
+而 `useEffect` 的意思指的是 Side Effect，也就是會影響其他環境的作用，都可以放在這裡使用，像是 call API。
+
+## useMemo
+
+Memo 是 memoized 的簡寫，所以顧名思義就是用來記憶、紀錄用的，在 React 中是用來紀錄值的，所以這個是用來優化程式用的，像是有一個複雜計算，那就可以根據監聽某些數值有無改變，來決定要不要重新計算，否則則一直保持原樣。
+
+而根據官方文件寫的，如果保持監聽值為空 `[]` 則會造成每次都重新計算。
+
+## `React.memo`
+
+```
+const MyComponent = React.memo(function MyComponent(props) {
+  /* render using props */
+});
+```
+
+`React.memo` 只會確認 props 的改變從而決定是否要 render，如果沒必要則會直接套用上次的結果，以減少 rerender。
+
+所以這個是一種用來優化的手段。
+
+## useCallback
+
+這也是一種 memoized，但跟 `useMemo` 不同的是他是回傳一個 function，所以他會紀錄一個 function 的 instance，也就是他的依賴項會監聽 function 的依賴項，只有當 function 會改變時，才改變這個 function，否則就回傳一樣的 function。

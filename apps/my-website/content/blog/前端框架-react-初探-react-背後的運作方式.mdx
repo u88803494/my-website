@@ -1,0 +1,225 @@
+---
+title: "前端框架 React：初探 React 背後的運作方式"
+slug: "前端框架-react-初探-react-背後的運作方式"
+description: "JSX 的真面目"
+date: 2019-10-25T13:35:12.086Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*pITtRGQSPcWswcZ62gE1dg.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E5%88%9D%E6%8E%A2-react-%E8%83%8C%E5%BE%8C%E7%9A%84%E9%81%8B%E4%BD%9C%E6%96%B9%E5%BC%8F-8e29333cf6d7"
+---
+
+## JSX 的真面目
+
+在使用 JSX 的時候，是需要 React 的，因為 JSX 原始的形式就是 React，可以透過下列的例子來得知。
+
+```
+import React, { Component } from 'react';
+import Title from './Title';
+```
+
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Title />
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+title.js:
+
+```
+import React, { Component } from 'react';
+```
+
+```
+export default function Title() {
+  return <h1>hello</h1>
+}
+```
+
+這會在畫面上印出一個 hello
+
+這時候 title.js 看起來好像沒用到 React 那就把它拿掉試試看。
+
+title.js:
+
+```
+export default function Title() {
+  return <h1>hello</h1>
+}
+```
+
+結果會報錯：
+
+![](https://cdn-images-1.medium.com/max/800/1*0d_tH3WsktB_n8MRajnxvw.png)
+
+這是因為不使用 JSX 的時候，原本的形式會長這樣：
+
+```
+title.js:
+```
+
+```
+import React, { Component } from 'react';
+```
+
+```
+export default function Title() {
+  return React.createElement('h1', null, `Hello`);
+}
+```
+
+詳細官網有說明：
+
+## React 的渲染機制與 Virtual DOM
+
+之前說每次只要 state 一改變，就會呼叫 render 來重新渲染畫面。
+
+但像是我們之前利用 JQuery 模擬 React 的時候，是要先把資料清空，然後才 Render，所以有 100 個 item，假設刪除最後一個，就會整個畫面空清重新再來，這樣可能就會有效能問題。
+
+那這樣我們在用 React 會不會有效能問題呢？實際上並不會
+
+因為 React 在 render 的時候，並不會真的把畫面清空，然後才重新 render。React 中間其實還會有一個動作。
+
+所以呼叫 render 之後產生的東西，可以稱為 Virtual DOM，最後才會變成 DOM。
+
+這邊的意思可以看看一張圖
+
+![](https://cdn-images-1.medium.com/max/800/1*pITtRGQSPcWswcZ62gE1dg.png)
+
+取自這邊：  
+[React Virtual DOM vs Incremental DOM vs Ember’s Glimmer: Fight](https://auth0.com/blog/2015/11/20/face-off-virtual-dom-vs-incremental-dom-vs-glimmer/)
+
+會把這次的 DOM 跟下次的 DOM 做比較，其中的差異，才會去做改變。
+
+這個 Virtual DOM 其實就是一個 JavaScript 的 Object
+
+```
+  render() {
+    return (
+      <div>
+        123
+      </div>
+    )
+```
+
+假設要 render 上面的 DOM，這個物件可能就會長得像下面那樣：
+
+```
+{
+  tag: 'div',
+  propsL null,
+  children: '123'
+}
+```
+
+假設今天重新 render 成
+
+```
+  render() {
+    return (
+      <div>
+        456
+      </div>
+    )
+```
+
+新的 virtual DOM 可能就長這樣：
+
+```
+{
+  tag: 'div',
+  propsL null,
+  children: '456'
+}
+```
+
+今天 React 就會把這兩個做比較
+
+```
+diff => 123 → 456
+```
+
+所以就只會變更這個部分。
+
+所以以 todolist 的功能來說，當新增了一個之後，也是同樣的流程。
+
+```
+{
+  ...
+  tag: 'div',
+  propsL null,
+  children: '99'
+}
+```
+
+```
+↓↓↓↓↓↓↓變成下方↓↓↓↓↓↓
+```
+
+```
+{
+  ...
+  tag: 'div',
+  propsL null,
+  children: '99'
+  tag: 'div',
+  propsL null,
+  children: '100'
+}
+```
+
+```
+比較出差異之後：
+```
+
+```
+→ render 差異之處：
+  tag: 'div',
+  propsL null,
+  children: '100'
+```
+
+所以就可以直接使用 `.setState()` 去改變狀態，之後就會 call render，但這不代表真的就會去操作那個 DOM，只代表說 call render function 跟 React 說想要這樣子的畫面。
+
+但實際上怎麼去 render 這個畫面，是 React 底層的機制在處理的，React 的工程師在這部份花了很大的心力。
+
+整體而言，就是當我們改變 state 的時候，就會去呼叫 render，然後 React 會創造 virtual DOM，然後跟之前的 DOM 做比較，這兩者的差異才去應用到真的 DOM 上面。
+
+## Pure component 與 Immutable data
+
+參考這篇文章：  
+[React 性能優化大挑戰：一次理解 Immutable data 跟 shouldComponentUpdate](https://github.com/aszx87410/blog/issues/26)
+
+在這裡我是初學者，整篇我覺得最主要需要理解的觀念是 PureComponent 是什麼，以及 shallowEqual 的概念。
+
+這樣才可以稍微看得懂這篇在說什麼。
+
+簡單說 PureComponent 與 Component 的差異就在於有沒有先**淺比較（shallowEqual）**過，這個**淺比較**是可以透過比對第一層的長度來判斷是否需要 render 的。
+
+所以最後文章的結論是如果 Component 常常會變動就不需要使用 PureComponent，而如果不會常變動就使用 PureComponent 即可。
+
+也點出另外一個問題，因為**淺比較**只比較第一層，所以如果資料在很深（也可以說比較多層內）的地方怎麼辦？這樣就比較不了了。所以還要透過壓平的方式來把資料取出比較，所以說使用 PureComponent 會是比較麻煩的。
+
+但是基本上會用到 PureComponent 的**淺比較**又是因為這樣比較節省資源，所以實際上並沒有差異到這麼多。
+
+那麼就不用這麼急著使用 PureComponent 來優化了，可以等真的整個架構已經大這點差異，也會有影響的時候，再來使用即可。
+
+## 收穫：
+
+這整篇下來，我們理解到 JSX 的機制。然後是 render 的機制，實際上跟我想的不一樣。原來不是整個重新 render，而是會比較過之後才去 render 有差異的部份。
+
+最後是篇比較困難些的文章，有很多名詞不明白，只能去查，查了之後才稍微比較理解到底是什麼意思。
+
+讓我知道說原來 PureComponent 不用這麼早使用，等到整個程式碼變得有差到這部份也需要優化再來做即可。
+
+在這裡也學到新的一點是關於 immutable data ，就是原來 `.setState` 會另外設立一個新的物件，原本的可能會保留做比較這樣子，我是覺得應該是跟 nextState 或是 prevState 會有關連吧。但這部份是我的猜測，之後應該會看到這部份的細節。

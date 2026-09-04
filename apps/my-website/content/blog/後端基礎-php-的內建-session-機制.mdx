@@ -1,0 +1,111 @@
+---
+title: "後端基礎：PHP 的內建 Session 機制"
+slug: "後端基礎-php-的內建-session-機制"
+description: "首先要在一開始的地方使用"
+date: 2019-08-07T06:19:39.650Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-php-%E7%9A%84%E5%85%A7%E5%BB%BA-session-%E6%A9%9F%E5%88%B6-f9a19209840f"
+---
+
+首先要在一開始的地方使用
+
+```
+session_start();
+```
+
+php 的 response 就會在背後產生一個 cookie，裡面含有 session_id
+
+然後在登入驗證成功的地方添加一行。
+
+```
+$_SESSION['username'] = $username;
+```
+
+PHP 會在伺服器的記憶體產生一個位置，用來存放這個值。
+
+就可以用來取代之前我們自己寫的機制。所以就可以放到所有的地方，包含註冊登入等等
+
+這邊每次要用到的時候都一定要 session_start();
+
+## session 機制說明
+
+### session 的設置
+
+在一開始設立
+
+1. 產生一個 session_id 放到 cookie
+
+```
+session_start(); // 產生一個 session_id 放到 cookie
+```
+
+2. username 放到記憶體裡面
+
+```
+$_SESSION['username'] = $username; // $username 可以換成任何你想加入的資料
+```
+
+以 session 來說，可以想像成是一個超大的 object。裡面存放了 session_id，session_id 裡面又有一個 object 放了很多的資料，像是使用者名稱等等的資料。
+
+```
+{
+  df1e234v91d61s6fsf1d6e16sf: {
+    username: jack003
+    ...
+    ...
+  }
+}
+```
+
+這一般來說都放在記憶體內部，因為記憶體的效能比較快，而且這種資料往往都只是暫時性的，不需要儲存在資料庫內部。
+
+### 權限檢查的時候
+
+使用一樣的指令
+
+1. 可以從 cookie 拿到 PHPSESSID （session id 在內建函式的設置名字是這樣）
+
+```
+session_start();
+```
+
+2. 拿 PHPSESSID 去查
+
+```
+$user = $_SESSION['username'];
+```
+
+就會去查之前我們處存在伺服器記憶體的資料
+
+```
+{
+  df1e234v91d61s6fsf1d6e16sf: {
+    username: jack003
+    ...
+    ...
+  }
+}
+```
+
+如果有 username 的值，就拿取，但如果沒拿到就是回傳空陣列，就知道沒登入
+
+### 登出的時候
+
+因為是把 token 拿掉
+
+直接使用
+
+```
+unset($_SESSION[‘變數名稱’]);
+```
+
+```
+session_destroy();
+```
+
+一個是刪除值，另外一個是直接摧毀 session
+
+## 應用
+
+在使用者登入的時候，可以順便把使用者資料寫入。這樣之後就可以在使用者做出一些動作的時候，去做確認，確認成功之後才執行。

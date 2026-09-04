@@ -1,0 +1,962 @@
+---
+title: "前端基礎：JQuery & Bootstrap 作業"
+slug: "前端基礎-jquery-bootstrap-作業"
+description: "前言："
+date: 2019-08-24T10:54:57.646Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*_H7KxRBggFsQf_2e3Yge4w.gif"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-jquery-bootstrap-%E4%BD%9C%E6%A5%AD-801acadd3b61"
+---
+
+## 前言：
+
+我在課程作業方面的想法、思考以及心得。所以可能寫得不盡完善，因為我的想法有時候會很跳 tone，不過我會盡量寫的通暢一些。
+
+## hw1：實作基本網格系統
+
+其實網格系統說穿了，就只是在不同寬度的時候依照比例調整 column 的寬度而已。這一個作業，你要實作出基本的網格系統，詳細規格可參考下面：
+
+1. 每一個 row 有 12 格
+2. 有一個叫做 container 的 class 會把裡面的內容置中，寬度則是 960px
+3. 一共有 12 種 col 的 class，col-1, col-2…col-12
+
+只要螢幕寬度小於 720px，每一格都會佔滿整個 row。
+
+—
+
+這基本上就是 `@media` 就可以實現 RWD。其餘的部份應該是 CSS 的撰寫。還好題目要求的是內容置中。這樣就不用設計好幾種了。
+
+先按照題目的意思把整體骨架完成
+
+```
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col1">text1</div>
+      <div class="col2">text2</div>
+      <div class="col3">text3</div>
+      <div class="col4">text4</div>
+      <div class="col5">text5</div>
+      <div class="col6">text6</div>
+      <div class="col7">text7</div>
+      <div class="col8">text8</div>
+      <div class="col9">text9</div>
+      <div class="col10">text10</div>
+      <div class="col11">text11</div>
+      <div class="col12">text12</div>
+    </div>
+  </div>
+</body>
+```
+
+首先是設置大小，按照題目的意思，先把 `.container` 設置寬度 960px 並設置 `border-sizing: border-box;` 這樣才可以方便調整，其餘如下：
+
+```
+.container {
+    box-sizing: border-box; // 方便調整
+    border:1px solid black; // 方面看出樣子
+    padding: 0 1px;
+    max-width: 960px;
+    margin: auto; // 置中
+}
+```
+
+然後在 `.row` 設置 `.display: inline-flex;`，也因為這次調整因為每個 col 命名不同，於是就使用 `.row > div` 來指名底下的全部，並且設置 `flex:1` 這樣才可以呈現每個寬度一樣長，然後還是沒變化。
+
+![](https://cdn-images-1.medium.com/max/800/1*khlvsXXdm4cV-qbY9LWv4g.png)
+
+因為要把 `.row`的寬度調整成跟 `.container` 一樣長才行，所以就設置 `width: 100%`，一樣加上 `border-sizing: border-box;` 方便調整。
+
+```
+.row {
+    box-sizing: border-box;
+    display:inline-flex;
+    width:100%;
+}
+```
+
+最後就是簡單的每個格子了，稍微把格子拉長一點讓整體更像一回事，然後加一點 margin 就好，剩下的就不多說明了
+
+```
+.row > div {
+    box-sizing: border-box;
+    border:1px solid black;
+    text-align: center;
+    flex:1;
+    word-break: break-all;
+    height: 80px;
+    margin: 2px 1px;
+}
+```
+
+接著是 720px 寬度，要變更樣式，使用 `@media` 就可以實現
+
+```
+@media screen and (max-width: 720px) {
+  .row {
+    display:inline-block; // 將之調回來，就可以佔據整個 row 的長度
+  }
+
+  .row > div {
+    margin: 2px auto; // 調整一點樣式
+  }
+}
+```
+
+這樣就大公告成了。
+
+![](https://cdn-images-1.medium.com/max/800/1*_H7KxRBggFsQf_2e3Yge4w.gif)
+
+收穫：調整完之後才發現自己多設了很多餘的屬性，所以就打算把整篇從頭到尾研究一下，才發現到原來是真的很多地方多做了。也因此明白自己還有很多地方需要加強像是 flex 到底該設定在哪個位置等等，也有好好的去深入思考一下。希望自己以後可以變得更加熟悉。
+
+## hw2：超基礎 Todo list
+
+![](https://cdn-images-1.medium.com/max/800/0*iF7DGtPdHO5HfVWk.png)
+
+請你完成一個很簡單的 Todo List，需要有以下功能：
+
+1. 身為使用者，我可以新增 todo item
+2. 身為使用者，我可以刪除 todo item
+3. 身為使用者，我可以標記某個 todo item 已完成
+
+—
+
+根據題意，要有一個輸入框可以輸入 Todo List，輸入之後按下 enter 就要出現欄位。
+
+大致上構思了需要有輸入區，顯示區：輸入區需要 input & button 或 enter 即可，顯示區需要勾勾可以用 .toggle 實現打勾，然後資料區，以及滑鼠移上去之後會出現的刪除鈕。不知道這樣的組合會不會太奢侈XD。希望不會就是明天來實作看看就對了。
+
+然後是編寫因為剛使用 JQuery 不熟，所以需要常常翻資料，並留下一些紀錄。
+
+eslint 會被 $ 當作 undefined，所以去找了資料
+
+這邊寫到 只要在 .eslintrc.js 的 gobol 添加 `"$": true` 即可。
+
+```
+{
+  "globals": {
+    "$": true
+  }
+}
+```
+
+—
+
+實作方面。
+
+先給個架構
+
+```
+<div class="container">
+  <div class="todolist__input">
+    <h1> todolist </h1>
+    <input class="form-control form-control-sm" id="input" type="text" placeholder="輸入代辦事項">
+  </div>
+  <div class="todolitst__list">
+```
+
+```
+</div>
+</div>
+```
+
+然後就開始測試我的想法。
+
+先從輸入開始。因為什麼都不懂，於是就是一邊寫一邊找指令XD。找到資料可以按下 enter，必須要使用 keypress 然偵測按鍵，然後針對 enter 做出反應。
+
+然後在找到如何取得資料以及如何清空，用起來果然簡潔很多，但也因為跟 JavaScript 差異不少，所以在學習使用的時候一直覺得怪怪的XD。
+
+```
+$(document).ready(() => {
+  $('#input').keypress((e) => {
+    console.log(e);
+    let code = (e.keyCode ? e.keyCode : e.which);
+    if (code === 13) {
+      console.log($('#input').val());
+      $('#input').val('');
+    }
+  });
+});
+```
+
+接著是下方顯示的部份，要先切個板出來。
+
+直接使用 bootstrap 的勾選之後下方加一個 hr ，之後添加刪除按鍵，並做一些樣式調整，使 button 可以強制顯示在後方。
+
+```
+<div class="todotlist__item form-check">
+  <input class="todolist__done form-check-input" type="checkbox" value="" id="defaultCheck1">
+  <label class="todolist__content form-check-label" for="defaultCheck1">
+    應做事項
+  </label>
+  <div class="todolist__delete"><button type="button" class="btn btn-outline-secondary">刪除</button></div>
+  <hr>
+</div>
+```
+
+CSS 設定：
+
+```
+.todolist__done {
+  margin-top: 0.5rem;
+}
+```
+
+```
+.todolist__content {
+  font-size: 19px;
+  padding-right: 80px;
+}
+```
+
+```
+.todolist__delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: inline-block;
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*5_JuEUjeNyQXEpG0OJVvsg.png)
+
+接著使之可以動態生成。把 HTML 利用 ES6 語法，導入使用者輸入的變數之後在設定成變數。然後就可以利用 `.append()` 動態添加了。
+
+```
+if (code === 13) {
+  const input = $('#input').val(); // 取得資料
+  id += 1;
+  $('#input').val(''); // 清空資料
+  // 後續是取得輸入的資料之後，直接顯示在下方
+  const result = `
+  <div class="todotlist__item form-check">
+    <input class="todolist__done form-check-input" type="checkbox"
+      value="" id="defaultCheck1">
+    <label class="todolist__content form-check-label"
+     for="defaultCheck1">
+      ${input}
+    </label>
+    <button type="button" class="todolist__delete
+      btn btn-outline-secondary">刪除</button>
+    <hr>
+  </div>`;
+  $('.todolist__input').append(result);
+}
+```
+
+這樣子就可以動態新增了。
+
+然後是使用刪除功能：
+
+刪除功能一開始想使用新增 id 的方式來判斷，但後來發現新增的不能這樣使用。最後發現必須要使用事件代理的方式，所以要選擇可以包含全部，的部份。於是就發現只有 .container 可以全選。[接著使用之前 JS102 學到的事件代理方式](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript%E7%AF%87-javascript-%E7%B6%B2%E9%A0%81%E4%BA%8B%E4%BB%B6%E8%99%95%E7%90%86-2596dbad9bdc)，就可以成功選中。
+
+```
+$('.container').on('click', (e) => {
+  if (e.target.classList.contains('todolist__delete')) {
+    alert('delete')
+  }
+});
+```
+
+這樣就可以確認確實是有選到的。
+
+接著就是按照裡面的方法改造成自己要的效果。
+
+但跟前面那篇文章的方法不太相同，這裡要使用 JQuery 內建的指令，用法上也不一樣。
+
+```
+$(e.target.closest('.todotlist__item')).remove();
+// 選到點選元素之後，移除。
+```
+
+完整的程式碼：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/59c467a5b49701ea7e8d796cc0c2a402)
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/24cd1055d972c792df00acb7a5b0e106)
+
+![](https://cdn-images-1.medium.com/max/800/1*On-qFu0jtaOfjhp6vs9v3A.gif)
+
+[JSbin](https://jsbin.com/qopiniv/edit?html,js,output) 可直接測試
+
+後來發現可以改成 `.prepend()` 就可以把資料插在前面了，所以 插入的指定 class name 就可以改成正常的 todolitst\_\_list 了。
+
+## hw3：加強留言板
+
+之前在課程中講過 Bootstrap 這一個好用的 library，能夠讓你把版面變得好看一點，現在就請你利用 Bootstrap 改造之前的留言板 UI。
+
+另外，請把發送留言跟刪除留言的地方改成 ajax，新增留言跟刪除的時候都不用換頁，藉此增進使用者體驗。
+
+最後，我們在之前有實作過「通行證」的機制，其實在 PHP 裡面有內建的可以用，而這個機制就叫做 session。可以參考 [PHP 5 Sessions](https://www.w3schools.com/php/php_sessions.asp) 或是 [PHP Session 使用介紹，啟用與清除 session](http://www.webtech.tw/info.php?tid=33)，把之前留言板的作業改成用 PHP 內建的 session 機制，而不是用我們自己實作的。
+
+—
+
+這邊有很多地方需要處理：
+
+1. bootstrap：用 bootstrap 改造留言板界面
+2. ajax：發送留言跟刪除留言改成 ajax
+3. Session：改成內建的 Session 機制
+
+於是就先從最簡單的改為內建 session 開始
+
+### 內建 Session 想法
+
+基本上就是把本來的方式改成內建的，也因為內建 session 的機制就是開始之後，沒有 session 就會建立，有的話就會取出資料。在設置方面也是這樣。所以就可以簡單的把 security_check.php 的東西改成這種形式。也就是 `session_start();` 之後，就可以從資料庫抓取資料下來，然後儲存到 session 裡面，還可以建立名稱分類，之後需要資料就只要抓取對應名稱的資料即可。
+
+另外由於`session_start();` 之後，只要沒有就會建立，有的話就使用。所以不能直接一開始就 `session_start();` 必須經過判斷之後，所以就要從登入的地方下手。
+
+所以就把原始登入的時候要做的動作用 `session_start();` 就可以取代了，而且思考之後我們可以把其他的資料在這種時候一併帶上，像是 user_id、username、nickname 等之後會用到的資料，這樣的話 security_check.php 安全檢查的部份就可以只通過有沒有 PHPSESSID 判斷了。如果要加強，還可以在配合檢查伺服器的 session 裡面是否有前面說的 user_id、username、nickname。
+
+### 實作上
+
+先把在 handle_login.php 原始的設定 cookie 的位置加上 `session_start();` ，但不刪除只加上待刪註記，等全部完成之後在刪除 cookie 的部份。然後於 handle_signout.php 設定 `session_destroy();` 但卻發現不能夠清除。本以為是沒有設置 `session_start();` 的問題，但設了之後還是不能清除，利用 setcookie 清除依然不行，最後發現是 devtools 裡面的 path 長得不一樣。
+
+![](https://cdn-images-1.medium.com/max/800/1*5RNO99BEINQfg9gqakehlg.png)
+
+不知道是不是這邊的問題。
+
+再次搜尋之後發現使用這種方式就可以清除
+
+經測試之後，確實是路徑的問題。只要把 `setCookie();` 設定第三個參數 `'/'` 就可以確實刪除 PHPSESSID
+
+所以在這邊把兩種方式都記錄下來：
+
+第一種：
+
+```
+//1、開始（必備）
+session_start();
+//2、清空session資訊
+$_SESSION = array();
+//3、清除客戶端sessionid
+if(isset($_COOKIE["PHPSESSID"])) {
+setCookie("PHPSESSID",'',time()-3600,'/'); // 疑似是邊第三個變數的關係
+}
+//4、徹底銷燬session
+session_destroy();
+```
+
+第二種：
+
+```
+session_unset(); // 清除所有設定值
+setCookie("PHPSESSID",'',time()-3600*24, '/'); // 清除瀏覽器 cookie
+session_destroy(); // 徹底摧毀 session
+```
+
+—
+
+### handle_login：
+
+改為把使用者資料新增至 session 之後就可以從 session 呼叫。
+
+然後因為會轉址到首頁，所以就把該使看一下首頁有哪些東西可以修正。先看到三個引入值，所以就先看看這三個引入的 php 有沒有需要修改的地方。另外一點是還要決定要放判斷如果有 session 才使用 `session_start();`。
+
+### security_check.php：
+
+改這邊的話，因為原始方法是通過抓取資料庫資料之後在帶入，這邊就需要測試一下，是否還需要這麼做，例如說 function 的部份可否直接抓 session 上面的呢？
+
+簡單隨意抓取一個 function 直接在裡面使用，就發現可以使用，這下就可以少了很多的引入變數。
+
+並且把安全驗證的地方改一下，偵測到有 session id 就把 login 變數設定為 true，並且`session_start();`
+
+```
+if(isset($_COOKIE["PHPSESSID"]) || !empty($_COOKIE["PHPSESSID"])) {
+  $login = true;
+  session_start(); // 監測 session
+} else {
+  $login = false;
+}
+```
+
+### utils.php：
+
+這邊是存放所有 function 的地方，因為前面說的可以把 session 上面的資料直接呼叫使用，所以那些傳入使用者 id 以及使用者暱稱的地方就可以通通改造，但是要改的地方太多了，就不一一說明了
+
+取代的過程中發現，無法正確顯示刪除編輯功能。結果是因為存在 session 的使用者 id 是 integer 而通過 SQL 去資料庫抓取下來的資料則是 string，所以會無法比較。
+
+發現這個問題之後，測試了一下，只需要將 `$_SESSION['user_id']` 改成 `"_SESSION[user_id]"` 就可以轉為字串了。
+
+另外，由於登入之後的資料還是使用 user_id 等名稱，會不易於易讀性，所以為了做區隔，將之改為以 login_id 命名，以方便區別。
+
+大致完成之後，登出發現，還是有錯誤，原來是那些引用 SESSION 的地方，在登出狀態並沒有 SESSION，所以就是把這部份改一下，主留言的部份，因為只有 admin.php 的部份需要使用，所以就放入該判斷成功的部份就好了。然後是 SQL 指令之後要顯示的部份，原本只取用前面變數的資料，但這個變數變成判斷前面的判斷式的一部分，這代表不一定會套用，所以這時候，有兩種方法，一個是傳入 $login 另一個是在內部判斷有無這個 PHPSESSID 這個 cookie，但這部份已經跟前面重複到了。
+
+另一點是編輯跟刪除的功能，因為也是使用 cookie 的值判斷，所以會出現錯誤，這邊比較簡單，就是在進入這個功能之前做一個判斷就好了。
+
+所以因為這樣的話就是一連串的都要使用到這個判斷，所以就決定使用傳入`$login`的方式。
+
+到這邊改內建機制就完成了。
+
+### 小結一下做了些什麼：
+
+**security_check.php**
+
+- 原本的檢驗機制改成，不抓取資料了，因為已經透過登入的時候處理好了。
+- 驗證機制改為簡單的登入就把 login 變數設為 true 並且 `session_start();`
+- 經測試之後 session 的資料在 function 直接呼叫，所以就可以減少很多的變數應用。
+
+**utils.php**
+
+- 將這邊的 `$user` 也就是使用者 id 的部份，通通用 `$_SESSION['login_id']` 取代
+- 將 `$user_nickname` 也就是使用者暱稱，通通改用 `$_SESSION['login_nickname']` 取代
+- 因應登出的部份把 admin.php 的留言撈資料的 Ιd 直接從 session 取得： `$login_id = $_SESSION['login_id'];`
+- 因應編輯刪除的功能，再沒有 cookie 也就是登出的時候照樣會執行。就使用引入的 `$login` 來判斷，沒有登入就直接不顯示。指令：`if ($login) echo memberInterface($row['user_id'], $row['parent_comment_id']);`
+
+**index.php & admin.php**
+
+- handle_login 改為把使用者資料新增至 session
+- handle_login 使用者資料新增的變數名稱使用 login_id、login_username、login_nickname 以方便辨別
+- 刪掉許多引入的使用者 id 以及 nickname。因為可以通過 session 取得了。
+- commnets 新增引入 `$login`。
+
+然後是 php 的小功能修改，有以下幾項：
+
+- 改成註冊之後直接登入
+- 登入界面以及留言界面整個切開來，這個要跟 bootstrap 一起做
+- 使用者送出刪除跟編輯資料的時候，要做確認使用者資料有無相符
+
+### 註冊即登入
+
+參考 handle_login.php 直接把 `session_start();` 放入即可，但是因為要抓取資料，所以就必須多連一次伺服器，不過這還好，因為導到登入頁面，使用者依然需要輸入之後再次連線才行。後來突發奇想，想說應該可以取得剛剛 INSERT 之後的 ID，果然有。可以使用 output 拿到想要的資料，但後來發現那是其他的 SQL 系統的功能，mySQL 並沒有。而 MySQL 的方法都要通過撈資料，而且那些方法都還會有些問題。
+
+發現自己做這題困難的問題點在於我資料都是用使用者 id 在抓取的，所以變成我不得不使用另外撈資料。
+
+done
+
+—
+
+另一點是昨天沒把自寫的 session 方法刪掉，所以發現有些問題沒處理，所以開始把自寫的 session 刪掉，以方便測試有沒有還有哪邊沒改好。
+
+### bootstrap：用 bootstrap 改造留言板界面
+
+因為需要一個 nav bar 所以就去尋找，個人希望是可以左邊是一般界面，右邊是管理界面，登入登出註冊等功能。
+
+![只需要改造一下即可](https://cdn-images-1.medium.com/max/800/1*Pog81s_mdlV7OShJqt1-8A.png)
+
+_只需要改造一下即可_
+
+然後就是在 span 這邊做改造，所以就先把登入註冊放上來，發現需要用 div 標籤包住，方便做調整，然後觀察一下 container 是如何做 RWD 的，也就跟著做，讓全展開的時候，登入註冊可以平行。而變成按鈕的時候，點開來則可以看到登出登入功能並排
+
+然後是把這部分設置成 function 這個很簡單，就是傳入 `$login` 來判斷即可
+
+```
+function loginInterface($login) {
+ if ($login) {
+  echo "<div class='nav-member'>
+    <a href='./handle_signout.php'>登出</a></div>";
+```
+
+```
+  echo "<div class='nav-member'>
+    <a href='./admin.php'>管理介面</a></div>";
+ } else {
+  echo "<div class='nav-member'>
+    <a href='./login.php'>登入</a></div>";
+```
+
+```
+  echo "<div class='nav-member'>
+    <a href='./register.php'>註冊</a></div>";
+  }
+}
+```
+
+但是當在 admin.php 的時候，又因為需要回到首頁，所以就要有另外一個判斷，所以就需要傳入頁面資訊 `$page_is`
+
+再來是一些小細節，像是主留言需要另外用 div 包起來，這樣才可以調整顏色。其他小細節有觀察到再慢慢修改。
+
+後續又修改了很多的細節，整體版面更好看了
+
+![](https://cdn-images-1.medium.com/max/800/1*OBfEGBcuY8kgw37FeoHVgg.png)
+
+### ajax：發送留言跟刪除留言改成 ajax
+
+ajax 是另外一難，因為基本上 JQuery 的部分沒有學得很深入。必須要花時間去思考怎麼做。
+
+先想一下 ajax 的原理，ajax 是可以前後端分離，所以就不需要通過伺服器就可以同步資料，也就是說前端按下刪除之後，瀏覽器通過 JavaScript 直接移除要刪除的部分，並且把資料後送給伺服器，光是這點就需要思考怎麼實作。
+
+另外這邊想把刪除跟編輯功能改成按鈕，這樣才會比較好看一些，因為原始使用 get 的方式比較不安全，這也是想改的原因之一。
+
+目前想法是通過 cookie 得知是否登入中，以避免沒登入卻還是執行 JavaScript，但也想過這部分好像不需要，因為沒登入根本就不會顯示任何可以操作的按鈕，所以我就只要用事件代理針對那些按鈕有反應就好了。構想中是通過事件代理新增跟刪除而已。
+
+### 刪除功能實作
+
+通過事件代理的方法可以偵測到
+
+```
+console.log(e.target.classList.contains('member__delete'));
+// true
+```
+
+然後就可以執行刪除的功能，但發現，主留言刪除的話，就要把整個區塊都移除，而刪除子留言的部份則是只要刪除那個留言而已。這樣的話就差很多，想了很久，還是需要依賴 classname 的差異才可以，所以主留言可能要命名成為 `member__delete--main` 子留言則是`member__delete--sub` 這樣子在事件代理偵測的時候，就可以分開了。
+
+會的部份做完之後，就是 ajax 的部份了。
+
+根據這篇所寫的內容，利用 $.ajax 就可以送出資料。然後原本用來執行動作的 php 檔就會變成 api。需要利用他們回應的資料，所以就要把回應資料改成 JSON 格式。但這中間的機制因為不懂，只能多摸索摸查詢資料了。
+
+因為一直創資料又刪資料很麻煩。所以決定先使用假回覆來看看能否接收。另外一點是要看能不能發送出去，思考一下要發資料，就必須要自動取得資料。
+
+然後是需要抓取當前資料，研究了半天，最後發現直接使用 `$(e.target)` 就可抓到當前的 calssname
+
+結果要使用 ajax 的時候卻發現原來 bootstrap 所用的 jquery 不支援，所以就要抓新版本。於是就直接把 jquery 那行改成 最新版本即可。連後面那堆資料都不要留。
+
+```
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+```
+
+另外是 JQuery 的監聽 .on 實際上是可以直接設定監聽子元素，所以前面有點白花功夫，但功夫都花了也打字了，就決定保留下來，後面就直接使用監聽子元素的方式繼續下去
+
+```
+$(‘.board’).on(‘click’, '.member__delete',(e) => {
+```
+
+```
+}
+```
+
+但因為 `.board` 跟 `.member__delete` 差太遠，所以就找上層元素，並嘗試印出資料。另外因為發現可以監聽子元素，所以 number\_\_delete 就不需要分主元素或子元素了。
+
+另外一點是因為我把編輯跟刪除的功能放在 nickname 的另外一邊，作為功能使用，所以刪除編輯功能等於是 nickname 的子元素，於是監聽器就可以改成下面這種形式
+
+```
+$('.original__nickname').on('click', '.member__delete', (e) => {
+    let id = $(e.target).attr('data-id');
+    console.log(id)
+})
+```
+
+然後因為我前面整個畫面已經調整過了。主要是我覺得刪除編輯使用原始的 a 元素就很好看。但這樣代表我必須要停止換頁。所以就使用了 `return false;` 來達成效果。
+
+這時候就想到之前學習到的 `e.preventDefault();` 同樣也可以達成效果。於是就去找找資料，發現原來 `return false;` 等於 `e.preventDefault();` 加上 `e.stopPropagation();` 外加上會另外跳出 callback function，所以在這邊效果其實是相同的。[參考資料](https://yiyingloveart.blogspot.com/2013/08/eventpreventdefaultreturn-false.html)
+
+另外要維持 a 元素的藍色樣式，就必須要有超連結效果，所以 a 標籤要加上 `href=''` 一定要等於空，否則會無效。搭配 `e.preventDefault();` 或 `return false;` 就可以達到想要的效果。
+
+```
+"<a class='member__delete' href='' data-id='$comment_id'>刪除</a>"
+```
+
+a 標籤就會長這樣子。
+
+```
+$('.original__nickname').on('click', '.member__delete', (e) => {
+  let id = $(e.target).attr('data-id');
+  console.log(id)
+  return false; // 使 a 元素不能換頁
+})
+```
+
+這樣就可以達到按了卻不換頁的效果
+
+然後是 ajax 的部份，因為我的 api 是使用 GET，所以使用抓取 data-id 然後引入網址的方式，送出資料。然後伺服器回應資料之後，在針對伺服器的資料做處理。而我們本身也要針對點選的目標來做判斷，如果是子留言那麼上層就會是 .original**sub-comment 如果是主留言 上層就是 .original**board 所以根據這樣就可以判斷有沒有找到這個 class 來作為判斷，找到者就移除那個 classname 這樣就會連底下都一起移除。就跟伺服器方做的處理一樣。
+
+```
+$(document).ready(() => {
+  $('.original__nickname').on('click', '.member__delete', (e) => {
+    if(!confirm('是否要刪除？')) return false; // 不刪除則跳出
+    let id = $(e.target).attr('data-id');
+    $.ajax({
+      url: './handle_delete.php?id=' + id, // 傳送資料
+      success: (res) => {
+        const result = JSON.parse(res);
+        if (result.success === 'true') {
+          if(e.target.closest('.original__sub-comment')) {
+            // 如果有找到就移除子留言
+            $(e.target.closest('.original__sub-
+               comment')).fadeOut(500);
+          } else if (e.target.closest('.original__board')) {
+            $(e.target.closest('.original__board')).fadeOut(500);
+          }
+        } else {
+          alert(result.success);
+        }
+      }
+    });
+
+    return false; // 使 a 元素不能換頁
+  })
+});
+```
+
+這樣就完成了刪除的 ajax 了。
+
+另外一點是伺服器那方，因為 ajax 的資料必須要是 JSON 格式。所以我花了一些時間研究 PHP 的 物件是怎麼回事。原來 PHP 的物件是通過 array 的方式使用的，這點跟其他的程式語言相比是比較不同。所以原本使用的 `.josn_encode()` 就必須要額外的接上 array 才可以。
+
+整體就要這樣子寫：
+
+```
+json_encode(array(
+  key1 => value1,
+  key2 => value2,
+  key3 => value3
+));
+```
+
+這樣子出來的資料才是我們要的形式。然後就可以針對不同的地方採用相對應的格式。
+
+執行之後的回應，成功就印出 true。失敗就印出 failed 以及錯誤訊息，返回之後，ajax 就會把錯誤訊息印出。
+
+```
+if($stmt->execute()) {
+echo json_encode(array(
+  "success" => "true",
+  ));
+//header("Location: $_SERVER[HTTP_REFERER]");
+} else {
+echo json_encode(array(
+  "success" => "failed: $conn->error",
+  ));
+// die("failed: $conn->error");
+}
+```
+
+另外一點是我的 handle_delete.php 有新增驗證會員正確性的機制，所以 member_check.php 的錯誤回應訊息也要改格式。整體如下：
+
+```
+// 寫成 function 就不會跟其他的干擾了
+function memberCheck($conn, $id) {
+  $sql = "SELECT `user_id` FROM hugh_comments WHERE id = $id";
+  $result = $conn->query($sql);
+  $row = $result->fetch_assoc();
+```
+
+```
+  if ("$row[user_id]" !== "$_SESSION[login_id]") {
+  // 外面包雙引號保持字串，因為兩種資料型態不一樣
+   return die(json_encode(array("success" => "你沒有權限",)));
+  }
+}
+```
+
+```
+memberCheck($conn, $id);
+```
+
+刪除功能就大功告成了。
+
+### 新增功能實作
+
+同樣使用 `.on()` 偵測，這次可以寫成偵測 submit 的動作
+
+```
+$('.board').on('submit', (e) => {
+```
+
+```
+}
+```
+
+就不用寫針對哪些 class 了。不過我在想之後要寫的更複雜的話，恐怕還是需要另外給 submit 一個 class name。
+
+然後是構思一下整體的流程：
+
+1. 按下之後，從 submit 的 form 取得資料
+
+2. 發資料到 api 新增留言
+
+3. 接收 api 回應的成功與否，來決定要不要新增
+
+4. 正確的話就，根據正確的位置
+
+5. 把剛剛接收的資料印出
+
+第一步驟，其實可以跟第二步驟一起做。後來發現可以使用 `.closest` 搭配 `.serialize()` 就可以直接抓到 form 的資料，並且傳送出去。
+
+```
+$(e.target.closest('form')).serialize();
+```
+
+這樣就可以取得跟 form 的資料，並且把資料轉成 PHP 可以接受的形式。
+
+搭配 `.ajax` 發送出去並且測試有無成功接到回傳資料。
+
+```
+$.ajax({
+  type: "POST",
+  url: "./handle_add.php",
+  data: $(e.target.closest('form')).serialize(), // 送出資料
+  dataType: "json",
+  success: (res) => {
+    console.log(res)
+    }
+  }
+});
+```
+
+這時候為了要測試，就可以先目標網址的改成回傳固定的資料。這樣就可以確定有沒有成功收到資料。
+
+發現成功之後，就可以開始改寫 api 讓 api 回傳需要的資料。並且因為發現除了 api 需要接收資料之外，還必須要回應剛剛接收的資料的相關訊息，所以就必須要另外再把最新一筆資料呼叫出來
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/ac064cc56161e666fc7cd14132d12c7d)
+
+因為 api 改成這樣子，所以成功的話就沒有 sucess 的資料。這邊就有兩種判斷方式第一種是判斷沒有 sucess 的話就是成功，另外一種是判斷回應資料的 id 有 id 就是傳送有成功。其他失敗的部份就可以跟刪除的部份一樣。
+
+```
+$('.board').on('submit', (e) => {
+    $.ajax({
+      type: "POST",
+      url: "./handle_add.php",
+      data: $(e.target.closest('form')).serialize(), // 送出資料
+      dataType: "json",
+      success: (res) => {
+        if (res.id) {
+          console.log(res)
+        } else {
+          alert(res.success);
+        }
+        // 成功之後就要 render 網頁了
+      }
+    });
+
+    return false;
+})
+```
+
+接下來就是判斷是哪邊的 submit，然後針對相對應的位置添加資料。這題麻煩在於主留言 render 之後又還要使之可以另外添加資料，先測試子留言
+
+找了很久才發現可以通過選到主元素，然後在往下選到子元素。
+
+通過這個方法，搭配另外寫選擇第幾個，就可以選到子元素的第一個。
+
+```
+let childClass = $(".original__sub-comment")[0];
+// 這樣就可以單獨選道第一個$(e.target.closest('.original__board')).find(childClass).before(result);
+// 添加在最上面一個元素上面，這樣結果就跟伺服器渲染的一樣。
+```
+
+但發現這種選法只能對最上層的留言有效，所以只能放棄。原始是希望看能不能不加上標籤包住，直接選到第一個子留言，然後把資料添加在第一個子留言上面，但是研究了很久不管換成 `.find()` 、`.children()` 都無法實現。
+
+所以就改用第二種方法，就是另外針對子留言多用一個 div 包起來，並且把所有的資料 `.prepend()` 在這個 div 的最前面，一樣可以達成效果。
+
+```
+if (e.target.closest('.original__board')) {
+  const result = `
+    <div class='original__sub-comment $is_main'>
+      <div class='original__nickname'>nickname
+        <div class='member__interface'>
+          <a class='member__edit' href='./update.php?id=$comment_id' data-id='$comment_id'>編輯</a>
+          <a class='member__delete' href='' data-id='$comment_id'>刪除</a>
+        </div>
+      </div>
+      <div class='original__comment'>$comment</div>
+      <div class='original__createdAt'>2019-0809466</div>
+    </div>`
+  $(e.target.closest('.original__board')).find(".original__sub-all").prepend(result);
+  // 添加在最上面一個元素上面，這樣結果就跟伺服器渲染的一樣。
+
+}
+```
+
+這邊先只用假值做測試，不然資料庫資料可能會上千筆去了XD
+
+然後就是放回原來的位置去套用從伺服器得到的資料。
+
+但這樣有個缺點是，因為還無法得知這個留言是否跟主留言同作者，仔細想一下要做這個還真難…。有幾種方式：
+
+1. 標示主留言的 id。但資安… 前端盡量不要顯示太多資訊好
+2. 後端 api 另外再撈主留言的 id。變成一個新增的動作要下三次 SQL 指令.. 而且這樣的話，還需要寫把 array 結合在一起的程式碼。
+3. 乾脆放棄XD 因為一般的留言板並不會特別做這種標示
+4. 研究看看有沒有辦法改寫指令一併撈出，但很難，因為同 table 無法 JOIN。除非另外拆 table，但是工程浩大…。
+
+目前可以思考自己有哪些資訊， session 儲存著登入者的 id，但似乎沒用。這篇文章的 user_id 是有的。這兩個資訊不是一樣嗎XD…。所以問題一樣，要怎麼得到主留言的 id？
+
+所以最後選擇放棄，因為不管哪個都各有優缺點。只能等以後有空再來補這個缺。
+
+**接下來實作主留言的部份：**
+
+跟子留言一樣的問題，所以先添加一個標籤把所有的主留言包起來。這邊之前沒注意到，要放在 if 裡面，確定有資料才印出來，所以 `</div>` 放的位置也要注意，這邊就先連前面子留言的部份一併修改。
+
+然後是實作新增的部份，因為 ajax 採用一樣的緣故，所以已經確定可以發送資料出去。所以就是寫 render 的就好。採用跟之前一樣的模式，把 render 的部份獨立完成之後在放入。因為有子留言的經驗，所以原則上就是把需要的 class name 更換即可達成效果，比較麻煩的是因為主留言東西比較多，所以要時間去改一下。
+
+改到一半發現需要 session 的資料，但研究發現，原來前後端分開的時候，JavaScript 並不能直接取得 session 的資料，必須經過伺服器，想一想這樣也比較合理。學習到這邊就越來越對於前後端的分別有了真實性。
+
+所以就開始研究一下 php 的 物件 要怎麼添加，還有可以物件中的值可不可以是另外一個物件，以及 session 的資料可以一口氣抓下來嗎？
+
+原來 php 的 物件也不難。只是跟 array 寫在一起，所以初學容易搞混而已。
+
+```
+$res = array(
+  "id"=> "123243423",
+  "nickname"=> "測試暱稱",
+  "comment"=> "這是內文",
+  "created_at"=> "2019-08-08",
+);
+```
+
+```
+$session = array(
+  "login_id" => "12346",
+  "login_username" => "aaa",
+  "login_nickname" => "天上",
+);
+```
+
+```
+$res['session'] = $session;
+// 添加一個 key 為 session，值是 $session 的資料
+echo json_encode($res, JSON_UNESCAPED_UNICODE);
+```
+
+就可以得到結果
+
+![](https://cdn-images-1.medium.com/max/800/1*yQ61pCgWn2K0lGV7f54MBQ.png)
+
+然後是發現可以直接把整個 session 的值取下來，所以就可以直接添加。
+
+```
+$res['session'] = $_SESSION;
+```
+
+利用這種方式，就可以順便把之前的實作的變色機制需要的值一起帶入，只是這樣子就會越寫越複雜，所以也需要把這些寫成 function，以方便閱讀。
+
+但先回到重點，先測試一下可以正確添加嗎？先直接使用這組來測試，發現都可以正常運行。
+
+![](https://cdn-images-1.medium.com/max/800/1*slqRIvMjYaYdEvjmGjePwQ.gif)
+
+但是當同樣擺在一起時，卻發現按下之後又執行主留言又執行子留言。這時候只要在兩個判斷最後面都加上 `return false;` 就可以不要繼續執行下去。
+
+另外想要針對 render 的添加特效，找到這個網站
+
+發現可以使用一些技巧不用整個重新 render
+
+但是整段寫下來太長了，所以就改一下，分開寫。
+
+```
+$(e.target.closest('.original__board')).find('.original__sub-all')
+  .prepend($(result).hide().fadeIn(500));
+// 這樣寫才會只有添加的部份有特效
+```
+
+```
+// 添加在最上面一個元素上面，這樣結果就跟伺服器渲染的一樣。
+```
+
+然後是清空輸入空間的指令。有了前面的經驗都不難了。
+
+```
+$(e.target.closest('form')).find('textarea').val('');
+```
+
+另外順便把 textarea 加上文字說明 使用 `placeholder='說明的文字'` 這樣就可以了。
+
+然後是額外的內容，因為覺得後端在驗證是否空值似乎有點浪費流量。所以決定在前端先驗證，簡單寫的判斷是判斷 textarea 是否空值。然後試著不用 alert 的方式，並且變動說明文字，但覺得這樣不夠強烈，所以就嘗試讓視窗可以晃動。結果發現原來 JQuery UI 才有預設震動特效，所以只好自己寫。其實也不難，就是 `margin-left` ±10 這樣。
+
+```
+if ($(e.target.closest('form')).find('textarea').val() === '') {
+  const renderTarget = $(e.target.closest('form')).find('textarea')
+  renderTarget.attr('placeholder', '內容不可以為空')
+  for(let i = 0; i <= 5; i += 1) { // 震動視窗，利用多次迴圈看起來像震動
+    renderTarget
+      .animate({'margin-left':'-10px'}, 50)
+      .animate({'margin-left':'10px'}, 50);
+  }
+  renderTarget.animate({'margin':'0px'}, 50);
+  return false; // 使輸出無效
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*iCcCZwCpyEaUnrbukeaz2g.gif)
+
+這樣前端的部份就大致完成了。
+
+剩下的就是再次改寫後端，把我們需要的資料抓取完成之後製作成需要的樣子。
+
+除了原來的值之外，另外把使用者的資料帶進去，再利用函式判斷主留言跟發作留言的作者是否是同一人，是的話就回傳 class name。不是或是主留言就回傳空字串。
+
+```
+$row = $result->fetch_assoc();
+$row['session'] = $_SESSION; // 添加取得 session 的資料
+// 撈取 parent_id 文章的 user_id，成功就回傳需顯示的 classname，失敗則否
+$row['is_main'] = getParentUser($conn, $parent_id);
+// 引入傳入的父留言 id
+echo json_encode($row, JSON_UNESCAPED_UNICODE);
+```
+
+function 的部份
+
+```
+function getParentUser($conn, $parent_id) {
+  $stmt_result = $conn->prepare("SELECT user_id AS main_user_id
+    FROM `hugh_comments` WHERE id = ?");
+  $stmt_result->bind_param("i", $parent_id);
+  $stmt_result->execute();
+```
+
+```
+$result = $stmt_result->get_result();
+  if ($result->num_rows>0) {
+    $row = $result->fetch_assoc();
+    return $row['main_user_id'] === $_SESSION['login_id'] ?
+       'original__main-bgcolor' : '';
+  } else {
+    return '';
+  }
+}
+```
+
+—
+
+所以就完成功能了。然後測試一下刪除！？奇怪怎麼動態新增的刪不掉… 而且網址轉跳的功能還在耶！但是因為空值，所以會轉跳原頁面。這代表一見事。可能還是要通過 if 的方式來判斷才可以，直接使用第三個參數恐怕不能算事件代理？！
+
+最後研究了很久才發現問題點。因為我主監聽的位置拉到太低，我是監測每個 nickname 的 div 的，而動態新增的不在監聽的範圍內，因為是後來才弄出來的。這時候只要把主監聽的改成會包覆所有可能動態新增的的 div 即可，也就是 `original__main-all` 這個 class 就可以動態新增。也感謝自己之前為了要動態新增而新增這個 class。所以感想是果然重要的資料群還是需要另外用一個 元素包起來才對。
+
+所以這邊學到一課，就是監聽的位置最高要在所有可能會需要監聽的位置。
+
+完整的 JS 程式碼：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/d43dc3f6281a5eccf19b5a202f4eef4b)
+
+## hw4：簡答題
+
+1. Bootstrap 是什麼？
+2. 請簡介網格系統以及與 RWD 的關係
+3. 請找出任何一個與 Bootstrap 類似的 library
+4. jQuery 是什麼？
+5. jQuery 與 vanilla JS 的關係是什麼？
+
+—
+
+### Bootstrap 是什麼？
+
+bootstrap 是一種有利於快速開發 CSS 的工具包，針對某些常用需求有已經寫好的現成 CSS 樣式。  
+使用 bootstrap 的時候，只需要引用即可。  
+因為已經有現成的 CSS 樣式，所以只需要在相對應的位置引用 class name ，就可以看到效果。
+
+bootstrap 還包含了 JavaScript 因為一些 UI 的運作需要搭配 JavaScript 才可以運行。  
+另外一點是 bootstrap 已經針對 RWD 有著良好的設計，所以在使用上可以更容易達成 RWD 效果。  
+也預先處理好跨瀏覽器的問題，所以可以省去很多較為底層的操作，也可以減少為了同樣的功能需要不停的撰寫相同的 CSS 的窘境。
+
+bootstrap 就是一個協助現在前端開發更容易的 library，主要是在開發 CSS 的部份會更簡單更容易一些。
+
+### 請簡介網格系統以及與 RWD 的關係
+
+網格系統可以讓 RWD 更容易使用，兩者相輔相成。  
+當網頁的內容需要並排顯示的時候，就可以套用網格系統。  
+網格系統可以針對螢幕寬度呈現不同的網格排序，就可以輕易達到根據不同的螢幕尺寸將資料四個一排或是三個一排等方式呈現。
+
+### 請找出任何一個與 Bootstrap 類似的 library
+
+JQuery UI、element UI
+
+### jQuery 是什麼？
+
+是一種把 JavaScript 指令，另外包裝過讓我們可以更方便使用的 library。  
+通過 JQuery 的 api 讓我們可以更容易的撰寫程式。
+
+### jQuery 與 vanilla JS 的關係是什麼？
+
+JQuery 的來源就是 vanilla JS，所以 JQuery 是依附在 vanilla JS 之下的，可以說沒有 vanilla JS 就沒有 JQuery。  
+兩者的差異是在 JQuery 使用起來比 vanilla JS 簡單許多。
+
+## 收穫：
+
+這週花了不少時間在作業一方面是工作較為忙碌，另外一面是從後端切到前端有點轉不過來，不過在熟悉 Bootstrap 跟 jQuery 的過程之中，對於前端跟後端的差異是越來越有真實性。
+
+從這邊可以理解到原來我們用來接收資料的 php 就是 api 的一種，也等於是所有的 handle_xxx.php 通通都可以稱為 api，當然實際上還差一些，因為 api 只能回應資料而已，不應該附帶一些轉址的功能之類的。所以只需要把這些 handle_xxx.php 改造一下，變成回應 JSON 格式的資料就可以了。
+
+也因為如此，就對於 single page application, SPA 有了更真實的感覺。原來就是通過這樣子的流程就可以不用換頁卻可以更新資料。這期間我有把留言板給朋友玩玩看，主要是他用手機，他在新增留言的時候疑似因為不會換頁，他以為失敗了，然後就多按幾次，結果跳出我意想不到的回應，當初在那個位置設置回應資料只是因為好玩，覺得應該不會跳出那筆資料。
+
+但讓我意想不到的是，果然還是使用者厲害，居然可以幫我按出那個錯誤訊息XD
+
+在實作過程中，我自己是覺得滿好玩的，通過 Bootstrap 跟 JQuery 可以很快的做出原生 CSS 及 vanllia JS 做起來很困難的事情，但我主要都花時間在看一下怎麼使用才好，因為用這些 library 用起來就很像是在讀別人的程式碼一樣，尤其是套用之後，效果不是自己 100% 想要的，那就必須要自己手動去修正，所以就要細細地去看一下是怎麼實作的，然後再針對想修正的方向去做調整。
+
+總而言之， Bootstrap 真的是個很方便的工具，有很多預設好的樣式，可以直接使用，然後可以以它為基礎再做變化即可。JQuery 則是預設好很多種方式，自己在研究如何 append 的時候就發現，還真夠多種 render 的方法，會覺得說怎麼不像 vanllia JS 那樣子，直接放在一個函式底下，然後再延伸出去，也許是當初製作的人覺得這樣很方便吧？

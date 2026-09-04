@@ -13,7 +13,16 @@ export default defineConfig({
       schema: s
         .object({
           title: s.string(),
-          slug: s.slug("posts"),
+          // Custom slug validation replacing s.slug(): the built-in regex is
+          // /^[a-z0-9]+(?:-[a-z0-9]+)*$/i, ASCII-only, which flags every
+          // Chinese-titled post as an invalid slug. \p{Letter} covers CJK while
+          // still excluding punctuation and whitespace; s.unique is retained.
+          slug: s
+            .string()
+            .min(1)
+            .max(200)
+            .regex(/^[\p{Letter}\p{Number}]+(?:-[\p{Letter}\p{Number}]+)*$/u, "Invalid slug")
+            .and(s.unique("posts")),
           description: s.string(),
           subtitle: s.string().optional(),
           date: s.isodate(),

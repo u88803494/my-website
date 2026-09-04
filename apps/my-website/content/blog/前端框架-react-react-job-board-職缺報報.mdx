@@ -1,0 +1,409 @@
+---
+title: "前端框架 React：React Job Board 職缺報報"
+slug: "前端框架-react-react-job-board-職缺報報"
+description: "一樣先從介面開始"
+date: 2019-11-02T05:39:57.156Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*gV82iMb5hI81ID1wPhxvyA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-react-job-board-%E8%81%B7%E7%BC%BA%E5%A0%B1%E5%A0%B1-f71aa0076c65"
+---
+
+## 一樣先從介面開始
+
+一樣使用 `npx create-react-app jobboard` 創建一個 React app，然後把不需要的部分刪除之後就可以開始寫了。
+
+ps: 在這邊發現創建的資料夾名稱要通通小寫，否則會報錯：  
+ ”name can no longer contain capital letters“
+
+然後就可以開始製作頁面，要有 title，然後是內容，最後來調整一下 CSS，就可以得到如下方的效果。
+
+![](https://cdn-images-1.medium.com/max/800/1*gV82iMb5hI81ID1wPhxvyA.png)
+
+程式碼：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/85f745433b60e5108137022017b1bb61)
+
+然後就可以開始串接資料，寫 state 等。
+
+## 開始實作功能
+
+這邊使用的 API 是一個現成的 API 系統，網址：http://www.mocky.io/
+
+這可以寫一些自己想要回傳的資料，然後得到的網址就可以直接使用。這邊已經有建立好的一個 [API](http://www.mocky.io/v2/5c18f4ac2f00002a00af130a)
+
+要取得資料的部分，當然也可以寫在 constructor 裡面。不過最好的作法就是寫在 ComponentDidMounting 裡面。
+
+```
+componentDidMount() {
+  fetch('http://www.mocky.io/v2/5c18f4ac2f00002a00af130a')
+    .then(res => res.json())
+    .then(date => console.log(date))
+}
+```
+
+取得之後試著印出，可以發現確實有取得資料：
+
+![](https://cdn-images-1.medium.com/max/800/1*ByU87UnbvgQXi39ZPnoQ0w.png)
+
+然後就可以開始寫初始化的資料，需要有一個 jobs 的資料是空陣列，這樣才可以放入這些資料。
+
+```
+constructor(props) {
+  super(props)
+  this.state = {
+    jobs: [],
+  }
+}
+```
+
+放入資料的部分只要直接使用 `.setState()` 即可。
+
+```
+componentDidMount() {
+  fetch('http://www.mocky.io/v2/5c18f4ac2f00002a00af130a')
+    .then(res => res.json())
+    .then(date => {
+       this.setState({
+         jobs: date,
+       })
+}
+```
+
+這樣就可以拿到資料。
+
+從 render 把資料解構之後，就可以使用這些資料，然後把這些資料放上之前寫好的資料，可以使用 `.map()` 來把這些資料一一作處理。
+
+![](https://cdn-images-1.medium.com/max/800/1*ZPx2SUmnpnRR7sdjC-w9Tg.png)
+
+當然這部分也可以另外切成 component，另外寫過，這樣會比較好維護。
+
+在這個範例中是非常簡單就可以完成一個基本功能，需要把資料拿下來之後，對應到 state，然後在 render 中間把資料放入即可。
+
+## 進階練習：加入 filter
+
+當前的職缺報報，實際上有個缺點就是沒有分類。
+
+所以這邊需要做上三種：前端、後端、其他。當按下按鈕之後就跳出該分類的職缺。
+
+這邊不用做混合的，像是同時顯示前端＋後端，這部分會比較難一些。
+
+篩選的方式可以根據職缺標題來判斷。
+
+—
+
+篩選分類的方式可以參考之前 todolist 的作法，在這裡要使用新增一筆資料來顯示狀態。
+
+新增按紐
+
+```
+<div className="filter">職缺類型：
+  <button className="filter_all"
+    onClick={this.filterButtom}>全部</button>
+  <button className="filter_fontend"
+    onClick={this.filterButtom}>前端</button>
+  <button className="filter_backend"
+    onClick={this.filterButtom}>後端</button>
+  <button className="filter_other"
+    onClick={this.filterButtom}>其他</button>
+</div>
+```
+
+然後針對這部份寫入狀態新建立一個 filter 用來分類，然後直接使用 class name 作為分類使用。
+
+```
+filterButtom = (e) => {
+  this.setState({
+    filter: e.target.className
+  })
+}
+```
+
+然後是資料的部分，由於內建函式不能夠直接找陣列裡面的物件的資料，所以就必須要處理過之後才可以，也就是說取得的資料本來是
+
+![](https://cdn-images-1.medium.com/max/800/1*uyfd-8Uw77bvc_RenQs3YA.png)
+
+而我們判斷的時候需要的資料就只有 title 而已，所以要判斷資料就必須要把資料處理成只有 title 的 array
+
+```
+const result = jobs.map(job => job.title).filter(job => job.indexOf('前端') > -1)
+```
+
+後來思考之後才發現是我對於整體不夠熟悉，所以就在嘗試看看：
+
+```
+const rr = jobs.filter(job => job.title.indexOf('前端') > -1)
+// 這樣就可以篩選資料了
+```
+
+這樣就可以直接篩選了…
+
+在這邊學到一個教訓，就是果然要先從最小的細節開始處理，就會慢慢找到正確的方法了。
+
+再來就是思考要怎麼樣把這樣的東西放入判斷，因為有好至少三種需要實作。
+
+所以就決定先使用先篩選資料，後面再放入的方式了。
+
+```
+let result // 處理資料的部分
+switch (filter) {
+  case 'filter_fontend':
+    result = jobs.filter(job => job.title.indexOf('前端') !== -1)
+    break;
+  case 'filter_backend':
+    result = jobs.filter(job => job.title.indexOf('Backend') !== -1)
+    break;
+  case 'filter_other':
+    result = jobs.filter(job => job.title.indexOf('前端') === -1
+      && job.title.indexOf('Backend') === -1)
+    break;
+  default:
+    result = jobs
+}
+```
+
+然後 render 的部分就用 result 的資料去處理即可。
+
+![這樣就可以單一頁面的切換了](https://cdn-images-1.medium.com/max/800/1*QRyqKro37CvkZrS4DoMgcg.gif)
+
+_這樣就可以單一頁面的切換了_
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/4c29fb91086e909a589f558be273cd0a)
+
+## 進階練習：加入關注清單
+
+在這個練習中是要做關注清單，所以右下角可能會有一個星星，點下去之後，就關注了。
+
+星星就會亮，然後背景變色，所以就需要把資料儲存在 localStorage 裡面，這樣才知道有在關注些什麼。
+
+然後還可以取消關注，因為只對這台電腦有效，所以可以存在 localStorage
+
+—
+
+這邊就要思考一個問題，就是資料要怎麼儲存，然後下載之後，資料要如何做處置呢？
+
+或是簡單一點，直接另外儲存一筆資料是關注清單，直接在裡面的陣列放標題作為關注，也就是說把關注的部分儲存成陣列就好。
+
+作法應該是類似之前的 todolist 的是否完成，只是這邊變成兩筆比不同的資料了。
+
+所以就先朝這個方向走吧。
+
+先在 state 的部分添加一筆：
+
+```
+this.state = {
+  jobs: [],
+  filter: 'filter_all',
+  watchlist: []
+}
+```
+
+然後是實作這個按鈕的介面。
+
+直接在原來的部分新增一筆資料，作為關注的按鈕
+
+```
+class Jobs:
+render() {
+  return(
+    ...
+    <div className="job_watch">🌟★☆</div> // 先測試，所以先隨意擺上
+  )
+}
+```
+
+接著要寫 CSS 把整個網頁至於右上角
+
+![備註的屬性是測試背景變色](https://cdn-images-1.medium.com/max/800/1*o3czYB5vlAs8pi2wZFT_sg.png)
+
+_備註的屬性是測試背景變色_
+
+![](https://cdn-images-1.medium.com/max/800/1*PGW3RfJGiI65dr_rbFXc_A.png)
+
+然後就要處理功能的部分了，直接按照整體執行的流程來思考，因為已經建立了空白的 state，所以就可以直接看看要怎麼樣寫按鈕的部分，
+
+直接在 `Jobs` 的標籤內傳入 function：
+
+```
+<Jobs job={job} key={job.link} watchJob={this.watchJob} />
+```
+
+這個 function 先準備好之後可以備用，
+
+然後是針對 Jobs 的 component 開始寫，先新增一個 `onClick` 監聽事件，然後使用 function 來接收，
+
+```
+<div className="job_watch" onClick={this.watch}>🌟★☆</div>
+```
+
+然後就開始寫 function，因為這個 function 是複雜把資料回傳的，之前決定要用 title 作為紀錄的方式，所以自然就是要回傳 title
+
+```
+watch = () => {
+  const { job, watchJob } = this.props
+  watchJob(job.title)
+}
+```
+
+在這裡把資料取出之後，然後呼叫這個 function 就可以了，所以接下來就是寫一下 watchJob 的作用了。
+
+```
+watchJob = (watch) => {
+  console.log(watch) // 確認資料傳入的正確性
+  const { watchlist } = this.state
+  this.setState({
+    watchlist: [...watchlist, watch]
+  }, () => {
+    console.log(this.state.watchlist)
+    // 這邊就可以確認到 setState 之後的資料
+ })
+}
+```
+
+這邊先這樣測試有沒有成功，發現可以印出 title，也可以順利新增進watchlist 的 array，但這樣會有問題，也就是說只能添加而已。
+
+這邊就要另外思考一下解決方案，因為是 array 裡面只能有一筆資料，所以就是當傳入的值，在 watchlist 裡面已經有了就移除，而當 watchlist 裡面沒有則新增
+
+```
+watchJob = (watch) => {
+  const { watchlist } = this.state
+```
+
+```
+  const newWatchlist = watchlist.filter(item => item !== watch)
+  this.setState({
+    watchlist: newWatchlist.length !== watchlist.length ?
+      newWatchlist : [...watchlist, watch]
+  }, () => {
+    console.log(this.state.watchlist)
+    // 用來確認狀態有無修改成功，之後需要移除
+  })
+}
+```
+
+通過這種方式來把資料放進去，判斷方式是資料的長度，如果取消 arr 長度就會變短，所以就可以用 newWatchlist 取代，而如果 arr 長度相等，就代表原來沒這個值，就必須要加上去，所以就會執行三元運算子的 false 的部分。
+
+接著是畫面的變動的部分，我想了很多原來很簡單，就是按照 state 是什麼就改變資料就好了…，也就是直接在 render 的時候做比較，先是寫比較的資料取得該結果：
+
+```
+const isWatch = watchlist.filter(item => item === job.title)
+```
+
+取得資料之後，跟原來的內容做比較，有對上的就呈現上來，這邊的方法感覺可以使用 arr 的長度來辨認。
+
+所以就真的直接用來比較，然後就是使用三元運算子就可以得到需要的星星。
+
+```
+<div className="job_watch" onClick={this.watch} >
+  {isWatch.length ? '★' : '☆'}
+</div>
+```
+
+然後是背景變色的部分，需要的是使用額外新增一個用來切換狀態的 CSS
+
+```
+app.css:
+```
+
+```
+.job--watching {
+  background: #ffffcb;
+}
+```
+
+然後針對單一個工作區使用斷路的方式來判斷資料，這邊就可以使用Template literals 然後再使用 `${}` 另外撰寫需要的程式碼就好，在這邊理解到之前產生的疑問了：**JSX 不用**`${}`**因為在這裡可以做區別。**
+
+```
+<div className={`job ${isWatch.length && 'job--watching'}`}>
+```
+
+整體會變成這樣子：
+
+![](https://cdn-images-1.medium.com/max/800/1*b8SFfpR3OYsvR39wKjDPow.png)
+
+然後就是把資料儲存的部分了，先處理把資料寫入的部分。
+
+在這邊要使用 lifecycle ，所以要再 class App 新增 componentDidUpdate：
+
+```
+componentDidUpdate(prevProps, prevState) {
+if (prevState.watchlist !== this.state.watchlist) {
+  window.localStorage.setItem('watchlist',
+    JSON.stringify(this.state.watchlist));
+  }
+}
+```
+
+經過判斷之後把資料轉成 JSON 存入 localStorage
+
+接下來就是取出資料的部分：
+
+這要在 `componentDidMount()` 的部分寫入，但本來就已經在這邊載入數據，所以可以先在寫出來測試：
+
+```
+const watchlist = window.localStorage.getItem('watchlist')
+console.log(JSON.parse(watchlist))
+```
+
+發現確實可以取出，所以就把這部分放入 state 內部，而後來思考後，其實可以跟抓取資料的部分寫在一起：
+
+![這樣寫在一起，也減少額外的 setState 導致的重新 render](https://cdn-images-1.medium.com/max/800/1*AK0CcUQdX1c2dtk3m6q5GA.png)
+
+_這樣寫在一起，也減少額外的 setState 導致的重新 render_
+
+然後後來發現了一個問題，就是當使用者第一次使用的時候，會因為 `localStorage` 沒有 watchlist 而產生錯誤，解決方法就很簡單的直接加上判斷就好
+
+```
+this.setState({
+  jobs: data,
+  watchlist: watchlist ? JSON.parse(watchlist) : []
+})
+```
+
+而且因為在這裡帶入資料的部分，本來就會 render 了，所以這邊多做一個判斷也不會多一次的 render
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/27286e6c15d9c1f8627bf53cde966b6b)
+
+## 魔王練習：實作搜尋功能
+
+這邊一樣也只思考怎麼實作就好。
+
+因為是搜尋功能，所以會有一個搜尋框，然後邊打字就會邊搜尋。除了標題之外，還有內文也要搜尋。
+
+而當把搜尋框清空之後，職缺就會全部出現。
+
+—
+
+在這邊可以使用 `.indexOf()` 來搜尋，一樣就是按照流程，先把寫出如何把搜尋的 input 的資料寫入 state。
+
+然後在按照這個 state 去處發搜尋功能，搜尋這邊要從 title 搜尋，也要把 content 搜尋，然後把搜尋結果篩選出來之後 render。
+
+寫到這邊會想到其實真的不好寫，主要是因為要如何判斷這是需要的資料呢？因為有兩種資料需要搜尋，所以變成說需要把搜尋到的結果先存下來，然後 render 的時候在選到該筆資料 render 了吧…
+
+## 學習收穫：
+
+在職缺報報這邊就是練習一下整個 React 的 render 過程，以及一些之前教導過得處理方式，在這邊也得到練習，所以算是對於這些 React 的操作方法更是熟悉。
+
+也讓我回憶起之前寫 JavaScript 的習慣，像是很多東西先從最小的部份開始著手，慢慢的就會有比較好的想法，在進階練習的第一題，我一直覺得我沒辦法很好的應用 `.filter()` 跟 `.map()` 。
+
+結果後面從 for 迴圈開始寫，就發現自己可以逐步理解到底該怎麼使用，這就是從最小的地方開始寫。
+
+我等於是舉了一些例子，把 `.filter()` 跟 `.map()` 的特性做了一些理解，這部份以後在碰到也決定都要這樣用了。因為類似的方法還有很多種XD
+
+這讓我想到之前學 JavaScript 時候的課程，有很多是叫我們利用迴圈寫出內建函式的效果，在這邊就可以利用這種方式練習了，感覺還不錯。
+
+`.map()` 的方面，最主要是學習到 React 在使用陣列 render 的時候的方式，一邊寫一邊測試中，就可以理解到 React 在處理陣列的時候，是遵循怎麼樣的規則，也加深了我該怎麼使用的印象。
+
+我也知道在 React 上面，JavaScript 的特性真的被很大限度的利用，所以我們才可以有了更簡短的程式碼，更好的寫程式的 React 可以使用。
+
+然後是關於另外一題我就可以很好的回想了。當時解題的時候，關於我的流程是怎麼樣方式，慢慢的都回想起來，這我才慢慢有了上手 React 的感覺。
+
+我就很順利的慢慢的拆解把下一題解出來了。
+
+當然這邊也是有學習到的部份，像是我終於練習到短路判斷的寫法，然後也終於知道該如何下手寫 React 的程式碼了。
+
+也知道我要怎麼樣把之前寫程式碼的流程搭配 React 的思考模式來寫出程式。
+
+簡單說就是按照整個流程，把介面那些刻好之後，就可以開始寫 React。
+
+先從 state 開始，然後逐步寫該如何 render，然後在寫其他的程式碼需要的效果，最後就可以完整了。

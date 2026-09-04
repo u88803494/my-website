@@ -1,0 +1,104 @@
+---
+title: "人生重構 Day07：學習終點站 — 進階 JS 與現代框架"
+slug: "人生重構-day07-學習終點站-進階-js-與現代框架"
+description: "只要你不停下，即使走得慢也不要緊。 — — 孔子"
+date: 2023-09-22T11:02:24.407Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E4%BA%BA%E7%94%9F%E9%87%8D%E6%A7%8B-day07-%E5%AD%B8%E7%BF%92%E7%B5%82%E9%BB%9E%E7%AB%99-%E9%80%B2%E9%9A%8E-js-%E8%88%87%E7%8F%BE%E4%BB%A3%E6%A1%86%E6%9E%B6-3c3fd31461f0"
+---
+
+> _只要你不停下，即使走得慢也不要緊。 — — 孔子_
+
+> _（原文：譬如為山，未成一簣，止，吾止也。譬如平地，雖覆一簣，進，吾往也 。）_
+
+只要繼續維持學習，終究會成功，這呼應了這個階段的狀況。
+
+## 回顧 Day06
+
+在 Day06 中，我分享了那階段學到了什麼以及有趣的發現，也分享了幾篇當時寫下作為筆記的文章，而接下來，就是繼續分享下去。今天，我將深入探討我在進階階段的學習心得。
+
+## 這階段學了什麼
+
+在這個階段，學了很多進階的 JavaScript 機制，甚至去探索其中的原理，從最間單的變數開始到理解各種像是 Scope、Hoisting、Clouse、Prototype、this 的基本原理，然後最後再帶去看 ES3 的說明書，去把這一切都串起來。最後可以帶著這些知識，再去學習現代框架(React)，然後就可以透過之前的理解的底層原理，去理解 React，對於學習很有幫助。這個方式真的滿好的，也是我最喜歡的方式，很幸慶自己遇到了這個課程。
+
+### 技術方面
+
+以下是照課程順序排序可以參考：[程式導師實驗計畫第十六週](https://github.com/u88803494/mentor-program-3rd/tree/master#%E7%AC%AC%E5%8D%81%E5%85%AD%E9%80%B10729--0804%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%B8%8A)
+
+- CSS 預處理器（LESS, SASS, Stylus 擇一）
+- stack 與 queue 與 JavaScript 的物件導向
+- Event Loop
+- scope
+- hoisting
+- closure
+- prototype
+- this
+- gulp
+- webpack
+- SPA
+- MVC（前後端）
+- React(Class component)
+- React Router
+- Redux
+- Redux-promise (middleware)
+- Express.js  
+  這邊只寫我有去學的部分，課程內容更多，包含了後端流行的更多部分。不過我就沒學了，因為時間不夠。
+
+### 這階段的心得
+
+這個階段，是真的挑戰性滿大的，在當時有許多同學都掛在這個階段。主要原因是因為要從原本 JavaScript 的過渡到更為複雜的 SPA 模式，所以確實是需要時間去習慣的。另外一點是這些進階知識，老師講得很深入，即便當時有強調這些不一定要全部都弄很懂才能求職。
+
+在前面的周我原本都可以勉強跟上，倒是隨著這些更進階的知識的學習，我開始進度落後了，而且越來越遠，但不打緊，至少我還有再繼續學習。而且我也按照我原本希望可以學得深的步調維持學習下去。
+
+不過這階段也發生了一些事情，原本我有在上班，而且我是個輪班仔，然後公司因為訂單爆量，導致我們越來越忙碌，弄得我的學習時間被壓制，有時候一週可能沒辦法達標40小時的學習，但我還是會盡量去達成的。
+
+也呼應了這次的引言：「只要你不停下，即使走得慢也不要緊。」
+
+最終我還是成功學習完成並且轉職成功了，即便最後我比其他同學都花了更多的時間（課程約半年，但我實際上花了一年才轉職成功。）
+
+## 文章分享
+
+這邊會分階段分享，因為真的滿刻苦銘心的，哈哈。
+
+### 深入學習 JavaScript
+
+[前端中階：JS令人搞不懂的地方-變數的生存範圍（scope）](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-%E8%AE%8A%E6%95%B8%E7%9A%84%E7%94%9F%E5%AD%98%E7%AF%84%E5%9C%8D-scope-b548fa067687)  
+很基礎的部分，但瀏覽量滿多的，解釋了**作用域最重要的就是知道 scope chain 是如何運作的**
+
+[前端中階：JS令人搞不懂的地方-hoisting](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-hoisting-beb1fc451c2)  
+透過 ES3 的說明書，去理解底層 Execution Context 與 Variable Object 是怎麼運作，以便理解 Hoisting 發生的原因。
+
+[前端中階：JS令人搞不懂的地方-Closure(閉包)](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-closure-%E9%96%89%E5%8C%85-cbb9c6a4185c)  
+透過對作用域的理解，去深入了解為什麼會產生閉包的情況，之前查文章有人說閉包是 bug，但其實不是是作者為了特定目的所做的功能。
+
+[前端中階作業：event loop、Scope、hoisting、closure](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E%E4%BD%9C%E6%A5%AD-event-loop-scope-hoisting-closure-ffa02ed722fb)  
+這是作業，雖然不是很多人看，但我當初是花了很多心力在透過文字去解析整個是如何運作了，所以私心想要特別分享一下，哈哈。
+
+### 現代框架 React 生態系
+
+[前端框架 React：React Form 報名表單](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-react-form-%E5%A0%B1%E5%90%8D%E8%A1%A8%E5%96%AE-ebd5e3a7201a)  
+透過表單來學習 React
+
+[前端框架 React：生命週期](https://hugh-program-learning-diary-js.medium.com/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E7%94%9F%E5%91%BD%E9%80%B1%E6%9C%9F-ec100a159e1e)  
+class component 的生命週期
+
+[React hook: useEffect 的用法](https://hugh-program-learning-diary-js.medium.com/react-hook-useeffect-%E7%9A%84%E7%94%A8%E6%B3%95-325ef5f0924f)  
+這是一篇自學的文章，因為課程快結束時，當時 hook 好像才剛出穩定版沒多久，而我為了之後工作可以更好找，就自學了 hook，有賴於之前學習的知識，我很快就意識到這個是利用閉包的原理達成，所以自學無障礙，很讚！
+
+## 結語
+
+經過了這階段的學習，使我非常的刻骨銘心，所以我差點連心得都寫不出來，只想寫一句「這階段好難」，哈哈。但度過之後，現在就好得多，我深刻體會到學習是一個永無止境的過程。如同孔子所說的「只要你不停下，即使走得慢也不要緊。」
+
+我也會一直持續地走下去，畢竟人生就是要不停的學習下去。所以我會持續精進自己，使得自己可以變得更好更快樂，去創造自己更美好的生活。
+
+我希望我的經驗和分享能對其他人有所啟發和幫助。如果您有任何問題或想法，歡迎隨時與我聯繫。我會繼續學習，繼續分享，也期待能與更多志同道合的人交流和學習。
+
+下一篇會講到我面試的狀況。
+
+文章就說到這，有什麼想法或問題，歡迎隨時找我聊聊！
+
+這篇文章也會同步發在 medium 上，如果有興趣歡迎追蹤我。
+
+medium: https://medium.com/@hugh-program-learning-diary-js  
+email: u88803494@gmail.com

@@ -1,0 +1,561 @@
+---
+title: "前端網頁基礎：HTML"
+slug: "前端網頁基礎-html"
+description: "必用標籤：html、head 與 body"
+date: 2019-05-20T06:00:56.066Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*SM9CVDar9X1YzDbXlAeI7g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E7%B6%B2%E9%A0%81%E5%9F%BA%E7%A4%8E-html-44930e478087"
+---
+
+## 必用標籤：html、head 與 body
+
+HyperText Markup Language, HTML。超文本標記語言
+
+> Markup 是標記的意思。一般字典查不到，從這裡得知的 [yahoo 字典](https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXWpY8eBcdBkA5gh9rolQ;_ylu=X3oDMTBvbXNzbjYyBGNvbG8DBHBvcwMxBHZ0aWQDBHNlYwNzcg--?p=Human+Markup+Language&ei=UTF-8&context=gsmcontext%3A%3Adocid%3A%3A0%2FoMVni92GnDhUnhgFCk2A%7Cgsmcontext%3A%3Asource_lang%3A%3Aen%7Cgsmcontext%3A%3Atarget_lang%3A%3Azh-hant&b=_UNSET_)
+
+Markup Language 標記語言。也不是一種程式，因為沒有程式的成分。
+
+### 介紹標籤
+
+```
+<!DOCTYPE HTML>
+```
+
+這通常加在第一行，用意是標記這個文本使用的語法。這個有些時候不一定要加，但通常加了會比較好，否則有時候會有一些 bug 的產生，可能會渲染得很奇怪。因為瀏覽器有很多種，所以如果不加的時候，瀏覽器就會自行去判斷要用哪種方式來渲染，所以當瀏覽器判斷錯誤的時候，就有可能導致畫面看起來很奇怪，加了這個就代表說跟瀏覽器告知就是使用這種標準。
+
+```
+<html></html>
+```
+
+```
+<head></head>
+<body></body>
+```
+
+這個會一個組合一個組合的出現，/xxxx 代表那個標籤的結束。
+
+整體架構如下：
+
+```
+<html>
+  <head> <!-- 網頁的一些基本資訊 -->
+    <meta charset="utf-8" /> <!--meta 內部放屬性 charset 就是 meta 的屬性 -->
+     <!-- meta 中間沒有內容，所以可以把 / 放在最後面，開合一組 -->
+      <title> I'm title </title> <!--網頁的標題 -->
+```
+
+```
+</head>
+  <body> <!-- 網頁的主要內容  -->
+    <!--
+    // 註解 給人看程式碼的時候對方會看到的內容
+    -->
+  </body>
+</html>
+```
+
+以上就是網頁最基本的結構。
+
+> 首先需要了解一下**後設資料(metadata)元素**的概念，用來構建HTML文件的基本結構，以及就如何處理文件向瀏覽器提供資訊和指示，它們本身不是文件內容，但提供了關於後面文件內容的資訊。 — — 出自《html5權威指南》
+
+> by [HTML meta標籤常用屬性及其作用總結](https://codertw.com/前端開發/25320/)
+
+參考資料：[應該避免的過時語法](https://developer.mozilla.org/zh-TW/docs/Web_開發/Historical_artifacts_to_avoid)
+
+## h1 ~ h6、p
+
+html 最早最常見的用途：顯示文章
+
+最早的 html 就只是顯示一些文章，頂多加上文字顏色跟標題而已，就只是用來撰寫文章用。這邊我就想到 markdown，最早的 html 也許就是類似 markdown 的用途。
+
+&lt;h1> 標題，有 h1 ~ h6 每種的尺寸都不太一樣。一般都不會全用大概到 h3 就差不多了。
+
+&lt;p> paragraph 段落
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <h1> 網頁前端 </h1> // 主標題
+    <h2> HTML </h2> // 副標題
+    <p> HTML 的介紹... </p> //段落
+    <h2> CSS </h2> // 副標題
+    <p> CSS 的介紹... </p> //段落
+  </body>
+</html>
+```
+
+Lorem ipsum 這是在網頁或設計領域常用的，就是為了測試版面再用，在中文來說就是假文章，所以可以把那些內容貼到 &lt;p> &lt;/p> 內部檢查排版狀況。
+
+Lorem ipsum 文章如下：
+
+```
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor amet fermentum. Nullam venenatis erat id vehicula ultrices sed ultricies condimentum. Magna sed etiam consequat, et lorem adipiscing sed nulla. Volutpat nisl et tempus et dolor libero, feugiat magna tempus, sed et lorem adipiscing.
+```
+
+## div 與 span
+
+這兩個標籤，在 html 幫忙分組，照前述的例子，可以把他們分組
+
+&lt;div> divsion 分組的用意，在 CSS 上面可以使用。
+
+> HTML div 標籤是網頁中的重要基礎元素，透過 DIV 標籤可以在網頁中創造各個不同的區塊，每個區塊內還可以增加更小的區塊，設計師也可以利用 HTML div 區塊來進行排版，對網路瀏覽器來說，每組 HTML div 標籤都是一個區塊級元素，基本會占用掉一整行的空間，當然設計師也可以透過 div 的屬性設定來調整這個部份，現在的 div 屬性設定都是採用 [CSS](https://www.wibibi.com/c.php?cid=7) 來設計。
+
+> by [wibibi](https://www.wibibi.com/info.php?tid=HTML_div_%E6%A8%99%E7%B1%A4)
+
+&lt;span> 一個跨度的意思。也是用來做分組，用來協助文字做分組。
+
+> span 標籤在 [HTML](http://www.wibibi.com/c.php?cid=9) 設計的時候就已經廣泛在使用，同樣的到了 [CSS](http://www.wibibi.com/c.php?cid=7) 設計也可以繼續使用，span 標籤可以用來標示一個行元素，與 [DIV](http://www.wibibi.com/info.php?tid=112) 區塊的用法有點類似，但瀏覽器會將 span 標籤包起來的元素視為一行。by [webtech](https://www.webtech.tw/info.php?tid=HTML_span_%E6%A8%99%E7%B1%A4%E7%94%A8%E6%B3%95)
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+      <h1> 網頁前端 </h1>
+      <h2> HTML </h2>
+      <p> <span> HTML </span> 的介紹... </p>
+    </div>
+    <h2> CSS </h2>
+    <p> CSS 的介紹... </p>
+  </body>
+</html>
+```
+
+&lt;div> 加上之後基本上網頁是不會有所變動的，就是把東西分成一組，只要在 devTool 指向某塊 &lt;div> 就會顯示出該 &lt;div>的位置，主要是在 CSS 上使用，使用 CSS 就需要針對某個標籤去使用屬性。
+
+&lt;span> 可以針對一段單獨的文字做改變，也跟 CSS 有關係。
+
+**使用上 &lt;div> 會換行 &lt;span> 則不會。**
+
+## 顯示圖片 img
+
+有時候會需要顯示圖片，就可以使用這個標籤。
+
+圖片是不會有任何內容的，所以不會這樣使用&lt;img>http://www.123.com/pic.jpg&lt;/img>
+
+正確使用方式是&lt;img src=”http://www.123.com/pic.jpg” />
+
+src 是 source 來源的縮寫。用雙引號包起來是字串的意思，不包的話會產生錯誤。
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+      <h1> 網頁前端 </h1>
+      <h2> HTML </h2>
+      <p> <span> HTML </span> 的介紹... </p>
+      <img title="123圖片!" src=”http://www.123.com/pic.jpg” />
+    </div>
+    <h2> CSS </h2>
+    <p> CSS 的介紹... </p>
+  </body>
+</html>
+```
+
+&lt;img> 除了 src 屬性，還有 title 屬性，這個 title 屬性是當滑鼠移動上去的時候，才會顯示出來的字串。alt 屬性，當圖片無法顯示出來的時候，就會用這個屬性的內容來替代顯示。
+
+## 顯示清單：ul、ol、li。
+
+&lt;ul> unordered list，沒有排序的，意思是顯示的時候會不會顯示序號。
+
+&lt;ol> ordered list，有排序的
+
+&lt;li> list item 包在上面兩個裡面的
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+      <h1> 網頁前端 </h1>
+      <h2> HTML </h2>
+      <p> <span> HTML </span> 的介紹... </p>
+    </div>
+    <h2> CSS </h2>
+    <p> CSS 的介紹... </p>
+    <ul>
+      <li>h1</li>
+      <li>h2</li>
+      <li>h3</li>
+    </ul>
+  </body>
+</html>
+```
+
+就會出現一個一個表格，沒有排序的 list，如果需要的話則是改成 ol 就可以有排序的了，會自動幫忙加上序號。
+
+## 保留完整格式：pre
+
+&lt;pre> preformatted text ，會幫我們把格式給保留下來，會原封不動的顯示出來，連前面留的空白都會顯示出來。
+
+&lt;br> line break：斷行，一般我們在 &lt;p> 標籤內部換行的時候，在 html 翻譯出來的頁面，並不會直接換行，所以就需要這個標籤來協助換行
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+      <h1> 網頁前端 </h1>
+      <h2> HTML </h2>
+      <p> HTML <br /> 的介紹... </p> // 這樣 HTML 跟 的介紹就換行
+      // br 後面的 / 不加也是可以的
+    </div>
+    <h2> CSS </h2>
+    <p> CSS 的介紹... </p>
+    <p>
+     // 這邊的內文 加了很多空白，都只會顯示一個空白，如果換行則是不會換行
+    </p>
+  </body>
+</html>
+```
+
+如果直接使用 &lt;p> 在裡面放 JavaScript 的 function 的話，會被直接顯示出來，而且空格會被吃掉，因為在 html 這邊，多個空白只會被解讀成一個空白，連換行都會被取消。這時候就要用 &lt;pre>。
+
+## 表格必備標籤：table、th、tr 與 td
+
+&lt;table> 表格
+
+&lt;tr> table row 表行，直行
+
+&lt;td> table data cell 表列，橫列
+
+&lt;th> table header 表頭
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+      <h1> 網頁前端 </h1>
+      <h2> HTML </h2>
+      <p> HTML <br /> 的介紹... </p>
+    </div>
+    <h2> CSS </h2>
+    <p> CSS 的介紹... </p>
+    <table>
+   <tr>
+     <th>姓名</th>
+     <td>國文分數</td>
+     <td>英文分數</td>
+   </tr>
+   <tr>
+     <td>小名</td>
+     <td>70</td>
+     <td>90</td>
+   </tr>
+   <tr>
+     <td>曉華</td>
+     <td>605123</td>
+     <td>4549116</td>
+   </tr>
+    </table>
+  </body>
+</html>
+```
+
+## &lt;a> anchor 錨點
+
+herf： **h**ypertext **ref**erence，超文版指向，就是可以超連結到別的位置。
+
+&lt;a> anchor 錨點：有兩種功能。1. 可以連到網頁外面的位置。2. 可以連到網頁裡面的連結
+
+其實就是超連結的意思
+
+target 屬性：可以指定連結方式，"\_self" 就是在這個網頁開啟連結，"\_blank" 新開一個分頁連結網址。
+
+第一個功能：
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+      <h1> 網頁前端 </h1>
+   <a href="http://google.com" target="_self"> chlick me to google</a>
+  </body>
+</html>
+```
+
+第二個功能：
+
+這就必須要在&lt;h1> 加上一個 id屬性 &lt;h1 id=””> 這樣就可以標示內部連結。然後可以使用 &lt;a href=”#”> &lt;/a> 來快速導向
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+ <a href="#p3"> take me to p3 </a> <!-- 這個按鍵可以快速導向 -->
+    <h1 id="p1"> 網頁前端 </h1> <!-- 這是設置索引 -->
+ <p>
+ Lorem ipsum dolor sit<br/>  amet consectetur adipiscing elit.<br/> Duis dapibus rutrum facilisis. <br/> Class aptent<br/>  taciti sociosqu ad litora <br/> torquent per conubia nostra,<br/>  per inceptos himenaeos.<br/>  Etiam tristique<br/>  libero eu nibh porttitor amet fermentum.<br/>  Nullam venenatis<br/>  erat id vehicula ultrices <br/> sed ultricies condimentum.<br/>  Magna sed etiam consequat,<br/>  et lorem adipiscing sed nulla.<br/>  Volutpat nisl et<br/>  tempus et dolor libero,<br/>  feugiat magna tempus,<br/>  sed et lorem adipiscing.
+    <h1 id="p2"> 網頁前端 </h1>
+ <p>
+ Lorem ipsum dolor sit<br/>  amet consectetur adipiscing elit.<br/> Duis dapibus rutrum facilisis. <br/> Class aptent<br/>  taciti sociosqu ad litora <br/> torquent per conubia nostra,<br/>  per inceptos himenaeos.<br/>  Etiam tristique<br/>  libero eu nibh porttitor amet fermentum.<br/>  Nullam venenatis<br/>  erat id vehicula ultrices <br/> sed ultricies condimentum.<br/>  Magna sed etiam consequat,<br/>  et lorem adipiscing sed nulla.<br/>  Volutpat nisl et<br/>  tempus et dolor libero,<br/>  feugiat magna tempus,<br/>  sed et lorem adipiscing.
+    <h1 id="p3"> 網頁前端 </h1>
+ <p>
+ Lorem ipsum dolor sit<br/>  amet consectetur adipiscing elit.<br/> Duis dapibus rutrum facilisis. <br/> Class aptent<br/>  taciti sociosqu ad litora <br/> torquent per conubia nostra,<br/>  per inceptos himenaeos.<br/>  Etiam tristique<br/>  libero eu nibh porttitor amet fermentum.<br/>  Nullam venenatis<br/>  erat id vehicula ultrices <br/> sed ultricies condimentum.<br/>  Magna sed etiam consequat,<br/>  et lorem adipiscing sed nulla.<br/>  Volutpat nisl et<br/>  tempus et dolor libero,<br/>  feugiat magna tempus,<br/>  sed et lorem adipiscing.
+ </p>
+ <a href="#p1"> take me to p1</a>
+  </body>
+</html>
+```
+
+## 語意化的 UI 標籤：main、nav、footer 等等
+
+&lt;main> 可以包裹整個網站最主要的元素
+
+&lt;nav> navigation 導覽列，軟體上面一整排的按鈕，那些都是導覽列
+
+&lt;footer> 網頁最底下的那些版權說明那些資訊的資訊
+
+其實這些跟其他那些元素包起來沒差別，最主要要這樣使用是因為要做為Semantic elements 語意化元素，這樣用的用意是可以清楚的表達這邊的用途，所以如果使用 &lt;div> 標籤的情況下，除非特別開程式碼來看，否則會不知道這邊是這樣的一塊，而且是網路爬蟲在爬的時候也會無法判斷這塊是什麼？我們在看個時候才可以很快地知道。
+
+其實還有很多的標籤可以使用，要用的時候在自行查詢就好。
+
+> 參考資料：
+
+> [MDN Semantics](https://developer.mozilla.org/en-US/docs/Glossary/Semantics)
+
+> [New Semantic Elements in HTML5](https://www.w3schools.com/html/html5_semantic_elements.asp)
+
+## 使用別人的網頁
+
+iframe 嵌入網頁
+
+使用 src 屬性可以添加網址
+
+然後還可以修正寬度高度
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+ <a href="#p3"> take me to p3 </a>
+    <h1 id="p1"> 網頁前端 </h1>
+ <p>
+ </p>
+    <h1 id="p2"> 網頁前端 </h1>
+ <p>
+ </p>
+    <h1 id="p3"> 網頁前端 </h1>
+ <p>
+ </p>
+ <iframe src="https://dictionary.cambridge.org/zht" width="100%" height="500px"/>
+ <a href="#p1"> take me to p1</a>
+  </body>
+</html>
+```
+
+有些網站會不給這樣使用，像是 Google，伺服器可以設定，設定過後會阻擋 iframe 的使用。
+
+## 表單相關標籤：form、input、textarea
+
+最主要的就是各種讓我們填資料的位置
+
+form 表單
+
+&lt;input> 輸入框
+
+text  
+password  
+email  
+date  
+radio 是單選框的意思  
+checkbok 複選單
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+ <form>
+   <div> <!-- 要分行可以使用 <div> 標籤 -->
+     姓名：<input type="text" /> <!-- 前面可以寫這個表格要做什麼用 -->
+   </div>
+   <div>
+     密碼：<input type="password" /> <!-- 使用 password 屬性就可以不顯示密碼 但在傳輸的時候還是一樣是名碼顯示 -->
+   </div>
+   <div>
+     Email：<input type="email" /> <!-- 使用 email 屬性，會協助驗證是某是正確的 email 格式 -->
+   </div>
+   <div>
+     日期：<input type="date" /> <!-- 使用 date 屬性，出現了輸入日期的格式 -->
+   </div>
+   <div>
+     性別：<input type="radio" name="gender" id="male" /> <label for="male"> 男性 </label>
+  <!--
+  加一個 name 表明 這兩個選項是一起的，就可以使選項只能擇一
+  使用 label 就可以連字一起選，也一樣要用 id 屬性標示 label 用 for 去標明。
+  -->
+  <input type="radio" name="gender" id="female" /> <label for="female"> 女性 </label>
+  <input type="radio" name="gender" id="other" /> <label for="other"> 非人類 </label>
+   </div>
+   <div>
+     興趣：<input type="checkbox" id="sports"/> <label for="sports">運動</label>
+  <input type="checkbox" id="reading"/> <label for="reading">閱讀</label>
+  <input type="checkbox" id="sports"/> <label for="sports">運動</label>
+  <!-- 多選框 -->
+   </div>
+   <div>
+     <input type="submit" value="送出表單"/> <!-- value 是更改提交的名稱 -->
+   </div>
+ </form>
+  </body>
+</html>
+```
+
+這邊有非常多的屬性可以使用
+
+參考資料： [更多 input 種類](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+
+## SEO 與相關標籤：meta tag
+
+### Search Engine Optimization 搜尋引擎優化
+
+幫助搜尋引擎理解自己的網頁。現在的搜尋引擎都很聰明，可以自行分析得很好，但如果可以主動提供這塊資訊，會比較好，會比較容易加分。
+
+找一個網頁，右鍵檢視原始碼，就可以看到很多資訊。像是[鼎泰豐](https://www.tripadvisor.com.tw/Restaurant_Review-g13808515-d2244808-Reviews-Din_Tai_Fung_101_Branch-Xinyi_District_Taipei.html)。
+
+```
+meta name=”keywords” content= <!-- 這個就是這個網頁的關鍵字-->
+  meta name="description" content= <!-- 這個網頁的簡介-->
+```
+
+&lt;meta> keyword, description
+
+```
+meta property=”og:title” content= <!-- 這個 og 也是在協助搜尋引擎的-->
+```
+
+OG 的全名是 [Open Graph Protocol ](http://ogp.me/)，就是為了讓其他的搜尋引擎更了解而誕生的。og 常常是 Facebook 在使用的，可以去 Facebook 的[分享偵錯工具](https://developers.facebook.com/tools/debug/?locale=zh_TW)去看看在 Facebook 是長什麼樣子，所以透過 og 就可以設定，被分享到 Facebook 的時候，所要使用的標題、圖片、簡介等。
+
+```
+</script><script type=”application/ld+json”>
+<!-- 這邊可以看到很多資料用 JSON 格式撰寫的-->
+```
+
+這就是 JSON-ld, JSON for Linking Data
+
+類似 open graph 的功能，就是為了要描述這個網頁而產生的。 https://json-ld.org/ 可以看到有很多的 key 可以使用。
+
+在 Google 搜尋 鼎泰豐 101 店 就會看到如下：
+
+![黃色的部分就是 JSON-ld 告訴搜尋引擎的資訊](https://cdn-images-1.medium.com/max/800/1*SM9CVDar9X1YzDbXlAeI7g.png)
+
+_黃色的部分就是 JSON-ld 告訴搜尋引擎的資訊_
+
+這樣做的好處是可以讓網站在被搜尋到的時候，提供更多的資訊，越多人產生興趣點擊越多次，排名就會上升了。
+
+### robots.txt
+
+給網路爬蟲所看的 https://www.tripadvisor.com.tw/robots.txt
+
+直接在網址添加 robots.txt 就可以看到。
+
+Disallow 不能給爬蟲爬的網頁
+
+Allow 可以給爬蟲爬的網頁
+
+就是讓爬蟲知道什麼資料是爬蟲要的什麼資料不是爬蟲要的。
+
+這個案例還有一些純文字，這是該公司給其他有興趣知道這些資料的人看的。
+
+### sitemap.xml
+
+sitemap 給搜尋引擎知道要爬什麼網頁。這邊的 xml 是整個網站的地圖
+
+### 其他語言標籤
+
+```
+<link rel=”alternate” hreflang=”en” href="xxx.com/en"
+```
+
+這表示這個網頁還有其他語言的版本，後面附上網址。這樣搜尋引擎給的分數就會集中，而不會分開計算。
+
+### app 資訊
+
+```
+<meta property=”al:
+```
+
+告訴這個網頁還有 app 的程式，也就是常常在看網頁看一看的時候，會跳出一個框告訴我們這個網頁還有 app 版本，要不要下載，就是需要設定這個 tag 才會有這種功能。
+
+### [Google Search console](https://search.google.com/search-console/about)
+
+可以觀看網站的一些成效，通常工程師比較不會看這個，大多數是 SEO team 才會看這個資料。
+
+通常 SEO 都是 SEO team 在管的，SEO team 會跟工程師溝通，需要放什麼 tag 的時候，就由工程師來去放，SEO team 只負責想需要放那些 tag，是兩邊互相配合才能達到成效。
+
+從 SEO 而來的流量叫做自然流量，所以排名高的時候，自然流量就會跟著變大。
+
+## Escape：該怎麼顯示標籤？
+
+假設今天我想在網頁顯示標籤，像是在網頁顯示 &lt;div>&lt;/div>。
+
+就需要跳脫 Escape
+
+直接取代標籤的符號
+
+```
+& →　&amp;
+< →　&lt; <!-- lt 是縮寫 -->
+> →　&gt; <!-- gt 是縮寫 -->
+```
+
+就不會被當作標籤
+
+```
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+  </head>
+  <body>
+    <div>
+   &lt;div&gt;&lt;/div&gt;
+ </div>
+  </body>
+</html>
+```
+
+在一些其他地方也會用到，像寫程式語言的時候，可能要在一個字串裡面加雙引號又要加單引號，可能就會要用到類似的方式。
+
+參考資料：[CDSN 解釋](https://bbs.csdn.net/topics/329082)
+
+在測試之後不只標籤，只要用 &lt;> 包裹起來的東西，無論是不是 html 的標籤，都會無法顯示，所以就必須要透過這樣的方法。
+
+## 收穫：
+
+在 html 這邊就看到，原來標籤還真的有夠多種的。也知道說，原來 SEO 就是寫在 html 這邊的，所以以前在弄 WordPress 的時候，常常有一些套件可以協助做 SEO 等等的，其實在 html 就只是一些簡單的語法而已，那些套件就是幫我們去加上這些資訊。不過在 SEO 這邊也覺得滿可怕的，那標籤又多又長，我想應該也是利用一些方式來協助添加吧，不然的話要手動一個一個添加也太浪費時間了。

@@ -1,0 +1,459 @@
+---
+title: "在 React 上實現所得即所見(WYSIWYG)功能"
+slug: "在-react-上實現所得即所見-wysiwyg-功能"
+description: "這是一個支援拖放功能的前端應用程式，使用 React 和 Tailwind CSS，能夠透過側邊欄添加或編輯項目，並且在畫面上進行即時調整。"
+date: 2024-11-15T00:02:37.460Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%9C%A8-react-%E4%B8%8A%E5%AF%A6%E7%8F%BE%E6%89%80%E5%BE%97%E5%8D%B3%E6%89%80%E8%A6%8B-wysiwyg-%E5%8A%9F%E8%83%BD-1bd41ba202c1"
+---
+
+## 簡介
+
+在現代 Web 開發中，**所見即所得(WYSIWYG)** 編輯器已經成為用戶互動的關鍵功能之一，特別是在處理動態內容創建的情境下。而**拖放(Drag and Drop, DnD)** 功能更是讓用戶可以更加靈活地進行編輯，提升整體使用體驗。
+
+最近在求職過程中，我遇到了一個要求實現類似 WYSIWYG 功能的挑戰，並且我選擇了使用 **React** 搭配 **React DnD** 來實現這個功能。為了讓大家了解這個實作過程，我整理了這篇文章來分享我的做法，並介紹如何用這些技術來實現**拖放編輯功能**。
+
+## 實現方式
+
+### 1. 選擇技術：React + React DnD
+
+首先，為了實現所見即所得功能，我選擇了 **React** 作為前端框架，並使用 **React DnD** 來處理拖放交互。**React DnD** 是一個強大的 React 庫，專門用來處理拖放交互，它可以幫助我們輕鬆地實現元件的拖動、放置，並且支持自定義交互。
+
+### 2. 搭建基本結構
+
+我先搭建了基本的 UI 結構，其中包含側邊欄和主區域：
+
+- **側邊欄**：顯示可拖動的元件，如圖片、文字等。命名為 Sidebar 的 component。
+- **主區域**：顯示用戶拖動並放置的元件，並能夠在這裡進行編輯。命名為 Main 的 component。
+
+### 3. 實現拖放功能
+
+在 **React DnD** 中，拖放交互主要涉及兩個部分：
+
+- **拖動源(Drag Source)**：這部分控制了哪些元素可以被拖動。
+- **放置目標(Drop Target)**：這部分決定了元素可以被放置在哪些區域。
+
+使用 **React DnD** 的 **useDrag** 和 **useDrop** hooks，可以讓我輕鬆地將拖動和放置邏輯綁定到指定的元素上。
+
+### 4. 編輯功能
+
+對於拖動過來的元件，我需要允許用戶進行編輯。在這個過程中，主要是處理圖片的 URL、寬度、高度等屬性。我使用了 **React state** 和 **useEffect** 來管理編輯的狀態，並在用戶更新屬性後即時更新顯示。
+
+接下來我們就可以實作了。
+
+## 設置 React DnD
+
+- 我先安裝了 `react-dnd` 和 `react-dnd-html5-backend`，並將其配置到我的應用中，讓 React 元件支持拖放功能。
+
+```bash
+yarn add react-dnd react-dnd-html5-backend
+```
+
+然後，我在 **App.js** 中設置了 DnD 提供的 **DndProvider**，讓所有的子元件都可以接收到 DnD 的上下文。
+
+```typescript
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
+function App() {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      {/* 你的應用內容 */}
+    </DndProvider>
+  )
+}
+```
+
+## 拖動源設置
+
+接著，我為側邊欄的圖片和文字元件設置了拖動源，並為主區域設置了放置目標。
+
+```typescript
+const [{ isDragging }, drag] = useDrag(() => ({
+  type: "component",
+  item: { type: "image", url: "image_url.jpg", width: 200, height: 200 },
+  collect: (monitor) => ({
+    isDragging: monitor.isDragging(),
+  }),
+}));
+```
+
+設置在按鈕上，功能包含圖片跟文字：
+
+```typescript
+// Button.tsx
+import { ReactNode } from "react";
+import { useDrag } from "react-dnd";
+
+interface ButtonProps {
+  children: ReactNode;
+  type: string;
+}
+
+const defaultImageItem = {
+  width: 300,
+  height: 300,
+  url: 'https://i.imgur.com/OL2RhAx.jpeg',
+  type: 'image',
+}
+
+const defaultTextItem = {
+  text: 'Hello from Meepshop!',
+  type: 'text',
+}
+
+const Button = (props: ButtonProps) => {
+  const { children, type } = props
+
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'component',
+    item: {
+      ...type === 'image' ? defaultImageItem : defaultTextItem,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
+  return (
+    <button
+      className={`py-2 border border-slate-950 rounded-md ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      ref={drag}
+    >
+      {children}
+    </button>
+  );
+}
+
+export default Button;
+```
+
+再把按鈕放在 Sidebar 上
+
+```javascript
+// Sidebar.tsx
+import useItemStore from "../stores";
+import Button from "./Button";
+import Editor from "./Editor";
+
+const Sidebar = () => {
+  const { selectedUuid } = useItemStore();
+
+  return (
+    <aside className="sticky top-0 flex h-screen w-1/4 flex-col justify-center border-r-2 p-4">
+      <div className="flex flex-col justify-center space-y-2">
+        <Button type="image">圖片元件</Button>
+        <Button type="text">文字元件</Button>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;
+```
+
+設置完成！接下來換成放置目標
+
+## 放置目標
+
+在 React-Dnd 上，我們可以通過 `useDrop` 來取得使用者放開的時候的資訊，所以就可以通過以下的程式碼，直接取得資料
+
+```javascript
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: 'component',
+    drop: (item: DragData) => { // 取得 drag 時候的資訊
+      const newItem = {
+        uuid: uuidv4(),
+        ...item,
+      }
+      addItem(newItem)
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop()
+    })
+  }))
+```
+
+然後我們就可以好好利用取得的這個資訊，來把元件資訊輸入，我這邊是使用 zustand 來實現這個資訊的存儲。所以整體的主區域的程式碼如下：
+
+```javascript
+// main.tsx
+import { useDrop } from 'react-dnd';
+import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid';
+import useItemStore from '../stores';
+import { DragData } from '../types';
+
+const Main = () => {
+  const { droppedItems, addItem, selectItem } = useItemStore();
+
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: 'component',
+    drop: (item: DragData) => {
+      const newItem = {
+        uuid: uuidv4(),
+        ...item,
+      }
+      addItem(newItem)
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop()
+    })
+  }))
+
+  return (
+    <div className="flex-1 relative">
+      <nav className="w-full h-8 sticky top-0 flex justify-center items-center bg-white border">
+        <div>
+          This is a fixed header, no need to modify
+        </div>
+      </nav>
+      <main
+        className={clsx(
+          "h-[calc(100vh-32px)]",
+          {
+            'bg-blue-100': canDrop,
+            'border-dashed border-2 border-blue-500': isOver
+          }
+        )}
+        ref={drop}
+      >
+        {droppedItems?.length > 0 && (
+          droppedItems?.map((item) => (
+            <div key={item.uuid} onClick={() => selectItem(item.uuid)}>
+              {item.type === 'image' ? (
+                <img
+                  alt="dropped"
+                  className="object-cover"
+                  src={item.url}
+                  height={item.height}
+                  width={item.width}
+                />
+              ) : (
+                <div>{item.text}</div>
+              )}
+            </div>
+          )))
+        }
+      </main>
+    </div>
+  )
+};
+
+export default Main;
+```
+
+zustand:
+
+```typescript
+// store.ts
+import { create } from "zustand";
+import { DragItem } from "../types";
+
+interface StoreState {
+  selectedUuid: string;
+  droppedItems: DragItem[];
+  addItem: (item: DragItem) => void;
+  selectItem: (uuid: string) => void;
+  updateItem: (uuid: string, newData: Partial<DragItem>) => void;
+}
+
+const useItemStore = create<StoreState>((set) => ({
+  selectedUuid: "",
+  droppedItems: [],
+  addItem: (item) =>
+    set((state) => ({
+      droppedItems: [...state.droppedItems, item],
+    })),
+  selectItem: (uuid) =>
+    set(() => ({
+      selectedUuid: uuid,
+    })),
+  updateItem: (uuid, newData) =>
+    set((state) => {
+      const updatedItems = state.droppedItems.map((item) => (item.uuid === uuid ? { ...item, ...newData } : item));
+      return { droppedItems: updatedItems };
+    }),
+}));
+
+export default useItemStore;
+```
+
+## 處理編輯功能
+
+在這裡是通過點擊元件之後，我們就可以在側邊欄位修改，所以可以看到前面 Zustand 裡面有一個 selectedUuid，這最主要的功能就是取得哪個元件被選中的資訊，接著我們就可以在左側的 Sidebar 取得資訊。
+
+```javascript
+// Sidebar.tsx
+import useItemStore from "../stores";
+import Button from "./Button";
+import Editor from "./Editor";
+
+const Sidebar = () => {
+  const { selectedUuid } = useItemStore();
+
+  return (
+    <aside className="sticky top-0 flex h-screen w-1/4 flex-col justify-center border-r-2 p-4">
+      {selectedUuid ? (
+        <Editor />
+      ) : (
+        <div className="flex flex-col justify-center space-y-2">
+          <Button type="image">圖片元件</Button>
+          <Button type="text">文字元件</Button>
+        </div>
+      )}
+    </aside>
+  );
+};
+
+export default Sidebar;
+```
+
+也新增了一個編輯器的 Component，如下：
+
+```typescript
+import { useEffect, useState } from "react";
+import useItemStore from "../stores";
+import { DragItem } from "../types";
+
+const Editor = () => {
+  const { selectedUuid, droppedItems, updateItem } = useItemStore();
+
+  const selectedItem = droppedItems.find(i => i.uuid === selectedUuid) as DragItem;
+
+  const [url, setUrl] = useState<string>(selectedItem?.url ?? '');
+  const [width, setWidth] = useState<number>(selectedItem?.width ?? 300);
+  const [height, setHeight] = useState<number>(selectedItem?.height ?? 300);
+
+  useEffect(() => {
+    if (selectedItem.type === "image") {
+      setUrl(selectedItem?.url ?? '');
+      setWidth(selectedItem?.width ?? 300);
+      setHeight(selectedItem?.height ?? 300);
+    }
+  }, [selectedItem.height, selectedItem.type, selectedItem.url, selectedItem.width, selectedUuid])
+
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(e.target.value)
+  }
+
+  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWidth(Number(e.target.value))
+  }
+
+  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHeight(Number(e.target.value))
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      updateItem(selectedItem.uuid, { url, width, height })
+    }
+  }
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateItem(selectedItem.uuid, { text: e.target.value });
+  };
+
+  if (selectedItem.type === 'image') {
+    return (
+      <div className="space-y-2">
+        <div className="space-y-1">
+          <label>URL：</label>
+          <input
+            className="border w-full p-1"
+            type="text"
+            value={url}
+            onChange={handleUrlChange}
+            onKeyDown={handleKeyPress}
+          />
+        </div>
+        <div className="space-y-1">
+          <label>{"寬度(px)："}</label>
+          <input
+            className="border w-full p-1"
+            value={width}
+            type="number"
+            onChange={handleWidthChange}
+            onKeyDown={handleKeyPress}
+          />
+        </div>
+        <div className="space-y-1">
+          <label>{"高度(px)："}</label>
+          <input
+            className="border w-full p-1"
+            value={height}
+            type="number"
+            onChange={handleHeightChange}
+            onKeyDown={handleKeyPress}
+          />
+        </div>
+        <div>輸入完按下 Enter 變更</div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <input
+        className="border w-full p-1"
+        type="text"
+        onChange={handleTextChange}
+        value={selectedItem?.text || ''}
+      />
+    </div>
+  )
+};
+
+export default Editor;
+```
+
+這樣就完成了
+
+### 成品 Youtube 影片
+
+<iframe
+  src="https://www.youtube.com/embed/OUDcQCZbXPE?feature=oembed"
+  width="700"
+  height="393"
+  frameBorder="0"
+  allowFullScreen
+></iframe>
+
+## 專案結構
+
+```markdown
+.
+├── src/
+│ ├── components/
+│ │ ├── Button.tsx # 按鈕元件，整合拖曳功能
+│ │ ├── Editor.tsx # 編輯區，提供項目編輯功能
+│ │ ├── Main.tsx # 主畫面，包含拖放區域
+│ │ └── Sidebar.tsx # 側邊欄
+│ ├── stores/
+│ │ └── index.ts # 狀態管理 store
+│ └── types/
+│ └── index.ts # 類型定義
+├── README.md # 專案說明文件
+├── package.json # 專案依賴管理
+└── tsconfig.json # TypeScript 設定
+```
+
+成品 GitHub：https://github.com/u88803494/dnd_test
+
+## 結論
+
+在這篇文章中，我分享了如何在 React 中實現一個基於 **拖曳(Drag and Drop)** 的**所見即所得(WYSIWYG)** 功能。這是我第一次實作類似的功能，我曾用過類似的套件來實現視訊時，視窗移動的功能。這對我來說是一個新體驗，也證明了我可以很快速地上手一個新套件的能力。
+
+在透過 **React** 和 **React DnD** 的結合，我能夠打造出一個直覺且易於操作的拖曳編輯體驗，讓使用者可以即時編輯圖片、文字等元件屬性，這在現代 Web 應用中是非常常見的需求。
+
+這個專案讓我更深入了解了如何運用 React 來開發靈活的用戶互動介面，同時也熟悉了 **React DnD** 函式庫，讓我能更輕鬆有效地實現拖曳交互。雖然這個過程中遇到了一些挑戰，但也讓我在前端開發、狀態管理和使用者體驗設計上有了更深刻的體會。
+
+所以我認知到如果我有需要，我也可以完善一個 WYSIWYG 編輯器，這會是一個有趣的體驗。
+
+如果你也有類似的需求或對這些技術感興趣，不妨試著動手實踐，相信你會有很多收穫！
+
+如果有任何疑問，歡迎聯絡我，謝謝！

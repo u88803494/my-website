@@ -1,0 +1,124 @@
+---
+title: "後端框架 Express.js：簡介"
+slug: "後端框架-express-js-簡介"
+description: "要了解後端框架，先從不用框架學起"
+date: 2026-09-02T00:53:38.134Z
+tags: ["medium"]
+draft: true
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*RjmRAy2wJ34G2lgEnm5rXg.png"
+mediumUrl: "https://medium.com/p/ae1d2dfdad1b"
+---
+
+## 要了解後端框架，先從不用框架學起
+
+node.js 本身就有內建指定可供使用。
+
+然後就可以寫一些指令
+
+```
+const http = require('http');
+const server = http.createServer(handler); // 傳入一個函式
+```
+
+```
+function handler(req, res) { // 命名習慣上用三字元
+```
+
+```
+}
+```
+
+然後完善這個 function
+
+```
+function handler(req, res) { // 命名習慣上用三字元
+  console.log(req.url); // 印出就可以看到有無人連入
+  res.write('hello'); // 回應 hello
+  res.end(); // 表示回應結束
+}
+```
+
+然後因為這是練習，所以可以監聽別的 port。
+
+```
+server.listen(5001); // 監聽 5001 port
+```
+
+像是測試的時候，就可以利用別的 port 來測試
+
+接著就可以執行
+
+![然後就發現停在這邊不會動](https://cdn-images-1.medium.com/max/800/1*RjmRAy2wJ34G2lgEnm5rXg.png)
+
+_然後就發現停在這邊不會動_
+
+因為伺服器執行中，所以就輸入任何都不會有反應，除非把它關掉。
+
+這時候在網址輸入自己連進去。
+
+![](https://cdn-images-1.medium.com/max/800/1*LKEqMVwV77KuoMhx4H2SzA.png)
+
+就會發現印出剛剛寫要寫出來的資料了。然後也會看到終端有所變化：
+
+![favicon.ico 是瀏覽器預設加上的網頁 icon](https://cdn-images-1.medium.com/max/800/1*bjLggNWUh98K5aPWxLqN-w.png)
+
+_favicon.ico 是瀏覽器預設加上的網頁 icon_
+
+然後試著在網址上面加上不同的東西。
+
+![](https://cdn-images-1.medium.com/max/800/1*KZXoTdLe3QIDKVZGB8h20Q.png)
+
+就會發現 server 端印出了這些
+
+![](https://cdn-images-1.medium.com/max/800/1*tdMSs2G-oKzyPsmolAc7ew.png)
+
+也因此，就可以利用這些來判斷要輸出什麼。
+
+![](https://cdn-images-1.medium.com/max/800/1*DFKnwOquFh7uo4MlgLIOoQ.png)
+
+localhost:5001/hello
+
+![](https://cdn-images-1.medium.com/max/800/1*mdvcebv1Ba62RZx2v55TiQ.png)
+
+localhost:5001/any
+
+![](https://cdn-images-1.medium.com/max/800/1*WxNLCKaF53uu4OPZ4ePCOQ.png)
+
+這邊的檔案如果有修改，都要重新啟動一次，才可以把伺服器更新。
+
+然後當然回應的資料就可以使用 html 的語法。
+
+![](https://cdn-images-1.medium.com/max/800/1*mKhDn76CbeyOo4iJysvkqg.png)
+
+而實際上比較正式的用法，就是還需要加上其他資訊才對。
+
+![](https://cdn-images-1.medium.com/max/800/1*e62tvZNqMPkhsaaKwKmqVQ.png)
+
+而在 chrome 中，回自動辨認為這種格式，所以不加也沒關係，但還是建議要加上會比較好。
+
+測試一下導向：
+
+![](https://cdn-images-1.medium.com/max/800/1*FgAyAc0qtzmBagDobkuSiA.png)
+
+這樣就可以當連入 localhost:5001/hello 的時候導向到 google。
+
+—
+
+這邊只是在說明底層，實際上 express.js 都把這些包裝起來，會更好用一些。
+
+## 初探 Express
+
+官網
+
+要用的時候首先要初始化資料。
+
+1. 創建一個資料夾  
+   `mkdir express-demo`
+2. 切入資料夾  
+   `cd express-demo`
+3. 初始化  
+   `npm init`
+4. 安裝 express  
+   `npm install express`
+
+然後就可以按照 getting start 的例子來試試看

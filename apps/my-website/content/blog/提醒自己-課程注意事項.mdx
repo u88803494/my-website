@@ -1,0 +1,33 @@
+---
+title: "提醒自己，課程注意事項。"
+slug: "提醒自己-課程注意事項"
+description: "課程更新時的做法"
+date: 2019-04-17T09:28:19.596Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E6%8F%90%E9%86%92%E8%87%AA%E5%B7%B1-%E8%AA%B2%E7%A8%8B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85-affb9dbfff0a"
+---
+
+## 課程更新時的做法
+
+課程主架構更新的時候，需要同步。就直接在自己的本機
+
+1. git branch sync-master, branch 的名字可以自己取。
+2. git checkout sync-master, 切換到該 branch
+3. git pull "主架構的網址" master, 把更新的主架構給 pull 進本機 repository
+4. 如果出現 vim 介面直接 :wq 儲存並退出
+5. git push origin sync-master, 直接把更新的架構 push 到自己的 repository
+6. 在 GitHub 上面自己的 repository 頁面，直接在 Pull request 裡面直接 @huli 即可，如果可以自己 merge 就自己 merge，後刪除 sync-master 這個 branch
+7. 回到自己的終端且 git checkout master, 切換回 master
+8. git pull origin master 從 GitHub 上自己的 repository 把檔案 pull 下來
+9. git branch -d sync-master 刪除自己本機上的 branch
+
+## 課程進行方式
+
+1. 看課程大綱：觀看自我檢測
+2. 看導讀：[MTR03] 程式導師實驗計畫第三期的當周影片，參考教材以導讀的為準。
+3. 學習：大部分都是附上的，如果沒有附上，就自行去找資源來學習。
+4. 看作業及作業介紹：GitHub 上面看課程說明，作業直接改 repository 的作業(皆以分類)。
+5. 交作業：交完之後，學習系統上要按完成。
+
+CLI 是工程師的基本功。Git 是交作業的重點。

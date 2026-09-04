@@ -1,0 +1,257 @@
+---
+title: "額外補充"
+slug: "額外補充"
+description: "JS 額外補充：hoisting 變數提升"
+date: 2019-05-27T14:50:18.293Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*TvFFXtHzP7A4hyI-AEVR7A.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-3779505a3216"
+---
+
+## JS 額外補充：hoisting 變數提升
+
+```
+test()
+```
+
+```
+function test() {
+ console.log(1)
+}
+// 1
+```
+
+在使用變數的時候，如果是在變數前面就呼叫了，照道理程式碼一行一行的讀，還沒到變數的時候，應該不能使用，但卻可以直接呼叫成功。
+
+原因是因為機制，就是 hoisting。在編譯的時候，會把變數的宣告放到最前面，所以呼叫的時候會直接可以呼叫寫在後面的變數。雖然是這樣，但是賦值的動作卻不會被提升。補充：提升只是一種形容。
+
+所以把 function 賦值給變數會不能這樣使用。
+
+```
+test()
+```
+
+```
+var test = function() {
+  console.log(1)
+}
+// error
+```
+
+因為 JavaScript 會把上述的情況當作：
+
+```
+var test // 只把宣告給提升
+```
+
+```
+test()
+```
+
+```
+test = function() {
+  console.log(1)
+}
+// error
+```
+
+然後只會把 var test 提升上去。賦值的動作卻沒有，所以一樣會產生錯誤。
+
+1. function 直接提升上去
+2. 變數宣告堤上去，賦值不會
+
+所以測試一下：
+
+```
+console.log(test)
+```
+
+```
+var test = 10;
+```
+
+```
+function test() {
+ console.log(1)
+}
+// [Function: test]
+```
+
+這樣會顯示 function
+
+原因是：當 function test 提升上去之後，因為已經有了存在，所以 var test 會被當作不存在，如同下方：
+
+```
+function test() {
+ console.log(1)
+}
+```
+
+```
+console.log(test)
+```
+
+```
+test = 10;
+```
+
+```
+
+// [Function: test]
+```
+
+所以如果在最下面 console.log(test) 會得到 10 這個結果。
+
+-
+
+另外一個範例
+
+```
+test()
+var test = 10;
+```
+
+```
+function test() {
+ console.log(1)
+}
+```
+
+```
+function test() {
+ console.log(2)
+}
+```
+
+```
+console.log(test)
+// 2
+```
+
+答案會得到 2，因為可以重複宣告 function，就像是重複宣告變數一樣，比就上面的會被蓋掉。
+
+-
+
+let 就不行，因為 let 不能被重複宣告
+
+```
+console.log(a)
+let a = 10;
+// ReferenceError: a is not defined
+```
+
+在 ES6 內，const 跟 let 不能被提升，而且也不能重複宣告。意思是 let 在同個 block 裡面不能重複宣告。
+
+-
+
+另外一個範例
+
+```
+var test = 10;
+```
+
+```
+function test(a) {
+ console.log(a)
+ var a = 30;
+}
+```
+
+```
+test(10)
+// 10
+```
+
+hoisting 等於是變數宣告提升，每個 scope 都會有提升的問題
+
+```
+var test = 10;
+```
+
+```
+function test(a) {
+ var a // 等同於這樣，但是 a 已經被宣告過了，所以這行等於沒有
+ console.log(a)
+ a = 30;
+}
+```
+
+```
+test(10)
+// 10
+```
+
+因為已經把 a 傳進去了，所以已經 var a = 10 了，所以宣告有提升跟沒提升一樣
+
+1. 像是 var a = 30，當變數 a 已經存在，不會提升。
+2. function 會提到最上面
+
+為什麼會需要知道這個，雖然有 let 了，有時候還是會需要用到 var 所以還是必須要知道。因為是 JavaScript 的機制之一，有時候面試也會考這個。
+
+-
+
+```
+function test(a) {
+ console.log(a)
+ var a = 30;
+
+ function a() {
+
+ }
+}
+```
+
+```
+test(10);
+// [Function: a]
+```
+
+a 被提升上去了，所以 a 是 function。
+
+-
+
+這種情形是有明確被定義的：
+
+![es5 規格書](https://cdn-images-1.medium.com/max/800/1*TvFFXtHzP7A4hyI-AEVR7A.png)
+
+_es5 規格書_
+
+![function 會提升上去，然後覆蓋掉前面的宣告變數](https://cdn-images-1.medium.com/max/800/1*TpnMOFwpULZmUWJxJEPF4w.png)
+
+_function 會提升上去，然後覆蓋掉前面的宣告變數_
+
+1. (如果在 function 裡面) 宣告 paranters 參數，帶入的值會在 function 內部直接被宣告變數並賦值。
+2. function 提升，放到第一步下面
+3. 如果在同一個 scope 裡面，這變數還沒宣告的話，變數的宣告提升。
+
+根據這三個步驟，就可以解決變數提升的問題。另外 ，只有宣告會提升， function 也是一樣，並不是整個 function 都提升上去了。
+
+最終就等同於
+
+```
+function test(a) {
+ var a = 10; // 因為待值 a = 10 等同於在這邊宣告
+ function a() {}; // function 會被提升
+ console.log(a);
+ var a = 10; // 因為上面已經有同名 function 了，所以不會變動。
+}
+```
+
+```
+test(10);
+```
+
+這個 hoisting 的用意就只是在幫助我們可以提早使用後面才宣告並賦值的東西。
+
+[補充資料](https://blog.techbridge.cc/2018/11/10/javascript-hoisting/)
+
+[MDN 補充](https://developer.mozilla.org/zh-TW/docs/Glossary/Hoisting)
+
+## 收穫：
+
+在這邊了解到原來還有這種機制，第一條所說的宣告變數，這點我之前就已經有這樣的想法，所以就是在這邊得到了更多的確定感。在這裡了解到原來，變數還可以提升阿，然後理解這一點也可以防止自己在寫程式的時候不小心寫出 bug。
+
+然後也知道這個東西如果了解是在於 JavaScript 中手跟精通的差異，也就是對於 JavaScript 的了解程度到哪裡。
+
+另外一篇補充[ JS 額外補充：hoisting 變數提升（二）](https://medium.com/@hugh_Program_learning_diary_Js/js-%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-hoisting-%E8%AE%8A%E6%95%B8%E6%8F%90%E5%8D%87-%E4%BA%8C-c5a52674e6e2)

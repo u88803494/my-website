@@ -1,0 +1,492 @@
+---
+title: "前端基礎 JavaScript篇：JavaScript 與瀏覽器的溝通"
+slug: "前端基礎-javascript篇-javascript-與瀏覽器的溝通"
+description: "簡介"
+date: 2019-05-28T15:10:59.422Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*LHGKIb7TYmanKkIOpqPOGQ.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-javascript%E7%AF%87-javascript-%E8%88%87%E7%80%8F%E8%A6%BD%E5%99%A8%E7%9A%84%E6%BA%9D%E9%80%9A-e00ff05d0fdc"
+---
+
+## 簡介
+
+1. 介面：如何改變介面？變動 ui 等等的
+2. 事件：如何監聽事件並做出反應？偵測到按鈕被按做出反應
+3. 資料：如何跟伺服器交換資料？要怎麼樣保存瀏覽器的資料，跟伺服器交換資料等。
+
+只要完成這三件事情，就可以寫出所有想要的網頁。
+
+## 執行 JavaScript 的一百種方法
+
+在哪裡執行？
+
+之前都是在 node 上執行。現在要怎麼樣在瀏覽器上執行？
+
+瀏覽器上面執行，直接寫在 html 內部。
+
+```
+<head>
+  <title> I'm title </title>
+  <script>
+    alert(1)
+  </script>
+</head>
+```
+
+寫在 body 內部也可以，所以是可以放在任何位置的。
+
+一般不會把 JavaScript 的程式碼通通寫在 html，會跟 CSS 一樣另外開個檔案來放，這樣才比較好修改。
+
+```
+<head>
+  <title> I'm title </title>
+  <script src="./index.js"></script>
+</head>
+```
+
+src 接路徑這邊是表示在同一個目錄之下的檔案，這是相對路徑的表示法。
+
+Node.js 與瀏覽器跑 JS 的差異
+
+語法是一樣，但有可能語法瀏覽器不支援。
+
+## DOM 是什麼？
+
+Document Object Model, DOM。
+
+類似於把文件轉換成物件。
+
+[DOM 簡介](https://openhome.cc/Gossip/JavaScript/W3CDOM.html)
+
+所以 JavaScript 要透過 DOM 去改變 HTML，透過類似物件的方式去指定要變動的元素，DOM 就是為了要讓 JavaScript 可以去透過 DOM 去改變畫面上內容而存在。
+
+-
+
+DOM 有很多種物件屬性跟方法可以使用。可以透過物件的方式去使用那些屬性跟方法，就可以得到資料進而去控制。
+
+可以參考這邊 [HTML DOM Document](http://www.runoob.com/jsref/dom-obj-document.html)
+
+[HTML DOM 元素](http://www.runoob.com/jsref/dom-obj-all.html)
+
+_文中的對象是大陸翻譯，台灣翻譯物件。_
+
+-
+
+[補充資料：BOM 與 DOM](https://ithelp.ithome.com.tw/articles/10191666)
+
+## DOM 方法與屬性
+
+方法是我們可以在節點（HTML 元素）上執行的動作。
+
+屬性是節點（HTML 元素）的值，您能夠獲取或設置。
+
+可通過 JavaScript （以及其他程式語言）對 HTML DOM 進行訪問。
+
+所有 HTML 元素被定義為物件，而程式介面則是物件方法和物件屬性。
+
+方法是您能夠執行的動作（比如添加或修改元素）。
+
+屬性是您能夠獲取或設置的值（比如節點的名稱或內容）。
+
+舉個例子來說：
+
+某個人是一個物件。
+
+人的方法可能是 eat(), sleep(), work(), play() 等等。
+
+所有人都有這些方法，但會在不同時間執行。
+
+一個人的屬性包括姓名、身高、體重、年齡、性別等等。
+
+所有人都有這些屬性，但它們的值因人而異。
+
+參考資料：[W3School HTML DOM 方法](http://www.w3school.com.cn/htmldom/dom_methods.asp)
+
+## 如何選到想要的元素：getElement
+
+### getElementsByTagName
+
+得到指定一個標籤名稱
+
+document 是瀏覽器提供的一個特殊物件，把很多的 function 都放在內部
+
+可以透過物件的方式去呼叫
+
+```
+const elements = document.getElementsByTagName('div')
+```
+
+-
+
+然後試著在 head 呼叫的時候，把它印出來
+
+```
+<!DOCTYPE HTML>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./style.css" />
+  <meta name = "viewport" content = "width=device-width, initial-scale=1" />
+  <title> FE102 </title>
+  <script src="./index.js"></script>
+  <script>
+ const elements = document.getElementsByTagName('div')
+ console.log(elements)
+  </script>
+</head>
+```
+
+```
+<body>
+ <div>
+
+  </div>
+```
+
+```
+</body>
+```
+
+```
+</html>
+```
+
+![結果得到一個空陣列](https://cdn-images-1.medium.com/max/800/1*LHGKIb7TYmanKkIOpqPOGQ.png)
+
+_結果得到一個空陣列_
+
+因為瀏覽器是一行一行的跑，所以只跑到上段的話，還沒有 div 這個標籤，所以就會印出空陣列。
+
+所以要把程式碼放在 &lt;body /> 的結尾標籤上面，就可以看到正確資訊。
+
+```
+<!DOCTYPE HTML>
+<html>
+```
+
+```
+<head>
+  <meta charset="utf-8" />
+  <meta name = "viewport" content = "width=device-width, initial-scale=1" />
+  <title> FE102 </title>
+```
+
+```
+</head>
+```
+
+```
+<body>
+ <div>
+```
+
+```
+</div>
+  <script>
+    const elements = document.getElementsByTagName('div')
+    console.log(elements)
+  </script>
+</body>
+```
+
+```
+</html>
+```
+
+![就會看得到有一個元素的陣列](https://cdn-images-1.medium.com/max/800/1*xaBSSKQ5Ndh9cd6X2bddQA.png)
+
+_就會看得到有一個元素的陣列_
+
+-
+
+### getElementsByClassName
+
+用法跟上面的一樣
+
+```
+const elements = document.getElementsByClassName('block')
+```
+
+不用加個點，直接取 class 的名稱就好。
+
+假設在網頁中有兩個 div 有 class name 都叫做 block
+
+然後可以用瀏覽器會印出
+
+```
+HTMLCollection(2) [div.block, div.block]
+```
+
+HTMLCollection 用起來類似於陣列，但實際上不是陣列。[MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/HTMLCollection)
+
+-
+
+### getElementById
+
+這個沒有 s 因為 ID 只會有一個。
+
+ID 跟 class 名字可以一樣，不過一般不會這樣子做
+
+因為 ID 只有一個，所以印出的時候，會直接把內容印出來，就不是陣列了。
+
+-
+
+### querySelector
+
+這個是比較新型的，後面接的是 CSS 的選擇器。
+
+```
+const elements = document.querySelector('#IDname')
+const elements = document.querySelector('tag')
+const elements = document.querySelector('.classname')
+```
+
+也支援更複雜的選擇器
+
+```
+const elements = document.querySelector('div .block')
+```
+
+但這個在回傳的時候，只會回傳選到的第一個，所以印出的話，只會看到第一個元素。
+
+### querySelectorAll
+
+跟上面一樣，只是這個會選到所有的，這時候就會印出類似於陣列的元素內容。
+
+querySelector 跟 querySelectorAll 是最直覺的選擇方式。
+
+-
+
+為什麼要有選擇元素的方式呢？
+
+因為要用這些方式去指定想要的元素，抓取到了資料，我們才可以針對該元素，以及該元素下方的所有資料進行各種事件的偵測
+
+## 改變元素的 class
+
+> 定义和用法
+
+> classList 属性返回元素的类名，作为 DOMTokenList 对象。
+
+> 该属性用于在元素中添加，移除及切换 CSS 类。
+
+> classList 属性是只读的，但你可以使用 add() 和 remove() 方法修改它。
+
+> [runoob 的介紹](http://www.runoob.com/jsref/prop-element-classlist.html)
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    .active {
+      background: red;
+    }
+  </style>
+</head>
+<body>
+  <div id='block'>
+    hello~
+  </div>
+  <script>
+    const element = document.querySelector('#block');
+    element.classList.add('active');
+  </script>
+</body>
+</html>
+```
+
+可以利用 element.classList.add(‘active’) 來新增效果。
+
+除此之外還可以移除效果。
+
+```
+element.classList.remove(‘className’)
+```
+
+就可以移除 class
+
+-
+
+另外還有 .toggle
+
+```
+element.classList.toggle(‘className’)
+```
+
+toggle 就是開關的意思，使用這就會讓沒有的就會新增，有的就會移除。可以設置一個按鈕，按下去之後就會移除效果，再按一次就會把效果新增回來。
+
+## 改變內容：inner、outer 的 HTML 與 text
+
+### innerText
+
+會回傳指定的內容的文字
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <style>
+    .active {
+      background: red;
+    }
+  </style>
+</head>
+<body>
+  <div id='block'>
+    yo
+    <a>hello~</a>
+  </div>
+  <script>
+    const element = document.querySelector('#block');
+    console.log(element.innerText);
+  </script>
+</body>
+</html>
+```
+
+直接透過 innerTEXT 印出，會出現標籤內所有的文字。
+
+```
+<script>
+    const element = document.querySelector('#block');
+    console.log(element.innerText);
+  </script>
+```
+
+```
+//  "
+//    yo
+//    hello~
+//  "
+```
+
+除了印出還可以變更內部的文字
+
+```
+<script>
+    const element = document.querySelector('#block > a');
+    element.innerText = 'i am a link'
+    console.log(element.innerText);
+</script>
+```
+
+![可以看到 a 元素內部的 hello 被取代掉了。](https://cdn-images-1.medium.com/max/800/1*a-4NbqbAOhBV-AjiWETQ7w.jpeg)
+
+_可以看到 a 元素內部的 hello 被取代掉了。_
+
+如果直接把 block 都取代掉。
+
+![內部的整個都會被取代掉](https://cdn-images-1.medium.com/max/800/1*ou-rwkbARaZtKfBjoja7pw.jpeg)
+
+_內部的整個都會被取代掉_
+
+可以利用這一點來取代文字。
+
+-
+
+### innerHTML
+
+會把標籤中的內容都抓取，包含 HTML 語法，但不包含抓取的標籤本身。
+
+![](https://cdn-images-1.medium.com/max/800/1*550z9lk1U5snw4vUAuN_hw.jpeg)
+
+-
+
+### outerHTML
+
+除了 inner 的那一段之外，就抓取的標籤本身也抓取。
+
+![抓取的標籤本身也抓取](https://cdn-images-1.medium.com/max/800/1*gJlARL9yx2BOVml6Jzpneg.jpeg)
+
+_抓取的標籤本身也抓取_
+
+所以可以去更改內容，甚至連標籤都可以更改。
+
+![全部被取代掉了](https://cdn-images-1.medium.com/max/800/1*sc6u5VUz2i93LKEdKPDtbQ.jpeg)
+
+_全部被取代掉了_
+
+最常用的是 innerText 跟 innerHTML
+
+改變文字最常使用，一般比較不會想去動到標籤。
+
+## 插入與刪除元素：appendChild 與 removeChild
+
+### removeChild
+
+> removeChild() 方法可从子节点列表中删除某个节点。
+
+> [runoob](http://www.runoob.com/jsref/met-node-removechild.html)
+
+要刪除的元素必須要找到它的父層
+
+利用前面的範例
+
+```
+<script>
+    const element = document.querySelector('#block'); //要先指定目錄
+    element.removeChild(document.querySelector('a')); //指定刪除該元素
+</script>
+```
+
+必須要先指定該目錄，才可以透過第二行的內容來刪除元素
+
+![a 元素被刪了，包含 a 元素的內容](https://cdn-images-1.medium.com/max/800/1*NFA0jvAAT7dkP_3CaZvXpQ.jpeg)
+
+_a 元素被刪了，包含 a 元素的內容_
+
+所以如果在其他地方也有一個 a 元素，就會發生錯誤，因為要刪除的元素必須要在父層一下
+
+![就會出現關於 a 的錯誤](https://cdn-images-1.medium.com/max/800/1*t7z69ecHIzlCUj1PbzX88w.jpeg)
+
+_就會出現關於 a 的錯誤_
+
+-
+
+## appendChild
+
+新增元素
+
+> appendChild() 方法可向节点的子节点列表的末尾添加新的子节点。
+
+> **提示：**如果文档树中已经存在了 newchild，它将从文档树中删除，然后重新插入它的新位置。如果 newchild 是 DocumentFragment 节点，则不会直接插入它，而是把它的子节点按序插入当前节点的 childNodes[] 数组的末尾。
+
+> 你可以使用 appendChild() 方法移除元素到另外一个元素。 [runoob](http://www.runoob.com/jsref/met-node-appendchild.html)
+
+```
+<script>
+    const element = document.querySelector('#block');
+    const item = document.createElement('div'); // 需要先創造一個元素
+    element.appendChild(item); // 在利用 appendChild 新增
+</script>
+```
+
+![反白處看到多了個 div](https://cdn-images-1.medium.com/max/800/1*Gu-2WkxhdWUfhnmdRIhHTQ.jpeg)
+
+_反白處看到多了個 div_
+
+然後透過 innerText 就可以新增內容進去。
+
+![就呈現第二行 123，因為是被包在 div 標籤內部](https://cdn-images-1.medium.com/max/800/1*KyvFjwgIUhJU5Cb1r0Ve3A.jpeg)
+
+_就呈現第二行 123，因為是被包在 div 標籤內部_
+
+還有更多方式，可以透過 Google 去了解更多。
+
+## 收穫：
+
+了解了 JavaScript 如何跟 html 溝通，原來就是透過 DOM。DOM 就是這樣的意思，所以 DOM 就是 JavaScript 跟 html 溝通的 API。透過 DOM 可以選中元素，然後還可以透過指令來新增刪除等方式來變動文字甚至標籤。
+
+2019/05/30 把筆記做了重新整理跟重新理解。
+
+我理解到了更多關於 DOM 的資訊，了解這些之後卡關的感覺就消失了，DOM 的功能就是溝通，有分屬性跟方法，屬性就是去了解那些資料，而方法則是做出任何的動作，然後再次理解到那些屬性跟方法也都是 function。透過物件的方式去使用 DOM 物件以及函式，可以讓我們更輕鬆的控制 HTML，然後透過呼叫之後儲存的方式，可以讓程式碼看起來更簡潔一些，我今天這樣看下來才發覺，原來我還有卡關的點是我不了解為什麼要把那些用變數給定義起來，原來就是這樣看起來很簡潔，透過其他的資料來了解我才知道說直接寫成 xxxxxx.xxxxx(ooo).xxxxx.xxxxx(xxxxx) 其實也是可以的啦。只不過這樣就太複雜了。

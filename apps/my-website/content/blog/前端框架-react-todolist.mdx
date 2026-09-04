@@ -1,0 +1,655 @@
+---
+title: "前端框架 React：todolist"
+slug: "前端框架-react-todolist"
+description: "首先先把 CSS 放進另外的檔案裡面，然後在 app.js 引入"
+date: 2019-10-23T13:25:18.860Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*H0SE1pURPQcq4OPWggpVKA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-todolist-3ef24b08a444"
+---
+
+首先先把 CSS 放進另外的檔案裡面，然後在 app.js 引入
+
+```
+.wrapper {
+  width: 400px;
+  margin: 0 auto;
+}
+```
+
+```
+.filters {
+  display: flex;
+}
+```
+
+```
+.filters div {
+  border: 1px solid grey;
+  margin-right: 10px;
+  cursor: pointer;
+}
+```
+
+```
+.list {
+  border: 1px solid black;
+  margin-top: 10px;
+}
+```
+
+```
+.list-item {
+  display: flex;
+  position: relative;
+}
+```
+
+```
+.list-item__state {
+  margin: 0 10px;
+}
+```
+
+```
+.list-item__action {
+  position: absolute;
+  right: 0;
+}
+```
+
+然後是寫好一部分的 render
+
+```
+render() {
+ return (
+  <div className="wrapper">
+    <div><input type="text" name="todo" />
+       <button className="add-todo">新增</button>
+    </div>
+    <h2>Todo</h2>
+    <div className="filters">
+      <div className="filters_all">全部</div>
+      <div className="filters_completed">已完成</div>
+    </div>
+    <div className="list">
+
+    </div>
+  </div>
+ )
+}
+```
+
+接著試著把資料新增到 state 上面。
+
+```
+constructor(props) {
+  super(props)
+  this.state = {
+    todos: [] // 域純資料
+  }
+}
+```
+
+就有了基本樣貌：
+
+![](https://cdn-images-1.medium.com/max/800/1*DUE-3dvyEvcA3gPkbNSQOg.png)
+
+然後因為這個是靜態頁面，也就是沒有後端的部份，所以 還有一個 id 要設定，這樣才可以得知是第幾筆資料。
+
+也可以寫在 state 裡面，也可以寫在外部。主要是 id 這個跟 render 沒關係
+
+```
+class App extends Component {
+constructor(props) {
+  super(props)
+  this.state = {
+    todos: []
+  }
+  this.id = 1
+}
+```
+
+當然 render 就需要取得資料了，然後是底下的資料的 HTML，但是在這部份，因為 render 只被呼叫一次，所以如果有三筆資料的話，不就需要寫三次了嗎？
+
+這種時候有一個慣例用法，在 render 的部份，React 的慣用作法是把資料改成陣列，這樣在 render 的時候 React 就會按照 array index 的順序把資料 render 上去。所以就需要通過 `.map()` 來處理
+
+![](https://cdn-images-1.medium.com/max/800/1*H0SE1pURPQcq4OPWggpVKA.png)
+
+因為這樣子的作法就等於是使用陣列
+
+```
+render() {
+  const { showTitle } = this.state
+  return (
+    <div className="wrapper">
+      <div><input type="text" name="todo" /><button className="add-todo">新增</button></div>
+      <h2>Todo</h2>
+      <div className="filters">
+        <div className="filters_all">全部</div>
+        <div className="filters_completed">已完成</div>
+      </div>
+      <div className="list">
+        {[<div>1</div>, <div>2</div>, <div>3</div>]}
+      </div>
+    </div>
+  )
+}
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*hDzL25ogTKuiOlfPGpzkdQ.png)
+
+他就會 Render 這三個 div，而不會 render 在同一行。
+
+同樣的道理就可以使用 map 生成陣列，可以試著把 state 的預設改成  
+`[1, 2, 3, 4, 5]`
+
+```
+<div className="list">
+  {todos.map(todo => (
+    <div>{todo}</div>
+  ))}
+</div>
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*XYwMuSsSiwlRgfB5Dl0QLg.png)
+
+所以就透過這種方式，就可以在每個 index 裡面寫我希望的 todolist 長什麼樣子，就可以這樣子去把整個都設定完成。
+
+```
+render() {
+    const { todos } = this.state
+    return (
+      <div className="wrapper">
+        <div><input type="text" name="todo" />
+          <button className="add-todo">新增</button>
+        </div>
+        <h2>Todo</h2>
+        <div className="filters">
+          <div className="filters_all">全部</div>
+          <div className="filters_completed">已完成</div>
+        </div>
+        <div className="list">
+          {todos.map(todo => (
+            <div className={`list-item ${todo.isCompleted ?
+             'completed' : ''}`}>
+              <div className="list-item__state">
+                {todo.isCompleted ? 'O' : 'X'}
+              </div>
+              <div className="list-item__content">
+                {todo.text}
+              </div>
+              <div className="list-item__action">
+                <button className="list-item__deltet">刪除</button>
+                <button className="list-item__mark">
+                  {todo.isCompleted ? '標示成未完成' : '標示成完成'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+```
+
+## 功能的部份
+
+### 新增
+
+新增的部份，需要多一筆資料 todoText ，用來取得 todo 的資料
+
+然後可以新增一個監聽器，然後使用一個 function 去取得這個 input 的部份： `onChange={this.handleChange}`
+
+接著針對， handleChange 取得資料寫 function
+
+```
+handleChange(e) {
+  this.setState({
+  todoText: e.target.value
+ })
+}
+```
+
+這樣就可以取得資料，接下來就是針對按鈕的部份，新增一個按下的監聽，並寫下 function 測試，也可以使用 alert 測試
+
+```
+addTodo() {
+  const { todoText } = this.state
+  alert(todoText) // 測試用，之後刪除
+}
+```
+
+然後就可以試著新增資料，而之前是使用 `.push` 來新增資料，而在 React 裡面則不一樣，不能直接操作 state，因為這樣子的話會有一些問題產生。
+
+這邊就要使用解構的語法，把原來的資料展開，然後在最後新增一比資料。
+
+```
+  addTodo() {
+    const { todoText, todos } = this.state
+    this.setState({
+      todos: [...todos, {
+        id: this.id,
+        isCompleted: false,
+        text: todoText,
+      }],
+      todoText: '' // 新增完之後要清空暫存區
+    })
+    this.id ++; // id 進位
+  }
+```
+
+然後瀏覽一下整體，會發現 render 的部份太複雜了，所以就可以考慮優化一下這部份，這邊另外開一個新檔案來放這部份。
+
+```
+todo.js:
+```
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Todo extends Component {
+  constructor(props) {
+    super(props)
+  }
+```
+
+```
+render() {
+    const { todo } = this.props
+    return (
+      <div className={`list-item ${todo.isCompleted ?
+        'completed' : ''}`}>
+        <div className="list-item__state">
+          {todo.isCompleted ? 'O' : 'X'}
+        </div>
+        <div className="list-item__content">
+          {todo.text}
+        </div>
+        <div className="list-item__action">
+          <button className="list-item__deltet">刪除</button>
+          <button className="list-item__mark">
+            {todo.isCompleted ? '標示成未完成' : '標示成完成'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default Todo
+```
+
+另外 app.js 要引入且在原來的地方改成插入這個 component
+
+```
+app.js
+import Todo from './Todo';
+```
+
+```
+...
+...
+...
+```
+
+```
+<div className="list">
+  {todos.map(todo => <Todo todo={todo} />)}
+</div>
+```
+
+### 刪除
+
+然後就可以在 todo.js 上面實作刪除的部份：
+
+```
+import React, { Component } from 'react';
+```
+
+```
+class Todo extends Component {
+  constructor(props) {
+    super(props)
+```
+
+```
+  this.delete = this.delete.bind(this);
+  }
+```
+
+```
+  delete() {
+
+  }
+```
+
+```
+  render() {
+    const { todo } = this.props
+    return (
+      <div className={`list-item ${todo.isCompleted
+        ? 'completed' : ''}`}>
+        <div className="list-item__state">
+          {todo.isCompleted ? 'O' : 'X'}
+        </div>
+        <div className="list-item__content">
+          {todo.text}
+        </div>
+        <div className="list-item__action">
+          <button className="list-item__deltet"
+            onClick={this.delete}>刪除</button>
+          <button className="list-item__mark">
+            {todo.isCompleted ? '標示成未完成' : '標示成完成'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default Todo
+```
+
+設置點擊之後，就可以寫刪除的 function，但這時候要怎麼知道 id 呢？就是要透過上一層，所以要去 app.js 另外開一個 function，因為這時候是要把 class App 的 state 拿掉
+
+```
+import React, { Component } from 'react';
+import Todo from './Todo';
+import "./style.css";
+```
+
+```
+class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      todos: [],
+      todoText: ''
+    }
+    this.id = 1;
+```
+
+```
+    this.handleChange = this.handleChange.bind(this);
+    this.addTodo = this.addTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+  }
+```
+
+```
+  handleChange(e) {
+    this.setState({
+      todoText: e.target.value
+    })
+  }
+```
+
+```
+  addTodo() {
+    const { todoText, todos } = this.state
+    this.setState({
+      todos: [...todos, {
+        id: this.id,
+        isCompleted: false,
+        text: todoText,
+      }],
+      todoText: '' // 新增完之後要清空暫存區
+    })
+    this.id++; // id 進位
+  }
+```
+
+```
+  deleteTodo(id) {
+    this.setState({
+      todos: this.state.todos.filter(todo => todo.id !== id)
+      // 把 id 不同的拿掉
+    })
+  }
+```
+
+```
+  render() {
+    const { todos, todoText } = this.state
+    return (
+      <div className="wrapper">
+        <div><input type="text" name="todo" value={todoText}
+           onChange={this.handleChange} />
+          <button className="add-todo"
+             onClick={this.addTodo}>新增</button>
+        </div>
+        <h2>Todo</h2>
+        <div className="filters">
+          <div className="filters_all">全部</div>
+          <div className="filters_completed">已完成</div>
+        </div>
+        <div className="list">
+          {
+            todos.map(todo => <Todo todo={todo}
+              deleteTodo={this.deleteTodo} />)
+            /* 把 function 傳入，才可以把值傳下去 */
+          }
+        </div>
+      </div>
+    )
+  }
+}
+```
+
+```
+export default App
+```
+
+然後 todo.js 的 delete 就可以呼叫了。
+
+```
+  delete() {
+    const {todo, deleteTodo} = this.props
+    deleteTodo(todo.id) // 把 id 傳進去，執行這個 function
+  }
+```
+
+這樣就可以刪除了，這邊不需要用上 id 的原因是直接整個重新 render 了，當然這樣其實會看到一個警告如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*naWg5cDu3s3nEO5mSJWNCw.png)
+
+這是因為 React 會希望你幫每一個 component 加上一個唯一 id 這樣才方便辨別資料，所以 `.map()` 的部份需要另外加上一個 key
+
+```
+todos.map(todo => <Todo key={todo.id} todo={todo}
+  deleteTodo={this.deleteTodo} />)
+```
+
+因為要用這個 id 幫助 React 去辨別說在更新 list 是刪除哪個元素，或是換位置，這只是為了要增加效率而已。
+
+### 標示
+
+新增一個函式叫做 markTodo，並且引入 `<Todo />` ，然後是 todo.js 也要新增用來傳值得 mark，實際上跟前面的例子大同小異，只是處理的部份不一樣。
+
+```
+app.js:
+```
+
+```
+  markTodo(id) {
+    this.setState({
+      todos: this.state.todos.map(todo => {
+        if (todo.id !== id) {
+          return todo
+        }
+        return {
+          ...todo,
+          isCompleted: !todo.isCompleted
+        }
+      })
+    })
+  }
+```
+
+```
+...
+...
+...
+```
+
+```
+        <div className="list">
+          {
+            todos.map(todo => (
+              <Todo key={todo.id} todo={todo}
+                deleteTodo={this.deleteTodo}
+                markTodo={this.markTodo} />
+            ))
+          }
+        </div>
+```
+
+然後是 todo.js 的部份，這邊只是要傳值進去而已。
+
+```
+todo.js:
+```
+
+```
+  mark() { // 這邊的用意只是要提供 id 給執行的 function 而已
+    const {todo, markTodo} = this.props
+    markTodo(todo.id)
+  }
+```
+
+```
+...
+...
+...
+```
+
+```
+<button className="list-item__mark" onClick={this.mark}>
+```
+
+### 分類
+
+因為也是一種狀態，所以就要在 state 上面新增一個狀態來分類，
+
+```
+this.state = {
+  todos: [],
+  todoText: '',
+  filter: 'all'
+}
+```
+
+然後這邊來試著實作 arrow function，把完成跟全部的部份都寫上：
+
+```
+  <div className="filters_all" onClick={() => {
+    this.setState({
+      filter: 'all'
+    })
+  }}>全部</div>
+  <div className="filters_completed" onClick={() => {
+    this.setState({
+      filter: 'completed'
+    })
+  }}>已完成</div>
+```
+
+然後針對資料的部份，也需要處理過。先引入 filter 這個值，然後處理
+
+```
+const { todos, todoText, filter } = this.state
+```
+
+```
+...
+...
+...
+```
+
+```
+    <div className="list">
+      {todos
+        .filter(todo => filter === 'completed' ?
+          todo.isCompleted : true)
+        .map(todo => (
+          <Todo key={todo.id} todo={todo}
+            deleteTodo={this.deleteTodo}
+            markTodo={this.markTodo} />
+        ))}
+    </div>
+```
+
+因為 filter 是回傳 true 就會被留下來， false 就不會，所以就可以透過這樣去篩選需要呈現的資料。所以當要篩選完成的部份，就只要把原本 state 裡面的 isCompleted 的值讓他回傳，就可以讓 false 的值被篩選去掉，只呈現已完成的部份。
+
+按下去之後，就是改變那個 filter 的 state，所以就會整個重新 render，這個部份就跟之前學習的 JQuery 的作法不同了。
+
+一個很重要的點是改變 state，去影響 render 的部份，就自然會給我們最新的畫面。根據 state 對應出來的畫面。
+
+## 加上 localStorage
+
+這是一種把資料處存在瀏覽器上面的方法。
+
+這邊就要利用之前教的 lifecycle method，componentDidUpdate，因為是當資料跟原先的不同的時候，就可以通過這個方法來比較。
+
+```
+app.js App component:
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.todos !== this.state.todos) {
+      window.localStorage.setItem('todoapp',
+        JSON.stringify(this.state.todos));
+    }
+  }
+```
+
+因為 prevProps 跟 prevState 都是指狀態改變前一筆的狀態，所以就可以拿來跟已經新增完成的狀態做比較，有不同，就把資料儲存進去。
+
+透過這樣就可以把資料儲存了。
+
+取出來的話，則是要放在初始化的地方，也就是 componentDidMount，這邊就比較複雜一些了，要先拿出資料，然後在調整一下結構才可以放入 state
+
+```
+  componentDidMount() {
+    const todoData = window.localStorage.getItem('todoapp');
+    if (todoData) {
+      const oldTodos = JSON.parse(todoData);
+      this.setState({
+        todos: oldTodos,
+      })
+      this.id = oldTodos[oldTodos.length - 1].id + 1
+      // 當初設定就是只有最後一個 id 用來設定而已，
+      // 所以這樣寫就可以得到最後一個 id 是多少
+    }
+  }
+```
+
+全部的 code：
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/a8cea1969be57474f535c26e4faa7ee3)
+
+## 結論：
+
+todolist 的部份，改用 React 之後，整體使用上來就更方便了。主要變成只需要管理資料而已了，不需要再去管畫面怎麼處理了。
+
+一切的一切就只要把資料弄好之後，剩下就交給 React 即可。
+
+透過 todolist 的例子，我們也可以分出來 Mounting 的時候到底是可以用來做什麼處理的，像是可以取得資料使用這樣子。
+
+這部份跟我之前再做 todolist 的想法相同，本來是因為練習，所以大量使用 AJAX。但當作業做完之後，我就思考，應該可以把資料抓下來之後在 localStorage 儲存，然後資料的處理只需要處理 localStorage 跟 AJAX 等待 callback 確認有無成功即可。
+
+就是因為當時我想說都寫了後端，就通通使用後端來傳資料，一方面當作練習大量練習使用 AJAX，所以該 todolist 可以說就是大量利用 AJAX 送資料跟取得資料。
+
+這點在 React 上面就可以使用 Mounting 來處理這塊的部份，這真的是十分好的方式，也很契合我當時的想法。
+
+而 Updating 的部份，則是平常變動的時候要如何處理資料的部份，在這邊的例子就是用來儲存資料，之後就是用來 AJAX 傳送資料跟確認而已了。也是一個很好用的部份。
+
+總言之，透過 React 對於 render 機制的部份跟 render 的 lifecycle method 就可以協助我們很好的處理跟運用這些資料。
+
+我會先運用三個部份來記憶該如何處理，Mounting、Updating、Unmounting。Mounting 用來處理初始化，Updating 就是使用者操作的部份，Unmounting 就是使用則移除資料的部份。不過 todolist 沒說到 Unmounting 的運用方式，所以這部份可能還要在多看看更多的例子才可以。

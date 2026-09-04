@@ -1,0 +1,164 @@
+---
+title: "讓 Windows 也可以客製化 Terminal：基礎設定篇"
+slug: "讓-windows-也可以客製化-terminal-基礎設定篇"
+description: "試著利用 WSL 在 Windows 上安裝 Ubuntu"
+date: 2021-05-20T10:19:21.926Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*jTknVs5mPJ4YRUiyE85ErA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%AE%93-windows-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%A2%E8%A3%BD%E5%8C%96-terminal-%E5%9F%BA%E7%A4%8E%E8%A8%AD%E5%AE%9A%E7%AF%87-a146febfdd10"
+---
+
+## 前言：
+
+之前在學程式的時候，我幾乎都是依賴 Windows 搭配跟我妹妹借來的 MacBook air 2016，所以我可以算是 Windows 跟 Mac 開發皆可的開發人員吧 XD
+
+而這次因為離職了，MacBook 要繳回公司，所以就沒有 MacBook 可以用了。雖說 M1 晶片風評不錯，但我更想等下一代，所以就暫時回到 Windows 的擁抱了。
+
+因為現在是用 Windows 開發了，所以就很懷念之前自己設置 Zsh 的方便，可以一目了然的看到很多想要的東西，重點是又酷又炫XDD
+
+在 Mac 系統上，是因為有強大的 iTerm 可用，它沒有 Windows 版，所幸微軟這幾年開發了很多強大的工具可以用。
+
+所以這篇就要來介紹一下如何設置 WSL2，以方便之後套用 Zsh 以及其套件。
+
+## 什麼是 WSL
+
+WSL 是 Windows Subsystem for Linux 的縮寫，是微軟推出的一個 Windows 子系統。用意是讓 Windows 可以使用 Linux 的應用程式。
+
+> 適用於 Linux 的 Windows 子系統可讓開發人員執行 GNU/Linux 環境 (包括大部分的命令列工具、公用程式和應用程式)，直接在 Windows 上執行，不需進行修改，不會造成傳統虛擬機器或 dualboot 設定的額外負荷。
+> 見：[什麼是 Windows 子系統 Linux 版？](https://docs.microsoft.com/zh-tw/windows/wsl/about)
+
+而我後來才發現原來還有 WSL 有第二個版本，所以我是比較晚才試試 WSL2 的，而 WSL2 也是比較推薦的選項。
+
+## WSL1 與 WSL2 架構上的差異
+
+先讓我們來看兩張圖：
+
+### WSL1:
+
+![WSL1 的架構](https://cdn-images-1.medium.com/max/800/1*jTknVs5mPJ4YRUiyE85ErA.png)
+
+_WSL1 的架構_
+
+### WSL2:
+
+![WSL2 的架構](https://cdn-images-1.medium.com/max/800/1*EJtRG4cDyCEFJGXshY83WQ.png)
+
+_WSL2 的架構_
+
+簡單說 WSL1 是通過中間的轉譯層來達成效果，而 WSL2 則是利用虛擬化的技術(但耗損很小)直接掛載的。
+
+當然這樣就會有各自的好處了，而 WSL2 最大的好處就是效能的增加。其餘的優勢差異可以參考[官方文件](https://docs.microsoft.com/zh-tw/windows/wsl/compare-versions)
+
+更多細節可以參考這兩篇文章：  
+[UNDERSTANDING DIFFERENCES BETWEEN WSL 1 AND WSL 2](https://thecodeblogger.com/2020/08/22/understanding-differences-between-wsl-1-and-wsl-2/)  
+[Exploring the differences between WSL 1 and 2](https://subscription.packtpub.com/book/cloud_and_networking/9781800562448/2/ch02lvl1sec04/exploring-the-differences-between-wsl-1-and-2)
+
+因為這篇最主要是寫我的安裝步驟，提這些知識主要目的是要增進理解，所以接下來就直接進入實際安裝的部份吧。
+
+## 安裝 WSL2 的步驟
+
+首先要檢查一下自己的 Windows 版本是不是符合的，需求如下：
+
+- 若為 X64 系統：版本 1903 或更高版本，含 組建 18362 或更高組建。
+- 若為 ARM64 系統：版本 2004 或更高版本，含 組建 19041 或更高組建。
+- 低於 18362 的組建不支援 WSL 2。
+
+在官方文件安裝的方式有兩種，一種是簡易版的一指令安裝，但我沒用這部份，我是使用手動安裝，主要是因為簡化安裝指令要加入 Windows 測試人員計畫才行。
+
+### 啟用設定
+
+**啟用 Windows 子系統 Linux 版**以系統管理員身分開啟 PowerShell 並執行：
+
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+
+**啟用 虛擬機器平台 選用功能**以系統管理員身分開啟 PowerShell 並執行：
+
+```
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+或是不想用指令來下的話，可以直接打開 Windows 功能界面，直接勾選如下三項：
+
+![](https://cdn-images-1.medium.com/max/600/1*umqHp1FYEhTydK7qgLsfzw.jpeg)
+
+![](https://cdn-images-1.medium.com/max/600/1*23E-BjwN8TK3qH31yLGCoQ.jpeg)
+
+完成之後，重新啟動電腦。
+
+### 安裝 Linux 核心更新套件
+
+下載 WSL2 Linux 核心套件並進行安裝，[安裝連結](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+
+### WSL 2 設為預設版本
+
+在 PowerShell 中輸入
+
+```
+wsl --set-default-version 2
+```
+
+這樣之後安裝 Linux 之後就會預設使用 WSL2
+
+### 安裝 Linux
+
+微軟非常好，已經在 [Microsoft Store](https://aka.ms/wslstore) 上面做好了，點擊之後開啟可以搜尋自己想要的 Linux
+
+我是直接使用最常見的 Ubuntu，直連網址如下：
+
+- [Ubuntu 18.04 LTS](https://www.microsoft.com/store/apps/9N9TNGVNDL3Q)
+- [Ubuntu 20.04 LTS](https://www.microsoft.com/store/apps/9n6svws3rx71)
+
+![我有預設黑背景，別再意](https://cdn-images-1.medium.com/max/800/1*aDoaXk0HqAgcWbh4QFkSXw.png)
+
+_我有預設黑背景，別再意_
+
+點擊取得之後，就會自動連到 Microsoft Store 上的對應頁面，接下來就是按下安裝後，等待安裝即可。
+
+![Microsoft Store 畫面](https://cdn-images-1.medium.com/max/800/1*7Uv_DXxkiI_rb2Km0eIlrA.png)
+
+_Microsoft Store 畫面_
+
+安裝好後點下啟動。
+
+接著就會安裝 Linux，然後要求輸入帳號密碼，帳號部份請全部用小寫，密碼的部份輸入了不會顯示。
+
+成功之後就會看到可以輸入的畫面，如下：
+
+![](https://cdn-images-1.medium.com/max/800/1*2ad_dnyvi4Yc65uWcj_d3A.jpeg)
+
+這時候就可以關閉這個視窗了。
+
+然後打開你在 Windows 上的 PowerShell 輸入如下指令
+
+```
+wsl -l -v
+```
+
+![紅框就是新安裝的了](https://cdn-images-1.medium.com/max/800/1*aB-98EEi9ycIuDpx-YgRfQ.png)
+
+_紅框就是新安裝的了_
+
+可以看到新安裝的 18.04 版就裝上去了，而且是使用 wsl2。
+
+接著就可以輸入 `wsl` 進入 linux 的 bash 了。
+
+但我在這邊不太一樣，因為我有兩個版本的 Linux，而我預設的是 20.04 版，所以我需要指定一下版本
+
+```
+wsl -d Ubuntu-18.04
+```
+
+![然後檢查一下版本，確實是 18.04 版](https://cdn-images-1.medium.com/max/800/1*7OitUO0jHGS12ssL9GyFDg.png)
+
+_然後檢查一下版本，確實是 18.04 版_
+
+### 相關篇章
+
+> 資料來源：
+
+> [WSL 官方文件](https://docs.microsoft.com/zh-tw/windows/wsl/)
+> [UNDERSTANDING DIFFERENCES BETWEEN WSL 1 AND WSL 2](https://thecodeblogger.com/2020/08/22/understanding-differences-between-wsl-1-and-wsl-2/)
+> [Exploring the differences between WSL 1 and 2](https://subscription.packtpub.com/book/cloud_and_networking/9781800562448/2/ch02lvl1sec04/exploring-the-differences-between-wsl-1-and-2)

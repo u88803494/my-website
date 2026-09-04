@@ -1,0 +1,169 @@
+---
+title: "JavaScript 進階：如何測試"
+slug: "javascript-進階-如何測試"
+description: "為什麼要寫測試？"
+date: 2019-05-05T13:02:45.217Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/javascript-%E9%80%B2%E9%9A%8E-%E5%A6%82%E4%BD%95%E6%B8%AC%E8%A9%A6-1258642d5c60"
+---
+
+## 為什麼要寫測試？
+
+一般都使用內建的方式來寫，就是使用印出的方式來看出結果。所以我們要測試的話必須去想一些很奇怪的方式或條件來測試。這樣子寫變成必須要一直寫，寫完之後再看結果。另外一種方式是直接在 console.log() 裡面把輸出結果 === 實際應該要有的結果，
+
+```
+console.log(repeat('a', 5) === 'aaaaa')
+console.log(repeat(‘abc’, 1) === ‘abc)
+console.log(repeat(‘’, 5) === ‘’)
+```
+
+缺點是很難規模化，也很難執行。
+
+## Jest
+
+[官方網站](https://jestjs.io/)
+
+一個由 Facebook 開源出來的協助測試的 framework。
+
+在這邊使用 left-pad 來測試
+
+所以要安裝 left-pad，可以直接用 yarn add left-pad 或 npm add left-pad 來安裝。
+
+而測試的話，通常是安裝在不同資料夾，寫 code 歸寫 code，測試歸測試。
+
+慣例上使用 \*\*\*\*.test.js 來表示這是個測試。
+
+所以在原先的 \***\*.js 加上 export**s\*\*
+
+```
+index.js:
+function repeat (str, n) {
+ let result = ‘’
+ for (let i = 1; i <= n; i +=1) {
+ result += str;
+ }
+ return result;
+}
+```
+
+```
+module.exports = repeat // 一定要是 exports 不然會無法成功
+```
+
+然後在 index.test.js 引入
+
+```
+var repeat = require('./index')
+```
+
+就可以試著測試，看官方文檔可以[找到](https://jestjs.io/docs/zh-Hans/getting-started)如何安裝測試的檔案。 https://jestjs.io/docs/zh-Hans/getting-started。
+
+不過在這邊測試內容依然必須要自己改寫。
+
+```
+var repeat = require('./index')
+```
+
+```
+test('a 重複 5 次應該要等於 aaaaa', function () {
+  expect(repeat('a', 5)).toBe('aaaaa');
+  // expect 可以接 function , toBe 這結果應該要是
+});
+```
+
+然後就可以利用 Command line 輸入 yarn run jest 來測試了。
+
+不過通常會把 package.json 裡面的 "scripts" 的 "test" 寫成 jest 的名稱方便測試使用
+
+```
+package.json:
+"scripts": {
+    "start": "node index.js",
+    "test": "jest"
+```
+
+只要在 Command line 上面輸入 yarn run test 一樣可以跑執行
+
+```
+λ yarn run test
+yarn run v1.15.2
+$ Jest
+ PASS  ./index.test.js
+  √ a 重複 5 次應該要等於 aaaaa (4ms)
+```
+
+```
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        2.374s
+Ran all test suites.
+Done in 3.78s.
+```
+
+jest 後面也可以寫 單一檔案，就是只測試該檔案而已。
+
+```
+package.json:
+"scripts": {
+    "start": "node index.js",
+    "test": "jest index.test.js"
+```
+
+不能直接使用 jest 來測試，因為它是安裝在專案底下，不是使用系統的，所以一定要透過 npm 或 yarn 來側。但在 v9 以上就可以使用單一指令來測試
+
+```
+λ npx jest index.test.js
+ PASS  ./index.test.js
+  √ a 重複 5 次應該要等於 aaaaa (4ms)
+```
+
+```
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        2.322s
+Ran all test suites matching /index.test.js/i.
+```
+
+所以直接執行 jest 指令它會從系統找，那就會顯示錯誤，因為系統沒有這個東西。
+
+所以就可以自行添加多個測試，簡單說就可以這樣利用測試與 code 分開的方式，自動測試，只要自己把 test 的檔案寫好，就可以很方便的檢查了。
+
+這些 test case 還可以放入另外一個 function
+
+```
+describe(‘測試 repeat’ , function(){
+  test....
+```
+
+```
+})
+```
+
+用這樣測試會更有規律。
+
+```
+test(‘...測式的名稱’, func)
+```
+
+這就被稱為**Unit Test 單元測試**
+
+## 先寫測試在寫程式
+
+Test-driven Development, TDD，測試驅動開發，一種開發方法。
+
+先把測試寫好，再來寫 function。可以寫一些[邊界測試](https://wiki.mbalib.com/zh-tw/%E8%BE%B9%E7%95%8C%E6%B5%8B%E8%AF%95)，來讓測試的效果更好。
+
+所以可以先在 index.test.js 上面先把一些測試的案例寫出來。之後再開始撰寫程式碼，就可以每修改一次，就跑一次測試，改一次就跑一次測試，直到修改到測試通過為止。
+
+所以 test case 要盡量地寫出各種可能的測試，盡量完整，就可以邊測試邊開發。
+
+這樣的好處是，完成之後就開發跟測試都完成了，因為很多時候會懶得寫測試。
+
+> [參考資料](http://teddy-chen-tw.blogspot.com/2014/09/bddtdd.html)1
+
+> [參考資料2](https://medium.com/@yurenju/%E8%87%AA%E5%8B%95%E8%BB%9F%E9%AB%94%E6%B8%AC%E8%A9%A6-tdd-%E8%88%87-bdd-464519672ac5)
+
+收穫：在這裡把測試的方法理解的更多了，原來可以直接在 console.log 強制輸出結果等於答案來看出是否正確，而根據這個思路所創造出來的就是額外寫的測試方法，到最後 TDD 的開發方法，可以先寫測試再來編寫程式碼，這樣的方法的好處應該也很多，後續我會再找資料來看。

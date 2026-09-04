@@ -1,0 +1,268 @@
+---
+title: "讓 Windows 也可以客製化 Terminal：Terminal 篇"
+slug: "讓-windows-也可以客製化-terminal-terminal-篇"
+description: "就讓我們為了 Terminal 新增佈景主題吧！with oh my zsh"
+date: 2021-05-21T12:14:09.448Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*HPI3v7m70mBkUvxY99d3Ww.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E8%AE%93-windows-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%A2%E8%A3%BD%E5%8C%96-terminal-terminal-%E7%AF%87-66f1c3d0037f"
+---
+
+## 前言
+
+這篇是接續：[讓 Windows 也可以客製化 Terminal：基礎設定篇](https://hugh-program-learning-diary-js.medium.com/%E8%AE%93-windows-%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%AE%A2%E8%A3%BD%E5%8C%96-terminal-%E5%9F%BA%E7%A4%8E%E8%A8%AD%E5%AE%9A%E7%AF%87-a146febfdd10)  
+如果還沒看過可以先看
+
+我在之前學習開發的時候，常常都被微軟的 cmd 困擾，所以後來我換了一款叫 cmder 的軟體，但其實他也沒有到非常好用，尤其是我在 Mac 上用到了 iTerm 之後。
+
+這次其實也是一直在到底要用那一款之間打轉，最後才想起來之前有跟人討論過，微軟自己有出一款叫做 Windows Terminal 的軟體是嶄新的 Command line 工具，所以最後就決定用這款來建立這次的環境。
+
+## 安裝 Windows Terminal
+
+打開 [Windows Store](https://aka.ms/wslstore)，並找到 Windows Terminal，從這裡就可以看到微軟的用心，真的很有心做得更好。
+
+然後可以在 Windows Store 看到有 preview 版跟一般版，不過既然都要玩新的了，所以我就選 preview 版。
+
+一樣安裝之後，打開來這個程式，因為這個只是一個額外的程式，打開來之後應該會看到 cmd或是 PowerShell。然後點開標題列上的向下圖標，就可以選擇你想要用的 command line 了。
+
+![按照這步驟打開剛剛安裝好的 Linux](https://cdn-images-1.medium.com/max/800/1*HPI3v7m70mBkUvxY99d3Ww.png)
+
+_按照這步驟打開剛剛安裝好的 Linux_
+
+按照圖中的步驟，打開並輸入
+
+```
+lsb_release -a
+```
+
+檢查當前的 Linux 版
+
+![](https://cdn-images-1.medium.com/max/800/1*dguFpF7KBscuggmY4nVW2Q.png)
+
+恭喜，已經確認可以在 Windows Terminal 上使用 Linux 了。
+
+然後是建議更新一下 Linux，指令如下：
+
+```
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove && sudo apt autoclean
+```
+
+更新時，可能要等一段時間，建議先去泡個茶。
+
+## 安裝 zsh
+
+接下來就不逐一解釋了，直接上指令：
+
+```
+# 安裝 zsh
+$ sudo apt-get install zsh
+```
+
+```
+# 查詢 zsh 是否存在
+$ which zsh
+/usr/bin/zsh
+```
+
+```
+# 切換成 zsh
+$ chsh -s /usr/bin/zsh
+```
+
+切換之後就重新啟動 Terminal，並選擇 Ubuntu 18.04 就會發現已經安裝成功，出現 zsh 的選項了。
+
+![](https://cdn-images-1.medium.com/max/800/1*C0vyJLkfON6tq37UESWREQ.png)
+
+這時候選 0，直接得到 default 即可，因為接下來會安裝別的工具。
+
+然後可以輸入 `zsh --version` 確認是否成功。
+
+![](https://cdn-images-1.medium.com/max/800/1*70QseEUm1ytW8n_rZKMNKg.png)
+
+接下來大多數人都想到，那我是不想要每次都要手動選阿，能不能直接打開 Windows Terminal 就直接幫我開好起我要的呢？接下來就要說道這塊了！
+
+## 調整 Windows Terminal 的設定
+
+按下快捷鍵 `ctrl + ,` 打開設定頁面，然後點擊開啟 JSON 檔案以調整設定。
+
+![](https://cdn-images-1.medium.com/max/800/1*NcTHmbm7qfO3jV-TTBtCLg.png)
+
+然後找到你想要預設啟動的 shell 的 guid，把他替換到上方的 defaultProfile 的值。
+
+![下方紅框的 guid 值取代上方的 defaultProfile 的值即可](https://cdn-images-1.medium.com/max/800/1*D5mG97h9BIbd187aJfqzbA.png)
+
+_下方紅框的 guid 值取代上方的 defaultProfile 的值即可_
+
+這樣就可以預設啟動 Ubuntu-18.04 了。
+
+其他還可以設定，像是可以美化一下：
+
+下載 [Cascadia Code PL](https://github.com/microsoft/cascadia-code/releases) 後，並設定成 `fontFace`。
+
+然後設定一下：
+
+![](https://cdn-images-1.medium.com/max/800/1*kkqAsbzdLbptKfkexnytfQ.png)
+
+這樣就可以使用這個字形，然後還有一點透明度， `acrylicOpacity` 設多少請隨意，或是不要透明度就純粹只設定 `fontFace` 也可以。
+
+接下來才是重頭戲，整個優化的重點在於此。
+
+## 安裝 oh-my-zsh
+
+zsh 當初出來的時候，據說是沒有太大名氣，因為他雖然很強大，但是卻因為很多選項都要自己一一的設定，所以因為太麻煩了，就還沒有紅起來。
+
+直到後來有一個作者推出了一個叫做 oh-my-zsh 的框架，他本身內建很多不錯的佈景主題以及各式各樣的外掛可以選用，所以這次就來安裝 oh-my-zsh 吧！
+
+輸入指令：
+
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+![看到這個畫面就代表安裝成功了](https://cdn-images-1.medium.com/max/800/1*M5QrQJpoJkzbERNj9f6vhA.png)
+
+_看到這個畫面就代表安裝成功了_
+
+也可以看到輸入那邊有所變化，因為他有一些預設樣式可以用，所以接下來就是開始使用想要的套件。
+
+## 安裝 Powerline fonts
+
+輸入指令：
+
+```
+sudo apt install fonts-powerline
+```
+
+這是一定要安裝，否則可能後續安裝的佈景主題，有些符號會看起來怪怪的。
+
+## 安裝 Powerlevel10k
+
+輸入指令：
+
+```
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+成功之後叫要設定一下才會成功套用這個 theme，所以可以用你習慣的編輯器開啟設定檔，我是在習慣在 command line 上面使用 vim，所以輸入：
+
+```
+vim ~/.zshrc
+```
+
+```
+# 如果是 VScode，可以輸入：
+code ~/.zshrc
+# 第一次輸入要等他安裝一個插件，這樣以後都可以用 code 指令了。
+```
+
+開啟之後找到並更改設定成
+
+```
+ZSH_THEME="powerlevel10k/powerlevel10k"
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*WMnmkPq9waGo_Yqy15Omxw.png)
+
+輸入指令保存設定：
+
+```
+source ~/.zshrc
+```
+
+然後重新啟動 Terminal，就會看到 powerlevel10k 的設定頁面了。
+
+以下這兩張圖就是 powerlevel10k 的設定頁面，如果沒有看到可以輸入指令 `p10k configure` 就可以進入這個設定，之後想要更改設定也可以輸入這個指令更改。
+
+![](https://cdn-images-1.medium.com/max/600/1*idEfb6oR_OiOfUqjetahew.png)
+
+![兩個圖形怎麼都看不到呢？](https://cdn-images-1.medium.com/max/600/1*lJZkRV9abFfqjSj1TDlo0A.png)
+
+_兩個圖形怎麼都看不到呢？_
+
+發現設定中的一些圖形看不到，這是因為沒有安裝一個 powerlevel10k 的字型。
+
+## 安裝 Meslo Nerd Font(可選)
+
+Meslo Nerd Font 是一款支持 powerlevel10k 所有字型 icons 的字體，這不一定要安裝，除非你希望用到這些 icons。
+
+在 Windows 環境需要手動安裝：[下載連結](https://github.com/romkatv/powerlevel10k#manual-font-installation)
+
+把四個字體都下載之後安裝，也可以點擊以下連結下載：
+
+- [MesloLGS NF Regular.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf)
+- [MesloLGS NF Bold.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf)
+- [MesloLGS NF Italic.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf)
+- [MesloLGS NF Bold Italic.ttf](https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf)
+
+安裝好之後，設定字體，一樣打開設定之後，開啟 JSON 檔案，然後幫你想要的 Terminal 設定需要的字形：
+
+![新增紅框字樣](https://cdn-images-1.medium.com/max/800/1*pyXcwqQsIabHwGf4x_H6cA.png)
+
+_新增紅框字樣_
+
+就會看到那些 icon 的樣子了。
+
+![](https://cdn-images-1.medium.com/max/800/1*ubaMT7mcLFlDua0eNYTnfw.png)
+
+然後就可以回來繼續執行選項了，按照步驟慢慢設定完成，你就有了你自己想要的風格了，恭喜。
+
+![](https://cdn-images-1.medium.com/max/800/1*h35yswCcSSJXlM2KHGZv3Q.png)
+
+## 新增其他好用外掛
+
+```
+# 安裝 指令補齊功能
+$ git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+# 安裝 指令建議功能
+$ git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+# 安裝 語法 highlight 功能
+$ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+```
+
+安裝完成之後還要修改 `~/.zshrc`，修改 plugins 才可以啟用喔
+
+```
+plugins=(git zsh-completions zsh-autosuggestions zsh-syntax-highlighting)
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Z2n1lp5dQHHKF025h8ip3A.png)
+
+儲存後重新啟動即可。
+
+## 修改開啟時的路徑
+
+在沒做任何修改之前，預設路徑如下：
+
+```
+/mnt/c/Users/[username]
+```
+
+但這不是我們要的！  
+所以接下來要告訴怎麼修改，輸入：
+
+```
+vim ~/.zshrc
+```
+
+並且在文件中找自己喜歡的地方，新增如下：
+
+```
+# start path
+if [[ $(pwd) == /mnt/c/Users/[windows username]  ]]
+then
+    cd ~/ # 你想要的路徑
+fi
+```
+
+儲存後，重新啟動，就可以看到直接就到該路徑了，之後有預設的路徑想改都可以按照這個方法來修改。
+
+恭喜，這樣就大致完成了整體的基礎設置了。
+
+### 相關篇章
+
+> 參考來源：
+> [Customize Windows Terminal with WSL2](https://dev.to/shettykaran21/customize-windows-terminal-with-wsl2-od9)
+> [Powerlevel10k GitHub](https://github.com/romkatv/powerlevel10k)
+> [用 10 分鐘建置 Windows 全端、深度學習的開發環境](https://psheon.github.io/2019/10/04/workspace-setup/)
+> [以WSL+UBUNTU+ZSH打造WINDOWS上高富帥的命令列模式](https://blog.kkbruce.net/2019/03/wsl-ubuntu-zsh-windows-command-line.html#.YKdyGagzaUl)

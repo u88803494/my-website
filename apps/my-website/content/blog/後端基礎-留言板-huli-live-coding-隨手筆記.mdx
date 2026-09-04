@@ -1,0 +1,217 @@
+---
+title: "後端基礎：留言板 huli Live Coding 隨手筆記"
+slug: "後端基礎-留言板-huli-live-coding-隨手筆記"
+description: "因為時間上的問題，我也已經把作業寫完了，這邊打算只純粹紀錄自己覺得應該要紀錄的資訊，其中包跨一些小細節，或是我覺得自己可能會忘記的用法，所以紀錄的不會很完整。"
+date: 2019-07-10T12:17:44.901Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*a3wJVED2gw4iwJYTeJz41A.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E7%95%99%E8%A8%80%E6%9D%BF-huli-live-coding-%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98-722c8c3511c8"
+---
+
+因為時間上的問題，我也已經把作業寫完了，這邊打算只純粹紀錄自己覺得應該要紀錄的資訊，其中包跨一些小細節，或是我覺得自己可能會忘記的用法，所以紀錄的不會很完整。
+
+詳細資訊參考：
+
+[後端基礎：PHP 與資料庫作業 心得想法思考](https://medium.com/@hugh_Program_learning_diary_Js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-php-%E8%88%87%E8%B3%87%E6%96%99%E5%BA%AB%E4%BD%9C%E6%A5%AD-%E5%BF%83%E5%BE%97%E6%83%B3%E6%B3%95%E6%80%9D%E8%80%83-eb32a1c80645?source=your_stories_page---------------------------)
+
+[後端基礎：留言板的設計講解](https://medium.com/@hugh_Program_learning_diary_Js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E7%95%99%E8%A8%80%E6%9D%BF%E7%9A%84%E8%A8%AD%E8%A8%88%E8%AC%9B%E8%A7%A3-f901703e4940?source=your_stories_page---------------------------)
+
+## 大綱：
+
+先寫 HTML，然後再把資料抓進去，再做一些功能。
+
+[HTML boilerplate](http://htmlshell.com/)：幫助可以更快開始的模板，通過勾選之後自動生成一個基本的 HTML 架構。
+
+在實作HTML 之後，因為想把時間跟暱稱放在同一排，但是一個在前面一個在後面。這邊有很多種作法可行，用比較簡單的方法就是先在上層設置
+
+```
+display:flex;
+```
+
+這樣下面的暱稱跟時間就會並排，然後在設置
+
+```
+ justify-content: space-between;
+```
+
+這樣就可以分開
+
+![](https://cdn-images-1.medium.com/max/800/1*a3wJVED2gw4iwJYTeJz41A.png)
+
+## 子留言
+
+子留言的部份，就可以利用另外一個 div 包起來，然後共用父留言的結構。但如果子留言要細部修改，就可以利用選擇器去選兩次 class 來些微改變不一樣的地方。因為這樣權重就較重，就可以很方便的修改細節。
+
+## 記得要把連線關掉。
+
+```
+$conn->query($sql);
+...
+...
+...
+$conn->close();
+```
+
+## php 的寫法
+
+除了直接寫出一整段的數個 echo 之外，還可以透過在需要 php 資料的地方，直接呼叫資料顯示。不過這樣會看起來比較亂！
+
+![](https://cdn-images-1.medium.com/max/800/1*ibKkhlOaXJRbursDQ5A2tQ.png)
+
+## PHP 小技巧
+
+可以另外開一個 php 的檔案之後在引入，可以讓整體看起來比較好看一點。
+
+```
+include('template_subcomment.php')
+```
+
+template_subcomment.php 裡面放入要 echo 的資料。
+
+也可以使用 require
+
+利用這種方式可以讓整個主網頁看起來比較易讀，在修改的時候也比較方便。
+
+## 註冊
+
+在 register.php 寫入註冊表單之後。因為要上傳伺服器，所以就必須要有上傳的功能。單純表單是不能把資料傳遞給伺服器。
+
+在這裡有兩種方式可以上傳資料，一個是另外引導到 handle_register.php。在這個頁面設置上傳功能。
+
+另一種方式是直接寫在原本的 register.php 上方寫入上傳功能。所以當送出的時候會導入本來的頁面，並且執行上傳的功能。
+
+```
+<form action="./register.php" method="post">
+```
+
+![](https://cdn-images-1.medium.com/max/800/1*Q2oIKvFbWEK0P2o0Nadh7A.png)
+
+## 登入錯誤訊息
+
+錯誤訊息可以在 php 的部份設置空字串，然後當帳號密碼錯誤的時候，就在html 裡面判斷該字串是否為空，不為空則印出錯誤訊息。
+
+```
+<?php
+```
+
+```
+$error_message = '';
+```
+
+```
+if(..登入成功判斷..) {
+  登入成功執行
+} else {
+  $error_message = '請確認帳號或密碼';
+}
+```
+
+```
+?>
+```
+
+```
+<!doctype html>
+...
+...
+...
+```
+
+```
+<body>
+<?php
+if ($error_message !== '') {
+  echo $error_message;
+}
+?>
+```
+
+```
+...
+//　原本的 HTML 部份
+```
+
+```
+<form>
+...
+...
+```
+
+```
+</body>
+```
+
+這段就是在最上面的登入成功判斷，失敗之後，就把變數的值改成請確認帳號或密碼。
+
+接著在網頁的部份判斷該字串，如果不是空的，就印出來。
+
+這也是放在同一頁的好處
+
+## Cookie 去那邊看
+
+chrome dev tools
+
+選擇 application 然後看 storage 裡面有 cookie
+
+## 是否登入的判斷
+
+在最上方先寫判斷
+
+```
+$is_login = false;
+$user_id = '';
+```
+
+```
+if(!isset($_COOKIE['user_id']) && !empty($_COOKIE['user_id'])) {
+  $is_login = true;
+  $user_id = $_COOKIE['user_id'];
+}
+```
+
+接著就可以用這邊取得的值來在 body 內寫入判斷
+
+![](https://cdn-images-1.medium.com/max/800/1*EZNYFLKZNJ0v7Ir0vdbDDw.png)
+
+### SQL 小細節
+
+如果該筆資料是 int 數字格式，就不需要用單引號選起來，因為單引號是給字串使用的。
+
+使用 SQL 指令的時候，JOIN 指令的後面加 WHERE（條件），否則會報錯。
+
+使用 JOIN 指令時，如果抓取下來的資料跟 PHP 數的變數不一樣，那就很簡單的直接使用 as 把該欄位的名稱改成跟 PHP 變數一樣即可。
+
+## 資料庫的設定小細節
+
+設置的資料庫，要一開始就設計好，中間如果變動設定，像是編碼，那麼可能中途就會資料錯亂。
+
+## 註冊後直接登入狀態
+
+通過
+
+```
+$last_id = $conn->insert_id; // 這行直接取得執行完的送上資料庫的 id
+setcookie("user_id", $last_id, time()+3600*24);
+```
+
+這樣就可以直接抓取上傳成功的 id 然後把這個 id 埋進瀏覽器，這樣就可以達到註冊完成之後直接處於登入狀態。
+
+[參考資料](https://www.w3schools.com/php/php_mysql_insert_lastid.asp)
+
+## cookie 的小細節
+
+從 devtool 的 application 裡面可以看到 cookie 的 path
+
+這個 path 就是 cookie 的路徑，預設值就是在取得的那個路徑之下，但可以透過 setcookie 的第三個參數來改變路徑。
+
+## php 編碼以及時區問題
+
+```
+$conn->query("SET NAMES 'UTF8'");
+$conn->query("SET time_zone = '+08:00'");
+```
+
+## 收穫：
+
+在這邊的筆記好像比之前的那兩篇都還多，因為有滿多小細節我覺得是值得我記錄下來的。也滿意外這個花了我不少的時間，在學習，我覺得我已經很偷懶了。結果還是寫了滿多的東西。這些東西在我下週的留言板我都會慢慢的用上去，好做出一個更完美的留言板。

@@ -19,6 +19,9 @@ const EXCLUDE_PATTERNS = [
   "yarn.lock",
   "bun.lockb",
   "**/*.md",
+  // 內容檔案，與 **/*.md 同性質：行數限制是為了讓程式碼變更可審查，
+  // 對整批遷移的文章內容沒有意義（endsWith(".md") 不會匹配 .mdx）
+  "**/*.mdx",
   "scripts/**/*.ts",
   "scripts/**/*.js",
   "**/*.sh",
@@ -117,8 +120,28 @@ function reportIssues(
   logger(`   ${advice}\n`);
 }
 
+/**
+ * A merge in progress: MERGE_HEAD exists only between `git merge` and its commit.
+ */
+function isMergeInProgress(): boolean {
+  try {
+    execSync("git rev-parse -q --verify MERGE_HEAD", { stdio: "pipe" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function validateCommitSize(): void {
   console.log("🔍 Validating commit size...\n");
+
+  // A merge commit's size is the difference between two branches — it cannot be
+  // split, and its contents were already reviewed on the source branch.
+  if (isMergeInProgress()) {
+    console.log("⏭️  Merge commit — size limits do not apply\n");
+    process.exit(0);
+  }
+
   const stagedFiles = getStagedFiles();
   if (stagedFiles.length === 0) {
     console.log("✅ No staged files to validate");
@@ -135,9 +158,11 @@ function validateCommitSize(): void {
   let hasErrors = false;
   let hasWarnings = false;
 
-  if (stagedFiles.length > CONFIG.MAX_FILES) {
+  // 用過濾後的清單：被排除的檔案（lockfile、內容檔）不受行數限制，
+  // 檔案數限制自然也不該算它們，否則排除機制只做了一半
+  if (filesToValidate.length > CONFIG.MAX_FILES) {
     console.error(
-      `❌ Too many files in commit: ${stagedFiles.length} (max: ${CONFIG.MAX_FILES})`
+      `❌ Too many files in commit: ${filesToValidate.length} (max: ${CONFIG.MAX_FILES})`
     );
     console.error("   Please split your commit into smaller, focused changes.\n");
     hasErrors = true;

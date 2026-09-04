@@ -1,0 +1,158 @@
+---
+title: "從前端視角理解 SOLID：I — 介面隔離原則，別再硬塞用不到的 Props 了！"
+slug: "從前端視角理解-solid-i-介面隔離原則-別再硬塞用不到的-props-了"
+description: "本文為 從前端視角理解 SOLID 系列的第五篇。"
+date: 2025-08-01T02:58:07.514Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*Ca3lkjeaVYE4dV3lqqTg2w.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-i-%E4%BB%8B%E9%9D%A2%E9%9A%94%E9%9B%A2%E5%8E%9F%E5%89%87-%E5%88%A5%E5%86%8D%E7%A1%AC%E5%A1%9E%E7%94%A8%E4%B8%8D%E5%88%B0%E7%9A%84-props-%E4%BA%86-7f4deb6199e0"
+---
+
+> _本文為_[**_從前端視角理解 SOLID_**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)_系列的第五篇。_
+
+> [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-%E4%B8%80%E5%88%87%E7%9A%84%E9%96%8B%E7%AB%AF-b10abdc2490b)
+
+> [**第二篇：S — 單一職責原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-s-單一職責原則-你的函式管太多了嗎-05a71a450216)
+
+> [**第三篇：O — 開放封閉原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-o-開放封閉原則-不動舊碼新增功能的魔法-c5e14f9400f0)
+
+> [**第四篇：L — 里氏替換原則**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-l-里氏替換原則-你的-延伸款-別背叛了-基本款-b983acaa3bc7)
+
+> **第五篇：I — 介面隔離原則 (本文)**
+
+> **第六篇：D — 依賴反轉原則 _(敬請期待)_**
+
+到目前為止，我們已經探討了如何拆分職責 (SRP)、如何擴展功能 (OCP)、以及如何確保擴展的可靠性 (LSP)。今天，我們要來解決一個在元件化開發中非常常見的問題：**一個元件到底該知道多少事？** 這就是 **I — 介面隔離原則 (Interface Segregation Principle, ISP)** 要探討的核心。
+
+## 釐清詞彙：到底什麼是「介面隔離」？
+
+介面隔離原則的官方定義是：
+
+> **_客戶端不應該被迫依賴於它們不使用的介面 (Clients should not be forced to depend upon interfaces that they do not use)。_**
+
+這句話在 TypeScript 的世界裡，簡直是為我們量身打造的。讓我們把它翻譯成 React 開發者的日常語言：
+
+**一個元件不應該被迫接收它根本用不到的 Props。**
+
+ISP 的精神在於「精準」與「最小化」。與其設計一個包山包海、什麼都有的「肥胖」Props 型別，不如將它拆分成數個更小、更專一的型別，讓每個元件只索取它完成任務所**必要的最少資訊**。
+
+## 具象化理解：分時段的餐廳菜單 vs. 超厚電話簿菜單
+
+想像一下你去一家高級餐廳。
+
+- **場景一（遵循 ISP）**：你中午抵達，服務生遞給你一本精緻的「午間套餐」菜單。上面只有午餐時段供應的餐點，清晰明瞭，你很快就做出了決定。
+- **場景二（違反 ISP）**：你中午抵達，服務生卻遞給你一本像電話簿一樣厚的「本店全品項」菜單。裡面包含了早餐、午餐、下午茶、晚餐、宵夜和酒水單。你只想點個午餐，卻得費力地翻過數十頁你根本點不到的品項，體驗極差。
+
+這個「超厚電話簿菜單」，就是一個違反 ISP 的「肥胖介面」。它強迫客戶（你）去依賴一堆你根本用不到的資訊。我們的目標，就是成為那位貼心的服務生，只提供客戶真正需要的菜單。
+
+![](https://cdn-images-1.medium.com/max/800/1*Ca3lkjeaVYE4dV3lqqTg2w.png)
+
+## 前端實戰：告別「上帝 Props」
+
+在 TypeScript + React 的專案中，最容易違反 ISP 的地方，就是定義一個巨大、全能的 `IUser` 介面，然後在所有需要使用者資訊的元件中都傳遞整個 `user` 物件。
+
+### 反面教材：
+
+**一個臃腫的**`IUser`**介面**
+
+```typescript
+// types/user.types.ts (一個肥胖介面)
+interface IUser {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  email: string;
+  lastLogin: Date;
+  permissions: string[];
+  isActive: boolean;
+  // ... 可能還有 20 個其他欄位
+}
+
+// 一個只需要顯示頭像和名稱的元件
+const UserAvatar = ({ user }: { user: IUser }) => {
+  return (
+    <div>
+      <img src={user.avatarUrl} alt={user.name} />
+      <span>{user.name}</span>
+    </div>
+  );
+};
+// 另一個只需要根據權限顯示內容的元件
+const AdminPanel = ({ user }: { user: IUser }) => {
+  if (user.permissions.includes('admin')) {
+    return <div>Admin Controls</div>;
+  }
+  return null;
+};
+```
+
+**問題在哪裡？**
+
+1. **不必要的耦合**：`UserAvatar` 元件明明只需要 `name` 和 `avatarUrl`，卻被迫知道了 `email`, `permissions` 等一大堆不相關的資訊。未來如果 `permissions` 的型別改變了，即使 `UserAvatar` 根本沒用到它，也可能會引發型別錯誤，增加了不必要的維護成本。
+2. **可讀性差**：當其他開發者看到 `UserAvatar` 接收了整個 `IUser` 物件，他無法立刻明白這個元件到底依賴了哪些具體資料，必須深入閱讀程式碼才能釐清。
+3. **難以複用與測試**：在為 `UserAvatar` 寫測試時，你必須模擬一個完整的 `IUser` 物件，而不是只提供它需要的兩個屬性即可。
+
+### 遵循 ISP 的重構：
+
+**拆分成精簡的 Props 型別**
+
+現在，我們用 ISP 的精神來重構它，為每個元件建立專屬的「小菜單」。
+
+```typescript
+// types/user.types.ts (拆分後的介面)
+// 介面一：只包含頭像所需資訊
+export interface IAvatarInfo {
+  name: string;
+  avatarUrl: string;
+}
+
+// 介面二：只包含權限所需資訊
+export interface IPermissionInfo {
+  permissions: string[];
+}
+
+// 完整的 User 型別可以由這些小介面組合而成
+export interface IUser extends IAvatarInfo, IPermissionInfo {
+  id: string;
+  email: string;
+  // ...
+}
+
+// --- 元件實作 ---
+// UserAvatar 現在只依賴它需要的最小資訊集
+const UserAvatar = ({ user }: { user: IAvatarInfo }) => {
+  return (
+    <div>
+      <img src={user.avatarUrl} alt={user.name} />
+      <span>{user.name}</span>
+    </div>
+  );
+};
+
+// AdminPanel 也一樣
+const AdminPanel = ({ user }: { user: IPermissionInfo }) => {
+  if (user.permissions.includes('admin')) {
+    return <div>Admin Controls</div>;
+  }
+  return null;
+};
+```
+
+重構之後，好處非常明顯：
+
+1. **低耦合**：`UserAvatar` 的世界裡，只有 `name` 和 `avatarUrl`。`IUser` 其他屬性的任何變更，都與它無關。
+2. **高可讀性**：Props 的型別定義，就像一份清晰的「元件使用說明書」，一眼就能看出元件的資料依賴。
+3. **易於測試**：測試 `UserAvatar` 時，只需要傳入 `{ name: 'Test', avatarUrl: '...' }` 即可，非常簡單。
+
+## 背景資料
+
+介面隔離原則 (ISP) 同樣由羅伯特·C·馬丁 (Uncle Bob) 提出。據說，這個原則的靈感，來自於他在為全錄 (Xerox) 公司提供諮詢時，遇到的一個巨大的印表機系統。系統中所有的客戶端都依賴一個龐大的 `Job` 類別，導致任何微小的修改都會引發連鎖反應，最終他透過將這個肥胖的介面拆分成數個更小的介面，成功地解耦了系統。
+
+## 結論
+
+介面隔離原則在 TypeScript 的世界中，是我們對抗「不必要複雜性」的利器。它提醒我們，在定義元件的 Props 時，應該像一位精準的外科醫生，而不是一個粗暴的屠夫。
+
+> **只索取你需要的，不要多拿一分一毫。**
+
+養成這個習慣，能讓你的元件變得更加獨立、專一且易於理解。當你的專案是由一個個這樣「輕量級」的元件組成時，整個系統的耦合度將會大幅降低，可維護性和開發者體驗也將得到質的飛躍。

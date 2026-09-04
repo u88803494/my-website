@@ -1,0 +1,178 @@
+---
+title: "後端基礎：資料庫補充 View、Stored Procedure 與 Trigger"
+slug: "後端基礎-資料庫補充-view-stored-procedure-與-trigger"
+description: "View"
+date: 2019-08-25T13:28:13.094Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*MCVWhpwxlKO-Ndh8TVKJug.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E8%B3%87%E6%96%99%E5%BA%AB%E8%A3%9C%E5%85%85-view-stored-procedure-%E8%88%87-trigger-8dbcbf5946a9"
+---
+
+## View
+
+就是一個虛擬的 table。通常用來暫存資料。
+
+在原本的用法上，我們需要建立報表的時候，可能要 JOIN 多個 table。所以就必須要另外寫頁面來執行才可以拿到那些資料。但有的時候，只是需要看這個表格而已，並不需要新增編輯刪除等功能，這時候就可以通過 view 建立一個假的表格，專門用來檢視用，所以 view 也翻譯為檢視表。
+
+建立的指令：
+
+```
+CREATE VIEW 表格名稱 AS 欲建立表格的SQL指令
+```
+
+![後面的操作方法就跟一般表格相同](https://cdn-images-1.medium.com/max/800/1*MCVWhpwxlKO-Ndh8TVKJug.png)
+
+_後面的操作方法就跟一般表格相同_
+
+就可以建立一個檢視表。
+
+![多了一個檢視表](https://cdn-images-1.medium.com/max/800/1*LICDEEZx86pzJNGSvn_FHQ.png)
+
+_多了一個檢視表_
+
+然後就可以使用一般的方式選取這個表格
+
+![整體就跟之前反白的那串 SELECT 的效果一樣](https://cdn-images-1.medium.com/max/800/1*XsSEy2MpLIiIL-uR_ugzZw.png)
+
+_整體就跟之前反白的那串 SELECT 的效果一樣_
+
+但這實際上並不是真的建立一個表格，所以就會說他是一個虛擬的 table
+
+### 實際應用
+
+這種型式建立的 table，在實際上並不會很常用到，因為這個 table 只有在進來的時候看得到，然後是後續如果有人接手這個 database，他可能會找不到這個 view 出來的 table 在哪裡，就算知道，新接手的人可能也不容易一眼看出來 view 出來的 table 當初的 SQL 指令是怎麼下的。然後是 view 出來的 table 還可以再跟別的資料 view 做結合，所以如果用太多就會越來越複雜。
+
+另外 view 在早期有個用途，就是說當資料庫需要給外人看的時候，並不想全部資料都給他看到，就可以利用 view 建立一個只可以看的 table，也就是說可以隱藏一些資訊。
+
+## Stored Procedure
+
+翻譯為預存程式就像是 sql 的 function。
+
+```
+SELECT SUM(price) FROM order_detial where 1
+```
+
+這樣就可以得到價錢的總和 `SUM()` 就是總和，就是內建 function。
+
+而 Stored Procedure 則是另外寫的 function，儲存在 database 內部。
+
+語法：
+
+```
+CREATE PRECEDURE 函式名稱(變數 變數型態)
+  BEGIN
+    執行內容;
+  END
+```
+
+但是不能直接這樣使用，因為執行內容的結尾，會讓 SQL 把分號網上的所有內容都當成是指令，也就是 END 執行不到，就會出錯。這時候要加上 `DELIMITER` 把符號轉變成其他的樣子，這樣就可以寫完這個 function 了。
+
+> 默認情況下，delimiter是分號**;**。在命令行客戶端中，如果有一行命令以分號結束，那麼回車後，mysql將會執行該命令。
+
+> 但有時候，不希望 MySQL 這麼做。在為可能輸入較多的語句，且語句中包含有分號。
+
+> 默認情況下，不可能等到用戶把這些語句全部輸入完之後，再執行整段語句。
+> 因為 mysql 一遇到分號，它就要自動執行。
+> 這種情況下，就需要事先把delimiter換成其它符號，如//或$$。
+
+> [參考](https://www.cnblogs.com/rootq/archive/2009/05/27/1490523.html)
+
+所以就需要把分號換掉，如下：
+
+![除了一開始要把符號換掉之外，結束之後還要把符號換回來](https://cdn-images-1.medium.com/max/800/1*Qi25EbSArYwTbIxnavNfKQ.png)
+
+_除了一開始要把符號換掉之外，結束之後還要把符號換回來_
+
+這樣就可以儲存成一個預存程式了。不過這種方法是當直接在 SQL 指令下的時候才要這樣子轉換符號。
+
+在使用的時候，跟 function 的方法一樣。只是要加一個 `CALL` 才可以呼叫：
+
+```
+CALL 函式名稱(引數)
+```
+
+![直接呈現呼叫方法跟結果。](https://cdn-images-1.medium.com/max/800/1*_FdleC-CVhCGbWnhg7YPwQ.png)
+
+_直接呈現呼叫方法跟結果。_
+
+預存程式是以資料庫為單位的，所以就從資料庫那邊去找
+
+![](https://cdn-images-1.medium.com/max/800/1*llgZye4ALlj7176KJESlIQ.png)
+
+這個介面就可以新增修改，而在這邊的話就不需要把分號換掉就可以寫了。因為這邊是專門寫 function 的地方。
+
+![](https://cdn-images-1.medium.com/max/800/1*nhI2auFpazf-w4f2vtrWqQ.png)
+
+這個跟 view 一樣，因為是把 function 寫在資料庫上面，所以需要 debug 就必須要打開資料庫才可以看到長什麼樣子，就會造成許多麻煩
+
+## Trigger
+
+發生事情前/後要做什麼事
+
+通常在資料庫裡面發生什麼事情，指的是新增編輯刪除
+
+Trigger 最常用的是儲存一些變動資訊，也就是 log 。
+
+所以就可以新增一個 table 專門儲存這些 log
+
+![除此之外還要記錄行動，所以新增一個 action](https://cdn-images-1.medium.com/max/800/1*xeL8GzwrqEe9BTWUE1FoQQ.png)
+
+_除此之外還要記錄行動，所以新增一個 action_
+
+一班我們在用的時候，會在寫 PHP 的時候，另外寫程式處理，就可以在新增編輯刪除的時候，另外把資料寫入 這個專門紀錄 log 的 table 。
+
+![當每一個新增編輯刪除都有這樣處理之後，就可以確保每次的處理都會有紀錄](https://cdn-images-1.medium.com/max/800/1*cnugB_ogRb6Mlg7lhFKjRg.png)
+
+_當每一個新增編輯刪除都有這樣處理之後，就可以確保每次的處理都會有紀錄_
+
+但如果有一天忘記了，只有使用到新增編輯刪除而已，忘記使用紀錄。就會有所遺漏。
+
+所以這種事情，最好是直接寫在 database 裡面，這樣就不會有遺漏了。
+
+以下以記錄新增為範例
+
+```
+CREATE TRIGGER 名稱
+    BEFORE UPDATE FROM table名稱
+    FOR EACH ROW
+  BEGIN
+    要做什麼;
+  END
+```
+
+這段意思就是，在 table 的每一個 ROW UPDATE 之前 要做些什麼。
+
+![一樣要變換分號](https://cdn-images-1.medium.com/max/800/1*FSqzOVhJ44Ojuw3lPop5aA.png)
+
+_一樣要變換分號_
+
+當要存取資料的時候，有個 OLD 跟 NEW 分別代表舊資料跟新資料，因為是在儲存之前，所以就要取得舊資料，也就是 OLD。
+
+執行之後，這樣的話，往後只要變動資料，就會被記錄下來。
+
+![](https://cdn-images-1.medium.com/max/800/1*r57QJiHrlrL8GL1zIz5puA.png)
+
+除此之外還可以新增一個欄位，標示是誰去改這個資料的。
+
+那這個寫好的要去哪邊看呢？一樣是在資料庫名稱那邊，然後在觸發器裡面。
+
+![](https://cdn-images-1.medium.com/max/800/1*UzmNnMDN_2PvLbz7pHQAxQ.png)
+
+然後也一樣可以直接編輯，甚至還有選單可以看要針對什麼狀況使用
+
+![](https://cdn-images-1.medium.com/max/800/1*k0nc060zjg4NU6koBJucdA.png)
+
+### 實際應用上
+
+Trigger 在應用上就很重要了，因為一般重要的資料都會希望有 LOG 可以保存起來，有個紀錄的話，會有很多的好處，除此之外還可以看到舊有的值，這是一件很方便的事情。
+
+## 收穫：
+
+滿意外，原來 database 這個麼的強大，有很多的功能可以使用。不過也是因為這些功能比較特別，所以就很少人會使用，也跟老師說的一樣，不推薦使用，但我覺得多學是好事，至少知道有這些東西可以使用，會是很棒的一件事情。
+
+其中最重要的是 trigger ，這卻滿重要的，因為我們都很需要針對寫進來的資料額外做一些處理，也許現階段的作業用不到，但我覺得將來有機會用到資料庫，應該會是很重要的一件事情，尤其現在的儲存空間越來越大的情況下，這些資料可以留下一個紀錄，就可以有很多的事情可以做了。
+
+像是一些大數據應該也可以用到這些歷史紀錄吧？像是記錄使用者的行為什麼的。這是我猜的也不一定正確XD
+
+總之，理解到這個強大的功能，讓我更認識到資料庫系統是多麽的強大好用，更會覺得有很多待研究的功能，可以去發現。

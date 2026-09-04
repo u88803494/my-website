@@ -1,0 +1,136 @@
+---
+title: "後端基礎：後端基礎與網路相關知識"
+slug: "後端基礎-後端基礎與網路相關知識"
+description: "網路是如何運作？"
+date: 2019-08-26T09:37:29.652Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*f1wAMAKOyAiTvO-VEdWLFw.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E-%E5%BE%8C%E7%AB%AF%E5%9F%BA%E7%A4%8E%E8%88%87%E7%B6%B2%E8%B7%AF%E7%9B%B8%E9%97%9C%E7%9F%A5%E8%AD%98-311b22165384"
+---
+
+## 網路是如何運作？
+
+參考之前寫的：
+
+從鳥哥的網站，可以看到有網路的基礎概論
+
+**OSI 七層協定 這是屬於一個模型，而我們實際上應用的事 TCP/IP 協定**
+
+![](https://cdn-images-1.medium.com/max/800/1*f1wAMAKOyAiTvO-VEdWLFw.png)
+
+而這個層與層之間，各自都會夾帶一個新的資料用作辨識，發送 request 的時候，由 應用層開始往下到傳送層，傳送層會加一些資料，然後再往下給網路層，網路層也會加一些資料，最後是到鏈結層，一樣也會加資料。然後再通過實體傳送到接收方，接收方在一層層由鏈結層開始往上一路到應用層，各次解析個層需要的資料。而伺服器回應的時候也是一樣，一層層往下包裝，接收的在一層層往上解析。就像下圖一樣。
+
+![](https://cdn-images-1.medium.com/max/800/1*x8hnsh1vWgStp59XDwWAHw.png)
+
+## IP（Internet Protocol）
+
+1. IP Address
+2. 內網 IP 位置 vs 外網 IP 位置
+
+代表在網路唯一的位置
+
+192 或是 10 開頭的就是內網 IP 專門給內網使用，也就是在同一個路由底下的，都稱為內網。
+
+想到知道自己的 IP 就可以去找網路上專門回應自己 IP 的網站：[ MyIP](https://myip.com.tw/) [GetIP](https://www.getip.org/)
+
+根據前面的理論，網路在傳送資料的時候，就把自己的 IP 相關資訊一併夾帶過去，所以對方就會收到自己的 IP 位置，這個網站則是把這個 IP 呈現出來。這樣就可以較為正確的取得自己的 IP 位置，這類型 IP 也可以稱為虛擬 IP。
+
+所以駭客是不可能通過 IP 就知道你家的位置的。因為我們連線的時候必須去連到電信公司的機房，然後機房在連線出去。所以駭客最多能查到的就是連線的機房是在哪裡而已。只有電信警察有權限或是電信公司的員工才可以去調閱 IP 是對應到哪個用戶，才可以知道是誰。除非駭客連電信公司都駭了，才有這個可能性。
+
+## TCP vs UDP
+
+![](https://cdn-images-1.medium.com/max/800/1*bIbI8ymsCTY_fCjsN2HqFQ.png)
+
+TCP 跟 UDP 最大的差異是 TCP 是一個保證會把資料送達的協定，而 UDP 則是不一定會送達，他的性質比較屬於一直發送資料，但不保證一定會送到。兩者的應用層面不一樣，速度也有差異。UDP 比較少用到。
+
+### TCP three-way handshake 三次握手
+
+TCP 保證送達資料的原理。
+
+![](https://cdn-images-1.medium.com/max/800/1*OEDf6rLtjWyLR1Kr5s86og.png)
+
+這是一個建立連線的步驟，用來保證連線可以正確連線。通過三次握手，兩方都得到各自的雙向溝通循環，意思就是發送方，確認到自己可以發送，也可以接收，而接收方也可以確認到自己可以發送，也可以收得到。所以兩方就都可以確定到自己發送跟接收的功能都是正常的。
+
+## 你是怎麼連到一個網站的？
+
+### Domain 網域
+
+其實就是網址，花錢買來的
+
+問題：從網址怎麼得到 IP? 答：通過 DNS
+
+### DNS(Domain Name Server)
+
+經由 DNS，由網域查到 IP 位置。DNS 紀錄了很多的網址對應 IP
+
+## 「網站」的背後到底是什麼？
+
+### 伺服器
+
+之前講過，其實伺服器就是一台電腦，只是有裝伺服器的程式
+
+1. 虛擬空間（只有空間而已，沒有操控權）
+2. 虛擬主機（一台實體主機上面有很多虛擬主機，可以視為 cloud）
+3. 實體主機（自己有一台完整的主機）
+
+假設要架網站有幾種方式
+
+1. 利用實體主機，也就是自己的電腦或是跟中華電信的機房租用一台主機
+2. 虛擬空間，最底層還是一台主機。但沒有操控權，只有一個空間，就像是 FTP 上傳的空間，就只有那個空間而已，所以一台電腦上面可以切出很多虛擬空間。所以租用虛擬空間的人，就只有哪個空間而已，不能夠裝伺服器，也不能做別的事情，這空間只能用來放東西。現在比較少。
+3. 虛擬主機：一個實體主機上面可以有很多的虛擬主機，用起來跟實體主機差不多。差異在於資源是跟人共享的，畢竟是共用一台實體主機。最常見。
+
+## 怎麼管理伺服器？
+
+虛擬空間，就是使用 FTP 的方式
+
+### 虛擬主機
+
+1. SSH (Secure Shell)
+
+透過 command line 介面直接連到遠端的主機下指令  
+所以記得要把指令學好… [參考鳥哥](http://linux.vbird.org/linux_server/0310telnetssh.php#ssh_server)
+
+使用指令 `ssh + 網址`
+
+使用指令 `nslookup + 網址` 可以連入網址
+
+2. 透過遠端桌面的方式（Windows 較常見）
+
+### VPN(Virtual Private Network )
+
+就像是你先連到一台主機，再從那台主機連到外面
+
+應用：公司內網、翻牆
+
+## 伺服器網路架構
+
+### NAT (Network Address Translation)
+
+![](https://cdn-images-1.medium.com/max/800/1*qYRtWvhKg-DPaBOfeisOEQ.png)
+
+通過 NAT 可以把外網跟內網阻隔
+
+### 負載均衡 Load Balancer
+
+![](https://cdn-images-1.medium.com/max/800/1*qd2DrpfmTTz4mCvmNylujQ.png)
+
+這是一個非常重要的架構，在後端領域非常常用。
+
+一台個可以把接收的資料分佈給其他機器的功能。好處是，當伺服器能力不足的時候，可以輕易的添加機器，而當其中一台伺服器壞掉的時候，也不會導致服務整個掛掉。
+
+### 資料庫 Replication
+
+這個就是備份的意思
+
+![](https://cdn-images-1.medium.com/max/800/1*wk1SAeseX4H7njPFzESGmg.png)
+
+常見的架構是有一個主資料庫，然後有一個副資料庫（SLAVE）。以上圖來說，就是當 PHP 接收到資料的時候，把資料寫入主資料庫，然後資料庫會自動把資料備份到副資料庫，而當 PHP 需要讀取資料的時候，直接跟副資料庫取得資料。這個也稱為 [主從模式](http://dns-learning.twnic.net.tw/bind/intro5.html) 。這樣可以降低主資料庫的負擔，大多數資料都是讀居多，所以 slave 也可以有很多台，當寫入之後，自動把資料同時寫入十台機器，然後讀的部份就交給這十台去分工，畢竟大多數的時間網站都是被讀取資料而已。
+
+### 資料庫高可用性 High Availability
+
+這意思是在解決資料庫同時不能同時壞掉的問題。
+
+![](https://cdn-images-1.medium.com/max/800/1*XG-X5rBMK7M1e8Ike33qxQ.png)
+
+當 master 壞了之後，就把流量轉到 slave ，然後等 master 修好之後在轉回來。

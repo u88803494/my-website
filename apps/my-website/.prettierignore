@@ -1,3 +1,10 @@
 # Ignore artifacts:
 build
 coverage
+
+# Blog articles migrated from Medium.
+# Prettier's markdown reflow damages them: it breaks MDX escape sequences across
+# lines (`\{add\}` becomes `\{add\` + `}`, so the escape no longer applies) and
+# wraps CJK sentences mid-word, since prose wrapping assumes space-separated
+# words. These are content files — there is nothing for a code formatter to fix.
+content/blog/

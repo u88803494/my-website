@@ -1,0 +1,214 @@
+---
+title: "前端框架 React：補充以及簡易路由"
+slug: "前端框架-react-補充以及簡易路由"
+description: "檔案結構"
+date: 2019-11-27T13:50:41.873Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*JM40KUXWJCligW37pWu71g.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6-react-%E8%A3%9C%E5%85%85%E4%BB%A5%E5%8F%8A%E7%B0%A1%E6%98%93%E8%B7%AF%E7%94%B1-25c7b511e9fa"
+---
+
+## 檔案結構
+
+在這邊可以使用 import 的時候，就可以把檔案放在資料夾內部。像是 Nav 的話，可以檔案放在資料夾裡面，如果在資料夾裡面的檔案命名為 index.js，這麼在主檔案引用的時候就只要引用資料夾就可以，這是因為預設狀況下會把 index 當作主要引用的檔案，這樣就不用另外在寫名稱。
+
+如下圖：
+
+![](https://cdn-images-1.medium.com/max/800/1*JM40KUXWJCligW37pWu71g.png)
+
+但這樣命名還是會造成混亂，這時候可以使用另外一種寫法，就是一樣在 nav 資料夾寫 index.js，但是另外開一個 Nav.js，然後 index.js 引用
+
+![](https://cdn-images-1.medium.com/max/800/1*qAyhW-uTKApWMkciqTcVww.png)
+
+也就是中間透過 index.js 作為轉介
+
+## JSX 相關補充
+
+在寫 JSX 的時候，一定要有一個最上層的標籤來包住，但後來有個新寫法，直接給個空標籤就可以了
+
+![](https://cdn-images-1.medium.com/max/800/1*VfxQe5P5xRmp2mx0JOQXpQ.png)
+
+由於這邊是分層資料夾，每個檔案都有分別引入不同的 CSS，所以假如一個 CSS 要給比較多地方使用的，就可以把 CSS 寫在上層的 `.css` 裡面，以這邊的例子來說，假設要新增一個叫做 page 的 classname，因為不是只有 about 在用，就可以寫在 App.css 裡面，這樣就可以給其他檔案共用。
+
+同時也發現這個應該是很多地方也會用到，所以就可以往上層的 Component 抽取。
+
+![](https://cdn-images-1.medium.com/max/800/1*b6D8Pj9bctnssfFPMyIZfg.png)
+
+背景的寬度也可以利用 CSS 來調整
+
+```
+.about {
+  background: rgba(0, 255, 0 , 0.3);
+  min-height: calc(100vh - 74px);
+}
+```
+
+`calc()`[ 說明](https://blog.csdn.net/qq_24581629/article/details/72377300)
+
+這樣會不滿整個畫面，然後減掉 74px 的高度。
+
+## 切 component 小重點
+
+當 component 內有重複很多的部份出現時，就可以另外開一個 component 寫過
+
+![](https://cdn-images-1.medium.com/max/800/1*PekRCCA467Aj4xsik6JpgA.png)
+
+改成另外個 Component
+
+![](https://cdn-images-1.medium.com/max/800/1*7z94KKOXDcP1BA6m-un2Rg.png)
+
+處此之外還可以把 text 的部份夾在 Item 中間，用起來就像是一般標籤那樣：
+
+```
+<Item
+  onChange={onChange}
+  isActive={activeTab === 'about'}
+  name='about'
+  text=''>
+  關於本站
+<Item/>
+```
+
+然後在 Item component 內就可以用 children 來引入夾住的資訊，其中也可以夾標籤
+
+## 抓資料方法與時機
+
+然後需要的內文資訊就可以一個網站拿到：  
+ https://jsonplaceholder.typicode.com/
+
+這裡裡面有很多假的資訊可以用來練習。
+
+在這邊可以在需要的地方才抓取資料就好，像是只有在 Post 才需要就可以在這邊使用 componentDidMount 來讓在這邊才抓資料，也可以設置 State
+
+![](https://cdn-images-1.medium.com/max/800/1*yvxnnkGzQLeb7iS0P42tfw.png)
+
+當然，因為需要有單獨的資料，所以也可以透過當點擊之後才去獲取資料。
+
+然後再把資料通過判斷 render 到整個畫面上面。
+
+![當有 postId 就 render，post 裡面的資料](https://cdn-images-1.medium.com/max/800/1*LI_X-ZUX9ccK7iVryEEHwQ.png)
+
+_當有 postId 就 render，post 裡面的資料_
+
+通過這樣子的判斷就可以很好的切換頁面，另外是加上一個 button 讓整個畫面只在單一文章的時候才 render。
+
+## 完成的 blog
+
+因為 gist 好像不能建立資料夾，所以在資料夾底下的檔案我就用反斜線來標示。
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/951bb83bfa65034e209fe8f85265ccf8)
+
+## 題外話：
+
+### websocket：
+
+可以讓伺服器主動推送資料給客戶端。參考資料[ runoob](https://www.runoob.com/html/html5-websocket.html)
+
+這是另外一種網路傳輸協定。
+
+參考網站：https://www.ruanyifeng.com/blog/2017/05/websocket.html
+
+### axios：
+
+類似 `fetch()` 的套件，需要額外引入使用。相關 [GitHub](https://github.com/axios/axios)
+
+## 前端路由
+
+因為使用 SPA 的時候，不管哪個畫面網址都是一樣的，所以就沒辦法分享特定的部分，或是特定的頁面給別人了，這時候就需要前端路由來協助處理這個部分。
+
+這部分就可以利用網址中 hashtag 來應用，因為網址的 hashtag (#號) 後面並不會讓網址變得不同的網址，所以就可以利用這點來設置不同的路由。
+
+[參考資料](https://blog.csdn.net/xiongzhengxiang/article/details/7052261) [參考資料2](https://blog.csdn.net/qq_23621841/article/details/81063123)
+
+所以就可以從最大的部分開始修改，先修改 nav 的部分，
+
+```
+onNavChange = page => {
+  this.setState({
+    tab: page,
+  })
+}
+```
+
+本來是這樣就可以直接改變
+
+```
+onNavChange = page => {
+  window.location.xxx
+}
+```
+
+也因為沒用改變資料的部分，所以也不用 onChange 了
+
+![](https://cdn-images-1.medium.com/max/800/1*sZQO7Y6_tKa3gV1qhyXGdw.png)
+
+本來的檔案也要改變，把 onClick 刪掉，然後把字串用 a 標籤包起來
+
+![](https://cdn-images-1.medium.com/max/800/1*ngK2T53S5HCnF7nqEAWctA.png)
+
+也因為 a 標籤有他自己的 CSS，所以CSS 也要修改
+
+```
+.nav__list a {
+  text-decoration: none;
+  color: black;
+}
+```
+
+然後可以利用另外一種 event listener：[onhashchange](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/onhashchange)
+
+利用這個可以偵測到 hash 的變更。
+
+像這種 window 的 event listener 最好加在 componentDidMount 。
+
+![](https://cdn-images-1.medium.com/max/800/1*7yNNCS2VbLkK3FqhANZ_Lw.png)
+
+通過這樣就可以監聽到 hash 的變化，
+
+![](https://cdn-images-1.medium.com/max/800/1*OYmZ81NAJHzS9VzSEqNMcg.png)
+
+然後就可以開始寫操作用的 function 去改變值，
+
+```
+const removeHashTag = str => {
+  return str.slice(1);
+}
+```
+
+用這個可以移除第一個字，然後是改變值
+
+![](https://cdn-images-1.medium.com/max/800/1*saDbC6mSU1OjzrO9eyM5JA.png)
+
+但這時候會發現，如果重新整理， tab 就會回到一開始的預設值，但是 hash tag 還是重新整理前的那個，這樣就會錯誤，這時候只要把預設的部分修改一下就好。
+
+![](https://cdn-images-1.medium.com/max/800/1*z5Jv4k3VnpLZGyXoWDya2A.png)
+
+但是如果純網址又會有錯，所以要給個預設值。
+
+```
+tab: removeHashTag(window.location.hash) || 'home' ,
+```
+
+這樣一但前者為空(false)，就會把後面的值給傳上去。
+
+關於每個頁面的部分，除了本來的寫法，還有另外一種寫法，比較如下：
+
+![下方是原本的的，上方是改寫後](https://cdn-images-1.medium.com/max/800/1*eWE0DFQu63dSHrlJx0B-IA.png)
+
+_下方是原本的的，上方是改寫後_
+
+然後就可以交給 `Route`內部去判斷，
+
+```
+const Route =
+  ({ current, path, Comp }) => (current !== path ? null : <Comp />)
+```
+
+然後是要傳入的 component 一定要大寫，甚至變數也要大寫，因為只有這樣才可以被視為 component，如果是小寫，就會被認為是一種標籤， render 的時候就會去找有無這種標籤。
+
+## 完成版
+
+這邊只有貼有更動的部分
+
+[📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/ca52af81f9d8c1b309be40c9d8294b4c)

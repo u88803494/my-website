@@ -1,0 +1,300 @@
+---
+title: "前端基礎： CSS 定位 （position）"
+slug: "前端基礎-css-定位-position"
+description: "這在 CSS 是很重要的觀念，這是用在排版元素的位置，因為我們必須要讓元素出現在應該出現的位置。這時候就會需要各種定位的方法來輔助。"
+date: 2019-05-23T11:04:17.545Z
+tags: ["medium"]
+draft: false
+thumbnail: "https://cdn-images-1.medium.com/max/800/1*089Aw5WOZThhi6P1aOu0QA.png"
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A4%8E-css-%E5%AE%9A%E4%BD%8D-position-781199fc4951"
+---
+
+這在 CSS 是很重要的觀念，這是用在排版元素的位置，因為我們必須要讓元素出現在應該出現的位置。這時候就會需要各種定位的方法來輔助。
+
+## static 與 relative
+
+static 網頁預設的排版方式。會一個一個元素的繪製。
+
+![](https://cdn-images-1.medium.com/max/800/1*089Aw5WOZThhi6P1aOu0QA.png)
+
+由紅框處往箭頭方向繪製 box1 之後在繪製 box2 再繪製 box3
+
+如果沒有設置的話，預設就是用 static 來繪製。
+
+### relative
+
+相對定位
+
+他會針對原本的定位做位移
+
+今天試著把第二個元素設置成 relative
+
+然後就可以使用 top bottom left right 來調整距離
+
+```
+/* style.css: */
+body {
+ margin: 0;
+}
+```
+
+```
+.box {
+ width: 100px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+}
+```
+
+```
+.box:nth-child(2) {/*針對第二個元素設置*/
+ position: relative;
+}
+```
+
+![box2 就移動了 20px](https://cdn-images-1.medium.com/max/800/1*kYw7PvdvJlD5EnGJLFFUyw.png)
+
+_box2 就移動了 20px_
+
+top:20px; 就是距離上方 20 px 所以 box2 會往下移動 20px，同理可證 right 就是距離右方，left 則是距離左方。
+
+簡單說就是跟原本的位置相比要怎麼偏移。
+
+## absolute 與 fixed
+
+fixed 固定定位：相對於瀏覽器的定位
+
+```
+/* style.css: */
+.box {
+ width: 300px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: block;
+}
+```
+
+```
+.box:first-child {
+ position: fixed;
+ width: 100px;
+ background: red;
+ bottom:100px;
+ right:0px;
+}
+```
+
+設定之後，不管怎麼捲動，位置就是固定在那。
+
+![就會一直定位在指定的地方](https://cdn-images-1.medium.com/max/800/1*ZYZK3cbVmJHZE2MTJCTW-A.gif)
+
+_就會一直定位在指定的地方_
+
+更精確的是指 相對於 viewpoint 的定位，viewpoint 在瀏覽器上就是可以看到的範圍。
+
+-
+
+absolute 絕對定位：絕對定位必須要有個參考點，否則就會用 body 做為參考點，參考點的設置就是以設置 absolute 的位置往上找不是 static 的元素，做為參考點
+
+```
+/* style.css: */
+.box {
+ width: 300px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: block;/* 預設 static 所以不回以這個為參考點*/
+}
+```
+
+```
+.box-inner {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box">box1</div>
+    <div class="box">
+  <div class="box-inner">
+   X
+  </div>
+ </div>
+    <div class="box">box3</div>
+    <div class="box">box4</div>
+    <div class="box">box5</div>
+    <div class="box">box6</div>
+  </body>
+</html>
+```
+
+![以紅框處作為參考點](https://cdn-images-1.medium.com/max/800/1*Xm5ciHw4Jj38RrRezX2tgQ.png)
+
+_以紅框處作為參考點_
+
+距離頂端(top) 10px 距離右邊(right) 10px
+
+-
+
+所以只要修改一下
+
+```
+/* style.css: */
+.box {
+ width: 300px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: block;
+ position: relative;
+}
+```
+
+```
+.box-inner {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+}
+```
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box">box1</div>
+    <div class="box"> /* 往上層找 這層有套用 position 所以就以這層為主*/
+      <div class="box-inner">/* 這邊設置 absolute*/
+        X
+      </div>
+    </div>
+    <div class="box">box3</div>
+    <div class="box">box4</div>
+    <div class="box">box5</div>
+    <div class="box">box6</div>
+  </body>
+</html>
+```
+
+因為第二個 div 內的 class 有設置 position 所以會以該 box 的內部定位做為參考點
+
+![](https://cdn-images-1.medium.com/max/800/1*QZWsfSlWI38BdE8ivBYWZQ.png)
+
+所以還可以另外再加些內容
+
+```
+<!-- index.html: -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+      <title> I'm title </title>
+   <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box">box1</div>
+    <div class="box">
+      <div class="box-inner">
+       X
+      </div>
+      <div> /*多了這行 */
+      123
+      </div>
+    </div>
+    <div class="box">box3</div>
+    <div class="box">box4</div>
+    <div class="box">box5</div>
+    <div class="box">box6</div>
+  </body>
+</html>
+```
+
+![可以看到 X 跟 123 不會互相有關係](https://cdn-images-1.medium.com/max/800/1*NHbMWjXMarpsZFnu2hYywg.png)
+
+_可以看到 X 跟 123 不會互相有關係_
+
+可以看到 X 跟 123 不會互相有關係，123也不會從 X 本來的位置開始往後排，也就是說 X 的元素 跟 123 這兩個元素彼此不相干擾，X 元素等於是另外一個平行空間，自己有自己的定位。而 123 因為沒設置 position 所以就是預設值 static 所以就是照一般的顯示。
+
+![透過直接更改 X 元素的 position 可以看到各種效果](https://cdn-images-1.medium.com/max/800/1*qt-4MKaEF38tkRe3pNPZ6A.gif)
+
+_透過直接更改 X 元素的 position 可以看到各種效果_
+
+所以在 fixed 跟 absolute 都是脫離原本的排版，而 static. relative 則是一樣會按造原本的排版去做變動，所以 123 元素就不會替補上來而是處於下一行。
+
+## 決定圖層順序 z-index
+
+x, y, z 因為網頁是平面的，所以 x. y 軸決定位置，而 z 軸就用做決定圖層顯示的先後順序。
+
+以前面的範例來說，調整 box 的元素，後面的元素會蓋掉前面的元素，所以往上調整的時候，會被蓋掉上方元素，往下調整，則是自己被蓋掉。
+
+![藉由調整 top 的值來呈現移動 box](https://cdn-images-1.medium.com/max/800/1*CR9_iI2WuhlFUBoYX-n9kg.gif)
+
+_藉由調整 top 的值來呈現移動 box_
+
+這時候就可以使用 z-index 來調整優先度。
+
+![可以看到調成整 1 的時候就會覆蓋了，0 或 -1 就還是被蓋掉，這數字也可以在往更高設置。](https://cdn-images-1.medium.com/max/800/1*2nIlCztMq-QPi7Skx0yM7g.gif)
+
+_可以看到調成整 1 的時候就會覆蓋了，0 或 -1 就還是被蓋掉，這數字也可以在往更高設置。_
+
+所以 z-index 可以根據它的值來決定顯示的優先度，數字比較大的就是顯示在前面。
+
+## sticky
+
+這是一個較新的屬性，所以有些瀏覽器不支援。
+
+sticky 是黏住的意思，他會在話面滾動到設定值的時候，就固定在那個位置。
+
+```
+/* style.css: */
+body {
+ margin:0px;
+}
+```
+
+```
+.box {
+ width: 300px;
+ height: 100px;
+ background: orange;
+ margin: 10px;
+ display: block;
+ position: relative;
+}
+```
+
+```
+.box:nth-child(2) {
+ background:red;
+ position: sticky;
+ top:0px;
+/* 這邊的意思是當畫面捲動到 top:0px 的時候，就會一直停留在 top:0px 的位置 */
+ z-index:2;
+}
+```
+
+![一開始使用 top:0px 後面改為 top:100px](https://cdn-images-1.medium.com/max/800/1*n5ldRAP564F_NiWHNgFSLg.gif)
+
+_一開始使用 top:0px 後面改為 top:100px_
+
+常用在導覽列，讓使用者可以一直有導覽列可以直接點選，或是一些希望更吸引人注意的重要項目。
+
+## 收穫：
+
+在這邊完成了整個 html 跟 CSS 的課程，覺得學習到滿多的，關於這篇，我了解了更多的定位方式，原來那些網頁的元素是透過這樣的方式去定位的，有一些定位讓人回憶起不好的回憶，像是那些農場文常用的，廣告一直貼著你螢幕最中間的位置走，真的是很使人反感，所以真的在做網頁的時候，必須要有良心，不然用了一些不好的呈現方式，真的會讓人很討厭，我記得後來 Google 有針對這點降排名，才導致這種情況好一些。

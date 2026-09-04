@@ -1,0 +1,39 @@
+---
+title: "node.js 中的環境變數 process.env"
+slug: "node-js-中的環境變數-process-env"
+description: "根據官方網站的定義"
+date: 2020-06-17T04:57:00.522Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/node-js-%E4%B8%AD%E7%9A%84%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8-process-env-38ac585a814d"
+---
+
+根據官方網站的定義
+
+在 node.js 中有一個不需要引入的物件 process，是全域變數。所以裡面有很多方法可以使用 `process.env` 是其中一個。
+
+他會返回一個包含使用者環境資訊的物件。
+
+在 node.js 上面使用 環境變量可以儲存一些不想給別人資料的資料，然後我們就可以利用這些資料。
+
+1. 在執行 `node` 指令的時候，輸入在前面：
+
+檔案 index.js
+
+```
+console.log(process.env.port)
+```
+
+輸入指令： `port='4444' node index.js`
+
+但這種每次都要重新執行
+
+2. 直接儲存起來
+
+同個檔案之下
+
+command line 輸入 `export port='4444'`
+
+然後執行 `node index.js`
+
+ps. 引號如果是數字可以免，但如果是一串亂碼推薦加上引號

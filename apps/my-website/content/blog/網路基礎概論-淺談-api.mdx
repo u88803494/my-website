@@ -1,0 +1,147 @@
+---
+title: "網路基礎概論： 淺談 API"
+slug: "網路基礎概論-淺談-api"
+description: "什麼是 API？"
+date: 2019-05-13T02:19:41.686Z
+tags: ["medium"]
+draft: false
+mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E7%B6%B2%E8%B7%AF%E5%9F%BA%E7%A4%8E%E6%A6%82%E8%AB%96-%E6%B7%BA%E8%AB%87-api-3919d7c0cd61"
+---
+
+## 什麼是 API？
+
+Application Programming Interface, API。應用程式介面
+
+最重要的是，Interface 介面。就是需要跟別人溝通才會用到介面。USB 其實也是一個 Interface
+
+> 介面 一種用於溝通（諸如軟體元件）的抽象化物 [by wiki](https://zh.wikipedia.org/wiki/%E4%BB%8B%E9%9D%A2)
+
+> **interface**​
+
+> **a**[**connection**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/connection)**between two**[**pieces**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/piece)**of**[**electronic**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/electronic)[**equipment**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/equipment)**, or between a**[**person**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/person)**and a**[**computer**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/computer)[**by 劍橋辭典**](https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/interface)
+
+使用 API
+
+提供 API
+
+大多數情況下是不能跟對方要求資料，所以就會透過 API 來交換資料，一般我們不希望別人直接存取自己的資料，所以就需要一個介面來提供資料，也方便我們控管資料的提供程度。
+
+例如：要怎麼知道網路狀況？通常作業系統都會提供 API，所以就要透過作業系統的 API 去得知道網路狀況
+
+讀取檔案也是通過 API 才可以讀取檔案的，所以作業系統把控了大部分的權限。
+
+例如要拿到 FB 的好友資料，我們就需要串接 FB 的 API 才可以拿到這些資料。
+
+別人要怎麼拿我網站上的資訊或新增資料呢？我要提供一個 API 讓別人有權限執行取得修改等權限。
+
+**簡單說，就是透過 API，可以讓雙方交換資料。**
+
+## API 與 Web API
+
+API 的提供可以透過各種方式，不限定於網路
+
+Web API 又可以稱為 HTTP API 透過 HTTP 協定的 API
+
+像是 Facebook API、推特 API
+
+可以從推特的網站上面看到 API 的使用，有些 API 用的方式跟指令類似於 HTTP 指令，因為它就是透過 HTTP 協定的方式運行。
+
+像是歐付寶 SDK 工具可以當作是是一個 library ，裡面做好了很多的 API。
+
+假如推特有提供 SDK 的話，就可以通過呼叫函式的方式來使用了。
+
+## 串接 HTTP API 實戰
+
+[測試網站](https://reqres.in/)
+
+下面有個範例可用
+
+```
+const request = require(‘request’);
+```
+
+```
+request(
+ “https://reqres.in/api/users/2", //
+ function (error, response, body) {
+ console.log(body);
+ }
+);
+```
+
+向上面這樣可以取得使用者資料
+
+都是要按照網上面的文件說明來使用
+
+如果想要用輸入的方式取得某段內容
+
+```
+const request = require(‘request’);
+const process = require(‘process’); // node 內建的功能
+```
+
+```
+console.log(process.argv)// 第三個 就是我們需要的東西
+request(
+ “https://reqres.in/api/users/2",
+ function (error, response, body) {
+ console.log(body);
+ }
+);
+```
+
+介紹 [process.argv](http://nodejs.cn/api/process/process)：
+
+```
+process.argv 属性返回一个数组，其中包含当启动 Node.js 进程时传入的命令行参数。 第一个元素是 process.execPath。 如果需要访问 argv[0] 的原始值，参阅 process.argv0。 第二个元素将是正在执行的 JavaScript 文件的路径。 其余元素将是任何其他命令行参数。
+```
+
+所以就可以利用這個的特性
+
+```
+const request = require(‘request’);
+const process = require(‘process’)
+```
+
+```
+request(
+ “https://reqres.in/api/users/" + process.argv[2],
+  // 直接返回第三個元素，與網址列一起算
+ function (error, response, body) {
+ console.log(body);
+ }
+);
+```
+
+使用 POST 去做新增
+
+參考這邊，會寫說如何操作 https://github.com/request/request
+
+[Forms](https://github.com/request/request#forms) 這邊可以看到有三種指令可用，所以使用如下
+
+```
+const request = require('request');
+const process = require('process')
+```
+
+```
+request.post(
+ {
+  url:'https://reqres.in/api/users',
+  form: {
+   name:'gundom',
+   job: 'master'
+  }
+ },
+ function (error, response, body) {
+  console.log(body);
+ }
+);
+// {"name":"gundom","job":"master","id":"810","createdAt":"2019-05-13T02:12:07.789Z"}
+```
+
+不過這邊並不會真的把資料收進去
+
+## 收穫：
+
+發現原來可以這麼簡單就可以串接 API 了，大致上就是需要讀文件，去理解該 API 如何使用就可以了，所以就是閱讀的能力要在提升。大致就是多熟悉怎麼使用，之後應該就會很快就上手了。
