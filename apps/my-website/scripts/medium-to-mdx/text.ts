@@ -60,11 +60,7 @@ export function truncate(text: string, maxLength: number): string {
  * it is folded to a space here as well as upstream in normalizeText.
  */
 export function yamlString(value: string): string {
-  const escaped = value
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/\s+/g, " ")
-    .trim();
+  const escaped = value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s+/g, " ").trim();
 
   return `"${escaped}"`;
 }
