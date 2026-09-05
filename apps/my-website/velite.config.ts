@@ -35,7 +35,7 @@ export default defineConfig({
           // output apart from another post's before overwriting anything.
           sourceFile: s.string().optional(),
           code: s.mdx({
-            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton, validateMdxCode],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton],
           }),
           raw: s.raw(),
         })
@@ -51,25 +51,6 @@ export default defineConfig({
     base: "/static/",
   },
 });
-
-// Validate MDX compiled code: ensure no suspicious patterns that would indicate
-// external content source injection or build-time corruption
-function validateMdxCode(tree: any) {
-  const codeString = JSON.stringify(tree);
-  // Reject patterns that shouldn't appear in legitimate MDX output from local files
-  const suspiciousPatterns = [
-    /import\s+(?!React|jsx-runtime|Fragment)/,
-    /export\s+[^;]*(?<!default)/,
-    /new\s+Function/,
-    /eval\s*\(/,
-  ];
-
-  for (const pattern of suspiciousPatterns) {
-    if (pattern.test(codeString)) {
-      throw new Error(`MDX code contains prohibited pattern: ${pattern}`);
-    }
-  }
-}
 
 // Compute reading time: estimate from raw MDX text (not compiled code)
 // Chinese: ~300 chars/min, English: ~200 words/min

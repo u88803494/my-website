@@ -4,6 +4,7 @@ import type { AnyNode, Element } from "domhandler";
 import { convertInline, isElement } from "./markdown-inline";
 import { escapeMdx, normalizeText, stripEmphasis } from "./text";
 import type { BodyContext } from "./types";
+import { dimensionAttr, isEmbeddableHost, jsxAttr, mdDestination, safeUrl } from "./url";
 
 /** Elements that produce a Markdown block; anything else is descended into. */
 const BLOCK_TAGS = new Set(["blockquote", "figure", "h1", "h2", "h3", "h4", "h5", "h6", "ol", "ul", "p", "pre"]);
@@ -47,26 +48,29 @@ export function convertFigure($: CheerioAPI, element: Element): string {
 
   // GitHub Gist embeds rely on document.write() and silently fail in React,
   // so they are downgraded to a plain link.
-  const gistScript = figure.find('script[src*="gist.github.com"]').attr("src");
+  const gistScript = safeUrl(figure.find('script[src*="gist.github.com"]').attr("src"));
   if (gistScript) {
-    return `[📄 在 GitHub Gist 查看完整程式碼](${gistScript.replace(/\.js$/, "")})`;
+    return `[📄 在 GitHub Gist 查看完整程式碼](${mdDestination(gistScript.replace(/\.js$/, ""))})`;
   }
 
-  // Real iframes (YouTube) are kept as-is — MDX renders inline HTML.
+  // Real iframes (YouTube) are kept as-is — MDX renders inline HTML. A host
+  // outside the allow list is downgraded to a link rather than embedded, since
+  // the src/width/height below are otherwise attacker-controlled JSX attributes.
   const iframe = figure.find("iframe").first();
-  const iframeSrc = iframe.attr("src");
-  if (iframeSrc) {
-    const width = iframe.attr("width") ?? "700";
-    const height = iframe.attr("height") ?? "393";
-    return `<iframe src="${iframeSrc}" width="${width}" height="${height}" frameBorder="0" allowFullScreen></iframe>`;
+  const iframeSrc = safeUrl(iframe.attr("src"));
+  if (iframeSrc && isEmbeddableHost(iframeSrc)) {
+    const width = dimensionAttr(iframe.attr("width"), "700");
+    const height = dimensionAttr(iframe.attr("height"), "393");
+    return `<iframe src="${jsxAttr(iframeSrc)}" width="${width}" height="${height}" frameBorder="0" allowFullScreen></iframe>`;
   }
+  if (iframeSrc) return `[🔗 觀看嵌入內容](${mdDestination(iframeSrc)})`;
 
-  const src = figure.find("img").first().attr("src");
+  const src = safeUrl(figure.find("img").first().attr("src"));
   if (!src) return "";
 
   // Images keep their Medium CDN URL; self-hosting is tracked separately.
   const caption = normalizeText(figure.find("figcaption").text()).trim();
-  const image = `![${escapeMdx(caption)}](${src})`;
+  const image = `![${escapeMdx(caption)}](${mdDestination(src)})`;
   return caption ? `${image}\n\n*${escapeMdx(caption)}*` : image;
 }
 

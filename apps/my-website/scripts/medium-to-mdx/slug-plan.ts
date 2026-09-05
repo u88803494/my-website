@@ -67,19 +67,17 @@ export function disambiguate(baseSlug: string, sourceFile: string, attempt: numb
  * base slug keeps it and the rest take a suffix — deterministic regardless of
  * which subset a run converts.
  */
-export function buildSlugPlan({ candidates, pinned, reserved }: SlugPlanInput): SlugPlan {
-  const bySourceFile = new Map<string, string>();
-  const ownerOfSlug = new Map<string, string>();
-  const conflicts: SlugConflict[] = [];
-
-  for (const slug of reserved ?? []) {
-    ownerOfSlug.set(slug, RESERVED_OWNER);
-  }
-
-  const ordered = [...candidates].sort((a, b) => a.sourceFile.localeCompare(b.sourceFile));
-
-  // Pinned assignments are honoured first so an existing URL always wins the
-  // slug, even if a different source file now sorts ahead of it.
+/**
+ * Honour pinned assignments first, so an existing URL always keeps its slug
+ * even if a different source file now sorts ahead of it.
+ */
+function applyPinned(
+  ordered: SlugCandidate[],
+  pinned: ReadonlyMap<string, string> | undefined,
+  bySourceFile: Map<string, string>,
+  ownerOfSlug: Map<string, string>,
+  conflicts: SlugConflict[],
+): void {
   for (const { sourceFile } of ordered) {
     const slug = pinned?.get(sourceFile);
     if (!slug) continue;
@@ -93,6 +91,20 @@ export function buildSlugPlan({ candidates, pinned, reserved }: SlugPlanInput): 
     bySourceFile.set(sourceFile, slug);
     ownerOfSlug.set(slug, sourceFile);
   }
+}
+
+export function buildSlugPlan({ candidates, pinned, reserved }: SlugPlanInput): SlugPlan {
+  const bySourceFile = new Map<string, string>();
+  const ownerOfSlug = new Map<string, string>();
+  const conflicts: SlugConflict[] = [];
+
+  for (const slug of reserved ?? []) {
+    ownerOfSlug.set(slug, RESERVED_OWNER);
+  }
+
+  const ordered = [...candidates].sort((a, b) => a.sourceFile.localeCompare(b.sourceFile));
+
+  applyPinned(ordered, pinned, bySourceFile, ownerOfSlug, conflicts);
 
   for (const { baseSlug, sourceFile } of ordered) {
     if (bySourceFile.has(sourceFile)) continue;

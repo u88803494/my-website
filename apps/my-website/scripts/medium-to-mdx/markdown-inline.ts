@@ -2,6 +2,7 @@ import type { CheerioAPI } from "cheerio";
 import type { AnyNode, Element } from "domhandler";
 
 import { escapeMdx, normalizeText } from "./text";
+import { mdDestination, safeUrl } from "./url";
 
 export function isElement(node: AnyNode): node is Element {
   return node.type === "tag";
@@ -21,7 +22,9 @@ export function convertInline($: CheerioAPI, nodes: AnyNode[]): string {
 
       switch (node.tagName) {
         case "a": {
-          const href = node.attribs["href"];
+          // javascript:/data: are rejected here; downstream React would also
+          // block a javascript: href, but data: still executes on click.
+          const href = safeUrl(node.attribs["href"]);
           if (!href) return inner;
 
           // Medium sometimes auto-links text that is already inside a link.
@@ -33,9 +36,9 @@ export function convertInline($: CheerioAPI, nodes: AnyNode[]): string {
           // corrupts posts that show markdown syntax as prose: Medium auto-links
           // the URL inside a literal "[text](url)" example, and re-wrapping it
           // yields "[text]([url](url))".
-          if (label.trim() === href) return href;
+          if (label.trim() === href) return mdDestination(href);
 
-          return `[${label}](${href})`;
+          return `[${label}](${mdDestination(href)})`;
         }
         case "b":
         case "strong":

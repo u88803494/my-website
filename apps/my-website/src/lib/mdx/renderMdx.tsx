@@ -10,15 +10,30 @@ import * as runtime from "react/jsx-runtime";
  * (e.g. via `@mdx-js/mdx`'s `evaluate()`), which fails since it's already
  * compiled JS, not markdown/MDX text.
  *
- * SECURITY: `new Function()` executes `code` as arbitrary JavaScript. This
- * is currently safe because `code` only ever originates from build-time
- * compilation of local files under `content/blog/**\/*.mdx` (see
- * velite.config.ts) — no request-scoped, user-submitted, or externally
- * fetched content reaches this function. If a future phase adds any
- * external content source (headless CMS, user submissions, remote MDX)
- * that feeds into `s.mdx()` or `code` here, this becomes a server-side
- * code injection path and must be reassessed (e.g. a sandboxed MDX
- * runtime, or keeping external content out of this pipeline entirely).
+ * SECURITY: `new Function()` executes `code` as arbitrary JavaScript, but that
+ * is not really the boundary — MDX itself lets any `content/blog/**\/*.mdx`
+ * file mount arbitrary JSX event handlers (`<div onClick={...}>`), so nothing
+ * about *how* this is rendered would contain that. The real trust boundary is
+ * `content/blog/**` itself, plus every program that writes into it —
+ * concretely, `apps/my-website/scripts/medium-to-mdx/`, which parses Medium's
+ * export (untrusted markup) into these files. That converter is expected to
+ * escape attribute values and validate URLs before they reach a `.mdx` file
+ * (see `scripts/medium-to-mdx/url.ts`); this function assumes that already
+ * happened. If a future phase adds any other source that feeds into `s.mdx()`
+ * or `code` here (headless CMS, user submissions, remote MDX), it must go
+ * through the same escaping discipline, or this becomes a server-side code
+ * injection path (this runs at build time under `next build`, not just in the
+ * browser) and must be reassessed — e.g. a sandboxed MDX runtime.
+ *
+ * velite.config.ts previously ran a `validateMdxCode` rehype plugin as a second
+ * line of defense. It never worked: unified calls rehype plugins as attachers
+ * (invoked with plugin options, expected to return a transformer), but it was
+ * written to receive the AST tree directly, so it always inspected
+ * `JSON.stringify(undefined)` and never actually checked anything. It has been
+ * removed rather than fixed — fixing the signature would make it receive the
+ * *hast* tree (pre-JSX-compilation markup), not the compiled `code` string its
+ * patterns were written against, and it would then throw on any article whose
+ * prose or code sample happens to contain the word "import" or "export".
  */
 function useMdxComponent(code: string): ComponentType {
   try {
