@@ -618,7 +618,7 @@ test.call({});
 我自己的話是解釋成 `.call()` 第一個參數是 function 或值 ，其他就是 function 傳入的值。  
 下面的說法也很類似，只是他把第一個當成第零個，實際上就像是有的程式語言的 array 是從 0 還是從 1 開始一樣的問題，知道意思就好。
 
-> 任何一個 function.call() 的狀況下，我們可以把整個參數陣列( arguments )向右平移，而**第零個參數則是告訴函數我們想使用的 this**。
+> 任何一個 function.call() 的狀況下，我們可以把整個參數陣列( arguments )向右平移，而**第零個參數則是告訴函數我們想使用的 this** 。
 > by [原型函數最實用的三個方法](https://medium.com/@realdennis/javascript-聊聊call-apply-bind的差異與相似之處-2f82a4b4dd66)
 
 通過 `.call()` 第一個參數就是 this 指向的對象的原理，就可以試著手動建立一個 new 的模型。

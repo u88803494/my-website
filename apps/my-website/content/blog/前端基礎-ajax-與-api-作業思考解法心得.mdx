@@ -275,7 +275,7 @@ for (let i = (json.length - 1); i >= 0; i -= 1) { // 留言從最後一筆開始
 
 本來以為是要轉成 JSON 格式寄送，但是發現轉換之後即便加上 header 也不行傳送，會直接得到 500 錯誤。
 
-然後觀察一下之後發現伺服器是 *‘Content-type: text/xml’*的，所以要研究如何使用這種方式上傳。
+然後觀察一下之後發現伺服器是 *‘Content-type: text/xml’* 的，所以要研究如何使用這種方式上傳。
 
 最後發現自己看錯了，用了 firefox 實際看到之後，就發現標頭是 Content-Typeapplication/json; charset=utf-8
 

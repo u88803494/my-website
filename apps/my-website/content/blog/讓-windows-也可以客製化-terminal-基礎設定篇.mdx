@@ -69,13 +69,15 @@ WSL 是 Windows Subsystem for Linux 的縮寫，是微軟推出的一個 Windows
 
 ### 啟用設定
 
-**啟用 Windows 子系統 Linux 版**以系統管理員身分開啟 PowerShell 並執行：
+**啟用 Windows 子系統 Linux 版**  
+以系統管理員身分開啟 PowerShell 並執行：
 
 ```
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 ```
 
-**啟用 虛擬機器平台 選用功能**以系統管理員身分開啟 PowerShell 並執行：
+**啟用 虛擬機器平台 選用功能**  
+以系統管理員身分開啟 PowerShell 並執行：
 
 ```
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart

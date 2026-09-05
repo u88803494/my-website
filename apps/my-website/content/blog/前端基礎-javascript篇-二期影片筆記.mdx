@@ -253,7 +253,7 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 -
 
-**Navigating to a different site**去其他的網站
+**Navigating to a different site** 去其他的網站
 
 當輸入其他網址要去不同的網站之後，將會調用新的 renderer process 來處理新的網站，同時會保持原來的 renderer process 因為需要用來處理卸載等等的事件。browser process 就會透過 IPC 去告訴舊的 renderer process 去渲染新頁面，然後透過 IPC 告訴舊的 renderer porcess 去卸載原來的網頁。
 
@@ -363,7 +363,7 @@ layout 是一種查看元素的幾何型態的過程。main thread 找遍所有�
 
 ![](https://cdn-images-1.medium.com/max/800/1*Ejq93d5rFjRk4Ph7eIdDcg.jpeg)
 
-**What is compositing**什麼是合成
+**What is compositing** 什麼是合成
 
 合成就是像在做製作圖片那樣，會有好幾層，先從底層開始慢慢地往上層圖放上去，最後就可以合成畫面。
 

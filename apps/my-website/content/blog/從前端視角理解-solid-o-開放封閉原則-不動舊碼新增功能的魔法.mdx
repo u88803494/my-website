@@ -9,7 +9,7 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8
 sourceFile: "2025-07-29_--------SOLID-O----------------------c5e14f9400f0.html"
 ---
 
-> *本文為*[***從前端視角理解 SOLID***](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)*系列的第三篇。*
+> *本文為* [***從前端視角理解 SOLID***](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b) *系列的第三篇。*
 
 > [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)
 
@@ -98,7 +98,7 @@ const StatusBadge = ({ status }: BadgeProps) => {
 export default StatusBadge;
 ```
 
-這個元件現在運作得很好。但下週，產品經理說：「我們需要增加一個『警告 (warning)』的狀態」。你該怎麼辦？唯一的辦法就是**打開這個檔案，修改**`switch`**區塊**，增加一個 `case 'warning'`。
+這個元件現在運作得很好。但下週，產品經理說：「我們需要增加一個『警告 (warning)』的狀態」。你該怎麼辦？唯一的辦法就是**打開這個檔案，修改** `switch` **區塊**，增加一個 `case 'warning'`。
 
 這就違反了 OCP，因為你「修改」了現有的程式碼。這樣做不僅麻煩，而且每次修改都有可能不小心改錯，影響到舊有的狀態顯示。
 
