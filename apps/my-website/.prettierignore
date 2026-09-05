@@ -2,6 +2,13 @@
 build
 coverage
 
+# NOTE: there is a second .prettierignore at the repo root. lint-staged's
+# pre-commit hook runs `prettier --write` from the repo root, which only
+# reads *that* file — an exclusion added only here won't stop pre-commit
+# from reformatting it (this bit a real commit once; see the root file's
+# own note). Both files need the same entry for anything under here that
+# must never be reformatted.
+
 # Blog articles migrated from Medium.
 # Prettier's markdown reflow damages them: it breaks MDX escape sequences across
 # lines (`\{add\}` becomes `\{add\` + `}`, so the escape no longer applies) and
