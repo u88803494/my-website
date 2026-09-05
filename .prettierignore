@@ -15,6 +15,15 @@
 # The converter's output is canonical; nothing here needs a formatter.
 apps/my-website/content/blog/
 
+# Golden-test snapshots (apps/my-website/scripts/medium-to-mdx/__tests__).
+# Same failure mode as the migrated articles above: Prettier's markdown
+# formatter re-serializes a parsed AST with its own preferred backtick count
+# for inline code spans, so a literal ```triple-backtick``` in a snapshot
+# silently becomes `single-backtick` on the next pre-commit run — a snapshot
+# the test itself never wrote, causing the next test run to report a mismatch
+# against content the converter never actually produced.
+apps/my-website/scripts/medium-to-mdx/__tests__/__snapshots__/
+
 # Auto-generated
 apps/my-website/.velite/
 CONVERSION_CHECKLIST.md

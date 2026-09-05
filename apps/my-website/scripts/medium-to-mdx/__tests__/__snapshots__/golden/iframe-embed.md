@@ -61,12 +61,12 @@ function App() {
 
 ```typescript
 const [{ isDragging }, drag] = useDrag(() => ({
-  type: "component",
-  item: { type: "image", url: "image_url.jpg", width: 200, height: 200 },
+  type: 'component',
+  item: { type: 'image', url: 'image_url.jpg', width: 200, height: 200 },
   collect: (monitor) => ({
     isDragging: monitor.isDragging(),
   }),
-}));
+}))
 ```
 
 設置在按鈕上，功能包含圖片跟文字：
@@ -131,13 +131,17 @@ const Sidebar = () => {
   const { selectedUuid } = useItemStore();
 
   return (
-    <aside className="sticky top-0 flex h-screen w-1/4 flex-col justify-center border-r-2 p-4">
+    <aside className="w-1/4 h-screen p-4 flex flex-col justify-center border-r-2 sticky top-0">
       <div className="flex flex-col justify-center space-y-2">
-        <Button type="image">圖片元件</Button>
-        <Button type="text">文字元件</Button>
+        <Button type="image">
+          圖片元件
+        </Button>
+        <Button type="text">
+          文字元件
+        </Button>
       </div>
     </aside>
-  );
+  )
 };
 
 export default Sidebar;
@@ -252,21 +256,20 @@ interface StoreState {
 }
 
 const useItemStore = create<StoreState>((set) => ({
-  selectedUuid: "",
+  selectedUuid: '',
   droppedItems: [],
-  addItem: (item) =>
-    set((state) => ({
-      droppedItems: [...state.droppedItems, item],
-    })),
-  selectItem: (uuid) =>
-    set(() => ({
-      selectedUuid: uuid,
-    })),
-  updateItem: (uuid, newData) =>
-    set((state) => {
-      const updatedItems = state.droppedItems.map((item) => (item.uuid === uuid ? { ...item, ...newData } : item));
-      return { droppedItems: updatedItems };
-    }),
+  addItem: (item) => set((state) => ({
+    droppedItems: [...state.droppedItems, item]
+  })),
+  selectItem: (uuid) => set(() => ({
+    selectedUuid: uuid
+  })),
+  updateItem: (uuid, newData) => set((state) => {
+    const updatedItems = state.droppedItems.map(item =>
+      item.uuid === uuid ? { ...item, ...newData } : item
+    );
+    return { droppedItems: updatedItems };
+  }),
 }));
 
 export default useItemStore;
@@ -286,17 +289,21 @@ const Sidebar = () => {
   const { selectedUuid } = useItemStore();
 
   return (
-    <aside className="sticky top-0 flex h-screen w-1/4 flex-col justify-center border-r-2 p-4">
+    <aside className="w-1/4 h-screen p-4 flex flex-col justify-center border-r-2 sticky top-0">
       {selectedUuid ? (
         <Editor />
       ) : (
         <div className="flex flex-col justify-center space-y-2">
-          <Button type="image">圖片元件</Button>
-          <Button type="text">文字元件</Button>
+          <Button type="image">
+            圖片元件
+          </Button>
+          <Button type="text">
+            文字元件
+          </Button>
         </div>
       )}
     </aside>
-  );
+  )
 };
 
 export default Sidebar;
@@ -412,18 +419,18 @@ export default Editor;
 ```markdown
 .
 ├── src/
-│ ├── components/
-│ │ ├── Button.tsx # 按鈕元件，整合拖曳功能
-│ │ ├── Editor.tsx # 編輯區，提供項目編輯功能
-│ │ ├── Main.tsx # 主畫面，包含拖放區域
-│ │ └── Sidebar.tsx # 側邊欄
-│ ├── stores/
-│ │ └── index.ts # 狀態管理 store
-│ └── types/
-│ └── index.ts # 類型定義
-├── README.md # 專案說明文件
-├── package.json # 專案依賴管理
-└── tsconfig.json # TypeScript 設定
+│   ├── components/
+│   │   ├── Button.tsx            # 按鈕元件，整合拖曳功能
+│   │   ├── Editor.tsx            # 編輯區，提供項目編輯功能
+│   │   ├── Main.tsx              # 主畫面，包含拖放區域
+│   │   └── Sidebar.tsx           # 側邊欄
+│   ├── stores/
+│   │   └── index.ts              # 狀態管理 store
+│   └── types/
+│       └── index.ts              # 類型定義
+├── README.md                     # 專案說明文件
+├── package.json                  # 專案依賴管理
+└── tsconfig.json                 # TypeScript 設定
 ```
 
 成品 GitHub：https://github.com/u88803494/dnd_test
