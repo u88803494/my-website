@@ -29,6 +29,12 @@ export interface SlugConflict {
   sourceFile: string;
   slug: string;
   heldBy: string;
+  /**
+   * "held" (default): another sourceFile already owns this slug.
+   * "oversized": the slug itself is the problem, not who holds it — see
+   * MAX_SLUG_BYTES below.
+   */
+  reason?: "held" | "oversized";
 }
 
 export interface SlugPlan {
@@ -38,6 +44,22 @@ export interface SlugPlan {
 }
 
 const RESERVED_OWNER = "<hand-written>";
+
+/**
+ * generateStaticParams() writes one file per slug, and filesystems typically
+ * cap a single path component at 255 bytes. A CJK slug can be up to 3 bytes
+ * per character once percent-encoded for the URL, so the limit has to be
+ * measured in encoded bytes, not characters — with headroom below 255 for the
+ * ".mdx" extension and any disambiguating suffix disambiguate() appends.
+ * Mirrors velite.config.ts's schema .refine(); kept here too so an oversized
+ * slug fails at conversion time with a clear message instead of surfacing
+ * only when someone next happens to run a Velite build.
+ */
+const MAX_SLUG_BYTES = 245;
+
+function slugByteLength(slug: string): number {
+  return new TextEncoder().encode(encodeURIComponent(slug)).length;
+}
 
 /** The Medium post id embedded in the export filename, if present. */
 function mediumId(sourceFile: string): string | undefined {
@@ -120,6 +142,11 @@ export function buildSlugPlan({ candidates, pinned, reserved }: SlugPlanInput): 
       }
       attempt += 1;
       slug = disambiguate(base, sourceFile, attempt);
+    }
+
+    if (slugByteLength(slug) > MAX_SLUG_BYTES) {
+      conflicts.push({ heldBy: "<none — slug itself is too long>", reason: "oversized", slug, sourceFile });
+      continue;
     }
 
     bySourceFile.set(sourceFile, slug);

@@ -30,7 +30,13 @@ export default defineConfig({
             // migrated corpus is 238 bytes encoded). Encoding here to measure
             // what the filesystem actually sees, with headroom below 255 for
             // the ".mdx" extension and any disambiguating suffix appended to
-            // it (see scripts/medium-to-mdx/slug-plan.ts).
+            // it. This is a second-layer check, not the primary one: the same
+            // 245-byte ceiling is enforced first at conversion time in
+            // scripts/medium-to-mdx/slug-plan.ts, so an oversized slug fails
+            // there with a clear message rather than surfacing only here, the
+            // next time anyone happens to run a Velite build. Kept here too as
+            // a backstop against a hand-written .mdx file that never went
+            // through the converter.
             .refine(
               (slug) => new TextEncoder().encode(encodeURIComponent(slug)).length <= 245,
               "Slug is too long once percent-encoded (filesystem path components are typically capped at 255 bytes)",

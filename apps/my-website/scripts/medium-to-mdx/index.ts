@@ -183,7 +183,11 @@ async function convert(): Promise<void> {
   });
 
   for (const conflict of plan.conflicts) {
-    console.error(`❌ ${conflict.sourceFile}: slug "${conflict.slug}" is held by ${conflict.heldBy}`);
+    const message =
+      conflict.reason === "oversized"
+        ? `slug "${conflict.slug}" is too long once percent-encoded for a URL`
+        : `slug "${conflict.slug}" is held by ${conflict.heldBy}`;
+    console.error(`❌ ${conflict.sourceFile}: ${message}`);
   }
 
   const state: ConversionState = {
@@ -192,7 +196,10 @@ async function convert(): Promise<void> {
     pinnedDates: new Map([...existingPosts].map(([source, { date }]) => [source, date])),
     stats: {
       converted: [],
-      failed: [...plan.conflicts.map((c) => ({ file: c.sourceFile, reason: `slug held by ${c.heldBy}` }))],
+      failed: plan.conflicts.map((c) => ({
+        file: c.sourceFile,
+        reason: c.reason === "oversized" ? "slug too long once percent-encoded" : `slug held by ${c.heldBy}`,
+      })),
       skipped: 0,
     },
   };

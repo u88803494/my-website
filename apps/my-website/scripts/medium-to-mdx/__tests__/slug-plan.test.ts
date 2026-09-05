@@ -75,6 +75,19 @@ describe("buildSlugPlan", () => {
     expect(plan.bySourceFile.get(A)).not.toBe("hello-world");
   });
 
+  // Regression guard: previously the 245-byte percent-encoded ceiling was
+  // only enforced by velite.config.ts's schema, so an oversized slug only
+  // failed the next time anyone happened to run a Velite build, not at
+  // conversion time. 撰 (3 bytes percent-encoded) repeated well past 245 bytes
+  // guarantees this fires regardless of the exact byte-count boundary.
+  it("reports a conflict instead of assigning a slug that is too long once percent-encoded", () => {
+    const oversizedBase = "撰".repeat(100);
+    const plan = buildSlugPlan({ candidates: [{ baseSlug: oversizedBase, sourceFile: A }] });
+
+    expect(plan.bySourceFile.has(A)).toBe(false);
+    expect(plan.conflicts).toEqual([expect.objectContaining({ reason: "oversized", sourceFile: A })]);
+  });
+
   it("assigns every candidate exactly one unique slug", () => {
     const many = Array.from({ length: 20 }, (_, i) => ({
       baseSlug: i % 3 === 0 ? "重複" : `文章-${i}`,
