@@ -213,6 +213,48 @@ function convertBlockElement($: CheerioAPI, node: Element, context: BodyContext)
   }
 }
 
+/** One content block's tag and plain text, in document order. */
+export interface ContentBlock {
+  tag: string;
+  text: string;
+}
+
+/**
+ * Walk the article body the same way convertBody does, but collect plain DOM
+ * text instead of Markdown. Used to decide what the description should be —
+ * reading from Markdown here would pick up escape sequences the converter
+ * introduces (e.g. a description ending up with a literal "\<" in it).
+ */
+export function collectContentBlocks($: CheerioAPI, bodyElement: Element): ContentBlock[] {
+  const blocks: ContentBlock[] = [];
+  let titleSkipped = false;
+
+  const walk = (nodes: AnyNode[]): void => {
+    for (const node of nodes) {
+      if (!isElement(node) || isStructuralNode(node)) continue;
+
+      if (!BLOCK_TAGS.has(node.tagName)) {
+        walk(node.children ?? []);
+        continue;
+      }
+
+      if (/^h[1-6]$/.test(node.tagName) && !titleSkipped && (node.attribs["class"] ?? "").includes("graf--title")) {
+        titleSkipped = true;
+        continue;
+      }
+
+      if (node.tagName === "p" && (node.attribs["class"] ?? "").includes("graf--empty")) continue;
+
+      const text = normalizeText($(node).text()).trim();
+      if (text) blocks.push({ tag: node.tagName, text });
+    }
+  };
+
+  walk(bodyElement.children ?? []);
+
+  return blocks;
+}
+
 /** Walk the article body and emit Markdown blocks. */
 export function convertBody($: CheerioAPI, bodyElement: Element, title: string): string {
   const blocks: string[] = [];

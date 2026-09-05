@@ -3,27 +3,65 @@ import { promises as fs } from "fs";
 import * as path from "path";
 
 import { CONFIG } from "./config";
-import { convertBody } from "./markdown-blocks";
+import type { ContentBlock } from "./markdown-blocks";
+import { collectContentBlocks, convertBody } from "./markdown-blocks";
 import { normalizeText, slugify, truncate } from "./text";
 import type { ParsedPost } from "./types";
 
+/** Minimum length for a block to be worth using as (part of) a description. */
+const MIN_BLOCK_LENGTH = 8;
+/** Below this, a lone first block reads as a fragment rather than a summary. */
+const SHORT_BLOCK_THRESHOLD = 40;
+
+const normalizeForComparison = (text: string): string => text.replace(/[\s\p{P}]+/gu, "").toLowerCase();
+
 /**
- * Derive a description from the first prose paragraph.
- * Used for the handful of posts Medium exported without a p-summary.
+ * Whether Medium's p-summary is really just an auto-excerpt of a heading,
+ * rather than something the author wrote as a summary.
+ *
+ * Medium generates p-summary by excerpting the first content block; when that
+ * block is a heading, the "summary" is just the section title truncated with
+ * an ellipsis — useless as a description, and it is what produced entries like
+ * "前言" or "緣由". The post title is checked too: the body's first heading is
+ * usually a graf--title repeat of it and gets filtered out of contentBlocks
+ * before this ever sees it, but Medium can still excerpt a fragment of the
+ * *title* as the summary (e.g. subtitle "入職前" from title "...心得 — 入職前").
+ * A real subtitle the author wrote is always prose distinct from both, so this
+ * only ever fires against a heading or the title itself.
  */
-function deriveDescription(body: string): string {
-  const firstParagraph = body
-    .split("\n\n")
-    .map((block) => block.trim())
-    .find((block) => block && !block.startsWith("#") && !block.startsWith("```") && !block.startsWith("!["));
+export function isAutoExcerptOfHeading(summary: string, first: ContentBlock | undefined, title: string): boolean {
+  const normalizedSummary = normalizeForComparison(summary.replace(/…$/, ""));
+  if (!normalizedSummary) return false;
 
-  if (!firstParagraph) return "";
+  const headingText = first && /^h[1-6]$/.test(first.tag) ? first.text : undefined;
 
-  return firstParagraph
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/[*`>]/g, "")
-    .replace(/\\([{}\\])/g, "$1")
-    .trim();
+  return [headingText, title].some((candidate) => {
+    if (!candidate) return false;
+    const normalizedCandidate = normalizeForComparison(candidate);
+    return normalizedCandidate === normalizedSummary || normalizedCandidate.includes(normalizedSummary);
+  });
+}
+
+/**
+ * Derive a description from the article's prose. Not truncated — the caller
+ * applies that once, after choosing between this and an authored summary.
+ *
+ * Used when there is no authored summary to fall back on. A single short
+ * first paragraph (Medium often opens with "前言" or a one-line hook) reads as
+ * a fragment on its own, so a second prose block is appended — but list blocks
+ * are skipped for this, since "1. 介面：… 2. 事件：…" concatenated onto a
+ * heading reads as a list fragment, not a summary.
+ */
+function deriveDescription(blocks: ContentBlock[]): string {
+  const prose = blocks.filter((block) => block.tag === "p" || block.tag === "blockquote");
+  const usable = prose.filter((block) => block.text.length >= MIN_BLOCK_LENGTH);
+
+  const first = usable[0];
+  if (!first) return "";
+  if (first.text.length >= SHORT_BLOCK_THRESHOLD) return first.text;
+
+  const second = usable[1];
+  return second ? `${first.text} ${second.text}` : first.text;
 }
 
 /**
@@ -60,12 +98,17 @@ export async function parsePost(filePath: string, options: ParseOptions = {}): P
   if (!bodyElement) throw new Error("missing body section");
 
   const body = convertBody($, bodyElement, title);
+  const contentBlocks = collectContentBlocks($, bodyElement);
 
-  // Medium's p-summary is an auto-generated excerpt of the opening paragraph.
-  // It serves as the subtitle verbatim, and as a truncated meta description.
+  // Medium's p-summary is usually an auto-generated excerpt of the opening
+  // paragraph, but when the post opens with a heading, the "summary" is just
+  // that heading title truncated with an ellipsis — not something the author
+  // wrote. isAutoExcerptOfHeading detects that case so it can be discarded
+  // rather than surfacing as e.g. description: "前言".
   const subtitleRaw = normalizeText($('section[data-field="subtitle"]').first().text()).trim();
-  const description = truncate(subtitleRaw || deriveDescription(body), CONFIG.DESCRIPTION_MAX_LENGTH);
-  const subtitle = subtitleRaw && subtitleRaw !== description ? subtitleRaw : undefined;
+  const authoredSummary = isAutoExcerptOfHeading(subtitleRaw, contentBlocks[0], title) ? "" : subtitleRaw;
+  const description = truncate(authoredSummary || deriveDescription(contentBlocks), CONFIG.DESCRIPTION_MAX_LENGTH);
+  const subtitle = authoredSummary && authoredSummary !== description ? authoredSummary : undefined;
 
   // Drafts have no canonical link, only a short "View original" URL.
   const mediumUrl = $("a.p-canonical").first().attr("href") ?? $('a[href*="medium.com/p/"]').first().attr("href");
