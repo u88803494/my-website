@@ -307,7 +307,7 @@ update_category.php：
 
 跟 職缺報報其實差不了多少。
 
--
+\-
 
 接下來就是管理文章的界面，實作完管理文章之後在整個串起來，部落格就完成了。這次先從後台開始做，先做分類，因為比較簡單，做完之後，就可以依照原有的基礎去打造管理文章的界面，這樣就會容易一些。
 
@@ -459,7 +459,7 @@ $sql = "INSERT INTO articles(title, content, category_id)
 ?>
 ```
 
--
+\-
 
 再來就是功能的部份。這邊就要先從刪除開始，因為是比較簡單的功能。一樣也是複製 category 的刪除。這邊非常簡單，只要改 $sql 的選擇部份就好。
 
@@ -480,7 +480,7 @@ delete.php：
 ?>
 ```
 
--
+\-
 
 然後是編輯的部份。這邊就比較不一樣了。因為要實作的部份就比較多，但一樣可以複製 category 的部份。然後要使用 add 的部份，來新增資料。然後因為這邊的部份需要使用兩個 table 的資料，articles 跟 categories。所以就要先決定完成其中一部份，這邊就先完成 articles 的部份，不然兩個一起做的話會很混亂。
 
@@ -558,7 +558,7 @@ update.php:
 
 [📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/cadd514d39a6689e01f38569ba7f68d6)
 
--
+\-
 
 再來就是編輯的上傳功能。一樣複製 category 的。
 
@@ -768,7 +768,7 @@ body {
 
 ![](https://cdn-images-1.medium.com/max/800/1*dw2pQb7lheLFAlNhes7PDg.png)
 
--
+\-
 
 呈現單一文章的部份也是一樣，直接使用 index.php 的部份去修改。
 
@@ -866,7 +866,7 @@ $sql = "SELECT A.title, A.content, C.name FROM articles as A
 
 目前在後台的部份是直接送出就發送了，但在一般的部落格系統中，會有一個草稿功能，必須要改個狀態，才會變成發布。在這種狀態下前台看不到草稿的文章，只有後台才可以看到。
 
--
+\-
 
 針對這題就是讓文章額外多一個欄位，只能有 0 跟 1，預設值是 0，意思是草稿，發布之後就變成 1。然後前台在選擇文章的時候，就要把這個加入設定，選取這個欄位數值為 1 的。題目是說改狀態，所以應該是使用選單的方式，我印象中大多是使用按鈕一個按鈕是保存成草稿，另外一個則是發布。但仔細思考，要用按鈕的話，就變成要判斷是那哪個按鈕。但我印象中，案按鈕的話，送出都是一樣會將所有資料送出。所以目前就先以選單的方式來，然後選單預設就是草稿。
 
@@ -899,7 +899,7 @@ SELECT * FROM articles WHERE published = 1 ORDER BY create_at DESC
 
 目前都是寫死的，所以如果要新增我的頁面管理，就需要在 admin.php 上面新增這個功能。
 
--
+\-
 
 目前想法是就放在 articles 裡面即可，因為關於我實際上也是一篇文章。感覺上另外開個 table 放置的話有點浪費空間。以這樣的作法，就是也要新增一個欄位，專門標示這是關於我的文章。然後在關於我的頁面直接指定撈欄位的資料即可。
 
@@ -919,7 +919,7 @@ SELECT * FROM articles WHERE published = 1 ORDER BY create_at DESC
 
 解到這邊就在思考，那我是否可以把上傳的 add 跟 update 結合在一起，看來也是可以，引導到的 php 上面多做一個判斷式即可。有 id 就把 $sql 使用update 編輯用的，如果沒有 id 就用插入的方式新增。
 
--
+\-
 
 實作方面
 
@@ -933,7 +933,7 @@ SELECT * FROM articles WHERE published = 1 ORDER BY create_at DESC
 
 這題在構思下，就跟留言板差不多，就是另外開一個 table 來儲存大家的評論。然後把每篇評論都加上 文章的 ID，以辨別是哪篇文章的評論。
 
--
+\-
 
 實作的話，要先把每篇文章下面新增添加留言的功能，並在下方顯示留言。
 
@@ -1016,7 +1016,7 @@ if ($result) {
 
 再來就是呈現評論的部份了。
 
--
+\-
 
 要先新增一個 table 專門用來儲存評論
 
@@ -1037,13 +1037,13 @@ $sql_comments = "SELECT C.nickname, C.comment, C.created_at FROM comments AS C L
 
 [📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/d10f7c300b99c94dbf04abff9458d4a2)
 
--
+\-
 
 在這邊思考後，其實評論也是一種文章，所以可以直接儲存在同一個 articles table 就好了，然後另外開一個欄位來標明是那一篇文章的評論就好了，該欄位 0 的時候，就是文章。如果有 0 以外的數字，就是文章的 id，所以就是評論。
 
 不過還有 nickname 需要儲存，把 nickname 儲存在 articles table 又不太合理，所以除非要節省資源，否則還是分開儲存比較實在。
 
--
+\-
 
 接下來的就是魔王練習的部份。我就只大概構思就好，不實作了。怕浪費很多時間在這上面。
 
@@ -1051,7 +1051,7 @@ $sql_comments = "SELECT C.nickname, C.comment, C.created_at FROM comments AS C L
 
 需要考慮資料庫怎麼存，後台怎麼改寫以及前台怎麼顯示，會花上很多的時間還有心思，因為要考慮的東西還滿多的。
 
--
+\-
 
 首先多個分類，應該就是按照一般的儲存方式，一個分類一個資料。需要構思的是 articles table 要怎麼儲存多個分類，這邊會想到 medium 限制 5 個的好處，這樣的好處就是我可以直接開五個欄位 category_id1, category_id2, … 就好了，直接儲存五個便可。
 
@@ -1067,7 +1067,7 @@ $sql_comments = "SELECT C.nickname, C.comment, C.created_at FROM comments AS C L
 
 這個難度很高。要有一個輸入框輸入關鍵字，也就是標題或內文內含有那些字，就代表示符合。所以要新增一個搜尋頁面，讓訪客很快的可以找到關鍵字的文章。
 
--
+\-
 
 這題感覺上就是考 LIKE 的應用。而且 LIKE 有很多種用法，有搜尋開頭，有搜尋結尾，還有搜尋中間。不知道能不能一起搜尋，如果可以會比較簡單一點。
 

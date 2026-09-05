@@ -72,7 +72,7 @@ function getDate(cb) { // cb callback 的縮寫
 
 差別在一個是分開寫，一個是寫在裡面。跟一般的 function 的寫法差異在之前都是寫數字、字串、陣列或物件，而這邊是傳入一個 function
 
--
+\-
 
 比如說要在三秒後執行 function
 
@@ -90,7 +90,7 @@ function cb() {
 // yo
 ```
 
--
+\-
 
 ## GET vs POST
 
@@ -113,7 +113,7 @@ curl https://google.com
 
 [參考資料 (中文](https://cythilya.github.io/2018/11/10/inside-look-at-modern-web-browser/))
 
--
+\-
 
 > 這邊只簡單介紹這一系列的文章，所以不會介紹得太詳細，雖然我會試著翻譯看看，但是太難的部份我就不會寫出來的，所以要詳細資料還是需要去看看原始文章。
 
@@ -173,7 +173,7 @@ process 可以去請求作業系統執行另外一個 process 來做不同的工
 
 這邊是以 chrome 為例子的架構
 
--
+\-
 
 ### Which process controls what?
 
@@ -197,7 +197,7 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 為了減少記憶體的使用 chrome 會有限制最大可以執行的 processes
 
--
+\-
 
 ### Per-frame renderer processes — Site Isolation
 
@@ -205,7 +205,7 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 ![](https://cdn-images-1.medium.com/max/800/1*_Jg7WWcpm1d_Y5Z7iGp6FA.gif)
 
--
+\-
 
 ### part2
 
@@ -251,7 +251,7 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 最後 renderer process 就會透過 IPC 告訴 browser process 已經完成整個任務。這時候 UI thread 會把分頁(tag) 的加載圖示停止，但客戶端的 JavaScript 依然可以加載額外的資源。
 
--
+\-
 
 **Navigating to a different site** 去其他的網站
 
@@ -261,7 +261,7 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 part2 就是在介紹 render process 跟 browser process 是如何溝通的。
 
--
+\-
 
 ### part3
 
@@ -333,7 +333,7 @@ layout 是一種查看元素的幾何型態的過程。main thread 找遍所有�
 
 以上面的例子來說，如果讓 HTML 按照編寫的順序去繪製元素，那將有可能產生不正確的繪製，所以就是利用 z-index 來決定繪製的先後順序。
 
--
+\-
 
 在 paint 階段中，main thread 會走遍所有的 layout tree，然後創造一個 paint records， paint records 就是一個註釋，像是背景優先，然後是文本，在來是矩形。
 
@@ -389,7 +389,7 @@ layout 是一種查看元素的幾何型態的過程。main thread 找遍所有�
 4. 決定顯示的優先順序，有重疊的時候要先畫 a 還是先畫 b
 5. 最後是怎麼畫出來的
 
--
+\-
 
 ### part4
 

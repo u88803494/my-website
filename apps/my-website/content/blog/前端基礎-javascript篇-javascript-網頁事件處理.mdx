@@ -87,7 +87,7 @@ element.addEventListener(事件名稱(event), 函式(function))
 
 裡面會有很多資訊，像是點擊的 x y 軸，點了什麼資料等等的
 
--
+\-
 
 所以以這個範例來說，當我們點擊之後，瀏覽器就會帶一些資訊進去 e，所以是瀏覽器呼叫的時候自動帶入這些參數，就像是下面的範例般：
 
@@ -101,7 +101,7 @@ onClick({
 
 所以我們就可以利用這個資訊來拿到一些跟事件有關的資訊。
 
--
+\-
 
 另外一個範例，用 window 這個是指瀏覽器的這個視窗
 
@@ -122,7 +122,7 @@ onClick({
 
 所以就可以透過這樣來取得特定的資訊。
 
--
+\-
 
 ```
 <script>
@@ -168,7 +168,7 @@ onClick({
 
 這樣使用之後可以在表單做提交的時候出現一個提示。
 
--
+\-
 
 如果不想要瀏覽器送出資訊
 
@@ -205,7 +205,7 @@ e.preventDefault(); 阻止瀏覽器的預設行為
 
 利用邏輯就可以寫出很多種功能以供使用
 
--
+\-
 
 備註：form 後面可以接上很多種 http 指令，預設值是 get，所以在送出資料之後，所輸入的東西都會在網頁上面明碼顯示。
 
@@ -243,7 +243,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 這種時候只要點擊這個連結，就會沒有反應，因為被阻止了。
 
--
+\-
 
 2. 阻止使用者輸入某個字
 
@@ -347,7 +347,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 **先捕獲再冒泡**
 
--
+\-
 
 .addEventListener 其實有第三個參數，第三個參數就是控制階段用的參數是一個布林值，true — 執行到捕獲階段，false(預設值) — 執行到冒泡階段。
 
@@ -379,7 +379,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 看得出來兩者的順序相反，由此可以得如同上述圖片那樣，捕獲就先由最外層(父層)開始，而冒泡的順序則相反。理由是這邊會先執行捕獲再來才是冒泡。
 
--
+\-
 
 這時候再試試看把兩邊的印出對調。
 
@@ -411,7 +411,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 .btn 的順序的差異的原因是在於。因為是點擊 button 的按鈕，是觸發 chick me 本身的事件，所以當執行目標的時候，就會進入目標階段(Target phase)，會根據哪一個放在上面就先執行，所以總結也一樣還是捕獲之後再冒泡。
 
--
+\-
 
 知道這些是有用處的
 
@@ -440,7 +440,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 *無論點哪處，都會記錄資訊*
 
--
+\-
 
 ### preventDefault 的向下傳遞機制
 
@@ -478,7 +478,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 </body>
 ```
 
--
+\-
 
 ```
 window.addEventListener('click', function(e) {
@@ -565,7 +565,7 @@ document.querySelector('.btn')
 
 由這邊就可以確認到，真的是先捕獲再冒泡，然後在 btn 冒泡的階段就停止了傳遞。
 
--
+\-
 
 就可以利用 window 來直接停止整個事件，設置之後記得要打 true 這樣才會設置在捕獲階段。
 
@@ -581,7 +581,7 @@ window.addEventListener('click', (e) => {
 
 *window 的捕獲階段就被停止了*
 
--
+\-
 
 可以在一個元素添加兩個或多個監聽事件。同時間也停止觸發。
 
@@ -605,7 +605,7 @@ window.addEventListener('click', (e) => {
 
 *多個監聽，且做出反應*
 
--
+\-
 
 ### stopImmediatePropagation
 
@@ -693,7 +693,7 @@ not available 就是無法使用。
 
 會發現當按下 2 的時候 i = 1 然後運行 alert(i+1) 於是跳出視窗顯示 2 。
 
--
+\-
 
 另外一個偵測的方式，利用 chrome 的 Event Listener Breakpoints 然後點選 click 事件。
 
@@ -756,7 +756,7 @@ e.target.getAttribute('data-value')
 
 ![](https://cdn-images-1.medium.com/max/800/1*1gz8jdOszLr9XxFXJu8AwA.gif)
 
--
+\-
 
 來試一下，如何新增按鈕
 
@@ -831,7 +831,7 @@ document.querySelector('.add-btn')
 
 至於怎麼處理就是接下來要講的內容。
 
--
+\-
 
 ### 小小心得：
 
@@ -1280,7 +1280,7 @@ document.querySelector('.result').innerText = result;
 
 不然會出現 bug
 
--
+\-
 
 接下來是優化
 
@@ -1402,7 +1402,7 @@ document.querySelector('.result').innerText = result;
 
 [JSBIN](https://jsbin.com/hinoruw/edit?html,output)
 
--
+\-
 
 再次優化
 
@@ -1509,7 +1509,7 @@ document.querySelector('.result').innerText = result;
 
 [JSBIN](https://jsbin.com/kohapan/edit?html,output)
 
--
+\-
 
 所以有好幾種方式可行，沒有誰好誰壞，每一種的好處跟壞處都不太一樣
 

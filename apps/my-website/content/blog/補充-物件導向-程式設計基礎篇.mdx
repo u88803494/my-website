@@ -176,7 +176,7 @@ $a->hello();
 
 $this 就是只這個 class Dog 的實體，因為已經 new 出來了。
 
--
+\-
 
 ```
 <?php
@@ -271,7 +271,7 @@ $b->hello();
 
 這樣就可以擁有 a 狗 b狗 c狗… 很多的狗
 
--
+\-
 
 不過一般並不讓別人隨便變動變數，所以就可通過另外一個方法（funcion），把名字傳進去。
 
@@ -343,7 +343,7 @@ public function setName($name) {
 
 這也是物件導向其中一個很重要的點。
 
--
+\-
 
 其實之前也已經用過了
 
@@ -399,7 +399,7 @@ $a = new Dog();
 
 所以就是透過編譯器來把 class 轉成 JS 可用的程式碼。
 
--
+\-
 
 現在先以 php 作為實例。
 
@@ -475,7 +475,7 @@ $b = new Dog('hello');
 ?>
 ```
 
--
+\-
 
 建構子（function **__construct）** 其實可以做的事情很多很多。你想得到的幾乎都可以，要初始化一些東西。像有人會把需要做的事情另外寫一個 class 包起來。
 
@@ -509,7 +509,7 @@ echo $db->result()
 
 這樣子，在之後使用的時候，就只需要改參數就好了。這個跟單純呼叫 function 是不一樣的。可以想像成是再把 function 集中起來管理的意思。以這個為例子來說，就是把 db 的初始化在裡面都做好了，就不需要在外面再初始化，也看不到初始化的部份。
 
--
+\-
 
 接下來回到 JavaScript 的部份。
 
@@ -572,7 +572,7 @@ function fetch_result($q) {
 
 在 JavaScript 的 this 就是用來指這個實體。這是最原始的用途。但在 JavaScript 中除了 class 內部之外，又有別種用途，所以 this 就變得比較複雜。
 
--
+\-
 
 回到計算機的部份：
 
@@ -773,7 +773,7 @@ $a->run();
 protected $name = 'default';
 ```
 
--
+\-
 
 如果想要在 function 裡面使用 parent 的方法呢？
 
@@ -796,7 +796,7 @@ $a = new Dog('leo');
 $a->sayYoAndHello();
 ```
 
--
+\-
 
 在 JavaScript 裡面使用 parent 是使用 super
 

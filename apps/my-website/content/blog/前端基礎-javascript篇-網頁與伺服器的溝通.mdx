@@ -274,7 +274,7 @@ request.open('GET', 'https://reqres.in/api/users', true)
 </script>
 ```
 
--
+\-
 
 ```
 const request = new XMLHttpRequest();
@@ -308,7 +308,7 @@ request.addEventListener('load', function(){
 
 寫這樣也是可以的
 
--
+\-
 
 ```
 if (request.status >= 200 && request.status < 400) {
@@ -320,7 +320,7 @@ if (request.status >= 200 && request.status < 400) {
 
 這一段在說的，把 status code 符合這些條件，就把 response 印出來。但是如果不符合就印出 err。
 
--
+\-
 
 ```
 request.onerror = function () {
@@ -330,7 +330,7 @@ request.onerror = function () {
 
 這段是當 request 發生 onerror 的時候，就是印出 error
 
--
+\-
 
 ```
 request.open('GET', 'https://reqres.in/api/users', true)
@@ -422,7 +422,7 @@ access-control-allow-origin: *
 
 所以，如果 sever 沒有加入這個 header : Access-Control-Allow-Origin 的話，那麼就絕對沒有辦法拿到 response。因為這是瀏覽器加上的限制。所以如果要繞過這個限制的話，就是變成同來源，或是 sever 端加入這個 header。
 
--
+\-
 
 參考資料：[輕鬆理解 Ajax 與跨來源請求](https://blog.techbridge.cc/2017/05/20/api-ajax-cors-and-jsonp/)
 

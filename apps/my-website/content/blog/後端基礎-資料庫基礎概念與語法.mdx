@@ -26,7 +26,7 @@ sourceFile: "2019-07-09_----------------a8b398c8b315.html"
 
 ![](https://cdn-images-1.medium.com/max/800/1*uYBql5M3ICY5AVt2C14Ukg.png)
 
--
+\-
 
 ### 資料庫命名規則：
 
@@ -112,7 +112,7 @@ WHERE content like 'h%' // 找 h 開頭的資料
 
 再取資料的時候要用 xxx.xx 的形式來取得 table_name.column_name
 
--
+\-
 
 ### Inner Join （取交集）：
 
@@ -130,7 +130,7 @@ SELECT users.id, jobs.id, jobs.title FROM `users` JOIN jobs ON users.id = jobs.i
 
 這樣就是選取了 users.id, jobs.id, jobs.title， users 跟 jobs 做集合，然後條件是 users.id = jobs.id ，所以就只顯示兩邊 id 相同的 jobs.title 資料。
 
--
+\-
 
 ### Left Join
 
@@ -146,7 +146,7 @@ SELECT users.id, jobs.id, jobs.title FROM `users` JOIN jobs ON users.id = jobs.i
 
 小提醒：join 有分兩種，一個是 inner join，另一個是 outer join。交集的就是 inner join，而有把中間以外的資料加進來的就是 outer join，所以 left join 的全名是 left outer join。
 
--
+\-
 
 ### Right Join
 
@@ -154,7 +154,7 @@ SELECT users.id, jobs.id, jobs.title FROM `users` JOIN jobs ON users.id = jobs.i
 
 就只保留右邊的資料，然後左邊有符合條件就顯示。
 
--
+\-
 
 ### Full Outer Join
 

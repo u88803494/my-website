@@ -54,7 +54,7 @@ Apache 跟 PHP 是互相交換資料的存在。
 
 ![](https://cdn-images-1.medium.com/max/800/1*LXCNsoJCIy7n0wXBqcjX6w.png)
 
--
+\-
 
 我們可以採用程式碼來模擬：
 
@@ -82,7 +82,7 @@ db.read()......
 return db.furst().id
 ```
 
--
+\-
 
 window 使用 https://www.uwamp.com/en/ 這是較為簡化的版本
 
@@ -218,7 +218,7 @@ PHP 中 字串相加要用 . 來相加，而不是使用 + 號，加號是數字
 
 這是非常簡單的前後端溝通的範例。
 
--
+\-
 
 程式碼也可以變成另外一種形式，可以分塊執行
 
@@ -263,7 +263,7 @@ PHP 中 字串相加要用 . 來相加，而不是使用 + 號，加號是數字
 </form>
 ```
 
--
+\-
 
 另外一種形式，則是登入頁面常常會導回登入頁面。
 
@@ -320,7 +320,7 @@ Tab → table 就是一般的 excel 那種表格
 
 SQL 的全名是 Structural Query Language。
 
--
+\-
 
 ### 查詢
 
@@ -333,7 +333,7 @@ select phone from users
 
 從 users 裡面找到 name 是 peter 的那列並且把 phone 這個欄位的值取出來
 
--
+\-
 
 那當想要查詢所有的欄位值，就可以使用 * 來替代。
 
@@ -344,7 +344,7 @@ select * from users
 
 從 users 裡面找到所有列並且把所有欄位的值取出來
 
--
+\-
 
 ### 刪除
 
@@ -359,7 +359,7 @@ where 後面接條件。
 
 如果沒接 where 就會把所有的都刪除
 
--
+\-
 
 ### 更新
 
@@ -370,7 +370,7 @@ update users set phone=123
 
 這邊跟刪除一樣，如果沒有接 where 它就會把所有的資料名字為 phone 通通改完 123通通改完 123
 
--
+\-
 
 ### 新增
 
@@ -381,7 +381,7 @@ insert into users(name, phone)
 
 新增一筆紀錄 name 是 peter，phone 是 123。
 
--
+\-
 
 ### 資料庫的登入
 
@@ -411,7 +411,7 @@ AI 就是打勾之後每新增一個紀錄的時候，如果 ID 沒設置它就�
 
 熟悉使用資料庫的指令之後，就可以看看 PHP 與資料庫的連接。
 
--
+\-
 
 ### PHP 與資料庫：連接
 
@@ -583,7 +583,7 @@ if ($conn->query($sql) === TRUE) {
 
 這樣就可以上傳資料。
 
--
+\-
 
 ### 導出與導入
 
@@ -619,7 +619,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 require_once('conn.php');
 ```
 
--
+\-
 
 ### 簡單示範會員系統
 
@@ -653,7 +653,7 @@ require_once('conn.php');
 </form>
 ```
 
--
+\-
 
 ```
 login.php:
@@ -685,7 +685,7 @@ if ($result->num_rows > 0) {
 ?>
 ```
 
--
+\-
 
 ```
 conn.php

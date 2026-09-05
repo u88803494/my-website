@@ -67,7 +67,7 @@ sourceFile: "2019-06-16_-------JavaScript----------5b79c5e5661d.html"
 
 然後是設定 CSS 樣式，所以決定先把背面設定顏色，然後設定 button 隱藏，先實作出只能玩一次
 
--
+\-
 
 思考題目實作的部分，點太快的時候要跳出提示，"還沒變色"。變色之後點擊要跳出提示點擊時跟變色差了多少時間
 
@@ -80,7 +80,7 @@ sourceFile: "2019-06-16_-------JavaScript----------5b79c5e5661d.html"
 
 自己觀察到都是 alert 之後才顯示再來一次，所以再來一次的顯示應該是要寫再 alert 後面
 
--
+\-
 
 先寫出 1 ~ 3 秒做出反應的 fucntion，要通過 [setTimeout](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/setTimeout) 以及 [math.random ](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/random)來實作，且實作出變色
 
@@ -148,7 +148,7 @@ window.addEventListener('click', tooEarly); // 取消事件延遲反應的時間
 
 我突然想到如果在 removeEventListener 寫一樣的 function 算不算呢？經試驗是不行
 
--
+\-
 
 接下來就寫隨機時間的 function
 
@@ -214,11 +214,11 @@ oneRound(); // 執行遊戲的關鍵
 
 待解決問題：ESlint 的先定義在使用，有部分 function 是因為要取消監聽才 callback 的結果卻變成一直跳錯誤。
 
--
+\-
 
 接下來是要寫再來一次的部分，所以就先把可能會需要的 function 名稱先寫出來。
 
--
+\-
 
 當新增重新開始的按鍵之後，卻發現有很多錯誤需要修正，像是不知道為何按下去之後就會很快地顯示案太早的按紐，發現是直接執行遊戲的話，疑似會把太早的直接註冊，但是又很奇怪的是應該是在點擊之後註冊的 但是為什麼又會當作是已經點擊了
 
@@ -298,7 +298,7 @@ oneRound(); // 執行遊戲的關鍵
 
 研究到最後發現是跟捕獲冒泡有關係的緣故，所以只要加上 e.stopPropagation 就好了
 
--
+\-
 
 ## hw2：仿 Google 表單
 
@@ -322,7 +322,7 @@ oneRound(); // 執行遊戲的關鍵
 
 1. 先切好版，然後驗證一個一個來做，不要一次想把所有驗證做完
 
--
+\-
 
 ### 切版
 
@@ -370,7 +370,7 @@ padding: 3px;
 
 [📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/fe7628d54b6d3f23c4c870f78a2db578)
 
--
+\-
 
 接著就是 JavaScript 的部分了
 
@@ -423,7 +423,7 @@ function learnedVerification(e) { // 偵測是否有相關背景
 
 偵測部份很多都是重複的部分，但是還沒想到如何改寫，之後再來做改寫的動作。
 
--
+\-
 
 儲存資料預計使用 array 或 object，所以在結束的地方還要清空(array)，object 則不用。
 
@@ -475,7 +475,7 @@ function success() { // 成功之後在 console 印出資料
 
 接著就是細節的部份需要修改。還要寫一下判斷是選哪一個，要針對這部分寫一個 function
 
--
+\-
 
 最後寫完之後發現，我可以先把所有的資料儲存進去 array，接著就可以用迴圈判斷是否為空字串了。當然資料的部分就需要自己來填寫。但以這樣的方式來說，需要 function 的部分可以大為減少，大致上就是一個放資料、一個判斷選項、一個迴圈(含驗證失敗變色的部分)，但迴圈的部分要控制到少一圈，因為其他的部分不需要判斷。不過這邊只是大致構想而已。
 
@@ -514,7 +514,7 @@ function success() { // 成功之後在 console 印出資料
 1. 不要想得太難，只要加減能夠成功就行了
 2. 先想怎麼通過上面附的兩個測試就好
 
--
+\-
 
 因為人在公司只能針對 hw3 的計算機的每個部份做出大致上的構想。
 
@@ -528,7 +528,7 @@ JavaScript 的部分。事件監聽要嘗試用事件代理來監聽。前面兩
 
 也因為題目要求只要做出 0123456 + - = 就好，所以可能就其他都當成擺設只設置要求的部分就好，最多就是設置按了之後會在螢幕上面顯示，但光這部分也要花不少心思去考慮吧
 
--
+\-
 
 實作部分
 
@@ -536,7 +536,7 @@ JavaScript 的部分。事件監聽要嘗試用事件代理來監聽。前面兩
 
 [📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/c855dcf6dc12ea0751d5845b36bfd662)
 
--
+\-
 
 接下來就是看 CSS 要怎麼樣下才可以把版型變成我要的樣子。
 
@@ -546,7 +546,7 @@ JavaScript 的部分。事件監聽要嘗試用事件代理來監聽。前面兩
 
 [📄 在 GitHub Gist 查看完整程式碼](https://gist.github.com/u88803494/92e88f35e41a7f33ce8b2d8ff51299c1)
 
--
+\-
 
 JavaScript
 
@@ -576,7 +576,7 @@ if (e.target.classList.contains('calculator__input--num')) {
   }
 ```
 
--
+\-
 
 然後是顯示數字的部分。
 
@@ -636,7 +636,7 @@ function screenNumber(num) { // 螢幕的數字
 
 這邊先把內部的數字跟外部的分開寫，理由是怕污染到螢幕的數字，但有可能不需要分開， 之後再來評估看看。另外有個問題是，案太多下之後會突破螢幕寬度，這就留待以後再來處理。
 
--
+\-
 
 成功在螢幕顯示之後，就是處理運算符的問題了。
 
@@ -663,7 +663,7 @@ function screenNumber(num) { // 螢幕的數字
 3. 什麼是 event delegation，為什麼我們需要它？
 4. `event.preventDefault()` 跟 `event.stopPropagation()` 差在哪裡，可以舉個範例嗎？
 
--
+\-
 
 ## 什麼是 DOM？
 
@@ -692,7 +692,7 @@ DOM 就是 Document Object Mothed。是一種把 HTML 結構轉換成物件的�
 
 [圖源](https://ithelp.ithome.com.tw/articles/10191666)
 
--
+\-
 
 ## 事件傳遞機制的順序是什麼；什麼是冒泡，什麼又是捕獲？
 
@@ -704,7 +704,7 @@ DOM 就是 Document Object Mothed。是一種把 HTML 結構轉換成物件的�
 
 當點擊一個元素之後，由最上面開始經過 document、&lt;html> 一路往下，最後到達指定的元素，這部分就是捕獲階段 (Capture phase)，也就是圖片紅色 (1) 的路徑。接著就會進入目標階段 (target phase)，也就是圖片藍色的 (2) 的階段，也就是點擊的元素的執行階段。接著就會進入冒泡階段 (Bubbling phase)，就是圖片中綠色的 (3) 的路徑，把事件依照原路徑一層層的傳上去。**一個重點就是先捕獲在冒泡。**
 
--
+\-
 
 ## 什麼是 event delegation，為什麼我們需要它？
 
@@ -720,7 +720,7 @@ delegation 意思是（工作、職務或權力等）分配；委派；授權 [�
 2. 可以很方便的新增或修改元素
 3. 不會因為一些改動就導致需要修改監聽事件或函式。
 
--
+\-
 
 ## event.preventDefault () 跟 event.stopPropagation () 差在哪裡，可以舉個範例嗎？
 
@@ -745,11 +745,11 @@ event.prevnetDefault () 的用意是在阻止事件的預設行為。假設今�
 
 這樣在點了那個連結的時候，就不會連結出去。因為只會阻止預設行為，所以背景顏色還是一樣會變成紅色。
 
--
+\-
 
--
+\-
 
--
+\-
 
 event.stopPropagation () 則是會阻止事件往上傳遞。也就是說，如果只有單一事件的話，其實不會有影響，但是當如果有兩種事件在同一個位置，依照捕獲與冒泡的原理來說，就會把事件傳遞給別層，所以當一個位置有兩個事件的時候，就會一起執行。但是我不希望兩個事件一起執行怎麼辦呢？就是使用 event.stopPropagation () 就可以了。  
 用上面的例子，另外用 div 包起來，然後設置高度跟顏色以方便觀看結果。然後設置監聽這個 div，當點擊之後就把背景給消除。先試試看不使用 event.stopPropagation () 的結果。
@@ -775,7 +775,7 @@ event.stopPropagation () 則是會阻止事件往上傳遞。也就是說，如�
 </body>
 ```
 
--
+\-
 
 ![](https://cdn-images-1.medium.com/max/800/0*BfadxYBSjEWhdE2c.gif)
 

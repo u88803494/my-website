@@ -69,7 +69,7 @@ var_dump($arr); // type, value
 print_r($arr) // 只會印出內容。
 ```
 
--
+\-
 
 function
 
@@ -174,7 +174,7 @@ function server(request) {
 
 這樣的話，需要某一筆資料的話，就必須要去手動找尋。所以就有人開發了資料庫來幫忙管理。其實資料庫的底層還是一樣存在硬碟，只是提供一個友善的界面，可以使用程式語言去把資料管理資料。這就是資料庫系統的主要價值所在。
 
--
+\-
 
 資料庫系統有分兩種：
 
@@ -182,13 +182,13 @@ function server(request) {
 
 關聯性資料庫的語言是 SQL
 
--
+\-
 
 第二種就是非關聯得資料庫，名稱是 NoSQL 也稱為 Not only SQL 。在 SQL 的資料型態會有一些限制，像是只能儲存數字或字串。而 非關聯的方式就可以儲存一些 array 或是 object。兩者都很好用，只是適用的場合不同。比較經常是儲存一些 LOG，而這種儲存方式則是可以依據需求去額外添加一些資料，就不會像 SQL 一樣，為了儲存那些資料，必須要額外開一個欄位來儲存，如果是常常需要不同類型的資料 SQL 就會變得很複雜。所以就可以使用 NoSQL 來儲存。而 NoSQL 有這種好處的原因就在於跟 SQL 比起來，NoSQL 的結構就比較鬆散。
 
 而這些資料庫型態其實都只是個統稱而已。實際上有各種不同別人時做出來的資料庫。
 
--
+\-
 
 最有名的關聯資料庫就是 MySQL，還有很多種，像是 PostgreSQL、MongoDB、MSSQL。這些關聯性資料庫都很接近，只是它們底層的 SQL engine 運作的方式可能不太一樣。每套 SQL 都有自己的語法，大都是大同小異，可能是一些功能上的不同而已。但因為概念跟語法形式都差不多，所以學了一套之後，其他套也會很容易上手。
 
@@ -288,7 +288,7 @@ SELECT id as name FROM `users`
 
 本來的 id 欄位名字變成 name
 
--
+\-
 
 where + 條件
 
@@ -298,7 +298,7 @@ SELECT id FROM `users` where id=2
 
 找尋 id 那筆 id=2 的資料。
 
--
+\-
 
 where 條件 and 條件。同時符合
 
@@ -318,7 +318,7 @@ SELECT * FROM `users` WHERE username="13fn=aniosnmdoa" AND content="dmiokfmispdf
 
 還有很多種選擇方式，像是 id > 10 的資料，或是字串中的某部份有沒有符合，這邊部份等用到的時候再去查看即可。
 
--
+\-
 
 ### 新增資料 Insert
 
@@ -338,7 +338,7 @@ INSERT INTO users(username, content) VALUES ("username01", "content01")
 
 ![](https://cdn-images-1.medium.com/max/800/1*AVmmECn5liwMlclUrf0H2w.png)
 
--
+\-
 
 ### 修改資料 Update
 
@@ -362,7 +362,7 @@ UPDATE `users` SET username="user02" , content="content02" WHERE id=2
 
 **切記，沒有 where 就會改變所有的欄位資料，所以務必加上**
 
--
+\-
 
 ### 刪除資料 Delete
 
