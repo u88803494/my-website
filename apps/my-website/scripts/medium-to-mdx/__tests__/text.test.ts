@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { escapeMdx, normalizeText, slugify, stripEmphasis, truncate, yamlString } from "../text";
+import { escapeMdx, normalizeText, slugify, stripEmphasis, truncate, wrapWithPadding, yamlString } from "../text";
 
 describe("slugify", () => {
   it("keeps CJK characters", () => {
@@ -47,6 +47,24 @@ describe("stripEmphasis", () => {
 
   it("leaves an unpaired asterisk alone", () => {
     expect(stripEmphasis("SELECT * FROM t")).toBe("SELECT * FROM t");
+  });
+});
+
+describe("wrapWithPadding", () => {
+  it("moves interior padding outside the markers", () => {
+    expect(wrapWithPadding("Change ", "**")).toBe("**Change** ");
+  });
+
+  it("leaves already-tight content unchanged in shape", () => {
+    expect(wrapWithPadding("粗體", "**")).toBe("**粗體**");
+  });
+
+  it("collapses to a single space when the span is whitespace-only", () => {
+    expect(wrapWithPadding("   ", "**")).toBe(" ");
+  });
+
+  it("returns empty for a genuinely empty span", () => {
+    expect(wrapWithPadding("", "**")).toBe("");
   });
 });
 

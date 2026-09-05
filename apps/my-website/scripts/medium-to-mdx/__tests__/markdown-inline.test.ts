@@ -36,10 +36,10 @@ describe("convertInline", () => {
     expect(inline("<em>斜體</em>")).toBe("*斜體*");
   });
 
-  // Pinned so the Stage 3 fix shows up as an intentional change. Medium commonly
-  // emits "<strong>Change </strong>directory"; dropping the inner space yields
-  // "**Change **directory", which CommonMark does not read as emphasis at all.
-  it("currently drops padding inside emphasis (to be fixed)", () => {
-    expect(inline("<strong>Change </strong>directory")).toBe("**Change**directory");
+  // Medium commonly emits "<strong>Change </strong>directory". Dropping the
+  // inner space would yield "**Change **directory", which CommonMark does not
+  // read as emphasis at all — the space belongs outside the markers.
+  it("moves padding inside emphasis outside the markers", () => {
+    expect(inline("<strong>Change </strong>directory")).toBe("**Change** directory");
   });
 });

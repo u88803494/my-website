@@ -49,6 +49,25 @@ export function slugify(title: string): string {
     .toLowerCase();
 }
 
+/**
+ * Move whitespace inside an emphasis span outside the markers.
+ *
+ * Medium commonly emits "<strong>Change </strong>directory". Trimming and
+ * dropping that space produced "**Change **directory" — CommonMark does not
+ * read a "**" followed by a space as emphasis at all, so the markers were
+ * printed literally instead of rendering bold. Moving the space out yields
+ * "**Change** directory", which does.
+ */
+export function wrapWithPadding(inner: string, marker: string): string {
+  const match = /^(\s*)([\s\S]*?)(\s*)$/.exec(inner);
+  if (!match) return inner;
+
+  const [, lead, core, trail] = match;
+  if (!core) return lead || trail ? " " : "";
+
+  return `${lead}${marker}${core}${marker}${trail}`;
+}
+
 /** Truncate to a sensible meta-description length. */
 export function truncate(text: string, maxLength: number): string {
   return text.length > maxLength ? `${text.slice(0, maxLength).trim()}…` : text;

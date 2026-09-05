@@ -1,7 +1,7 @@
 import type { CheerioAPI } from "cheerio";
 import type { AnyNode, Element } from "domhandler";
 
-import { escapeMdx, normalizeText } from "./text";
+import { escapeMdx, normalizeText, wrapWithPadding } from "./text";
 import { mdDestination, safeUrl } from "./url";
 
 export function isElement(node: AnyNode): node is Element {
@@ -42,7 +42,7 @@ export function convertInline($: CheerioAPI, nodes: AnyNode[]): string {
         }
         case "b":
         case "strong":
-          return inner.trim() ? `**${inner.trim()}**` : "";
+          return wrapWithPadding(inner, "**");
         case "br":
           // Markdown hard line break
           return "  \n";
@@ -51,7 +51,7 @@ export function convertInline($: CheerioAPI, nodes: AnyNode[]): string {
           return `\`${normalizeText($(node).text())}\``;
         case "em":
         case "i":
-          return inner.trim() ? `*${inner.trim()}*` : "";
+          return wrapWithPadding(inner, "*");
         default:
           return inner;
       }
