@@ -13,7 +13,7 @@ const MIN_BLOCK_LENGTH = 8;
 /** Below this, a lone first block reads as a fragment rather than a summary. */
 const SHORT_BLOCK_THRESHOLD = 40;
 
-const normalizeForComparison = (text: string): string => text.replace(/[\s\p{P}]+/gu, "").toLowerCase();
+export const normalizeForComparison = (text: string): string => text.replace(/[\s\p{P}]+/gu, "").toLowerCase();
 
 /**
  * Whether Medium's p-summary is really just an auto-excerpt of a heading,
