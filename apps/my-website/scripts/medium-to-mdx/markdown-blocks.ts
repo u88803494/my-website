@@ -99,12 +99,21 @@ export function convertList($: CheerioAPI, element: Element, depth: number): str
     .join("\n");
 }
 
-/** Convert a blockquote, prefixing every line with "> ". */
+/**
+ * Convert a blockquote, prefixing every line with "> ".
+ *
+ * Only the line's leading whitespace is stripped. A <br> produces a trailing
+ * "  " (two spaces) hard break; trimming that too would silently merge lines
+ * that were meant to stay apart.
+ */
 export function convertBlockquote($: CheerioAPI, element: Element): string {
   return convertInline($, element.children ?? [])
     .trim()
     .split("\n")
-    .map((line) => `> ${line.trim()}`)
+    .map((line) => {
+      const content = line.replace(/^[ \t]+/, "");
+      return content ? `> ${content}` : ">";
+    })
     .join("\n");
 }
 

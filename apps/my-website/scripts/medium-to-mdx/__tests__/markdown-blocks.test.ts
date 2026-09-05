@@ -56,7 +56,9 @@ describe("convertFigure", () => {
   });
 
   it("keeps a real iframe", () => {
-    const { $, node } = el('<figure><iframe src="https://www.youtube.com/embed/abc" width="700" height="393"></iframe></figure>');
+    const { $, node } = el(
+      '<figure><iframe src="https://www.youtube.com/embed/abc" width="700" height="393"></iframe></figure>',
+    );
     expect(convertFigure($, node)).toContain('<iframe src="https://www.youtube.com/embed/abc"');
   });
 
@@ -99,5 +101,15 @@ describe("convertBlockquote", () => {
   it("prefixes every line", () => {
     const { $, node } = el("<blockquote>引用內容</blockquote>");
     expect(convertBlockquote($, node)).toBe("> 引用內容");
+  });
+
+  it("keeps the hard break a <br> produces, instead of merging the lines", () => {
+    const { $, node } = el("<blockquote>第一行<br>第二行</blockquote>");
+    expect(convertBlockquote($, node)).toBe("> 第一行  \n> 第二行");
+  });
+
+  it("emits a bare '>' for a blank line rather than a trailing space", () => {
+    const { $, node } = el("<blockquote>a<br><br>b</blockquote>");
+    expect(convertBlockquote($, node)).toBe("> a  \n>\n> b");
   });
 });
