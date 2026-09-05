@@ -18,9 +18,13 @@ export function convertPre($: CheerioAPI, element: Element): string {
   const clone = $(element).clone();
   clone.find("br").replaceWith("\n");
 
+  // Trailing whitespace inside a fence is invisible noise carried over from the
+  // source. Stripping it here (rather than letting a formatter do it later) keeps
+  // the converter's output canonical, so re-runs stay byte-identical.
   const code = clone
     .text()
     .replace(/\u00A0/g, " ")
+    .replace(/[ \t]+$/gm, "")
     .replace(/\n+$/, "");
 
   // An empty <pre> would otherwise emit an empty fence, which swallows the

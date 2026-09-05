@@ -16,29 +16,13 @@
 import { promises as fs } from "fs";
 import * as path from "path";
 
-import { APP_ROOT, CONFIG, REPO_ROOT } from "./config";
+import { parseArgs } from "./cli";
+import { CONFIG, REPO_ROOT } from "./config";
 import { EXCLUDED_FILES } from "./exclude";
 import { renderMdx, writeChecklist } from "./output";
 import { parsePost } from "./parse";
-import type { CliOptions, ConversionState, ConversionStats, ParsedPost, SlugContext, SlugResolution } from "./types";
-
-function parseArgs(argv: string[]): CliOptions {
-  const getValue = (flag: string): string | undefined => {
-    const index = argv.indexOf(flag);
-    return index === -1 ? undefined : argv[index + 1];
-  };
-
-  const limitRaw = getValue("--limit");
-
-  return {
-    dryRun: argv.includes("--dry-run"),
-    force: argv.includes("--force"),
-    input: getValue("--input"),
-    limit: limitRaw ? Number.parseInt(limitRaw, 10) : undefined,
-    only: getValue("--only"),
-    out: getValue("--out") ?? path.join(APP_ROOT, CONFIG.OUTPUT_DIR),
-  };
-}
+import { resolveSlug } from "./slug-plan";
+import type { CliOptions, ConversionState, ConversionStats } from "./types";
 
 /**
  * Locate the Medium export posts directory when --input is not given.
@@ -54,24 +38,6 @@ async function resolveInputDir(explicit: string | undefined): Promise<string> {
   if (!exportDir) throw new Error(`No medium-export-* directory found under ${sourceRoot}`);
 
   return path.join(sourceRoot, exportDir.name, "posts");
-}
-
-/**
- * Decide the output slug for a post, or skip it entirely.
- *
- * A post already on disk is skipped so batches can be re-run cheaply; --force
- * overrides that. A collision within the same run is disambiguated with the
- * Medium post id embedded in the source filename, which keeps the slug stable
- * across re-runs (unlike a positional counter).
- */
-function resolveSlug(post: ParsedPost, fileName: string, context: SlugContext): SlugResolution {
-  const base = post.slug || fileName.replace(/\.html$/, "");
-
-  if (context.existing.has(`${base}.mdx`) && !context.force) return { kind: "skip" };
-  if (!context.usedSlugs.has(base)) return { kind: "use", slug: base };
-
-  const mediumId = /([0-9a-f]{12})\.html$/.exec(fileName)?.[1]?.slice(0, 6);
-  return { kind: "use", slug: mediumId ? `${base}-${mediumId}` : `${base}-${context.usedSlugs.size}` };
 }
 
 /** Convert one file into the output dir, recording the outcome in state. */
