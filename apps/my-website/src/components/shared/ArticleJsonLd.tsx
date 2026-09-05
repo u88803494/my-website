@@ -1,3 +1,4 @@
+import { getPostUrl } from "@/lib/content/posts";
 import { formatDateISO8601 } from "@/lib/date-formatting";
 import type { Post } from "#site/content";
 
@@ -33,10 +34,10 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      // Must match the canonical URL from generateMetadata exactly. A raw CJK
-      // slug here would disagree with the percent-encoded canonical, showing
-      // Google two different URLs for the same page.
-      "@id": `https://henryleelab.com/blog/${encodeURIComponent(post.slug)}`,
+      // Must match the canonical URL from generateMetadata exactly, or Google
+      // sees two different URLs for the same page — getPostUrl() is the single
+      // source both go through.
+      "@id": getPostUrl(post),
     },
   };
 

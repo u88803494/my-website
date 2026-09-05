@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { getAllPosts } from "@/lib/content/posts";
+import { getAllPosts, getPostUrl } from "@/lib/content/posts";
 
 const BASE_URL = "https://henryleelab.com";
 
@@ -15,9 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...allPosts.map((post) => ({
-      // CJK slugs must be encoded to match the canonical URL from
-      // generateMetadata and the JSON-LD @id; sitemap URLs must be escaped too
-      url: `${BASE_URL}/blog/${encodeURIComponent(post.slug)}`,
+      url: getPostUrl(post),
       lastModified: post.updatedDate ?? post.date,
       changeFrequency: "monthly" as const,
       priority: 0.7,
@@ -36,12 +34,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/medium-blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.6,
     },
     {
       url: `${BASE_URL}/resume-zh`,

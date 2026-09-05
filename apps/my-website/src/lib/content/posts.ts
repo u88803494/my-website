@@ -75,6 +75,27 @@ export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post 
   };
 }
 
+const SITE_URL = "https://henryleelab.com";
+
+/**
+ * The canonical path for a post, e.g. "/blog/前端中階-gulp".
+ *
+ * Every caller that needs a link to a post — <Link href>, canonical,
+ * JSON-LD's @id, sitemap — must encode a CJK slug identically, or Google sees
+ * two different URLs for the same page and a plain <Link> silently relies on
+ * the browser to encode it for you. Centralizing here means a slug only gets
+ * encoded once, in one place, rather than at each of those call sites
+ * separately (three of which previously did, and two of which didn't).
+ */
+export function getPostPath(post: Pick<Post, "slug">): string {
+  return `/blog/${encodeURIComponent(post.slug)}`;
+}
+
+/** The absolute canonical URL for a post. */
+export function getPostUrl(post: Pick<Post, "slug">): string {
+  return `${SITE_URL}${getPostPath(post)}`;
+}
+
 export interface PostMetadata {
   dateISO: string;
   dateFormatted: string;

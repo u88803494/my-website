@@ -22,6 +22,19 @@ export default defineConfig({
             .min(1)
             .max(200)
             .regex(/^[\p{Letter}\p{Number}]+(?:-[\p{Letter}\p{Number}]+)*$/u, "Invalid slug")
+            // .max(200) above counts characters, but generateStaticParams()
+            // writes one static file per slug, and most filesystems cap a
+            // single path component at 255 bytes — a CJK slug can be up to 3
+            // bytes per character once percent-encoded for the URL, so 200
+            // characters is nowhere near 200 bytes (the longest slug in the
+            // migrated corpus is 238 bytes encoded). Encoding here to measure
+            // what the filesystem actually sees, with headroom below 255 for
+            // the ".mdx" extension and any disambiguating suffix appended to
+            // it (see scripts/medium-to-mdx/slug-plan.ts).
+            .refine(
+              (slug) => new TextEncoder().encode(encodeURIComponent(slug)).length <= 245,
+              "Slug is too long once percent-encoded (filesystem path components are typically capped at 255 bytes)",
+            )
             .and(s.unique("posts")),
           description: s.string(),
           subtitle: s.string().optional(),
