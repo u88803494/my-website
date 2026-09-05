@@ -1,14 +1,8 @@
-<!doctype html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Markdown 語法</title>
-    <style>
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</title><style>
       * {
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
       }
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
       }
@@ -61,84 +55,18 @@
         padding-bottom: 0 !important;
       }
       header,
-      section[data-field="subtitle"],
-      section[data-field="description"] {
+      section[data-field=subtitle],
+      section[data-field=description] {
         display: none;
       }
-    </style>
-  </head>
-  <body>
-    <article class="h-entry">
-      <header>
-        <h1 class="p-name">Markdown 語法</h1>
-      </header>
-      <section data-field="subtitle" class="p-summary">基本語法</section>
-      <section data-field="body" class="e-content">
-        <section name="1f88" class="section section--body section--first section--last">
-          <div class="section-divider"><hr class="section-divider" /></div>
-          <div class="section-content">
-            <div class="section-inner sectionLayout--insetColumn">
-              <h3 name="676d" id="676d" class="graf graf--h3 graf--leading graf--title">Markdown 語法</h3>
-              <h4 name="66a6" id="66a6" class="graf graf--h4 graf-after--h3 graf--subtitle">基本語法</h4>
-              <p name="6e78" id="6e78" class="graf graf--p graf-after--h4"># 標題</p>
-              <p name="5a88" id="5a88" class="graf graf--p graf-after--p">## 副標題</p>
-              <p name="843c" id="843c" class="graf graf--p graf-after--p">### &amp; ####</p>
-              <pre name="eb72" id="eb72" class="graf graf--pre graf-after--p"> **粗體**</pre>
-              <pre name="73e0" id="73e0" class="graf graf--pre graf-after--pre"> *斜體*</pre>
-              <pre name="db71" id="db71" class="graf graf--pre graf-after--pre"> ~~刪除線~~</pre>
-              <p name="c960" id="c960" class="graf graf--p graf-after--pre">
-                連結： [點我去 lidemy](<a
-                  href="https://lidemy.com"
-                  data-href="https://lidemy.com"
-                  class="markup--anchor markup--p-anchor"
-                  rel="noopener"
-                  target="_blank"
-                  >https://lidemy.com</a
-                >)
-              </p>
-              <h4 name="d3b4" id="d3b4" class="graf graf--h4 graf-after--p">進階語法</h4>
-              <p name="24dc" id="24dc" class="graf graf--p graf-after--h4">`程式碼` 把標示內的程式碼變成小區塊</p>
-              <p name="4021" id="4021" class="graf graf--p graf-after--p">
-                大區塊語法(前面四個空白) ex: 空白空白空白空白程式碼
-              </p>
-              <p name="b6ff" id="b6ff" class="graf graf--p graf-after--p">```語法代號+高亮程式碼``` 高亮顯示程式碼</p>
-              <p name="ba56" id="ba56" class="graf graf--p graf-after--p">水平線</p>
-              <pre
-                name="52e0"
-                id="52e0"
-                class="graf graf--pre graf-after--p"
-              ><code class="markup--code markup--pre-code">***<br>---<br>___</code></pre>
-              <p name="3bbe" id="3bbe" class="graf graf--p graf-after--pre">表格</p>
-              <pre
-                name="887d"
-                id="887d"
-                class="graf graf--pre graf-after--p"
-              ><code class="markup--code markup--pre-code">| 标题|内容|备注|<br>| ------ | :------:|------:|<br>|标题1 |内容1|备注1|<br>| 标题2 | 内容2|备注2|</code></pre>
-              <p name="8d5f" id="8d5f" class="graf graf--p graf-after--pre graf--trailing">\ 反斜線：使語法失效</p>
-            </div>
-          </div>
-        </section>
-      </section>
-      <footer>
-        <p>
-          By
-          <a href="https://medium.com/@hugh-program-learning-diary-js" class="p-author h-card"
-            >Hugh&#39;s Programming life</a
-          >
-          on
-          <a href="https://medium.com/p/ec41ed06c815"
-            ><time class="dt-published" datetime="2019-04-30T12:41:02.048Z">April 30, 2019</time></a
-          >.
-        </p>
-        <p>
-          <a
-            href="https://medium.com/@hugh-program-learning-diary-js/markdown-%E8%AA%9E%E6%B3%95-ec41ed06c815"
-            class="p-canonical"
-            >Canonical link</a
-          >
-        </p>
-        <p>Exported from <a href="https://medium.com">Medium</a> on September 2, 2026.</p>
-      </footer>
-    </article>
-  </body>
-</html>
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+解決方案：
+</section>
+<section data-field="body" class="e-content">
+<section name="868f" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4978" id="4978" class="graf graf--h3 graf--leading graf--title">React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</h3><h3 name="d5c9" id="d5c9" class="graf graf--h3 graf-after--h3">解決方案：</h3><div name="317f" id="317f" class="graf graf--mixtapeEmbed graf-after--h3"><a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" data-href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx"><strong class="markup--strong markup--mixtapeEmbed-strong">Formatting code with tag in React and JSX</strong><br><em class="markup--em markup--mixtapeEmbed-em">I am trying to use the pre tag inside of JSX.When you use the pre tag in JSX, it doesn’t format at all. Why? In order…</em>stackoverflow.com</a><a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="f9793f1ae2997cdee7d3046b2e303af9" data-thumbnail-img-id="0*sqzMXTQoPk-UlNXT" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*sqzMXTQoPk-UlNXT);"></a></div><p name="9ff9" id="9ff9" class="graf graf--p graf-after--mixtapeEmbed">從這裡發現只要使用 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" data-href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" class="markup--anchor markup--p-anchor" rel="noreferrer noopener noopener noopener noopener" target="_blank">Template literals</a> 就可以解決這個問題，也就是需要文字的部分寫下：</p><pre name="31f2" id="31f2" class="graf graf--pre graf-after--p">{`<br>  內容<br>  xxx<br>  xxx<br>`}</pre><p name="5d91" id="5d91" class="graf graf--p graf-after--pre">但是利用 <code class="markup--code markup--p-code">&lt;pre&gt;</code> 標籤的話，連寫 code 的空白都會被納入，這樣如果需要文字置中就會跑板，那解決方法就是使用 CSS 屬性即可。</p><pre name="22be" id="22be" class="graf graf--pre graf-after--p">white-space: pre-line;<br>text-align: center;</pre><p name="8787" id="8787" class="graf graf--p graf-after--pre graf--trailing">利用 <code class="markup--code markup--p-code">pre-line</code> 就不會出現空白，這樣就可以置中了</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@hugh-program-learning-diary-js" class="p-author h-card">Hugh&#39;s Programming life</a> on <a href="https://medium.com/p/8e1e7fd5a9b"><time class="dt-published" datetime="2020-02-03T09:49:17.817Z">February 3, 2020</time></a>.</p><p><a href="https://medium.com/@hugh-program-learning-diary-js/react-%E7%9A%84-jsx-%E4%B8%AD%E7%9A%84-pre-%E6%A8%99%E7%B1%A4%E6%95%88%E6%9E%9C%E7%84%A1%E6%B3%95%E5%91%88%E7%8F%BE-8e1e7fd5a9b" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on September 2, 2026.</p></footer></article></body></html>

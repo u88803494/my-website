@@ -1,265 +1,51 @@
-我的解法心得可以參考：[Week3 解題思考、想法、心得](https://medium.com/@hugh_Program_learning_diary_Js/week3-解題思考-想法-心得-52142c9f646c)
+## Vercel 介紹
 
-## 分號這件事情
+Vercel 是一個友善前端開發人員的佈署跟協作平台，提供了很多工具，可以架構高效能的網站和應用。
 
-Automatic Semicolon Insertion , ASI. JavaScript 編譯器的機制。
+Vercel 的功能使得開發人員可以達成快速且自動化佈署網站。
 
-在 JavaScript 的時候，分號大多是可加可不加，但不加的時候，JavaScript 有時候會把分號加在一些奇怪的地方。
+## Vercel 佈署
 
-\1.
+流程如下：
 
-```
-function printStars(n) {
- return
- {
-  a:1
- }
-}
-```
+擁有一個專案之後，到了 Vercel 的 [get-started 頁面](https://vercel.com/#get-started)，點選 contiune with GitHub。
 
-```
-console.log(printStars())
-// undefined
-// 因為分號會被自動加在 return 後面
-```
+![](https://cdn-images-1.medium.com/max/800/1*tyYFPR2pDDvCycPUriIEig.png)
 
-\2.
+打開要 import 的 repository，點選 Add GitHub Org or Account 授權你的帳戶。
 
-```
-const arr= [1, 2, 3, 4]
-let [first] = arr
-const arr2 = [4, 5, 6]
-[first] = arr2
-// arr2 is not defined
-```
+![我有一些授權的是因為我之前已經授權過了。](https://cdn-images-1.medium.com/max/800/1*6UKeJoCPC2fXofvzGGLBVQ.png)
 
-JavaScript 會把程式碼解析成：
+*我有一些授權的是因為我之前已經授權過了。*
 
-```
-const arr= [1, 2, 3, 4]
-let [first] = arr
-const arr2 = [4, 5, 6][first] = arr2
-```
+然後會談出一個視窗，點選你的 GitHub 帳號
 
-程式碼會從右到左跑，所以會先跑右邊的 arr2 但這時候 arr2 沒有定義，所以會出錯。
+![](https://cdn-images-1.medium.com/max/800/1*niRDnL5PpoByBOdneZM2fQ.png)
 
-基本上很少會出現這種錯誤，就是盡量不要在一行程式碼的開頭使用 \[.\{.(。
+然後往下捲動，到 Repository access 選擇 Only select repositories，可以用搜尋的找到自己想要的專案。  
+note: 建議不要用 All repositories，降低對方伺服器的負擔
 
-## 作業檢討
+![](https://cdn-images-1.medium.com/max/800/1*FWuGhU19WungiIBrsBYkUw.png)
 
-### hw1：好多星星
+選號之後按下 Save，就會自動回到剛剛的 Vercel 頁面，並且看到你剛剛授權的 repository 了，然後按下 import 的按鈕。
 
-```
-function stars(n) {
- let arr = [];
-   for (let i = 1; i <= n; i += 1) {
-    arr.push(repeat('*', i))
-   }
- return arr
-}
-```
+![](https://cdn-images-1.medium.com/max/800/1*0bJ5MWHOwUQ6dWsZZsg6bQ.png)
 
-## hw2：大小寫互換
+個人使用選擇下面的欄位
 
-可以利用三元運算子更簡潔
+![](https://cdn-images-1.medium.com/max/800/1*tJhrDGlOMInVJpNHA8N4-Q.png)
 
-```
-function alphaSwap(str) {
-  let result = '';
-  for (let i = 0; i < str.length; i += 1) {
- (str[i] >= 'A' && str[i] <= 'Z') ?
-    result += str[i].toLowerCase() : result += str[i].toUpperCase();
-  }
-  return result;
-}
-```
+接個下個畫面就是輸入相關資料，但 vercel 都會自動幫你帶入，非常的方便。所以確認無誤之後，直接按下 deploy 即可。
 
-這樣寫可讀性比較差，所以清楚的用法還是用 if else 比較好，通常三元運算子的用法都是用在返回值。
+![](https://cdn-images-1.medium.com/max/800/1*yK5ZaQKd_zJbCIq6WfI8lg.png)
 
-## hw3：判斷質數
+接著就進入 Deploy 階段了，夠簡單吧！
 
-```
-function isPrime(n) {
-  if (n === 1) return false;
-  const factor = returnFactor(n);
-  if (factor.length === 2) {
-      return true;
-    } else {
-   return false;
-}
-```
+![](https://cdn-images-1.medium.com/max/800/1*PhIcQ_ELBdSJBGoPvleTOg.png)
 
-```
-function returnFactor(n) {
- const result = []
- for(let i = 1; i <= n; i += 1) {
-  if (n % i === 0) {
-   result.push(i);
-  }
- }
- return result;
-}
-```
+然後就完成了，夠 easy 吧！
 
-這邊解法是利用質數的因數只會有兩個的方式來解，所以就把因數化成陣列，之後再用陣列的長度來判斷。
+![](https://cdn-images-1.medium.com/max/800/1*Jp7o8cO2sjVEClLQB2iJVw.png)
 
-可以簡化：
-
-```
-function isPrime(n) {
-  if (n === 1) return false;
-  const factor = returnFactor(n);
-  return factor.length === 2; //因為這個只有 true 或是 false
-}
-```
-
-```
-function returnFactor(n) {
- const result = []
- for(let i = 1; i <= n; i += 1) {
-  if (n % i === 0) {
-   result.push(i);
-  }
- }
- return result;
-}
-```
-
-## hw4：判斷迴文
-
-```
-function isPalindromes(str) {
-  const lowerCaseStr = str.toLowerCase();
-  return lowerCaseStr === lowerCaseStr.split('').reverse().join('');
-}
-```
-
-## hw5：大數加法
-
-大數字會有精準度的問題。這題就是模擬直式加法。所以要把字串變成陣列，再把它加起來。還有補零的問題，正著加很難，所以必須要倒過來加，加完之後再倒回來，就可以得到答案。
-
-一般在寫這題的時候，通常最開始都寫這樣：
-
-```
-function add(a, b) {
-  const arrA = a.split('').reverse(); // 切成陣列且反轉
-  const arrB = b.split('').reverse();
-  const ans = [''];
-  const length = Math.max(arrA.length, arrB.length); // 比較回傳最大
-  for(let i = 0; i < length; i += 1) {
-    ans[i] = Number(arrA[i]) + Number(arrB[i]);
-  } // 處理所有的 ans 的 arr
-  return ans.reverse().join('');
-}
-```
-
-但是這樣寫的話，就是都沒考慮進位的問題，所以碰到進位的話。就會出現 NaN的字樣。
-
-> NaN
-
-> 這個意思是代表著 no a number 的意思
-
-> Number(undefined) 會得到 NaN
-
-所以要把 Number 利用 || 來轉變 NaN，類似幫它加預設值的方式。
-
-```
-function add(a, b) {
-  const arrA = a.split('').reverse(); // 切成陣列且反轉
-  const arrB = b.split('').reverse();
-  const ans = [''];
-  const length = Math.max(arrA.length, arrB.length); // 比較回傳最大
-  for(let i = 0; i < length; i += 1) {
-    ans[i] = Number(arrA[i] || 0) + Number(arrB[i] || 0);
-  }
-  return ans.reverse().join('');
-}
-```
-
-Number(arrB\[i\] || 0) 這樣只要是 NaN 就變成 0，等同於補零。
-
-進位處理：
-
-```
-function add(a, b) {
-  const arrA = a.split('').reverse(); // 切成陣列且反轉
-  const arrB = b.split('').reverse();
-  const ans = [''];
-  const length = Math.max(arrA.length, arrB.length); // 比較回傳最大
-  let carry = 0;
-  for(let i = 0; i < length; i += 1) {
-    ans[i] = Number(arrA[i] || 0) + Number(arrB[i] || 0);
-    carry = 0; // 清空進位
-    /*
-    這邊有很多方法
-    const n = Number(arrA[i] || 0) + Number(arrB[i] || 0);
-    // 把這串判斷等於 n
-    ans[i] % 10 取餘數
-    carry = Math.floor(n / 10); 無條件捨去，可以偵測有沒有進位
-    */
-    if (ans[i] >= 10) { // 判斷
-    carry = 1;
-    ans[i] -= 10;
-    }
-  }
-  return ans.reverse().join('');
-}
-```
-
-然後還要處理最大位的進位：
-
-在處理最後一位的時候，carry 是還有可能有個 1 的，所以我們就必須要去處理它。
-
-```
-function add(a, b) {
-  const arrA = a.split('').reverse(); // 切成陣列且反轉
-  const arrB = b.split('').reverse();
-  const ans = [''];
-  const length = Math.max(arrA.length, arrB.length); // 比較回傳最大
-  let carry = 0;
-  for(let i = 0; i < length; i += 1) {
-    const n = Number(arrA[i] || 0) + Number(arrB[i] || 0) + carry;
-    // 把這串結果等於 n ，也必須要把 carry 放進去
-    ans[i] = n % 10 //取餘數
-    carry = Math.floor(n / 10); //無條件捨去，可以偵測有沒有進位
-  }
-```
-
-```
-if (carry) { // 直接用 carry 判斷就好，因為 0 就是 false
-   ans.push(carry); // 直接用 carry 的值也行
-  }
-return ans.reverse().join('');
-}
-```
-
-還有一種方法，不需要進位判斷，就是直接把進位的值放入下一個陣列。
-
-```
-function add(a, b) {
-  const arrA = a.split('').reverse();
-  const arrB = b.split('').reverse();
-  const ans = []; // 設成甚麼都不要
-  const length = Math.max(arrA.length, arrB.length);
-  let carry = 0;
-  for(let i = 0; i < length; i += 1) {
-    const n =
-    Number(arrA[i] || 0) + Number(arrB[i] || 0) + (ans[i] || 0);
-    //加這個位數本來就有的東西，上兩行為同一行，裝不下所以斷行，其實也可以執行
-    ans[i] = n % 10;
-    ans[i + 1] = Math.floor(n / 10) || '';
-    // 把 carry 寫到下一個位數，ans[i + 1] = carry
-    // 其實可以直接把進位的值放入下一個陣列就好了
-  }
-```
-
-```
-return ans.reverse().join('');
-}
-```
-
-這樣解比較漂亮，只是可讀性就差多了。
-
-收穫：了解到原來有更多的方法可以解出這題，我寫的還是算太複雜了，所以還是可以更進步，有些東西沒有直接的想法可以這樣用，就是因為不夠熟悉的關係吧！只能說之後多多熟悉，才可以更加的熟練！
-
-參考資料：[Week3 解題思考、想法、心得](https://medium.com/@hugh_Program_learning_diary_Js/week3-解題思考-想法-心得-52142c9f646c)
+> 參考資料：  
+> [Vercel official document](https://vercel.com/docs)
