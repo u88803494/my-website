@@ -78,6 +78,11 @@ describe("convertList", () => {
     const { $, node } = el("<ul><li>a<ol><li>a1</li><li>a2</li></ol></li><li>b</li></ul>");
     expect(convertList($, node, 0)).toBe("- a\n  1. a1\n  2. a2\n- b");
   });
+
+  it("drops an empty <li> and renumbers around it, rather than leaving a gap", () => {
+    const { $, node } = el('<ol><li>a</li><li class="graf--empty"><br></li><li>b</li></ol>');
+    expect(convertList($, node, 0)).toBe("1. a\n2. b");
+  });
 });
 
 describe("convertBody", () => {
@@ -94,6 +99,19 @@ describe("convertBody", () => {
   it("skips Medium's empty paragraphs and section dividers", () => {
     const { $, body } = loadBody('<hr class="section-divider"><p class="graf graf--p graf--empty"><br></p><p>內文</p>');
     expect(convertBody($, body, "測試標題")).toBe("內文");
+  });
+
+  // Authors sometimes typed a lone "-" as a visual divider between paragraphs.
+  // Left as-is it becomes an empty Markdown list item; a marker followed by
+  // real content is a genuine list and must render as one.
+  it("escapes a paragraph that is only a bare list marker", () => {
+    const { $, body } = loadBody("<p>-</p>");
+    expect(convertBody($, body, "測試標題")).toBe("\\-");
+  });
+
+  it("leaves a paragraph starting with a marker and real content alone", () => {
+    const { $, body } = loadBody("<p>- 真的是清單</p>");
+    expect(convertBody($, body, "測試標題")).toBe("- 真的是清單");
   });
 });
 

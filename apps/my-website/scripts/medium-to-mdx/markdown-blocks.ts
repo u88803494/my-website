@@ -82,6 +82,7 @@ export function convertList($: CheerioAPI, element: Element, depth: number): str
   return $(element)
     .children("li")
     .toArray()
+    .filter((li) => !(li.attribs["class"] ?? "").includes("graf--empty"))
     .map((li, index) => {
       const marker = ordered ? `${index + 1}.` : "-";
 
@@ -142,6 +143,19 @@ function escapeLeadingBlockMarker(text: string): string {
   return text.replace(/^([#>])/, "\\$1");
 }
 
+/** A paragraph whose entire content is a single list marker, nothing else. */
+const BARE_LIST_MARKER = /^(?:[-*+]|\d{1,3}\.)$/;
+
+/**
+ * Escape a paragraph that is *only* a list marker — Medium authors sometimes
+ * typed a lone "-" as a visual divider between paragraphs, and left as-is it
+ * renders as an empty Markdown list item. A marker followed by real content
+ * (e.g. "- 真的是清單") is deliberately left alone; see escapeLeadingBlockMarker.
+ */
+function escapeBareListMarker(text: string): string {
+  return BARE_LIST_MARKER.test(text) ? `\\${text}` : text;
+}
+
 /**
  * Medium's exporter brackets every section with a divider <hr>. It is layout,
  * not authored content.
@@ -190,7 +204,7 @@ function convertBlockElement($: CheerioAPI, node: Element, context: BodyContext)
     case "p": {
       if ((node.attribs["class"] ?? "").includes("graf--empty")) return null;
       const text = convertInline($, node.children ?? []).trim();
-      return text ? escapeLeadingBlockMarker(escapeEsmKeyword(text)) : null;
+      return text ? escapeBareListMarker(escapeLeadingBlockMarker(escapeEsmKeyword(text))) : null;
     }
     case "pre":
       return convertPre($, node);
