@@ -14,13 +14,19 @@ export function normalizeText(text: string): string {
 }
 
 /**
- * Escape characters that MDX would otherwise parse as JSX syntax.
+ * Escape characters that MDX/Markdown would otherwise parse as syntax.
  * Only applied to prose — never to code, where these characters are literal.
+ *
+ * `[` and `]` matter beyond JSX: unescaped, a prose string like "查看
+ * 說明](javascript:alert(1))" is indistinguishable from real link syntax to
+ * the Markdown parser and gets compiled into a real `<a href>` — completely
+ * bypassing safeUrl's scheme allow-list, which only ever sees values already
+ * extracted from a genuine <a href>/<img src> attribute, never free text.
  */
 export function escapeMdx(text: string): string {
   return text
     .replace(/\\/g, "\\\\")
-    .replace(/[{}]/g, (match) => `\\${match}`)
+    .replace(/[{}[\]]/g, (match) => `\\${match}`)
     .replace(/</g, "&lt;");
 }
 

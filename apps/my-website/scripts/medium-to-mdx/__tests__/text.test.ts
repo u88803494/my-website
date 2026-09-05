@@ -72,6 +72,15 @@ describe("escapeMdx", () => {
   it("escapes the characters MDX would read as JSX", () => {
     expect(escapeMdx("a < b {c}")).toBe("a &lt; b \\{c\\}");
   });
+
+  // Regression guard: unescaped, "text](scheme:...)" in prose is
+  // indistinguishable from real Markdown link syntax, bypassing safeUrl's
+  // scheme allow-list entirely since that only ever validates a value already
+  // extracted from a genuine <a href>/<img src> attribute.
+  it("escapes square brackets so prose can't be read as link syntax", () => {
+    expect(escapeMdx("查看說明](javascript:alert(1))")).toBe("查看說明\\](javascript:alert(1))");
+    expect(escapeMdx("arr[0]")).toBe("arr\\[0\\]");
+  });
 });
 
 describe("normalizeText", () => {
