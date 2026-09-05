@@ -102,17 +102,17 @@ yarn start
 ```
 
 1. 刪除 src 資料夾底下用不到的檔案，只留下 App.js 跟 index.js，並把副檔名改成 .jsx。
-2.
+2. 
 3. App.jsx 刪除無用內容，只留下如下內容，專案名稱請自行修改：
 
 - `import React from 'react'; const App = () => ( <div> MMRM frontend [專案名稱] </div> ); export default App;`
 
-1.
+1. 
 2. index.jsx 刪除無用內容，只留下如下內容：
 
 - `import React from 'react'; import ReactDOM from 'react-dom'; import App from './App'; ReactDOM.render(<App />, document.getElementById('root'));`
 
-1.
+1. 
 
 ## ESlint
 
@@ -122,62 +122,62 @@ yarn start
 
 - `yarn add -D eslint`
 
-1.
+1. 
 2. 初始化 ESlint
 
 - `yarn run eslint --init`
 
-1.
+1. 
 2. 選擇對應選項：
 
 - `How would you like to use ESLint? To check syntax, find problems, and enforce code style What type of modules does your project use? JavaScript modules (import/export) Which framework does your project use? React Does your project use TypeScript? No Where does your code run? Browser How would you like to define a style for your project? Use a popular style guide Which style guide do you want to follow? Airbnb What format do you want your config file to be in? YAML`
 
-1.
+1. 
 2. 然後就會看到 The config that you’ve selected requires the following dependencies，請選 Yes。  
-   這邊這段意思是需要他列出的依賴項，但這邊會有個問題是他會直接用 npm 安裝，這個問題等下解決。
-3.
+這邊這段意思是需要他列出的依賴項，但這邊會有個問題是他會直接用 npm 安裝，這個問題等下解決。
+3. 
 4. 刪除 package-lock.json 、 yarn.lock、node_modules然後重新安裝 yarn install。
-5.
+5. 
 6. 打開 .eslintrc.yml 添加設定如下：
 
 - `... extends: - eslint:recommended <-- 新增這項 - plugin:react/recommended - airbnb ... parserOptions: ... ecmaVersion: latest <-- 原本 13 改成 latest ... ... rules: { eqeqeq: [2, always], no-console: warn, no-restricted-exports: [off], react/function-component-definition: [2, { "namedComponents": "arrow-function" }] }`
 
-1.
+1. 
 2. 新增 .eslintignore 並添加內容：
 
 - `# dependencies /node_modules # production /build /dist`
 
-1.
+1. 
 2. 打開 package.json 添加新的 scripts
 
 - `"lint": "eslint 'src/**/*.{js,jsx}' --ext jsx --ext js --fix --max-warnings=0",`
 
-1.
+1. 
 
 ## Prettier
 
 1. 安裝 Prettier yarn add — dev prettier eslint-config-prettier。
-2.
+2. 
 3. 建立新檔案 .prettierrc.json ，內容如下：
 
 - `{ "semi": true, "singleQuote": true, "tabWidth": 2, "useTabs": false, "printWidth": 100 }`
 
-1.
+1. 
 2. 建立新檔案 .prettierignore，內容如下：
 
 - `# Ignore artifacts: build coverage`
 
-1.
+1. 
 2. 調整 .eslintrc.yml設定，在 extends，最後新增如下：
 
 - `... extends: - eslint:recommended - plugin:react/recommended - airbnb - prettier <-- 新增 ...`
 
-1.
+1. 
 2. package.json 的 scripts 新增指令：
 
 - `"format": "prettier 'src/**/*.{js,jsx}' --write",`
 
-1.
+1. 
 
 ## Husky and lint-staged
 
@@ -185,74 +185,74 @@ yarn start
 
 - `yarn add --dev husky lint-staged npx husky install npm set-script prepare "husky install" npx husky add .husky/pre-commit "npx lint-staged"`
 
-1.
+1. 
 2. package.json 新增指令：
 
 - `"lint-staged": { "src/**/*.{js,jsx}": [ "yarn lint", "yarn format" ] }`
 
-1.
+1. 
 2. 調整 package.json 的順序如下所示：
-3.
+3. 
 
 UI 界面到這邊就結束了，如果是要模組化的 repository 就繼續往下做。
 
 ## 初始化打包
 
 1. 在 src 目錄下建立新資料夾 packages。
-2.
+2. 
 3. 在 packages 目錄下建立新檔案 index.jsx，這個檔案是整個打包的入口點。  
-   App.jsx 可以留下，作為寫好的 packages 本地引入測試使用。
-4.
+App.jsx 可以留下，作為寫好的 packages 本地引入測試使用。
+4. 
 5. 在 packages 目錄下建立新資料夾 components並且建立一個資料夾 Test 以建立 Test 的 Component，在其資料夾底下建立 index.jsx 跟 Test.jsx。
-6.
+6. 
 7. Test.jsx：
 
 - `import React from 'react'; const Test = () => ( <div> Test component </div> ); export default Test;`
 
-1.
+1. 
 2. index.jsx
 
 - `export { default } from './Test';`
 
-1.
-2.
+1. 
+2. 
 3. 建立完成 Test component 後， 在src/packages/index.jsx 的檔案寫入如下內容：
 
 - `import Test from './components/Test'; export { Test as default, Test };`
 
 1. 因為目前只有一個 component，ESslint 會要求要有 default，所以先寫這樣，等以後有第二個之後，就可以把 Test as default 的部份移除。
-2.
+2. 
 3. 然後在 App.jsx 引入試試看：
 
 - `import React from 'react'; import { Test } from './packages'; const App = () => ( <div> MMRM network module <Test /> </div> ); export default App;`
 
-1.
+1. 
 2. 成功後就，可以開始安裝 babel 以編譯成 package：
 
 - `yarn add -D @babel/cli @babel/preset-env @babel/preset-react cross-env`
 
-1.
+1. 
 2. 新增 babel.config.json
 
 - `{ "presets": [ "@babel/preset-env", "@babel/preset-react" ] }`
 
-1.
+1. 
 2. 接著設定 package.json ：
 
 - `... "main": "dist/index.js", "files": [ "dist" ], ... "scripts": { ... "compile": "cross-env NODE_ENV=production babel src/packages --out-dir dist --copy-files", "postcompile": "git add dist", },`
 
-1.
+1. 
 2. 打開 .husky/pre-commit 的檔案，修改 npx lint-staged 那行改為：
 
 - `rm -rf dist && npx lint-staged && yarn compile`
 
-1.
+1. 
 2. package.json 新增 ：
 
 - `"ignore": [ "node_modules", "dist", "*.config.js" ]`
 
-1.
+1. 
 2. 調整 package.json 整體的順序如下圖所示：
-3.
+3. 
 4. 完成。
 5.

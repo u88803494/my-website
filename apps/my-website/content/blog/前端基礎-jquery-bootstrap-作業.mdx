@@ -279,7 +279,7 @@ $(e.target.closest('.todotlist__item')).remove();
 
 [JSbin](https://jsbin.com/qopiniv/edit?html,js,output) 可直接測試
 
-後來發現可以改成 `.prepend()` 就可以把資料插在前面了，所以 插入的指定 class name 就可以改成正常的 todolitst\_\_list 了。
+後來發現可以改成 `.prepend()` 就可以把資料插在前面了，所以 插入的指定 class name 就可以改成正常的 todolitst__list 了。
 
 ## hw3：加強留言板
 
@@ -433,7 +433,7 @@ done
 
 ![只需要改造一下即可](https://cdn-images-1.medium.com/max/800/1*Pog81s_mdlV7OShJqt1-8A.png)
 
-_只需要改造一下即可_
+*只需要改造一下即可*
 
 然後就是在 span 這邊做改造，所以就先把登入註冊放上來，發現需要用 div 標籤包住，方便做調整，然後觀察一下 container 是如何做 RWD 的，也就跟著做，讓全展開的時候，登入註冊可以平行。而變成按鈕的時候，點開來則可以看到登出登入功能並排
 
@@ -514,7 +514,7 @@ $(‘.board’).on(‘click’, '.member__delete',(e) => {
 }
 ```
 
-但因為 `.board` 跟 `.member__delete` 差太遠，所以就找上層元素，並嘗試印出資料。另外因為發現可以監聽子元素，所以 number\_\_delete 就不需要分主元素或子元素了。
+但因為 `.board` 跟 `.member__delete` 差太遠，所以就找上層元素，並嘗試印出資料。另外因為發現可以監聽子元素，所以 number__delete 就不需要分主元素或子元素了。
 
 另外一點是因為我把編輯跟刪除的功能放在 nickname 的另外一邊，作為功能使用，所以刪除編輯功能等於是 nickname 的子元素，於是監聽器就可以改成下面這種形式
 
@@ -547,7 +547,7 @@ $('.original__nickname').on('click', '.member__delete', (e) => {
 
 這樣就可以達到按了卻不換頁的效果
 
-然後是 ajax 的部份，因為我的 api 是使用 GET，所以使用抓取 data-id 然後引入網址的方式，送出資料。然後伺服器回應資料之後，在針對伺服器的資料做處理。而我們本身也要針對點選的目標來做判斷，如果是子留言那麼上層就會是 .original**sub-comment 如果是主留言 上層就是 .original**board 所以根據這樣就可以判斷有沒有找到這個 class 來作為判斷，找到者就移除那個 classname 這樣就會連底下都一起移除。就跟伺服器方做的處理一樣。
+然後是 ajax 的部份，因為我的 api 是使用 GET，所以使用抓取 data-id 然後引入網址的方式，送出資料。然後伺服器回應資料之後，在針對伺服器的資料做處理。而我們本身也要針對點選的目標來做判斷，如果是子留言那麼上層就會是 .original__sub-comment 如果是主留言 上層就是 .original__board 所以根據這樣就可以判斷有沒有找到這個 class 來作為判斷，找到者就移除那個 classname 這樣就會連底下都一起移除。就跟伺服器方做的處理一樣。
 
 ```
 $(document).ready(() => {

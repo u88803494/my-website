@@ -763,22 +763,19 @@ console.log(add(3, 5)) // 因為預設輸出 add ，所以這邊可以直接使�
 // 8
 ```
 
-**通常都使用 import \* as 使用上會比較方便。**
+**通常都使用 import * as 使用上會比較方便。**
 
 > Export 有幾種方式：
 
-> 1. export function add()\{\}，使用 import \{add\} 引
->    入
+> 1. export function add()\{\}，使用 import \{add\} 引入
 
-> 2. export \{ add \}，與上面那種一
->    樣
+> 2. export \{ add \}，與上面那種一樣
 
-> 3. export default function add()，使用 import add 引入，不需要加大括
->    號
+> 3. export default function add()，使用 import add 引入，不需要加大括號
 
 > 如果想要用其他名字，可以用 as 取別名，例如說 export \{ add as addFunction \}
 
-> 可以用 import \* as utils from ‘utils’ 把全部都 import 進來
+> 可以用 import * as utils from ‘utils’ 把全部都 import 進來
 
 ## Babel 簡介與基本使用方法
 

@@ -20,7 +20,7 @@ const result = getData();
 console.log(result);
 ```
 
-因為程式是按照順序執行，所以當執行到 `getData();` 的時候，如果 function 運算時間過長，就會導致一直等不到執行下一行，假設要執行五分鐘，等於是要五分鐘後才可以執行下一行印出，這件事情對於 JavaScript 是不合理的，這種情況等於是整個程式都卡住了。在 JavaScript 沒辦法拿一些需要很耗時間的操作來做，假如這個 function 只需要 0.01 秒或是很短的時間就還行，但是如果要 10 秒或是更久，那就顯得不合理，程式會**阻塞**在那邊。
+因為程式是按照順序執行，所以當執行到 ```getData();``` 的時候，如果 function 運算時間過長，就會導致一直等不到執行下一行，假設要執行五分鐘，等於是要五分鐘後才可以執行下一行印出，這件事情對於 JavaScript 是不合理的，這種情況等於是整個程式都卡住了。在 JavaScript 沒辦法拿一些需要很耗時間的操作來做，假如這個 function 只需要 0.01 秒或是很短的時間就還行，但是如果要 10 秒或是更久，那就顯得不合理，程式會**阻塞**在那邊。
 
 補充資料：[超簡易舉例](https://medium.com/@ad57475747/javascript-%E5%90%8C%E6%AD%A5-%E9%9D%9E%E5%90%8C%E6%AD%A5%E7%9A%84%E8%99%95%E7%90%86-58826f2fed89) . [生活中的例子來舉例](https://medium.com/@mts40110/js-%E5%90%8C%E6%AD%A5-%E7%95%B0%E6%AD%A5-%E9%98%BB%E5%A1%9E-%E9%9D%9E%E9%98%BB%E5%A1%9E-29e1e1c0193e)
 
@@ -164,7 +164,7 @@ process 可以去請求作業系統執行另外一個 process 來做不同的工
 
 ![一個瀏覽器有多個 processes](https://cdn-images-1.medium.com/max/800/1*hZc_UGEh7jzNxetvHMOLYw.png)
 
-_一個瀏覽器有多個 processes_
+*一個瀏覽器有多個 processes*
 
 所以瀏覽器有這麼多的 processes ，它們之間互相溝通就是利用 IPC
 
@@ -250,7 +250,9 @@ Chrome 的架構是每一個分頁都是一個 process，所以當其中一個�
 
 最後 renderer process 就會透過 IPC 告訴 browser process 已經完成整個任務。這時候 UI thread 會把分頁(tag) 的加載圖示停止，但客戶端的 JavaScript 依然可以加載額外的資源。
 
-- **Navigating to a different site**去其他的網站
+-
+
+**Navigating to a different site**去其他的網站
 
 當輸入其他網址要去不同的網站之後，將會調用新的 renderer process 來處理新的網站，同時會保持原來的 renderer process 因為需要用來處理卸載等等的事件。browser process 就會透過 IPC 去告訴舊的 renderer process 去渲染新頁面，然後透過 IPC 告訴舊的 renderer porcess 去卸載原來的網頁。
 
@@ -268,7 +270,7 @@ part2 就是在介紹 render process 跟 browser process 是如何溝通的。
 
 ![Renderer process 有很多的組成，有 main thread(主渲染)、worker threads、compositor thread、raster thread](https://cdn-images-1.medium.com/max/800/1*jO6VXkS9eGda00f6e1a02A.png)
 
-_Renderer process 有很多的組成，有 main thread(主渲染)、worker threads、compositor thread、raster thread_
+*Renderer process 有很多的組成，有 main thread(主渲染)、worker threads、compositor thread、raster thread*
 
 Renderer thread 的核心工作是要將 HTML、CSS 和 JavaScript 轉換成用戶可以互動的網頁。
 
@@ -326,7 +328,7 @@ layout 是一種查看元素的幾何型態的過程。main thread 找遍所有�
 
 ![頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲染圖樣，會產生這樣的錯誤，就是因為沒考慮到 z-index](https://cdn-images-1.medium.com/max/800/1*e4F167P6VN9iEvl5sCTp9Q.jpeg)
 
-_頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲染圖樣，會產生這樣的錯誤，就是因為沒考慮到 z-index_
+*頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲染圖樣，會產生這樣的錯誤，就是因為沒考慮到 z-index*
 
 以上面的例子來說，如果讓 HTML 按照編寫的順序去繪製元素，那將有可能產生不正確的繪製，所以就是利用 z-index 來決定繪製的先後順序。
 
@@ -354,7 +356,7 @@ _頁面的元素按照 html 的標記順序出現，導致產生了錯誤的渲�
 
 ![時間軸上的動畫幅，但被 JavaScript 阻塞了](https://cdn-images-1.medium.com/max/800/1*CGSV4gE27m32fymvTeABsA.jpeg)
 
-_時間軸上的動畫幅，但被 JavaScript 阻塞了_
+*時間軸上的動畫幅，但被 JavaScript 阻塞了*
 
 這時候可以將 JavaScript 分割為小塊來執行，使用 requestAnimationFrame()安排在每一幅上運行。
 

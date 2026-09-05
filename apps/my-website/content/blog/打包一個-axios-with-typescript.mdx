@@ -13,8 +13,8 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E6%89%93%E5%8C%8
 Record 的第一個是 key 的名稱型別，第二個則是 value 的型別。
 
 ```typescript
-import axios, { AxiosResponse } from "axios";
-import { jwtStorage } from "@company/web/util/storage";
+import axios, { AxiosResponse } from 'axios';
+import { jwtStorage } from '@company/web/util/storage';
 
 type Parameters = Record<string, string>;
 type Body = Record<string, string | number>;
@@ -24,16 +24,17 @@ const jwtToken = jwtStorage.get();
 const request = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
   headers: {
-    "Accept-Language": "zh-TW",
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    locale: "zh-tw",
+    'Accept-Language': 'zh-TW',
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    locale: 'zh-tw',
     Authorization: `Bearer ${jwtToken}`,
   },
   timeout: 5000,
 });
 
-const getQueryString = (parameters: Parameters = {}) => `?${new URLSearchParams(parameters).toString()}`;
+const getQueryString = (parameters: Parameters = {}) =>
+  `?${new URLSearchParams(parameters).toString()}`;
 
 const get = <T>(path: string, parameters: Parameters = {}): Promise<AxiosResponse<T>> => {
   const pathWithQuery = `${path}${getQueryString(parameters)}`;
@@ -54,7 +55,7 @@ export const fetchApi = { get, post };
 stroage:
 
 ```typescript
-import { STORAGE_KEY } from "@company/web/util/constant";
+import { STORAGE_KEY } from '@company/web/util/constant';
 
 class Storage {
   name: string;
@@ -63,8 +64,8 @@ class Storage {
   }
 
   get = () => {
-    if (typeof window === "undefined") return "";
-    return window.localStorage.getItem(this.name) ?? "";
+    if (typeof window === 'undefined') return '';
+    return window.localStorage.getItem(this.name) ?? '';
   };
 
   set = (data: string) => {

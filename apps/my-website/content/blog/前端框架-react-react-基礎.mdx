@@ -118,7 +118,7 @@ export default App
 
 ![title 沒有 render method，也告訴我們沒有繼承 react.component](https://cdn-images-1.medium.com/max/800/1*CJNTGF_Ama96ng7qrImesw.png)
 
-_title 沒有 render method，也告訴我們沒有繼承 react.component_
+*title 沒有 render method，也告訴我們沒有繼承 react.component*
 
 所以就必須要繼承 react.component 才行。
 
@@ -191,7 +191,7 @@ export default App
 
 ![左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的](https://cdn-images-1.medium.com/max/800/1*k2lck7XsuoZu0Nw7pILtaw.png)
 
-_左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的_
+*左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的*
 
 整個流程就是：
 
@@ -242,7 +242,7 @@ _左邊是 VScode 右邊是 dev tools 可以看到兩者結構是一樣的_
 
 ![class 變成 yoyoyo123](https://cdn-images-1.medium.com/max/800/1*5euyHhxY2GfTtMGo80rP1A.png)
 
-_class 變成 yoyoyo123_
+*class 變成 yoyoyo123*
 
 那種寫法就像是分開寫的這樣子
 
@@ -254,7 +254,7 @@ _class 變成 yoyoyo123_
 
 ![fontSize 這樣子](https://cdn-images-1.medium.com/max/800/1*WReMBAfGMUb_skvSQgmNyg.png)
 
-_fontSize 這樣子_
+*fontSize 這樣子*
 
 第三點是 return 的方式，除非讓第一行接在 return 後面，否則都要加括號才行，不然的話 JavaScript 會解析成 `return undefined`
 
@@ -536,7 +536,7 @@ export default App
 
 因為是不同的 class 那這邊就會碰到一個問題，就是要如何把 App 裡面的 this 放入 Counter？
 
-這的方法就有點類似`<h1 onClick=` 這樣子的方式，也就是類似於  
+這的方法就有點類似`<h1 onClick=` 這樣子的方式，也就是類似於   
 `<a href= >` 的形式。
 
 直接把 `<counter />` 加上一個名字，然後指向該值：  
@@ -742,7 +742,7 @@ export default App
 
 ![可以看到兩個 class 疊加的效果](https://cdn-images-1.medium.com/max/800/1*D4ZXkJdOaHW1GiFzF_2tJw.png)
 
-_可以看到兩個 class 疊加的效果_
+*可以看到兩個 class 疊加的效果*
 
 不過大致上都是以第一種為主，第二種比較少用到。
 
@@ -750,7 +750,7 @@ _可以看到兩個 class 疊加的效果_
 
 ![點了 hello 之後，就顯示一次 render](https://cdn-images-1.medium.com/max/800/1*Mc7QILNw5xdMY1BsCKVUrg.gif)
 
-_點了 hello 之後，就顯示一次 render_
+*點了 hello 之後，就顯示一次 render*
 
 —
 
@@ -969,7 +969,7 @@ export default App
 流程如下：
 
 1. render Title  
-   text = 1, handleClick = func
+text = 1, handleClick = func
 2. trigger Title > h1 > onClick => props.handleClick func
 3. App.handleClick => setState => counter: 2
 4. re-render
@@ -1108,8 +1108,7 @@ const Title = (props) => {
 
 1. inline CSS
 2. 寫在 html 檔裡
-3. import CSS（透過 webpack
-   ）
+3. import CSS（透過 webpack）
 4. styled-components
 
 目前比較常用的方式大概就是後兩者為主，每種方式都可以，各有各自的好處。
@@ -1126,7 +1125,7 @@ render 的部分，則可以依賴 JSX 來達成，這是一個像是 JavaScript
 
 所以使用 JSX 的時候，整體可讀性就非常的高，只是要這樣子做就需要很多的前置作業而已。這也是 webpack 的重要性，很多功能都透過 webpack 來輕鬆達成。
 
-> 其實 JSX 也不是什麼新的程式語言，他更像是Javascript的語法糖（Syntactic sugar），他可以幫助我們在撰寫 React Component 來的更加簡便，在 React讀取到 JSX 語法時，會自動幫我們使用 React.createElement 方法來建立虛擬的 DOM 元素，也就是說 JSX 語法實際上就是使用 React.createElement 方法的簡寫語法。[_參考資料_](https://ithelp.ithome.com.tw/articles/10200353)
+> 其實 JSX 也不是什麼新的程式語言，他更像是Javascript的語法糖（Syntactic sugar），他可以幫助我們在撰寫 React Component 來的更加簡便，在 React讀取到 JSX 語法時，會自動幫我們使用 React.createElement 方法來建立虛擬的 DOM 元素，也就是說 JSX 語法實際上就是使用 React.createElement 方法的簡寫語法。[*參考資料*](https://ithelp.ithome.com.tw/articles/10200353)
 
 這之中也有監聽器植入的方式，這還真的是非常的方便，因為這樣子我們就不用去處理那些很麻煩的選取 dom 的方法了。
 

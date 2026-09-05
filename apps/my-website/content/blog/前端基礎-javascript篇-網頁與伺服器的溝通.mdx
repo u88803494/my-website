@@ -94,7 +94,7 @@ Node.js 程式直接發 request 給 server 然後可以直接拿到 server 的 r
 
 ![因為找不到 ./text 所以不會有資料](https://cdn-images-1.medium.com/max/800/1*MJB3c3tIH-McUkotvhlhtw.gif)
 
-_因為找不到 ./text 所以不會有資料_
+*因為找不到 ./text 所以不會有資料*
 
 這時候再測試，把 Preserve log 點起來之後在提交
 
@@ -411,7 +411,7 @@ request.send()
 
 就是在發出跨來源 request 的時候，對方的 response headers 會有個 Access-Control-Allow-Origin。會去對應使用者發出的 request header。而我們發給 Google 是沒有任何的這個資訊。所以就會被拒絕存取。
 
-但為什麼另外一個網址 [https://reqres.in/api/users](https://reqres.in/api/users%27) 卻可以呢？因為是寫 \* 也就是所有的 origin 都可以存取。
+但為什麼另外一個網址 [https://reqres.in/api/users](https://reqres.in/api/users%27) 卻可以呢？因為是寫 * 也就是所有的 origin 都可以存取。
 
 ```
 access-control-allow-origin: *

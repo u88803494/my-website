@@ -9,7 +9,7 @@ thumbnail: "https://cdn-images-1.medium.com/max/800/1*PTtBUdmdUzmSpBW2IXrS9A.png
 mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8D%E7%AB%AF%E8%A6%96%E8%A7%92%E7%90%86%E8%A7%A3-solid-s-%E5%96%AE%E4%B8%80%E8%81%B7%E8%B2%AC%E5%8E%9F%E5%89%87-%E4%BD%A0%E7%9A%84%E5%87%BD%E5%BC%8F%E7%AE%A1%E5%A4%AA%E5%A4%9A%E4%BA%86%E5%97%8E-05a71a450216"
 ---
 
-> _本文為_[**_從前端視角理解 SOLID_**](https://hugh-program-learning-diary-js.medium.com/從前端視角理解-solid-一切的開端-b10abdc2490b)_系列的第二篇。_
+> *本文為*[***從前端視角理解 SOLID***](https://hugh-program-learning-diary-js.medium.com/從前端視角理解-solid-一切的開端-b10abdc2490b)*系列的第二篇。*
 
 > [**第一篇：導論，為何好懂的 React 程式碼都有它的影子？**](https://medium.com/@hugh-program-learning-diary-js/從前端視角理解-solid-一切的開端-b10abdc2490b)
 
@@ -21,7 +21,7 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%9E%E5%89%8
 
 單一職責原則 (Single Responsibility Principle, SRP) 的官方定義是：
 
-> **_一個模組或一個類別，只應該有一個會需要變更它的理由 (A class should have only one reason to change)。_**
+> ***一個模組或一個類別，只應該有一個會需要變更它的理由 (A class should have only one reason to change)。***
 
 這句話聽起來有點抽象。用更白話的前端語言來「翻譯」，它的意思是：
 
@@ -115,7 +115,7 @@ export default UserProfile;
 
 ```typescript
 // hooks/useUser.ts (專職的 Custom Hook)
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 interface User {
   id: number;
@@ -133,12 +133,12 @@ export const useUser = (userId: number) => {
         setLoading(true);
         const response = await fetch(`https://api.example.com/users/${userId}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch user");
+          throw new Error('Failed to fetch user');
         }
         const data = await response.json();
         setUser(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {
         setLoading(false);
       }

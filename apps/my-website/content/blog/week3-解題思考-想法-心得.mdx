@@ -164,10 +164,10 @@ function isPalindromes(str) {
 1. 寫一個 function 把字串轉成陣列，再轉型態為數字。
 2. 寫一個 function 把較短的一方補上 0。可能的話要把陣列反轉以方便添加0。
 3. 寫一個 function 把對應的陣列相加。
-4. 寫一個每提升一位就\*10 的 function。
+4. 寫一個每提升一位就*10 的 function。
 5. 寫個判斷大於 9 就處理進位的 function
 
-先把字串反轉，然後從 index 0 開始帶入 function 1，然後送到 function 3 相加，返回後根據 index 0 開始每 +1 就 \*10 之後回傳
+先把字串反轉，然後從 index 0 開始帶入 function 1，然後送到 function 3 相加，返回後根據 index 0 開始每 +1 就 *10 之後回傳
 
 目標是想一位一位相加，要處理的點是進位，進位要用判斷式來判斷，如果大於 9 就利用 function 5
 

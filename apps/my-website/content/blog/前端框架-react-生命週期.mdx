@@ -105,7 +105,7 @@ class Title extends Component {
 
 constructor 是在 component 建立的時候，最自動幫你執行的 function，所以如果沒有要做任何事情的時候，可以不用寫 constructor。但如果有這個需求，記得要把寫好寫滿 `constructor(props)` 、 `super(props)` 這樣才可以確保東西都有初始化好。
 
-另一點是當需要隱藏一些東西的時候，就需要透過 CSS  
+另一點是當需要隱藏一些東西的時候，就需要透過 CSS   
 或是使用 `isShow && <Title />` 的語法，這是一個 React 常常用的方法。
 
 ## shouldComponentUpdate
@@ -126,10 +126,9 @@ shouldComponentUpdate() {
 }
 ```
 
-他呼叫的時機點是在 state 被改變後才被呼叫意思就是：
-
-1. change state
-2. shouldComponentUpdate()
+他呼叫的時機點是在 state 被改變後才被呼叫意思就是：  
+1. change state  
+2. shouldComponentUpdate()  
 3. render
 
 意思就是在 render 以前會被呼叫的函式，而如果沒有寫這部分，預設就是回傳 true。
@@ -164,7 +163,7 @@ shouldComponentUpdate(nextProps, nextState)
 
 ![可以發現到 3 沒有被 Render 出來](https://cdn-images-1.medium.com/max/800/1*nPD4NYRUYlrp1CkJl1IhTA.gif)
 
-_可以發現到 3 沒有被 Render 出來_
+*可以發現到 3 沒有被 Render 出來*
 
 這是因為達成條件之後，就 reutrn flase，所以就不呼叫 render 了。
 
@@ -357,13 +356,13 @@ export default App
 
 ![先重整之後才發現到兩秒後改變了](https://cdn-images-1.medium.com/max/800/1*-CiofObhcU4j8UesNL6XNg.gif)
 
-_先重整之後才發現到兩秒後改變了_
+*先重整之後才發現到兩秒後改變了*
 
 但這邊會有一個問題，假如我在他切換之前就把這個 DOM 關閉的話呢？
 
 ![可以看到跳出一個錯誤：Can’t perform a React state update on an unmounted component.](https://cdn-images-1.medium.com/max/800/1*o6x5K6JTZXthP_bp9QIJ9g.gif)
 
-_可以看到跳出一個錯誤：Can’t perform a React state update on an unmounted component._
+*可以看到跳出一個錯誤：Can’t perform a React state update on an unmounted component.*
 
 ![](https://cdn-images-1.medium.com/max/800/1*q__vHLQ7yYLi_kGUBG0UYA.png)
 
@@ -448,7 +447,7 @@ export default App
 
 ![可以看到只有 Title component 被卸載的時候才會呼叫這個 function](https://cdn-images-1.medium.com/max/800/1*5ALlArmWbXOpTDnz4Dma3A.gif)
 
-_可以看到只有 Title component 被卸載的時候才會呼叫這個 function_
+*可以看到只有 Title component 被卸載的時候才會呼叫這個 function*
 
 ## componentDidUpdate
 
@@ -464,7 +463,7 @@ _可以看到只有 Title component 被卸載的時候才會呼叫這個 functio
 
 ![當按下 apple 的 +1 就會印出 1 1 1](https://cdn-images-1.medium.com/max/800/1*c2Aqwd9--qJ5q2_srz9BKQ.png)
 
-_當按下 apple 的 +1 就會印出 1 1 1_
+*當按下 apple 的 +1 就會印出 1 1 1*
 
 這是因為 `.setState()` 是非同步的，所以 `.setState()` 還沒執行完成就已經到了印出的部分，所以會印出原本的資料。就會沒辦法確保拿到的是已經執行完畢的 state。
 
@@ -520,7 +519,7 @@ Mounting 會建立 Component，執行順序就圖如同上那樣。
 
 ![多出來的則是比較少用到。shouldComponentUpdate 稍微用到的機會多一些](https://cdn-images-1.medium.com/max/800/1*wu3CMpeDZ1toE9w8b7Lf6w.png)
 
-_多出來的則是比較少用到。shouldComponentUpdate 稍微用到的機會多一些_
+*多出來的則是比較少用到。shouldComponentUpdate 稍微用到的機會多一些*
 
 在使用上也有分好幾個階段，可以看到左邊的 phase 的部份，最主要有分 Render phase 跟 Commit phase。從這邊就可以得知道，之前有一個範例是在 constructor 裡面取得 DOM 卻沒有，就是因為這邊的機制的關係，只有當達到 Commit phase 的時候才可以選取得到 DOM
 

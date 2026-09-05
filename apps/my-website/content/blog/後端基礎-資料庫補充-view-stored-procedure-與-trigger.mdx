@@ -23,19 +23,19 @@ CREATE VIEW 表格名稱 AS 欲建立表格的SQL指令
 
 ![後面的操作方法就跟一般表格相同](https://cdn-images-1.medium.com/max/800/1*MCVWhpwxlKO-Ndh8TVKJug.png)
 
-_後面的操作方法就跟一般表格相同_
+*後面的操作方法就跟一般表格相同*
 
 就可以建立一個檢視表。
 
 ![多了一個檢視表](https://cdn-images-1.medium.com/max/800/1*LICDEEZx86pzJNGSvn_FHQ.png)
 
-_多了一個檢視表_
+*多了一個檢視表*
 
 然後就可以使用一般的方式選取這個表格
 
 ![整體就跟之前反白的那串 SELECT 的效果一樣](https://cdn-images-1.medium.com/max/800/1*XsSEy2MpLIiIL-uR_ugzZw.png)
 
-_整體就跟之前反白的那串 SELECT 的效果一樣_
+*整體就跟之前反白的那串 SELECT 的效果一樣*
 
 但這實際上並不是真的建立一個表格，所以就會說他是一個虛擬的 table
 
@@ -82,7 +82,7 @@ CREATE PRECEDURE 函式名稱(變數 變數型態)
 
 ![除了一開始要把符號換掉之外，結束之後還要把符號換回來](https://cdn-images-1.medium.com/max/800/1*Qi25EbSArYwTbIxnavNfKQ.png)
 
-_除了一開始要把符號換掉之外，結束之後還要把符號換回來_
+*除了一開始要把符號換掉之外，結束之後還要把符號換回來*
 
 這樣就可以儲存成一個預存程式了。不過這種方法是當直接在 SQL 指令下的時候才要這樣子轉換符號。
 
@@ -94,7 +94,7 @@ CALL 函式名稱(引數)
 
 ![直接呈現呼叫方法跟結果。](https://cdn-images-1.medium.com/max/800/1*_FdleC-CVhCGbWnhg7YPwQ.png)
 
-_直接呈現呼叫方法跟結果。_
+*直接呈現呼叫方法跟結果。*
 
 預存程式是以資料庫為單位的，所以就從資料庫那邊去找
 
@@ -118,13 +118,13 @@ Trigger 最常用的是儲存一些變動資訊，也就是 log 。
 
 ![除此之外還要記錄行動，所以新增一個 action](https://cdn-images-1.medium.com/max/800/1*xeL8GzwrqEe9BTWUE1FoQQ.png)
 
-_除此之外還要記錄行動，所以新增一個 action_
+*除此之外還要記錄行動，所以新增一個 action*
 
 一班我們在用的時候，會在寫 PHP 的時候，另外寫程式處理，就可以在新增編輯刪除的時候，另外把資料寫入 這個專門紀錄 log 的 table 。
 
 ![當每一個新增編輯刪除都有這樣處理之後，就可以確保每次的處理都會有紀錄](https://cdn-images-1.medium.com/max/800/1*cnugB_ogRb6Mlg7lhFKjRg.png)
 
-_當每一個新增編輯刪除都有這樣處理之後，就可以確保每次的處理都會有紀錄_
+*當每一個新增編輯刪除都有這樣處理之後，就可以確保每次的處理都會有紀錄*
 
 但如果有一天忘記了，只有使用到新增編輯刪除而已，忘記使用紀錄。就會有所遺漏。
 
@@ -145,7 +145,7 @@ CREATE TRIGGER 名稱
 
 ![一樣要變換分號](https://cdn-images-1.medium.com/max/800/1*FSqzOVhJ44Ojuw3lPop5aA.png)
 
-_一樣要變換分號_
+*一樣要變換分號*
 
 當要存取資料的時候，有個 OLD 跟 NEW 分別代表舊資料跟新資料，因為是在儲存之前，所以就要取得舊資料，也就是 OLD。
 

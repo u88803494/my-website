@@ -9,7 +9,7 @@ thumbnail: "https://cdn-images-1.medium.com/max/800/1*hBg1NrYGb1ObZzylyOFqkg.png
 mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/next-js-15-%E7%9A%84%E6%95%88%E8%83%BD%E9%AD%94%E6%B3%95-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-isr-%E7%9A%84%E6%9C%80%E6%96%B0%E5%AF%A6%E8%B8%90-5685f8256474"
 ---
 
-> _想讓網站快得像火箭，內容又能隨時更新？Next.js 的 ISR 就是你的答案。本文帶你一次搞懂。_
+> *想讓網站快得像火箭，內容又能隨時更新？Next.js 的 ISR 就是你的答案。本文帶你一次搞懂。*
 
 這篇文章會帶你解決一個所有 Web 開發者都會遇到的經典難題：**到底該怎麼做，才能讓網站又快、內容又新？**
 
@@ -26,7 +26,7 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/next-js-15-%E7%9A
 
 無論你是剛接觸 Next.js 的新手，還是希望能活用最新功能的老手，這篇文章都能幫你徹底掌握這項打造高效能現代網站的關鍵技術。
 
-> _如何在靜態網站的極致速度與動態網站的內容彈性之間，找到完美的平衡點。_
+> *如何在靜態網站的極致速度與動態網站的內容彈性之間，找到完美的平衡點。*
 
 身為 Web 開發者，我們總是在一個經典的兩難中掙扎：我們希望網站像純靜態頁面一樣，擁有閃電般的載入速度；但同時，我們也需要網站的內容能夠隨時更新，以反應最新的資訊。
 
@@ -138,16 +138,16 @@ export default async function Page() {
 
 ```typescript
 // app/actions.ts
-"use server";
+'use server'
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache'
 
 // 這是一個 Server Action，會在後台被呼叫
 export async function createPost() {
   // ... 這裡有新增文章到資料庫的邏輯 ...
 
   // 通知 Next.js 將 /blog 這個路徑的快取設為無效
-  revalidatePath("/blog");
+  revalidatePath('/blog')
 }
 ```
 
@@ -170,8 +170,8 @@ export async function createPost() {
 ```javascript
 // app/blog/page.tsx - 使用 fetch
 export default async function Page() {
-  const data = await fetch("https://api.vercel.app/blog", {
-    next: { tags: ["posts"] }, // 為這個 fetch 請求貼上 'posts' 標籤
+  const data = await fetch('https://api.vercel.app/blog', {
+    next: { tags: ['posts'] }, // 為這個 fetch 請求貼上 'posts' 標籤
   });
   const posts = await data.json();
   // ...
@@ -182,18 +182,18 @@ export default async function Page() {
 
 ```typescript
 // app/some-other-page/page.tsx - 使用 ORM 和 unstable_cache
-import { unstable_cache } from "next/cache";
-import { db } from "@/lib/db"; // 假設這是您的資料庫實例
+import { unstable_cache } from 'next/cache';
+import { db } from '@/lib/db'; // 假設這是您的資料庫實例
 
 const getCachedPosts = unstable_cache(
   async () => {
     // 這裡執行實際的資料庫查詢
     return await db.select().from(posts);
   },
-  ["all-posts"], // 快取鍵 (cache key)，必須是唯一的字串陣列
+  ['all-posts'], // 快取鍵 (cache key)，必須是唯一的字串陣列
   {
-    tags: ["posts"], // 同樣為這份來自資料庫的資料貼上 'posts' 標籤
-  },
+    tags: ['posts'], // 同樣為這份來自資料庫的資料貼上 'posts' 標籤
+  }
 );
 ```
 
@@ -205,15 +205,15 @@ const getCachedPosts = unstable_cache(
 
 ```javascript
 // app/actions.ts
-"use server";
+'use server'
 
-import { revalidateTag } from "next/cache";
+import { revalidateTag } from 'next/cache'
 
 export async function createPost() {
   // ... 這裡有新增文章到資料庫的邏輯 ...
 
   // 讓所有被貼上 'posts' 標籤的資料快取全部失效
-  revalidateTag("posts");
+  revalidateTag('posts');
 }
 ```
 

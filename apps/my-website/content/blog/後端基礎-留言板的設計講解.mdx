@@ -44,8 +44,8 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%A
 1. 顯示所有留言 index.php
 
 分頁：LIMIT 10 OFFSET 10  
-先撈主留言 select _ from … where parent_id = 0  
-再撈子留言 select _ from … where parent_id = $id
+先撈主留言 select * from … where parent_id = 0  
+再撈子留言 select * from … where parent_id = $id
 
 2. 發布留言 add_comments.php
 
@@ -71,13 +71,13 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E5%BE%8C%E7%AB%A
 ## 實作會員系統
 
 1. 註冊頁面 register.php 可以重複利用，GET 就是表單，POST 就是註冊  
-   或你也可以有 register.php, handle_register.php
+或你也可以有 register.php, handle_register.php
 
 寫資料進 DB，可以準備一個 message.php 顯示訊息（成功 or 失敗）  
 導回 index.php 或是 register.php（若註冊失敗）
 
 2. 登入頁面 login.php  
-   查詢會員是否存在，利用 cookie 記錄會員 id，記得要先判斷是不是已經登入狀態了
+查詢會員是否存在，利用 cookie 記錄會員 id，記得要先判斷是不是已經登入狀態了
 
 3. 留言板 index.php  
-   透過 cookie 判斷是否已經是會員，決定是否顯示留言區塊
+透過 cookie 判斷是否已經是會員，決定是否顯示留言區塊

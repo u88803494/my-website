@@ -37,7 +37,7 @@ element.addEventListener(事件名稱(event), 函式(function))
 
 ![點一下就會執行該函式](https://cdn-images-1.medium.com/max/800/1*CuL-IHHHE1RaQnNX4HTHmw.gif)
 
-_點一下就會執行該函式_
+*點一下就會執行該函式*
 
 這個概念就是 event Listener 監聽事件，監聽之後得到事件就會執行，這種稱為 callback function 。所以 function 裡面可以做任何想做的事情。
 
@@ -82,7 +82,7 @@ _點一下就會執行該函式_
 
 ![裡面會有很多資訊](https://cdn-images-1.medium.com/max/800/1*dgGEgKn8wuIYICt2Yi8FXQ.gif)
 
-_裡面會有很多資訊_
+*裡面會有很多資訊*
 
 裡面會有很多資訊，像是點擊的 x y 軸，點了什麼資料等等的
 
@@ -117,7 +117,7 @@ onClick({
 
 ![最後一段是示範這些 e 的資訊有多少](https://cdn-images-1.medium.com/max/800/1*PbwW4IpJkBXFzLm6eGZcCw.gif)
 
-_最後一段是示範這些 e 的資訊有多少_
+*最後一段是示範這些 e 的資訊有多少*
 
 所以就可以透過這樣來取得特定的資訊。
 
@@ -200,7 +200,7 @@ e.preventDefault(); 阻止瀏覽器的預設行為
 
 ![就可以利用這點來驗證表單](https://cdn-images-1.medium.com/max/800/1*8XzR0c7i8DYEwFe29g6NaQ.gif)
 
-_就可以利用這點來驗證表單_
+*就可以利用這點來驗證表單*
 
 利用邏輯就可以寫出很多種功能以供使用
 
@@ -326,7 +326,7 @@ prevent 有阻止、妨礙的意思 [劍橋](https://dictionary.cambridge.org/zh
 
 ![分三次點擊不同地方](https://cdn-images-1.medium.com/max/800/1*fM1y9cycWk3C-zhES4jPvg.gif)
 
-_分三次點擊不同地方_
+*分三次點擊不同地方*
 
 從圖中可以看到點了按鈕之後，就會一次印出三種，分別是 .btn、.inner、.outer 三者是按照順序執行的，所以是由底層開始往父層執行。也可以想成是按下的時候，先按到第一層 button 所以就印出 .btn，然後再案到第二層 inner 所以印出 .inner ，最後是按到最底層的 outer 所以就印出 .outer。
 
@@ -374,7 +374,7 @@ _分三次點擊不同地方_
 
 ![可以發現他們的順序是相反的，理由是這邊會先執行捕獲再來才是冒泡](https://cdn-images-1.medium.com/max/800/1*RwTxtGYKSzDzz0vgD40PUA.jpeg)
 
-_可以發現他們的順序是相反的，理由是這邊會先執行捕獲再來才是冒泡_
+*可以發現他們的順序是相反的，理由是這邊會先執行捕獲再來才是冒泡*
 
 看得出來兩者的順序相反，由此可以得如同上述圖片那樣，捕獲就先由最外層(父層)開始，而冒泡的順序則相反。理由是這邊會先執行捕獲再來才是冒泡。
 
@@ -404,7 +404,7 @@ _可以發現他們的順序是相反的，理由是這邊會先執行捕獲再�
 
 ![.btn 的順序怎麼不太一樣呢？](https://cdn-images-1.medium.com/max/800/1*5PvQurHoHTjKkVnl2icrSQ.jpeg)
 
-_.btn 的順序怎麼不太一樣呢？_
+*.btn 的順序怎麼不太一樣呢？*
 
 這裡在執行的時候，一樣會先執行捕獲，才執行冒泡
 
@@ -437,7 +437,7 @@ _.btn 的順序怎麼不太一樣呢？_
 
 ![無論點哪處，都會記錄資訊](https://cdn-images-1.medium.com/max/800/1*p82KcUX8zRja0VvlVGIh8A.gif)
 
-_無論點哪處，都會記錄資訊_
+*無論點哪處，都會記錄資訊*
 
 -
 
@@ -491,7 +491,7 @@ window.addEventListener('click', function(e) {
 
 ![可以看到點了幾次都連不到 google](https://cdn-images-1.medium.com/max/800/1*cYobyDKNRyXR5QDzq23W6w.gif)
 
-_可以看到點了幾次都連不到 google_
+*可以看到點了幾次都連不到 google*
 
 這有個原因。是因為 preventDefault 會往下傳遞，所以在 window 一使用preventDefault 之後，就會連帶下面所有的元素也都有 preventDefault 的屬性，最後傳到 a 元素都會帶有 preventDefault 的屬性，也就是說這條路徑之中，只要有其中一個標籤 call 了 preventDefault ，那麼該標籤底下所有的元素都會帶有 preventDefault，也就是預設行為都被取消了，就不會有效果。
 
@@ -554,13 +554,13 @@ document.querySelector('.btn')
 
 ![不過也因為只有 btn 設置 stopPropagation 所以其他按鈕一樣照常](https://cdn-images-1.medium.com/max/800/1*lD8FwijEXeCG7n3ERg-fVQ.gif)
 
-_不過也因為只有 btn 設置 stopPropagation 所以其他按鈕一樣照常_
+*不過也因為只有 btn 設置 stopPropagation 所以其他按鈕一樣照常*
 
 所以來測試一下，同時監聽捕獲跟冒泡。
 
 ![可以看到一路到 btn 的冒泡就結束了](https://cdn-images-1.medium.com/max/800/1*a4pDBEIHIPSRQJFT9e7Oog.gif)
 
-_可以看到一路到 btn 的冒泡就結束了_
+*可以看到一路到 btn 的冒泡就結束了*
 
 由這邊就可以確認到，真的是先捕獲再冒泡，然後在 btn 冒泡的階段就停止了傳遞。
 
@@ -578,7 +578,7 @@ window.addEventListener('click', (e) => {
 
 ![window 的捕獲階段就被停止了](https://cdn-images-1.medium.com/max/800/1*Tk3xqhXEbE0Rnk9BhNScHg.gif)
 
-_window 的捕獲階段就被停止了_
+*window 的捕獲階段就被停止了*
 
 -
 
@@ -602,7 +602,7 @@ _window 的捕獲階段就被停止了_
 
 ![多個監聽，且做出反應](https://cdn-images-1.medium.com/max/800/1*-3IpzeY03xryUaM9ULbhHg.gif)
 
-_多個監聽，且做出反應_
+*多個監聽，且做出反應*
 
 -
 
@@ -630,7 +630,7 @@ document.querySelector('.btn')
 
 ![咦，第二個怎麼會不能執行](https://cdn-images-1.medium.com/max/800/1*GJzG3ADCv64vNw9rGqjUYg.gif)
 
-_咦，第二個怎麼會不能執行_
+*咦，第二個怎麼會不能執行*
 
 因為 querySelector 只能選到第一個，所以就只有第一個才可以執行。
 
@@ -658,7 +658,7 @@ for(var i = 0; i < elements.length; i += 1) {
 
 ![結果還是不行，通通數字出現 6](https://cdn-images-1.medium.com/max/800/1*TCRf1FlkGXsO7R3-UkogrQ.gif)
 
-_結果還是不行，通通數字出現 6_
+*結果還是不行，通通數字出現 6*
 
 這問題是因為作用域的關係
 
@@ -666,7 +666,7 @@ _結果還是不行，通通數字出現 6_
 
 ![可以看到 i 值等於 5 了](https://cdn-images-1.medium.com/max/800/1*1-RLayw_ITdiUzGYd481xw.png)
 
-_可以看到 i 值等於 5 了_
+*可以看到 i 值等於 5 了*
 
 因為 i = 5 了，所以當點擊之後會直接運算 alert( i+1 ) 得結果 6。按了每一個按鈕都一樣。
 
@@ -680,7 +680,7 @@ _可以看到 i 值等於 5 了_
 
 ![i 值就是 not available](https://cdn-images-1.medium.com/max/800/1*84YKZYSbnkCJ1p-mzgR-1Q.png)
 
-_i 值就是 not available_
+*i 值就是 not available*
 
 not available 就是無法使用。
 
@@ -688,7 +688,7 @@ not available 就是無法使用。
 
 ![觀察一下按下按鈕的反應](https://cdn-images-1.medium.com/max/800/1*YzJ9FPs2X2_1p_bgJtJuYw.gif)
 
-_觀察一下按下按鈕的反應_
+*觀察一下按下按鈕的反應*
 
 會發現當按下 2 的時候 i = 1 然後運行 alert(i+1) 於是跳出視窗顯示 2 。
 
@@ -698,7 +698,7 @@ _觀察一下按下按鈕的反應_
 
 ![往下拉之後開啟 Mouse 的選單點選 click 事件](https://cdn-images-1.medium.com/max/800/1*-H3nbFyq3Fit0yJlfstGMQ.gif)
 
-_往下拉之後開啟 Mouse 的選單點選 click 事件_
+*往下拉之後開啟 Mouse 的選單點選 click 事件*
 
 點選 click 事件之後，就會在所有的 EventListener 的 click 事件暫停。
 
@@ -706,7 +706,7 @@ _往下拉之後開啟 Mouse 的選單點選 click 事件_
 
 ![可以看到 i 值跟反黃的 clock 事件代表暫停點在那了](https://cdn-images-1.medium.com/max/800/1*BCnCK8gt1Y54JJtYA2cJpg.gif)
 
-_可以看到 i 值跟反黃的 clock 事件代表暫停點在那了_
+*可以看到 i 值跟反黃的 clock 事件代表暫停點在那了*
 
 由此得知，使用 var 的時候，因為已經有變數 i 的值了，所以就會直接使用 i 的值代進去，所以無論按哪個按鈕都會等於 6 。
 
@@ -822,7 +822,7 @@ document.querySelector('.add-btn')
 
 ![發現，新增的按鈕怎麼不能使用呢？](https://cdn-images-1.medium.com/max/800/1*x9pO7k7JPNoAX43Z_MwLBg.gif)
 
-_發現，新增的按鈕怎麼不能使用呢？_
+*發現，新增的按鈕怎麼不能使用呢？*
 
 其實是因為程式碼在開網頁的時候就已經先跑完了，所以後面新增的 btn 其實並不會被監聽到，所以也就沒辦法做出回應了。
 
@@ -860,7 +860,7 @@ document.querySelector('.outer').addEventListener('click',
 
 ![空白處也能按呢!](https://cdn-images-1.medium.com/max/800/1*6GbNNfJtwMo7d1EThtCb5A.gif)
 
-_空白處也能按呢!_
+*空白處也能按呢!*
 
 可以發現除了原本的按鈕之外，新增的按鈕也可以做出反應了，這就是因為冒泡的關係，而本來事件就會冒泡，所以就會抓得到。另外點了同排的空白處也可以印出資料，這是因為監聽的對象是一整個 &lt;div calss=’outer’>的關係。
 
@@ -884,7 +884,7 @@ console.log(e.target.classList.contains('btn'));
 
 ![已經先新增按鈕好了，當按下新增的按鈕也可以回傳](https://cdn-images-1.medium.com/max/800/1*3nEGVVHs0bAYzB5v_g8WqA.gif)
 
-_已經先新增按鈕好了，當按下新增的按鈕也可以回傳_
+*已經先新增按鈕好了，當按下新增的按鈕也可以回傳*
 
 可以看到有 btn 都會回傳 true，所以就可以利用這樣來判斷。
 
@@ -1026,7 +1026,7 @@ document.querySelector('.outer').addEventListener('click',
 
 ![測試ok](https://cdn-images-1.medium.com/max/800/1*iTOK7k75WFHtRsV5LNthuQ.gif)
 
-_測試ok_
+*測試ok*
 
 所以就增加兩組分別放數字還有特殊符號
 
@@ -1063,7 +1063,7 @@ _測試ok_
 
 ![發現有個型出來了](https://cdn-images-1.medium.com/max/800/1*heW-frH33P7qa5vVEZAdRw.png)
 
-_發現有個型出來了_
+*發現有個型出來了*
 
 所以就可以來實作程式的部分
 
@@ -1099,7 +1099,7 @@ document.querySelector('.btn-generate').addEventListener('click',
 
 ![可以顯示 true](https://cdn-images-1.medium.com/max/800/1*nOg1A8l3E6dw3gQzb9Up5A.gif)
 
-_可以顯示 true_
+*可以顯示 true*
 
 所以就使用這個條件來判斷
 
@@ -1143,7 +1143,7 @@ document.querySelector('.btn-generate').addEventListener('click',
 
 ![可以看到的確可以出現內容](https://cdn-images-1.medium.com/max/800/1*I9YIp0MgjAlCbG6GHDWrwQ.gif)
 
-_可以看到的確可以出現內容_
+*可以看到的確可以出現內容*
 
 可以看到都有成功添加
 
@@ -1153,9 +1153,9 @@ _可以看到的確可以出現內容_
 
 然後寫如何產生，
 
-Math.random() 這會產生一個 0~&lt;1 的數字，所以把它 \*10
+Math.random() 這會產生一個 0~&lt;1 的數字，所以把它 *10
 
-Math.random() \*10 這樣就會產生 0 ~ 9.9999999... 的數字。
+Math.random() *10 這樣就會產生 0 ~ 9.9999999... 的數字。
 
 但我們需要整數，所以用 Math.floor
 
@@ -1699,7 +1699,7 @@ document.querySelector('.contacts').addEventListener('click',
 
 ![可以成功新增且移除了!](https://cdn-images-1.medium.com/max/800/1*NuCuRHGCrs9jBwZw_dI2Fg.gif)
 
-_可以成功新增且移除了!_
+*可以成功新增且移除了!*
 
 [JSBIN](https://jsbin.com/rohunaz/edit?html,output)
 

@@ -98,7 +98,7 @@ handleSubmit = (e) => {
 
 ![只有印出 this.input 的內容跟 this.input.current 的內容](https://cdn-images-1.medium.com/max/800/1*ySJ9n3qI-AYECS54sxdbwA.png)
 
-_只有印出 this.input 的內容跟 this.input.current 的內容_
+*只有印出 this.input 的內容跟 this.input.current 的內容*
 
 這就是使用 uncontrolled component 的方式，使用 uncontrolled component 的時候，這是在 React 比較推薦的方法
 
@@ -150,7 +150,7 @@ value={this.state.name} onChange={this.handleInputChange} />
 
 ![不改變 state 只印出看看](https://cdn-images-1.medium.com/max/800/1*lKKJjZtwnasBCbD-njq1Ow.png)
 
-_不改變 state 只印出看看_
+*不改變 state 只印出看看*
 
 所以一定要去改變這個 state，才可以。從這邊就可以知道為什麼之前沒有使用 `onChange` 的時候，會鎖定整個畫面，因為一定要改變 state 才可以改變畫面。
 
@@ -293,7 +293,7 @@ this.state = {
 
 ![這例子比較不適當，所以後來有改](https://cdn-images-1.medium.com/max/800/1*xhinzSP-O40ArAbYno8Skg.gif)
 
-_這例子比較不適當，所以後來有改_
+*這例子比較不適當，所以後來有改*
 
 所以這邊就要不同的處理了，就要使用另外的 function
 

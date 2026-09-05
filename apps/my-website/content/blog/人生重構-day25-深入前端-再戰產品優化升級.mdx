@@ -39,7 +39,7 @@ mediumUrl: "https://medium.com/@hugh-program-learning-diary-js/%E4%BA%BA%E7%94%9
 
 ![四格空行的示意圖，這樣一個簡單的元件就會看起來非常地巢狀，當更多了就會變成一場災難。](https://cdn-images-1.medium.com/max/800/0*rSnvuaOtMcGc52u8.png)
 
-_四格空行的示意圖，這樣一個簡單的元件就會看起來非常地巢狀，當更多了就會變成一場災難。_
+*四格空行的示意圖，這樣一個簡單的元件就會看起來非常地巢狀，當更多了就會變成一場災難。*
 
 **過長的開發內容：**  
 在這裡程式碼經常是大概三百到五百行，非常的長。不只邏輯，也把 UI 通通都放在一起，甚至一個元件的 state 可以有十幾個。這不僅使得代碼難以閱讀，也增加了耦合性。
@@ -79,7 +79,7 @@ _四格空行的示意圖，這樣一個簡單的元件就會看起來非常地�
 ```javascript
 useEffect(() => {
   const getData = async () => {
-    const res = await axios.get("url");
+    const res = await axios.get('url');
     setData(res.data);
   };
   getData();
@@ -91,7 +91,7 @@ useEffect(() => {
 ```javascript
 useEffect(() => {
   (async () => {
-    const res = await axios.get("url");
+    const res = await axios.get('url');
     setData(res.data);
   })();
 }, []);

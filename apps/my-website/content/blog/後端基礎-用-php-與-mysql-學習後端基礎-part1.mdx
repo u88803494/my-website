@@ -309,7 +309,7 @@ SELECT * FROM `users` WHERE username="13fn=aniosnmdoa" AND content="dmiokfmispdf
 
 ![](https://cdn-images-1.medium.com/max/800/1*a1ZGoArGKGyZ809rpRpWmw.png)
 
-去找尋 username 等於那樣且 content 等於那樣的資料，然後可以利用 _ 的部份調整想要顯示的資料。這邊用 _ 是全部的意思，所以只要相關的資料就會全部都顯示出來。
+去找尋 username 等於那樣且 content 等於那樣的資料，然後可以利用 * 的部份調整想要顯示的資料。這邊用 * 是全部的意思，所以只要相關的資料就會全部都顯示出來。
 
 另外還可以利用 or 只要兩個調整其中一個成立就顯示資料。
 
@@ -325,7 +325,7 @@ SELECT * FROM `users` WHERE username="13fn=aniosnmdoa" AND content="dmiokfmispdf
 
 ![](https://cdn-images-1.medium.com/max/800/1*Sr4UdzZYf-RDQAXnf0LDeQ.png)
 
-> `在這邊的用意是把名稱包起來，因為如果名稱內使用一些語法的詞的話，會被判斷為是語法，例如說名稱叫做 insert number 不用` 包起這個名稱，的話 insert 就會被判斷成語法。進而引發錯誤。但如果沒有這種情況的話，不加也是可以的。
+> ` 在這邊的用意是把名稱包起來，因為如果名稱內使用一些語法的詞的話，會被判斷為是語法，例如說名稱叫做 insert number 不用 ` 包起這個名稱，的話 insert 就會被判斷成語法。進而引發錯誤。但如果沒有這種情況的話，不加也是可以的。
 
 > 另一點是只要是字串就要加上雙引號。
 

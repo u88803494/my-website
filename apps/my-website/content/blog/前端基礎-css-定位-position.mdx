@@ -55,7 +55,7 @@ body {
 
 ![box2 就移動了 20px](https://cdn-images-1.medium.com/max/800/1*kYw7PvdvJlD5EnGJLFFUyw.png)
 
-_box2 就移動了 20px_
+*box2 就移動了 20px*
 
 top:20px; 就是距離上方 20 px 所以 box2 會往下移動 20px，同理可證 right 就是距離右方，left 則是距離左方。
 
@@ -90,7 +90,7 @@ fixed 固定定位：相對於瀏覽器的定位
 
 ![就會一直定位在指定的地方](https://cdn-images-1.medium.com/max/800/1*ZYZK3cbVmJHZE2MTJCTW-A.gif)
 
-_就會一直定位在指定的地方_
+*就會一直定位在指定的地方*
 
 更精確的是指 相對於 viewpoint 的定位，viewpoint 在瀏覽器上就是可以看到的範圍。
 
@@ -142,7 +142,7 @@ absolute 絕對定位：絕對定位必須要有個參考點，否則就會用 b
 
 ![以紅框處作為參考點](https://cdn-images-1.medium.com/max/800/1*Xm5ciHw4Jj38RrRezX2tgQ.png)
 
-_以紅框處作為參考點_
+*以紅框處作為參考點*
 
 距離頂端(top) 10px 距離右邊(right) 10px
 
@@ -227,13 +227,13 @@ _以紅框處作為參考點_
 
 ![可以看到 X 跟 123 不會互相有關係](https://cdn-images-1.medium.com/max/800/1*NHbMWjXMarpsZFnu2hYywg.png)
 
-_可以看到 X 跟 123 不會互相有關係_
+*可以看到 X 跟 123 不會互相有關係*
 
 可以看到 X 跟 123 不會互相有關係，123也不會從 X 本來的位置開始往後排，也就是說 X 的元素 跟 123 這兩個元素彼此不相干擾，X 元素等於是另外一個平行空間，自己有自己的定位。而 123 因為沒設置 position 所以就是預設值 static 所以就是照一般的顯示。
 
 ![透過直接更改 X 元素的 position 可以看到各種效果](https://cdn-images-1.medium.com/max/800/1*qt-4MKaEF38tkRe3pNPZ6A.gif)
 
-_透過直接更改 X 元素的 position 可以看到各種效果_
+*透過直接更改 X 元素的 position 可以看到各種效果*
 
 所以在 fixed 跟 absolute 都是脫離原本的排版，而 static. relative 則是一樣會按造原本的排版去做變動，所以 123 元素就不會替補上來而是處於下一行。
 
@@ -245,13 +245,13 @@ x, y, z 因為網頁是平面的，所以 x. y 軸決定位置，而 z 軸就用
 
 ![藉由調整 top 的值來呈現移動 box](https://cdn-images-1.medium.com/max/800/1*CR9_iI2WuhlFUBoYX-n9kg.gif)
 
-_藉由調整 top 的值來呈現移動 box_
+*藉由調整 top 的值來呈現移動 box*
 
 這時候就可以使用 z-index 來調整優先度。
 
 ![可以看到調成整 1 的時候就會覆蓋了，0 或 -1 就還是被蓋掉，這數字也可以在往更高設置。](https://cdn-images-1.medium.com/max/800/1*2nIlCztMq-QPi7Skx0yM7g.gif)
 
-_可以看到調成整 1 的時候就會覆蓋了，0 或 -1 就還是被蓋掉，這數字也可以在往更高設置。_
+*可以看到調成整 1 的時候就會覆蓋了，0 或 -1 就還是被蓋掉，這數字也可以在往更高設置。*
 
 所以 z-index 可以根據它的值來決定顯示的優先度，數字比較大的就是顯示在前面。
 
@@ -291,7 +291,7 @@ body {
 
 ![一開始使用 top:0px 後面改為 top:100px](https://cdn-images-1.medium.com/max/800/1*n5ldRAP564F_NiWHNgFSLg.gif)
 
-_一開始使用 top:0px 後面改為 top:100px_
+*一開始使用 top:0px 後面改為 top:100px*
 
 常用在導覽列，讓使用者可以一直有導覽列可以直接點選，或是一些希望更吸引人注意的重要項目。
 

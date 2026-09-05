@@ -33,7 +33,7 @@ Zod，一個「TypeScript-first」的驗證庫，徹底解決了這個問題。�
 當你寫下這段 Zod Schema：
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
 // 1. Zod Schema (唯一的「事實來源」)
 const UserSchema = z.object({
@@ -51,7 +51,7 @@ const UserSchema = z.object({
 ```typescript
 // 執行期：用 .parse() 驗證
 try {
-  const user = UserSchema.parse({ username: "al" }); // 👈 這會拋出錯誤
+  const user = UserSchema.parse({ username: 'al' }); // 👈 這會拋出錯誤
 } catch (err) {
   console.error(err); // ZodError: "username" must be at least 3 chars
 }
@@ -110,9 +110,9 @@ type z.infer<T> =
 這段程式碼的白話文就是：
 
 - T extends … (提問)：
-- 「嘿 TypeScript，傳進來的 T (也就是 UserSchema 的類型)，它是不是一個『帶有 \_output 標籤』的禮物盒？」
-- \{ \_output: infer O \} (填空)：
-- 「如果是！那請你幫我『**推斷 (infer)』出 \_output 標籤裡面**的類型是什麼，並把這個類型放進 O 這個空格裡。」
+- 「嘿 TypeScript，傳進來的 T (也就是 UserSchema 的類型)，它是不是一個『帶有 _output 標籤』的禮物盒？」
+- \{ _output: infer O \} (填空)：
+- 「如果是！那請你幫我『**推斷 (infer)』出 _output 標籤裡面**的類型是什麼，並把這個類型放進 O 這個空格裡。」
 - ? O : never (回傳)：
 - 「提問成功，O 現在等於 \{ username: string, email: string \}。好，我就把 O 回傳出去。」
 

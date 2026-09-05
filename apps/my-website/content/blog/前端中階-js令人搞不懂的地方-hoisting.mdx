@@ -263,7 +263,7 @@ ECMAScript 等於是 JavaScript 的規格書，所以可以直接從這邊看。
 
 ![每一個執行環境都會變成一個 variable object](https://cdn-images-1.medium.com/max/800/1*LJpk8qEAaOGgTEzs-R_ZPw.png)
 
-_每一個執行環境都會變成一個 variable object_
+*每一個執行環境都會變成一個 variable object*
 
 每一個執行環境都會變成一個 variable object。在裡面被宣告的變數都會被加入 variable object
 
@@ -288,7 +288,7 @@ function test() {
 
 ![接續上文，因為剛好換頁，所以分開](https://cdn-images-1.medium.com/max/800/1*1MPneW86Aad8hYm-r2g_mQ.png)
 
-_接續上文，因為剛好換頁，所以分開_
+*接續上文，因為剛好換頁，所以分開*
 
 當進入 execution context 裡面的時候，會按照下列順序把宣告的東西綁定在 variable object 裡面：
 
@@ -513,7 +513,7 @@ console.log('6.', a);
 console.log('7.', b);
 ```
 
-然後繼續往下， `var a = 7` 因為已經有 a 了，所以等於只是賦值而已。  
+然後繼續往下， `var a = 7` 因為已經有 a 了，所以等於只是賦值而已。   
 `a = 7` ，到了第二個印出，就會印出 7。
 
 ```

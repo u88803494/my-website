@@ -69,7 +69,7 @@ step 7 設置 Configure Security Group
 
 ![輸入名稱之後按下 Download Key Pair](https://cdn-images-1.medium.com/max/800/1*BXvC4u7ILYiiGDMUfaSF8w.png)
 
-_輸入名稱之後按下 Download Key Pair_
+*輸入名稱之後按下 Download Key Pair*
 
 輸入名稱之後按下 Download Key Pair。這個要保存好。然後這時候藍色按鈕就會高亮，就可以按下 Launch Instances>
 
@@ -127,7 +127,7 @@ ssh -i ~/Documents/key.pem ubuntu@123.123.11.22
 
 ![點開 connect 就可以看到，裡面也教說要調整權限](https://cdn-images-1.medium.com/max/800/1*3tOdCrDCJZHWCQEpLPphWA.png)
 
-_點開 connect 就可以看到，裡面也教說要調整權限_
+*點開 connect 就可以看到，裡面也教說要調整權限*
 
 直接使用 example 裡面的指令也可以，檔案的路徑要調整一下。
 
@@ -136,27 +136,27 @@ _點開 connect 就可以看到，裡面也教說要調整權限_
 ### 設定 LAMP：
 
 1. 更新 ubuntu 的系統  
-   `$ sudo apt update && sudo apt upgrade && sudo apt dist-upgrade`  
-   跳出訊息，是否安裝？或佔用空間 xxx，記得輸入：`y`（會跳出紫色選項，選擇 keep the local version currently installed）
+`$ sudo apt update && sudo apt upgrade && sudo apt dist-upgrade`  
+跳出訊息，是否安裝？或佔用空間 xxx，記得輸入：`y`（會跳出紫色選項，選擇 keep the local version currently installed）
 2. 安裝 Tasksel  
-   `$ sudo apt install tasksel`  
-   跳出訊息，是否安裝？或佔用空間 xxx。輸入：`y`
+`$ sudo apt install tasksel`  
+跳出訊息，是否安裝？或佔用空間 xxx。輸入：`y`
 3. 用 Tasksel 下載 lamp-server  
-   `$ sudo tasksel install lamp-server`  
-   （會跑一個下載中的紫色框）
+`$ sudo tasksel install lamp-server`  
+（會跑一個下載中的紫色框）
 
 這時候，就可以到瀏覽企輸入 IP 位置，看看伺服器
 
 ![出現這個頁面](https://cdn-images-1.medium.com/max/800/1*8joDA3U-vgLK8u-xBU4cUw.png)
 
-_出現這個頁面_
+*出現這個頁面*
 
 出現這個頁面就是安裝成功，接著就可以進行下一步。
 
 ## 設定 phpmyadmin
 
 1. 下載 phpmyadmin  
-   `$ sudo apt install phpmyadmin`
+`$ sudo apt install phpmyadmin`
 2. 記得連接 apache2（要按空白鍵，有顯示＊字號）
 
 ![](https://cdn-images-1.medium.com/max/800/1*ryy7XDC1cpePndklIlJsYA.png)
@@ -171,26 +171,26 @@ _出現這個頁面_
 ### 設定密碼
 
 1. 改變 phpmyadmin 登入的設定，改成可以用密碼登入  
-   `$ sudo mysql -u root mysql`進入 sql 指令  
-   輸入：  
-   `$ UPDATE user SET plugin='mysql_native_password' WHERE User='root';`  
-   `$ FLUSH PRIVILEGES;`  
-   離開 sql 指令  
-   `$ exit`
+`$ sudo mysql -u root mysql`進入 sql 指令  
+輸入：  
+`$ UPDATE user SET plugin='mysql_native_password' WHERE User='root';`  
+`$ FLUSH PRIVILEGES;`  
+離開 sql 指令  
+`$ exit`
 2. 設定 root 的密碼  
-   `$ sudo mysql_secure_installation`
+`$ sudo mysql_secure_installation`
 3. 是否設定密碼？ `$ y`  
-   這時候會跳出選擇密碼強度，然後才設定密碼  
-   有三個選項，建議直接選 0，因為我選了 1 之後發現密碼要超級複雜才可以（中英文大小寫+符號混用長度還要一定的長度）  
-   所以除非是需要很注重安全性，否則選 0 之後繼續
+這時候會跳出選擇密碼強度，然後才設定密碼  
+有三個選項，建議直接選 0，因為我選了 1 之後發現密碼要超級複雜才可以（中英文大小寫+符號混用長度還要一定的長度）  
+所以除非是需要很注重安全性，否則選 0 之後繼續
 4. 輸入符合規定的密碼。  
-   直接輸入 `預設置密碼 `這時候密碼不會顯示所以不要認為沒有輸入成功。  
-   確定設這個密碼嗎？ `$ y`  
-   幾個設定的問題都可以選 `yes`  
-   最後會出現 All Done!
+直接輸入 `預設置密碼 `這時候密碼不會顯示所以不要認為沒有輸入成功。  
+確定設這個密碼嗎？ `$ y`  
+幾個設定的問題都可以選 `yes`  
+最後會出現 All Done!
 5. 就可以在瀏覽器輸入自己的 `IPv4/phpmyadmin` 就看到登入畫面了  
-   帳號：root  
-   密碼：前面設定的密碼
+帳號：root  
+密碼：前面設定的密碼
 
 ### 把檔案放上去
 
@@ -248,7 +248,7 @@ $vim index.php
 
 ![按下紅色標示複製網址](https://cdn-images-1.medium.com/max/800/1*rEtgDnMC9hflItvB48a8GQ.png)
 
-_按下紅色標示複製網址_
+*按下紅色標示複製網址*
 
 回到電腦，把要上傳的資料單獨處於一個資料夾之後  
 （記得把 conn.php 拿掉，因為 .gitignore 檔案還沒上傳之前，並不會讓 conn.php 被忽略）
@@ -283,7 +283,7 @@ git clone https://github.com/u88803494/MessageBoard.git
 
 ![這我已經先測試了，所以已經有文章了。](https://cdn-images-1.medium.com/max/800/1*MA7t74EucXxAnziYHD1tEA.png)
 
-_這我已經先測試了，所以已經有文章了。_
+*這我已經先測試了，所以已經有文章了。*
 
 ## 設定 DNS( 網址可連伺服器 )
 
@@ -295,7 +295,7 @@ _這我已經先測試了，所以已經有文章了。_
 
 ![然後就是區域檔紀錄](https://cdn-images-1.medium.com/max/800/1*A5INzoOYgYD1D9aCCf2a9w.png)
 
-_然後就是區域檔紀錄_
+*然後就是區域檔紀錄*
 
 在區域檔紀錄，把 A 的 IPv4 改成 AWS 的網址即可。
 
@@ -316,13 +316,13 @@ _然後就是區域檔紀錄_
 
 ![選擇免費方案即可](https://cdn-images-1.medium.com/max/800/1*OMyjvRqh7JsniBaUNRNPOw.png)
 
-_選擇免費方案即可_
+*選擇免費方案即可*
 
 5. 設置 IPv4
 
 ![紅框輸入 AWS 的 IPv4 即可](https://cdn-images-1.medium.com/max/800/1*LmraDrQa0DSM8lw2WaMdLQ.png)
 
-_紅框輸入 AWS 的 IPv4 即可_
+*紅框輸入 AWS 的 IPv4 即可*
 
 下面還有很多的設定，不用管他們。Name 不輸入的話就是主網域，name 輸入就有子網域。  
 TTL，是域名的更新時間。因為本來 Gandi 本身的設置就比較高，所以更換成功之後要等一段時間才可以成功換新。
@@ -333,7 +333,7 @@ TTL，是域名的更新時間。因為本來 Gandi 本身的設置就比較高�
 
 ![下面兩個就是用來取代的部份。](https://cdn-images-1.medium.com/max/800/1*tkZ8PMEuBRY7D0d1ZMVrrQ.png)
 
-_下面兩個就是用來取代的部份。_
+*下面兩個就是用來取代的部份。*
 
 7. 回到 Gandi 的域名界面，選擇名稱伺服器，選擇變更
 
@@ -347,8 +347,8 @@ _下面兩個就是用來取代的部份。_
 也就是步驟 6 的地方按下 Done, check Nameserver。
 
 8. 等待，也許明天再來看有沒有成功就好。  
-   因為 Gandi 本身設置的 TTL 時間就很長，所以除非一開始沒有連入網址，否則一旦連入之後，就會依照 Gandi 的設置時間存入專門管理域名的伺服器的快取。  
-   這種情況之下，我們就必須要等快取的時間過了，才會變成新的設置。這部份就只能等了。
+因為 Gandi 本身設置的 TTL 時間就很長，所以除非一開始沒有連入網址，否則一旦連入之後，就會依照 Gandi 的設置時間存入專門管理域名的伺服器的快取。  
+這種情況之下，我們就必須要等快取的時間過了，才會變成新的設置。這部份就只能等了。
 
 ## 參考資料：
 

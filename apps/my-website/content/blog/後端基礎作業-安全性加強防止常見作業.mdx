@@ -300,7 +300,7 @@ function subCommentAdd($conn, $user, $parent_id) {
 
 ![這樣代表成功了一半，當然也可以實際上傳然後去資料庫看看](https://cdn-images-1.medium.com/max/800/1*wvxsQQ1bGleZCdlTKE2mgA.png)
 
-_這樣代表成功了一半，當然也可以實際上傳然後去資料庫看看_
+*這樣代表成功了一半，當然也可以實際上傳然後去資料庫看看*
 
 然後是呈現子留言的部份。這邊就必須要呼叫資料。然後可以參考前面的經驗思考一下需要帶入哪些值。像是 parent_id 因為要相對應主留言去撈資料。然後就可以成功帶入了：
 
@@ -341,7 +341,7 @@ echo   "<div class='original__sub-comment' $is_main>";
 
 這樣就可以正確變色。
 
-另外注意到一點是，分頁功能的 bug。本來撈資料分頁的部份是直接撈全部，但因為子留言的關係。會讓分頁多出好幾頁的 bug。所以就需要用 WHERE 只選中 parent_id = 0 的資料即可。另外把分頁選擇的功能改成 SELECT count(\*) 的形式，但發現程式碼差不多。
+另外注意到一點是，分頁功能的 bug。本來撈資料分頁的部份是直接撈全部，但因為子留言的關係。會讓分頁多出好幾頁的 bug。所以就需要用 WHERE 只選中 parent_id = 0 的資料即可。另外把分頁選擇的功能改成 SELECT count(*) 的形式，但發現程式碼差不多。
 
 ```
 function numPages($conn, $page, $per){

@@ -115,7 +115,7 @@ scope chain: [AO , [[Scope]] ]
 
 ![往上找來理解 AO](https://cdn-images-1.medium.com/max/800/1*FVj7-BstOLW2em7xcGJ-Ew.png)
 
-_往上找來理解 AO_
+*往上找來理解 AO*
 
 當進入一個 execution context 裡面的時候，同時會創見一個物件叫做 activation objection。activation objection 初始化，並且命名一些 arguments。  
 然後 activation objection 在這裡的作用，就如同 variable object
@@ -425,7 +425,7 @@ testEC.AO: {
 ```
 
 然後執行的時候，到了 `console.log(v1, vTest)`，就會先從自己的 innerEC.AO 開始找，找尋 v1 發現沒資料，就在找 testEC.AO，v1 找不到，再次往上找，找到 globalEC.VO 有 v1 。  
-接著在找 vTest，innerEC.AO 開始找，找尋 vTest 發現沒資料，就在找 testEC.AO，找到 vTest: 20  
+接著在找 vTest，innerEC.AO 開始找，找尋 vTest 發現沒資料，就在找 testEC.AO，找到 vTest: 20   
 然後就印出 10 20
 
 ### 小結：

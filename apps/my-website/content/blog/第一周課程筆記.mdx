@@ -140,7 +140,7 @@ console.log(score[0] + score[1] + score[2] + score[3] + score[4])
 
 突然很好奇，變數可以儲存到多少呢？於是上網查[資料](https://social.msdn.microsoft.com/Forums/zh-TW/92d69f8c-3abe-4f5a-a001-29ac333d763b?forum=237)：長度限制
 
-> 每個陣列之維度長度都受限於 **Integer** 資料型別的最大值，也就是 _(2 ^ 31) — 1_。然而，陣列之總大小也同時受限於系統可用的記憶體。若您試圖對總大小超過可用的 RAM 之陣列進行初始化，Common Language Runtime 將擲回 [OutOfMemoryException](http://msdn2.microsoft.com/zh-tw/library/system.outofmemoryexception%28VS.80%29.aspx) 例外狀況。
+> 每個陣列之維度長度都受限於 **Integer** 資料型別的最大值，也就是 *(2 ^ 31) — 1*。然而，陣列之總大小也同時受限於系統可用的記憶體。若您試圖對總大小超過可用的 RAM 之陣列進行初始化，Common Language Runtime 將擲回 [OutOfMemoryException](http://msdn2.microsoft.com/zh-tw/library/system.outofmemoryexception%28VS.80%29.aspx) 例外狀況。
 
 根據這個回答來看，他的大小應該跟記憶體配置有關係。
 

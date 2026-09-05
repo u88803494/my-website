@@ -89,7 +89,7 @@ printSquare(4);
 
 ![這是一個假設性的代碼](https://cdn-images-1.medium.com/max/800/1*5JA6de9Cni1_28RRVL7Dew.png)
 
-_這是一個假設性的代碼_
+*這是一個假設性的代碼*
 
 假設一個程式是 single thread 而每次執行一個請求之後，就要乾巴巴的等待請求完成，這會造成什麼問題？
 
@@ -148,13 +148,13 @@ console.log('JSConfEU');
 
 ![可以看到 web APIs 依然在計時](https://cdn-images-1.medium.com/max/800/1*_Dvx_z5SmeQhQCojE7Gw1g.png)
 
-_可以看到 web APIs 依然在計時_
+*可以看到 web APIs 依然在計時*
 
 然後 `console.log('JSConfEU')` 執行印出 `JSConfEU `且移出 stack，也因為 `main()` 執行完成，所以就把 `main()` 也一併移出 stack
 
 ![這邊可以看到依然在計時](https://cdn-images-1.medium.com/max/800/1*8hH2ROhXxEZ49JRt6OCuTA.png)
 
-_這邊可以看到依然在計時_
+*這邊可以看到依然在計時*
 
 當 timer 計時完成之後，就把 web APIs 的內容推送到 task queue
 
@@ -174,7 +174,7 @@ _這邊可以看到依然在計時_
 
 ![done](https://cdn-images-1.medium.com/max/800/1*nFXF8veFGuKzAEyCzAIvmw.png)
 
-_done_
+*done*
 
 大功告成
 
