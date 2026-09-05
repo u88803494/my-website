@@ -21,8 +21,8 @@ import { CONFIG, REPO_ROOT } from "./config";
 import { EXCLUDED_FILES } from "./exclude";
 import { renderMdx, writeChecklist } from "./output";
 import { parsePost } from "./parse";
-import { buildSlugPlan } from "./slug-plan";
 import type { SlugPlan } from "./slug-plan";
+import { buildSlugPlan } from "./slug-plan";
 import type { CliOptions, ConversionState, ConversionStats } from "./types";
 
 /**
@@ -190,7 +190,11 @@ async function convert(): Promise<void> {
     existing: new Set(existingFiles),
     ownerOfExisting,
     pinnedDates: new Map([...existingPosts].map(([source, { date }]) => [source, date])),
-    stats: { converted: [], failed: [...plan.conflicts.map((c) => ({ file: c.sourceFile, reason: `slug held by ${c.heldBy}` }))], skipped: 0 },
+    stats: {
+      converted: [],
+      failed: [...plan.conflicts.map((c) => ({ file: c.sourceFile, reason: `slug held by ${c.heldBy}` }))],
+      skipped: 0,
+    },
   };
 
   for (const fileName of candidates) {
