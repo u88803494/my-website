@@ -107,7 +107,7 @@ closure 跟 作用域深深的綁在一起，要理解 closure 就必須要了�
 
 這個 scope chain 被初始化成 activation object
 
-進入一個新的 function EC 的時候，會在其 scope 加上 activation object(AO) 以及儲存在 [[Scope]] 裡面的 scope chain
+進入一個新的 function EC 的時候，會在其 scope 加上 activation object(AO) 以及儲存在 \[\[Scope\]\] 裡面的 scope chain
 
 ```
 Enter function EC =>
@@ -185,7 +185,7 @@ test.[[Scope]] = globalEC.scopeChain // = globalEC.VO
 
 然後執行的時候會把 a 的值改成 1
 
-接著就進入 test 這個 function，就產生一個 testEC，scope chain 會等於自己本身+上 test.[[Scope]] 內部的值，並且一樣要產生一個 inner 的隱藏屬性，inner.[[Scope]] 內容是 testEC.scopeChain 的值。
+接著就進入 test 這個 function，就產生一個 testEC，scope chain 會等於自己本身+上 test.\[\[Scope\]\] 內部的值，並且一樣要產生一個 inner 的隱藏屬性，inner.\[\[Scope\]\] 內容是 testEC.scopeChain 的值。
 
 ```
 testEC: {
@@ -219,7 +219,7 @@ test.[[Scope]] = globalEC.scopeChain
 
 然後執行階段 b 等於 2。
 
-接著進入 inner，產生一個 innerEC，進入之後初始化 c，然後 Scope chain 等於 innerEC.VO, inner.[[Scope]] 的值，然後經過轉換，就可以得到一串 Scope chain 找資料的鏈鎖 — [innerEC.AO, testEC.AO, globalEC.VO]
+接著進入 inner，產生一個 innerEC，進入之後初始化 c，然後 Scope chain 等於 innerEC.VO, inner.\[\[Scope\]\] 的值，然後經過轉換，就可以得到一串 Scope chain 找資料的鏈鎖 — \[innerEC.AO, testEC.AO, globalEC.VO\]
 
 ```
 innerEC: {
@@ -381,7 +381,7 @@ testEC.AO: {
 }
 ```
 
-接著是 globalEC 的 `inner();` 編譯，就會進入 innerEC，初始化中，scopeChain 就會放上自己的 AO 並且把 innerEC.[[Scope]] 的資料放入，呈現如下方的樣子：
+接著是 globalEC 的 `inner();` 編譯，就會進入 innerEC，初始化中，scopeChain 就會放上自己的 AO 並且把 innerEC.\[\[Scope\]\] 的資料放入，呈現如下方的樣子：
 
 ```
 inner.[[Scope]] = [testEC.AO, globalEC.VO]
@@ -763,9 +763,9 @@ console.log(myWallet.getMoney());
 
 單純讓框架內有框架自己內部的變數即可。思考一下也發現沒錯，這點很重要，不然要用一個框架還要小心，是否有什麼變數不能使用，會重複到？這樣好會增加使用上的難度。
 
-這邊最主要的是我們要知道 [[Scope]] 到底是怎麼儲存資料的，因為通過這個的模式，才可以理解到整個 scope chain 到底是長什麼樣子。
+這邊最主要的是我們要知道 \[\[Scope\]\] 到底是怎麼儲存資料的，因為通過這個的模式，才可以理解到整個 scope chain 到底是長什麼樣子。
 
-也只有通過 [[Scope]] 處理好 scope chain 到底是怎麼運作的。
+也只有通過 \[\[Scope\]\] 處理好 scope chain 到底是怎麼運作的。
 
 上一篇：[前端中階：JS令人搞不懂的地方-hoisting](https://medium.com/@hugh_Program_learning_diary_Js/%E5%89%8D%E7%AB%AF%E4%B8%AD%E9%9A%8E-js%E4%BB%A4%E4%BA%BA%E6%90%9E%E4%B8%8D%E6%87%82%E7%9A%84%E5%9C%B0%E6%96%B9-hoisting-beb1fc451c2?source=your_stories_page---------------------------)
 

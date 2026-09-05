@@ -351,14 +351,14 @@ console.log(sum([3, 4, 11]))
 ```
 
 流程：  
-在這邊，會先把 [3, 4, 11
+在這邊，會先把 \[3, 4, 11
 
-] 代進 .reduce，reduce裡面又有一個 function，所以就會先執行該 function。  
-第一次執行：回傳 初始值 "0" + arr[0] "3" 到 accumulator，accumulator = 3
+\] 代進 .reduce，reduce裡面又有一個 function，所以就會先執行該 function。  
+第一次執行：回傳 初始值 "0" + arr\[0\] "3" 到 accumulator，accumulator = 3
 
-第二次執行：回傳 accumulator "3" + arr[1] "4" 到 accumulator，accumulator = 7。
+第二次執行：回傳 accumulator "3" + arr\[1\] "4" 到 accumulator，accumulator = 7。
 
-第三次執行：回傳 accumulator “7” + arr[2] “11” 到 accumulator，，accumulator = 18。
+第三次執行：回傳 accumulator “7” + arr\[2\] “11” 到 accumulator，，accumulator = 18。
 
 arr.reduce(function(accumulator, value) \{ return accumulator + value\}, 0) 這整串等於 18 。
 

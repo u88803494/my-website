@@ -521,7 +521,7 @@ globalEC: {
 }
 ```
 
-### 31. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+### 31. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.\[\[Scope\]\] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
 
 stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` web APIs：cb_timer(1秒)、cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
 
@@ -637,7 +637,7 @@ globalEC: {
 }
 ```
 
-### 36. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+### 36. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.\[\[Scope\]\] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
 
 stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 web APIs：cb_timer(2秒)、cb_timer(3秒)、cb_timer(4秒) call queue： event loop → call stack
 
@@ -753,7 +753,7 @@ globalEC: {
 }
 ```
 
-### 41. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+### 41. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.\[\[Scope\]\] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
 
 stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 web APIs：cb_timer(3秒)、cb_timer(4秒) call queue：cb event loop → call stack
 
@@ -869,7 +869,7 @@ globalEC: {
 }
 ```
 
-### 46. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+### 46. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.\[\[Scope\]\] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
 
 stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 web APIs：cb_timer(4秒) call queue：cb event loop → call stack
 
@@ -985,7 +985,7 @@ globalEC: {
 }
 ```
 
-### 51. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.[[Scope]] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
+### 51. call queue 發現有個待執行。於是把 call queue 的內容，移到 stack。把 cb 放入 stack 且因為 cb 是 function，所以進入 cbEC，產生 AO 並初始化。因為沒有需要編譯的部份，所以 AO 為空。產生一個 cb.\[\[Scope\]\] 內容等於 globalEC.scopeChain 會等於 globalEC.VO。cbEC 的 scopeChain 等於 `[cbEC.AO, cb.[[Scope]]]`，實際上等同於 `[cbEC.AO, globalEC.VO]`。
 
 stack：`cb()` 印出的資料：`i: 0` `i: 1` `i: 2` `i: 3` `i: 4` 5 5 5 5 web APIs： call queue： event loop → call stack
 
@@ -1740,11 +1740,11 @@ undefined
 
 從 execution context 到作用域這兩個大重點，從這邊才可以知道 closure、hoisting 等的原理，以及產生的原因。所以我就可以只用一套 execution 跟 context 去打天下了，就不用特別去硬記那些規則到底是什麼了。
 
-因為這種硬記只會很容易就忘掉了，說實在的，當我在 [Week17] 重新學習到 hoisting 的部份，我早就把規則都忘光了。甚至想不太起來 hoisting 到底是什麼意思。
+因為這種硬記只會很容易就忘掉了，說實在的，當我在 \[Week17\] 重新學習到 hoisting 的部份，我早就把規則都忘光了。甚至想不太起來 hoisting 到底是什麼意思。
 
 ### hoisting
 
-在 hoisting 的部份我記得，剛開始學習的時候，我是很認為自己是知道的、理解的，因為前面在看直播影片的時候，我都是答對的，結果 [Week17] 提供的文章，老師的例子稍微不一樣一點我就答錯了。
+在 hoisting 的部份我記得，剛開始學習的時候，我是很認為自己是知道的、理解的，因為前面在看直播影片的時候，我都是答對的，結果 \[Week17\] 提供的文章，老師的例子稍微不一樣一點我就答錯了。
 
 這就再次印證，硬記真的不行的。而通過 execution context 的理解之後，就可以更好的明白為什麼 hoisting 的規則會是如此，所以實際上不是直接產生 hositing 的機制，而是有底層的 Execution context 產生 hoisting 的機制。
 
@@ -1754,7 +1754,7 @@ undefined
 
 closure 的部份，我可以大致理解到是為什麼產生這樣子原理。在這裡又再次的理解 execution context 跟 Scope chain 的問題，要產生一個不會被回收的變數，又不會被 global 修改，是要怎麼實現的。也就是使用 function 中的 function 才可以讓 VO 不會被回收。
 
-而在 closure 的部份，也講到 IIFE 原來就是這簡單哦！馬上可以執行的 Function 這部份在 [JS102] 還是 [JS101] 的時候，就有看到老師利用了，所以知道有這種方法，只是在這邊才清楚原來整體是這樣子的。
+而在 closure 的部份，也講到 IIFE 原來就是這簡單哦！馬上可以執行的 Function 這部份在 \[JS102\] 還是 \[JS101\] 的時候，就有看到老師利用了，所以知道有這種方法，只是在這邊才清楚原來整體是這樣子的。
 
 ### 物件導向
 
