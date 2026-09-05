@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const COPIED_CLASS = "is-copied";
 const COPIED_DURATION_MS = 2000;
@@ -15,6 +15,8 @@ const COPIED_LABEL = "已複製到剪貼簿";
  * click handling globally.
  */
 export function CodeBlockCopyScript() {
+  const statusRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const pendingButtons = new Set<HTMLButtonElement>();
 
@@ -35,9 +37,13 @@ export function CodeBlockCopyScript() {
           // The visible "複製"/"已複製" swap is CSS-only (::after content, see
           // globals.css) and screen readers do not read pseudo-element content
           // at all. aria-label additionally overrides it entirely when present,
-          // so without this a screen reader user got no feedback that copying
-          // had worked — same button name before and after the click.
+          // which announces the change only if the button itself is focused —
+          // Safari does not move keyboard focus to a <button> on a plain
+          // click, so a mouse-click copy there changes the label on an
+          // unfocused element and VoiceOver announces nothing. The aria-live
+          // region below announces regardless of what currently has focus.
           button.setAttribute("aria-label", COPIED_LABEL);
+          if (statusRef.current) statusRef.current.textContent = COPIED_LABEL;
           window.setTimeout(() => {
             button.classList.remove(COPIED_CLASS);
             button.setAttribute("aria-label", IDLE_LABEL);
@@ -56,5 +62,5 @@ export function CodeBlockCopyScript() {
     };
   }, []);
 
-  return null;
+  return <div ref={statusRef} role="status" aria-live="polite" className="sr-only" />;
 }
