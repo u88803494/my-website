@@ -151,4 +151,65 @@ describe("content corpus invariants", () => {
       .map((a) => a.file);
     expect(offenders).toEqual([]);
   });
+
+  // Regression guard for the two malformed pseudo-links downgraded in an
+  // earlier fix: an <a href> that was never a URL (the author had typed the
+  // article's own title into href by mistake).
+  //
+  // Strips inline code spans too: inline `arr[0]()` reads identically to an
+  // empty-destination link to a naive `](...)` scan, but it's a function
+  // call, not a link.
+  it("has no markdown link pointing at a non-http(s)/mailto destination", async () => {
+    const corpus = await loadCorpus();
+    const offenders: string[] = [];
+    for (const article of corpus) {
+      const prose = stripCodeFences(article.body).replace(/`[^`\n]*`/g, "");
+      for (const match of prose.matchAll(/\]\(([^)]*)\)/g)) {
+        const url = match[1] ?? "";
+        if (!/^(https?:|mailto:)/.test(url)) {
+          offenders.push(`${article.file}: ${url.slice(0, 60)}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  // Regression guard for the injection fix: an iframe embed must only ever
+  // come from the allow-listed hosts convertFigure restricts embeds to.
+  const EMBEDDABLE_HOSTS = ["codepen.io", "codesandbox.io", "player.vimeo.com", "youtube-nocookie.com", "youtube.com"];
+  it("every iframe embed points at an allow-listed host over https", async () => {
+    const corpus = await loadCorpus();
+    const offenders: string[] = [];
+    for (const article of corpus) {
+      // An article that teaches HTML (e.g. 前端網頁基礎-html.mdx) legitimately
+      // shows <iframe> inside a code sample — that is documentation, not an
+      // embed the converter produced. Only a real (non-fenced) iframe matters
+      // here: convertFigure only ever emits one outside a fence.
+      for (const match of stripCodeFences(article.body).matchAll(/<iframe\s+src="([^"]*)"/g)) {
+        const src = match[1] ?? "";
+        const isSafe = src.startsWith("https://") && EMBEDDABLE_HOSTS.some((host) => src.includes(host));
+        if (!isSafe) offenders.push(`${article.file}: ${src}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  // Only counts a line that is *only* a fence marker (what convertPre actually
+  // emits) — a line like "```lang``` 高亮顯示" is prose demonstrating fence
+  // syntax (present in the one article that documents Markdown itself), not
+  // an unpaired fence.
+  it("has no unfenced code fence markers (odd number of standalone ``` lines per file)", async () => {
+    const corpus = await loadCorpus();
+    const offenders = corpus
+      .filter((a) => (a.body.match(/^`{3,}[^`\n]*$/gm)?.length ?? 0) % 2 !== 0)
+      .map((a) => a.file);
+    expect(offenders).toEqual([]);
+  });
+
+  it("every draft's date does not read as a future migration artifact beyond today", async () => {
+    const corpus = await loadCorpus();
+    const now = Date.now();
+    const offenders = corpus.filter((a) => new Date(a.frontmatter.date ?? "").getTime() > now).map((a) => a.file);
+    expect(offenders).toEqual([]);
+  });
 });
