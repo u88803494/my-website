@@ -767,23 +767,14 @@ console.log(add(3, 5)) // 因為預設輸出 add ，所以這邊可以直接使�
 
 > Export 有幾種方式：
 
-> 1. export function add()\{\}，使用 import \{add\}
+> 1. export function add()\{\}，使用 import \{add\} 引
+>    入
 
->    引
+> 2. export \{ add \}，與上面那種一
+>    樣
 
-> 入
-
-> 2. export \{ add \}，與上面那種
-
->    一
-
-> 樣
-
-> 3. export default function add()，使用 import add 引入，不需要加大
-
->    括
-
-> 號
+> 3. export default function add()，使用 import add 引入，不需要加大括
+>    號
 
 > 如果想要用其他名字，可以用 as 取別名，例如說 export \{ add as addFunction \}
 
