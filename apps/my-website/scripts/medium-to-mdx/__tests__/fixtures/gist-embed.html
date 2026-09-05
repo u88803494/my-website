@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JS 額外補充：hoisting 變數提升（二）</title>
+    <style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field="subtitle"],
+      section[data-field="description"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <article class="h-entry">
+      <header>
+        <h1 class="p-name">JS 額外補充：hoisting 變數提升（二）</h1>
+      </header>
+      <section data-field="subtitle" class="p-summary">Hoisting</section>
+      <section data-field="body" class="e-content">
+        <section name="8a5a" class="section section--body section--first">
+          <div class="section-divider"><hr class="section-divider" /></div>
+          <div class="section-content">
+            <div class="section-inner sectionLayout--insetColumn">
+              <h3 name="6871" id="6871" class="graf graf--h3 graf--leading graf--title">
+                JS 額外補充：hoisting 變數提升（二）
+              </h3>
+              <p name="54b6" id="54b6" class="graf graf--p graf-after--h3">
+                這篇是接續這篇內容的建議先參考該篇在來看這篇：<a
+                  href="https://medium.com/@hugh_Program_learning_diary_Js/%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-3779505a3216?source=your_stories_page---------------------------"
+                  data-href="https://medium.com/@hugh_Program_learning_diary_Js/%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-3779505a3216?source=your_stories_page---------------------------"
+                  class="markup--anchor markup--p-anchor"
+                  target="_blank"
+                  >JS 額外補充 hoisting 變數提升</a
+                >
+              </p>
+              <h3 name="2354" id="2354" class="graf graf--h3 graf-after--p">Hoisting</h3>
+              <p name="cee0" id="cee0" class="graf graf--p graf-after--h3">變數(宣告)提升</p>
+              <pre
+                name="30c3"
+                id="30c3"
+                class="graf graf--pre graf-after--p"
+              >function test() { <br>  console.log(a);<br>  var a = 10;<br>}<br>// undefined</pre>
+              <p name="d6c5" id="d6c5" class="graf graf--p graf-after--pre">最簡單的就是上述的範例會等於</p>
+              <pre
+                name="7666"
+                id="7666"
+                class="graf graf--pre graf-after--p"
+              >function test() {<br>  var a; <br>  console.log(a);<br>  a = 10;<br>}</pre>
+              <pre name="0570" id="0570" class="graf graf--pre graf-after--pre">// undefined</pre>
+              <p name="4e3b" id="4e3b" class="graf graf--p graf-after--pre">
+                變數提升最重要的目的：可以在宣告 function 之前就使用到該 function，後來就演變成變數也可以提升
+              </p>
+              <pre
+                name="2157"
+                id="2157"
+                class="graf graf--pre graf-after--p"
+              >function test() {<br> let a = 1;<br> function test2() {<br>  console.log(a)<br> }<br> test2();<br>}</pre>
+              <pre name="a05f" id="a05f" class="graf graf--pre graf-after--pre">test();<br>// 1</pre>
+              <p name="e282" id="e282" class="graf graf--p graf-after--pre">
+                以這樣來說，他找不到 a 就會出去上層找 a 所以得到答案 1
+              </p>
+              <p name="bc51" id="bc51" class="graf graf--p graf-after--p">-</p>
+              <p name="c83c" id="c83c" class="graf graf--p graf-after--p">如果改為</p>
+              <pre
+                name="584f"
+                id="584f"
+                class="graf graf--pre graf-after--p"
+              >function test() {<br> let a = 1;<br> function test2() {<br>  console.log(a) <br>  var a = 10;<br> }<br> test2();<br>}</pre>
+              <pre name="bdfa" id="bdfa" class="graf graf--pre graf-after--pre">test();<br>// undefined</pre>
+              <p name="7a6f" id="7a6f" class="graf graf--p graf-after--pre">
+                會這樣是因為 var a 也會變數提升，所以等於重新定義了一次，所以印出來就是 undefined
+              </p>
+              <p name="34f0" id="34f0" class="graf graf--p graf-after--p">
+                前面說 let 不會變數提升，所以把這題改成 let
+              </p>
+              <pre
+                name="b745"
+                id="b745"
+                class="graf graf--pre graf-after--p"
+              >function test() {<br> let a = 1;<br> function test2() {<br>  console.log(a) <br>  let a = 10;<br> }<br> test2();<br>}</pre>
+              <pre name="3ca5" id="3ca5" class="graf graf--pre graf-after--pre">test();<br>// a is not defined</pre>
+              <p name="5ac4" id="5ac4" class="graf graf--p graf-after--pre">如果沒有變數提升不應該是往上找嗎？</p>
+              <p name="3daf" id="3daf" class="graf graf--p graf-after--p">
+                這個現象說明 let 還是有變數提升的，但是方式跟 var 不一樣
+              </p>
+              <p name="c444" id="c444" class="graf graf--p graf-after--p">var 的話 變數會被初始化為 undefined</p>
+              <p name="c8a9" id="c8a9" class="graf graf--p graf-after--p">
+                let 的話 在給值之前去存取的話，會出現
+                <code class="markup--code markup--p-code">ReferenceError: is not defined</code> ，有個名稱叫做 Temporal
+                Dead Zone，這邊的意思是，從變數提升的位置到實際賦值的位置，都稱作為 Temporal Dead Zone, TDZ.
+                <a
+                  href="https://segmentfault.com/a/1190000008213835"
+                  data-href="https://segmentfault.com/a/1190000008213835"
+                  class="markup--anchor markup--p-anchor"
+                  rel="noopener"
+                  target="_blank"
+                  >補充資料</a
+                >
+              </p>
+              <figure name="c292" id="c292" class="graf graf--figure graf--iframe graf-after--p">
+                <script src="https://gist.github.com/u88803494/b5bd81b9cfbd9d73c008f0bafaabb42b.js"></script>
+              </figure>
+              <p name="7d52" id="7d52" class="graf graf--p graf-after--figure">
+                所以如果中間有任何的程式碼都被視為 TDZ
+              </p>
+              <figure name="f55b" id="f55b" class="graf graf--figure graf--iframe graf-after--p">
+                <script src="https://gist.github.com/u88803494/a381c118e7e421836444881bd311a3b6.js"></script>
+              </figure>
+              <p name="e8f4" id="e8f4" class="graf graf--p graf-after--figure graf--trailing">
+                所以在 TDZ 的區塊內要用到那個變數，就會跳出
+                <code class="markup--code markup--p-code">ReferenceError: a is not defined</code> 的錯誤
+              </p>
+            </div>
+          </div>
+        </section>
+        <section name="4ec6" class="section section--body section--last">
+          <div class="section-divider"><hr class="section-divider" /></div>
+          <div class="section-content">
+            <div class="section-inner sectionLayout--insetColumn">
+              <p name="0856" id="0856" class="graf graf--p graf--leading graf--trailing">
+                <strong class="markup--strong markup--p-strong"
+                  >這些資料其實不一定要非常明白，只需要記得第一個例子所表示的，當成補充資料來了解即可。</strong
+                >
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+      <footer>
+        <p>
+          By
+          <a href="https://medium.com/@hugh-program-learning-diary-js" class="p-author h-card"
+            >Hugh&#39;s Programming life</a
+          >
+          on
+          <a href="https://medium.com/p/c5a52674e6e2"
+            ><time class="dt-published" datetime="2019-06-05T03:11:46.104Z">June 5, 2019</time></a
+          >.
+        </p>
+        <p>
+          <a
+            href="https://medium.com/@hugh-program-learning-diary-js/js-%E9%A1%8D%E5%A4%96%E8%A3%9C%E5%85%85-hoisting-%E8%AE%8A%E6%95%B8%E6%8F%90%E5%8D%87-%E4%BA%8C-c5a52674e6e2"
+            class="p-canonical"
+            >Canonical link</a
+          >
+        </p>
+        <p>Exported from <a href="https://medium.com">Medium</a> on September 2, 2026.</p>
+      </footer>
+    </article>
+  </body>
+</html>

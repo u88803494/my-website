@@ -24,6 +24,11 @@ const EXCLUDE_PATTERNS = [
   "**/*.mdx",
   "scripts/**/*.ts",
   "scripts/**/*.js",
+  // Real (not synthetic) Medium export HTML used as golden-test input — data,
+  // not code a human needs to review line-by-line. **/*.html isn't used here
+  // since it would also exempt genuine app source, which this repo has none
+  // of today but shouldn't silently stop being checked if that changes.
+  "apps/my-website/scripts/medium-to-mdx/__tests__/fixtures/**",
   "**/*.sh",
   "dist/**",
   "build/**",

@@ -8,3 +8,12 @@ coverage
 # wraps CJK sentences mid-word, since prose wrapping assumes space-separated
 # words. These are content files — there is nothing for a code formatter to fix.
 content/blog/
+
+# Golden-test snapshots (scripts/medium-to-mdx/__tests__/golden.test.ts).
+# Same failure mode as content/blog/ above: Prettier's markdown formatter
+# re-serializes a parsed AST with its own preferred backtick count for inline
+# code spans, so a literal ```triple-backtick``` in the snapshot silently
+# becomes `single-backtick` on the next `prettier --write .` — a snapshot the
+# test itself never wrote, causing the next test run to report a mismatch
+# against content the converter never actually produced.
+scripts/medium-to-mdx/__tests__/__snapshots__/
