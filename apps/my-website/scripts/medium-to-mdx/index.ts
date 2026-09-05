@@ -89,7 +89,10 @@ async function convertOne(
 ): Promise<void> {
   const slug = plan.bySourceFile.get(fileName);
   if (!slug) {
-    state.stats.failed.push({ file: fileName, reason: "no slug assigned" });
+    // Every candidate ends up in either plan.bySourceFile or plan.conflicts —
+    // never neither — and convert() already seeds state.stats.failed from
+    // plan.conflicts before this loop runs. Pushing here too would count the
+    // same oversized-slug failure twice.
     return;
   }
 
