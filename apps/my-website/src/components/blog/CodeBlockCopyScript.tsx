@@ -47,6 +47,11 @@ export function CodeBlockCopyScript() {
           window.setTimeout(() => {
             button.classList.remove(COPIED_CLASS);
             button.setAttribute("aria-label", IDLE_LABEL);
+            // Reset the live region's text too, not just the button's label —
+            // otherwise the *second* copy on the page writes the same string
+            // it already holds, which most screen readers don't re-announce
+            // since nothing in the DOM actually changed.
+            if (statusRef.current) statusRef.current.textContent = "";
             pendingButtons.delete(button);
           }, COPIED_DURATION_MS);
         })
