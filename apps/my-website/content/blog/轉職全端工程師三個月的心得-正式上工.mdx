@@ -65,12 +65,12 @@ sourceFile: "2020-10-24_---------------------3a769dd67c7d.html"
 
 > **Establish Node.js with Express for Development**
 
-> **Goal**
+> **Goal**  
 > `GET localhost:3000/hello` server should respond `World` with status code `200 GET localhost:3000/db` server should respond with the content from `db.stats()` and code `200`
 
-> **Further requirements**
-> es6 transpile
-> eslint
+> **Further requirements**  
+> es6 transpile  
+> eslint  
 > unit test with `mocha` and `chai`
 
 而初次建立專案之後，就是很簡單的建立專案，但難的部分很快就來了，因為我後端沒用過 node.js，而這邊要直接用 Express.js，所以說實在的梯度真的很高。而且 node.js 原生也不支援 `import`，所以我就必須要另外安裝 babel 才行。
@@ -119,8 +119,8 @@ code 就不用說了，引入除了要照字母順序之外，還要分為從 pa
 
 在這裡開始變成寫 issue 會要求要盡量詳細，然後還需要分幾個細項來寫，如下：
 
-> Summary
-> Behaviors
+> Summary  
+> Behaviors  
 > Possible Implementations
 
 這邊整體就是一個請假系統，要有使用者的 APIs，然後第三個就是做請假的 APIs 了。困難點在於，我必須要跟 users APIs，做結合，也就是說，在使用者針對 leave(請假) APIs 發送 Request 的時候，必須要先驗證使用者的身份，去分可以誰可以執行哪些 API，誰不行。

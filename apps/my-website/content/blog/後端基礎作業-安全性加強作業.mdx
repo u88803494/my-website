@@ -320,12 +320,12 @@ if (!$result) {
 
 第三點，筆數的選法有找到比較舊的[資料](http://www.programmer-club.com.tw/ShowSameTitleN/sqllanguage/2095.html)。可以透過 LIMIT 跳過前面幾筆，選後面幾筆這樣。
 
-> 這個問題，用 MySQL 的人就比較幸福了
-> MySQL 可以用 LIMIT 來限定取出的筆數
-> 例如：
-> SELECT * FROM table_1 LIMIT 50
-> 表示取前 50 筆
-> SELECT * FROM table_1 LIMIT 50, 50
+> 這個問題，用 MySQL 的人就比較幸福了  
+> MySQL 可以用 LIMIT 來限定取出的筆數  
+> 例如：  
+> SELECT * FROM table_1 LIMIT 50  
+> 表示取前 50 筆  
+> SELECT * FROM table_1 LIMIT 50, 50  
 > 表示跳過前 50 筆後，取 50 筆，也就是 51~100 筆
 
 然後是換頁的部分，以 php 來說每次換頁都要重新跑一次資料。然後是根據換頁的按鈕來去看要怎麼下指令撈資料，所以按鈕本身要 hidden 一些值才行吧。
