@@ -12,17 +12,40 @@ interface MdxComponentProps {
 }
 
 /**
- * Overrides the default <img> the compiled MDX renders for `![alt](src)`.
+ * Builds the <img> override for one MdxContent render.
  *
  * next/image needs known dimensions (or a configured loader) at build time;
  * these all point at Medium's CDN with no size on record, and are only there
  * until self-hosting is sorted out (see issue #124), so a plain <img> stays.
  * loading="lazy" still matters — some migrated articles embed 30+ images, all
  * of which would otherwise start downloading immediately on page load.
+ *
+ * The first image in an article is commonly the LCP candidate (a hero
+ * screenshot right under the <h1>), so it alone gets loading="eager" +
+ * fetchPriority="high" instead — lazy-loading it works against the metric
+ * loading="lazy" exists to protect everywhere else. The counter is created
+ * fresh per MdxContent call (a Server Component, rendered once per page, not
+ * subject to Client Component Strict Mode double-render) so it can't leak
+ * state between articles.
  */
-function MdxImage(props: ComponentPropsWithoutRef<"img">) {
-  // eslint-disable-next-line @next/next/no-img-element -- see comment above
-  return <img alt="" decoding="async" loading="lazy" {...props} />;
+function createMdxImage(): ComponentType<ComponentPropsWithoutRef<"img">> {
+  let seen = false;
+
+  return function MdxImage(props: ComponentPropsWithoutRef<"img">) {
+    const isFirst = !seen;
+    seen = true;
+
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- see comment above
+      <img
+        alt=""
+        decoding="async"
+        loading={isFirst ? "eager" : "lazy"}
+        fetchPriority={isFirst ? "high" : "auto"}
+        {...props}
+      />
+    );
+  };
 }
 
 /**
@@ -83,5 +106,5 @@ interface MdxContentProps {
 
 export function MdxContent({ code }: MdxContentProps) {
   const Component = useMdxComponent(code);
-  return <Component components={{ img: MdxImage }} />;
+  return <Component components={{ img: createMdxImage() }} />;
 }
