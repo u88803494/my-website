@@ -1,5 +1,29 @@
-import type { ComponentType } from "react";
+import type { ComponentPropsWithoutRef, ComponentType } from "react";
 import * as runtime from "react/jsx-runtime";
+
+/** The subset of the standard MDX component-override map this app overrides. */
+interface MdxComponentOverrides {
+  img?: ComponentType<ComponentPropsWithoutRef<"img">>;
+}
+
+/** Every compiled MDX component accepts this — @mdx-js/mdx's standard override prop. */
+interface MdxComponentProps {
+  components?: MdxComponentOverrides;
+}
+
+/**
+ * Overrides the default <img> the compiled MDX renders for `![alt](src)`.
+ *
+ * next/image needs known dimensions (or a configured loader) at build time;
+ * these all point at Medium's CDN with no size on record, and are only there
+ * until self-hosting is sorted out (see issue #124), so a plain <img> stays.
+ * loading="lazy" still matters — some migrated articles embed 30+ images, all
+ * of which would otherwise start downloading immediately on page load.
+ */
+function MdxImage(props: ComponentPropsWithoutRef<"img">) {
+  // eslint-disable-next-line @next/next/no-img-element -- see comment above
+  return <img alt="" decoding="async" loading="lazy" {...props} />;
+}
 
 /**
  * Velite's `s.mdx()` field pre-compiles MDX source into a JS function body
@@ -35,7 +59,7 @@ import * as runtime from "react/jsx-runtime";
  * patterns were written against, and it would then throw on any article whose
  * prose or code sample happens to contain the word "import" or "export".
  */
-function useMdxComponent(code: string): ComponentType {
+function useMdxComponent(code: string): ComponentType<MdxComponentProps> {
   try {
     const fn = new Function(code);
     return fn(runtime).default;
@@ -59,5 +83,5 @@ interface MdxContentProps {
 
 export function MdxContent({ code }: MdxContentProps) {
   const Component = useMdxComponent(code);
-  return <Component />;
+  return <Component components={{ img: MdxImage }} />;
 }

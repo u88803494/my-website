@@ -82,7 +82,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <div className="mx-auto max-w-6xl px-4 py-8 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start lg:gap-12">
         <article
           className={cn(
-            "prose prose-sm sm:prose-base lg:prose-lg mx-auto max-w-2xl lg:mx-0",
+            // prose-sm (14px) reads fine for Latin text but is too small for
+            // CJK's denser glyphs, and every phone falls under the sm: breakpoint
+            "prose prose-base lg:prose-lg mx-auto max-w-2xl lg:mx-0",
             "prose-headings:text-base-content prose-p:text-base-content/90 prose-strong:text-base-content",
             "prose-a:text-primary prose-code:text-base-content",
             "prose-p:leading-[1.75] prose-li:leading-[1.75]",
