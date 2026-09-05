@@ -31,6 +31,9 @@ export default defineConfig({
           thumbnail: s.string().optional(),
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
+          // Which Medium export produced this file. Lets a re-run tell its own
+          // output apart from another post's before overwriting anything.
+          sourceFile: s.string().optional(),
           code: s.mdx({
             rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton, validateMdxCode],
           }),

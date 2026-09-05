@@ -42,11 +42,3 @@ export function loadBody(bodyHtml: string): { $: CheerioAPI; body: Element } {
   if (!body) throw new Error("fixture has no body section");
   return { $, body };
 }
-
-/** Load an inline fragment, returning its child nodes for convertInline. */
-export function loadInline(html: string): { $: CheerioAPI; nodes: ReturnType<CheerioAPI>["prototype"] } {
-  const $ = cheerio.load(`<div id="root">${html}</div>`);
-  const root = $("#root").get(0);
-  if (!root) throw new Error("fixture has no root");
-  return { $, nodes: root.children as never };
-}

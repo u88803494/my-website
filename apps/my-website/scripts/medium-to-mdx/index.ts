@@ -21,7 +21,8 @@ import { CONFIG, REPO_ROOT } from "./config";
 import { EXCLUDED_FILES } from "./exclude";
 import { renderMdx, writeChecklist } from "./output";
 import { parsePost } from "./parse";
-import { resolveSlug } from "./slug-plan";
+import { buildSlugPlan } from "./slug-plan";
+import type { SlugPlan } from "./slug-plan";
 import type { CliOptions, ConversionState, ConversionStats } from "./types";
 
 /**
@@ -40,35 +41,82 @@ async function resolveInputDir(explicit: string | undefined): Promise<string> {
   return path.join(sourceRoot, exportDir.name, "posts");
 }
 
+interface ExistingPost {
+  slug: string;
+  date: string;
+}
+
+/**
+ * Read back what previous conversions produced, keyed by source file.
+ *
+ * The slug keeps a published URL attached to the post that owns it, and the
+ * date keeps drafts stable — they have no date in the export, so without this
+ * they would drift to the file's mtime on every re-run.
+ */
+async function readExistingPosts(
+  outDir: string,
+  files: string[],
+  knownSources: ReadonlyMap<string, string>,
+): Promise<Map<string, ExistingPost>> {
+  const posts = new Map<string, ExistingPost>();
+
+  for (const file of files) {
+    if (!file.endsWith(".mdx")) continue;
+    const text = await fs.readFile(path.join(outDir, file), "utf8");
+    // Files written before sourceFile existed are adopted by matching their
+    // mediumUrl, so the first run after this change claims them rather than
+    // writing a renamed duplicate alongside.
+    const source =
+      /^sourceFile: "(.*)"$/m.exec(text)?.[1] ?? knownSources.get(/^mediumUrl: "(.*)"$/m.exec(text)?.[1] ?? "");
+    if (!source) continue;
+
+    posts.set(source, {
+      date: /^date: (.*)$/m.exec(text)?.[1]?.trim() ?? "",
+      slug: file.replace(/\.mdx$/, ""),
+    });
+  }
+
+  return posts;
+}
+
 /** Convert one file into the output dir, recording the outcome in state. */
 async function convertOne(
   fileName: string,
   inputDir: string,
   options: CliOptions,
   state: ConversionState,
+  plan: SlugPlan,
 ): Promise<void> {
-  try {
-    const post = await parsePost(path.join(inputDir, fileName));
-    const resolution = resolveSlug(post, fileName, {
-      existing: state.existing,
-      force: options.force,
-      usedSlugs: state.usedSlugs,
-    });
+  const slug = plan.bySourceFile.get(fileName);
+  if (!slug) {
+    state.stats.failed.push({ file: fileName, reason: "no slug assigned" });
+    return;
+  }
 
-    if (resolution.kind === "skip") {
+  try {
+    // Never let one post take over another's file. The plan prevents this by
+    // construction; this catches a stale plan or a hand-edited filename.
+    const owner = state.ownerOfExisting.get(slug);
+    if (owner && owner !== fileName) {
+      state.stats.failed.push({ file: fileName, reason: `slug "${slug}" belongs to ${owner}` });
+      console.error(`❌ ${fileName}: would overwrite ${owner}`);
+      return;
+    }
+
+    if (state.existing.has(`${slug}.mdx`) && !options.force) {
       state.stats.skipped++;
       return;
     }
 
-    post.slug = resolution.slug;
-    state.usedSlugs.add(resolution.slug);
+    const post = await parsePost(path.join(inputDir, fileName), { pinnedDate: state.pinnedDates.get(fileName) });
+    post.slug = slug;
 
     if (!options.dryRun) {
-      await fs.writeFile(path.join(options.out, `${resolution.slug}.mdx`), renderMdx(post), "utf8");
+      await fs.writeFile(path.join(options.out, `${slug}.mdx`), renderMdx(post), "utf8");
     }
 
     state.stats.converted.push(post);
-    console.log(`✅ ${post.title}\n   → ${resolution.slug}.mdx${post.draft ? " (draft)" : ""}`);
+    console.log(`✅ ${post.title}\n   → ${slug}.mdx${post.draft ? " (draft)" : ""}`);
   } catch (error) {
     // A single malformed export must not abort the batch
     const reason = error instanceof Error ? error.message : String(error);
@@ -106,15 +154,48 @@ async function convert(): Promise<void> {
 
   await fs.mkdir(options.out, { recursive: true });
 
+  const existingFiles = await fs.readdir(options.out);
+  // Parse every candidate up front: the slug plan needs all base slugs, and the
+  // mediumUrl doubles as the key for adopting output written before sourceFile.
+  const parsed = await Promise.all(
+    allFiles.map(async (sourceFile) => ({ post: await parsePost(path.join(inputDir, sourceFile)), sourceFile })),
+  );
+  const sourcesByMediumUrl = new Map(
+    parsed.flatMap(({ post, sourceFile }) => (post.mediumUrl ? [[post.mediumUrl, sourceFile] as const] : [])),
+  );
+  const existingPosts = await readExistingPosts(options.out, existingFiles, sourcesByMediumUrl);
+  const ownerOfExisting = new Map([...existingPosts].map(([source, { slug }]) => [slug, source]));
+
+  // Slugs claimed by hand-written MDX (no sourceFile) are off limits.
+  const reserved = new Set(
+    existingFiles
+      .filter((file) => file.endsWith(".mdx"))
+      .map((file) => file.replace(/\.mdx$/, ""))
+      .filter((slug) => !ownerOfExisting.has(slug)),
+  );
+
+  // Built from every candidate, not just this run's subset, so --limit and
+  // --only cannot change which slug a post gets.
+  const plan = buildSlugPlan({
+    candidates: parsed.map(({ post, sourceFile }) => ({ baseSlug: post.slug, sourceFile })),
+    pinned: new Map([...existingPosts].map(([source, { slug }]) => [source, slug])),
+    reserved,
+  });
+
+  for (const conflict of plan.conflicts) {
+    console.error(`❌ ${conflict.sourceFile}: slug "${conflict.slug}" is held by ${conflict.heldBy}`);
+  }
+
   const state: ConversionState = {
-    existing: new Set(await fs.readdir(options.out)),
-    stats: { converted: [], failed: [], skipped: 0 },
-    usedSlugs: new Set<string>(),
+    existing: new Set(existingFiles),
+    ownerOfExisting,
+    pinnedDates: new Map([...existingPosts].map(([source, { date }]) => [source, date])),
+    stats: { converted: [], failed: [...plan.conflicts.map((c) => ({ file: c.sourceFile, reason: `slug held by ${c.heldBy}` }))], skipped: 0 },
   };
 
   for (const fileName of candidates) {
     if (options.limit !== undefined && state.stats.converted.length >= options.limit) break;
-    await convertOne(fileName, inputDir, options, state);
+    await convertOne(fileName, inputDir, options, state, plan);
   }
 
   reportStats(state.stats, candidates.length);
@@ -127,6 +208,9 @@ async function convert(): Promise<void> {
   if (state.stats.converted.length > 0) {
     await writeChecklist(state.stats.converted, options.out);
   }
+
+  // Signal failure without truncating buffered stdout, which process.exit would.
+  if (state.stats.failed.length > 0) process.exitCode = 1;
 }
 
 async function main(): Promise<void> {

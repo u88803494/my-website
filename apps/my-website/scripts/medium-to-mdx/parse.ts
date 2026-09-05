@@ -26,18 +26,29 @@ function deriveDescription(body: string): string {
     .trim();
 }
 
-/** Resolve the publication date, falling back to file mtime for drafts. */
-async function resolveDate($: cheerio.CheerioAPI, filePath: string): Promise<string> {
-  // Published posts carry <time class="dt-published">; drafts do not.
+/**
+ * Resolve the publication date.
+ *
+ * Drafts carry no <time class="dt-published">, so they fall back to a date the
+ * caller pins — re-extracting the export would otherwise change file mtimes and
+ * silently move every draft's date.
+ */
+async function resolveDate($: cheerio.CheerioAPI, filePath: string, pinnedDate?: string): Promise<string> {
   const publishedAttr = $("time.dt-published").first().attr("datetime");
   if (publishedAttr) return new Date(publishedAttr).toISOString();
+  if (pinnedDate) return pinnedDate;
 
   const stat = await fs.stat(filePath);
   return stat.mtime.toISOString();
 }
 
 /** Parse one Medium export file (microformats2 h-entry) into a ParsedPost. */
-export async function parsePost(filePath: string): Promise<ParsedPost> {
+export interface ParseOptions {
+  /** Date to use for drafts, normally carried over from a previous conversion. */
+  pinnedDate?: string;
+}
+
+export async function parsePost(filePath: string, options: ParseOptions = {}): Promise<ParsedPost> {
   const html = await fs.readFile(filePath, "utf8");
   const $ = cheerio.load(html);
   const fileName = path.basename(filePath);
@@ -63,7 +74,7 @@ export async function parsePost(filePath: string): Promise<ParsedPost> {
 
   return {
     body,
-    date: await resolveDate($, filePath),
+    date: await resolveDate($, filePath, options.pinnedDate),
     description: description || title,
     draft: fileName.startsWith("draft_"),
     mediumUrl,

@@ -22,6 +22,9 @@ export function renderMdx(post: ParsedPost): string {
 
   if (post.thumbnail) lines.push(`thumbnail: ${yamlString(post.thumbnail)}`);
   if (post.mediumUrl) lines.push(`mediumUrl: ${yamlString(post.mediumUrl)}`);
+  // Records which export produced this file, so a re-run can tell "this is
+  // mine" from "this belongs to another post" before overwriting anything.
+  lines.push(`sourceFile: ${yamlString(post.sourceFile)}`);
 
   lines.push("---", "", post.body, "");
 
