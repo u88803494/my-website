@@ -1,0 +1,29 @@
+# Blog articles migrated from Medium.
+#
+# Prettier does two damaging things to these files, so they are excluded here at
+# the repository root — lint-staged runs Prettier from the root, and Prettier
+# only reads the .prettierignore in its working directory, so the app-level file
+# does not cover the pre-commit path.
+#
+# 1. It rewrites published article content. Code examples get reformatted
+#    (quote style, and prettier-plugin-tailwindcss reorders class lists), so the
+#    article ends up showing code the author never wrote.
+# 2. It breaks MDX escapes and hard breaks. Markdown reflow splits `\{add\}`
+#    across lines, leaving the brace unescaped, and strips the two trailing
+#    spaces that make a <br> a hard line break.
+#
+# The converter's output is canonical; nothing here needs a formatter.
+apps/my-website/content/blog/
+
+# Golden-test snapshots (apps/my-website/scripts/medium-to-mdx/__tests__).
+# Same failure mode as the migrated articles above: Prettier's markdown
+# formatter re-serializes a parsed AST with its own preferred backtick count
+# for inline code spans, so a literal ```triple-backtick``` in a snapshot
+# silently becomes `single-backtick` on the next pre-commit run — a snapshot
+# the test itself never wrote, causing the next test run to report a mismatch
+# against content the converter never actually produced.
+apps/my-website/scripts/medium-to-mdx/__tests__/__snapshots__/
+
+# Auto-generated
+apps/my-website/.velite/
+CONVERSION_CHECKLIST.md

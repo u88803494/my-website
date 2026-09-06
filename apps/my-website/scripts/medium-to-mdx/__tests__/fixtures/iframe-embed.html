@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>在 React 上實現所得即所見(WYSIWYG)功能</title>
+    <style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field="subtitle"],
+      section[data-field="description"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <article class="h-entry">
+      <header>
+        <h1 class="p-name">在 React 上實現所得即所見(WYSIWYG)功能</h1>
+      </header>
+      <section data-field="subtitle" class="p-summary">
+        這是一個支援拖放功能的前端應用程式，使用 React 和 Tailwind
+        CSS，能夠透過側邊欄添加或編輯項目，並且在畫面上進行即時調整。
+      </section>
+      <section data-field="body" class="e-content">
+        <section name="f0c7" class="section section--body section--first section--last">
+          <div class="section-divider"><hr class="section-divider" /></div>
+          <div class="section-content">
+            <div class="section-inner sectionLayout--insetColumn">
+              <h3 name="7a40" id="7a40" class="graf graf--h3 graf--leading graf--title">
+                在 React 上實現所得即所見(WYSIWYG)功能
+              </h3>
+              <h3 name="cd65" id="cd65" class="graf graf--h3 graf-after--h3">簡介</h3>
+              <p name="5f23" id="5f23" class="graf graf--p graf-after--h3">
+                在現代 Web 開發中，<strong class="markup--strong markup--p-strong">所見即所得(WYSIWYG)</strong>
+                編輯器已經成為用戶互動的關鍵功能之一，特別是在處理動態內容創建的情境下。而<strong
+                  class="markup--strong markup--p-strong"
+                  >拖放(Drag and Drop, DnD)</strong
+                >
+                功能更是讓用戶可以更加靈活地進行編輯，提升整體使用體驗。
+              </p>
+              <p name="09b4" id="09b4" class="graf graf--p graf-after--p">
+                最近在求職過程中，我遇到了一個要求實現類似 WYSIWYG 功能的挑戰，並且我選擇了使用
+                <strong class="markup--strong markup--p-strong">React</strong> 搭配
+                <strong class="markup--strong markup--p-strong">React DnD</strong>
+                來實現這個功能。為了讓大家了解這個實作過程，我整理了這篇文章來分享我的做法，並介紹如何用這些技術來實現<strong
+                  class="markup--strong markup--p-strong"
+                  >拖放編輯功能</strong
+                >。
+              </p>
+              <h3 name="0547" id="0547" class="graf graf--h3 graf-after--p">實現方式</h3>
+              <h4 name="15eb" id="15eb" class="graf graf--h4 graf-after--h3">1. 選擇技術：React + React DnD</h4>
+              <p name="755e" id="755e" class="graf graf--p graf-after--h4">
+                首先，為了實現所見即所得功能，我選擇了
+                <strong class="markup--strong markup--p-strong">React</strong> 作為前端框架，並使用
+                <strong class="markup--strong markup--p-strong">React DnD</strong> 來處理拖放交互。<strong
+                  class="markup--strong markup--p-strong"
+                  >React DnD</strong
+                >
+                是一個強大的 React
+                庫，專門用來處理拖放交互，它可以幫助我們輕鬆地實現元件的拖動、放置，並且支持自定義交互。
+              </p>
+              <h4 name="f24e" id="f24e" class="graf graf--h4 graf-after--p">2. 搭建基本結構</h4>
+              <p name="bc37" id="bc37" class="graf graf--p graf-after--h4">
+                我先搭建了基本的 UI 結構，其中包含側邊欄和主區域：
+              </p>
+              <ul class="postList">
+                <li name="04c6" id="04c6" class="graf graf--li graf-after--p">
+                  <strong class="markup--strong markup--li-strong">側邊欄</strong
+                  >：顯示可拖動的元件，如圖片、文字等。命名為 Sidebar 的 component。
+                </li>
+                <li name="4c77" id="4c77" class="graf graf--li graf-after--li">
+                  <strong class="markup--strong markup--li-strong">主區域</strong
+                  >：顯示用戶拖動並放置的元件，並能夠在這裡進行編輯。命名為 Main 的 component。
+                </li>
+              </ul>
+              <h4 name="7f36" id="7f36" class="graf graf--h4 graf-after--li">3. 實現拖放功能</h4>
+              <p name="8db7" id="8db7" class="graf graf--p graf-after--h4">
+                在 <strong class="markup--strong markup--p-strong">React DnD</strong> 中，拖放交互主要涉及兩個部分：
+              </p>
+              <ul class="postList">
+                <li name="54b4" id="54b4" class="graf graf--li graf-after--p">
+                  <strong class="markup--strong markup--li-strong">拖動源(Drag Source)</strong
+                  >：這部分控制了哪些元素可以被拖動。
+                </li>
+                <li name="822f" id="822f" class="graf graf--li graf-after--li">
+                  <strong class="markup--strong markup--li-strong">放置目標(Drop Target)</strong
+                  >：這部分決定了元素可以被放置在哪些區域。
+                </li>
+              </ul>
+              <p name="4fc7" id="4fc7" class="graf graf--p graf-after--li">
+                使用 <strong class="markup--strong markup--p-strong">React DnD</strong> 的
+                <strong class="markup--strong markup--p-strong">useDrag</strong> 和
+                <strong class="markup--strong markup--p-strong">useDrop</strong>
+                hooks，可以讓我輕鬆地將拖動和放置邏輯綁定到指定的元素上。
+              </p>
+              <h4 name="272b" id="272b" class="graf graf--h4 graf-after--p">4. 編輯功能</h4>
+              <p name="975a" id="975a" class="graf graf--p graf-after--h4">
+                對於拖動過來的元件，我需要允許用戶進行編輯。在這個過程中，主要是處理圖片的
+                URL、寬度、高度等屬性。我使用了 <strong class="markup--strong markup--p-strong">React state</strong> 和
+                <strong class="markup--strong markup--p-strong">useEffect</strong>
+                來管理編輯的狀態，並在用戶更新屬性後即時更新顯示。
+              </p>
+              <p name="bcd6" id="bcd6" class="graf graf--p graf-after--p">接下來我們就可以實作了。</p>
+              <h3 name="d75f" id="d75f" class="graf graf--h3 graf-after--p">
+                <strong class="markup--strong markup--h3-strong">設置 React DnD</strong>
+              </h3>
+              <ul class="postList">
+                <li name="b087" id="b087" class="graf graf--li graf-after--h3">
+                  我先安裝了 <code class="markup--code markup--li-code">react-dnd</code> 和
+                  <code class="markup--code markup--li-code">react-dnd-html5-backend</code>，並將其配置到我的應用中，讓
+                  React 元件支持拖放功能。
+                </li>
+              </ul>
+              <pre
+                data-code-block-mode="2"
+                spellcheck="false"
+                data-code-block-lang="bash"
+                name="6fc5"
+                id="6fc5"
+                class="graf graf--pre graf-after--li graf--preV2"
+              ><span class="pre--content">yarn add react-dnd react-dnd-html5-backend</span></pre>
+              <p name="ded8" id="ded8" class="graf graf--p graf-after--pre">
+                然後，我在 <strong class="markup--strong markup--p-strong">App.js</strong> 中設置了 DnD 提供的
+                <strong class="markup--strong markup--p-strong">DndProvider</strong>，讓所有的子元件都可以接收到 DnD
+                的上下文。
+              </p>
+              <pre
+                data-code-block-mode="2"
+                spellcheck="false"
+                data-code-block-lang="typescript"
+                name="65d4"
+                id="65d4"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">DndProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dnd&#x27;</span><br /><span class="hljs-keyword">import</span> { <span class="hljs-title class_">HTML5Backend</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dnd-html5-backend&#x27;</span><br /><br /><span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {<br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">DndProvider</span> <span class="hljs-attr">backend</span>=<span class="hljs-string">{HTML5Backend}</span>&gt;</span><br />      {/* 你的應用內容 */}<br />    <span class="hljs-tag">&lt;/<span class="hljs-name">DndProvider</span>&gt;</span></span><br />  )<br />}</span></pre>
+              <h3 name="ee49" id="ee49" class="graf graf--h3 graf-after--pre">拖動源設置</h3>
+              <p name="7590" id="7590" class="graf graf--p graf-after--h3">
+                接著，我為側邊欄的圖片和文字元件設置了拖動源，並為主區域設置了放置目標。
+              </p>
+              <pre
+                data-code-block-mode="2"
+                spellcheck="false"
+                data-code-block-lang="typescript"
+                name="32d3"
+                id="32d3"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-keyword">const</span> [{ isDragging }, drag] = <span class="hljs-title function_">useDrag</span>(<span class="hljs-function">() =&gt;</span> ({<br />  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;component&#x27;</span>,<br />  <span class="hljs-attr">item</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image&#x27;</span>, <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;image_url.jpg&#x27;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">200</span> },<br />  <span class="hljs-attr">collect</span>: <span class="hljs-function">(<span class="hljs-params">monitor</span>) =&gt;</span> ({<br />    <span class="hljs-attr">isDragging</span>: monitor.<span class="hljs-title function_">isDragging</span>(),<br />  }),<br />}))</span></pre>
+              <p name="91e7" id="91e7" class="graf graf--p graf-after--pre">設置在按鈕上，功能包含圖片跟文字：</p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="typescript"
+                name="6f34"
+                id="6f34"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-comment">// Button.tsx</span><br /><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ReactNode</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;<br /><span class="hljs-keyword">import</span> { useDrag } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react-dnd&quot;</span>;<br /><br /><span class="hljs-keyword">interface</span> <span class="hljs-title class_">ButtonProps</span> {<br />  <span class="hljs-attr">children</span>: <span class="hljs-title class_">ReactNode</span>;<br />  <span class="hljs-attr">type</span>: <span class="hljs-built_in">string</span>;<br />}<br /><br /><span class="hljs-keyword">const</span> defaultImageItem = {<br />  <span class="hljs-attr">width</span>: <span class="hljs-number">300</span>,<br />  <span class="hljs-attr">height</span>: <span class="hljs-number">300</span>,<br />  <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://i.imgur.com/OL2RhAx.jpeg&#x27;</span>,<br />  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image&#x27;</span>,<br />}<br /><br /><span class="hljs-keyword">const</span> defaultTextItem = {<br />  <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Hello from Meepshop!&#x27;</span>,<br />  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text&#x27;</span>,<br />}<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">Button</span> = (<span class="hljs-params">props: ButtonProps</span>) =&gt; {<br />  <span class="hljs-keyword">const</span> { children, <span class="hljs-keyword">type</span> } = props<br /><br />  <span class="hljs-keyword">const</span> [{ isDragging }, drag] = <span class="hljs-title function_">useDrag</span>(<span class="hljs-function">() =&gt;</span> ({<br />    <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;component&#x27;</span>,<br />    <span class="hljs-attr">item</span>: {<br />      ...<span class="hljs-keyword">type</span> === <span class="hljs-string">&#x27;image&#x27;</span> ? defaultImageItem : defaultTextItem,<br />    },<br />    <span class="hljs-attr">collect</span>: <span class="hljs-function">(<span class="hljs-params">monitor</span>) =&gt;</span> ({<br />      <span class="hljs-attr">isDragging</span>: !!monitor.<span class="hljs-title function_">isDragging</span>(),<br />    }),<br />  }));<br /><br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span><br />      <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">py-2</span> <span class="hljs-attr">border</span> <span class="hljs-attr">border-slate-950</span> <span class="hljs-attr">rounded-md</span> ${<span class="hljs-attr">isDragging</span> ? &#x27;<span class="hljs-attr">opacity-50</span>&#x27; <span class="hljs-attr">:</span> &#x27;<span class="hljs-attr">opacity-100</span>&#x27;}`}<br />      <span class="hljs-attr">ref</span>=<span class="hljs-string">{drag}</span><br />    &gt;</span><br />      {children}<br />    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br />  );<br />}<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Button</span>;</span></pre>
+              <p name="3ff1" id="3ff1" class="graf graf--p graf-after--pre">再把按鈕放在 Sidebar 上</p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="javascript"
+                name="3a60"
+                id="3a60"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-comment">// Sidebar.tsx</span><br /><span class="hljs-keyword">import</span> useItemStore <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../stores&quot;</span>;<br /><span class="hljs-keyword">import</span> <span class="hljs-title class_">Button</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./Button&quot;</span>;<br /><span class="hljs-keyword">import</span> <span class="hljs-title class_">Editor</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./Editor&quot;</span>;<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">Sidebar</span> = (<span class="hljs-params"></span>) =&gt; {<br />  <span class="hljs-keyword">const</span> { selectedUuid } = <span class="hljs-title function_">useItemStore</span>();<br /><br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">aside</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-1/4 h-screen p-4 flex flex-col justify-center border-r-2 sticky top-0&quot;</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex flex-col justify-center space-y-2&quot;</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br />          圖片元件<br />        <span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span><br />          文字元件<br />        <span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span><br />      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />    <span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span></span><br />  )<br />};<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Sidebar</span>;</span></pre>
+              <p name="cf76" id="cf76" class="graf graf--p graf-after--pre">設置完成！接下來換成放置目標</p>
+              <h3 name="c22d" id="c22d" class="graf graf--h3 graf-after--p">放置目標</h3>
+              <p name="be49" id="be49" class="graf graf--p graf-after--h3">
+                在 React-Dnd 上，我們可以通過
+                <code class="markup--code markup--p-code">useDrop</code>
+                來取得使用者放開的時候的資訊，所以就可以通過以下的程式碼，直接取得資料
+              </p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="javascript"
+                name="bfd7"
+                id="bfd7"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content">  <span class="hljs-keyword">const</span> [{ canDrop, isOver }, drop] = <span class="hljs-title function_">useDrop</span>(<span class="hljs-function">() =&gt;</span> ({<br />    <span class="hljs-attr">accept</span>: <span class="hljs-string">&#x27;component&#x27;</span>,<br />    <span class="hljs-attr">drop</span>: <span class="hljs-function">(<span class="hljs-params">item: DragData</span>) =&gt;</span> { <span class="hljs-comment">// 取得 drag 時候的資訊</span><br />      <span class="hljs-keyword">const</span> newItem = {<br />        <span class="hljs-attr">uuid</span>: <span class="hljs-title function_">uuidv4</span>(),<br />        ...item,<br />      }<br />      <span class="hljs-title function_">addItem</span>(newItem)<br />    },<br />    <span class="hljs-attr">collect</span>: <span class="hljs-function">(<span class="hljs-params">monitor</span>) =&gt;</span> ({<br />      <span class="hljs-attr">isOver</span>: !!monitor.<span class="hljs-title function_">isOver</span>(),<br />      <span class="hljs-attr">canDrop</span>: !!monitor.<span class="hljs-title function_">canDrop</span>()<br />    })<br />  }))</span></pre>
+              <p name="29e1" id="29e1" class="graf graf--p graf-after--pre">
+                然後我們就可以好好利用取得的這個資訊，來把元件資訊輸入，我這邊是使用 zustand
+                來實現這個資訊的存儲。所以整體的主區域的程式碼如下：
+              </p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="javascript"
+                name="4c42"
+                id="4c42"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-comment">// main.tsx</span><br /><span class="hljs-keyword">import</span> { useDrop } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dnd&#x27;</span>;<br /><span class="hljs-keyword">import</span> clsx <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;clsx&#x27;</span>;<br /><span class="hljs-keyword">import</span> { v4 <span class="hljs-keyword">as</span> uuidv4 } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;uuid&#x27;</span>;<br /><span class="hljs-keyword">import</span> useItemStore <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../stores&#x27;</span>;<br /><span class="hljs-keyword">import</span> { <span class="hljs-title class_">DragData</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../types&#x27;</span>;<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">Main</span> = (<span class="hljs-params"></span>) =&gt; {<br />  <span class="hljs-keyword">const</span> { droppedItems, addItem, selectItem } = <span class="hljs-title function_">useItemStore</span>();<br /><br />  <span class="hljs-keyword">const</span> [{ canDrop, isOver }, drop] = <span class="hljs-title function_">useDrop</span>(<span class="hljs-function">() =&gt;</span> ({<br />    <span class="hljs-attr">accept</span>: <span class="hljs-string">&#x27;component&#x27;</span>,<br />    <span class="hljs-attr">drop</span>: <span class="hljs-function">(<span class="hljs-params">item: DragData</span>) =&gt;</span> {<br />      <span class="hljs-keyword">const</span> newItem = {<br />        <span class="hljs-attr">uuid</span>: <span class="hljs-title function_">uuidv4</span>(),<br />        ...item,<br />      }<br />      <span class="hljs-title function_">addItem</span>(newItem)<br />    },<br />    <span class="hljs-attr">collect</span>: <span class="hljs-function">(<span class="hljs-params">monitor</span>) =&gt;</span> ({<br />      <span class="hljs-attr">isOver</span>: !!monitor.<span class="hljs-title function_">isOver</span>(),<br />      <span class="hljs-attr">canDrop</span>: !!monitor.<span class="hljs-title function_">canDrop</span>()<br />    })<br />  }))<br /><br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex-1 relative&quot;</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">nav</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-full h-8 sticky top-0 flex justify-center items-center bg-white border&quot;</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br />          This is a fixed header, no need to modify<br />        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />      <span class="hljs-tag">&lt;/<span class="hljs-name">nav</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">main</span><br />        <span class="hljs-attr">className</span>=<span class="hljs-string">{clsx(</span><br />          &quot;<span class="hljs-attr">h-</span>[<span class="hljs-attr">calc</span>(<span class="hljs-attr">100vh-32px</span>)]&quot;,<br />          {<br />            &#x27;<span class="hljs-attr">bg-blue-100</span>&#x27;<span class="hljs-attr">:</span> <span class="hljs-attr">canDrop</span>,<br />            &#x27;<span class="hljs-attr">border-dashed</span> <span class="hljs-attr">border-2</span> <span class="hljs-attr">border-blue-500</span>&#x27;<span class="hljs-attr">:</span> <span class="hljs-attr">isOver</span><br />          }<br />        )}<br />        <span class="hljs-attr">ref</span>=<span class="hljs-string">{drop}</span><br />      &gt;</span><br />        {droppedItems?.length &gt; 0 &amp;&amp; (<br />          droppedItems?.map((item) =&gt; (<br />            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{item.uuid}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> selectItem(item.uuid)}&gt;<br />              {item.type === &#x27;image&#x27; ? (<br />                <span class="hljs-tag">&lt;<span class="hljs-name">img</span><br />                  <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;dropped&quot;</span><br />                  <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;object-cover&quot;</span><br />                  <span class="hljs-attr">src</span>=<span class="hljs-string">{item.url}</span><br />                  <span class="hljs-attr">height</span>=<span class="hljs-string">{item.height}</span><br />                  <span class="hljs-attr">width</span>=<span class="hljs-string">{item.width}</span><br />                /&gt;</span><br />              ) : (<br />                <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{item.text}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />              )}<br />            <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />          )))<br />        }<br />      <span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span><br />    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br />  )<br />};<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Main</span>;</span></pre>
+              <p name="2f72" id="2f72" class="graf graf--p graf-after--pre">zustand:</p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="typescript"
+                name="9920"
+                id="9920"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-comment">// store.ts</span><br /><span class="hljs-keyword">import</span> { create } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;zustand&quot;</span>;<br /><span class="hljs-keyword">import</span> { <span class="hljs-title class_">DragItem</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../types&quot;</span>;<br /><br /><span class="hljs-keyword">interface</span> <span class="hljs-title class_">StoreState</span> {<br />  <span class="hljs-attr">selectedUuid</span>: <span class="hljs-built_in">string</span>;<br />  <span class="hljs-attr">droppedItems</span>: <span class="hljs-title class_">DragItem</span>[];<br />  <span class="hljs-attr">addItem</span>: <span class="hljs-function">(<span class="hljs-params">item: DragItem</span>) =&gt;</span> <span class="hljs-built_in">void</span>;<br />  <span class="hljs-attr">selectItem</span>: <span class="hljs-function">(<span class="hljs-params">uuid: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span>;<br />  <span class="hljs-attr">updateItem</span>: <span class="hljs-function">(<span class="hljs-params">uuid: <span class="hljs-built_in">string</span>, newData: Partial&lt;DragItem&gt;</span>) =&gt;</span> <span class="hljs-built_in">void</span>;<br />}<br /><br /><span class="hljs-keyword">const</span> useItemStore = create&lt;<span class="hljs-title class_">StoreState</span>&gt;(<span class="hljs-function">(<span class="hljs-params">set</span>) =&gt;</span> ({<br />  <span class="hljs-attr">selectedUuid</span>: <span class="hljs-string">&#x27;&#x27;</span>,<br />  <span class="hljs-attr">droppedItems</span>: [],<br />  <span class="hljs-attr">addItem</span>: <span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> ({<br />    <span class="hljs-attr">droppedItems</span>: [...state.<span class="hljs-property">droppedItems</span>, item]<br />  })),<br />  <span class="hljs-attr">selectItem</span>: <span class="hljs-function">(<span class="hljs-params">uuid</span>) =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">() =&gt;</span> ({<br />    <span class="hljs-attr">selectedUuid</span>: uuid<br />  })),<br />  <span class="hljs-attr">updateItem</span>: <span class="hljs-function">(<span class="hljs-params">uuid, newData</span>) =&gt;</span> <span class="hljs-title function_">set</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> {<br />    <span class="hljs-keyword">const</span> updatedItems = state.<span class="hljs-property">droppedItems</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span><br />      item.<span class="hljs-property">uuid</span> === uuid ? { ...item, ...newData } : item<br />    );<br />    <span class="hljs-keyword">return</span> { <span class="hljs-attr">droppedItems</span>: updatedItems };<br />  }),<br />}));<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> useItemStore;</span></pre>
+              <h3 name="ef64" id="ef64" class="graf graf--h3 graf-after--pre">處理編輯功能</h3>
+              <p name="66ed" id="66ed" class="graf graf--p graf-after--h3">
+                在這裡是通過點擊元件之後，我們就可以在側邊欄位修改，所以可以看到前面 Zustand 裡面有一個
+                selectedUuid，這最主要的功能就是取得哪個元件被選中的資訊，接著我們就可以在左側的 Sidebar 取得資訊。
+              </p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="javascript"
+                name="c295"
+                id="c295"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-comment">// Sidebar.tsx</span><br /><span class="hljs-keyword">import</span> useItemStore <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../stores&quot;</span>;<br /><span class="hljs-keyword">import</span> <span class="hljs-title class_">Button</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./Button&quot;</span>;<br /><span class="hljs-keyword">import</span> <span class="hljs-title class_">Editor</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./Editor&quot;</span>;<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">Sidebar</span> = (<span class="hljs-params"></span>) =&gt; {<br />  <span class="hljs-keyword">const</span> { selectedUuid } = <span class="hljs-title function_">useItemStore</span>();<br /><br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">aside</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-1/4 h-screen p-4 flex flex-col justify-center border-r-2 sticky top-0&quot;</span>&gt;</span><br />      {selectedUuid ? (<br />        <span class="hljs-tag">&lt;<span class="hljs-name">Editor</span> /&gt;</span><br />      ) : (<br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;flex flex-col justify-center space-y-2&quot;</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br />            圖片元件<br />          <span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span><br />            文字元件<br />          <span class="hljs-tag">&lt;/<span class="hljs-name">Button</span>&gt;</span><br />        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />      )}<br />    <span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span></span><br />  )<br />};<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Sidebar</span>;</span></pre>
+              <p name="6564" id="6564" class="graf graf--p graf-after--pre">也新增了一個編輯器的 Component，如下：</p>
+              <pre
+                data-code-block-mode="1"
+                spellcheck="false"
+                data-code-block-lang="typescript"
+                name="eb0a"
+                id="eb0a"
+                class="graf graf--pre graf-after--p graf--preV2"
+              ><span class="pre--content"><span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;<br /><span class="hljs-keyword">import</span> useItemStore <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../stores&quot;</span>;<br /><span class="hljs-keyword">import</span> { <span class="hljs-title class_">DragItem</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../types&quot;</span>;<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">Editor</span> = (<span class="hljs-params"></span>) =&gt; {<br />  <span class="hljs-keyword">const</span> { selectedUuid, droppedItems, updateItem } = <span class="hljs-title function_">useItemStore</span>();<br /><br />  <span class="hljs-keyword">const</span> selectedItem = droppedItems.<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i.<span class="hljs-property">uuid</span> === selectedUuid) <span class="hljs-keyword">as</span> <span class="hljs-title class_">DragItem</span>;<br /><br />  <span class="hljs-keyword">const</span> [url, setUrl] = useState&lt;<span class="hljs-built_in">string</span>&gt;(selectedItem?.<span class="hljs-property">url</span> ?? <span class="hljs-string">&#x27;&#x27;</span>);<br />  <span class="hljs-keyword">const</span> [width, setWidth] = useState&lt;<span class="hljs-built_in">number</span>&gt;(selectedItem?.<span class="hljs-property">width</span> ?? <span class="hljs-number">300</span>);<br />  <span class="hljs-keyword">const</span> [height, setHeight] = useState&lt;<span class="hljs-built_in">number</span>&gt;(selectedItem?.<span class="hljs-property">height</span> ?? <span class="hljs-number">300</span>);<br /><br />  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {<br />    <span class="hljs-keyword">if</span> (selectedItem.<span class="hljs-property">type</span> === <span class="hljs-string">&quot;image&quot;</span>) {<br />      <span class="hljs-title function_">setUrl</span>(selectedItem?.<span class="hljs-property">url</span> ?? <span class="hljs-string">&#x27;&#x27;</span>);<br />      <span class="hljs-title function_">setWidth</span>(selectedItem?.<span class="hljs-property">width</span> ?? <span class="hljs-number">300</span>);<br />      <span class="hljs-title function_">setHeight</span>(selectedItem?.<span class="hljs-property">height</span> ?? <span class="hljs-number">300</span>);<br />    }<br />  }, [selectedItem.<span class="hljs-property">height</span>, selectedItem.<span class="hljs-property">type</span>, selectedItem.<span class="hljs-property">url</span>, selectedItem.<span class="hljs-property">width</span>, selectedUuid])<br /><br />  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleUrlChange</span> = (<span class="hljs-params">e: React.ChangeEvent&lt;HTMLInputElement&gt;</span>) =&gt; {<br />    <span class="hljs-title function_">setUrl</span>(e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>)<br />  }<br /><br />  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleWidthChange</span> = (<span class="hljs-params">e: React.ChangeEvent&lt;HTMLInputElement&gt;</span>) =&gt; {<br />    <span class="hljs-title function_">setWidth</span>(<span class="hljs-title class_">Number</span>(e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>))<br />  }<br /><br />  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleHeightChange</span> = (<span class="hljs-params">e: React.ChangeEvent&lt;HTMLInputElement&gt;</span>) =&gt; {<br />    <span class="hljs-title function_">setHeight</span>(<span class="hljs-title class_">Number</span>(e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>))<br />  }<br /><br />  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleKeyPress</span> = (<span class="hljs-params">e: React.KeyboardEvent</span>) =&gt; {<br />    <span class="hljs-keyword">if</span> (e.<span class="hljs-property">key</span> === <span class="hljs-string">&#x27;Enter&#x27;</span>) {<br />      <span class="hljs-title function_">updateItem</span>(selectedItem.<span class="hljs-property">uuid</span>, { url, width, height })<br />    }<br />  }<br /><br />  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handleTextChange</span> = (<span class="hljs-params">e: React.ChangeEvent&lt;HTMLInputElement&gt;</span>) =&gt; {<br />    <span class="hljs-title function_">updateItem</span>(selectedItem.<span class="hljs-property">uuid</span>, { <span class="hljs-attr">text</span>: e.<span class="hljs-property">target</span>.<span class="hljs-property">value</span> });<br />  };<br /><br />  <span class="hljs-keyword">if</span> (selectedItem.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;image&#x27;</span>) {<br />    <span class="hljs-keyword">return</span> (<br />      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-y-2&quot;</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-y-1&quot;</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>URL：<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">input</span><br />            <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;border w-full p-1&quot;</span><br />            <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span><br />            <span class="hljs-attr">value</span>=<span class="hljs-string">{url}</span><br />            <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleUrlChange}</span><br />            <span class="hljs-attr">onKeyDown</span>=<span class="hljs-string">{handleKeyPress}</span><br />          /&gt;</span><br />        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-y-1&quot;</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>{&quot;寬度(px)：&quot;}<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">input</span><br />            <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;border w-full p-1&quot;</span><br />            <span class="hljs-attr">value</span>=<span class="hljs-string">{width}</span><br />            <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;number&quot;</span><br />            <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleWidthChange}</span><br />            <span class="hljs-attr">onKeyDown</span>=<span class="hljs-string">{handleKeyPress}</span><br />          /&gt;</span><br />        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;space-y-1&quot;</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>{&quot;高度(px)：&quot;}<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br />          <span class="hljs-tag">&lt;<span class="hljs-name">input</span><br />            <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;border w-full p-1&quot;</span><br />            <span class="hljs-attr">value</span>=<span class="hljs-string">{height}</span><br />            <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;number&quot;</span><br />            <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleHeightChange}</span><br />            <span class="hljs-attr">onKeyDown</span>=<span class="hljs-string">{handleKeyPress}</span><br />          /&gt;</span><br />        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>輸入完按下 Enter 變更<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br />      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br />    )<br />  }<br /><br />  <span class="hljs-keyword">return</span> (<br />    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">input</span><br />        <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;border w-full p-1&quot;</span><br />        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span><br />        <span class="hljs-attr">onChange</span>=<span class="hljs-string">{handleTextChange}</span><br />        <span class="hljs-attr">value</span>=<span class="hljs-string">{selectedItem?.text</span> || &#x27;&#x27;}<br />      /&gt;</span><br />    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br />  )<br />};<br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Editor</span>;</span></pre>
+              <p name="b6b3" id="b6b3" class="graf graf--p graf-after--pre">這樣就完成了</p>
+              <h4 name="903c" id="903c" class="graf graf--h4 graf-after--p">成品 Youtube 影片</h4>
+              <figure name="ee9b" id="ee9b" class="graf graf--figure graf--iframe graf-after--h4">
+                <iframe
+                  src="https://www.youtube.com/embed/OUDcQCZbXPE?feature=oembed"
+                  width="700"
+                  height="393"
+                  frameborder="0"
+                  scrolling="no"
+                ></iframe>
+              </figure>
+              <h3 name="13a0" id="13a0" class="graf graf--h3 graf-after--figure">專案結構</h3>
+              <pre
+                data-code-block-mode="2"
+                spellcheck="false"
+                data-code-block-lang="markdown"
+                name="a6db"
+                id="a6db"
+                class="graf graf--pre graf-after--h3 graf--preV2"
+              ><span class="pre--content">.<br />├── src/<br />│   ├── components/<br />│   │   ├── Button.tsx            # 按鈕元件，整合拖曳功能<br />│   │   ├── Editor.tsx            # 編輯區，提供項目編輯功能<br />│   │   ├── Main.tsx              # 主畫面，包含拖放區域<br />│   │   └── Sidebar.tsx           # 側邊欄<br />│   ├── stores/<br />│   │   └── index.ts              # 狀態管理 store<br />│   └── types/<br />│       └── index.ts              # 類型定義<br />├── README.md                     # 專案說明文件<br />├── package.json                  # 專案依賴管理<br />└── tsconfig.json                 # TypeScript 設定</span></pre>
+              <p name="49de" id="49de" class="graf graf--p graf-after--pre">
+                成品 GitHub：<a
+                  href="https://github.com/u88803494/dnd_test"
+                  data-href="https://github.com/u88803494/dnd_test"
+                  class="markup--anchor markup--p-anchor"
+                  rel="nofollow noopener noopener"
+                  target="_blank"
+                  >https://github.com/u88803494/dnd_test</a
+                >
+              </p>
+              <h3 name="a9b8" id="a9b8" class="graf graf--h3 graf-after--p">結論</h3>
+              <p name="d549" id="d549" class="graf graf--p graf-after--h3">
+                在這篇文章中，我分享了如何在 React 中實現一個基於
+                <strong class="markup--strong markup--p-strong">拖曳(Drag and Drop)</strong> 的<strong
+                  class="markup--strong markup--p-strong"
+                  >所見即所得(WYSIWYG)</strong
+                >
+                功能。這是我第一次實作類似的功能，我曾用過類似的套件來實現視訊時，視窗移動的功能。這對我來說是一個新體驗，也證明了我可以很快速地上手一個新套件的能力。
+              </p>
+              <p name="5c27" id="5c27" class="graf graf--p graf-after--p">
+                在透過 <strong class="markup--strong markup--p-strong">React</strong> 和
+                <strong class="markup--strong markup--p-strong">React DnD</strong>
+                的結合，我能夠打造出一個直覺且易於操作的拖曳編輯體驗，讓使用者可以即時編輯圖片、文字等元件屬性，這在現代
+                Web 應用中是非常常見的需求。
+              </p>
+              <p name="9dbb" id="9dbb" class="graf graf--p graf-after--p">
+                這個專案讓我更深入了解了如何運用 React 來開發靈活的用戶互動介面，同時也熟悉了
+                <strong class="markup--strong markup--p-strong">React DnD</strong>
+                函式庫，讓我能更輕鬆有效地實現拖曳交互。雖然這個過程中遇到了一些挑戰，但也讓我在前端開發、狀態管理和使用者體驗設計上有了更深刻的體會。
+              </p>
+              <p name="176e" id="176e" class="graf graf--p graf-after--p">
+                所以我認知到如果我有需要，我也可以完善一個 WYSIWYG 編輯器，這會是一個有趣的體驗。
+              </p>
+              <p name="5636" id="5636" class="graf graf--p graf-after--p">
+                如果你也有類似的需求或對這些技術感興趣，不妨試著動手實踐，相信你會有很多收穫！
+              </p>
+              <p name="7064" id="7064" class="graf graf--p graf-after--p graf--trailing">
+                如果有任何疑問，歡迎聯絡我，謝謝！
+              </p>
+            </div>
+          </div>
+        </section>
+      </section>
+      <footer>
+        <p>
+          By
+          <a href="https://medium.com/@hugh-program-learning-diary-js" class="p-author h-card"
+            >Hugh&#39;s Programming life</a
+          >
+          on
+          <a href="https://medium.com/p/1bd41ba202c1"
+            ><time class="dt-published" datetime="2024-11-15T00:02:37.460Z">November 15, 2024</time></a
+          >.
+        </p>
+        <p>
+          <a
+            href="https://medium.com/@hugh-program-learning-diary-js/%E5%9C%A8-react-%E4%B8%8A%E5%AF%A6%E7%8F%BE%E6%89%80%E5%BE%97%E5%8D%B3%E6%89%80%E8%A6%8B-wysiwyg-%E5%8A%9F%E8%83%BD-1bd41ba202c1"
+            class="p-canonical"
+            >Canonical link</a
+          >
+        </p>
+        <p>Exported from <a href="https://medium.com">Medium</a> on September 2, 2026.</p>
+      </footer>
+    </article>
+  </body>
+</html>

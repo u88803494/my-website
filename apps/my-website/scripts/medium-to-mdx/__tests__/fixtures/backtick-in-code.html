@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+解決方案：
+</section>
+<section data-field="body" class="e-content">
+<section name="868f" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4978" id="4978" class="graf graf--h3 graf--leading graf--title">React 的 JSX 中的 &lt;pre&gt; 標籤效果無法呈現</h3><h3 name="d5c9" id="d5c9" class="graf graf--h3 graf-after--h3">解決方案：</h3><div name="317f" id="317f" class="graf graf--mixtapeEmbed graf-after--h3"><a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" data-href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx"><strong class="markup--strong markup--mixtapeEmbed-strong">Formatting code with tag in React and JSX</strong><br><em class="markup--em markup--mixtapeEmbed-em">I am trying to use the pre tag inside of JSX.When you use the pre tag in JSX, it doesn’t format at all. Why? In order…</em>stackoverflow.com</a><a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="f9793f1ae2997cdee7d3046b2e303af9" data-thumbnail-img-id="0*sqzMXTQoPk-UlNXT" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*sqzMXTQoPk-UlNXT);"></a></div><p name="9ff9" id="9ff9" class="graf graf--p graf-after--mixtapeEmbed">從這裡發現只要使用 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" data-href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" class="markup--anchor markup--p-anchor" rel="noreferrer noopener noopener noopener noopener" target="_blank">Template literals</a> 就可以解決這個問題，也就是需要文字的部分寫下：</p><pre name="31f2" id="31f2" class="graf graf--pre graf-after--p">{`<br>  內容<br>  xxx<br>  xxx<br>`}</pre><p name="5d91" id="5d91" class="graf graf--p graf-after--pre">但是利用 <code class="markup--code markup--p-code">&lt;pre&gt;</code> 標籤的話，連寫 code 的空白都會被納入，這樣如果需要文字置中就會跑板，那解決方法就是使用 CSS 屬性即可。</p><pre name="22be" id="22be" class="graf graf--pre graf-after--p">white-space: pre-line;<br>text-align: center;</pre><p name="8787" id="8787" class="graf graf--p graf-after--pre graf--trailing">利用 <code class="markup--code markup--p-code">pre-line</code> 就不會出現空白，這樣就可以置中了</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@hugh-program-learning-diary-js" class="p-author h-card">Hugh&#39;s Programming life</a> on <a href="https://medium.com/p/8e1e7fd5a9b"><time class="dt-published" datetime="2020-02-03T09:49:17.817Z">February 3, 2020</time></a>.</p><p><a href="https://medium.com/@hugh-program-learning-diary-js/react-%E7%9A%84-jsx-%E4%B8%AD%E7%9A%84-pre-%E6%A8%99%E7%B1%A4%E6%95%88%E6%9E%9C%E7%84%A1%E6%B3%95%E5%91%88%E7%8F%BE-8e1e7fd5a9b" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on September 2, 2026.</p></footer></article></body></html>

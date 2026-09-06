@@ -1,3 +1,4 @@
+import { getPostUrl } from "@/lib/content/posts";
 import { formatDateISO8601 } from "@/lib/date-formatting";
 import type { Post } from "#site/content";
 
@@ -33,15 +34,17 @@ export function ArticleJsonLd({ post }: ArticleJsonLdProps) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://henryleelab.com/blog/${post.slug}`,
+      // Must match the canonical URL from generateMetadata exactly, or Google
+      // sees two different URLs for the same page — getPostUrl() is the single
+      // source both go through.
+      "@id": getPostUrl(post),
     },
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      suppressHydrationWarning
-    />
-  );
+  // JSON.stringify never escapes "<", so a title/description containing the
+  // literal substring "</script>" would close this tag early at the HTML
+  // parser level and let whatever follows execute as live markup.
+  const json = JSON.stringify(schema).replace(/</g, "\\u003c");
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} suppressHydrationWarning />;
 }

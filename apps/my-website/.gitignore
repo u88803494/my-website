@@ -17,6 +17,9 @@
 /.next/
 /out/
 /.velite/
+# Velite's asset output (output.assets in velite.config.ts) — images/files
+# referenced from MDX frontmatter that Velite copies at build time.
+/public/static/
 
 # production
 /build

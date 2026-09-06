@@ -1,0 +1,284 @@
+import type { CheerioAPI } from "cheerio";
+import type { AnyNode, Element } from "domhandler";
+
+import { convertInline, isElement } from "./markdown-inline";
+import { escapeMdx, normalizeText, stripEmphasis } from "./text";
+import type { BodyContext } from "./types";
+import { dimensionAttr, isEmbeddableHost, jsxAttr, mdDestination, safeUrl } from "./url";
+
+/** Elements that produce a Markdown block; anything else is descended into. */
+const BLOCK_TAGS = new Set(["blockquote", "figure", "h1", "h2", "h3", "h4", "h5", "h6", "ol", "ul", "p", "pre"]);
+
+/**
+ * Convert a <pre> code block.
+ * Medium stores line breaks inside <pre> as <br> tags rather than newline
+ * characters, so they must be restored before reading the text content —
+ * otherwise every line collapses into one.
+ */
+export function convertPre($: CheerioAPI, element: Element): string {
+  const clone = $(element).clone();
+  clone.find("br").replaceWith("\n");
+
+  // Trailing whitespace inside a fence is invisible noise carried over from the
+  // source. Stripping it here (rather than letting a formatter do it later) keeps
+  // the converter's output canonical, so re-runs stay byte-identical.
+  const code = clone
+    .text()
+    .replace(/\u00A0/g, " ")
+    .replace(/[ \t]+$/gm, "")
+    .replace(/\n+$/, "");
+
+  // An empty <pre> would otherwise emit an empty fence, which swallows the
+  // following block into it.
+  if (!code.trim()) return "";
+
+  // Some posts contain literal ``` inside the code (markdown typed into
+  // Medium's code block). The fence must be longer than the longest run of
+  // backticks it contains, or it closes early and the rest leaks into prose.
+  const longestRun = Math.max(0, ...[...code.matchAll(/`+/g)].map((match) => match[0].length));
+  const fence = "`".repeat(Math.max(3, longestRun + 1));
+  const lang = element.attribs["data-code-block-lang"] ?? "";
+
+  return `${fence}${lang}\n${code}\n${fence}`;
+}
+
+/** Convert a <figure>: image, GitHub Gist embed, or iframe embed. */
+export function convertFigure($: CheerioAPI, element: Element): string {
+  const figure = $(element);
+
+  // GitHub Gist embeds rely on document.write() and silently fail in React,
+  // so they are downgraded to a plain link.
+  const gistScript = safeUrl(figure.find('script[src*="gist.github.com"]').attr("src"));
+  if (gistScript) {
+    return `[📄 在 GitHub Gist 查看完整程式碼](${mdDestination(gistScript.replace(/\.js$/, ""))})`;
+  }
+
+  // Real iframes (YouTube) are kept as-is — MDX renders inline HTML. A host
+  // outside the allow list is downgraded to a link rather than embedded, since
+  // the src/width/height below are otherwise attacker-controlled JSX attributes.
+  const iframe = figure.find("iframe").first();
+  const iframeSrc = safeUrl(iframe.attr("src"));
+  if (iframeSrc && isEmbeddableHost(iframeSrc)) {
+    const width = dimensionAttr(iframe.attr("width"), "700");
+    const height = dimensionAttr(iframe.attr("height"), "393");
+    return `<iframe src="${jsxAttr(iframeSrc)}" width="${width}" height="${height}" frameBorder="0" allowFullScreen></iframe>`;
+  }
+  if (iframeSrc) return `[🔗 觀看嵌入內容](${mdDestination(iframeSrc)})`;
+
+  const src = safeUrl(figure.find("img").first().attr("src"));
+  if (!src) return "";
+
+  // Images keep their Medium CDN URL; self-hosting is tracked separately.
+  const caption = normalizeText(figure.find("figcaption").text()).trim();
+  const image = `![${escapeMdx(caption)}](${mdDestination(src)})`;
+  return caption ? `${image}\n\n*${escapeMdx(caption)}*` : image;
+}
+
+/** Convert <ul>/<ol>, recursing into nested lists with proper indentation. */
+export function convertList($: CheerioAPI, element: Element, depth: number): string {
+  const ordered = element.tagName === "ol";
+  const indent = "  ".repeat(depth);
+
+  return $(element)
+    .children("li")
+    .toArray()
+    .filter((li) => !(li.attribs["class"] ?? "").includes("graf--empty"))
+    .map((li, index) => {
+      const marker = ordered ? `${index + 1}.` : "-";
+
+      // Split direct nested lists from the item's own inline content
+      const nested = $(li).children("ul, ol").toArray();
+      const ownNodes = (li.children ?? []).filter(
+        (child) => !(isElement(child) && (child.tagName === "ul" || child.tagName === "ol")),
+      );
+
+      const head = `${indent}${marker} ${convertInline($, ownNodes).trim()}`;
+      const nestedText = nested.map((list) => convertList($, list, depth + 1)).join("\n");
+
+      return nestedText ? `${head}\n${nestedText}` : head;
+    })
+    .join("\n");
+}
+
+/**
+ * Convert a blockquote, prefixing every line with "> ".
+ *
+ * Only the line's leading whitespace is stripped. A <br> produces a trailing
+ * "  " (two spaces) hard break; trimming that too would silently merge lines
+ * that were meant to stay apart.
+ */
+export function convertBlockquote($: CheerioAPI, element: Element): string {
+  return convertInline($, element.children ?? [])
+    .trim()
+    .split("\n")
+    .map((line) => {
+      const content = line.replace(/^[ \t]+/, "");
+      return content ? `> ${content}` : ">";
+    })
+    .join("\n");
+}
+
+/**
+ * Neutralize a paragraph that starts with `import` or `export`.
+ *
+ * MDX parses those at the start of a line as ESM statements and fails on prose
+ * like "export function add(a, b)". Replacing the first character with its HTML
+ * entity renders identically while no longer matching the ESM grammar.
+ */
+function escapeEsmKeyword(text: string): string {
+  if (!/^(import|export)\b/.test(text)) return text;
+  return `&#${text.charCodeAt(0)};${text.slice(1)}`;
+}
+
+/**
+ * Escape a leading # or > so the paragraph stays a paragraph.
+ *
+ * Medium has real headings and blockquotes, so a paragraph *starting* with
+ * these characters is literal text — typically a post explaining Markdown
+ * syntax. List markers (- and 1.) are deliberately not escaped: authors often
+ * typed lists as plain paragraphs, and letting Markdown parse them restores the
+ * list semantics they meant.
+ */
+function escapeLeadingBlockMarker(text: string): string {
+  return text.replace(/^([#>])/, "\\$1");
+}
+
+/** A paragraph whose entire content is a single list marker, nothing else. */
+const BARE_LIST_MARKER = /^(?:[-*+]|\d{1,3}\.)$/;
+
+/**
+ * Escape a paragraph that is *only* a list marker — Medium authors sometimes
+ * typed a lone "-" as a visual divider between paragraphs, and left as-is it
+ * renders as an empty Markdown list item. A marker followed by real content
+ * (e.g. "- 真的是清單") is deliberately left alone; see escapeLeadingBlockMarker.
+ */
+function escapeBareListMarker(text: string): string {
+  return BARE_LIST_MARKER.test(text) ? `\\${text}` : text;
+}
+
+/**
+ * Medium's exporter brackets every section with a divider <hr>. It is layout,
+ * not authored content.
+ */
+function isStructuralNode(node: Element): boolean {
+  return node.tagName === "hr" || (node.attribs["class"] ?? "").includes("section-divider");
+}
+
+/**
+ * Convert an h1-h3 heading, dropping the one that merely repeats the post title
+ * (the exporter emits it as graf--title at the top of the body).
+ */
+function convertMajorHeading($: CheerioAPI, node: Element, context: BodyContext): string | null {
+  const text = stripEmphasis(convertInline($, node.children ?? []).trim());
+  if (!text) return null;
+
+  const isRepeatedTitle = (node.attribs["class"] ?? "").includes("graf--title") || text === context.title;
+  if (!context.titleHeadingSkipped && isRepeatedTitle) {
+    context.titleHeadingSkipped = true;
+    return null;
+  }
+
+  return `## ${text}`;
+}
+
+/** Convert one block-level element; null means "produces no output". */
+function convertBlockElement($: CheerioAPI, node: Element, context: BodyContext): string | null {
+  switch (node.tagName) {
+    case "blockquote":
+      return convertBlockquote($, node) || null;
+    case "figure":
+      return convertFigure($, node) || null;
+    case "h1":
+    case "h2":
+    case "h3":
+      return convertMajorHeading($, node, context);
+    case "h4":
+    case "h5":
+    case "h6": {
+      const text = stripEmphasis(convertInline($, node.children ?? []).trim());
+      return text ? `### ${text}` : null;
+    }
+    case "ol":
+    case "ul":
+      return convertList($, node, 0) || null;
+    case "p": {
+      if ((node.attribs["class"] ?? "").includes("graf--empty")) return null;
+      const text = convertInline($, node.children ?? []).trim();
+      return text ? escapeBareListMarker(escapeLeadingBlockMarker(escapeEsmKeyword(text))) : null;
+    }
+    case "pre":
+      return convertPre($, node);
+    default:
+      return null;
+  }
+}
+
+/** One content block's tag and plain text, in document order. */
+export interface ContentBlock {
+  tag: string;
+  text: string;
+}
+
+/**
+ * Walk the article body the same way convertBody does, but collect plain DOM
+ * text instead of Markdown. Used to decide what the description should be —
+ * reading from Markdown here would pick up escape sequences the converter
+ * introduces (e.g. a description ending up with a literal "\<" in it).
+ */
+export function collectContentBlocks($: CheerioAPI, bodyElement: Element): ContentBlock[] {
+  const blocks: ContentBlock[] = [];
+  let titleSkipped = false;
+
+  const walk = (nodes: AnyNode[]): void => {
+    for (const node of nodes) {
+      if (!isElement(node) || isStructuralNode(node)) continue;
+
+      if (!BLOCK_TAGS.has(node.tagName)) {
+        walk(node.children ?? []);
+        continue;
+      }
+
+      if (/^h[1-6]$/.test(node.tagName) && !titleSkipped && (node.attribs["class"] ?? "").includes("graf--title")) {
+        titleSkipped = true;
+        continue;
+      }
+
+      if (node.tagName === "p" && (node.attribs["class"] ?? "").includes("graf--empty")) continue;
+
+      const text = normalizeText($(node).text()).trim();
+      if (text) blocks.push({ tag: node.tagName, text });
+    }
+  };
+
+  walk(bodyElement.children ?? []);
+
+  return blocks;
+}
+
+/** Walk the article body and emit Markdown blocks. */
+export function convertBody($: CheerioAPI, bodyElement: Element, title: string): string {
+  const blocks: string[] = [];
+  const context: BodyContext = { title, titleHeadingSkipped: false };
+
+  const walk = (nodes: AnyNode[]): void => {
+    for (const node of nodes) {
+      if (!isElement(node) || isStructuralNode(node)) continue;
+
+      // Non-block elements (section, div, ...) are wrappers — descend into them
+      if (!BLOCK_TAGS.has(node.tagName)) {
+        walk(node.children ?? []);
+        continue;
+      }
+
+      const block = convertBlockElement($, node, context);
+      if (block?.trim()) blocks.push(block);
+    }
+  };
+
+  walk(bodyElement.children ?? []);
+
+  return blocks
+    .join("\n\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}

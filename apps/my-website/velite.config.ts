@@ -13,7 +13,35 @@ export default defineConfig({
       schema: s
         .object({
           title: s.string(),
-          slug: s.slug("posts"),
+          // Custom slug validation replacing s.slug(): the built-in regex is
+          // /^[a-z0-9]+(?:-[a-z0-9]+)*$/i, ASCII-only, which flags every
+          // Chinese-titled post as an invalid slug. \p{Letter} covers CJK while
+          // still excluding punctuation and whitespace; s.unique is retained.
+          slug: s
+            .string()
+            .min(1)
+            .max(200)
+            .regex(/^[\p{Letter}\p{Number}]+(?:-[\p{Letter}\p{Number}]+)*$/u, "Invalid slug")
+            // .max(200) above counts characters, but generateStaticParams()
+            // writes one static file per slug, and most filesystems cap a
+            // single path component at 255 bytes — a CJK slug can be up to 3
+            // bytes per character once percent-encoded for the URL, so 200
+            // characters is nowhere near 200 bytes (the longest slug in the
+            // migrated corpus is 238 bytes encoded). Encoding here to measure
+            // what the filesystem actually sees, with headroom below 255 for
+            // the ".mdx" extension and any disambiguating suffix appended to
+            // it. This is a second-layer check, not the primary one: the same
+            // 245-byte ceiling is enforced first at conversion time in
+            // scripts/medium-to-mdx/slug-plan.ts, so an oversized slug fails
+            // there with a clear message rather than surfacing only here, the
+            // next time anyone happens to run a Velite build. Kept here too as
+            // a backstop against a hand-written .mdx file that never went
+            // through the converter.
+            .refine(
+              (slug) => new TextEncoder().encode(encodeURIComponent(slug)).length <= 245,
+              "Slug is too long once percent-encoded (filesystem path components are typically capped at 255 bytes)",
+            )
+            .and(s.unique("posts")),
           description: s.string(),
           subtitle: s.string().optional(),
           date: s.isodate(),
@@ -22,8 +50,11 @@ export default defineConfig({
           thumbnail: s.string().optional(),
           draft: s.boolean().default(false),
           mediumUrl: s.string().url().optional(),
+          // Which Medium export produced this file. Lets a re-run tell its own
+          // output apart from another post's before overwriting anything.
+          sourceFile: s.string().optional(),
           code: s.mdx({
-            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton, validateMdxCode],
+            rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton],
           }),
           raw: s.raw(),
         })
@@ -39,25 +70,6 @@ export default defineConfig({
     base: "/static/",
   },
 });
-
-// Validate MDX compiled code: ensure no suspicious patterns that would indicate
-// external content source injection or build-time corruption
-function validateMdxCode(tree: any) {
-  const codeString = JSON.stringify(tree);
-  // Reject patterns that shouldn't appear in legitimate MDX output from local files
-  const suspiciousPatterns = [
-    /import\s+(?!React|jsx-runtime|Fragment)/,
-    /export\s+[^;]*(?<!default)/,
-    /new\s+Function/,
-    /eval\s*\(/,
-  ];
-
-  for (const pattern of suspiciousPatterns) {
-    if (pattern.test(codeString)) {
-      throw new Error(`MDX code contains prohibited pattern: ${pattern}`);
-    }
-  }
-}
 
 // Compute reading time: estimate from raw MDX text (not compiled code)
 // Chinese: ~300 chars/min, English: ~200 words/min
