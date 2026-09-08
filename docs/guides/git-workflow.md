@@ -227,30 +227,23 @@ const Configuration: UserConfig = {
         "shared",
         "tsconfig",
         "eslint-config",
-        "resume",
+        "tailwind-config",
         "blog",
-        "ai-dictionary",
         "ai-analyzer",
-        "time-tracker",
-        "about",
-        "not-found",
-        "deps",
-        "config",
-        "ci",
-        "scripts",
+        "ai-dictionary",
         "docs",
-        "all",
+        "ci",
+        "deps",
+        "release",
       ],
     ],
 
-    "header-max-length": [2, "always", 100],
     "subject-max-length": [2, "always", 72],
+    "subject-empty": [2, "never"],
     "subject-case": [2, "always", "sentence-case"],
     "subject-full-stop": [2, "never", "."],
-    "subject-empty": [2, "never"],
-    "body-leading-blank": [2, "always"],
-    "scope-case": [2, "always", "kebab-case"],
-    "scope-empty": [1, "never"],
+    "body-max-line-length": [2, "always", 100],
+    "footer-max-line-length": [2, "always", 100],
   },
 
   helpUrl:
@@ -316,19 +309,18 @@ echo "✅ All pre-push checks passed!"
 
 ### 步驟 5：更新 lint-staged 設定
 
-修改 `lint-staged.config.js` 以移除 TypeScript 檢查：
+修改 `lint-staged.config.js`，移除 TypeScript 檢查（改置於 pre-push），並包一層 `cd apps/my-website` 讓 prettier／eslint 吃到該 app 自己的設定檔，而非 monorepo 根目錄的：
 
 ```javascript
 module.exports = {
+  // JS/TS 檔案：格式化 → ESLint 修復
+  // 注意：TypeScript 型別檢查已移至 pre-push hook 以提升 pre-commit 速度
   "apps/my-website/**/*.{js,jsx,ts,tsx}": [
-    "prettier --write",
-    "eslint --fix --max-warnings=0",
-    // ❌ 已移除：tsc --noEmit
+    "bash -c 'cd apps/my-website && pnpm prettier --write ${0#apps/my-website/}'",
+    "bash -c 'cd apps/my-website && pnpm eslint --fix --max-warnings=0 ${0#apps/my-website/}'",
   ],
-  "packages/**/*.{js,jsx,ts,tsx}": [
-    "prettier --write",
-    "eslint --fix --max-warnings=0",
-  ],
+
+  // 其他檔案：只格式化
   "**/*.{json,css,scss,md,mdx,yaml,yml}": ["prettier --write"],
 };
 ```
