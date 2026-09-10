@@ -276,7 +276,7 @@ node scripts/batch-parse-articles.js
 - 📝 **[Medium 文章自動化指南](../../docs/guides/medium-article-sync.md)** - 完整的自動化系統使用說明
 - 🗂️ **[article-urls.json](./article-urls.json)** - Medium 文章 URL 管理
 - 🤖 **[batch-parse-articles.ts](./scripts/batch-parse-articles.ts)** - 自動化解析腳本
-- 📊 **[articleData.ts](./src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
+- 📊 **[articleData.ts](../../packages/shared/src/data/articleData.ts)** - 文章資料結構 (自動生成，請勿手動編輯)
 
 ## 🌟 特色功能說明
 
