@@ -259,7 +259,7 @@ pnpm sync:all-articles  # 完整同步流程
 - 📋 **[結構化日誌指南](./docs/guides/structured-logging.md)** - Logger 系統使用與最佳實踐
 - 🗂️ **[article-urls.json](./apps/my-website/article-urls.json)** - Medium 文章 URL 管理
 - 🤖 **[batch-parse-articles.ts](./apps/my-website/scripts/batch-parse-articles.ts)** - 自動化解析腳本
-- 📊 **[articleData.ts](./apps/my-website/src/data/articleData.ts)** - 文章資料結構 (請勿手動編輯)
+- 📊 **[articleData.ts](./packages/shared/src/data/articleData.ts)** - 文章資料結構 (自動生成，請勿手動編輯)
 - 📋 **[Issue 管理指南](./docs/guides/issue-management.md)** - P0-P3 優先級系統使用說明
 
 ## 📊 Issue 管理

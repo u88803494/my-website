@@ -27,28 +27,45 @@ ai_context: |
 
 ```
 my-website/
-├── AGENTS.md                    # 主配置檔（業界標準）
+├── AGENTS.md                    # 主配置檔（業界標準，所有工具的單一事實來源）
 ├── CLAUDE.md                    # Claude Code 入口檔（@AGENTS.md + 專屬功能）
-├── .cursorrules → AGENTS.md     # Symbolic link（Cursor IDE）
-├── .windsurfrules → AGENTS.md   # Symbolic link（Windsurf IDE）
+├── .cursorrules → AGENTS.md     # Symbolic link（Cursor IDE，目前未使用但保留）
+├── .windsurfrules → AGENTS.md   # Symbolic link（Windsurf IDE，目前未使用但保留）
 └── .gemini/
-    └── settings.json            # Gemini CLI 設定（contextFileName: "AGENTS.md"）
+    └── settings.json            # Gemini CLI / Antigravity CLI 設定
 ```
 
 ### 檔案說明
 
 - **AGENTS.md** - 所有 AI 工具的共同配置（專案概述、開發命令、編碼標準、架構規範）
 - **CLAUDE.md** - Claude Code 專屬功能（React Query 模式、API 路由、Subagents、MCP 伺服器）
-- **.cursorrules** - Cursor IDE 配置（符號連結到 AGENTS.md）
-- **.windsurfrules** - Windsurf IDE 配置（符號連結到 AGENTS.md）
-- **.gemini/settings.json** - Gemini CLI 設定（指向 AGENTS.md）
+- **.cursorrules** - Cursor IDE 配置（符號連結到 AGENTS.md，目前未使用但保留，成本極低且符合 [ADR 002](../adr/002-agents-md-adoption.md) 的單一事實來源設計）
+- **.windsurfrules** - Windsurf IDE 配置（符號連結到 AGENTS.md，同上）
+- **.gemini/settings.json** - Gemini CLI 與 Antigravity CLI 共用的設定檔：
+
+  ```json
+  {
+    "context": { "fileName": "AGENTS.md" },
+    "mcpServers": {
+      "chrome-devtools": {
+        "command": "npx",
+        "args": ["chrome-devtools-mcp@latest"]
+      }
+    }
+  }
+  ```
+
+  `context.fileName` 指定讀取 `AGENTS.md` 作為主要規範；`mcpServers` 額外掛載 chrome-devtools MCP。
 
 ### 支援的 AI 工具
 
 - ✅ **Claude Code** - 透過 `@AGENTS.md` 引用讀取主配置
-- ✅ **Cursor IDE** - 原生支援 `.cursorrules` 符號連結
-- ✅ **Windsurf IDE** - 原生支援 `.windsurfrules` 符號連結
-- ✅ **Gemini CLI** - 透過 `settings.json` 設定讀取 AGENTS.md
+- ✅ **Antigravity CLI** - 透過 `.gemini/settings.json` 的 `context.fileName` 讀取 `AGENTS.md`
+- ✅ **Gemini CLI** - 同上，共用 `.gemini/settings.json`
+- 🔕 **Cursor IDE** - 原生支援 `.cursorrules` 符號連結，目前未使用
+- 🔕 **Windsurf IDE** - 原生支援 `.windsurfrules` 符號連結，目前未使用
+
+> **注意**：Antigravity CLI 同時支援讀取專案根目錄的 `GEMINI.md`，且其優先級高於 `AGENTS.md`。本專案刻意不放置 `GEMINI.md`，避免內容與 `AGENTS.md` 不同步時，過時的規範反而覆蓋完整版本。若未來需要 Antigravity 專屬設定，應優先考慮擴充 `.gemini/settings.json`。
 
 ### 設計理念
 
@@ -61,9 +78,7 @@ my-website/
 
 ### 詳細說明
 
-參閱 [ADR 002: Adopt AGENTS.md Standard](../adr/002-agents-md-adoption.md) 瞭解完整的設計決策、實作細節和遷移指南。
-
----
+參閱 [ADR 002: Adopt AGENTS.md Standard](../adr/002-agents-md-adoption.md) 瞭解完整的設計決策、實作細節和遷移指南（該 ADR 記載的 `contextFileName` 為 Gemini CLI 較舊的扁平設定格式，現行 `.gemini/settings.json` 已改用巢狀的 `context.fileName`，惟依 ADR 不可變的慣例，原文保留不改）。
 
 ## TypeScript 和 ESLint 配置
 
