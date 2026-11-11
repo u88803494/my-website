@@ -58,3 +58,10 @@ next-env.d.ts
 # Medium official export (source material for the MDX migration).
 # Kept local only: once converted, content/blog/*.mdx is the source of truth.
 medium-source/
+
+# Medium live-page comparison run (Playwright). medium-auth.json holds a
+# logged-in Medium session — never commit it; the cache and reports are
+# generated output.
+medium-auth.json
+medium-comparison-cache.json
+MEDIUM_*_REPORT.md
