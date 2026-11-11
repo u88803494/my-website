@@ -1,7 +1,14 @@
 import * as cheerio from "cheerio";
 import { describe, expect, it } from "vitest";
 
-import { convertBlockquote, convertBody, convertFigure, convertList, convertPre } from "../markdown-blocks";
+import {
+  convertBlockquote,
+  convertBody,
+  convertFigure,
+  convertList,
+  convertMixtapeEmbed,
+  convertPre,
+} from "../markdown-blocks";
 import { loadBody } from "./helpers";
 
 /** Load a single element and hand it to a block converter. */
@@ -73,6 +80,46 @@ describe("convertFigure", () => {
   });
 });
 
+// HTML extracted verbatim from __tests__/fixtures/backtick-in-code.html, the
+// real Medium export for "React 的 JSX 中的 <pre> 標籤效果無法呈現" — the article
+// where this card going missing (see convertMixtapeEmbed) was first found.
+describe("convertMixtapeEmbed", () => {
+  it("keeps the card's title as a link, dropping the scraped excerpt and thumbnail", () => {
+    const { $, node } = el(
+      '<div class="graf graf--mixtapeEmbed graf-after--h3">' +
+        '<a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="markup--anchor markup--mixtapeEmbed-anchor">' +
+        '<strong class="markup--strong markup--mixtapeEmbed-strong">Formatting code with tag in React and JSX</strong><br>' +
+        '<em class="markup--em markup--mixtapeEmbed-em">I am trying to use the pre tag inside of JSX…</em>stackoverflow.com</a>' +
+        '<a href="https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx" class="js-mixtapeImage mixtapeImage u-ignoreBlock"></a>' +
+        "</div>",
+    );
+    expect(convertMixtapeEmbed($, node)).toBe(
+      "[Formatting code with tag in React and JSX](https://stackoverflow.com/questions/37847885/formatting-code-with-pre-tag-in-react-and-jsx)",
+    );
+  });
+
+  // The URL goes through escapeMdx as a label rather than being emitted bare:
+  // bare text in prose is parsed for MDX expressions and JSX.
+  it("uses the href as the label when the card has no <strong> title", () => {
+    const { $, node } = el(
+      '<div class="graf--mixtapeEmbed"><a href="https://example.com/x"><em>excerpt only</em></a></div>',
+    );
+    expect(convertMixtapeEmbed($, node)).toBe("[https://example.com/x](https://example.com/x)");
+  });
+
+  it("escapes MDX syntax in a title-less card's href rather than emitting it bare", () => {
+    const { $, node } = el(
+      '<div class="graf--mixtapeEmbed"><a href="https://example.com/{a}"><em>excerpt only</em></a></div>',
+    );
+    expect(convertMixtapeEmbed($, node)).toBe("[https://example.com/\\{a\\}](https://example.com/{a})");
+  });
+
+  it("emits nothing when the card's link has an unsafe or missing href", () => {
+    const { $, node } = el('<div class="graf--mixtapeEmbed"><a><strong>no href</strong></a></div>');
+    expect(convertMixtapeEmbed($, node)).toBe("");
+  });
+});
+
 describe("convertList", () => {
   it("indents a nested list and numbers an ordered one from 1", () => {
     const { $, node } = el("<ul><li>a<ol><li>a1</li><li>a2</li></ol></li><li>b</li></ul>");
@@ -112,6 +159,21 @@ describe("convertBody", () => {
   it("leaves a paragraph starting with a marker and real content alone", () => {
     const { $, body } = loadBody("<p>- 真的是清單</p>");
     expect(convertBody($, body, "測試標題")).toBe("- 真的是清單");
+  });
+
+  // Regression: a mixtapeEmbed's wrapper (<div>) and inner <a> are both
+  // non-block tags, so without the isMixtapeEmbed check in walk(), this
+  // recurses past both looking for a block tag, finds only inline
+  // <strong>/<em> inside, and the whole card vanishes with zero output.
+  it("keeps a mixtape embed's title instead of silently dropping the card", () => {
+    const { $, body } = loadBody(
+      '<p>解決方案：</p><div class="graf graf--mixtapeEmbed graf-after--p">' +
+        '<a href="https://stackoverflow.com/questions/37847885/x"><strong>Formatting code with tag in React and JSX</strong><br>' +
+        "<em>excerpt</em>stackoverflow.com</a></div><p>從這裡發現</p>",
+    );
+    expect(convertBody($, body, "測試標題")).toBe(
+      "解決方案：\n\n[Formatting code with tag in React and JSX](https://stackoverflow.com/questions/37847885/x)\n\n從這裡發現",
+    );
   });
 });
 

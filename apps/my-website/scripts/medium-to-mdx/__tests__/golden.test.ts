@@ -20,7 +20,9 @@
  *   <br> hard break
  * - backtick-in-code.html: a real <pre> block whose *code content* (not
  *   prose describing code) contains a literal backtick, forcing
- *   convertPre's fence-lengthening to actually fire
+ *   convertPre's fence-lengthening to actually fire. It also happens to
+ *   contain a real graf--mixtapeEmbed link-preview card — see
+ *   convertMixtapeEmbed — which this snapshot pins alongside the backtick case
  *
  * A genuine nested list (an <li> directly containing a <ul>/<ol>) does not
  * exist anywhere in the 259-file source export — checked with the same

@@ -42,6 +42,44 @@ export function convertPre($: CheerioAPI, element: Element): string {
   return `${fence}${lang}\n${code}\n${fence}`;
 }
 
+/**
+ * Convert a Medium "mixtape" embed — the link preview card Medium renders
+ * when a bare URL sits on its own line (title + excerpt it scraped from the
+ * target page). The wrapper is a <div class="graf--mixtapeEmbed">, not a
+ * BLOCK_TAGS member, so without this the walk in convertBody/collectContentBlocks
+ * recurses straight through it: div and its inner <a> are both non-block, the
+ * <strong>/<em> title/excerpt inside are inline-only, and the whole card
+ * vanishes with no trace — not even as plain text. Only the title survives as
+ * a link; the excerpt is Medium's own scrape of the target page, not authored
+ * content, and the thumbnail is a second decorative <a> with no text.
+ */
+export function convertMixtapeEmbed($: CheerioAPI, node: Element): string {
+  const anchor = $(node).find("a").first();
+  const href = safeUrl(anchor.attr("href"));
+  if (!href) return "";
+
+  // Always emit a full [label](dest) link, never a bare URL. A URL in prose is
+  // subject to MDX's expression and JSX parsing (`{`, `<mailto:… />`), whereas
+  // escapeMdx handles the label and mdDestination handles the destination.
+  const title = normalizeText(anchor.find("strong").first().text()).trim();
+  return `[${escapeMdx(title || href)}](${mdDestination(href)})`;
+}
+
+/** The authored part of a mixtape card: its title, or nothing. */
+function mixtapeTitle($: CheerioAPI, node: Element): string {
+  return normalizeText($(node).find("a strong").first().text()).trim();
+}
+
+/** The exporter's graf--title heading: a repeat of the post title at the top of the body. */
+function isTitleHeading(node: Element): boolean {
+  return /^h[1-6]$/.test(node.tagName) && (node.attribs["class"] ?? "").includes("graf--title");
+}
+
+/** A paragraph Medium emitted purely as vertical spacing. */
+function isEmptyParagraph(node: Element): boolean {
+  return node.tagName === "p" && (node.attribs["class"] ?? "").includes("graf--empty");
+}
+
 /** Convert a <figure>: image, GitHub Gist embed, or iframe embed. */
 export function convertFigure($: CheerioAPI, element: Element): string {
   const figure = $(element);
@@ -164,6 +202,11 @@ function isStructuralNode(node: Element): boolean {
   return node.tagName === "hr" || (node.attribs["class"] ?? "").includes("section-divider");
 }
 
+/** A Medium link-preview card — see convertMixtapeEmbed for why this needs its own check. */
+function isMixtapeEmbed(node: Element): boolean {
+  return (node.attribs["class"] ?? "").includes("graf--mixtapeEmbed");
+}
+
 /**
  * Convert an h1-h3 heading, dropping the one that merely repeats the post title
  * (the exporter emits it as graf--title at the top of the body).
@@ -229,24 +272,35 @@ export function collectContentBlocks($: CheerioAPI, bodyElement: Element): Conte
   const blocks: ContentBlock[] = [];
   let titleSkipped = false;
 
+  const push = (tag: string, text: string): void => {
+    if (text) blocks.push({ tag, text });
+  };
+
   const walk = (nodes: AnyNode[]): void => {
     for (const node of nodes) {
       if (!isElement(node) || isStructuralNode(node)) continue;
+
+      // Only the card's title counts as content, matching convertBody. The
+      // excerpt is Medium's scrape of the target page and must not end up in
+      // a derived description.
+      if (isMixtapeEmbed(node)) {
+        push("p", mixtapeTitle($, node));
+        continue;
+      }
 
       if (!BLOCK_TAGS.has(node.tagName)) {
         walk(node.children ?? []);
         continue;
       }
 
-      if (/^h[1-6]$/.test(node.tagName) && !titleSkipped && (node.attribs["class"] ?? "").includes("graf--title")) {
+      if (!titleSkipped && isTitleHeading(node)) {
         titleSkipped = true;
         continue;
       }
 
-      if (node.tagName === "p" && (node.attribs["class"] ?? "").includes("graf--empty")) continue;
+      if (isEmptyParagraph(node)) continue;
 
-      const text = normalizeText($(node).text()).trim();
-      if (text) blocks.push({ tag: node.tagName, text });
+      push(node.tagName, normalizeText($(node).text()).trim());
     }
   };
 
@@ -263,6 +317,12 @@ export function convertBody($: CheerioAPI, bodyElement: Element, title: string):
   const walk = (nodes: AnyNode[]): void => {
     for (const node of nodes) {
       if (!isElement(node) || isStructuralNode(node)) continue;
+
+      if (isMixtapeEmbed(node)) {
+        const block = convertMixtapeEmbed($, node);
+        if (block) blocks.push(block);
+        continue;
+      }
 
       // Non-block elements (section, div, ...) are wrappers — descend into them
       if (!BLOCK_TAGS.has(node.tagName)) {
