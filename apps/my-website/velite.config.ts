@@ -1,5 +1,6 @@
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import remarkCjkFriendly from "remark-cjk-friendly";
 import { defineConfig, s } from "velite";
 
 import { rehypeCopyButton } from "./src/lib/mdx/rehype-copy-button";
@@ -54,6 +55,11 @@ export default defineConfig({
           // output apart from another post's before overwriting anything.
           sourceFile: s.string().optional(),
           code: s.mdx({
+            // CommonMark's flanking rules don't recognise `**` when a CJK
+            // character sits on one side and CJK punctuation on the other
+            // (e.g. 稱作**「相聯陣列」**；), so the asterisks would render
+            // literally. remarkCjkFriendly relaxes the rule for CJK text.
+            remarkPlugins: [remarkCjkFriendly],
             rehypePlugins: [rehypeSlug, [rehypePrettyCode, rehypePrettyCodeOptions], rehypeCopyButton],
           }),
           raw: s.raw(),
