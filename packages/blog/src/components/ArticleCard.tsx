@@ -41,7 +41,11 @@ export function ArticleCard({ post }: ArticleCardProps) {
       {/* The entire list item is clickable (stretched link); an internal nav link
           doesn't need an extra "Read article" button */}
       <h3 className="group-hover:text-primary mt-2 text-xl font-bold transition-colors sm:text-2xl">
-        <Link className="after:absolute after:inset-0" href={`/blog/${post.slug}`}>
+        {/* Encoded so a CJK slug matches the canonical URL and JSON-LD @id
+            elsewhere on the site (see getPostPath() in apps/my-website) —
+            this package deliberately doesn't import that, so it stays decoupled
+            from Velite (see README), but the encoding itself must stay in sync. */}
+        <Link className="after:absolute after:inset-0" href={`/blog/${encodeURIComponent(post.slug)}`}>
           {post.title}
         </Link>
       </h3>

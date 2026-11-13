@@ -1,0 +1,26 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: Lint, type-check, and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Runs lint + type-check (via turbo) then the full vitest suite —
+      # see the "check" script in the root package.json.
+      - run: pnpm run check

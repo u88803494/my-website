@@ -13,7 +13,7 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
-    "check": "turbo run check",
+    "check": "turbo run check && pnpm run test:run",
     "clean": "turbo run clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "vitest",

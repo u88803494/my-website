@@ -1,3 +1,26 @@
 # Ignore artifacts:
 build
 coverage
+
+# NOTE: there is a second .prettierignore at the repo root. lint-staged's
+# pre-commit hook runs `prettier --write` from the repo root, which only
+# reads *that* file — an exclusion added only here won't stop pre-commit
+# from reformatting it (this bit a real commit once; see the root file's
+# own note). Both files need the same entry for anything under here that
+# must never be reformatted.
+
+# Blog articles migrated from Medium.
+# Prettier's markdown reflow damages them: it breaks MDX escape sequences across
+# lines (`\{add\}` becomes `\{add\` + `}`, so the escape no longer applies) and
+# wraps CJK sentences mid-word, since prose wrapping assumes space-separated
+# words. These are content files — there is nothing for a code formatter to fix.
+content/blog/
+
+# Golden-test snapshots (scripts/medium-to-mdx/__tests__/golden.test.ts).
+# Same failure mode as content/blog/ above: Prettier's markdown formatter
+# re-serializes a parsed AST with its own preferred backtick count for inline
+# code spans, so a literal ```triple-backtick``` in the snapshot silently
+# becomes `single-backtick` on the next `prettier --write .` — a snapshot the
+# test itself never wrote, causing the next test run to report a mismatch
+# against content the converter never actually produced.
+scripts/medium-to-mdx/__tests__/__snapshots__/
