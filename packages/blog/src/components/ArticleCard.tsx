@@ -1,8 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { useMemo } from "react";
 
 import type { PostSummary } from "../types";
 
@@ -12,28 +8,22 @@ interface ArticleCardProps {
   post: PostSummary;
 }
 
+// A server component with no entrance animation: the list renders 200+ cards,
+// and an initial opacity:0 left the whole page blank until hydration finished
+// (and permanently blank without JS).
 export function ArticleCard({ post }: ArticleCardProps) {
-  const formattedDate = useMemo(
-    () =>
-      new Date(post.date).toLocaleDateString("zh-TW", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        timeZone: "UTC",
-      }),
-    [post.date],
-  );
+  const formattedDate = new Date(post.date).toLocaleDateString("zh-TW", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
   const visibleTags = post.tags.slice(0, MAX_VISIBLE_TAGS);
   const hiddenTagCount = post.tags.length - visibleTags.length;
 
   return (
-    <motion.article
-      animate={{ opacity: 1, y: 0 }}
-      className="border-base-300 group relative border-b py-8 first:pt-0 last:border-b-0"
-      initial={{ opacity: 0, y: 12 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <article className="border-base-300 group relative border-b py-8 first:pt-0 last:border-b-0">
       <time className="text-base-content/50 text-xs" dateTime={post.date}>
         {formattedDate}
       </time>
@@ -64,6 +54,6 @@ export function ArticleCard({ post }: ArticleCardProps) {
           </>
         )}
       </div>
-    </motion.article>
+    </article>
   );
 }
