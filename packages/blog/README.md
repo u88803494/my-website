@@ -1,24 +1,22 @@
 # @packages/blog
 
-部落格功能 package，整合 Medium 文章展示。
+自架 MDX blog UI package，服務 `/blog` 路由（Velite 靜態生成，非 Medium）。
 
 ## 功能
 
-- Medium 文章列表展示
+- 文章列表呈現
 - 文章卡片組件
-- 響應式網格布局
 
 ## 使用方式
 
 ```typescript
 import { BlogFeature } from "@packages/blog";
+import type { PostSummary } from "@packages/blog/types";
 
 export default function BlogPage() {
-  return <BlogFeature />;
+  const posts: PostSummary[] = getAllPosts();
+  return <BlogFeature posts={posts} />;
 }
 ```
 
-## API
-
-- `BlogFeature` - 主要組件
-- `useMediumArticles` - 獲取文章的 hook
+資料取得（Velite content）在 `apps/my-website/src/lib/content/posts.ts`，這個 package 只負責 UI 呈現，不直接依賴 Velite 輸出。

@@ -22,7 +22,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({ backgroundClass, conten
           <div className="bg-primary mx-auto mb-6 h-1 w-20" />
           <p className="text-base-content/80 text-lg">{content.description}</p>
         </div>
-        <div className="flex flex-col gap-12">
+        <div className="not-prose flex flex-col gap-12">
           {content.experiences.map((experience) => (
             <ExperienceCard
               achievementHeading={content.achievementHeading}
