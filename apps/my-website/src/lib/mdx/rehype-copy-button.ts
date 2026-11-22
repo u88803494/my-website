@@ -20,7 +20,11 @@ export function rehypeCopyButton() {
 
       // No text child node: the visible "Copy"/"Copied" text is entirely driven by
       // the CSS ::after content, toggled via the .is-copied class (see globals.css),
-      // since this output is static HTML with no React state to swap the text with
+      // since this output is static HTML with no React state to swap the text with.
+      // The aria-label below must match CodeBlockCopyScript.tsx's IDLE_LABEL — that
+      // script updates it to COPIED_LABEL on click and back on timeout, since an
+      // aria-label overrides ::after content entirely and a screen reader would
+      // otherwise hear the same button name before and after a successful copy.
       node.children.push({
         type: "element",
         tagName: "button",

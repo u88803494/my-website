@@ -1,6 +1,8 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+import { getPostPath } from "@/lib/content/posts";
+
 interface AdjacentPost {
   slug: string;
   title: string;
@@ -21,7 +23,7 @@ export function PostNavigation({ prev, next }: PostNavigationProps) {
       {prev ? (
         <Link
           className="group border-base-200 hover:border-primary/50 hover:bg-base-200/50 flex flex-col gap-1 rounded-lg border p-4 transition-colors"
-          href={`/blog/${prev.slug}`}
+          href={getPostPath(prev)}
         >
           <span className="text-base-content/50 group-hover:text-primary flex items-center gap-1 text-xs transition-colors">
             <ArrowLeft aria-hidden="true" className="h-3 w-3" />
@@ -36,7 +38,7 @@ export function PostNavigation({ prev, next }: PostNavigationProps) {
       {next ? (
         <Link
           className="group border-base-200 hover:border-primary/50 hover:bg-base-200/50 flex flex-col gap-1 rounded-lg border p-4 text-right transition-colors sm:items-end"
-          href={`/blog/${next.slug}`}
+          href={getPostPath(next)}
         >
           <span className="text-base-content/50 group-hover:text-primary flex items-center gap-1 text-xs transition-colors">
             下一篇

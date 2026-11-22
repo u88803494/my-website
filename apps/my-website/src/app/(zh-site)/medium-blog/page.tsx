@@ -13,6 +13,10 @@ import { getQueryClient } from "@/lib/query-client";
 export const metadata: Metadata = {
   description: "Henry Lee 的技術文章與開發心得分享",
   title: "技術部落格 - Henry Lee",
+  // Blog content moved to /blog (Velite + MDX). This route is kept for
+  // backward compatibility only and is unreachable from site navigation, so
+  // it must not compete with /blog in search results or get indexed itself.
+  robots: { follow: false, index: false },
 };
 
 /**

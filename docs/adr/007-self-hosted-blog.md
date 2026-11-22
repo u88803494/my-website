@@ -255,7 +255,7 @@ ai_context: |
 
 ### 待遷移文件
 
-- [Medium 文章同步指南](../guides/medium-article-sync.md) - 現行的文章同步流程。本決策會改變此流程，Phase 3 需一併更新
+- [Medium 文章遷移至 MDX](../guides/medium-article-sync.md) - 遷移流程與已知限制（Phase 3 已完成更新）
 
 ---
 
