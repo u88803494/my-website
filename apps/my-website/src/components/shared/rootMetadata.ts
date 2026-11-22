@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 
+// A page that defines its own openGraph object completely overrides this default (Next.js
+// metadata merging is object replacement, not a deep merge), so pages without a dedicated
+// share image (e.g. blog posts, the blog list) must fall back to this image explicitly —
+// it is not inherited automatically
+export const DEFAULT_OG_IMAGE_URL = "https://henryleelab.com/images/my-photo.jpeg";
+
 const sharedMetadata: Metadata = {
   authors: [{ name: "Henry Lee", url: "https://henryleelab.com" }],
   creator: "Henry Lee",
@@ -28,7 +34,7 @@ export const englishRootMetadata: Metadata = {
       {
         alt: "Portrait of Henry Lee",
         height: 512,
-        url: "https://henryleelab.com/images/my-photo.jpeg",
+        url: DEFAULT_OG_IMAGE_URL,
         width: 512,
       },
     ],
@@ -40,7 +46,7 @@ export const englishRootMetadata: Metadata = {
     card: "summary",
     description:
       "Senior Software Engineer Henry Lee's personal website, featuring frontend architecture, AI-native products, and full-stack web development.",
-    images: ["https://henryleelab.com/images/my-photo.jpeg"],
+    images: [DEFAULT_OG_IMAGE_URL],
     title: "Henry Lee - Senior Software Engineer",
   },
 };
@@ -67,7 +73,7 @@ export const traditionalChineseRootMetadata: Metadata = {
       {
         alt: "Henry Lee 頭像 Henry Lee Portrait",
         height: 512,
-        url: "https://henryleelab.com/images/my-photo.jpeg",
+        url: DEFAULT_OG_IMAGE_URL,
         width: 512,
       },
     ],
@@ -79,7 +85,7 @@ export const traditionalChineseRootMetadata: Metadata = {
     card: "summary",
     description:
       "資深軟體工程師 Henry Lee 的個人網站，專精 Frontend、AI 與全端 Web 開發。Senior Software Engineer portfolio, specializing in frontend, AI, and full-stack web development.",
-    images: ["https://henryleelab.com/images/my-photo.jpeg"],
+    images: [DEFAULT_OG_IMAGE_URL],
     title: "Henry Lee - 資深軟體工程師 | Henry Lee's Personal Website",
   },
 };

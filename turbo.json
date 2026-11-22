@@ -2,8 +2,12 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "tasks": {
+    "content:build": {
+      "inputs": ["content/**", "velite.config.ts", "src/lib/mdx/**"],
+      "outputs": [".velite/**", "public/static/**"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "content:build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
       "env": [
         "GEMINI_API_KEY",
@@ -15,7 +19,9 @@
         "SKIP_ENV_VALIDATION"
       ]
     },
-    "check-types": {},
+    "check-types": {
+      "dependsOn": ["content:build"]
+    },
     "dev": {
       "persistent": true,
       "cache": false,

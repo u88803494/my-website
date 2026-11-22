@@ -154,6 +154,10 @@ cp .env.example .env.local
 
 ## 🤖 Medium 文章自動化使用指南
 
+> ⚠️ **此流程已不再是 Blog 的內容來源。** Blog 已遷移至自架的 Velite + MDX，
+> 文章位於 `content/blog/`。以下流程僅供 `/medium-blog` 這個保留相容的舊路由使用。
+> 新增文章請見 **[Medium 文章遷移至 MDX](../../docs/guides/medium-article-sync.md)**。
+
 ### 快速開始
 
 1. **添加文章 URL**

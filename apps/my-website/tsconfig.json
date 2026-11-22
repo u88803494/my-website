@@ -2,8 +2,13 @@
   "extends": "@packages/tsconfig/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "skipLibCheck": true,
+    "declaration": false,
+    "declarationMap": false,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "#site/content": ["./.velite/index.d.ts"],
+      "@velite/*": ["./.velite/*"]
     },
     "plugins": [
       {
