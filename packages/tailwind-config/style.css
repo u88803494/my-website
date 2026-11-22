@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 /* Scan all packages for Tailwind classes */
 @source "../../packages/*/src/**/*.{js,ts,jsx,tsx}";
 
 /* Scan all apps for Tailwind classes */
 @source "../../apps/*/src/**/*.{js,ts,jsx,tsx}";
+
+/* Scan MDX blog content for Tailwind classes */
+@source "../../apps/my-website/content/**/*.mdx";
 
 /* DaisyUI Plugin Configuration */
 @plugin "daisyui" {

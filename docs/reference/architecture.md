@@ -172,7 +172,8 @@ Root (my-website-monorepo)
 │       ├── 依賴：@packages/tailwind-config
 │       ├── 依賴：@packages/ai-dictionary
 │       ├── 依賴：@packages/ai-analyzer
-│       └── 依賴：@packages/blog
+│       ├── 依賴：@packages/blog
+│       └── 依賴：@packages/medium-blog
 └── packages/
     ├── shared/           # 無依賴（基礎）
     ├── tsconfig/         # 無依賴
@@ -180,7 +181,8 @@ Root (my-website-monorepo)
     ├── tailwind-config/  # 無依賴
     ├── ai-dictionary/    # 依賴：@packages/shared
     ├── ai-analyzer/      # 依賴：@packages/shared
-    └── blog/             # 依賴：@packages/shared
+    ├── blog/             # 自架 MDX blog UI（/blog），無外部依賴
+    └── medium-blog/      # Medium 文章展示（/medium-blog），依賴：@packages/shared
 ```
 
 ### Apps

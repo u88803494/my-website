@@ -17,6 +17,11 @@ ai_context: |
 
 # GET /api/medium-articles
 
+> ⚠️ **保留相容，不再是內容主源。** Blog 已於 Phase 3 遷移至自架的 Velite + MDX
+> （`apps/my-website/content/blog/`），`/blog` 與 `/blog/[slug]` 皆不使用此 API。
+> 本端點與 `/medium-blog` 路由維持運作但不主動維護。
+> 見 [ADR-007：自架 Blog](../../adr/007-self-hosted-blog.md)。
+
 取得快取的 Medium 文章,支援分頁功能。
 
 ## 端點
@@ -222,4 +227,4 @@ pnpm parse:all-articles
 - [API 概覽](./README.md)
 - [React Query Patterns](../../explanation/react-query-patterns.md)
 - [架構參考](../architecture.md)
-- [Medium 文章同步指南](../../guides/medium-article-sync.md)
+- [Medium 文章遷移至 MDX](../../guides/medium-article-sync.md)

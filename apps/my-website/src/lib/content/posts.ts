@@ -1,0 +1,143 @@
+// Value import uses the "@velite/*" tsconfig path alias (not the
+// "#site/content" subpath import) because Turbopack (Next.js 16.1.1) fails
+// to resolve package.json "imports" field entries at runtime, silently
+// producing `undefined` for the module. "@velite/*" avoids the "#"-prefixed
+// specifier entirely, going through the same resolver-alias mechanism that
+// "@/*" already uses successfully elsewhere in this app. The type-only
+// import above is erased at compile time and unaffected either way.
+import type { PostSummary } from "@packages/blog/types";
+import { posts as allPostsData } from "@velite/index.js";
+
+import { formatDateISO8601, formatDateLocalized, formatDateSimple } from "@/lib/date-formatting";
+import type { Post } from "#site/content";
+
+/**
+ * Returns all posts, sorted by date descending. Drafts are included in
+ * development only, and always sort below published posts.
+ *
+ * Medium's export carries no date for drafts, so they all fall back to the
+ * export date — newer than every real post, which would otherwise bury the
+ * actual content under them in the dev listing.
+ */
+export function getAllPosts(): Post[] {
+  return (allPostsData as Post[])
+    .filter((post) => process.env.NODE_ENV === "development" || !post.draft)
+    .sort((a, b) => {
+      if (a.draft !== b.draft) return a.draft ? 1 : -1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+}
+
+/**
+ * Decodes a route slug for comparison against Velite's stored slug.
+ *
+ * Next.js hands routes a percent-encoded params.slug ("%E7%AC%AC%E4%B8%80..."),
+ * while Velite stores the raw slug, so CJK titles never match without this.
+ * ASCII slugs are unchanged by decoding.
+ */
+function decodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    // Malformed percent-encoding (e.g. a bare "%"): keep it as-is and let it 404
+    return slug;
+  }
+}
+
+/**
+ * Returns a single post by slug.
+ */
+export function getPostBySlug(slug: string): Post | undefined {
+  const decoded = decodeSlug(slug);
+
+  return (allPostsData as Post[]).find(
+    (post) => post.slug === decoded && (process.env.NODE_ENV === "development" || !post.draft),
+  );
+}
+
+/**
+ * Returns the previous (earlier) and next (later) post relative to the given slug.
+ * getAllPosts() sorts newest-to-oldest, so "prev" has a larger array index and
+ * "next" has a smaller one.
+ */
+export function getAdjacentPosts(slug: string): { prev: Post | null; next: Post | null } {
+  const posts = getAllPosts();
+  const decoded = decodeSlug(slug);
+  const index = posts.findIndex((post) => post.slug === decoded);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: posts[index + 1] ?? null,
+    next: posts[index - 1] ?? null,
+  };
+}
+
+const SITE_URL = "https://henryleelab.com";
+
+/**
+ * The canonical path for a post, e.g. "/blog/前端中階-gulp".
+ *
+ * Every caller that needs a link to a post — <Link href>, canonical,
+ * JSON-LD's @id, sitemap — must encode a CJK slug identically, or Google sees
+ * two different URLs for the same page and a plain <Link> silently relies on
+ * the browser to encode it for you. Centralizing here means a slug only gets
+ * encoded once, in one place, rather than at each of those call sites
+ * separately (three of which previously did, and two of which didn't).
+ */
+export function getPostPath(post: Pick<Post, "slug">): string {
+  return `/blog/${encodeURIComponent(post.slug)}`;
+}
+
+/** The absolute canonical URL for a post. */
+export function getPostUrl(post: Pick<Post, "slug">): string {
+  return `${SITE_URL}${getPostPath(post)}`;
+}
+
+export interface PostMetadata {
+  dateISO: string;
+  dateFormatted: string;
+  dateUpdatedISO?: string;
+}
+
+/**
+ * Converted post ready for article page display: all formatting (dates, etc.)
+ * done once, not repeated in render logic.
+ */
+export interface PostForDisplay extends Post {
+  metadata: PostMetadata;
+}
+
+/**
+ * Transforms a post into display-ready shape: ISO dates for <time dateTime>,
+ * formatted dates for presentation, all in one place.
+ */
+export function toPostForDisplay(post: Post): PostForDisplay {
+  return {
+    ...post,
+    metadata: {
+      dateISO: formatDateISO8601(post.date),
+      dateFormatted: formatDateLocalized(post.date),
+      dateUpdatedISO: post.updatedDate ? formatDateISO8601(post.updatedDate) : undefined,
+    },
+  };
+}
+
+/**
+ * Converts a post into the trimmed-down shape the UI needs.
+ */
+export function toPostSummary(post: Post): PostSummary {
+  return {
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    date: formatDateSimple(post.date),
+    updatedDate: post.updatedDate ? formatDateSimple(post.updatedDate) : undefined,
+    tags: post.tags,
+    readTime: post.readTime,
+    thumbnail: post.thumbnail,
+    mediumUrl: post.mediumUrl,
+  };
+}
